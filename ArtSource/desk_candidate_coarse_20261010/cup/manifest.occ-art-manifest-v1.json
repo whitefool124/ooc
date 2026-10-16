@@ -1,0 +1,66 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "desk_candidate_coarse_20261010_cup",
+  "role": "hd2d_library_display",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in generation; noncombat desk texture/card",
+    "source_path": "ArtSource/desk_candidate_coarse_20261010/cup/raw/source.png",
+    "source_sha256": "456e73312a9d79eb7f318898e7b9e36274d0cf0695ce95b3a3f9fe389f92bdf8"
+  },
+  "delivery": {
+    "output_path": "ArtSource/desk_candidate_coarse_20261010/cup/delivery/cup.png",
+    "output_sha256": "f12ebd62de6b6b325f5dffc18a007ec452532590c6b87f3d6189859e1482b2ae",
+    "native_ppu": null,
+    "logical_cells": null,
+    "palette_max": 1000000,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "real desk camera-facing cup card foot anchored to desktop",
+    "verification_mode": "QA_PENDING in-memory real Game View preview; no Unity importer or formal assets",
+    "capture_sha256": "055b5972735bb6a26ef81543383a917a2c7c89c1e978a73e0af8e0dc4f584736"
+  },
+  "processing": {
+    "operations": [
+      "remove alpha below 64 (no color/shape repaint)",
+      {
+        "crop": [
+          101,
+          128,
+          1373,
+          1058
+        ]
+      },
+      "nearest delivery resize under noncombat library exception",
+      "transparent safety border"
+    ],
+    "pixel_repainting": false,
+    "original_size": [
+      1402,
+      1122
+    ],
+    "delivery_size": [
+      132,
+      98
+    ],
+    "modeling_policy": "2026-10-10 final user correction"
+  },
+  "evidence": {
+    "one_x": "ArtSource/desk_candidate_coarse_20261010/cup/qa/one_x.png",
+    "four_x": "ArtSource/desk_candidate_coarse_20261010/cup/qa/four_x.png",
+    "grayscale": "ArtSource/desk_candidate_coarse_20261010/cup/qa/grayscale.png",
+    "checker": "ArtSource/desk_candidate_coarse_20261010/cup/qa/checker.png",
+    "application_contact": "UnityProject/ReviewEvidence/20261010_hd2d_desk/coarse_final_menu_1920.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Application and human approval pending; not FORMAL."
+  }
+}

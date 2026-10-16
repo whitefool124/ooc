@@ -1,0 +1,91 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.main_menu_e.native64.book_open",
+  "role": "ui_tabletop_book_open_128x64",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in image generation. Closed book/lamp passed lossless grid decoding. Background/cup/open book are explicitly recorded community reconstruction review candidates; original confidence failure retained. Composite copies intact components without geometry resizing.",
+    "source_path": "ArtSource/MainMenuE_Native64_20261008/book_open/source-r2.png",
+    "source_sha256": "0156baa27289816d5de043c7e119db7a6e07009ed8f0a20934bea780d869f1df"
+  },
+  "delivery": {
+    "output_path": "ArtSource/MainMenuE_Native64_20261008/book_open/native.png",
+    "output_sha256": "771dd25f8dd5029d960b69b12c333dc5df89e73c0edb76a390159ac8f391a99c",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Single displayed pixel grid, 6 screen pixels per logical pixel at 1920x1080."
+  },
+  "application": {
+    "runtime_draw_rect": [
+      0,
+      0,
+      1920,
+      1080
+    ],
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/MainMenuE_Native64_20261008/book_open/one_x.png",
+    "four_x": "ArtSource/MainMenuE_Native64_20261008/book_open/four_x.png",
+    "grayscale": "ArtSource/MainMenuE_Native64_20261008/book_open/grayscale.png",
+    "checker": "ArtSource/MainMenuE_Native64_20261008/book_open/checker.png",
+    "application_contact": "UnityProject/ReviewEvidence/MainMenuE/menu-native64-v2.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "User selected E and authorized production methods unrestricted. This processed result remains review-ready, no formal aesthetic acceptance claim."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "runtime_lattice": {
+      "tier": 6,
+      "pass": true,
+      "report": "UnityProject/ReviewEvidence/MainMenuE/pixel-grid-native64-v2.json",
+      "scope": "Closed live screenshot only; open state inspected in actual recorded transition"
+    }
+  },
+  "processing": {
+    "method": "independent_grid_decode_and_recorded_reconstruction",
+    "geometric_component_resizing": false,
+    "human_aesthetic_acceptance": false,
+    "reports": [
+      "ArtSource/MainMenuE_Native64_20261008/book_open/candidate-qa.json",
+      "ArtSource/MainMenuE_Native64_20261008/book_open/community-cropped-qa.json",
+      "ArtSource/MainMenuE_Native64_20261008/book_open/qa-r1.json",
+      "ArtSource/MainMenuE_Native64_20261008/book_open/qa-r2.json"
+    ]
+  }
+}

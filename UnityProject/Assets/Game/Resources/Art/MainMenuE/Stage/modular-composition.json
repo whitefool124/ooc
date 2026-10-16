@@ -1,0 +1,66 @@
+{
+  "layers": [
+    {
+      "name": "vista",
+      "x": 0,
+      "y": 0,
+      "width": 320,
+      "height": 180,
+      "order": 0,
+      "lit": false
+    },
+    {
+      "name": "room",
+      "x": 48,
+      "y": 10,
+      "width": 224,
+      "height": 130,
+      "order": 1,
+      "lit": true
+    },
+    {
+      "name": "shelf",
+      "x": 52,
+      "y": 46,
+      "width": 29,
+      "height": 78,
+      "order": 2,
+      "lit": true
+    },
+    {
+      "name": "plant",
+      "x": 126,
+      "y": 70,
+      "width": 25,
+      "height": 36,
+      "order": 2,
+      "lit": true
+    },
+    {
+      "name": "banner",
+      "x": 232,
+      "y": 12,
+      "width": 34,
+      "height": 69,
+      "order": 2,
+      "lit": true
+    },
+    {
+      "name": "desk",
+      "x": 25,
+      "y": 120,
+      "width": 269,
+      "height": 56,
+      "order": 3,
+      "lit": true
+    }
+  ],
+  "grid": [
+    320,
+    180
+  ],
+  "source": "ArtSource/MainMenuE_Modular_20261008",
+  "normal_data": "technical flat material-plane normals, never new albedo art",
+  "pixel_geometry_resized": false,
+  "review": "PENDING human acceptance"
+}

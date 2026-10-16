@@ -1,0 +1,176 @@
+{
+  "scope": "Local sprite material responses and background footprint only; not scene quality/human approval",
+  "comparisons": [
+    {
+      "asset": "academy_decoy_lantern_active_dry",
+      "a": "baseline_540",
+      "b": "full_540",
+      "changed_pixels": 29731,
+      "max_delta": 87,
+      "mean_delta": 1.0164840534979425,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_decoy_lantern_active_dry",
+      "a": "baseline_1080",
+      "b": "normal_only_1080",
+      "changed_pixels": 105744,
+      "max_delta": 34,
+      "mean_delta": 0.20231658307613168,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_decoy_lantern_active_dry",
+      "a": "baseline_1080",
+      "b": "surface_only_1080",
+      "changed_pixels": 118573,
+      "max_delta": 86,
+      "mean_delta": 0.9543958976337449,
+      "background_changed_pixels": 1
+    },
+    {
+      "asset": "academy_decoy_lantern_active_dry",
+      "a": "surface_only_1080",
+      "b": "full_1080",
+      "changed_pixels": 110006,
+      "max_delta": 36,
+      "mean_delta": 0.24632490997942386,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_decoy_lantern_active_dry",
+      "a": "full_1080",
+      "b": "rotated_light_1080",
+      "changed_pixels": 118574,
+      "max_delta": 69,
+      "mean_delta": 0.6383772183641976,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_heavy_archive_stack_damaged_dry",
+      "a": "baseline_540",
+      "b": "full_540",
+      "changed_pixels": 57296,
+      "max_delta": 25,
+      "mean_delta": 0.701190200617284,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_heavy_archive_stack_intact_dry",
+      "a": "baseline_540",
+      "b": "full_540",
+      "changed_pixels": 59083,
+      "max_delta": 30,
+      "mean_delta": 0.834471450617284,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_heavy_archive_stack_intact_dry",
+      "a": "baseline_1080",
+      "b": "normal_only_1080",
+      "changed_pixels": 208210,
+      "max_delta": 30,
+      "mean_delta": 0.534345904063786,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_heavy_archive_stack_intact_dry",
+      "a": "baseline_1080",
+      "b": "surface_only_1080",
+      "changed_pixels": 223662,
+      "max_delta": 13,
+      "mean_delta": 0.49786233281893005,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_heavy_archive_stack_intact_dry",
+      "a": "surface_only_1080",
+      "b": "full_1080",
+      "changed_pixels": 217523,
+      "max_delta": 31,
+      "mean_delta": 0.6433370306069959,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_heavy_archive_stack_intact_dry",
+      "a": "full_1080",
+      "b": "rotated_light_1080",
+      "changed_pixels": 236237,
+      "max_delta": 89,
+      "mean_delta": 3.465799575617284,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_heavy_archive_stack_rubble_dry",
+      "a": "baseline_540",
+      "b": "full_540",
+      "changed_pixels": 33228,
+      "max_delta": 123,
+      "mean_delta": 0.5140586419753086,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_loot_chest_closed_dry",
+      "a": "baseline_540",
+      "b": "full_540",
+      "changed_pixels": 59827,
+      "max_delta": 54,
+      "mean_delta": 1.013599537037037,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_loot_chest_closed_dry",
+      "a": "baseline_1080",
+      "b": "normal_only_1080",
+      "changed_pixels": 202001,
+      "max_delta": 8,
+      "mean_delta": 0.18102687757201646,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_loot_chest_closed_dry",
+      "a": "baseline_1080",
+      "b": "surface_only_1080",
+      "changed_pixels": 237183,
+      "max_delta": 58,
+      "mean_delta": 0.8702068865740741,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_loot_chest_closed_dry",
+      "a": "surface_only_1080",
+      "b": "full_1080",
+      "changed_pixels": 211368,
+      "max_delta": 7,
+      "mean_delta": 0.20506671167695473,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_loot_chest_closed_dry",
+      "a": "full_1080",
+      "b": "rotated_light_1080",
+      "changed_pixels": 237183,
+      "max_delta": 57,
+      "mean_delta": 2.8236556391460907,
+      "background_changed_pixels": 0
+    },
+    {
+      "asset": "academy_loot_chest_empty_dry",
+      "a": "baseline_540",
+      "b": "full_540",
+      "changed_pixels": 75494,
+      "max_delta": 68,
+      "mean_delta": 0.9567444701646091,
+      "background_changed_pixels": 2
+    },
+    {
+      "asset": "academy_loot_chest_open_dry",
+      "a": "baseline_540",
+      "b": "full_540",
+      "changed_pixels": 75772,
+      "max_delta": 83,
+      "mean_delta": 1.2760802469135804,
+      "background_changed_pixels": 0
+    }
+  ]
+}

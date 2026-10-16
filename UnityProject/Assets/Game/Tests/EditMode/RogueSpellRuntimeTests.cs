@@ -96,7 +96,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void ApprovedSpellCorrections_ArePresentInAuthoritativeFireCatalog()
         {
-            Assert.That(FireSpellCatalog.Get("F-P-M19").Rules.Single(value => value.Kind == FireRuleKind.WeaponDamage).Amount, Is.EqualTo(28));
+            Assert.That(FireSpellCatalog.Get("F-P-M19").Rules.Single(value => value.Kind == FireRuleKind.WeaponDamage).Amount, Is.EqualTo(24));
             Assert.That(FireSpellCatalog.Get("F-P-U11").ManaCost, Is.Zero);
             Assert.That(FireSpellCatalog.Get("F-P-U13").ManaCost, Is.EqualTo(1));
             Assert.That(FireSpellCatalog.Get("F-P-U13").Rules.Single(value => value.Kind == FireRuleKind.RestoreMana).Amount, Is.EqualTo(3));
@@ -228,7 +228,7 @@ namespace OCC.Combat.Tests
             Assert.That(m06.Rules.Single(rule => rule.Kind == FireRuleKind.Damage).Amount, Is.EqualTo(10));
 
             FireSpellDefinition r01 = RogueSpellCombatRuntime.ApplyAmplifySpecialization(FireSpellCatalog.Get("F-P-R01"));
-            Assert.That(r01.Rules.Single(rule => rule.Kind == FireRuleKind.Damage).Amount, Is.EqualTo(14));
+            Assert.That(r01.Rules.Single(rule => rule.Kind == FireRuleKind.Damage).Amount, Is.EqualTo(10));
 
             // 变体不得二次减费：行动点、魔力与冷却必须与目录中的平衡值一致。
             foreach (string id in new[] { "F-P-M01", "F-P-M03", "F-P-M06", "F-P-U01", "F-P-U04", "F-P-U18", "F-P-R01", "F-P-R19" })
@@ -240,9 +240,8 @@ namespace OCC.Combat.Tests
                 Assert.That(variant.Cooldown, Is.EqualTo(origin.Cooldown), id);
             }
 
-            // 总案 3.5.6.5：只有普通与罕见下调 1 点魔力，稀有不下调（与技能配置表一致）。
-            // 三链落表后 U17 焦土警戒为普通（落表魔力 4 → 结算 3），R19 熔障爆点为稀有不参与下调。
-            Assert.That(FireSpellCatalog.Get("F-P-M07").ManaCost, Is.EqualTo(5));
+            // 总案 3.5.6.6 与配置表记录最终费用，运行时不再叠加稀有度减费。
+            Assert.That(FireSpellCatalog.Get("F-P-M07").ManaCost, Is.EqualTo(4));
             Assert.That(FireSpellCatalog.Get("F-P-U17").ManaCost, Is.EqualTo(3));
             Assert.That(FireSpellCatalog.Get("F-P-R19").ManaCost, Is.EqualTo(4));
 
@@ -257,7 +256,7 @@ namespace OCC.Combat.Tests
             Assert.That(RogueSpellCombatRuntime.ApplyThrottleSpecialization(FireSpellCatalog.Get("F-P-M01")).ManaCost,
                 Is.EqualTo(FireSpellCatalog.Get("F-P-M01").ManaCost - 1));
             Assert.That(RogueSpellCombatRuntime.ApplyThrottleSpecialization(FireSpellCatalog.Get("F-P-R01")).ManaCost,
-                Is.EqualTo(0));
+                Is.EqualTo(1));
             // 基础四式不在 FireSpellCatalog 内（属另一套 SpellDefinition），其节流由 ExecuteBasic 路径处理。
         }
 

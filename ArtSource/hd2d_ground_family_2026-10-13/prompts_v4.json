@@ -1,0 +1,9 @@
+[
+  {
+    "id": "academy_court_limestone_a",
+    "prompt": "Edit the provided ENLARGED native tile. This reference is exactly 32 by 32 logical square pixels, enlarged 32 times with nearest-neighbor, so every visible small block is one original pixel. KEEP THIS EXACT 32-COLUMN BY 32-ROW GRID and square tile extent, and keep both thin square perimeter bands at their existing thickness. Do not redraw on a finer grid. Change only the stone marks inside the perimeter: replace the tiny scratches with ONE subtle broad connected limestone inclusion and one much smaller connected inclusion. Keep most of the tile in its current calm grey-beige dominant fill. Use only 5 solid grey-beige stone colors, with absolutely uniform flat fills inside each pixel square. No gradients or mottled texture, no antialiasing, no fine subdivisions or half-pixels, no dust dots, no lighting, shadow, cracks, shine or text. Authentic low-resolution game pixel art, new independent drawing of the interior on the unchanged native lattice. Full square opaque tile, no added padding or background.",
+    "reference": "diagnostics/academy_block_court_b_reference_32x.png",
+    "reference_zoom": 32,
+    "changes": "single-lattice inference anchor only; simpler material marking"
+  }
+]

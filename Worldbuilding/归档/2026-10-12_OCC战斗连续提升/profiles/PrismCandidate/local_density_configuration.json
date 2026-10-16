@@ -1,0 +1,1262 @@
+{
+  "status": "QA_PENDING",
+  "source": "Current live battle geometry/material readback, visible source-textured meshes only",
+  "fieldOfView": 24.0,
+  "allowHDR": true,
+  "renderer": "UniversalRenderer",
+  "postProcessing": true,
+  "colourSpace": "Linear",
+  "quality": "Very Low",
+  "expectedWorldPixelPitch": 0.03125,
+  "sourceTexelWorldPitchMin": 0.03125,
+  "sourceTexelWorldPitchMax": 0.03125,
+  "sourceMacroPixelReview": "PENDING",
+  "humanReview": "PENDING",
+  "visibleTextures": [
+    {
+      "objectName": "外围连续铺地",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4448,
+      "construction": "simple_polygonal_mesh",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        36.0,
+        0.0,
+        32.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "浅水面",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": null,
+      "sourceTexelWorldPitchMax": null,
+      "worldBounds": [
+        3.44999981,
+        0.0,
+        9.65
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "学院独立立面",
+      "texture": "academy_facade",
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png",
+      "sha256": "f1705cf02ff32e1b1bc4d1161b4b659fb34a7c084f13ab74a9cee93fbca5b5ed",
+      "width": 224,
+      "height": 128,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        7.0,
+        4.0,
+        0.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "独立庭院树",
+      "texture": "academy_tree",
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_tree.png",
+      "sha256": "9978c0b532855042c823e461be21c7c5c6947aa693af3625aabcd063e531bf51",
+      "width": 96,
+      "height": 96,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        3.0,
+        2.12132025,
+        2.12132049
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "独立庭院树",
+      "texture": "academy_tree",
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_tree.png",
+      "sha256": "9978c0b532855042c823e461be21c7c5c6947aa693af3625aabcd063e531bf51",
+      "width": 96,
+      "height": 96,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        3.0,
+        2.12132025,
+        2.12132049
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "独立庭院树",
+      "texture": "academy_tree",
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_tree.png",
+      "sha256": "9978c0b532855042c823e461be21c7c5c6947aa693af3625aabcd063e531bf51",
+      "width": 96,
+      "height": 96,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        3.0,
+        2.12132025,
+        2.12132049
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "学院结构_0",
+      "texture": "academy_floor_repair_plate",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_plate.png",
+      "sha256": "0afc2015c074d36111f95ce0c3a32d3be07bf91c0f5173ec8c99eded4a2ba638",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "学院结构_1",
+      "texture": "academy_floor_repair_stone",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_stone.png",
+      "sha256": "d4ac1fcb1223e8d014e6f72481246da7d044784a944efa0b3a0b495b65ef3d45",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "学院结构_2",
+      "texture": "academy_floor_inspection_window",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_inspection_window.png",
+      "sha256": "b48ba37e685d4604264b9964250f7c0ada97c8e5bc2d0c8b8ccd0f32ccbfc258",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(0, 0)",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(1, 0)",
+      "texture": "academy_block_court_a",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "物件_(1, 0)",
+      "texture": "academy_light_training_pad_intact",
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_light_training_pad_intact.png",
+      "sha256": "5d539d09f65c75927e662d53fffa052ebd834582cfe700547884dff2255d3df0",
+      "width": 64,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        2.0,
+        0.7071067,
+        0.7071068
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(2, 0)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "环境_(2, 0)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(3, 0)",
+      "texture": "academy_block_court_c",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+      "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "环境_(3, 0)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(4, 0)",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "环境_(4, 0)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(5, 0)",
+      "texture": "academy_block_court_a",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "单位_(5, 0)",
+      "texture": "pyromancer",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png",
+      "sha256": "d826c048290a40dc80336df73f74d5c11a30cc0414ca38b7528dc776088a860a",
+      "width": 32,
+      "height": 64,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        1.41421342,
+        1.41421366
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(6, 0)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(7, 0)",
+      "texture": "academy_block_court_c",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+      "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(0, 1)",
+      "texture": "academy_block_court_c",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+      "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(1, 1)",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "物件_(1, 1)",
+      "texture": "academy_light_book_crate_intact",
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_light_book_crate_intact.png",
+      "sha256": "ecb2514718fdeb4c348307705af45c91a369b56cc4d6256b366b9a5a139155ba",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.7071067,
+        0.7071068
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(2, 1)",
+      "texture": "academy_block_court_a",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "环境_(2, 1)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(3, 1)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(4, 1)",
+      "texture": "academy_block_court_c",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+      "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "物件_(4, 1)",
+      "texture": "academy_light_training_pad_intact",
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_light_training_pad_intact.png",
+      "sha256": "5d539d09f65c75927e662d53fffa052ebd834582cfe700547884dff2255d3df0",
+      "width": 64,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        2.0,
+        0.7071067,
+        0.7071068
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(5, 1)",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(6, 1)",
+      "texture": "academy_block_court_a",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(7, 1)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(0, 2)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(1, 2)",
+      "texture": "academy_block_court_c",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+      "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "单位_(1, 2)",
+      "texture": "victor_static",
+      "path": "UnityProject/Assets/Game/Resources/Art/VictorBattle/victor_static.asset",
+      "sha256": "8ecf3ad3223f1841c9755365db02dd357608b8edad37a7433050ec14ae970087",
+      "width": 64,
+      "height": 64,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        2.0,
+        1.41421342,
+        1.41421366
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(2, 2)",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "环境_(2, 2)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(3, 2)",
+      "texture": "academy_block_court_a",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(4, 2)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "单位_(4, 2)",
+      "texture": "sigil_mauler",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/sigil_mauler.png",
+      "sha256": "6a1bff441963682bfceebb34d4c944acb7b2a9d3a35d901bc4940300a54b2591",
+      "width": 64,
+      "height": 64,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        2.0,
+        1.41421342,
+        1.41421366
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(5, 2)",
+      "texture": "academy_block_court_c",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+      "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "物件_(5, 2)",
+      "texture": "academy_aether_crystal_intact",
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DBattleCrystalCandidates/academy_aether_crystal_intact.png",
+      "sha256": "89ae7fed00ede0db80c11ebe9d998dc20cee231904d8a9e9b63dac4fbaf67cad",
+      "width": 64,
+      "height": 64,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        2.0,
+        1.41421342,
+        1.41421366
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(6, 2)",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "战利品_(6, 2)",
+      "texture": "academy_loot_chest_closed",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_loot_chest_closed.png",
+      "sha256": "7b405f8250650dcaf2831e6a0c1b0d8de94d88f3df35371673f7d128ca8fe1d4",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.7071067,
+        0.7071068
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(7, 2)",
+      "texture": "academy_block_court_a",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(0, 3)",
+      "texture": "academy_block_court_a",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(1, 3)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(2, 3)",
+      "texture": "academy_block_court_c",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+      "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "环境_(2, 3)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(3, 3)",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(4, 3)",
+      "texture": "academy_block_court_a",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(5, 3)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(6, 3)",
+      "texture": "academy_block_court_c",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+      "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(7, 3)",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(0, 4)",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(1, 4)",
+      "texture": "academy_block_court_a",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(2, 4)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(3, 4)",
+      "texture": "academy_block_court_c",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+      "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(4, 4)",
+      "texture": "academy_block_court_d",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+      "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(5, 4)",
+      "texture": "academy_block_court_a",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(6, 4)",
+      "texture": "academy_block_court_b",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    },
+    {
+      "objectName": "地面_(7, 4)",
+      "texture": "academy_block_court_c",
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+      "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "vertices": 4,
+      "construction": "pixel_card",
+      "sourceTexelWorldPitchMin": 0.03125,
+      "sourceTexelWorldPitchMax": 0.03125,
+      "worldBounds": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "uvDensityScope": "Actual world distance per source texel; source macro-pixel lattice not inferred or human-approved"
+    }
+  ],
+  "lights": [
+    {
+      "name": "战场统一日光",
+      "type": "Directional",
+      "intensity": 3.1,
+      "range": 10.0,
+      "colour": [
+        1.0,
+        0.94,
+        0.84,
+        1.0
+      ],
+      "shadows": "Soft",
+      "cullingMask": 32768
+    },
+    {
+      "name": "战场柔和补光",
+      "type": "Directional",
+      "intensity": 0.35,
+      "range": 10.0,
+      "colour": [
+        0.7,
+        0.82,
+        1.0,
+        1.0
+      ],
+      "shadows": "None",
+      "cullingMask": 32768
+    },
+    {
+      "name": "蓄能晶簇局部光_(5, 2)",
+      "type": "Point",
+      "intensity": 1.8,
+      "range": 2.3,
+      "colour": [
+        0.36,
+        0.67,
+        1.0,
+        1.0
+      ],
+      "shadows": "None",
+      "cullingMask": 32768
+    }
+  ],
+  "limitations": [
+    "Inventory excludes non-textured/procedural shader inputs; not complete source-granularity or model-style approval",
+    "Quad classification is a geometry diagnostic, not human construction review"
+  ]
+}

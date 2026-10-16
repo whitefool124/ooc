@@ -1,0 +1,319 @@
+{
+  "status": "RUNTIME_VERIFIED_CANDIDATE",
+  "duration": 16,
+  "fixed_camera": true,
+  "terrain_destruction": false,
+  "editor_checks": {
+    "path": "Worldbuilding/归档/2026-10-15_天穹熔炉像素疏化/fixed_runtime_checks.json",
+    "sha256": "00eb26037614131fb63c58a5b276d03e70406d8c3441427bdc890f82099cb347"
+  },
+  "player_checks": {
+    "path": "Worldbuilding/归档/2026-10-15_天穹熔炉像素疏化/PlayerCheck/player_checks.json",
+    "sha256": "5e4c150a11fc089a4e4f4284093e04385538b846c1db84d7e278f9b265cfd79b"
+  },
+  "model_checks": {
+    "path": "Worldbuilding/归档/2026-10-15_天穹熔炉像素疏化/model_views/model_checks.json",
+    "sha256": "68ac98a9be8b11addbe419ba9b59ff66d7cb477eaa87e809ab6cc498d070be51"
+  },
+  "build_report": {
+    "path": "Worldbuilding/归档/2026-10-15_天穹熔炉像素疏化/build_report.json",
+    "sha256": "57737cf86440a37300aa7935c76857f205bec330130cdf0ff0cfabee9309e2ce"
+  },
+  "movie": {
+    "path": "Artifacts/SkyFurnacePixel_20261015/天穹熔炉_像素疏化版.mp4",
+    "sha256": "93df02187b45528b46910d75803a9b05323a38c285998ba4c3d915dd826c6d2f"
+  },
+  "movie_type": "Unity runtime timeline frame export plus synchronized stems; not desktop recording or FPS benchmark",
+  "human_aesthetic_review": "PENDING",
+  "asset_status": "QA_PENDING",
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "f58a11f55edbac3893e59fd81d0089ac6ef97a105950ecd87687207204609b94"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "74ad94d5258d658b3622a807ae80f8190bc1197bfa19be5858a890c78f0b3f44"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "0b6427eeddc1fb8544fc04a5d769566f901c04b23c1fbdb9c01c9d86cfca5a2b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "cb0d43a9604da681e1d28b56f540b3daf75394b36d949ec78bcf56796d00568b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+      "sha256": "1ca0a64638423bce4e74098e2097137e9c2f9cf37c9145900be0548d491fd630"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceVoxelStage.cs",
+      "sha256": "e6022b737144e337642fe80c4975134547031f40150530f9336a04bd095e29a4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/VfxVoxelMesh.cs",
+      "sha256": "e43932cb6a04acd803f0ee3cff2ecd8cd9eaf76313d751bbf001b0d86aa45e63"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader",
+      "sha256": "405310975cb9bad36ad2cf6e9e1261975d14fa586de7d51da22b29539eecffe2"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceEnergy.shader",
+      "sha256": "a15de9af2c8c18b83ee9a7fdf28403a90cec522c0550e74d2ece8edbe3f99b3a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+      "sha256": "6fdffb19b0189810c20a984bcb0581800ff9289e64f1830fe66ea625f3c2748d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs",
+      "sha256": "76a9f2cfdb79faa4a61ddfc39234c7e5b2941bf3d957759e3b5ce60a3017eb30"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/quiet_energy_pixel.png",
+      "sha256": "a79f3482fa9d71c3fdb77dd2321c1fce30cd435a7df9cf0249937a56c28aea1e"
+    },
+    {
+      "path": "UnityProject/Assets/Scenes/SkyFurnace.unity",
+      "sha256": "d27f7982036d600b9faea8e6834115d3a0d9c6d014a99992da02b3b961ad20a6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png",
+      "sha256": "600006205fbf16204a98afcf272a2a420b618042e4f2d4cc18cef65d675f3d24"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png",
+      "sha256": "f1705cf02ff32e1b1bc4d1161b4b659fb34a7c084f13ab74a9cee93fbca5b5ed"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_tree.png",
+      "sha256": "9978c0b532855042c823e461be21c7c5c6947aa693af3625aabcd063e531bf51"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_planter_intact.png",
+      "sha256": "093279eea84c12bb7e1ebeb81c84ccd0fdf22d06404339640536140106b8b2c2"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_decoy_lantern_active.png",
+      "sha256": "0c2e6cf9cdc2d00c01218382ca2f0f264b30155900f869d34191f104d60d97d1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png",
+      "sha256": "d826c048290a40dc80336df73f74d5c11a30cc0414ca38b7528dc776088a860a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/pyromancer_cast.png",
+      "sha256": "91c04b17c1019469e60a6d07b12e4b687d009162a186322b4d5688a2e2e9cfb4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/smoke_wisp_v2.png",
+      "sha256": "8227b9a93970c55e005e51b58ef79b19978bfe5739a00e2fedc1752c3787d515"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePlayerProbe.cs",
+      "sha256": "21184acb9527a850b011d889b7a0aef8f9324bd8834e7eb3bb0146c9e22bdfbc"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DFireLightRecipe.cs",
+      "sha256": "534da2d9b20775d6aa993e96246c7deb850464f3d018ab5b659933bc7a1e2248"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxLitCard.shader",
+      "sha256": "16cff3f51dbd7103d6d728ab7ded5832634f9552280bec8542d92ee6027fb541"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+      "sha256": "7226abe153ba06d2fdfe1ff74cbd3bf21c5998e6d7016782d45e496870a86df7"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceHeat.shader",
+      "sha256": "b87b3e19708b773a75f18a30a1565edc8fb71afcfe87a5db9d04bd06410be60a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_fire_light.asset",
+      "sha256": "e5c0c932face49563e5102f9d67bd8069c2e98accc082586fb0f97e0806e9f9b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_vfx_lit_card.mat",
+      "sha256": "886066be0217431929e5d802a374bf221cf90e6c28fef886bc6866214ffced7b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_cutout.mat",
+      "sha256": "326722cf4eac49349711e495aaf63cae4d5a59e2110060931413cb049a1c521b"
+    },
+    {
+      "path": "UnityProject/Assets/Resources/Audio/OCC/SkyFurnace/music_16s.wav",
+      "sha256": "8e4e213755f915ef5890d699805b414f2e7a8481b55c78e76b14b9dde564e8eb"
+    },
+    {
+      "path": "UnityProject/Assets/Resources/Audio/OCC/SkyFurnace/sfx_16s.wav",
+      "sha256": "65a66b6a2c16a8f657dbd35983a0de1ed65027af6e0009926b0f9ca3a2786d61"
+    },
+    {
+      "path": "ArtSource/SkyFurnacePixel_20261015/quiet_energy.occ-art-manifest-v1.json",
+      "sha256": "3f9c07e8f1af311cdb6b620de0083aba78c28703a30b8f0cd4aeeca175815b84"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-15_天穹熔炉像素疏化/pixel_density.json",
+      "sha256": "a9da8de49e0f8415f022b95945ef07c9301351cb1fccde93693d1a1ca67decb5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-15_天穹熔炉像素疏化/construction.json",
+      "sha256": "1cbb02f62d18a54d6152593115f9b9197dbd5a2482d04efef84180d766e11429"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-15_天穹熔炉像素疏化/model_views/model_checks.json",
+      "sha256": "68ac98a9be8b11addbe419ba9b59ff66d7cb477eaa87e809ab6cc498d070be51"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs.meta",
+      "sha256": "1043985ec98f5a7960ea997b6fa58cfbd347bb6eaf10fa1cab4303f341e17807"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs.meta",
+      "sha256": "f6c7e397bf9563e73d5c495624e2f3847eefee45705d78f733a82569d20d508e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs.meta",
+      "sha256": "ced65329a3dc4392e52eee37f60cbbc3a2574eefcef2748ac9154192efe941e8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs.meta",
+      "sha256": "433cb82eb68cec227674c4e1a609305bd44621ede2431d141e4c8716835fb31b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs.meta",
+      "sha256": "8649c0a976c1b3600e1db53e752ef6ef8c105844fd0c29454d374b9c86edbfc1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs.meta",
+      "sha256": "3e9f9cae4c9769fb776e7926e07cdb6e100cde573f9cc846fcfd853b226200be"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceVoxelStage.cs.meta",
+      "sha256": "ee12432e2241107b3994a04402ee1ab57d9eefefb8986ed3cb408bd5a5631dd4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/VfxVoxelMesh.cs.meta",
+      "sha256": "dc16e7d6edce00e179aff00017fc2887158c06c4e8e79543e317287d295b5b97"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader.meta",
+      "sha256": "9badd21644749d37550f57663265e6eed8852705f28aa7e9db88103d44c11833"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceEnergy.shader.meta",
+      "sha256": "da6250f514bc689568d78fd02b6b1612548c6c7bdd4c4a61bad1d0b28a081f7f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs.meta",
+      "sha256": "5eaece5bf0a73a188188a6b7e0526d5d8b233192be9abccf1cb274ed77286aad"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs.meta",
+      "sha256": "b170d448313b3ceceae41d7c1ec3dcb0b224308a2ab4b2ac25c24289def680c7"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/quiet_energy_pixel.png.meta",
+      "sha256": "8fee0029f1b43c1ea4954faedbb8bf912eab253fab44d3ffd51eda044fb1a701"
+    },
+    {
+      "path": "UnityProject/Assets/Scenes/SkyFurnace.unity.meta",
+      "sha256": "218558caaa552cead2c3ead37341b9207f1e8a93a6a1624326fb0bb6cac013f9"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png.meta",
+      "sha256": "829778e94d7f21beedb404b2740623a2a734226224280f341193bb23d3e14607"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png.meta",
+      "sha256": "7e8a9909c0deceac1549b2eae5c8a4949acc532ac08e11b88719359a99c56845"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png.meta",
+      "sha256": "5cda836b364a6d7fae3ec79d75e3250a2815ae891ad41a26eabfec81b661e9a4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_tree.png.meta",
+      "sha256": "111003ba1ba345a5e7ca62a494c317d29319a8f7ee72d39d21db797aa95411ad"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_planter_intact.png.meta",
+      "sha256": "f935062c53c7f74dba69462d7c707f74ba8644f4c2755302875a6d99d39ac3a8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_decoy_lantern_active.png.meta",
+      "sha256": "8f961b18c1ad1c966c5b3c23431e1eb269e0a6e0f9086a2fe1f6a540c01cd818"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png.meta",
+      "sha256": "a4fb1fa473dac1cccbde8c9dff8e527b11a066ce2107e460e6c57c8ed8221fa4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/pyromancer_cast.png.meta",
+      "sha256": "b5dff1e6ddc2c72389250c49e8186bba51064e76cd6c6823767bffeca10c531a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/smoke_wisp_v2.png.meta",
+      "sha256": "9835d28fa18c28f1ebf5e52d690d1ed41c75f8aae8aaf3d91a599596e2e29e95"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePlayerProbe.cs.meta",
+      "sha256": "27755157ff6731a4e1d98339e1a2495eff7a4563a632558b64788f9dd4d8b78e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DFireLightRecipe.cs.meta",
+      "sha256": "69c2758d9bb58effa44c0b780e2b9cf47e2bbb74a7bd6e99856ab73b3dbf0800"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxLitCard.shader.meta",
+      "sha256": "31f5472b7ed1ba48382fde3d36387159b1955ce258e235d099be46902e4f65ce"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader.meta",
+      "sha256": "76aeacc9e21c9f8d89cc4d41fc1c627ea3e8d7efcfc5f57b14a53979ca3e97ec"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceHeat.shader.meta",
+      "sha256": "165d68b1b22b960bf09239be5d2517d43cd133e05477b4a0c1dac7ab34288ce5"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_fire_light.asset.meta",
+      "sha256": "7607a3ed6eeb81a350439c145bcab1a7abcb40e8c719e01d8e6e0787ec0076a0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_vfx_lit_card.mat.meta",
+      "sha256": "69316e6f299f4f1a7ff7fe4f56b3692dc74a0f50421697b5053af7274a246e4a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_cutout.mat.meta",
+      "sha256": "98d56bd353e25d8cfd5c2baef42dd452b0b50a8005dac1df1c218d01ba55290d"
+    },
+    {
+      "path": "UnityProject/Assets/Resources/Audio/OCC/SkyFurnace/music_16s.wav.meta",
+      "sha256": "c97b91508593beae80e0abe86b7fb86b0d0be24cf8b35ad018378ff6c1d2ef98"
+    },
+    {
+      "path": "UnityProject/Assets/Resources/Audio/OCC/SkyFurnace/sfx_16s.wav.meta",
+      "sha256": "685fc3c859cadb1d7c7bcbc24f30444d909a1610a2c7d91146012ad0682b67f5"
+    }
+  ]
+}

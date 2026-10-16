@@ -8,6 +8,30 @@ namespace OCC.Combat.Tests
 {
     public sealed class FormalArtRegistryTests
     {
+        [Test]
+        public void VictorBattleSprite_ResolvesThroughTheSharedHeroLookup()
+        {
+            var assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var sprite = Resources.Load<Sprite>(FormalArtRegistry.UnitPath("hero"));
+            Assert.That(sprite, Is.Not.Null);
+            Assert.That(sprite.pixelsPerUnit, Is.EqualTo(32));
+            Assert.That(assets.Unit(hero), Is.SameAs(sprite.texture));
+            Assert.That(assets.Unit(hero, 1), Is.SameAs(sprite.texture));
+            Assert.That(sprite.texture.filterMode, Is.EqualTo(FilterMode.Point));
+            Assert.That(sprite.texture.mipmapCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void BreakStanceFloatingFeedback_ResolvesAnImportedSemanticIcon()
+        {
+            var semantic=CombatFeedbackCatalog.For(CombatFeedbackKind.BreakStance);
+            Assert.That(Resources.Load<Sprite>(FormalArtRegistry.FeedbackPath(semantic.Key)),Is.Not.Null,
+                "A real break-stance hit must display feedback without interrupting action playback.");
+            Assert.That(semantic.ShortLabel,Is.EqualTo("破势"));
+        }
+
         [TestCase("shieldguard")]
         [TestCase("stone_snare")]
         [TestCase("raider")]
@@ -27,6 +51,28 @@ namespace OCC.Combat.Tests
             Assert.That(assets.Unit(unit, 1), Is.SameAs(rest));
             Assert.That(assets.Portrait(unit), Is.Not.SameAs(rest));
             Assert.That(assets.Portrait(unit).width, Is.EqualTo(128));
+        }
+
+        [Test]
+        public void BreachRam_UsesUserAdoptedSpriteWithoutCandidateSwitch()
+        {
+            bool previous=EnemyUnitArtCandidates.ReviewEnabled;
+            try
+            {
+                EnemyUnitArtCandidates.ReviewEnabled=false;
+                var assets=new CombatFormalVisualAssets();assets.LoadRuntime();
+                var unit=new UnitState("ram",false,new GridPosition(0,0));EnemyArchetypes.Get("breach_ram").Apply(unit);
+                var sprite=Resources.Load<Sprite>(FormalArtRegistry.UnitPath("breach_ram"));
+                Assert.That(EnemyArchetypes.Get("breach_ram").ArtId,Is.EqualTo("breach_ram"));
+                Assert.That(sprite,Is.Not.Null);Assert.That(sprite.texture.width,Is.EqualTo(64));Assert.That(sprite.texture.height,Is.EqualTo(64));
+                Assert.That(sprite.pixelsPerUnit,Is.EqualTo(32));Assert.That(sprite.pivot.y,Is.EqualTo(2).Within(.001));
+                Assert.That(sprite.texture.filterMode,Is.EqualTo(FilterMode.Point));Assert.That(sprite.texture.mipmapCount,Is.EqualTo(1));
+                Assert.That(assets.Unit(unit),Is.SameAs(sprite.texture));Assert.That(assets.Unit(unit,1),Is.SameAs(sprite.texture));
+                Assert.That(assets.Unit(unit),Is.Not.SameAs(Resources.Load<Texture2D>(FormalArtRegistry.UnitPath("sigil_mauler"))));
+                EnemyUnitArtCandidates.ReviewEnabled=true;Assert.That(EnemyUnitArtCandidates.Resolve("breach_ram"),Is.Null);
+                Assert.That(assets.Unit(unit),Is.SameAs(sprite.texture));
+            }
+            finally{EnemyUnitArtCandidates.ReviewEnabled=previous;}
         }
 
         [Test]

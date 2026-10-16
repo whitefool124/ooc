@@ -55,6 +55,12 @@ namespace OCC.Combat.Roguelite
         private readonly Dictionary<string, RogueBackpackPlacement> backpack = new Dictionary<string, RogueBackpackPlacement>(StringComparer.Ordinal);
         private bool forgeWeaponShieldAvailable;
         private bool forgeSpellDiscountConsumed;
+        private string activeMealId=string.Empty;
+        private bool mealSpellConsumed,mealWeaponConsumed;
+        public bool MealSpellDiscountAvailable=>activeMealId=="MEAL-SPELL"&&!mealSpellConsumed;
+        public void ConsumeMealSpellDiscount()=>mealSpellConsumed=true;
+        public int MealWeaponDamageBonus=>activeMealId=="MEAL-POWER"?2:activeMealId=="MEAL-HUNTER"&&!mealWeaponConsumed?4:0;
+        public void ConsumeMealWeaponHit(string unitId){if(unitId=="hero")mealWeaponConsumed=true;}
         private readonly Dictionary<EquipmentSlot, string> equipped = EquipmentSlotRules.ActiveSlots.ToDictionary(value => value, value => string.Empty);
         private readonly string[] quickbar = new string[RogueRuntimeConstants.ItemQuickbarSize];
         private readonly HashSet<string> firstMoveAvailable = new HashSet<string>(StringComparer.Ordinal);
@@ -124,6 +130,7 @@ namespace OCC.Combat.Roguelite
             foreach (string id in firstPaidSpellReturned) clone.firstPaidSpellReturned.Add(id);
             clone.forgeWeaponShieldAvailable = forgeWeaponShieldAvailable;
             clone.forgeSpellDiscountConsumed = forgeSpellDiscountConsumed;
+            clone.activeMealId=activeMealId;clone.mealSpellConsumed=mealSpellConsumed;clone.mealWeaponConsumed=mealWeaponConsumed;
             clone.attachedCombat = combat;
             return clone;
         }
@@ -145,9 +152,11 @@ namespace OCC.Combat.Roguelite
             {
                 RogueEquipmentRuntime starter = CreateStarter(dto.Seed);
                 starter.AddMaterialStock(dto);
+                starter.activeMealId=dto.MealBattlesRemaining>0?dto.ActiveMealId:string.Empty;
                 return starter;
             }
             RogueEquipmentRuntime runtime = new RogueEquipmentRuntime(dto.Seed);
+            runtime.activeMealId=dto.MealBattlesRemaining>0?dto.ActiveMealId:string.Empty;
             foreach (EquipmentInstanceDto saved in dto.EquipmentInstances.OrderBy(value => value.AcquiredOrder))
             {
                 RogueEquipmentInstance instance = runtime.CreateInstance(saved.InstanceId, saved.DefinitionId, saved.Rarity, saved.AcquiredOrder, saved.SourceType);
@@ -354,17 +363,26 @@ namespace OCC.Combat.Roguelite
         internal void AttachToCombat(CombatState combat)
         {
             attachedCombat = combat ?? throw new ArgumentNullException(nameof(combat));
+            firstMoveAvailable.Add("hero");
             RefreshEquipmentPassives();
             int statusGuards = new[] { EquipmentSlot.Head, EquipmentSlot.Chest, EquipmentSlot.Feet }
                 .Count(slot => HasForgedEquipped(slot, "FORGE-CIRCUIT"));
+            if(activeMealId=="MEAL-CLEAR")statusGuards++;
             if (statusGuards > 0) attachedCombat.GetUnit("hero")?.ConfigureFirstNegativeStatusReduction(statusGuards);
+            if(!string.IsNullOrEmpty(activeMealId))
+            {
+                var meal=AcademyMealCatalog.Get(activeMealId);
+                attachedCombat.PassiveEffects.RegisterPassive("hero",new CombatPassiveDefinition("meal:"+meal.Id,meal.Name,
+                    CombatPassiveSourceKind.Meal,meal.Id,CombatPassiveTrigger.BattleStart,meal.Effect));
+            }
         }
 
         private bool HasForgedEquipped(EquipmentSlot slot, string materialId) =>
             equipped.TryGetValue(slot, out string id) && !string.IsNullOrEmpty(id) &&
             equipment.TryGetValue(id, out RogueEquipmentInstance instance) && instance.ForgeMaterialId == materialId;
 
-        public int ForgeWeaponDamageBonus => HasForgedEquipped(EquipmentSlot.Weapon, "FORGE-LOAD") ? 2 : 0;
+        public int ForgeWeaponDamageBonus => (HasForgedEquipped(EquipmentSlot.Weapon, "FORGE-LOAD") ? 2 : 0)+
+            MealWeaponDamageBonus;
         public int ForgeManaCapacityBonus => HasForgedEquipped(EquipmentSlot.CastingUnit, "FORGE-LOAD") ? 1 : 0;
         public bool FirstForgeSpellDiscountAvailable => HasForgedEquipped(EquipmentSlot.CastingUnit, "FORGE-CIRCUIT") &&
             !forgeSpellDiscountConsumed;
@@ -373,6 +391,7 @@ namespace OCC.Combat.Roguelite
 
         public void AfterWeaponHit(CombatState combat, string unitId)
         {
+            if(unitId=="hero")mealWeaponConsumed=true;
             if (unitId != "hero" || !forgeWeaponShieldAvailable ||
                 !HasForgedEquipped(EquipmentSlot.Weapon, "FORGE-CIRCUIT")) return;
             forgeWeaponShieldAvailable = false;
@@ -495,7 +514,8 @@ namespace OCC.Combat.Roguelite
             }
         }
 
-        public int MovementBonus(string unitId) => unitId == "hero" && firstMoveAvailable.Contains(unitId) && HasEquippedEffect("first_move:+1") ? 1 : 0;
+        public int MovementBonus(string unitId) => unitId == "hero" && firstMoveAvailable.Contains(unitId)
+            ? (HasEquippedEffect("first_move:+1")?1:0)+(activeMealId=="MEAL-MOVE"?1:0) : 0;
         public void AfterMove(string unitId) => firstMoveAvailable.Remove(unitId);
 
         public void OnPersonalSpellPaid(CombatState combat, string unitId, int manaPaid)

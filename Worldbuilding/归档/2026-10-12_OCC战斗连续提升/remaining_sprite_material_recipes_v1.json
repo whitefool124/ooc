@@ -1,0 +1,1288 @@
+{
+  "schema": "occ-authored-sprite-material-batch-v1",
+  "status": "QA_PENDING",
+  "world_pixel_pitch": 0.03125,
+  "materials": {
+    "void": {
+      "roughness": 1,
+      "metallic": 0,
+      "coat": 0,
+      "energy": 0
+    },
+    "stone": {
+      "roughness": 0.88,
+      "metallic": 0,
+      "coat": 0,
+      "energy": 0
+    },
+    "crystal": {
+      "roughness": 0.3,
+      "metallic": 0,
+      "coat": 0.65,
+      "energy": 0.12
+    },
+    "leaf": {
+      "roughness": 0.92,
+      "metallic": 0,
+      "coat": 0,
+      "energy": 0
+    },
+    "wood": {
+      "roughness": 0.85,
+      "metallic": 0,
+      "coat": 0,
+      "energy": 0
+    },
+    "glass": {
+      "roughness": 0.32,
+      "metallic": 0,
+      "coat": 0.6,
+      "energy": 0
+    },
+    "frame": {
+      "roughness": 0.6,
+      "metallic": 0.3,
+      "coat": 0,
+      "energy": 0
+    },
+    "roof": {
+      "roughness": 0.8,
+      "metallic": 0,
+      "coat": 0,
+      "energy": 0
+    }
+  },
+  "assets": [
+    {
+      "id": "academy_aether_crystal_intact",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_crystal_intact.png",
+        "sha256": "e3728c4b07c1e1dd16a00ba4f0d30ace06522161e6f3b616e04d43c6c8da24ca"
+      },
+      "canvas": [
+        96,
+        64
+      ],
+      "output": "crystal",
+      "default_role": "stone",
+      "geometry": [
+        {
+          "kind": "prism",
+          "values": [
+            18,
+            32,
+            33,
+            52,
+            0.014
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            33,
+            17,
+            52,
+            43,
+            0.023
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            47,
+            26,
+            64,
+            51,
+            0.02
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            61,
+            31,
+            81,
+            55,
+            0.018
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            28,
+            43,
+            46,
+            57,
+            0.012
+          ]
+        }
+      ],
+      "regions": [],
+      "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+      "limitations": [
+        "Shallow-relief approximation; no physical transmission",
+        "Original albedo retains baked bright facets; numeric fields do not remove them"
+      ],
+      "palette_roles": {
+        "crystal": [
+          [
+            70,
+            99,
+            146
+          ],
+          [
+            241,
+            253,
+            254
+          ],
+          [
+            47,
+            69,
+            100
+          ],
+          [
+            122,
+            155,
+            192
+          ],
+          [
+            199,
+            232,
+            254
+          ],
+          [
+            163,
+            207,
+            249
+          ],
+          [
+            94,
+            124,
+            164
+          ],
+          [
+            135,
+            177,
+            225
+          ]
+        ],
+        "stone": [
+          [
+            27,
+            33,
+            49
+          ],
+          [
+            67,
+            66,
+            69
+          ],
+          [
+            182,
+            177,
+            175
+          ],
+          [
+            204,
+            198,
+            196
+          ],
+          [
+            145,
+            143,
+            146
+          ],
+          [
+            107,
+            104,
+            108
+          ]
+        ]
+      }
+    },
+    {
+      "id": "academy_aether_crystal_damaged",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_crystal_damaged.png",
+        "sha256": "fc3c48a06127f8e6d3aec41b8c03c83806e5940844f371c6fae874536fb1bf23"
+      },
+      "canvas": [
+        96,
+        64
+      ],
+      "output": "crystal",
+      "default_role": "stone",
+      "geometry": [
+        {
+          "kind": "prism",
+          "values": [
+            18,
+            32,
+            33,
+            52,
+            0.014
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            33,
+            17,
+            52,
+            43,
+            0.023
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            47,
+            26,
+            64,
+            51,
+            0.02
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            61,
+            31,
+            81,
+            55,
+            0.018
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            28,
+            43,
+            46,
+            57,
+            0.012
+          ]
+        }
+      ],
+      "regions": [],
+      "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+      "limitations": [
+        "Shallow-relief approximation; no physical transmission",
+        "Original albedo retains baked bright facets; numeric fields do not remove them"
+      ],
+      "palette_roles": {
+        "crystal": [
+          [
+            77,
+            108,
+            147
+          ],
+          [
+            45,
+            69,
+            100
+          ],
+          [
+            243,
+            253,
+            253
+          ],
+          [
+            114,
+            146,
+            187
+          ],
+          [
+            193,
+            234,
+            252
+          ],
+          [
+            146,
+            196,
+            248
+          ],
+          [
+            155,
+            250,
+            253
+          ],
+          [
+            109,
+            246,
+            244
+          ],
+          [
+            118,
+            209,
+            227
+          ]
+        ],
+        "stone": [
+          [
+            22,
+            28,
+            44
+          ],
+          [
+            199,
+            192,
+            188
+          ],
+          [
+            69,
+            67,
+            69
+          ],
+          [
+            118,
+            116,
+            119
+          ],
+          [
+            168,
+            164,
+            163
+          ]
+        ]
+      }
+    },
+    {
+      "id": "academy_pressure_crystal_intact",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_pressure_crystal_intact.png",
+        "sha256": "f129e12e7b355549698002a4e6187a594a9d75ec3b24e104c0995a99611cdbae"
+      },
+      "canvas": [
+        96,
+        64
+      ],
+      "output": "crystal",
+      "default_role": "stone",
+      "geometry": [
+        {
+          "kind": "prism",
+          "values": [
+            18,
+            32,
+            33,
+            52,
+            0.014
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            33,
+            17,
+            52,
+            43,
+            0.023
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            47,
+            26,
+            64,
+            51,
+            0.02
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            61,
+            31,
+            81,
+            55,
+            0.018
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            28,
+            43,
+            46,
+            57,
+            0.012
+          ]
+        }
+      ],
+      "regions": [],
+      "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+      "limitations": [
+        "Shallow-relief approximation; no physical transmission",
+        "Original albedo retains baked bright facets; numeric fields do not remove them"
+      ],
+      "palette_roles": {
+        "crystal": [
+          [
+            99,
+            131,
+            172
+          ],
+          [
+            70,
+            100,
+            145
+          ],
+          [
+            210,
+            246,
+            254
+          ],
+          [
+            143,
+            198,
+            246
+          ],
+          [
+            241,
+            253,
+            254
+          ],
+          [
+            119,
+            162,
+            214
+          ],
+          [
+            49,
+            72,
+            105
+          ],
+          [
+            170,
+            244,
+            253
+          ]
+        ],
+        "stone": [
+          [
+            26,
+            33,
+            50
+          ],
+          [
+            189,
+            183,
+            180
+          ],
+          [
+            71,
+            69,
+            73
+          ],
+          [
+            126,
+            123,
+            125
+          ],
+          [
+            101,
+            98,
+            102
+          ],
+          [
+            156,
+            152,
+            151
+          ]
+        ]
+      }
+    },
+    {
+      "id": "academy_pressure_crystal_damaged",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_pressure_crystal_damaged.png",
+        "sha256": "e5776dccef6fbc34c8b17f939552e9310b3e80717e52690800c2fdc2f700b5d8"
+      },
+      "canvas": [
+        96,
+        64
+      ],
+      "output": "crystal",
+      "default_role": "stone",
+      "geometry": [
+        {
+          "kind": "prism",
+          "values": [
+            18,
+            32,
+            33,
+            52,
+            0.014
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            33,
+            17,
+            52,
+            43,
+            0.023
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            47,
+            26,
+            64,
+            51,
+            0.02
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            61,
+            31,
+            81,
+            55,
+            0.018
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            28,
+            43,
+            46,
+            57,
+            0.012
+          ]
+        }
+      ],
+      "regions": [],
+      "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+      "limitations": [
+        "Shallow-relief approximation; no physical transmission",
+        "Original albedo retains baked bright facets; numeric fields do not remove them"
+      ],
+      "palette_roles": {
+        "crystal": [
+          [
+            91,
+            130,
+            176
+          ],
+          [
+            61,
+            96,
+            145
+          ],
+          [
+            121,
+            179,
+            244
+          ],
+          [
+            239,
+            253,
+            254
+          ],
+          [
+            197,
+            242,
+            254
+          ],
+          [
+            44,
+            72,
+            107
+          ],
+          [
+            145,
+            249,
+            250
+          ],
+          [
+            28,
+            48,
+            74
+          ],
+          [
+            76,
+            249,
+            253
+          ],
+          [
+            43,
+            186,
+            215
+          ]
+        ],
+        "stone": [
+          [
+            15,
+            22,
+            38
+          ],
+          [
+            190,
+            182,
+            178
+          ],
+          [
+            73,
+            70,
+            73
+          ],
+          [
+            122,
+            119,
+            121
+          ]
+        ]
+      }
+    },
+    {
+      "id": "academy_facade",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png",
+        "sha256": "f1705cf02ff32e1b1bc4d1161b4b659fb34a7c084f13ab74a9cee93fbca5b5ed"
+      },
+      "canvas": [
+        224,
+        128
+      ],
+      "output": "environment",
+      "default_role": "stone",
+      "geometry": [
+        {
+          "kind": "rect",
+          "values": [
+            2,
+            54,
+            222,
+            125,
+            0.006
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            85,
+            30,
+            139,
+            125,
+            0.013
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            6,
+            56,
+            9,
+            124,
+            0.014
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            44,
+            56,
+            47,
+            124,
+            0.014
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            82,
+            56,
+            85,
+            124,
+            0.014
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            139,
+            56,
+            142,
+            124,
+            0.014
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            179,
+            56,
+            182,
+            124,
+            0.014
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            216,
+            56,
+            219,
+            124,
+            0.014
+          ]
+        }
+      ],
+      "regions": [
+        {
+          "bounds": [
+            1,
+            28,
+            223,
+            60
+          ],
+          "role": "roof"
+        },
+        {
+          "bounds": [
+            18,
+            64,
+            25,
+            78
+          ],
+          "role": "glass"
+        },
+        {
+          "bounds": [
+            38,
+            64,
+            45,
+            78
+          ],
+          "role": "glass"
+        },
+        {
+          "bounds": [
+            57,
+            64,
+            66,
+            78
+          ],
+          "role": "glass"
+        },
+        {
+          "bounds": [
+            77,
+            64,
+            86,
+            78
+          ],
+          "role": "glass"
+        },
+        {
+          "bounds": [
+            106,
+            54,
+            121,
+            77
+          ],
+          "role": "glass"
+        },
+        {
+          "bounds": [
+            151,
+            64,
+            160,
+            78
+          ],
+          "role": "glass"
+        },
+        {
+          "bounds": [
+            170,
+            64,
+            179,
+            78
+          ],
+          "role": "glass"
+        },
+        {
+          "bounds": [
+            190,
+            64,
+            199,
+            78
+          ],
+          "role": "glass"
+        },
+        {
+          "bounds": [
+            211,
+            64,
+            218,
+            78
+          ],
+          "role": "glass"
+        },
+        {
+          "bounds": [
+            104,
+            95,
+            124,
+            123
+          ],
+          "role": "wood"
+        }
+      ],
+      "region_basis": "Explicit manually authored spatial material regions",
+      "limitations": [
+        "Shallow-relief approximation; no physical transmission"
+      ]
+    },
+    {
+      "id": "greenhouse_facade",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyCandidates/greenhouse_facade.png",
+        "sha256": "b94bb42ebdd9587fcf31b24ace148cb8412c88f55482c9bb48cc6ec21d576034"
+      },
+      "canvas": [
+        256,
+        96
+      ],
+      "output": "environment",
+      "default_role": "glass",
+      "geometry": [
+        {
+          "kind": "rect",
+          "values": [
+            12,
+            39,
+            13,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            29,
+            39,
+            30,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            47,
+            39,
+            48,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            65,
+            39,
+            66,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            83,
+            39,
+            84,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            101,
+            39,
+            102,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            117,
+            39,
+            118,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            136,
+            39,
+            137,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            153,
+            39,
+            154,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            172,
+            39,
+            173,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            190,
+            39,
+            191,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            208,
+            39,
+            209,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            226,
+            39,
+            227,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            243,
+            39,
+            244,
+            83,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            10,
+            48,
+            245,
+            49,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            10,
+            62,
+            245,
+            63,
+            0.008
+          ]
+        },
+        {
+          "kind": "rect",
+          "values": [
+            10,
+            80,
+            245,
+            81,
+            0.008
+          ]
+        }
+      ],
+      "regions": [
+        {
+          "bounds": [
+            10,
+            80,
+            245,
+            95
+          ],
+          "role": "stone"
+        },
+        {
+          "bounds": [
+            12,
+            39,
+            13,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            29,
+            39,
+            30,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            47,
+            39,
+            48,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            65,
+            39,
+            66,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            83,
+            39,
+            84,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            101,
+            39,
+            102,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            117,
+            39,
+            118,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            136,
+            39,
+            137,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            153,
+            39,
+            154,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            172,
+            39,
+            173,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            190,
+            39,
+            191,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            208,
+            39,
+            209,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            226,
+            39,
+            227,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            243,
+            39,
+            244,
+            83
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            10,
+            48,
+            245,
+            49
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            10,
+            62,
+            245,
+            63
+          ],
+          "role": "frame"
+        },
+        {
+          "bounds": [
+            10,
+            80,
+            245,
+            81
+          ],
+          "role": "frame"
+        }
+      ],
+      "region_basis": "Explicit manually authored spatial material regions",
+      "limitations": [
+        "Shallow-relief approximation; no physical transmission"
+      ]
+    },
+    {
+      "id": "academy_tree",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_tree.png",
+        "sha256": "9978c0b532855042c823e461be21c7c5c6947aa693af3625aabcd063e531bf51"
+      },
+      "canvas": [
+        96,
+        96
+      ],
+      "output": "environment",
+      "default_role": "leaf",
+      "geometry": [
+        {
+          "kind": "ellipse",
+          "values": [
+            48,
+            24,
+            22,
+            18,
+            0.016
+          ]
+        },
+        {
+          "kind": "ellipse",
+          "values": [
+            22,
+            37,
+            18,
+            17,
+            0.014
+          ]
+        },
+        {
+          "kind": "ellipse",
+          "values": [
+            70,
+            39,
+            22,
+            20,
+            0.015
+          ]
+        },
+        {
+          "kind": "ellipse",
+          "values": [
+            28,
+            60,
+            20,
+            12,
+            0.01
+          ]
+        },
+        {
+          "kind": "ellipse",
+          "values": [
+            61,
+            57,
+            24,
+            13,
+            0.012
+          ]
+        },
+        {
+          "kind": "prism",
+          "values": [
+            43,
+            44,
+            55,
+            94,
+            0.016
+          ]
+        }
+      ],
+      "regions": [
+        {
+          "bounds": [
+            42,
+            58,
+            56,
+            94
+          ],
+          "role": "wood"
+        }
+      ],
+      "region_basis": "Explicit manually authored spatial material regions",
+      "limitations": [
+        "Leaf canopy volume proxy only; no individual-leaf geometry or transmission"
+      ]
+    }
+  ]
+}

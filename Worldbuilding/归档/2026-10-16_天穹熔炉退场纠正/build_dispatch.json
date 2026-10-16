@@ -1,0 +1,24 @@
+{
+  "success": true,
+  "command": "command build",
+  "data": {
+    "command": "build",
+    "parameters": {
+      "target": "StandaloneWindows64",
+      "outputPath": "E:/数据库/OCC_Codex/Artifacts/SkyFurnaceFractureFix_20261016/Player/SkyFurnace.exe",
+      "scenes": "[\"Assets/Scenes/SkyFurnace.unity\"]",
+      "confirm": "true"
+    },
+    "result": {
+      "status": "queued",
+      "buildId": "build_f82584d383c8"
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7801,
+      "projectPath": "E:\\数据库\\OCC_Codex\\UnityProject"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

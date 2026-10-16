@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"status\\\":\\\"PASS commands=14 moves=3 attacks=8  victory=PASS saved=True\\\",\\\"commands\\\":14,\\\"moves\\\":3,\\\"attacks\\\":8,\\\"evidence\\\":\\\" victory=PASS saved=True\\\",\\\"waterMaterials\\\":0}\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

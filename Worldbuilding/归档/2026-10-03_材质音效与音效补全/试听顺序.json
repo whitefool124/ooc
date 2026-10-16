@@ -1,0 +1,98 @@
+[
+  {
+    "time_seconds": 0,
+    "cue": "cloth_pick"
+  },
+  {
+    "time_seconds": 1.144,
+    "cue": "cloth_drop"
+  },
+  {
+    "time_seconds": 2.052,
+    "cue": "leather_pick"
+  },
+  {
+    "time_seconds": 2.845,
+    "cue": "leather_drop"
+  },
+  {
+    "time_seconds": 3.749,
+    "cue": "glass_pick"
+  },
+  {
+    "time_seconds": 4.656,
+    "cue": "glass_drop"
+  },
+  {
+    "time_seconds": 5.362,
+    "cue": "metal_pick"
+  },
+  {
+    "time_seconds": 6.114,
+    "cue": "metal_light"
+  },
+  {
+    "time_seconds": 6.863,
+    "cue": "metal_heavy"
+  },
+  {
+    "time_seconds": 7.719,
+    "cue": "paper_pick"
+  },
+  {
+    "time_seconds": 8.45,
+    "cue": "paper_drop"
+  },
+  {
+    "time_seconds": 9.211,
+    "cue": "coins"
+  },
+  {
+    "time_seconds": 10.05,
+    "cue": "forge"
+  },
+  {
+    "time_seconds": 11.309,
+    "cue": "meal"
+  },
+  {
+    "time_seconds": 12.464,
+    "cue": "latch"
+  },
+  {
+    "time_seconds": 13.215,
+    "cue": "reject"
+  },
+  {
+    "time_seconds": 14.438,
+    "cue": "object_hit"
+  },
+  {
+    "time_seconds": 15.075,
+    "cue": "object_break"
+  },
+  {
+    "time_seconds": 15.886,
+    "cue": "defeat"
+  },
+  {
+    "time_seconds": 16.955,
+    "cue": "stone_0"
+  },
+  {
+    "time_seconds": 17.558,
+    "cue": "stone_1"
+  },
+  {
+    "time_seconds": 18.162,
+    "cue": "stone_2"
+  },
+  {
+    "time_seconds": 18.772,
+    "cue": "water_0"
+  },
+  {
+    "time_seconds": 20.309,
+    "cue": "water_1"
+  }
+]

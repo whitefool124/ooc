@@ -58,5 +58,36 @@ namespace OCC.Combat.Tests
                 Assert.That(peak, Is.InRange(.15f, .90f), clip.name);
             }
         }
+        [Test] public void FoleyClipsAreShortMonoPcmAndNotClipped()
+        {
+            var clips=Resources.LoadAll<AudioClip>("Audio/OCC/SFX/Foley");
+            Assert.AreEqual(39,clips.Length);
+            foreach(var clip in clips)
+            {
+                Assert.AreEqual(1,clip.channels,clip.name);Assert.Less(clip.length,3,clip.name);
+                var importer=(AudioImporter)AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(clip));
+                Assert.AreEqual(AudioClipLoadType.DecompressOnLoad,importer.defaultSampleSettings.loadType,clip.name);
+                Assert.AreEqual(AudioCompressionFormat.PCM,importer.defaultSampleSettings.compressionFormat,clip.name);
+                clip.LoadAudioData();var samples=new float[clip.samples];Assert.IsTrue(clip.GetData(samples,0));
+                float peak=0;foreach(float v in samples)peak=Mathf.Max(peak,Mathf.Abs(v));
+                Assert.That(peak,Is.InRange(.03f,.781f),clip.name);
+            }
+        }
+        [Test] public void InventorySoundsFollowMaterialAndWeight()
+        {
+            Assert.AreEqual("glass_drop",InventoryClip("ACA-EQ-HD01",null,true,1));
+            Assert.AreEqual("cloth_drop",InventoryClip("ACA-EQ-CH01",null,true,2));
+            Assert.AreEqual("leather_drop",InventoryClip("ACA-EQ-LG01",null,true));
+            Assert.AreEqual("metal_heavy",InventoryClip("ACA-EQ-CH03",null,true,3));
+            Assert.AreEqual("metal_light",InventoryClip("ACA-EQ-LG02",null,true,2));
+            Assert.AreEqual("paper_pick",InventoryClip(null,"SPEC-TEST",false));
+            Assert.AreEqual("latch",InventoryClip("G-01",null,false));
+            Assert.IsNull(ServiceClip("shop"));
+            Assert.AreEqual("coins",ServiceClip("purchase"));
+        }
+        private static string InventoryClip(string definition,string material,bool dropped,int weight=2)
+            => (string)typeof(InventoryLiftDetail).Assembly.GetType("OCC.Combat.Presentation.OccSoundEffects").GetMethod("InventoryClip",System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.NonPublic).Invoke(null,new object[]{definition,material,dropped,weight});
+        private static string ServiceClip(string subject)
+            => (string)typeof(InventoryLiftDetail).Assembly.GetType("OCC.Combat.Presentation.OccSoundEffects").GetMethod("ServiceClip",System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.NonPublic).Invoke(null,new object[]{subject});
     }
 }

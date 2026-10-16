@@ -1,0 +1,154 @@
+{
+  "schema": "occ-actual-cover-material-inventory-v1",
+  "status": "QA_PENDING",
+  "assets": [
+    {
+      "id": "academy_heavy_training_barricade_intact",
+      "status": "QA_PENDING",
+      "source_albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_intact.png",
+        "sha256": "d32717d12b028f9f34e714da4db1ee3f05659b6b0847273b5bdeeb3e314dd3c9"
+      },
+      "source_bbox": [
+        1,
+        8,
+        30,
+        31
+      ],
+      "source_raw": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/paired_raw.png",
+        "sha256": "3c588122015d67b07c143ea49ea39e8db23d6f60a14fee90aeca47bd37036ed9"
+      },
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/normal_panel.png",
+            "sha256": "ccfc3425a6ae9b4300e6739198c55a928f3add9c840229738b62653b6f02377c"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/normal.png",
+            "sha256": "4a73f59b5de702ec536e3c03ba743adf8df5f270f46233750ab01f2d515bce06"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/normal_registration.json",
+            "sha256": "07f85c9187390ffcdaf2850e3e9a3bdc2a8b18e0f2035b639035aeaf9d488ba9"
+          },
+          "rgb_min": [
+            59,
+            42,
+            225
+          ],
+          "rgb_max": [
+            252,
+            248,
+            254
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_panel.png",
+            "sha256": "c151d6b6541717a288837eaf911634c6fcdb1d678e6025ae8528e40c61643343"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/roughness.png",
+            "sha256": "99590b476cf89538a50670e97fb1e58135d69adfe27fdb0663bc66d8ce7a1350"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_registration.json",
+            "sha256": "f781b17b628045ac1233cb4ee4cb5c90530e739b80e8c65c9d8a57c23b31261f"
+          },
+          "rgb_min": [
+            139,
+            138,
+            137
+          ],
+          "rgb_max": [
+            255,
+            254,
+            254
+          ]
+        }
+      ],
+      "normal_convention": "OpenGL +Y up, no green flip",
+      "world_pixel_pitch": 0.03125,
+      "material_regions": "Nonmetal wood/paper/fabric or pale stone; neutral black metallic/glass region input",
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "academy_light_book_crate_intact",
+      "status": "QA_PENDING",
+      "source_albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_light_book_crate_intact.png",
+        "sha256": "ecb2514718fdeb4c348307705af45c91a369b56cc4d6256b366b9a5a139155ba"
+      },
+      "source_bbox": [
+        6,
+        15,
+        25,
+        31
+      ],
+      "source_raw": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/paired_raw.png",
+        "sha256": "010295bbe3e301912a3083378c7e3a7e6f4322fcfd331da4a7eb161474614c82"
+      },
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_raw_r3.png",
+            "sha256": "5df2ae6fe291cd4ea52eb7ae93017e343563388d1c51bc7bd29bbe439178a0e3"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/normal.png",
+            "sha256": "deb85ea2bce06542ac882a3e85a28dc20c0c138143f73a67a52fed5f855d2a91"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_registration.json",
+            "sha256": "ccdc562119c0049cc325cc890fc8b86c237871344a61c4d60b58bb065e225fb6"
+          },
+          "rgb_min": [
+            67,
+            60,
+            223
+          ],
+          "rgb_max": [
+            179,
+            190,
+            254
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/roughness_panel.png",
+            "sha256": "a26bea5a109b050b234b8567dbf4cdc839ab790efdf73eaaf3cccc29db166923"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/roughness.png",
+            "sha256": "5444b738802fa595626b42a42d451be2c0aa0318fe1340fb840d22ef327ded9e"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/roughness_registration.json",
+            "sha256": "579c329cfbc2dd815754cb1a42385407bb239e42ae46992f20f31be4d891b0bc"
+          },
+          "rgb_min": [
+            107,
+            107,
+            106
+          ],
+          "rgb_max": [
+            255,
+            255,
+            254
+          ]
+        }
+      ],
+      "normal_convention": "OpenGL +Y up, no green flip",
+      "world_pixel_pitch": 0.03125,
+      "material_regions": "Nonmetal wood/paper/fabric or pale stone; neutral black metallic/glass region input",
+      "human_registration_review": "PENDING"
+    }
+  ]
+}

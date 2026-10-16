@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"FAIL:entry:System.InvalidOperationException: Verification slot is occupied\\r\\n  at OCC.Combat.EditorTools.AcademyJourneyAudit+<NewEntry>d__20.MoveNext () [0x00117] in E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Assets\\\\Game\\\\Editor\\\\AcademyJourneyAudit.cs:79 \\r\\n  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Assets\\\\Game\\\\Editor\\\\AcademyJourneyAudit.cs:66 \",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

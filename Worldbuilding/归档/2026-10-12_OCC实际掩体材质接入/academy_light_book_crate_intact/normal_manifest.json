@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_light_book_crate_intact_normal",
+  "role": "hd2d_material_data_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_raw_r3.png",
+    "source_sha256": "5df2ae6fe291cd4ea52eb7ae93017e343563388d1c51bc7bd29bbe439178a0e3",
+    "independent_raw": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_raw_r3.png",
+      "sha256": "5df2ae6fe291cd4ea52eb7ae93017e343563388d1c51bc7bd29bbe439178a0e3"
+    },
+    "registration": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_registration.json",
+      "sha256": "ccdc562119c0049cc325cc890fc8b86c237871344a61c4d60b58bb065e225fb6"
+    }
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/normal.png",
+    "output_sha256": "deb85ea2bce06542ac882a3e85a28dc20c0c138143f73a67a52fed5f855d2a91",
+    "native_ppu": 32,
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "unity_import": {
+    "guid": "f39aa5b039c100d439aee01029f997fe",
+    "filter_mode": "Point",
+    "colour_space": "linear",
+    "mipmaps": false,
+    "compression": "Uncompressed",
+    "wrap_mode": "Clamp"
+  },
+  "application": {
+    "albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_light_book_crate_intact.png",
+      "sha256": "ecb2514718fdeb4c348307705af45c91a369b56cc4d6256b366b9a5a139155ba"
+    },
+    "shared_uv": true,
+    "world_pixel_pitch": 0.03125,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_light_book_crate_intact_dry/result.json",
+      "sha256": "8443e6cea4329fe1180c17b531bd8baf93f6fad458ae6e4776dd743725c5e4ca"
+    }
+  },
+  "human_review": {
+    "overall": "PENDING"
+  },
+  "admission_blockers": [
+    "Numeric material-data role not registered in Sprite formal admission; no FORMAL promotion",
+    "Source registration, complete scene density and genuine human material review pending"
+  ]
+}

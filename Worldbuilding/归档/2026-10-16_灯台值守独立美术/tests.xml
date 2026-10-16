@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-16 07:40:14Z" end-time="2026-10-16 07:40:16Z" duration="1.6882771">
+  <test-suite type="TestSuite" id="1000" name="My project" fullname="My project" runstate="Runnable" testcasecount="2773" result="Passed" start-time="2026-10-16 07:40:14Z" end-time="2026-10-16 07:40:16Z" duration="1.688277" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2682" name="OCC.Combat.EditModeTests.dll" fullname="E:/数据库/OCC_Codex/UnityProject/Library/ScriptAssemblies/OCC.Combat.EditModeTests.dll" runstate="Runnable" testcasecount="1463" result="Passed" start-time="2026-10-16 07:40:14Z" end-time="2026-10-16 07:40:16Z" duration="1.497544" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="27696" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2683" name="OCC" fullname="OCC" runstate="Runnable" testcasecount="1463" result="Passed" start-time="2026-10-16 07:40:14Z" end-time="2026-10-16 07:40:16Z" duration="1.409866" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2685" name="Combat" fullname="OCC.Combat" runstate="Runnable" testcasecount="1461" result="Passed" start-time="2026-10-16 07:40:14Z" end-time="2026-10-16 07:40:16Z" duration="1.322248" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2686" name="Tests" fullname="OCC.Combat.Tests" runstate="Runnable" testcasecount="1461" result="Passed" start-time="2026-10-16 07:40:15Z" end-time="2026-10-16 07:40:16Z" duration="1.249926" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1877" name="EnemyUnitArtCandidateTests" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-16 07:40:15Z" end-time="2026-10-16 07:40:16Z" duration="1.108311" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1878" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1426429647" result="Passed" start-time="2026-10-16 07:40:15Z" end-time="2026-10-16 07:40:16Z" duration="0.989244" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1879" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1673571513" result="Passed" start-time="2026-10-16 07:40:16Z" end-time="2026-10-16 07:40:16Z" duration="0.051419" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/FNHF/AppData/LocalLow/DefaultCompany/My project\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

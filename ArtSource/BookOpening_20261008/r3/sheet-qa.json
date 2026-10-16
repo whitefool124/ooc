@@ -1,0 +1,122 @@
+[
+  {
+    "status": "PASS_LOSSLESS_TARGET",
+    "inferred_subject_pixel_pitch": 39,
+    "subject_lattice_confidence": 1.2182,
+    "subject_logical_size": [
+      7,
+      3
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      7,
+      3
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 31,
+    "subject_lattice_confidence": 1.0027,
+    "subject_logical_size": [
+      9,
+      5
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      9,
+      5
+    ]
+  },
+  {
+    "status": "PASS_LOSSLESS_TARGET",
+    "inferred_subject_pixel_pitch": 39,
+    "subject_lattice_confidence": 1.5413,
+    "subject_logical_size": [
+      9,
+      6
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      9,
+      6
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 38,
+    "subject_lattice_confidence": 1.1181,
+    "subject_logical_size": [
+      9,
+      7
+    ],
+    "subject_bounds_on_logical_grid": [
+      4,
+      0,
+      13,
+      7
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 22,
+    "subject_lattice_confidence": 1.0785,
+    "subject_logical_size": [
+      19,
+      10
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      8,
+      19,
+      18
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 22,
+    "subject_lattice_confidence": 1.1051,
+    "subject_logical_size": [
+      20,
+      7
+    ],
+    "subject_bounds_on_logical_grid": [
+      1,
+      11,
+      21,
+      18
+    ]
+  },
+  {
+    "status": "PASS_LOSSLESS_TARGET",
+    "inferred_subject_pixel_pitch": 37,
+    "subject_lattice_confidence": 1.3987,
+    "subject_logical_size": [
+      13,
+      4
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      7,
+      13,
+      11
+    ]
+  },
+  {
+    "status": "PASS_LOSSLESS_TARGET",
+    "inferred_subject_pixel_pitch": 37,
+    "subject_lattice_confidence": 1.3947,
+    "subject_logical_size": [
+      13,
+      4
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      7,
+      13,
+      11
+    ]
+  }
+]

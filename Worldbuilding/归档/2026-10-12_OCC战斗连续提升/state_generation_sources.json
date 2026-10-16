@@ -1,0 +1,26 @@
+[
+  {
+    "id": "academy_light_stone_bench_damaged",
+    "prompt": "Create an opaque NUMERICAL MATERIAL DATA atlas for exactly referenced damaged pale stone bench with rough fracture faces, broad shallow surface planes. Output landscape 2:1, TWO equally sized SQUARE panels side by side: tangent OpenGL NORMAL left, linear grayscale ROUGHNESS right. Each panel exact original32x32 reference canvas, original subject positions, same empty upper canvas, one authored cell per native pixel, world32PPU. LEFT muted normal data: empty/front plane RGB128,128,255; broad slight plane/bevel deviations, R/G100..156 B245..255, constant square cells. RIGHT semantically authored rough stone uniformly210..225; empty canvas225; all roughness pixels between190..235, ordinary midgray boundaries. Exact shared UV geometry. Material DATA values independently authored from geometry/material identity, never convert reference brightness to height/roughness. Preserve simple native silhouette frequency, fullcanvas, quiet sparse field; no illustration or lighting.",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-422e2758-d079-4203-8ab1-1bc1997ee220.png",
+    "status": "QA_PENDING",
+    "use": "normal panel only; roughness panel rejected in favour of explicit uniform semantic material parameter",
+    "limitation": "Normal amplitudes and UV registration pending checks"
+  },
+  {
+    "id": "academy_light_stone_bench_rubble",
+    "prompt": "Create an opaque NUMERICAL MATERIAL DATA atlas for exactly referenced pile of pale stone rubble, broad shallow fragment planes. Output landscape 2:1, TWO equally sized SQUARE panels side by side: tangent OpenGL NORMAL left, linear grayscale ROUGHNESS right. Each panel exact original32x32 reference canvas, original subject positions, same empty upper canvas, one authored cell per native pixel, world32PPU. LEFT muted normal data: empty/front plane RGB128,128,255; broad slight plane/bevel deviations, R/G100..156 B245..255, constant square cells. RIGHT semantically authored fractured rough stone uniformly220..235; empty canvas225; all roughness pixels between190..235, ordinary midgray boundaries. Exact shared UV geometry. Material DATA values independently authored from geometry/material identity, never convert reference brightness to height/roughness. Preserve simple native silhouette frequency, fullcanvas, quiet sparse field; no illustration or lighting.",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-19bd838c-d9bf-4d8d-8cdd-816b5b34e257.png",
+    "status": "QA_PENDING",
+    "use": "normal panel only; roughness panel rejected in favour of explicit uniform semantic material parameter",
+    "limitation": "Normal amplitudes and UV registration pending checks"
+  },
+  {
+    "id": "academy_light_planter_damaged",
+    "prompt": "Create an opaque NUMERICAL MATERIAL DATA atlas for exactly referenced broken clay planter with rough soil and cracked rim, broad shallow surface planes. Output landscape 2:1, TWO equally sized SQUARE panels side by side: tangent OpenGL NORMAL left, linear grayscale ROUGHNESS right. Each panel exact original32x32 reference canvas, original subject positions, same empty upper canvas, one authored cell per native pixel, world32PPU. LEFT muted normal data: empty/front plane RGB128,128,255; broad slight plane/bevel deviations, R/G100..156 B245..255, constant square cells. RIGHT semantically authored clay195..210, soil230, rough timber210; empty canvas225; all roughness pixels between190..235, ordinary midgray boundaries. Exact shared UV geometry. Material DATA values independently authored from geometry/material identity, never convert reference brightness to height/roughness. Preserve simple native silhouette frequency, fullcanvas, quiet sparse field; no illustration or lighting.",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-b124178b-505b-479c-ba31-f997a13fab8a.png",
+    "status": "QA_PENDING",
+    "use": "normal panel only; roughness panel rejected in favour of explicit uniform semantic material parameter",
+    "limitation": "Black outer frame must be rejected; retry normal registration"
+  }
+]

@@ -14,6 +14,9 @@ namespace OCC.Combat.Presentation
         private static void Install()
         {
             QualitySettings.antiAliasing = 0;
+            // Reflections add lighting detail without filtering source sprite pixels.
+            // Low editor quality tiers otherwise prevent even one-shot probe capture.
+            QualitySettings.realtimeReflectionProbes = true;
             SceneManager.sceneLoaded -= OnSceneLoaded;
             SceneManager.sceneLoaded += OnSceneLoaded;
             ApplyToCameras();

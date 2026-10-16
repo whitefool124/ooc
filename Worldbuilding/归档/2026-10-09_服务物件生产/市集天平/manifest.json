@@ -1,0 +1,150 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "hd2d_market_balance",
+  "role": "ui_detail_adaptive",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in imagegen source; rejected variants and diagnosis retained alongside selected source",
+    "source_path": "Worldbuilding/归档/2026-10-09_服务物件生产/市集天平/source-01.png",
+    "source_sha256": "47893974db952e795f4581f6a875a646a799d8246eb44f86c96552a0df4c3ee3"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-10-09_服务物件生产/市集天平/delivery.png",
+    "output_sha256": "aec13401b7ca201814c3a30b32d88b948118a5f0189d0c7b84b0a3119aa49d95",
+    "native_output_path": "Worldbuilding/归档/2026-10-09_服务物件生产/市集天平/delivery.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 1,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": null,
+    "integer_only": false,
+    "fractional_scale_forbidden": false,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Native raster is unchanged; perspective scene application is reviewed for support, depth, lighting and clarity."
+  },
+  "application": {
+    "runtime_draw_rect": "Complete native cutout at uniform scale, separate from camera-parallel live text and approved tiled paper supports",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective"
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-10-09_服务物件生产/市集天平/delivery.png",
+    "four_x": "Worldbuilding/归档/2026-10-09_服务物件生产/市集天平/4x.png",
+    "six_x": "Worldbuilding/归档/2026-10-09_服务物件生产/市集天平/6x.png",
+    "grayscale": "Worldbuilding/归档/2026-10-09_服务物件生产/市集天平/gray.png",
+    "checker": "Worldbuilding/归档/2026-10-09_服务物件生产/市集天平/checker.png",
+    "application_contact": "UnityProject/ReviewEvidence/MainMenuE/specific-shop.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "notes": "Independent new source; numerical pass is not aesthetic approval."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "importer_verified": false,
+    "runtime_verified": false,
+    "hd2d_runtime": {
+      "native_source_preserved": true,
+      "review_only": true,
+      "capture": "UnityProject/ReviewEvidence/MainMenuE/specific-shop.png"
+    }
+  },
+  "placement_semantics": {
+    "asset_role": "noncombat_content_object",
+    "application_scope": "runtime_layout",
+    "logical_cell": null,
+    "logical_cells": null,
+    "real_dimensions_m": [
+      3.75,
+      3.0
+    ],
+    "mount_type": "tabletop",
+    "native_anchor": [
+      60,
+      95
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 94
+    },
+    "depth_sort_baseline": 94,
+    "support_asset": "E shared desk tabletop",
+    "screen_axis": "horizontal_vertical_locked",
+    "allowed_occlusion_direction": "front_to_back_scene_depth",
+    "material_palette_family": "warm leather paper brass and desaturated teal",
+    "light_direction": "upper_left_form_shading_runtime_scene_illumination",
+    "combined_room_shell": false,
+    "note": "Independent noncombat tabletop cutout; complete silhouette uses uniform display scale. No source raster resize or recoloring. Room/desk is reused; live dossiers use approved adaptive paper."
+  },
+  "decoder": {
+    "status": "PASS_LOSSLESS_TARGET",
+    "source_size": [
+      1402,
+      1122
+    ],
+    "inferred_subject_pixel_pitch": 11,
+    "inferred_subject_grid_phase": [
+      5,
+      4
+    ],
+    "subject_lattice_confidence": 1.6722,
+    "subject_lattice_confidence_min": 1.2,
+    "subject_lattice_is_stable": true,
+    "ground_field_manual_pitch": null,
+    "ground_field_manual_pitch_review_required": false,
+    "background_checker_used_for_scale": false,
+    "subject_bounds_on_logical_grid": [
+      2,
+      0,
+      120,
+      94
+    ],
+    "subject_logical_size": [
+      118,
+      94
+    ],
+    "target_canvas": [
+      120,
+      96
+    ],
+    "normalization_mode": "intact_subject_canvas",
+    "ground_window_bounds_on_logical_grid": null,
+    "ground_window_selection": "deterministic_center",
+    "preview": null,
+    "safe_border": 1,
+    "decoded_visible_colours_before_cleanup": 2047,
+    "decoded_visible_colours_after_cleanup": 16,
+    "palette_max": 16,
+    "all_decoded_colours_are_observed_source_samples": true,
+    "alpha_shape_preserved_pixel_for_pixel": true,
+    "output_subject_equals_cleaned_decoded_subject_pixel_for_pixel": true,
+    "ground_window_equals_decoded_source_pixels_pixel_for_pixel": null,
+    "macro_pixel_colour_selection": "observed_medoid_from_cell_center",
+    "macro_pixel_decoding_performed": true,
+    "geometric_resize_or_interpolation_performed": false,
+    "new_colours_introduced": false,
+    "logical_pixels_removed": 0,
+    "background_artifact_cells_removed": 40,
+    "alpha_components_before_cleanup": 22,
+    "alpha_components_after_cleanup": 1,
+    "dithering": false,
+    "structural_detail_loss_allowed": false,
+    "promotion_limit": null,
+    "colour_cleanup": "near-duplicate RGB variants are remapped only to observed source medoids; use --palette-max 0 for unconsolidated logical-cell decoding"
+  }
+}

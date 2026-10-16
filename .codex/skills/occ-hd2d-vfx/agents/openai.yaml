@@ -1,0 +1,4 @@
+interface:
+  display_name: "OCC HD-2D 光影与特效"
+  short_description: "为OCC制作华丽空间特效、真实光影、火术轨迹与完整实战样板"
+  default_prompt: "使用 $occ-hd2d-vfx 为当前OCC场景制作一个真实结算同步、空间接触正确的华丽特效样板。"

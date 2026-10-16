@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Presentation
@@ -30,7 +31,8 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, Texture2D> icons = new Dictionary<string, Texture2D>(StringComparer.Ordinal);
         private readonly Dictionary<int, Texture2D> swatches = new Dictionary<int, Texture2D>();
         private GUISkin formalSkin;
-        private Texture2D inventoryBackdrop;
+        private Canvas deskCanvas;
+        private FormalUiInteractionLayer interactionLayer;
         private readonly Texture2D[] clickFeedbackFrames = new Texture2D[6];
         private Vector2 clickFeedbackPointer;
         private float clickFeedbackStarted = -1f;
@@ -45,11 +47,26 @@ namespace OCC.Combat.Presentation
         public void Initialize(IInventoryPresentationHost source)
         {
             bootstrap = source;
-            inventoryBackdrop = Resources.Load<Texture2D>(FormalUiEffectsConfig.BackdropPath("inventory"));
-            if (inventoryBackdrop == null) throw new KeyNotFoundException("Missing formal inventory backdrop");
         }
         public bool IsOpen => open;
         public bool RequestOpen() => TryOpen();
+
+        private void Update()
+        {
+            bool visible = open && bootstrap != null && bootstrap.IsDeveloperCombatActive && !bootstrap.IsCombatEntryBlocking;
+            if (visible && deskCanvas == null)
+            {
+                deskCanvas = FormalUiKit.CanvasRoot("战斗行囊书桌", UiLayoutContract.SettlementSortingOrder + 10);
+                GameObject background = FormalUiKit.Panel("行囊场景", deskCanvas.transform, Vector2.zero, Vector2.one,
+                    Vector2.zero, Vector2.zero, Color.clear);
+                FormalUiKit.Stretch(background.GetComponent<RectTransform>());
+                background.GetComponent<Image>().raycastTarget = false;
+                AcademyDeskBackdrop.Attach(background.GetComponent<Image>(), false);
+                deskCanvas.GetComponent<GraphicRaycaster>().enabled = false;
+            }
+            if (deskCanvas != null && deskCanvas.gameObject.activeSelf != visible) deskCanvas.gameObject.SetActive(visible);
+            if (visible && interactionLayer == null) interactionLayer = FindAnyObjectByType<FormalUiInteractionLayer>();
+        }
 
         private void OnGUI()
         {
@@ -57,6 +74,8 @@ namespace OCC.Combat.Presentation
             // IMGUI composites above every canvas, so the entry cinematic's black fade cannot
             // hide this launcher - it has to stand down for the duration itself.
             if (bootstrap.IsCombatEntryBlocking) return;
+            // IMGUI draws above canvases; let the global confirmation own both rendering and input.
+            if (interactionLayer != null && interactionLayer.IsConfirmationOpen) return;
             HandleHotkey();
             Matrix4x4 previous = GUI.matrix;
             GUI.matrix = UiResolutionLayout.GuiMatrix(Screen.width, Screen.height);
@@ -121,15 +140,15 @@ namespace OCC.Combat.Presentation
             inventoryHoverText = null;
             semanticHoverText = null;
             contentHover = null;
-            GUI.DrawTexture(new Rect(0, 0, 1920, 1080), inventoryBackdrop, ScaleMode.StretchToFill, false);
-            Fill(new Rect(0, 0, 1920, 1080), FormalUiTheme.WithAlpha(Ink, .82f));
-            Rect panel = new Rect(32, 24, 1856, 1024); Fill(panel, FormalUiTheme.WithAlpha(Ink, .985f)); Outline(panel, FormalUiTheme.WithAlpha(FormalUiTheme.OnInk, .88f));
-            Fill(new Rect(34, 26, 1852, 112), FormalUiTheme.WithAlpha(Panel, .98f));
+            Rect panel = new Rect(32, 24, 1856, 1024);
+            Fill(new Rect(panel.x + 6, panel.y + 6, panel.width, panel.height), FormalUiTheme.WithAlpha(Ink, .32f));
+            Fill(panel, ArchiveUiStyle.Paper); Outline(panel, ArchiveUiStyle.Rule);
+            Fill(new Rect(34, 26, 1852, 112), ArchiveUiStyle.LightPaper);
             Fill(new Rect(36, 136, 1848, 2), FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .72f));
             bool rogue = state.Ruleset == CombatRuleset.Roguelite && state.RogueEquipment != null;
             bool searchingLoot = rogue && state.LootSource != null && !state.LootSource.IsComplete;
             GUI.Label(new Rect(100, 72, 880, 42), searchingLoot ? "现场搜刮" : rogue ? "学院整备" : "背包与搜索");
-            Fill(new Rect(92, 106, 1460, 34), FormalUiTheme.WithAlpha(Panel, .98f));
+            Fill(new Rect(92, 106, 1460, 34), ArchiveUiStyle.LightPaper);
             GUI.color = Muted; GUI.Label(new Rect(100, 112, 1440, 30), "拖动整理　R 旋转　1–4 关联快捷栏"); GUI.color = Color.white;
             if (ClickButton(new Rect(1630, 72, 180, 52), "返回战斗 [B]")) { open = false; dragState = null; }
 
@@ -246,6 +265,7 @@ namespace OCC.Combat.Presentation
             {
                 selectedId = hovered.InstanceId; rogueDragId = hovered.InstanceId; rogueDragRotated = hovered.Rotated;
                 rogueGrabX = Mathf.FloorToInt((current.mousePosition.x - hoveredRect.x) / cell); rogueGrabY = Mathf.FloorToInt((current.mousePosition.y - hoveredRect.y) / cell);
+                OccSoundEffects.Inventory(runtime.DefinitionFor(hovered.InstanceId)?.DefinitionId ?? runtime.TacticalItem(hovered.InstanceId)?.DefinitionId,runtime.MaterialIdFor(hovered.InstanceId),false);
                 inventoryInteractionMessage = "拖拽中　右键旋转"; current.Use(); return;
             }
             if (string.IsNullOrEmpty(rogueDragId) || current.type != EventType.MouseUp || current.button != 0) return;
@@ -302,8 +322,8 @@ namespace OCC.Combat.Presentation
             {
                 int slot = i; string id = quickbar[i]; RogueTacticalItemInstance item = runtime.TacticalItem(id); float slotSize = (rect.width - 50f) / 4f; Rect slotRect = new Rect(rect.x + 14f + i * (slotSize + 7f), rect.y + 48f, slotSize, 62f);
                 DrawRogueGridFrame(slotRect, id == selectedId ? FormalUiTheme.Amber : item == null ? FormalUiTheme.Muted : FormalUiTheme.Safe); if (item != null) DrawIcon(new Rect(slotRect.x + 9, slotRect.y + 15, 32, 32), FormalArtRegistry.ItemPath(item.DefinitionId));
-                GUI.color = item == null ? Muted : Text; GUI.Label(new Rect(slotRect.x + 6, slotRect.y + 5, 22, 20), (i + 1).ToString()); GUI.color = Color.white;
-                if (item != null) GUI.Label(new Rect(slotRect.x + slotRect.width - 28, slotRect.y + 37, 22, 20), item.ChargesCurrent.ToString());
+                GUI.color = item == null ? Muted : Text; GUI.Label(new Rect(slotRect.x + 6, slotRect.y + 5, 32, 32), (i + 1).ToString()); GUI.color = Color.white;
+                if (item != null) GUI.Label(new Rect(slotRect.x + slotRect.width - 38, slotRect.y + 28, 32, 32), item.ChargesCurrent.ToString());
                 if (Event.current != null && item != null && slotRect.Contains(Event.current.mousePosition))
                 {
                     TacticalItemDefinition definition = runtime.TacticalDefinitionFor(id);
@@ -633,6 +653,8 @@ namespace OCC.Combat.Presentation
             Box(rect, "检修备件箱");
             if (loot == null)
             {
+                DrawIcon(new Rect(rect.center.x - 128, rect.y + 180, 256, 256),
+                    FormalUiEffectsConfig.IllustrationPath("empty_reward_crate"));
                 GUI.color = Muted;
                 GUI.Label(new Rect(rect.x + 24, rect.y + 68, rect.width - 48, 32), "当前没有可搜刮的容器。");
                 GUI.color = Color.white;
@@ -780,6 +802,7 @@ namespace OCC.Combat.Presentation
 
         private void RegisterClickFeedback()
         {
+            OccSoundEffects.Button();
             clickFeedbackPointer = Event.current == null ? Vector2.zero : Event.current.mousePosition;
             clickFeedbackStarted = Time.unscaledTime;
         }
@@ -845,15 +868,10 @@ namespace OCC.Combat.Presentation
         private static void Outline(Rect rect, Color color)
         {
             float edge = FormalUiTheme.FrameThickness;
-            float corner = FormalUiTheme.FrameCornerSize;
             Fill(new Rect(rect.x, rect.y, rect.width, edge), color);
             Fill(new Rect(rect.x, rect.yMax - edge, rect.width, edge), color);
             Fill(new Rect(rect.x, rect.y, edge, rect.height), color);
             Fill(new Rect(rect.xMax - edge, rect.y, edge, rect.height), color);
-            Fill(new Rect(rect.x, rect.y, corner, corner), color);
-            Fill(new Rect(rect.xMax - corner, rect.y, corner, corner), color);
-            Fill(new Rect(rect.x, rect.yMax - corner, corner, corner), color);
-            Fill(new Rect(rect.xMax - corner, rect.yMax - corner, corner, corner), color);
         }
         private static void Box(Rect rect, string title) { Fill(rect, FormalUiTheme.WithAlpha(Surface, .98f)); Outline(rect, FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .72f)); Fill(new Rect(rect.x + FormalUiTheme.FrameThickness, rect.y + 42, rect.width - FormalUiTheme.FrameThickness * 2, 2), FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .52f)); GUI.Label(new Rect(rect.x + 16, rect.y + 10, rect.width - 32, 30), title); }
 
@@ -919,7 +937,7 @@ namespace OCC.Combat.Presentation
             Rect panel = new Rect(x, y, width, height);
             Fill(panel, FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .995f));
             Outline(panel, FormalUiTheme.WithAlpha(content.Accent, .95f));
-            Fill(new Rect(x + 2f, y + 2f, width - 4f, categoryHeight), FormalUiTheme.Ink);
+            Fill(new Rect(x + 2f, y + 2f, width - 4f, categoryHeight), ArchiveUiStyle.Paper);
             Color previous = GUI.color;
             GUI.color = content.Accent;
             GUI.Label(new Rect(x + padding, y + 4f, width - padding * 2f, categoryHeight - 4f), content.Category);
@@ -953,6 +971,7 @@ namespace OCC.Combat.Presentation
 
         private void OnDestroy()
         {
+            if (deskCanvas != null) Destroy(deskCanvas.gameObject);
             foreach (Texture2D texture in swatches.Values) if (texture != null) Destroy(texture);
             swatches.Clear();
             if (formalSkin != null) Destroy(formalSkin);

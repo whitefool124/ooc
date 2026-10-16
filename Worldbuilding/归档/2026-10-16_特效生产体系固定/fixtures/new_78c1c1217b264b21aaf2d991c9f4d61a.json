@@ -1,0 +1,47 @@
+{
+  "schema": "occ-vfx-recipe-v1",
+  "id": "production_probe",
+  "status": "DRAFT",
+  "mode": "shared",
+  "usage": "cinematic_study",
+  "reference": "Tools/OCCVfx/references/sky_furnace_20261016.lock.json",
+  "duration_seconds": null,
+  "settlement_binding": null,
+  "effect_motion_limit_m": null,
+  "phases": {
+    "growth": {
+      "enabled": true,
+      "seconds": null
+    },
+    "charge": {
+      "enabled": true,
+      "seconds": null
+    },
+    "burst": {
+      "enabled": true,
+      "seconds": null
+    },
+    "exit": {
+      "enabled": true,
+      "seconds": null
+    }
+  },
+  "growth": {
+    "method": "attached_pixel_colonies",
+    "unlit_coverage": 0,
+    "main_roots": null,
+    "maximum_branches": null
+  },
+  "exit": {
+    "method": "full_source_geometric_fracture",
+    "particle_alpha": 1,
+    "native_size": 1,
+    "material_emission_reference": null
+  },
+  "layers": [],
+  "implementation": [],
+  "review": {
+    "status": "PENDING"
+  },
+  "evidence": {}
+}

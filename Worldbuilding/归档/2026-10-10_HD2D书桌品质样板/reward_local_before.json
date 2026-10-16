@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":false,\"code\":\"RUNTIME_ERROR\",\"error\":\"RUNTIME_ERROR\",\"data\":{\"message\":\"Unknown preview node: C1\",\"stack\":\"  at OCC.Combat.RogueliteMapRun.PreviewUiCaptureNode (System.String nodeId) [0x00029] in E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Assets\\\\Game\\\\Runtime\\\\Campaign\\\\RogueliteMapRun.cs:979 \\r\\n  at OCC.Combat.Presentation.CombatPrototypeBootstrap.PreviewUiCaptureRun (System.Boolean academy, System.String nodeId, System.Boolean departure, System.String special) [0x000c0] in E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Assets\\\\Game\\\\Runtime\\\\Presentation\\\\CombatPrototypeBootstrap.cs:496 \\r\\n  at RewardLocal.Run () [0x0004e] in <3655516d802b40dd991d61ae16050098>:0 \\r\\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\\r\\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <816f70bc2a9c4332b0bd119906a8d40e>:0 \",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

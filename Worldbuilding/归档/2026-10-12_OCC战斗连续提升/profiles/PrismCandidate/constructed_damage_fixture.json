@@ -1,0 +1,16 @@
+{
+  "status": "LOCAL_RENDER_FIXTURE",
+  "source": "Disposable in-memory preview run: durability thresholds explicitly set to test damaged texture selection. Not a player action, gameplay result or normal-entry proof",
+  "cells": [
+    {
+      "x": 5,
+      "y": 2,
+      "before": 16,
+      "fixture": 8
+    }
+  ],
+  "mappedCrystalAlbedos": [
+    "academy_aether_crystal_damaged"
+  ],
+  "focusRequested": false
+}

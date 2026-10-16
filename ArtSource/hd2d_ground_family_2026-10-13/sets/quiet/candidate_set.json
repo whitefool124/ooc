@@ -1,0 +1,62 @@
+{
+  "status": "QA_PENDING",
+  "assets": [
+    {
+      "id": "academy_court_limestone_a",
+      "source": "ArtSource/hd2d_ground_family_2026-10-13/raw/academy_court_limestone_a_r5.png",
+      "output": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/delivery/academy_court_limestone_a.png",
+      "registration_confidence": 2.0716,
+      "generic_confidence": 1.0662,
+      "phase": [
+        0,
+        38
+      ],
+      "window": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "dominant": 0.572
+    },
+    {
+      "id": "academy_court_limestone_b",
+      "source": "ArtSource/hd2d_ground_family_2026-10-13/raw/academy_court_limestone_b_r5.png",
+      "output": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/delivery/academy_court_limestone_b.png",
+      "registration_confidence": 1.905,
+      "generic_confidence": 1.2087,
+      "phase": [
+        0,
+        37
+      ],
+      "window": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "dominant": 0.755
+    },
+    {
+      "id": "academy_court_limestone_c",
+      "source": "ArtSource/hd2d_ground_family_2026-10-13/raw/academy_court_limestone_c_r5.png",
+      "output": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/delivery/academy_court_limestone_c.png",
+      "registration_confidence": 1.9401,
+      "generic_confidence": 1.0209,
+      "phase": [
+        0,
+        38
+      ],
+      "window": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "dominant": 0.76
+    }
+  ],
+  "normal": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/material_data/normal.png",
+  "roughness": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/material_data/roughness.png",
+  "human_review": "PENDING"
+}

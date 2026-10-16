@@ -1,0 +1,38 @@
+{
+  "scope": "single native32 material probe, actual URP offscreen rendering; not normal-entry game/UI or performance",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "activeScenePreserved": true,
+  "dirty": false,
+  "play": false,
+  "normalStrength": 0.28,
+  "normalGreenFlip": false,
+  "Id": "academy_heavy_masonry_screen_damaged",
+  "shaderName": "OCC/HD2D/GroundedSprite",
+  "maps": [
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_masonry_screen_damaged/normal.png",
+      "guid": "be7bc607c6394d846b36825ffe9f8113",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "type": "NormalMap",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    }
+  ],
+  "uniformSurface": 0.88,
+  "metallic": 0.0,
+  "coat": 0.0,
+  "captures": [
+    "baseline_1080.png",
+    "baseline_540.png",
+    "full_1080.png",
+    "full_540.png",
+    "neutral_light_1080.png",
+    "normal_only_1080.png",
+    "rotated_light_1080.png",
+    "surface_only_1080.png"
+  ],
+  "messages": []
+}

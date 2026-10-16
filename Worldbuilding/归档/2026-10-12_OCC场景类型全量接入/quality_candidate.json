@@ -1,0 +1,589 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "c6e069ff0f1f014e37e0dddf207f6b9dc3b1dd137a4d3a77ff25ba9de70ba1c7",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldProfile.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+    "UnityProject/Assets/Game/Editor/Hd2DLocalIntegrationTools.cs",
+    "UnityProject/Assets/Game/Editor/Hd2DLocalIntegrationTools.cs.meta",
+    "UnityProject/Packages/com.unity.pipeline/Runtime/Common/BasePipelineServer.cs",
+    "UnityProject/Assets/Game/Resources/Art/HD2DAcademyCandidates/greenhouse_facade.png",
+    "UnityProject/Assets/Game/Resources/Art/HD2DAcademyCandidates/greenhouse_facade.png.meta",
+    "UnityProject/Assets/Game/Resources/Art/HD2DAcademyCandidates.meta",
+    "Tools/OCCArt/hd2d_baselines_v1.json"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "72a78ddf11b8a002f1ce8b979c348fcd54f15d179f26da00e329ec78359df08c"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "5778b36640c24997ccb18f95786efb3d066f9163f241c5a87d26758ba02d9126"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "b6e9512854f40b266735f2ead588b3cf15932d8857825d2d27a1f14c47df8e7b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "8a450638e21f724263c6e3ad40077419ff1a26a4d985f6d2be48848658a615f1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldProfile.cs",
+      "sha256": "e24a479e142af167ffc19fe6a67f2d20fe3ff3244e951f7d0ba3fd00c2546ae5"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DLocalIntegrationTools.cs",
+      "sha256": "41d09dbbedf31216fe5a7eb33f5377d8f7ea9085851cc51d688fa0bb7ec0e1c9"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DLocalIntegrationTools.cs.meta",
+      "sha256": "d0fba04fcb1e23e1168d542670c1271232615ec46384393c2029b2540a2c87f2"
+    },
+    {
+      "path": "UnityProject/Packages/com.unity.pipeline/Runtime/Common/BasePipelineServer.cs",
+      "sha256": "6b3f6bc21363f455fa63132e4fbab16b7995e5b94df62b437a78d7dce117834d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyCandidates/greenhouse_facade.png",
+      "sha256": "b94bb42ebdd9587fcf31b24ace148cb8412c88f55482c9bb48cc6ec21d576034"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyCandidates/greenhouse_facade.png.meta",
+      "sha256": "0533326a3e691a710e672fa167132a2ce74991d1217ebe0b3280f6dfb9399d4d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyCandidates.meta",
+      "sha256": "b19039b00e0c14b973816fc4b9d1f574e574aa0c2f786e263b946902c22e7b4d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_b.png",
+      "sha256": "87caaefb6c5858ff1ae5f389af7e10a273c0daa843db4df82761a67098a26b76"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_b.png",
+      "sha256": "8dd4a3dcb33c1ddc24cd381d4dc11665357a0a16e1b4800abd21d5f0758dff17"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC温室资产样板/greenhouse_raw_r1.png",
+      "sha256": "44e1937329af5c3d6e640c09e7184cee6bf86b51856adf9ffc9f422399c6cfc4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC温室资产样板/decode_r1.json",
+      "sha256": "e72dbca5b59e87fabbcab462cc6917e1ad0990169d456512b36d1dc0d91e25f6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC场景类型全量接入/integration_audit.json",
+      "sha256": "7889a98c3db99e1e5d44a30b2373c5ca3408d45c0ee82f7629e932cfc46a2d8f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC场景类型全量接入/greenhouse_runtime_manifest.json",
+      "sha256": "58561874c4a2bac5280ee1289e03c4ff7fe7815fa8d8328eaa12903108356e8e"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 45,
+    "yaw": 0,
+    "wall_height": 0.65,
+    "unit_ground_angle": 45,
+    "environment_families": [
+      "AcademyCourt",
+      "AetherTower",
+      "Conservatory",
+      "InteriorHall",
+      "RuinSite",
+      "StoneRoad"
+    ]
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": null
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "No current screenshots or motion review after family/placement changes",
+    "Paired material maps and dedicated setting artwork incomplete",
+    "Full visible density/construction inventories and genuine human approval pending",
+    "Player60FPS/P9516.7ms unmeasured"
+  ],
+  "additional_evidence": [
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC场景类型全量接入/integration_audit.json",
+      "sha256": "7889a98c3db99e1e5d44a30b2373c5ca3408d45c0ee82f7629e932cfc46a2d8f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC场景类型全量接入/README.md",
+      "sha256": "0e4efb75fbb9b5538616c319f44371059a76e18d7f670e0262d34875f1018ffe"
+    }
+  ],
+  "runtime_observations": {
+    "integration": {
+      "scope": "profile routing/import/shader checks only; no Play Mode or journey",
+      "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+      "scene": "Assets/Scenes/CombatPrototype.unity",
+      "dirty": false,
+      "candidate": {
+        "asset": "Assets/Game/Resources/Art/HD2DAcademyCandidates/greenhouse_facade.png",
+        "guid": "a31b2f1c2fe0fda4c99c818901c000fd",
+        "width": 256,
+        "height": 96,
+        "filter": "Point",
+        "status": "QA_PENDING"
+      },
+      "levels": [
+        {
+          "Id": "rail_patrol",
+          "DisplayName": "普通战斗 04 · 石路巡哨",
+          "environment": "StoneRoad",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_road_b",
+          "WaterGarden": false,
+          "Trees": true
+        },
+        {
+          "Id": "depot_wreck",
+          "DisplayName": "普通战斗 05 · 废弃驿站",
+          "environment": "RuinSite",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_ruin_b",
+          "WaterGarden": false,
+          "Trees": false
+        },
+        {
+          "Id": "relay_raid",
+          "DisplayName": "普通战斗 06 · 野外导能柱",
+          "environment": "AcademyCourt",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": true,
+          "Trees": true
+        },
+        {
+          "Id": "signal_hub",
+          "DisplayName": "普通战斗 07 · 传讯石庭",
+          "environment": "AcademyCourt",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": true,
+          "Trees": true
+        },
+        {
+          "Id": "gatehouse",
+          "DisplayName": "普通战斗 08 · 石闸关口",
+          "environment": "AcademyCourt",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": true,
+          "Trees": true
+        },
+        {
+          "Id": "transmission_tower",
+          "DisplayName": "普通战斗 09 · 传讯塔楼",
+          "environment": "AetherTower",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": false,
+          "Trees": false
+        },
+        {
+          "Id": "elite_foundry",
+          "DisplayName": "精英战斗 02 · 刻阵工坊",
+          "environment": "RuinSite",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_ruin_b",
+          "WaterGarden": false,
+          "Trees": false
+        },
+        {
+          "Id": "core_approach",
+          "DisplayName": "精英战斗 03 · 塔前石庭",
+          "environment": "AcademyCourt",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": true,
+          "Trees": true
+        },
+        {
+          "Id": "core_finale",
+          "DisplayName": "Boss战斗 01 · 古塔核心",
+          "environment": "AetherTower",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": false,
+          "Trees": false
+        },
+        {
+          "Id": "rain_lantern_court",
+          "DisplayName": "普通战斗 01 · 雨后灯庭",
+          "environment": "AcademyCourt",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": true,
+          "Trees": true
+        },
+        {
+          "Id": "first_battle_greenhouse_collection_room",
+          "DisplayName": "普通战斗 02 · 温室藏品间",
+          "environment": "Conservatory",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": false,
+          "Trees": true
+        },
+        {
+          "Id": "first_b3_rain_prism_court",
+          "DisplayName": "普通战斗 03 · 雨痕晶庭",
+          "environment": "AcademyCourt",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": true,
+          "Trees": true
+        },
+        {
+          "Id": "first_elite_three_material_pressure",
+          "DisplayName": "精英战斗 01 · 三材承压场",
+          "environment": "AcademyCourt",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": true,
+          "Trees": true
+        },
+        {
+          "Id": "calibration_lockdown",
+          "DisplayName": "精英战斗 04 · 失控校准室封锁",
+          "environment": "InteriorHall",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": false,
+          "Trees": false
+        },
+        {
+          "Id": "cliff_relay_survey",
+          "DisplayName": "精英战斗 05 · 断崖导能柱考察",
+          "environment": "RuinSite",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_ruin_b",
+          "WaterGarden": false,
+          "Trees": false
+        },
+        {
+          "Id": "sealed_vault_certification",
+          "DisplayName": "精英战斗 06 · 封存库权限核验",
+          "environment": "InteriorHall",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": false,
+          "Trees": false
+        },
+        {
+          "Id": "library_discipline",
+          "DisplayName": "精英战斗 07 · 图书馆纠察",
+          "environment": "InteriorHall",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": false,
+          "Trees": false
+        },
+        {
+          "Id": "outer_ring_clearance",
+          "DisplayName": "精英战斗 08 · 高塔外环清障",
+          "environment": "AetherTower",
+          "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+          "WaterGarden": false,
+          "Trees": false
+        }
+      ],
+      "shaders": [
+        {
+          "name": "OCC/HD2D/BakedArchitecture",
+          "messages": []
+        },
+        {
+          "name": "OCC/HD2D/WetCourtyard",
+          "messages": []
+        },
+        {
+          "name": "OCC/HD2D/GroundedSprite",
+          "messages": []
+        }
+      ],
+      "reviewDisabled": true
+    },
+    "verification_scope": "Editor import/profile/shader checks only. No new Play Mode, window focus or full journey.",
+    "pipeline_fix": "IPv4 loopback only; detect occupied ports with active TCP listeners and exclusive bind; current two-Editor addresses are7800 and7801"
+  }
+}

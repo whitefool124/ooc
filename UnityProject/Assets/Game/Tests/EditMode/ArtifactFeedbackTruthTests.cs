@@ -50,7 +50,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void ShieldBalancer_ReportsShieldTransferredIntoCoverWithoutInventingDamage()
+        public void ShieldBalancer_ReportsCoverWithoutInventingShieldCost()
         {
             CombatState state = State(); state.ConfigureRuleset(CombatRuleset.Roguelite);
             var hero = state.GetUnit("hero"); Assert.That(state.TryGrantRogueliteShield(hero.Id, "test", 12), Is.True);
@@ -58,20 +58,20 @@ namespace OCC.Combat.Tests
             GridPosition cell = P(2, 1);
             var execution = ArtifactEngine.Execute(new ArtifactBattleState(state), "hero", ArtifactCatalog.ShieldBalancer, ArtifactTarget.At(cell), 3);
             CombatFeedbackEvent[] events = Events(execution);
-            Assert.That(hero.Shield, Is.Zero);
+            Assert.That(hero.Shield, Is.EqualTo(12));
             Assert.That(state.Map.GetTile(cell).Cover, Is.EqualTo(CoverType.Light));
             Assert.That(state.Map.GetTile(cell).Durability, Is.EqualTo(12));
-            Assert.That(events.Single(e => e.Kind == CombatFeedbackKind.ShieldConsumed).Amount, Is.EqualTo(12));
+            Assert.That(events.Any(e => e.Kind == CombatFeedbackKind.ShieldConsumed), Is.False);
             foreach (var e in events) capture.AddFeedback(e);
             var shown = new List<CombatFeedbackEvent>(); playback.Start(capture, state, 0f, shown.Add); playback.Advance(1f);
-            Assert.That(shown, Has.Count.EqualTo(2));
+            Assert.That(shown, Has.Count.EqualTo(1));
             Assert.That(shown.Any(e => e.Kind == CombatFeedbackKind.UtilityResolved), Is.True);
             Assert.That(shown.Any(e => e.Kind == CombatFeedbackKind.Damage || e.Kind == CombatFeedbackKind.ShieldAbsorb || e.Kind == CombatFeedbackKind.ShieldRestore), Is.False);
         }
 
         [TestCase(10, false)]
-        [TestCase(100, true)]
-        public void FortuneSeal_UsesSurvivingVictimConditionAndBacklashBypassesCasterShield(int enemyHealth, bool backlash)
+        [TestCase(100, false)]
+        public void FortuneSeal_UsesApprovedDamageWithoutBacklash(int enemyHealth, bool backlash)
         {
             var state = State(enemyHealth); var hero = state.GetUnit("hero"); var enemy = state.GetUnit("enemy");
             int startingHealth = hero.Health;
@@ -82,16 +82,16 @@ namespace OCC.Combat.Tests
             Assert.That(events.Where(e => e.TargetUnitId == "hero" && e.Kind == CombatFeedbackKind.Damage).Sum(e => e.Amount), Is.EqualTo(backlash ? 12 : 0));
             Assert.That(events.Any(e => e.TargetUnitId == "hero" && e.Kind == CombatFeedbackKind.ShieldAbsorb), Is.False);
             Assert.That(events.Where(e => e.TargetUnitId == "enemy" && (e.Kind == CombatFeedbackKind.Damage || e.Kind == CombatFeedbackKind.ShieldAbsorb)).Sum(e => e.Amount),
-                Is.EqualTo(Math.Min(28, enemyHealth + 2)), "actual loss, including overkill clipping, is counted once");
+                Is.EqualTo(Math.Min(10, enemyHealth + 2)), "actual loss, including overkill clipping, is counted once");
         }
 
         [Test]
-        public void RepairFrame_ReportsShieldCostWithoutAHitOrAdditionalSnapshotAbsorption()
+        public void RepairFrame_ReportsHealingWithoutInventingShieldCost()
         {
             var prepared = (ArtifactTrainingRangeCase)new ArtifactTrainingRangeProvider().Prepare("G-T06");
             var state = prepared.Battle.Combat; var playback = new CombatActionPlayback(); var capture = playback.Capture(state, null, "hero", 0);
             var execution = (ArtifactExecution)prepared.Execute().NativeResult; var events = Events(execution);
-            Assert.That(events.Single(e => e.Kind == CombatFeedbackKind.ShieldConsumed).Amount, Is.EqualTo(12));
+            Assert.That(events.Any(e => e.Kind == CombatFeedbackKind.ShieldConsumed), Is.False);
             Assert.That(events.Any(e => e.Kind == CombatFeedbackKind.ShieldAbsorb), Is.False);
             foreach (var e in events) capture.AddFeedback(e);
             var shown = new List<CombatFeedbackEvent>(); playback.Start(capture, state, 0, shown.Add); playback.Advance(1);
@@ -116,7 +116,7 @@ namespace OCC.Combat.Tests
             var reaction = battle.ResolveIncomingRangedHit("hero", "enemy", 5); var events = Events(reaction);
             Assert.That(reaction.IsTriggered, Is.True); Assert.That(reaction.SourceUnitId, Is.EqualTo("hero"));
             Assert.That(events.Single(e => e.Kind == CombatFeedbackKind.ShieldRestore).TargetUnitId, Is.EqualTo("hero"));
-            Assert.That(events.Single(e => e.Kind == CombatFeedbackKind.ShieldRestore).Amount, Is.EqualTo(5));
+            Assert.That(events.Single(e => e.Kind == CombatFeedbackKind.ShieldRestore).Amount, Is.EqualTo(8));
             Assert.That(events.Where(e => e.TargetUnitId == "enemy" && (e.Kind == CombatFeedbackKind.Damage || e.Kind == CombatFeedbackKind.ShieldAbsorb)).Sum(e => e.Amount), Is.EqualTo(8));
             Assert.That(battle.TakeResolvedReactions().Count, Is.EqualTo(1)); Assert.That(battle.TakeResolvedReactions(), Is.Empty);
             Assert.That(battle.ResolveIncomingRangedHit("hero", "enemy", 5).Steps, Is.Empty);

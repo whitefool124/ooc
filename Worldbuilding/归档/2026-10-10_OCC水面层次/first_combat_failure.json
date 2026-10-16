@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"status\\\":\\\"FAIL: UnityEngine.MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\\\\nYour script should either check if it is null or you should not destroy the object.\\\\r\\\\n  at UnityEngine.Object+MarshalledUnityObject.TryThrowEditorNullExceptionObject (UnityEngine.Object unityObj, System.String parameterName) [0x00065] in <5bc40c3d370d4c0ba31a7d683af28bc8>:0 \\\\r\\\\n  at UnityEngine.Bindings.ThrowHelper.ThrowNullReferenceException (System.Object obj) [0x0000a] in <5bc40c3d370d4c0ba31a7d683af28bc8>:0 \\\\r\\\\n  at UnityEngine.GameObject.get_transform () [0x00006] in <5bc40c3d370d4c0ba31a7d683af28bc8>:0 \\\\r\\\\n  at OCC.Combat.Presentation.Hd2DBattlefieldSample.CheckCellRoundTrips () [0x00012] in E:\\\\\\\\数据库\\\\\\\\OCC_Codex\\\\\\\\UnityProject\\\\\\\\Assets\\\\\\\\Game\\\\\\\\Runtime\\\\\\\\Presentation\\\\\\\\Hd2DBattlefieldSample.cs:300 \\\\r\\\\n  at OCC.Combat.EditorTools.Hd2DCombatReviewAudit+<Combat>d__31.MoveNext () [0x00575] in E:\\\\\\\\数据库\\\\\\\\OCC_Codex\\\\\\\\UnityProject\\\\\\\\Assets\\\\\\\\Game\\\\\\\\Editor\\\\\\\\Hd2DCombatReviewAudit.cs:121 \\\\r\\\\n  at OCC.Combat.EditorTools.Hd2DCombatReviewAudit+<Guard>d__24.MoveNext () [0x00067] in E:\\\\\\\\数据库\\\\\\\\OCC_Codex\\\\\\\\UnityProject\\\\\\\\Assets\\\\\\\\Game\\\\\\\\Editor\\\\\\\\Hd2DCombatReviewAudit.cs:38 \\\",\\\"commands\\\":14,\\\"moves\\\":3,\\\"attacks\\\":8,\\\"evidence\\\":\\\"\\\",\\\"waterRenderers\\\":0,\\\"waterMaterials\\\":0}\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

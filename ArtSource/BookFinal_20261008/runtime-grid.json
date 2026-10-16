@@ -1,0 +1,33 @@
+{
+  "schema": "occ-runtime-pixel-grid-v1",
+  "capture": "UnityProject/ReviewEvidence/MainMenuE/book-final-open.png",
+  "capture_size": [
+    1920,
+    1080
+  ],
+  "expected_tier": 6,
+  "detected_tiers": [
+    6
+  ],
+  "uniform_across_regions": true,
+  "lattice_offset_zero": true,
+  "regions": {
+    "book": {
+      "pitch": 6,
+      "uniform_fraction": 1.0,
+      "offset": [
+        0,
+        0
+      ],
+      "offset_uniform_fraction": 1.0,
+      "colors": 210,
+      "box": [
+        576,
+        480,
+        1224,
+        672
+      ]
+    }
+  },
+  "pass": true
+}

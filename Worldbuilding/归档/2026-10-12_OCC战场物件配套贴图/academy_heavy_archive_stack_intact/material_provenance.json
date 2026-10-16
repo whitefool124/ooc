@@ -1,0 +1,72 @@
+{
+  "id": "academy_heavy_archive_stack_intact",
+  "status": "QA_PENDING",
+  "albedo": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_heavy_archive_stack_intact.png",
+    "sha256": "3aedfb1674ff0525aff5c7cf43ba3e1d46bf60a3bb375df2cedf8381fc57bd51"
+  },
+  "raw": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/paired_raw_r1.png",
+    "sha256": "620380cb89e86c8f77e8d919351d56455f73ce4d902d9d5717b19debeacbb635"
+  },
+  "roughness_raw": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/roughness_raw_r2.png",
+    "sha256": "b66881aab21593a3d03ef65be731b4e780e49d501968ee3791354fd9b672a7c9"
+  },
+  "world_pixel_pitch": 0.03125,
+  "normal_convention": "OpenGL +Y up; no importer green flip",
+  "maps": [
+    {
+      "kind": "normal",
+      "source": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/normal_panel.png",
+        "sha256": "790a69802d706097303ccdf8d4a4418a10e6f6553c22a2b9a6a4eecf0c77b9fc"
+      },
+      "delivery": {
+        "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact/normal.png",
+        "sha256": "774e8681c7ac7d9c5e31b58bcc66f17fb279572eb45d6b668b1192879e53b5c4"
+      },
+      "registration": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/normal_registration.json",
+        "sha256": "741bc041284b045f6174ec97121be56c822671bba5ee14707bea40eab5c747a4"
+      },
+      "rgb_min": [
+        44,
+        53,
+        159
+      ],
+      "rgb_max": [
+        180,
+        193,
+        254
+      ]
+    },
+    {
+      "kind": "roughness",
+      "source": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/roughness_raw_r2.png",
+        "sha256": "b66881aab21593a3d03ef65be731b4e780e49d501968ee3791354fd9b672a7c9"
+      },
+      "delivery": {
+        "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact/roughness.png",
+        "sha256": "08b5f11daa8a258b43081e41d571b67bf79ab01f9b7c1c6183c83a64fd5ce101"
+      },
+      "registration": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/roughness_registration.json",
+        "sha256": "78f6e6613076e84160c7b5519e848fb8460911855ae407feae5d42b9571b9be3"
+      },
+      "rgb_min": [
+        143,
+        143,
+        143
+      ],
+      "rgb_max": [
+        254,
+        254,
+        254
+      ]
+    }
+  ],
+  "human_review": "PENDING",
+  "material_policy": "Archive wood and paper are fully nonmetal with zero glass; neutral built-in black region texture. Chest hardware is region-masked. Lantern iron/glass use independently authored red/green regions; B unused."
+}

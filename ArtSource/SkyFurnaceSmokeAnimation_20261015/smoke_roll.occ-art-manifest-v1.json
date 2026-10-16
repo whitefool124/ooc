@@ -1,0 +1,44 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sky_furnace_smoke_roll_20261015",
+  "role": "hd2d_environment_module",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "User-authorized reference-derived paper production; NOT lossless source-grid decode",
+    "source_path": "ArtSource/SkyFurnaceSmokeAnimation_20261015/raw/smoke_sheet_r2.png",
+    "source_sha256": "71186a61b770700fbefa9747e6be951ee1f3761e8e482d7c1da50af19cb23bbb"
+  },
+  "delivery": {
+    "output_path": "ArtSource/SkyFurnaceSmokeAnimation_20261015/delivery/smoke_roll_sheet.png",
+    "native_output_path": "ArtSource/SkyFurnaceSmokeAnimation_20261015/delivery/smoke_roll_sheet.png",
+    "output_sha256": "04f73a664c26d103723f0b51adfb2044079565573f7ea9f0826a4c32a0ce1baa",
+    "native_ppu": 42.666666666666664,
+    "palette_max": 4,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "battlefield_hd2d_environment",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": ".75m fixed canvas, eight32x32frames; no sizeOverLifetime",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User says go; VFX pixel pitch may differ, physical scale must remain coherent; isolated SkyFurnace sample"
+  },
+  "evidence": {
+    "one_x": "ArtSource/SkyFurnaceSmokeAnimation_20261015/qa/1x.png",
+    "four_x": "ArtSource/SkyFurnaceSmokeAnimation_20261015/qa/4x.png",
+    "grayscale": "ArtSource/SkyFurnaceSmokeAnimation_20261015/qa/grayscale.png",
+    "checker": "ArtSource/SkyFurnaceSmokeAnimation_20261015/qa/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-15_天穹熔炉光影编排/fixed_frames/frame_09.20.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "notes": "Reference-derived animation manufacture, not strict generated-lattice PASS; VFX density exception explicitly authorized"
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/SkyFurnace/smoke_roll_sheet.png",
+    "formal_promotion": false
+  }
+}

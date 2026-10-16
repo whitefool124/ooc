@@ -1,0 +1,1 @@
+PASS: real equipment/spell category clicks, actual pointer hover on three real icons under Mask; 22 buffered runtime crops per material; rendered stencil phase equals source, zero animation stops phase, exit clears and category/page clean up. Static side-light comparisons included. Disposable memory preview, no player save writes; visual pixel evidence evaluated separately.

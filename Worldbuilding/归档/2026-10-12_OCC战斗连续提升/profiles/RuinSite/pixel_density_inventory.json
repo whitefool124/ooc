@@ -1,0 +1,1098 @@
+{
+  "schema": "occ-hd2d-pixel-density-v1",
+  "status": "QA_PENDING",
+  "world_pixel_pitch": 0.03125,
+  "reference_asset_id": "RuinSite_000_真实地台厚度",
+  "all_visible_pixel_assets_reviewed": false,
+  "assets": [
+    {
+      "id": "RuinSite_000_真实地台厚度",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": true
+    },
+    {
+      "id": "RuinSite_001_外围连续铺地",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_d.png",
+        "sha256": "8fd06628aeaed8aca987699e86a2d1125b156ba6429e191cfef6fd2b6c29754d"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_002_合批_庭院暖灰石",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_b.png",
+        "sha256": "8dd4a3dcb33c1ddc24cd381d4dc11665357a0a16e1b4800abd21d5f0758dff17"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": true
+    },
+    {
+      "id": "RuinSite_003_合批_学院象牙石",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_b.png",
+        "sha256": "8dd4a3dcb33c1ddc24cd381d4dc11665357a0a16e1b4800abd21d5f0758dff17"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": true
+    },
+    {
+      "id": "RuinSite_004_学院结构_0",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_conduit_blank.png",
+        "sha256": "0762d349279985159f77ac7cc3482632d7abe6f665cb78f340bbf861e3ed81f9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_005_学院结构_1",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_round.png",
+        "sha256": "192bcf071e31f593761e989f9e76914c0abaf50c45f2d0964ab0e651bde00ef9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_006_学院结构_2",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_iron.png",
+        "sha256": "695d19d360e0985afc35e1e63df45275af022fd01c2de80f8841a0348626e840"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_007_地面_(0, 0)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_d.png",
+        "sha256": "8fd06628aeaed8aca987699e86a2d1125b156ba6429e191cfef6fd2b6c29754d"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_008_立体墙_(0, 0)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": true
+    },
+    {
+      "id": "RuinSite_009_地面_(1, 0)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_a.png",
+        "sha256": "35412b1527a89310e6a23b74af8ab75a06b158a6c7eee03e120a5117f063f1c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_010_单位_(1, 0)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/tether_hound.png",
+        "sha256": "8fe92744b4aecd2e5026ed577bec6975c02a6bd3e306ebb6aa7c597ec0873f73"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [64, 64]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_011_地面_(2, 0)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_b.png",
+        "sha256": "8dd4a3dcb33c1ddc24cd381d4dc11665357a0a16e1b4800abd21d5f0758dff17"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_012_地面_(3, 0)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_c.png",
+        "sha256": "8b2a62fb569aa5ca94da8db4756ca2c04ef04da71fc2534bbe2f21ff93644632"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_013_地面_(4, 0)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_d.png",
+        "sha256": "29f6296d2bbea4a6f1e21608f65fd0365749d46bae8a3ab639522c7dca2931a0"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_014_单位_(4, 0)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/UnitStatic32x64/shieldguard.png",
+        "sha256": "bcc59ef438286b0a935b094be7875cac4a91d568050a9bb0560a0d137262ec5f"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 64]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_015_地面_(5, 0)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_a.png",
+        "sha256": "e8fd05e2c091c94a90159b52085b8f10a9aadb09326296c035ff552bb8c1e680"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_016_立体墙_(5, 0)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": true
+    },
+    {
+      "id": "RuinSite_017_地面_(0, 1)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_c.png",
+        "sha256": "8b2a62fb569aa5ca94da8db4756ca2c04ef04da71fc2534bbe2f21ff93644632"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_018_地面_(1, 1)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_d.png",
+        "sha256": "8fd06628aeaed8aca987699e86a2d1125b156ba6429e191cfef6fd2b6c29754d"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_019_地面_(2, 1)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_a.png",
+        "sha256": "35412b1527a89310e6a23b74af8ab75a06b158a6c7eee03e120a5117f063f1c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_020_物件_(2, 1)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_intact.png",
+        "sha256": "d32717d12b028f9f34e714da4db1ee3f05659b6b0847273b5bdeeb3e314dd3c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_021_地面_(3, 1)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_b.png",
+        "sha256": "8dd4a3dcb33c1ddc24cd381d4dc11665357a0a16e1b4800abd21d5f0758dff17"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_022_物件_(3, 1)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_intact.png",
+        "sha256": "d32717d12b028f9f34e714da4db1ee3f05659b6b0847273b5bdeeb3e314dd3c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_023_地面_(4, 1)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_c.png",
+        "sha256": "6d4f31fb77089be85b8b845c4df69fae72d2e2a2e11a8df4450bf8928829e3c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_024_地面_(5, 1)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_d.png",
+        "sha256": "29f6296d2bbea4a6f1e21608f65fd0365749d46bae8a3ab639522c7dca2931a0"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_025_地面_(0, 2)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_b.png",
+        "sha256": "8dd4a3dcb33c1ddc24cd381d4dc11665357a0a16e1b4800abd21d5f0758dff17"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_026_地面_(1, 2)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_c.png",
+        "sha256": "8b2a62fb569aa5ca94da8db4756ca2c04ef04da71fc2534bbe2f21ff93644632"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_027_物件_(1, 2)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_intact.png",
+        "sha256": "d32717d12b028f9f34e714da4db1ee3f05659b6b0847273b5bdeeb3e314dd3c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_028_地面_(2, 2)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_d.png",
+        "sha256": "8fd06628aeaed8aca987699e86a2d1125b156ba6429e191cfef6fd2b6c29754d"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_029_地面_(3, 2)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_a.png",
+        "sha256": "35412b1527a89310e6a23b74af8ab75a06b158a6c7eee03e120a5117f063f1c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_030_地面_(4, 2)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_b.png",
+        "sha256": "87caaefb6c5858ff1ae5f389af7e10a273c0daa843db4df82761a67098a26b76"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_031_物件_(4, 2)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_intact.png",
+        "sha256": "d32717d12b028f9f34e714da4db1ee3f05659b6b0847273b5bdeeb3e314dd3c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_032_地面_(5, 2)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_c.png",
+        "sha256": "6d4f31fb77089be85b8b845c4df69fae72d2e2a2e11a8df4450bf8928829e3c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_033_地面_(0, 3)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_a.png",
+        "sha256": "35412b1527a89310e6a23b74af8ab75a06b158a6c7eee03e120a5117f063f1c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_034_物件_(0, 3)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_light_planter_cover_intact.png",
+        "sha256": "57eea2fcac4d9bdfb00a24492e142b76be2c0cc0515cbf0cdce1aadda98c11f6"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_035_地面_(1, 3)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_b.png",
+        "sha256": "8dd4a3dcb33c1ddc24cd381d4dc11665357a0a16e1b4800abd21d5f0758dff17"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_036_地面_(2, 3)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_c.png",
+        "sha256": "8b2a62fb569aa5ca94da8db4756ca2c04ef04da71fc2534bbe2f21ff93644632"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_037_物件_(2, 3)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_intact.png",
+        "sha256": "d32717d12b028f9f34e714da4db1ee3f05659b6b0847273b5bdeeb3e314dd3c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_038_地面_(3, 3)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_d.png",
+        "sha256": "8fd06628aeaed8aca987699e86a2d1125b156ba6429e191cfef6fd2b6c29754d"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_039_物件_(3, 3)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_intact.png",
+        "sha256": "d32717d12b028f9f34e714da4db1ee3f05659b6b0847273b5bdeeb3e314dd3c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_040_地面_(4, 3)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_a.png",
+        "sha256": "e8fd05e2c091c94a90159b52085b8f10a9aadb09326296c035ff552bb8c1e680"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_041_地面_(5, 3)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_b.png",
+        "sha256": "87caaefb6c5858ff1ae5f389af7e10a273c0daa843db4df82761a67098a26b76"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_042_物件_(5, 3)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_light_wood_bench_intact.png",
+        "sha256": "9703c572881f815eee107a570040dff3454dbb0b8d7237d1bac396ca34f643c7"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [64, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_043_地面_(0, 4)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_d.png",
+        "sha256": "29f6296d2bbea4a6f1e21608f65fd0365749d46bae8a3ab639522c7dca2931a0"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_044_地面_(1, 4)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_a.png",
+        "sha256": "e8fd05e2c091c94a90159b52085b8f10a9aadb09326296c035ff552bb8c1e680"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_045_地面_(2, 4)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_b.png",
+        "sha256": "87caaefb6c5858ff1ae5f389af7e10a273c0daa843db4df82761a67098a26b76"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_046_单位_(2, 4)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/VictorBattle/victor_static.asset",
+        "sha256": "8ecf3ad3223f1841c9755365db02dd357608b8edad37a7433050ec14ae970087"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [64, 64]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_047_地面_(3, 4)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_c.png",
+        "sha256": "6d4f31fb77089be85b8b845c4df69fae72d2e2a2e11a8df4450bf8928829e3c9"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_048_地面_(4, 4)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_d.png",
+        "sha256": "29f6296d2bbea4a6f1e21608f65fd0365749d46bae8a3ab639522c7dca2931a0"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    },
+    {
+      "id": "RuinSite_049_地面_(5, 4)",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_a.png",
+        "sha256": "e8fd05e2c091c94a90159b52085b8f10a9aadb09326296c035ff552bb8c1e680"
+      },
+      "placement": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/local_density_configuration.json",
+        "sha256": "dade3d9fa70a43a88455e2d23052a878570e54cde115a9601122e58becc9cd5a"
+      },
+      "density_basis": "Actual mesh world distance per source texel from UV derivatives; native source dimensions [32, 32]; runtime-copy identity explicitly traced",
+      "source_uniformity": "PENDING",
+      "source_macro_pixel_unit": "PENDING_SOURCE_REVIEW",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "runtime_copy_resolved": false
+    }
+  ],
+  "comparisons": [
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "capture": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/full_output_offscreen_1920x1080.png",
+        "sha256": "e70f66179c6104d335844090934d2dfc44f94f4fe86a5868018a28bf45e189fd"
+      },
+      "sampled_asset_ids": [
+        "RuinSite_000_真实地台厚度",
+        "RuinSite_001_外围连续铺地",
+        "RuinSite_002_合批_庭院暖灰石",
+        "RuinSite_003_合批_学院象牙石",
+        "RuinSite_004_学院结构_0",
+        "RuinSite_005_学院结构_1",
+        "RuinSite_006_学院结构_2",
+        "RuinSite_007_地面_(0, 0)",
+        "RuinSite_008_立体墙_(0, 0)",
+        "RuinSite_009_地面_(1, 0)",
+        "RuinSite_010_单位_(1, 0)",
+        "RuinSite_011_地面_(2, 0)",
+        "RuinSite_012_地面_(3, 0)",
+        "RuinSite_013_地面_(4, 0)",
+        "RuinSite_014_单位_(4, 0)",
+        "RuinSite_015_地面_(5, 0)",
+        "RuinSite_016_立体墙_(5, 0)",
+        "RuinSite_017_地面_(0, 1)",
+        "RuinSite_018_地面_(1, 1)",
+        "RuinSite_019_地面_(2, 1)",
+        "RuinSite_020_物件_(2, 1)",
+        "RuinSite_021_地面_(3, 1)",
+        "RuinSite_022_物件_(3, 1)",
+        "RuinSite_023_地面_(4, 1)",
+        "RuinSite_024_地面_(5, 1)",
+        "RuinSite_025_地面_(0, 2)",
+        "RuinSite_026_地面_(1, 2)",
+        "RuinSite_027_物件_(1, 2)",
+        "RuinSite_028_地面_(2, 2)",
+        "RuinSite_029_地面_(3, 2)",
+        "RuinSite_030_地面_(4, 2)",
+        "RuinSite_031_物件_(4, 2)",
+        "RuinSite_032_地面_(5, 2)",
+        "RuinSite_033_地面_(0, 3)",
+        "RuinSite_034_物件_(0, 3)",
+        "RuinSite_035_地面_(1, 3)",
+        "RuinSite_036_地面_(2, 3)",
+        "RuinSite_037_物件_(2, 3)",
+        "RuinSite_038_地面_(3, 3)",
+        "RuinSite_039_物件_(3, 3)",
+        "RuinSite_040_地面_(4, 3)",
+        "RuinSite_041_地面_(5, 3)",
+        "RuinSite_042_物件_(5, 3)",
+        "RuinSite_043_地面_(0, 4)",
+        "RuinSite_044_地面_(1, 4)",
+        "RuinSite_045_地面_(2, 4)",
+        "RuinSite_046_单位_(2, 4)",
+        "RuinSite_047_地面_(3, 4)",
+        "RuinSite_048_地面_(4, 4)",
+        "RuinSite_049_地面_(5, 4)"
+      ],
+      "same_frame_verdict": "PENDING",
+      "projection_verdict": "PENDING",
+      "motion_verdict": "PENDING",
+      "motion_record": null,
+      "motion_scope": "Static endpoint/readback only; no continuous recording approval"
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "capture": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RuinSite/full_output_offscreen_960x540.png",
+        "sha256": "68acb050a1d6ee5917e3bde1155543a0db54124ba2f4acb6ee25daba604b6f7e"
+      },
+      "sampled_asset_ids": [
+        "RuinSite_000_真实地台厚度",
+        "RuinSite_001_外围连续铺地",
+        "RuinSite_002_合批_庭院暖灰石",
+        "RuinSite_003_合批_学院象牙石",
+        "RuinSite_004_学院结构_0",
+        "RuinSite_005_学院结构_1",
+        "RuinSite_006_学院结构_2",
+        "RuinSite_007_地面_(0, 0)",
+        "RuinSite_008_立体墙_(0, 0)",
+        "RuinSite_009_地面_(1, 0)",
+        "RuinSite_010_单位_(1, 0)",
+        "RuinSite_011_地面_(2, 0)",
+        "RuinSite_012_地面_(3, 0)",
+        "RuinSite_013_地面_(4, 0)",
+        "RuinSite_014_单位_(4, 0)",
+        "RuinSite_015_地面_(5, 0)",
+        "RuinSite_016_立体墙_(5, 0)",
+        "RuinSite_017_地面_(0, 1)",
+        "RuinSite_018_地面_(1, 1)",
+        "RuinSite_019_地面_(2, 1)",
+        "RuinSite_020_物件_(2, 1)",
+        "RuinSite_021_地面_(3, 1)",
+        "RuinSite_022_物件_(3, 1)",
+        "RuinSite_023_地面_(4, 1)",
+        "RuinSite_024_地面_(5, 1)",
+        "RuinSite_025_地面_(0, 2)",
+        "RuinSite_026_地面_(1, 2)",
+        "RuinSite_027_物件_(1, 2)",
+        "RuinSite_028_地面_(2, 2)",
+        "RuinSite_029_地面_(3, 2)",
+        "RuinSite_030_地面_(4, 2)",
+        "RuinSite_031_物件_(4, 2)",
+        "RuinSite_032_地面_(5, 2)",
+        "RuinSite_033_地面_(0, 3)",
+        "RuinSite_034_物件_(0, 3)",
+        "RuinSite_035_地面_(1, 3)",
+        "RuinSite_036_地面_(2, 3)",
+        "RuinSite_037_物件_(2, 3)",
+        "RuinSite_038_地面_(3, 3)",
+        "RuinSite_039_物件_(3, 3)",
+        "RuinSite_040_地面_(4, 3)",
+        "RuinSite_041_地面_(5, 3)",
+        "RuinSite_042_物件_(5, 3)",
+        "RuinSite_043_地面_(0, 4)",
+        "RuinSite_044_地面_(1, 4)",
+        "RuinSite_045_地面_(2, 4)",
+        "RuinSite_046_单位_(2, 4)",
+        "RuinSite_047_地面_(3, 4)",
+        "RuinSite_048_地面_(4, 4)",
+        "RuinSite_049_地面_(5, 4)"
+      ],
+      "same_frame_verdict": "PENDING",
+      "projection_verdict": "PENDING",
+      "motion_verdict": "PENDING",
+      "motion_record": null,
+      "motion_scope": "Static endpoint/readback only; no continuous recording approval"
+    }
+  ],
+  "coverage": "All current frustum-visible enabled colour-textured MeshRenderers, excluding shadow-only proxies; no active texture-free weather fixture",
+  "unresolved_colour_sources": [],
+  "human_review": "PENDING"
+}

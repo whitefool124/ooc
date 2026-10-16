@@ -1,0 +1,62 @@
+[
+  {
+    "timestampUtc": "2026-10-04T06:19:02.7883986Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.8028077Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.8176125Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.8395014Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.8531351Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.8722537Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.8898831Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.9019994Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.9225449Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.9334798Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.9559471Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.9700719Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:02.990105Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T06:19:03.0011227Z",
+    "message": "MissingReferenceException: The object of type 'UnityEngine.GameObject' has been destroyed but you are still trying to access it.\nYour script should either check if it is null or you should not destroy the object."
+  },
+  {
+    "timestampUtc": "2026-10-04T10:08:09.9151748Z",
+    "message": "[Funplay] Command runtime error: Unknown preview node: FR1-B1\n  at OCC.Combat.RogueliteMapRun.PreviewUiCaptureNode (System.String nodeId) [0x00029] in E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Runtime\\Campaign\\RogueliteMapRun.cs:979 \r\n  at OCC.Combat.Presentation.CombatPrototypeBootstrap.PreviewUiCaptureRun (System.Boolean academy, System.String nodeId, System.Boolean departure, System.String special) [0x000c0] in E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Runtime\\Presentation\\CombatPrototypeBootstrap.cs:496 \r\n  at Check.Execute (Funplay.Editor.Tools.Scripting.ExecutionContext ctx) [0x0002c] in <27156699605c49de9340625fca868f16>:0 \r\n  at Funplay.Editor.Tools.Builtins.ScriptExecutionFunctions.ExecuteAsCommand (System.Type commandType, System.String compilerName) [0x0003c] in .\\Library\\PackageCache\\com.gamebooom.unity.mcp@7310de901a8c\\Editor\\Tools\\Builtins\\ScriptExecutionFunctions.cs:611 "
+  }
+]

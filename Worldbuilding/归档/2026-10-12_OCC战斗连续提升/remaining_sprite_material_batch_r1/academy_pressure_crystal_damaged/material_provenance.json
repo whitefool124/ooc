@@ -1,0 +1,30 @@
+{
+  "schema": "occ-authored-sprite-material-v1",
+  "status": "QA_PENDING",
+  "id": "academy_pressure_crystal_damaged",
+  "source": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_pressure_crystal_damaged.png",
+    "sha256": "e5776dccef6fbc34c8b17f939552e9310b3e80717e52690800c2fdc2f700b5d8"
+  },
+  "recipe_sha256": "4001c3807bc30df7fc083df6c67d2edb6e8e368cc9762342cb6f28a24d9b0991",
+  "native_canvas": [
+    96,
+    64
+  ],
+  "world_pixel_pitch": 0.03125,
+  "height_basis": "explicit_authored_geometry",
+  "albedo_brightness_used_for_height": false,
+  "source_art_changed": false,
+  "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+  "fields": {
+    "normal.png": "f0599c4cadb138872876343156661bb07a12d25aba9b58dfdb95eca083339abc",
+    "regions.png": "5feb04b7d6c257dd6bd0a3a7f7be780320b68f8a04f767fc567f91066f980766"
+  },
+  "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+  "limitations": [
+    "Shallow-relief approximation; no physical transmission",
+    "Original albedo retains baked bright facets; numeric fields do not remove them"
+  ],
+  "runtime_review": "PENDING",
+  "human_registration_review": "PENDING"
+}

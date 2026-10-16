@@ -1,0 +1,96 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "device_tower_mechanism_candidate_20261016",
+  "role": "single_cell_prop_adaptive_32ppu",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in generation, subject-grid inferred, no geometric resizing",
+    "source_path": "ArtSource/device_material_candidates_20261016/tower/raw/r1_source.png",
+    "source_sha256": "ba25d51af9547728d40cb967448f52c75f95f8739310fad1ec2f5f1609a89e4c"
+  },
+  "delivery": {
+    "output_path": "ArtSource/device_material_candidates_20261016/tower/asset/device_tower_mechanism.png",
+    "output_sha256": "511b10d5fec6e3a22e351acad11e4ac4a2bfa42a8d0cd625d8d5347a8ffc1541",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Same 32 PPU as battlefield. Whole subject preserved on smallest fitting 32-multiple canvas; ground material is a horizontal card."
+  },
+  "application": {
+    "runtime_draw_rect": "One logical cell; visual extent from native canvas /32, bottom centre anchor",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1,
+    "review_scope": "Adopted existing source; default runtime local evidence in2026-10-16 stage-one closure archive. Whole scene aesthetics/performance remain separate."
+  },
+  "evidence": {
+    "one_x": "ArtSource/device_material_candidates_20261016/tower/qa/1x.png",
+    "four_x": "ArtSource/device_material_candidates_20261016/tower/qa/4x.png",
+    "grayscale": "ArtSource/device_material_candidates_20261016/tower/qa/grayscale.png",
+    "checker": "ArtSource/device_material_candidates_20261016/tower/qa/checker.png",
+    "application_contact": "ArtSource/device_material_candidates_20261016/tower/qa/contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "QA_PENDING. Prior user asked semantic readability before further polish; no automatic formal promotion."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldDevices32/device_tower_mechanism.png",
+    "stable_guid": "757d1ff37a44fc046b4b30b6e9d0ebb6",
+    "native_ppu": 32,
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "review_scope": "Default player lookup and representative local capture; sequence frames all loaded, no whole-scene motion approval"
+  },
+  "processing": {
+    "decode_report": "ArtSource/device_material_candidates_20261016/tower/qa/r1_decode.json",
+    "resize": false,
+    "new_colours": "black external one-native-pixel outline only",
+    "alpha_preserved": true,
+    "visible_bounds": [
+      14,
+      16,
+      49,
+      62
+    ],
+    "world_pixel_pitch": 0.03125,
+    "native_ppu": 32
+  },
+  "production_binding": {
+    "status": "USER_AUTHORIZED",
+    "default_enabled": true,
+    "authorization": "2026-10-16 user: 自己把待办清空",
+    "delivery_sha256": "511b10d5fec6e3a22e351acad11e4ac4a2bfa42a8d0cd625d8d5347a8ffc1541",
+    "guid_preserved": true
+  }
+}

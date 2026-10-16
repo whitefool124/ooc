@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"战斗鼠标操作|越格角色的输入归属|同时反馈的可读性|战场格标记强度阶梯|动作命中与镜头衔接\"><h3 id=\"doxcnp91aS7PlgcTEFlEZBhYGFe\">5.2.1 战斗鼠标操作</h3><h2 id=\"doxcnL5dwg0yAG2DN19oZOzk8Sf\">A.8 动作命中与镜头衔接</h2><h2 id=\"doxcnFs1nWTZ47RsmLe7UfZ1Pdb\">A.14 越格角色的输入归属</h2><h2 id=\"doxcnIvSTr8WNZbNHop7wZHBwlf\">A.16 同时反馈的可读性</h2><h2 id=\"doxcneyGinGQBQ9vIIxtPWEfDSh\">A.17 战场格标记强度阶梯</h2></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2639
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

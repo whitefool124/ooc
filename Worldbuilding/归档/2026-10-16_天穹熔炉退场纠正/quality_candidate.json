@@ -1,0 +1,114 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "38625900f0f7a2c9c8c48eddc0291138ddbf9d5238cf65825426f6b91cb5f4d6",
+  "status": "QA_PENDING",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePixelDisassembly.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceSmokeParticles.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceBurstParticles.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+    "UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceSolidPixel.shader",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs"
+  ],
+  "inputs": [
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+      "sha256": "e7fe893fd260df2ff6e23f881454837306626849a01e1303a284b47e12925bb0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePixelDisassembly.cs",
+      "sha256": "f2a34f84ff3c7cfcbbdbe2401a1eaddfcdd17b9cdd6ddbd85cd79b06e325120f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceSmokeParticles.cs",
+      "sha256": "880f459430a895525508bd6e82db910c4d76ddd1e53bd92e39285fc76678858e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceBurstParticles.cs",
+      "sha256": "35de21d8416cf0f6c5f94e0ddce79356ef1a39340ddfe193d90ef51b1a30c023"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+      "sha256": "0d1f28630b21390865bacb60b29f0c8a87d7031338e1b37c52c9bd33ace17022"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceSolidPixel.shader",
+      "sha256": "13047c685d5f2eb429c96fbeeaef50157f4fa92f002b396449eece5a2d02e1e6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+      "sha256": "a9f344c8ff0a0b1c0fc352784cbb8a494cdb9108a91def21d4ccbdf6847f6c85"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs",
+      "sha256": "4df2d5dfef41e9fb4b607ae893683b2acbf9579bfb79c40c7bee2a5b822b2018"
+    },
+    {
+      "path": "UnityProject/Assets/Scenes/SkyFurnace.unity",
+      "sha256": "d27f7982036d600b9faea8e6834115d3a0d9c6d014a99992da02b3b961ad20a6"
+    }
+  ],
+  "configuration": {
+    "scope": "Dedicated SkyFurnace retirement correction, replacing paper erasure with full-source geometric fracture",
+    "duration": 16,
+    "audio": "none",
+    "sourceCoverage": "All source pixels retained through initial fracture; observed outer seal5468/5468 from9.0to11.2seconds",
+    "untexturedCubeEdgeMetres": 0.03125,
+    "review": "PENDING"
+  },
+  "local_evidence": {
+    "runtime": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉退场纠正/fixed_runtime_checks.json",
+      "sha256": "0048fda67d650c91a557ecdbdeb8d7c9ea370cd133e6a28d82761bfb273e1200"
+    },
+    "geometry": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉退场纠正/burst_study/geometry_checks.json",
+      "sha256": "831d9bfd105d43d8ff0a5034316c72f154924f3a7016ae08254e3ca9ea338c46"
+    },
+    "native_particle_readback": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉退场纠正/fracture_readback_checks.json",
+      "sha256": "d9c32928d5b26048f06b92379063cff8ea3bbde11caae33142cb5bfdfc50174d"
+    },
+    "sampled_motion": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉退场纠正/burst_study/burst_checks.json",
+      "sha256": "1246089e3fa638e2480781057b62313141d077e794345e3945965da8579af76e"
+    },
+    "sequence": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉退场纠正/整形_碎裂_飘离_实机对照.png",
+      "sha256": "0d12bd0c1413ff197efc68a4c7c0030dccf735abc988cd6636e60abae66e04c9"
+    },
+    "film": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉退场纠正/fixed_film_capture.json",
+      "sha256": "9313b806dac03d527763a4bf37ab723cce42124b88b9129980c8ad3a66c992d0"
+    },
+    "console": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉退场纠正/console.json",
+      "sha256": "8e7137dae04e08b5263af999bfff41ae941b23e8d50247375e9b4aa98071ab53"
+    },
+    "movie": {
+      "path": "Artifacts/SkyFurnaceFractureFix_20261016/天穹熔炉_法阵破碎修正.mp4",
+      "sha256": "2be59568671f73ee6585702ecf6722faf96c852b09b8243cadfbb33637ca2cdd"
+    },
+    "retirement_clip": {
+      "path": "Artifacts/SkyFurnaceFractureFix_20261016/法阵碎裂飘散_正常速度.mp4",
+      "sha256": "ba30f2b309724dbc461a344e1db5cb26674ce1033302e684c3d6eb843aafe469"
+    },
+    "build": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉退场纠正/build_status.json",
+      "sha256": "0b07857a10e2c7c39129b5b9430feb9ec20ac00f3ec7235d54d6fca0ed2fd1b8"
+    },
+    "standalone": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉退场纠正/PlayerCheck/player_checks.json",
+      "sha256": "ab0a91c1aee2cea0a5ab5649ceabaed8827ac76237c347c4304dced44d6b8a3c"
+    }
+  },
+  "limitations": [
+    "Previous visual acceptance was rejected by user; current replacement awaits visual review.",
+    "Local technical checks do not establish formal combat integration, target-device performance, or human aesthetic approval."
+  ]
+}

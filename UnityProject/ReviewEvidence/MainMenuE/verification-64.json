@@ -1,0 +1,22 @@
+{
+  "native_scene": [
+    240,
+    135
+  ],
+  "object_detail_baseline": [
+    64,
+    64
+  ],
+  "runtime": [
+    1920,
+    1080
+  ],
+  "pixel_tier": 8,
+  "background_book_cup_lamp_uniform": true,
+  "start_actual_click_destination": "Configuration",
+  "continue_actual_click_destination": "Map",
+  "continued_node": "O",
+  "continued_saved": true,
+  "player_saves": "isolated verification scope; restored on exit",
+  "human_aesthetic_acceptance": "PENDING"
+}

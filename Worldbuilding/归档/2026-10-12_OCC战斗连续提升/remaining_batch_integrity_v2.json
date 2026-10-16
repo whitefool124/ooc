@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "scope": "Numeric batch integrity only, not visual approval",
+  "source_images_unchanged": 9,
+  "byte_identical_repeat_fields": 16,
+  "normal_basis": "Explicit physical geometry, not albedo brightness"
+}

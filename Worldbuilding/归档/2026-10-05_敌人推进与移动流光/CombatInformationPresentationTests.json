@@ -1,0 +1,97 @@
+{
+  "status": "completed",
+  "duration": 0.49,
+  "summary": {
+    "total": 12,
+    "passed": 12,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.ActionResult_UsesEquippedRogueSpellInsteadOfLegacyHeroSkill",
+      "Status": "Passed",
+      "Duration": 0.1635396,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.ActionResult_UsesExecutionValuesForSingleStructuredRecord",
+      "Status": "Passed",
+      "Duration": 0.0018425,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.AttackIntent_SeparatesSelectableRangeFromThisAttackFootprint",
+      "Status": "Passed",
+      "Duration": 0.0029317,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.AttackPreview_ReportsBeforeAfterAndDamageBreakdown",
+      "Status": "Passed",
+      "Duration": 0.0056833,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.DamageIntent_RecalculatesAgainstTheCurrentDefenses",
+      "Status": "Passed",
+      "Duration": 0.0008591,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.DefeatOutcome_ExplainsReasonConsequencesAndRecentEvents",
+      "Status": "Passed",
+      "Duration": 0.003274,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.DefeatSettlement_DoesNotCapturePostCombatInventoryIntoMapRun",
+      "Status": "Passed",
+      "Duration": 0.0353042,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.EnemyIntent_UsesAuthoritativeTacticsCommandAndExposesExactSignature",
+      "Status": "Passed",
+      "Duration": 0.0033819,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.EnemyProfile_ContainsVitalsWeaponSkillsCooldownsAndStatuses",
+      "Status": "Passed",
+      "Duration": 0.0131184,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.GenericRogueliteSpellsUseTheirOwnTargetingTagsWithoutFireCatalogErrors",
+      "Status": "Passed",
+      "Duration": 0.0066455,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.MoveIntent_ExposesTheAuthoritativeDestinationForHoverHighlight",
+      "Status": "Passed",
+      "Duration": 0.00078,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatInformationPresentationTests.MoveIntent_UsesExecutionPathAndShowsWaterStatusRemoval",
+      "Status": "Passed",
+      "Duration": 0.0021475,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

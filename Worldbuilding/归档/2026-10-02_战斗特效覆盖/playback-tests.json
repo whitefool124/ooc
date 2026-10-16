@@ -1,0 +1,69 @@
+{
+  "status": "completed",
+  "duration": 0.87,
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.ArmedAttachment_DoesNotPlayItsFutureImpactBeforeTheWeaponTrigger",
+      "Status": "Passed",
+      "Duration": 0.0537145,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.EveryPreparedSpell_UsesAvailableFramesAndNonOverlappingStagesPerCell",
+      "Status": "Passed",
+      "Duration": 0.4743471,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.ReactionDoesNotEraseDeliveryImpactOrGroundStages",
+      "Status": "Passed",
+      "Duration": 0.0128085,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.Renderer_SamplesFramesTracksViewportAndClearsAllPendingEffectsWhenAnimationIsDisabled",
+      "Status": "Passed",
+      "Duration": 0.057567,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.RepeatedAbility_ReplacesOverlappingTracksWithoutBuildingAnUnboundedQueue",
+      "Status": "Passed",
+      "Duration": 0.0065941,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.ResetOrDisable_RemovesRenderedAndFutureStagesWithoutChangingCombat(False)",
+      "Status": "Passed",
+      "Duration": 0.005949,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.ResetOrDisable_RemovesRenderedAndFutureStagesWithoutChangingCombat(True)",
+      "Status": "Passed",
+      "Duration": 0.001329,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.ZeroDamageRecoveryAndGroundResults_DoNotClaimThoseEffectsOccurred",
+      "Status": "Passed",
+      "Duration": 0.0007673,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

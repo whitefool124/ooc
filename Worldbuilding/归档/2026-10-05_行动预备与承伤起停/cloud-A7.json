@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"移动表现使用已结算命令\"><p id=\"doxcnJ4vBg1nuEgy8kUAszZSZXd\">移动表现使用已结算命令中的真实逐格相邻路径，不从终点重新寻路，也不显示敌人未来搜索路线。参考时长为每格80ms，总长限制在120–350ms；连续移动从当前视觉位置接续。路径缺失或发生强制位移时直接对齐最终状态，不编造穿越障碍的路线。角色、生命、护盾、状态共用同一位移；单位按视觉足底排序。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2653
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

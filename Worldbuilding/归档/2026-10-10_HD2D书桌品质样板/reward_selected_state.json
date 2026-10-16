@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"CurrentNodeId\\\":\\\"B1\\\",\\\"SelectedRewardId\\\":\\\"F-P-M03\\\",\\\"RewardChoicesOpened\\\":true,\\\"LootPendingExit\\\":false,\\\"PendingRewardStepId\\\":\\\"main\\\",\\\"icons\\\":[],\\\"localPreview\\\":true}\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

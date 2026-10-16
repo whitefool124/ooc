@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sky_furnace_furnace_core_20261014",
+  "role": "hd2d_environment_module",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in source; noninteractive stage spatial-effect module, inferred grid decode without geometric resizing",
+    "source_path": "ArtSource/SkyFurnace_20261014/raw/furnace_core_r1.png",
+    "source_sha256": "349f22bd8470cb853511dcfb4efcc8859718fb8e33ec40af495e484b5885d749"
+  },
+  "delivery": {
+    "output_path": "ArtSource/SkyFurnace_20261014/delivery/furnace_core.png",
+    "output_sha256": "9cbfff49987f64e71f21068dae8447d616566c4903b1da6e4716d3a6d74476ee",
+    "native_output_path": "ArtSource/SkyFurnace_20261014/delivery/furnace_core.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "battlefield_hd2d_environment",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "2.0 by 2.0 metres at fixed32PPU; independent noninteractive cinematic",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User authorized all required stage assets and requested32px source art on2026-10-14"
+  },
+  "evidence": {
+    "one_x": "ArtSource/SkyFurnace_20261014/qa/furnace_core/1x.png",
+    "four_x": "ArtSource/SkyFurnace_20261014/qa/furnace_core/4x.png",
+    "six_x": "ArtSource/SkyFurnace_20261014/qa/furnace_core/6x.png",
+    "grayscale": "ArtSource/SkyFurnace_20261014/qa/furnace_core/grayscale.png",
+    "checker": "ArtSource/SkyFurnace_20261014/qa/furnace_core/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-14_天穹熔炉演出方案/fixed_frames/frame_06.50.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Technical candidate only; actual scene density and aesthetic review pending"
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/SkyFurnace/furnace_core.png",
+    "formal_promotion": false
+  }
+}

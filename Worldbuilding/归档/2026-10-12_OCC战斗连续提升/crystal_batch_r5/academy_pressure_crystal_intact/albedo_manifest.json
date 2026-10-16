@@ -1,0 +1,62 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_pressure_crystal_intact_density_candidate_20261012",
+  "role": "single_cell_prop_adaptive_32ppu",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in mineral base-colour generation, selected source and grid record bound below; no geometric resize",
+    "source_path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/crystal_batch_r5/academy_pressure_crystal_intact/raw.png",
+    "source_sha256": "125d5a6680445813a7a85ce1c574b95faf1d024790213ee6ac30c145de8a8c5f"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/HD2DBattleCrystalCandidates/academy_pressure_crystal_intact.png",
+    "output_sha256": "e5ebc28eb58abba8df006f976d022ddfe3a87d770893525b51c0dbb90775bb57",
+    "native_output_path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/crystal_batch_r5/academy_pressure_crystal_intact/albedo.png",
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24
+  },
+  "normalization": {
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/crystal_batch_r5/academy_pressure_crystal_intact/decode.json",
+      "sha256": "4ce652d8a6b6678400527027ad2e3ded1c550dbf1c8ac992844506c1911f7cdb"
+    },
+    "source_macro_pixel_pitch": 22,
+    "source_grid_confidence": 6.6293,
+    "geometric_resize": false,
+    "outline": "Replace existing outermost opaque native cells by one black native cell; no alpha expansion or extra ring"
+  },
+  "application": {
+    "runtime_draw_rect": "64x64 visual canvas at32PPU, root foot/grid unchanged; only explicitly enabled Editor QA preview",
+    "world_pixel_pitch": 0.03125,
+    "formal_replacement": false,
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "scale_fields_scope": "Native source diagnostics only; actual HD2D remains perspective at32PPU",
+    "source_contact_scope": "Flat source/tile contact diagnostic, not runtime scene or human approval"
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/crystal_batch_r5/academy_pressure_crystal_intact/1x.png",
+    "four_x": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/crystal_batch_r5/academy_pressure_crystal_intact/4x.png",
+    "grayscale": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/crystal_batch_r5/academy_pressure_crystal_intact/grayscale.png",
+    "checker": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/crystal_batch_r5/academy_pressure_crystal_intact/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/crystal_batch_r5/academy_pressure_crystal_intact/source_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "scene_pixel_size_consistency": "PENDING"
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/HD2DBattleCrystalCandidates/academy_pressure_crystal_intact.png",
+    "native_ppu": 32,
+    "formal_promotion": false
+  },
+  "blockers": [
+    "Candidate only; complete scene density, actual application and human art review pending"
+  ]
+}

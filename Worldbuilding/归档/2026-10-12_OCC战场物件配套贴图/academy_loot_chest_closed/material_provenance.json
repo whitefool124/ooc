@@ -1,0 +1,97 @@
+{
+  "id": "academy_loot_chest_closed",
+  "status": "QA_PENDING",
+  "albedo": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_loot_chest_closed.png",
+    "sha256": "7b405f8250650dcaf2831e6a0c1b0d8de94d88f3df35371673f7d128ca8fe1d4"
+  },
+  "raw": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/paired_raw_r1.png",
+    "sha256": "287eb602cbb392e4b068c10b54873470c3443c1211f6f65f81c81c274e3f72e3"
+  },
+  "roughness_raw": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/roughness_raw_r2.png",
+    "sha256": "9eed3f836f9ec25bb97fd74667b33adef903a0291d98bcc67f39621761c6efd1"
+  },
+  "world_pixel_pitch": 0.03125,
+  "normal_convention": "OpenGL +Y up; no importer green flip",
+  "maps": [
+    {
+      "kind": "normal",
+      "source": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/normal_raw_r2.png",
+        "sha256": "45db5350061b169c09a7f3dd94fec016e12bfedbf4a1820167677bfc06fb2550"
+      },
+      "delivery": {
+        "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/normal.png",
+        "sha256": "c239767f2f6bb7068393d60d54b8d5a08599b89fe2d4c03236b319c67a69f98d"
+      },
+      "registration": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/normal_registration.json",
+        "sha256": "ab6b0698b56331dedb857456e1cae3f532c00da377f25a0746fb06b61dc99aec"
+      },
+      "rgb_min": [
+        105,
+        114,
+        250
+      ],
+      "rgb_max": [
+        160,
+        156,
+        254
+      ]
+    },
+    {
+      "kind": "roughness",
+      "source": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/roughness_raw_r2.png",
+        "sha256": "9eed3f836f9ec25bb97fd74667b33adef903a0291d98bcc67f39621761c6efd1"
+      },
+      "delivery": {
+        "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/roughness.png",
+        "sha256": "fecbb9afced62e1f70f438099e429427b4a012085de86dbcffee619352a65291"
+      },
+      "registration": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/roughness_registration.json",
+        "sha256": "976bf76ed98c077e5a9e12675dc9c08a3211fbdde87af2ef20614b0d02d9b367"
+      },
+      "rgb_min": [
+        102,
+        102,
+        102
+      ],
+      "rgb_max": [
+        254,
+        254,
+        254
+      ]
+    },
+    {
+      "kind": "regions",
+      "source": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/regions_panel.png",
+        "sha256": "4c71dc526c5f90bcc732dd5fefe8ebdef1907f17dae483d7bb1038aa7731b00e"
+      },
+      "delivery": {
+        "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/regions.png",
+        "sha256": "84370b1e03b72cceebc1d746438f4496802c3cd1d861f06c5d11507ab805d75d"
+      },
+      "registration": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/regions_registration.json",
+        "sha256": "5a957a608f35a818cd5e4bb4192f498b7b76877eb01bc06560e81a64b07dad3f"
+      },
+      "rgb_min": [
+        0,
+        0,
+        0
+      ],
+      "rgb_max": [
+        253,
+        4,
+        4
+      ]
+    }
+  ],
+  "human_review": "PENDING",
+  "material_policy": "Archive wood and paper are fully nonmetal with zero glass; neutral built-in black region texture. Chest hardware is region-masked. Lantern iron/glass use independently authored red/green regions; B unused."
+}

@@ -1,0 +1,476 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.3",
+  "contract_sha256": "5f1b45719f50c7544ba5c901dd3eefbbc0a0181eeb86f039e5553c2a805d109b",
+  "scene_kind": "desk",
+  "baseline_id": "desk-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DDeskArtCandidate.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DNativeMaterialMesh.cs"
+  ],
+  "inputs": [
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "296d00399e90e469d9f84bf3e44cee5d7074748a3243a1da9dc2412d5812ef42"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DAtmosphere.asset",
+      "sha256": "adf26689a7e80b22ef256d4a7c516929d51aea7f3af97bbe91cb136db3a685f0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/desk.png",
+      "sha256": "6151936c18cfde721a5590bcc7d5939a4c68c508d2c672387587a75f53c744ef"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DDeskArtCandidate.cs",
+      "sha256": "c655dea9e36242269ae724a15cf6777c9063a48669008cd80ee4518742c8bc5e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+      "sha256": "6f707400ca083ba404e678ef5dc5f4c21fda1065d78354d02f502bdca24025d7"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DNativeMaterialMesh.cs",
+      "sha256": "408393e02cc2a706010804019e5f2af6f94ac5f0683af349f7661dfeb442a7e6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/MainMenuHd2DStage.cs",
+      "sha256": "cc14c25431840009bd15a534a7ae7d7e74196c347d5c5964bfee829dd6da35d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "a3e19c8ccdf3e897e9c6c09cd508915afcbb56165e027180320f8796f812e396"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/wood_material_equipment_1920.png",
+      "sha256": "bf8883db88515334015eb5e72ccb8172fed5fee1660b8771bc6c231f396a4c85"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/wood_material_menu_1920.png",
+      "sha256": "f6739250b2bf5a5ea2ab487f7557db33132b472c5d9939f5678f3610b2d65472"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/wood_material_menu_actual_960.png",
+      "sha256": "db8e9f5f6d53aa63c9c996b49aa40a545293d9e0559e34fe3d0a0cb5887c73b0"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/wood_material_specular_off_1920.png",
+      "sha256": "3ed905b1021761a24afaaed40c0d1613a63879d688ed0bd18111b9c27bca59e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_960_capture.json",
+      "sha256": "558e9c015497a3b97bc3e99a658fbbe0e91edd62ed9032cc63339ce1b291a1a2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_backpack_hit.json",
+      "sha256": "3881229ac806060cfa4fd792c5e16c4e52da04aca547079bace03180d0858a50"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_compile_status.json",
+      "sha256": "44108a466ce054b178307bc0cd738b28a46f17270d1b75f377d3231be3a7de0a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_density.json",
+      "sha256": "a97e482a80b5d6a3ce39ec102a64301da04c731f7cc24f8beda6afb1187ebec5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_equipment_capture.json",
+      "sha256": "577c7a90143098c01ac1e8013675902e46d42e110d975940c8edfcd77cb4bdc1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_equipment_density.json",
+      "sha256": "75b31d74bd2e16552647a64a8171fa6c3fb4ef52532fcd4f5ea8d985b172f9ee"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_equipment_readback.json",
+      "sha256": "99c968464461c6536d9ec56f52223f0195c29c2c5ce6f79a57043884e54843c2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_exit_preflight.json",
+      "sha256": "849bbe36afb158b8a9a89eefc2c3a4d7336524882989eb3b949a9f370a8e4587"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_exit_state.json",
+      "sha256": "27c750b7eaea4129ba9d6ffe2d1c1bb5f24221e1e42e926471126a53360a05ea"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_final_console.json",
+      "sha256": "748ebc5e45f7e9c5a43d6d7be32233857b055c0b577dd536e1cb6bd7125b3935"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_map_buttons.json",
+      "sha256": "784aaca4d40a01df88e3ca53fd5ef86a73dd191206efcdbbf08e526fa514da30"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_menu_capture.json",
+      "sha256": "a897420ac88f575349024b63d77a81eaeb79a372553a4b9a31e3e8fb1e93fe81"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_open.json",
+      "sha256": "72f80dcfe8bac63c6b02c70eba24e9a4cc05b094ec7be12436fafdd4e5e79d58"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_preflight.json",
+      "sha256": "81069f32ffa5c7df2d991725afde5a67a1d9c662ae7df604b34c3cf1590245c3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_prepare.json",
+      "sha256": "2cb7e7bdb0f4560c20a9144c4d22e8a2c86e6920360e90329c15541e4a7b6530"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_ready_preflight.json",
+      "sha256": "81069f32ffa5c7df2d991725afde5a67a1d9c662ae7df604b34c3cf1590245c3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_restore960.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_restore_scene.json",
+      "sha256": "21b89f082079496f11647493945e1ccc7928291f62cad9cc4d7776fc12a0c0a6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_runtime.json",
+      "sha256": "62a422beadf094fff0dd13048817c7abad39c75de03b61b839ded472e7a6067d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_scope.json",
+      "sha256": "078a03f79fc40984006449d6eaef79c2f411cbddb23029815675f0ff33d0ea87"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_material_select960.json",
+      "sha256": "95b6c75aba1d7f87047f60437567c7dfed727437ae3cca244a4e8f012febf834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_specular_off.json",
+      "sha256": "b699a23550feeb490e752fa4f30dd67e3765826502f82837af31c6226058f2b0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_specular_off_capture.json",
+      "sha256": "db3fcb83b383db8b33292327def575196edd89a04bf766373d5968785d42c9ef"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_specular_restore.json",
+      "sha256": "9344ec5b073018f12696a4ff0648a20430b54d00b416d731642f20290a4e6589"
+    },
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "e3d411ed5c97764ebfd06659ab7dc4b12303319622a6401e6d59ee39b1fbf371"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": {
+      "shader": "Universal Render Pipeline/Lit",
+      "workflow": "specular",
+      "metallic": 0,
+      "dielectric_specular_rgb": [
+        0.04,
+        0.04,
+        0.04
+      ],
+      "desktop_smoothness": 0.32,
+      "edge_leg_smoothness": 0.24,
+      "source": "Art/MainMenuE/Stage/desk",
+      "source_patch_bottom_left": [
+        48,
+        32,
+        176,
+        20
+      ],
+      "world_ppu": 32,
+      "filter": "Point",
+      "normal_roughness_maps": "none; no generated or repainted bitmap",
+      "lighting": "existing scene lights unchanged"
+    },
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 35,
+    "yaw": 0,
+    "field_of_view": 24
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": null
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "整场景人物及装备等资产像素尺度仍未统一，保留最高优先级阻断项。",
+    "完整密度清单、运动证据、人工样板认可和性能验收未完成；本次只核对局部木桌材质。",
+    "旧书桌截图与之前 quality report 不再代表当前木桌 UV/材质配置，不继承其批准。"
+  ],
+  "local_validation": {
+    "compile": "wood_material_compile_status.json operation.status ready; compilation_errors empty",
+    "normal_entry": "wood_material_entry_status.json PASS:entry, backpack real UI hit",
+    "captures": "main menu actual 1920x1080 and 960x540; widened equipment table 1920x1080",
+    "reflection": "main-menu same camera with wood specular on/off; restored after capture; runtime values read back",
+    "density": "mesh world edge / source UV texel span at 32 PPU for tabletop, edge and all legs, including widened 7.8-unit table; source macro-grid and complete scene approval remain separate"
+  }
+}

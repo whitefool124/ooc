@@ -1,0 +1,34 @@
+{
+  "status": "completed",
+  "duration": 0.69,
+  "summary": {
+    "total": 3,
+    "passed": 1,
+    "failed": 2,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.IndividualLoot_OldSecondBattleSaveRepairsPreviousGroupSelectionWithoutReroll",
+      "Status": "Failed",
+      "Duration": 0.3347203,
+      "Message": "  Expected: <empty>\r\n  But was:  \"F-P-R19\"\r\n",
+      "StackTrace": "at OCC.Combat.Tests.FirstRunExperienceTests.IndividualLoot_OldSecondBattleSaveRepairsPreviousGroupSelectionWithoutReroll () [0x0003b] in E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Tests\\EditMode\\FirstRunExperienceTests.cs:43\r\n"
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.IndividualLoot_SecondBattleStartsWithItsOwnUnopenedReward",
+      "Status": "Failed",
+      "Duration": 0.0997598,
+      "Message": "  Expected: False\r\n  But was:  True\r\n",
+      "StackTrace": "at OCC.Combat.Tests.FirstRunExperienceTests.IndividualLoot_SecondBattleStartsWithItsOwnUnopenedReward () [0x00007] in E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Tests\\EditMode\\FirstRunExperienceTests.cs:28\r\n"
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.IndividualLoot_ValidSecondBattleSelectionSurvivesReload",
+      "Status": "Passed",
+      "Duration": 0.1545325,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

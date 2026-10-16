@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="30" result="Failed(Child)" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-16 10:09:21Z" end-time="2026-10-16 10:09:23Z" duration="1.4443695">
+  <test-suite type="TestSuite" id="1000" name="My project" fullname="My project" runstate="Runnable" testcasecount="2820" result="Failed" site="Child" start-time="2026-10-16 10:09:21Z" end-time="2026-10-16 10:09:23Z" duration="1.444370" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2742" name="OCC.Combat.EditModeTests.dll" fullname="E:/数据库/OCC_Codex/UnityProject/Library/ScriptAssemblies/OCC.Combat.EditModeTests.dll" runstate="Runnable" testcasecount="1510" result="Failed" site="Child" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:23Z" duration="1.267281" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="36400" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2743" name="OCC" fullname="OCC" runstate="Runnable" testcasecount="1510" result="Failed" site="Child" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:23Z" duration="1.225726" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2745" name="Combat" fullname="OCC.Combat" runstate="Runnable" testcasecount="1508" result="Failed" site="Child" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:23Z" duration="1.176292" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2746" name="Tests" fullname="OCC.Combat.Tests" runstate="Runnable" testcasecount="1508" result="Failed" site="Child" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:23Z" duration="1.129822" total="30" passed="29" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1558" name="CombatMotionRefinementTests" fullname="OCC.Combat.Tests.CombatMotionRefinementTests" classname="OCC.Combat.Tests.CombatMotionRefinementTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:22Z" duration="0.353835" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1559" name="ActualRouteAcceleratesAndBrakesWithoutChangingArrivalTime" fullname="OCC.Combat.Tests.CombatMotionRefinementTests.ActualRouteAcceleratesAndBrakesWithoutChangingArrivalTime" methodname="ActualRouteAcceleratesAndBrakesWithoutChangingArrivalTime" classname="OCC.Combat.Tests.CombatMotionRefinementTests" runstate="Runnable" seed="1742300621" result="Passed" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:22Z" duration="0.033009" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1563" name="MixedShieldAndHealthContactKeepsHealthMotionInEitherOrder" fullname="OCC.Combat.Tests.CombatMotionRefinementTests.MixedShieldAndHealthContactKeepsHealthMotionInEitherOrder" classname="OCC.Combat.Tests.CombatMotionRefinementTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:22Z" duration="0.245142" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1561" name="MixedShieldAndHealthContactKeepsHealthMotionInEitherOrder(True)" fullname="OCC.Combat.Tests.CombatMotionRefinementTests.MixedShieldAndHealthContactKeepsHealthMotionInEitherOrder(True)" methodname="MixedShieldAndHealthContactKeepsHealthMotionInEitherOrder" classname="OCC.Combat.Tests.CombatMotionRefinementTests" runstate="Runnable" seed="573567222" result="Passed" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:22Z" duration="0.236426" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1562" name="MixedShieldAndHealthContactKeepsHealthMotionInEitherOrder(False)" fullname="OCC.Combat.Tests.CombatMotionRefinementTests.MixedShieldAndHealthContactKeepsHealthMotionInEitherOrder(False)" methodname="MixedShieldAndHealthContactKeepsHealthMotionInEitherOrder" classname="OCC.Combat.Tests.CombatMotionRefinementTests" runstate="Runnable" seed="1679648983" result="Passed" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:22Z" duration="0.003536" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1560" name="PreparationUsesPublicFirstStepAndDoesNotReplaceAHit" fullname="OCC.Combat.Tests.CombatMotionRefinementTests.PreparationUsesPublicFirstStepAndDoesNotReplaceAHit" methodname="PreparationUsesPublicFirstStepAndDoesNotReplaceAHit" classname="OCC.Combat.Tests.CombatMotionRefinementTests" runstate="Runnable" seed="1009771623" result="Passed" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:22Z" duration="0.046282" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1564" name="ZeroChangeCannotCreateDamageMotionAndShieldStaysLighterAndSilver" fullname="OCC.Combat.Tests.CombatMotionRefinementTests.ZeroChangeCannotCreateDamageMotionAndShieldStaysLighterAndSilver" methodname="ZeroChangeCannotCreateDamageMotionAndShieldStaysLighterAndSilver" classname="OCC.Combat.Tests.CombatMotionRefinementTests" runstate="Runnable" seed="1959862113" result="Passed" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:22Z" duration="0.002285" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1823" name="DeviceMaterialPresentationTests" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:23Z" duration="0.472905" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="1842" name="CandidateImports_PreserveCompleteNativeCanvasAndSampling" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.CandidateImports_PreserveCompleteNativeCanvasAndSampling" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:23Z" duration="0.409825" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1838" name="CandidateImports_PreserveCompleteNativeCanvasAndSampling(&quot;device_overload&quot;)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.CandidateImports_PreserveCompleteNativeCanvasAndSampling(&quot;device_overload&quot;)" methodname="CandidateImports_PreserveCompleteNativeCanvasAndSampling" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="1330673117" result="Passed" start-time="2026-10-16 10:09:22Z" end-time="2026-10-16 10:09:23Z" duration="0.397230" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1839" name="CandidateImports_PreserveCompleteNativeCanvasAndSampling(&quot;device_ward_generator&quot;)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.CandidateImports_PreserveCompleteNativeCanvasAndSampling(&quot;device_ward_generator&quot;)" methodname="CandidateImports_PreserveCompleteNativeCanvasAndSampling" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="1729123166" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.003503" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1840" name="CandidateImports_PreserveCompleteNativeCanvasAndSampling(&quot;device_tower_mechanism&quot;)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.CandidateImports_PreserveCompleteNativeCanvasAndSampling(&quot;device_tower_mechanism&quot;)" methodname="CandidateImports_PreserveCompleteNativeCanvasAndSampling" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="1990882600" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.003072" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1841" name="CandidateImports_PreserveCompleteNativeCanvasAndSampling(&quot;material_crystal_shards&quot;)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.CandidateImports_PreserveCompleteNativeCanvasAndSampling(&quot;material_crystal_shards&quot;)" methodname="CandidateImports_PreserveCompleteNativeCanvasAndSampling" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="1318922083" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.003030" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1836" name="CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.034377" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1832" name="CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect(0)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect(0)" methodname="CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="1281575941" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.026627" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1833" name="CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect(1)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect(1)" methodname="CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="1094019211" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.001721" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1834" name="CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect(2)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect(2)" methodname="CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="2044473398" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.001594" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1835" name="CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect(3)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect(3)" methodname="CrystalMaterial_DoesNotReplaceSameCellObjectOrEffect" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="1826384728" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.001834" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1827" name="Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.008943" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1824" name="Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed(0,&quot;device_overload&quot;,&quot;过载装置&quot;)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed(0,&quot;device_overload&quot;,&quot;过载装置&quot;)" methodname="Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="1318461832" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.002687" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1825" name="Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed(1,&quot;device_ward_generator&quot;,&quot;护罩发生器&quot;)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed(1,&quot;device_ward_generator&quot;,&quot;护罩发生器&quot;)" methodname="Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="551257167" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.001936" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1826" name="Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed(2,&quot;device_tower_mechanism&quot;,&quot;塔内机关&quot;)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed(2,&quot;device_tower_mechanism&quot;,&quot;塔内机关&quot;)" methodname="Devices_KeepIdentityAndDurability_AndReleaseTheCandidateWhenDestroyed" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="311164991" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.002433" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1831" name="TowerMechanisms_ExplainFunctionAndCurrentReleaseState" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.TowerMechanisms_ExplainFunctionAndCurrentReleaseState" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.010662" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1828" name="TowerMechanisms_ExplainFunctionAndCurrentReleaseState(1,&quot;护障维护&quot;,&quot;临时重掩体&quot;)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.TowerMechanisms_ExplainFunctionAndCurrentReleaseState(1,&quot;护障维护&quot;,&quot;临时重掩体&quot;)" methodname="TowerMechanisms_ExplainFunctionAndCurrentReleaseState" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="246449867" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.004393" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1829" name="TowerMechanisms_ExplainFunctionAndCurrentReleaseState(2,&quot;显影巡查&quot;,&quot;清除线上单位护盾&quot;)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.TowerMechanisms_ExplainFunctionAndCurrentReleaseState(2,&quot;显影巡查&quot;,&quot;清除线上单位护盾&quot;)" methodname="TowerMechanisms_ExplainFunctionAndCurrentReleaseState" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="684731576" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.002340" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1830" name="TowerMechanisms_ExplainFunctionAndCurrentReleaseState(3,&quot;冲压隔离&quot;,&quot;6 点伤害&quot;)" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.TowerMechanisms_ExplainFunctionAndCurrentReleaseState(3,&quot;冲压隔离&quot;,&quot;6 点伤害&quot;)" methodname="TowerMechanisms_ExplainFunctionAndCurrentReleaseState" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="782358883" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.001681" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1837" name="UnillustratedMaterial_UsesAnExactNameInsteadOfAPretendObject" fullname="OCC.Combat.Tests.DeviceMaterialPresentationTests.UnillustratedMaterial_UsesAnExactNameInsteadOfAPretendObject" methodname="UnillustratedMaterial_UsesAnExactNameInsteadOfAPretendObject" classname="OCC.Combat.Tests.DeviceMaterialPresentationTests" runstate="Runnable" seed="312548609" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.001993" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1897" name="EnemyUnitArtCandidateTests" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" testcasecount="10" result="Failed" site="Child" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.059706" total="10" passed="9" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-suite type="ParameterizedMethod" id="1903" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" testcasecount="5" result="Failed" site="Child" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.046333" total="5" passed="4" failed="1" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="1898" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;signal_keeper&quot;,32,64)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;signal_keeper&quot;,32,64)" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1026368080" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.013045" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1899" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;elder_tracker_hound&quot;,64,32)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;elder_tracker_hound&quot;,64,32)" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="488890039" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.007103" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1900" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;wind_librarian&quot;,32,64)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;wind_librarian&quot;,32,64)" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1636143227" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.008599" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1901" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;legacy_storekeeper&quot;,32,64)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;legacy_storekeeper&quot;,32,64)" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1029095214" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.004740" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1902" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;breach_ram&quot;,64,64)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;breach_ram&quot;,64,64)" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="56110306" result="Failed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.008275" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[  Expected: same as <sigil_mauler (UnityEngine.Texture2D)>
+  But was:  <breach_ram (UnityEngine.Texture2D)>
+]]></message>
+                    <stack-trace><![CDATA[at OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits (System.String id, System.Int32 width, System.Int32 height) [0x000a8] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Tests\EditMode\EnemyUnitArtCandidateTests.cs:34
+]]></stack-trace>
+                  </failure>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1909" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.009615" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1904" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;signal_keeper&quot;)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;signal_keeper&quot;)" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="148219707" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.003530" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1905" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;elder_tracker_hound&quot;)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;elder_tracker_hound&quot;)" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="2072087443" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.000653" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1906" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;wind_librarian&quot;)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;wind_librarian&quot;)" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="950213559" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.000555" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1907" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;legacy_storekeeper&quot;)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;legacy_storekeeper&quot;)" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="777554420" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.000538" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1908" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;breach_ram&quot;)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;breach_ram&quot;)" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="807116442" result="Passed" start-time="2026-10-16 10:09:23Z" end-time="2026-10-16 10:09:23Z" duration="0.000598" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Saving results to: C:/Users/FNHF/AppData/LocalLow/DefaultCompany/My project\TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

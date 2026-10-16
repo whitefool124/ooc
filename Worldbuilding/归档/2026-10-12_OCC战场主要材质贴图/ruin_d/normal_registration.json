@@ -1,0 +1,38 @@
+{
+  "schema": "occ-registered-material-data-decode-v1",
+  "status": "REVIEW_READY",
+  "kind": "normal",
+  "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-12_OCC战场主要材质贴图\\ruin_d\\normal_panel.png",
+  "source_sha256": "eb92367078c06d7a50c217553cf4df1dfdb44661398a23d1bc0c5304466c5beb",
+  "reference": "E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalAcademyIndependentFloors32\\academy_block_ruin_d.png",
+  "reference_sha256": "8fd06628aeaed8aca987699e86a2d1125b156ba6429e191cfef6fd2b6c29754d",
+  "native_grid": [
+    32,
+    32
+  ],
+  "source_macro_pitch_xy": [
+    19.59375,
+    19.59375
+  ],
+  "registration_basis": "Full opaque UV field; one rim cell on the supplied native32 stone; fixed normalized32x32 layout. Sparse/repetitive numeric fields are not sprite silhouettes.",
+  "output": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-12_OCC战场主要材质贴图\\ruin_d\\normal32.png",
+  "output_sha256": "84961fd0cd67763aa5b4a8e13b8d733456619b9c27bde995f8c3ea4686c001f6",
+  "geometry_resize_or_interpolation_performed": false,
+  "new_rgb_colours_introduced": false,
+  "background_pixels_removed": 0,
+  "macro_cell_rgb_selection": "observed central-cell RGB medoid",
+  "max_central_cell_std": 66.04142826221722,
+  "rgb_min": [
+    50,
+    48,
+    206
+  ],
+  "rgb_max": [
+    164,
+    204,
+    254
+  ],
+  "manual_registered_field_review_required": true,
+  "human_registration_review": "PENDING",
+  "limitation": "No lowered generic1.2 threshold and no automatic formal approval. Validate actual map alignment and neutral/default/rotated-light response."
+}

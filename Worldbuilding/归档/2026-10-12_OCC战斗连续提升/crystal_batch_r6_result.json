@@ -1,0 +1,24 @@
+[
+  {
+    "id": "academy_aether_crystal_damaged",
+    "status": "PASS_LOSSLESS_TARGET",
+    "pitch": 39,
+    "confidence": 3.3557,
+    "subject": [
+      15,
+      14
+    ],
+    "raw": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\crystal_batch_r6\\academy_aether_crystal_damaged\\raw.png"
+  },
+  {
+    "id": "academy_pressure_crystal_damaged",
+    "status": "PASS_LOSSLESS_TARGET",
+    "pitch": 21,
+    "confidence": 1.8395,
+    "subject": [
+      45,
+      27
+    ],
+    "raw": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\crystal_batch_r6\\academy_pressure_crystal_damaged\\raw.png"
+  }
+]

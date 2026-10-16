@@ -1,0 +1,26 @@
+{
+  "cols": 282,
+  "rows": 159,
+  "step_x": 5.9286,
+  "step_y": 5.9286,
+  "consensus": "forced",
+  "confidence": "medium",
+  "detect_s": 0.0,
+  "recon_s": 2.058,
+  "route": "COMMUNITY_RECONSTRUCTION_REVIEW_ONLY",
+  "lossless_decoder_pass": false,
+  "automatic_grid": {
+    "cols": 141,
+    "rows": 79,
+    "step_x": 11.8528,
+    "step_y": 11.8617,
+    "consensus": "arbitrated",
+    "confidence": "medium",
+    "detect_s": 12.383,
+    "recon_s": 2.5
+  },
+  "subdivision": 2,
+  "subdivision_basis": "Visible fine spire and banner cord edges use half of dominant broad-cluster step; review candidate, not a confidence-threshold pass.",
+  "arbitrary_target_resize": false,
+  "human_acceptance": false
+}

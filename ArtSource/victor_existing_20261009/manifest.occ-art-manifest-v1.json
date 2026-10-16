@@ -1,0 +1,54 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "victor_existing_static_20261009",
+  "role": "tactical_unit_adaptive_32ppu",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Reuse existing validated 2026-09-10 Victor coherent frame 00 without pixel modification; no new generation or scaling",
+    "source_path": "Artifacts/OCC_VictorFireballAnimation_20260910/frames_coherent/victor_fireball_coherent_00.png",
+    "source_sha256": "d980065c4121eb03aa6aca8e55aa2a77b88d9e4e442f8fc2037b1677e259f213",
+    "historical_manifest": "Artifacts/OCC_VictorFireballAnimation_20260910/victor_fireball_animation_v1.occ-art.json"
+  },
+  "delivery": {
+    "output_path": "ArtSource/victor_existing_20261009/asset/victor_static.png",
+    "output_sha256": "d980065c4121eb03aa6aca8e55aa2a77b88d9e4e442f8fc2037b1677e259f213",
+    "native_output_path": "ArtSource/victor_existing_20261009/asset/victor_static.png",
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 24,
+    "required_color_families": []
+  },
+  "application": {
+    "integration_authorization": "User explicitly requests existing Victor tactical artwork installed in game 2026-10-09",
+    "runtime_draw_rect": "64x64 native canvas at32PPU; no geometric resize; one logical cell",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/victor_existing_20261009/qa/1x.png",
+    "four_x": "ArtSource/victor_existing_20261009/qa/4x.png",
+    "grayscale": "ArtSource/victor_existing_20261009/qa/grayscale.png",
+    "checker": "ArtSource/victor_existing_20261009/qa/checker.png",
+    "application_contact": "ArtSource/victor_existing_20261009/qa/application_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "notes": "User requested reuse; exact chosen historical frame final aesthetic confirmation remains independent from integration verification."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/VictorBattle/victor_static.asset",
+    "guid": "14f25cd5ec84b7546b94b69442aa8d6d",
+    "resource_path": "Art/VictorBattle/victor_static",
+    "storage": "Unity Texture2D asset with Sprite subasset created via AssetDatabase",
+    "native_ppu": 32,
+    "filter": "Point",
+    "mipmaps": false,
+    "pixel_content": "Unmodified existing validated coherent frame 00",
+    "formal_promotion": false
+  }
+}

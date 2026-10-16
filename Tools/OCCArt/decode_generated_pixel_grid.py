@@ -51,6 +51,7 @@ def arguments() -> argparse.Namespace:
         "Defaults to the deterministic centered window.",
     )
     parser.add_argument("--subject-pitch", type=int, help="Optional diagnosed macro-pixel pitch override")
+    parser.add_argument("--preserve-components", action="store_true", help="Preserve intentionally separated authored islands, e.g. a footprint trail or VFX frame")
     return parser.parse_args()
 
 
@@ -453,6 +454,9 @@ def main() -> None:
     pitch, phase_x, phase_y, lattice_confidence, source_bounds = infer_subject_lattice(cleaned_source, requested_pitch)
     decoded_unfiltered = decode_subject_lattice(cleaned_source, source_bounds, pitch, phase_x, phase_y)
     decoded_raw, background_artifact_cells_removed, component_count_before_cleanup = keep_largest_alpha_component(decoded_unfiltered)
+    if args.preserve_components:
+        decoded_raw = decoded_unfiltered
+        background_artifact_cells_removed = 0
     decoded = consolidate_to_observed_palette(decoded_raw, args.palette_max)
     decoded_bounds = decoded.getchannel("A").getbbox()
     if target_size is None:
@@ -548,7 +552,8 @@ def main() -> None:
         "logical_pixels_removed": 0 if ground_window_size is None else max(0, decoded.width * decoded.height - target_size[0] * target_size[1]),
         "background_artifact_cells_removed": background_artifact_cells_removed,
         "alpha_components_before_cleanup": component_count_before_cleanup,
-        "alpha_components_after_cleanup": 1 if decoded_visible else 0,
+        "alpha_components_after_cleanup": component_count_before_cleanup if args.preserve_components else (1 if decoded_visible else 0),
+        "intentional_alpha_components_preserved": args.preserve_components,
         "dithering": False,
         "structural_detail_loss_allowed": False,
         "promotion_limit": "REVIEW_READY only; a manually pitched ground field requires explicit human material, pixel-scale and application review before FORMAL_CANDIDATE" if manual_ground_field_route else None,

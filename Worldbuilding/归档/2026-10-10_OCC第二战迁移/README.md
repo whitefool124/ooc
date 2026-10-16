@@ -1,0 +1,13 @@
+# 第二战正常入口与 HD-2D 流程收口
+
+范围：从正常新游戏入口完成B1、三选一、EV1与EV2，进入B2温室藏品间；验证不同尺寸战场的空间表现、镜头投影和操作。不是全项目美术完成或品质批准。
+
+实测首轮阻断：奖励卡揭晓后，ScreenSpaceOverlay的“战斗结果”仍active且raycastTarget=true，排序45，拦截WorldSpace奖励卡点击。保留occ_route_reward_blocked.png。修复FormalCombatHud.Update：当真实单轮状态AwaitingReward或LootPendingExit时隐藏整个战斗HUD，由奖励页承担输入。未改变奖励、存档或胜败规则；无新美术原料或正式资产替换。
+
+新增Editor验证入口RunToSecondBattle复用正常UI事件、实际地图点击和既有战斗命令，无临时构造关卡、装备替换或内部胜利设置。当前第二战标识来自正式FirstRegionLevelCatalog，不能用仅机制内部的GreenhouseCollectionRoomRuntime.LevelId代替。
+
+首轮修复后B1领奖、两事件和B2正常入口已通过，42格投影回查成立。观察到晶簇像亮色贴片但周围无受光，增加B2专属Point光：强度1.8、范围2.3、冷蓝色、无额外阴影、仅Layer15。光源位置来自真实晶簇格；IsAetherCrystal且Durability>0时启用，毁晶后关闭。未按纹理颜色推断能量或改变玩法。光源由战场world持有，离场一并销毁。
+
+最终实际验证：B1完整战斗及领奖、两个事件、B2正常进入PASS；B2实际1920×1080和960×540截图及同机位关灯对照；B2战斗15次指令、4次移动、8次攻击胜利并保存，随后540p奖励选择／领取／返回地图PASS，RewardGroups.B2.SelectedId=F-P-U04。离场晶光0，退出Play后场景clean、未编译中、1080尺寸恢复，未保存场景。毁晶中途启灭代码已绑定真实状态，但本轮没有单独强制验证该路径。Console仍有QuickInstaller程序集路径转换异常，未发现本轮OCC源代码编译错误；不宣称Console完全清空。质量总门槛仍失败，保持QA_PENDING。
+
+运行证据、两种分辨率和战斗结果见evidence与JSON收据。原存档隔离范围由既有审计在退出Play时恢复。质量登记QA_PENDING；暂未覆盖全部关卡、全场密度与人工审美、正式Player性能预算。当前通用学院庭院环境并非温室专属完整美术，后续需要继续场地差异化。不得将本轮入口通过算作温室完整场景还原。

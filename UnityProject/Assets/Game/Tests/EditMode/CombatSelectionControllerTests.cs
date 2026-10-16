@@ -10,6 +10,21 @@ namespace OCC.Combat.Tests
     public sealed class CombatSelectionControllerTests
     {
         [Test]
+        public void PointerSelection_SurvivesHoverLeavingButCannotLeakIntoAnotherAction()
+        {
+            var selection = new CombatSelectionController();
+            selection.SelectAction("攻击");
+            selection.SelectPointerPosition(new GridPosition(2, 0));
+            selection.SetPreviewPosition(new GridPosition(3, 0));
+            selection.ClearPreviewPosition();
+            Assert.That(selection.HasPointerSelection, Is.True);
+            Assert.That(selection.PointerPosition, Is.EqualTo(new GridPosition(2, 0)));
+            selection.SelectAction("移动");
+            Assert.That(selection.HasPointerSelection, Is.False);
+            Assert.That(selection.HasPreviewPosition, Is.False);
+        }
+
+        [Test]
         public void SelectActionAndReset_ClearTargetAndKeyboardCursor()
         {
             CombatState state = State(out UnitState hero, out UnitState enemy);

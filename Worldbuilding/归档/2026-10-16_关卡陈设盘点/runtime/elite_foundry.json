@@ -1,0 +1,23 @@
+{
+  "level": "elite_foundry",
+  "fixtures": [
+    {
+      "name": "左侧外围陈设_academy_smithing_table_2x1",
+      "texture": "academy_smithing_table_2x1"
+    },
+    {
+      "name": "左侧外围陈设_academy_smithing_table_2x1_直立投影",
+      "texture": "academy_smithing_table_2x1"
+    },
+    {
+      "name": "后庭外围陈设_academy_tool_cabinet_2x1",
+      "texture": "academy_tool_cabinet_2x1"
+    },
+    {
+      "name": "后庭外围陈设_academy_tool_cabinet_2x1_直立投影",
+      "texture": "academy_tool_cabinet_2x1"
+    }
+  ],
+  "source": "Actual catalog encounter and runtime HUD in an isolated preview run; not a natural random journey or art approval",
+  "focusRequested": false
+}

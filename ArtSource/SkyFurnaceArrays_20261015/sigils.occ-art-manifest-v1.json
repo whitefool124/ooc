@@ -1,0 +1,46 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sky_furnace_cut_card_sigils",
+  "role": "hd2d_environment_module",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "User2026-10-15: image supplies aesthetic design; produce and cut layered pixel cards. Reference-derived processing, NOT lossless lattice decode.",
+    "source_path": "ArtSource/SkyFurnaceArrays_20261015/raw/seal_r1.png",
+    "source_sha256": "1aaca4662d9ca336140b7fbe971acc12a9641cf39693a490a1d8b6fe744dae08"
+  },
+  "delivery": {
+    "output_path": "ArtSource/SkyFurnaceArrays_20261015/cards/sigils.png",
+    "native_output_path": "ArtSource/SkyFurnaceArrays_20261015/cards/sigils.png",
+    "output_sha256": "a72be6c4d9301fb852fdbc6a66985e08f26e2544c34dfbb300937e8576a537c9",
+    "native_ppu": 32,
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "battlefield_hd2d_environment",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "5.0m x 5.0m at32PPU, no layer-specific texel scaling",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "Explicit reference-to-paper-card construction route authorized by user; isolated cinematic only"
+  },
+  "evidence": {
+    "one_x": "ArtSource/SkyFurnaceArrays_20261015/qa/cards/sigils/1x.png",
+    "four_x": "ArtSource/SkyFurnaceArrays_20261015/qa/cards/sigils/4x.png",
+    "grayscale": "ArtSource/SkyFurnaceArrays_20261015/qa/cards/sigils/grayscale.png",
+    "checker": "ArtSource/SkyFurnaceArrays_20261015/qa/cards/sigils/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-15_天穹熔炉纸板拆层/fixed_frames/frame_04.50.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Reference original did not satisfy strict generated-grid route. This is a separate user-authorized production route. Current scene aesthetics/density remain pending."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/SkyFurnace/magic_card_sigils.png",
+    "formal_promotion": false
+  }
+}

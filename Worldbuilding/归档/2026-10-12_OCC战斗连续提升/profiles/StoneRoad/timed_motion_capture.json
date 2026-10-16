@@ -1,0 +1,252 @@
+{
+  "status": "LOCAL_TIMED_CAMERA_PATH",
+  "scope": "Timed live Editor runtime camera through legal public scroll/drag handlers; isolated preview, not normal input journey or FPS benchmark",
+  "requestedFrameIntervalSeconds": 0.125,
+  "frames": [
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "index": 0,
+      "path": "motion_1920x1080_00.png",
+      "editorTimestamp": 45292.372573399996,
+      "fieldOfView": 24.0,
+      "cameraPosition": [
+        403.0,
+        511.478027,
+        392.021973
+      ]
+    },
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "index": 1,
+      "path": "motion_1920x1080_01.png",
+      "editorTimestamp": 45292.6346176,
+      "fieldOfView": 23.0,
+      "cameraPosition": [
+        402.983551,
+        511.478027,
+        392.016144
+      ]
+    },
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "index": 2,
+      "path": "motion_1920x1080_02.png",
+      "editorTimestamp": 45292.898053799996,
+      "fieldOfView": 22.0,
+      "cameraPosition": [
+        402.967834,
+        511.478027,
+        392.0106
+      ]
+    },
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "index": 3,
+      "path": "motion_1920x1080_03.png",
+      "editorTimestamp": 45293.1576336,
+      "fieldOfView": 21.0,
+      "cameraPosition": [
+        402.95285,
+        511.478027,
+        392.0053
+      ]
+    },
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "index": 4,
+      "path": "motion_1920x1080_04.png",
+      "editorTimestamp": 45293.4028713,
+      "fieldOfView": 21.0,
+      "cameraPosition": [
+        402.937866,
+        511.478027,
+        392.0
+      ]
+    },
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "index": 5,
+      "path": "motion_1920x1080_05.png",
+      "editorTimestamp": 45293.6573633,
+      "fieldOfView": 22.0,
+      "cameraPosition": [
+        402.953583,
+        511.478027,
+        392.005554
+      ]
+    },
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "index": 6,
+      "path": "motion_1920x1080_06.png",
+      "editorTimestamp": 45293.9101476,
+      "fieldOfView": 23.0,
+      "cameraPosition": [
+        402.970032,
+        511.478027,
+        392.011383
+      ]
+    },
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "index": 7,
+      "path": "motion_1920x1080_07.png",
+      "editorTimestamp": 45294.177746,
+      "fieldOfView": 24.0,
+      "cameraPosition": [
+        402.9872,
+        511.478027,
+        392.017456
+      ]
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "index": 0,
+      "path": "motion_960x540_00.png",
+      "editorTimestamp": 45294.4493754,
+      "fieldOfView": 24.0,
+      "cameraPosition": [
+        403.0,
+        511.478027,
+        392.021973
+      ]
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "index": 1,
+      "path": "motion_960x540_01.png",
+      "editorTimestamp": 45294.6626836,
+      "fieldOfView": 23.0,
+      "cameraPosition": [
+        402.983551,
+        511.478027,
+        392.016144
+      ]
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "index": 2,
+      "path": "motion_960x540_02.png",
+      "editorTimestamp": 45294.8690824,
+      "fieldOfView": 22.0,
+      "cameraPosition": [
+        402.967834,
+        511.478027,
+        392.0106
+      ]
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "index": 3,
+      "path": "motion_960x540_03.png",
+      "editorTimestamp": 45295.0954699,
+      "fieldOfView": 21.0,
+      "cameraPosition": [
+        402.95285,
+        511.478027,
+        392.0053
+      ]
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "index": 4,
+      "path": "motion_960x540_04.png",
+      "editorTimestamp": 45295.3203629,
+      "fieldOfView": 21.0,
+      "cameraPosition": [
+        402.937866,
+        511.478027,
+        392.0
+      ]
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "index": 5,
+      "path": "motion_960x540_05.png",
+      "editorTimestamp": 45295.5229943,
+      "fieldOfView": 22.0,
+      "cameraPosition": [
+        402.953583,
+        511.478027,
+        392.005554
+      ]
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "index": 6,
+      "path": "motion_960x540_06.png",
+      "editorTimestamp": 45295.723281399994,
+      "fieldOfView": 23.0,
+      "cameraPosition": [
+        402.970032,
+        511.478027,
+        392.011383
+      ]
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "index": 7,
+      "path": "motion_960x540_07.png",
+      "editorTimestamp": 45295.9385856,
+      "fieldOfView": 24.0,
+      "cameraPosition": [
+        402.9872,
+        511.478027,
+        392.017456
+      ]
+    }
+  ],
+  "focusRequested": false,
+  "gameplayStateChanged": false,
+  "cameraRestored": true,
+  "visualStabilityReview": "PENDING",
+  "playerPerformance": "NOT_MEASURED"
+}

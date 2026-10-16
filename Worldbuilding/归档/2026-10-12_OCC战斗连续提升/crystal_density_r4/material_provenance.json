@@ -1,0 +1,52 @@
+{
+  "schema": "occ-crystal-candidate-material-v1",
+  "status": "QA_PENDING",
+  "id": "academy_aether_crystal_intact",
+  "maps": [
+    {
+      "kind": "normal",
+      "source": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/crystal_density_r4/normal_raw.png",
+        "sha256": "565594ba67087378a91be2ea30351eee327719232cce8b563af708b8bc04f3e3"
+      },
+      "delivery": {
+        "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/CrystalCandidates/academy_aether_crystal_intact/normal.png",
+        "sha256": "4f68a9473b1299653c0b361ac709164ec51c5dfcd9b72d8eaf5e31b09b09b1fe"
+      },
+      "reference": {
+        "path": "UnityProject/Assets/Game/Resources/Art/HD2DBattleCrystalCandidates/academy_aether_crystal_intact.png",
+        "sha256": "89ae7fed00ede0db80c11ebe9d998dc20cee231904d8a9e9b63dac4fbaf67cad"
+      },
+      "method": "Known native64 UV central-cell observed RGB medoid; no albedo brightness conversion, interpolation or new RGB",
+      "status": "REVIEW_READY",
+      "normal_convention": "OpenGL +Y, no green flip",
+      "channels": "Tangent-space independent numeric normals",
+      "human_registration_review": "PENDING"
+    },
+    {
+      "kind": "regions",
+      "source": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/crystal_density_r4/regions_raw.png",
+        "sha256": "6d87b626a587ef383d92f4a56728703dc1d367ee685c63094584fc346fc5a674"
+      },
+      "delivery": {
+        "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/CrystalCandidates/academy_aether_crystal_intact/regions.png",
+        "sha256": "4c6e9f95c1c85605dadd5f21cb39889dd9dd787c87275fd3495064857e57708d"
+      },
+      "reference": {
+        "path": "UnityProject/Assets/Game/Resources/Art/HD2DBattleCrystalCandidates/academy_aether_crystal_intact.png",
+        "sha256": "89ae7fed00ede0db80c11ebe9d998dc20cee231904d8a9e9b63dac4fbaf67cad"
+      },
+      "method": "Known native64 UV central-cell observed RGB medoid; no albedo brightness conversion, interpolation or new RGB",
+      "status": "REVIEW_READY",
+      "normal_convention": "OpenGL +Y, no green flip",
+      "channels": "R UNUSED: dielectric locked to uniform metallic0; G crystal coat/surface; B declared energy region",
+      "human_registration_review": "PENDING"
+    }
+  ],
+  "roughness": {
+    "stone": 1,
+    "crystal": 0.25
+  },
+  "world_pixel_pitch": 0.03125
+}

@@ -1,0 +1,118 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "38625900f0f7a2c9c8c48eddc0291138ddbf9d5238cf65825426f6b91cb5f4d6",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/PixelIgnitionMap.cs"
+  ],
+  "inputs": [
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+      "sha256": "8235c221f1ae9d989a941ec7be8a871bd98cd8fc3ab9db4c8bc2933132102e47"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+      "sha256": "d0faac18544329776a066624acd0d63045a527d36347c8933474aa1d082184d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+      "sha256": "669603860734abdbceaa05baab70d5ad745fc573b45630d72be0099aa56e72a6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs",
+      "sha256": "0de1f80712711538ca2a0113f86696d4d5772cbe6e441d4904ed7a93bdec6b59"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelIgnitionMap.cs",
+      "sha256": "e26a2ae4a3f32b5a6f98ce4298a5e4bd464e22265e45c4e8e02df2e027db0853"
+    }
+  ],
+  "configuration": {
+    "scope": "Local SkyFurnace seal visibility and release brightness only",
+    "reveal": "Binary native connected-ink steps,12held poses per second; no angular/radial cut or per-texel fade",
+    "release_boost_seconds": 7.4,
+    "audio": "none",
+    "scene_saved": false
+  },
+  "local_evidence": {
+    "progression": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/progression.json",
+      "sha256": "52b3d87a629daf4050f75131d53bef5a493198470014832fb493080088736a96"
+    },
+    "checks": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/pixel_step_checks.json",
+      "sha256": "ae69f712c97237f3564c6838959b2f0a245daebaca2b4cef30277d5a5157015d"
+    },
+    "console": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/console.json",
+      "sha256": "75bca19243053422ef76c966b9c435ae5a1529924d8cc2d0420ab3fcf8a19efb"
+    },
+    "captures": [
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/00.00.png",
+        "sha256": "6332dde4c5148f4e90a6d91e3567416d4df8c3b3365733deea511874d7398fa6"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/00.30.png",
+        "sha256": "83bc723275d02f2826c2a312b5c0fecd98752f760450c2efb73e5e7b843202fe"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/00.76.png",
+        "sha256": "50d6794bd7952a6b331d334c843ca4d52a534eb7ee0b5db4a18416009fde0c26"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/00.78.png",
+        "sha256": "50d6794bd7952a6b331d334c843ca4d52a534eb7ee0b5db4a18416009fde0c26"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/00.84.png",
+        "sha256": "412a650d4a1c078b0296c6fd0e9ebcd93a03919b4fc12b7a19aa4fd0eebe3549"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/00.86.png",
+        "sha256": "412a650d4a1c078b0296c6fd0e9ebcd93a03919b4fc12b7a19aa4fd0eebe3549"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/01.60.png",
+        "sha256": "202da5540d40260393f6076a2ae302d4b75a9f602040a442ae0f292847942f8d"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/03.40.png",
+        "sha256": "464decb204d826e3c94bf1e1c54ae019be56b3018a9d3ffe8abcb75ad4d09702"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/05.50.png",
+        "sha256": "5195c19e6481749ff6d5f3188e6a0b4f9047fe12e9160f35457247e84f7c3b6d"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/06.60.png",
+        "sha256": "ebfa75fe43a5e9b1a6e37ce547e1579586aec6f442c3733fc3d6252e4180b2e8"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/07.25.png",
+        "sha256": "a6f30ecad51dee6d1da77db8bc3e2da18fd84dfda474ade683298bd5c821fb2f"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉逐格动画/ignition_study/07.40.png",
+        "sha256": "cf7b59d3f609e95b3b33892357a76f460f78ada711a14331110afa2b6e07a829"
+      }
+    ],
+    "movie": {
+      "path": "Artifacts/SkyFurnacePixelSteps_20261016/天穹熔炉_逐格点亮.mp4",
+      "sha256": "1465aabcea98080c267beaea12b5ac8d94d2311844a92352e1b8c483e266105e"
+    },
+    "scope": "Local seal correction only; full approval requirements not provided"
+  },
+  "limitations": [
+    "Local correction report only; no formal baseline promotion.",
+    "Human aesthetic approval pending; no new performance or full game journey evidence.",
+    "Previous candidate environment/source density remains pending; historical evidence is not rebound as current approval."
+  ]
+}

@@ -10,6 +10,49 @@ namespace OCC.Combat.Tests
 {
     public sealed class FirstRunExperienceTests
     {
+        private static RogueliteMapRun SecondBattleAfterIndividualLoot()
+        {
+            var run=RogueliteMapRun.CreateFirstRunV1(1906);run.AcknowledgeFirstRunOrigin();
+            run.SelectNode("B1");run.CompleteCurrentCombat();
+            run.ClaimFixedLoot("gold");run.ClaimFixedLoot("contribution");
+            run.OpenPendingRewardChoices();run.SelectPendingReward("F-P-R19");run.ClaimLootChoice("F-P-R19");run.LeaveLoot();
+            run.SelectNode("EV1");run.ChooseCurrentNodeContent("FIRST-EV1-ACCEPT-DELIVERY");
+            run.SelectNode("EV2");run.ChooseCurrentNodeContent("FIRST-EV2-GOLD");
+            run.SelectNode("B2");run.CompleteCurrentCombat();return run;
+        }
+
+        [Test]
+        public void IndividualLoot_SecondBattleStartsWithItsOwnUnopenedReward()
+        {
+            var run=SecondBattleAfterIndividualLoot();
+            Assert.That(run.RewardChoicesOpened,Is.False);
+            Assert.That(run.SelectedRewardId,Is.Empty);
+            Assert.That(run.LootPendingExit,Is.False);
+            Assert.That(run.CurrentRewards.Select(r=>r.Id),Is.EqualTo(new[]{"F-P-U04","F-P-U01","F-P-U18"}));
+            run.OpenPendingRewardChoices();run.SelectPendingReward("F-P-U04");run.ClaimLootChoice("F-P-U04");
+            Assert.That(run.RogueRunState.MasteredSpellIds,Contains.Item("F-P-U04"));
+            Assert.That(run.SelectedRewardId,Is.Empty);Assert.That(run.RewardChoicesOpened,Is.False);
+        }
+
+        [Test]
+        public void IndividualLoot_OldSecondBattleSaveRepairsPreviousGroupSelectionWithoutReroll()
+        {
+            var run=SecondBattleAfterIndividualLoot();
+            run.RogueRunState.SelectedRewardId="F-P-R19";run.RogueRunState.RewardChoicesOpened=true;
+            var loaded=RogueliteMapRun.FromRogue11(Rogue11Serializer.Deserialize(Rogue11Serializer.Serialize(run.RogueRunState)));
+            Assert.That(loaded.SelectedRewardId,Is.Empty);Assert.That(loaded.RewardChoicesOpened,Is.False);
+            Assert.That(loaded.CurrentRewards.Select(r=>r.Id),Is.EqualTo(new[]{"F-P-U04","F-P-U01","F-P-U18"}));
+            Assert.That(loaded.RogueRunState.PendingRewardGold,Is.EqualTo(3));
+            Assert.That(loaded.RogueRunState.MasteredSpellIds,Contains.Item("F-P-R19"));
+        }
+
+        [Test]
+        public void IndividualLoot_ValidSecondBattleSelectionSurvivesReload()
+        {
+            var run=SecondBattleAfterIndividualLoot();run.OpenPendingRewardChoices();run.SelectPendingReward("F-P-U01");
+            var loaded=RogueliteMapRun.FromRogue11(Rogue11Serializer.Deserialize(Rogue11Serializer.Serialize(run.RogueRunState)));
+            Assert.That(loaded.SelectedRewardId,Is.EqualTo("F-P-U01"));Assert.That(loaded.RewardChoicesOpened,Is.True);
+        }
         [Test]
         public void FirstBattleBeforeOriginConfirmationExplainsPrerequisiteAndCanStartAfterConfirmation()
         {
@@ -203,7 +246,7 @@ namespace OCC.Combat.Tests
             Assert.That(run.RogueRunState.MasteredSpellIds, Contains.Item("PASSIVE-ELITE-01"));
             Assert.That(run.RogueRunState.EquipmentInstances.Select(value => value.DefinitionId), Contains.Item("ACA-EQ-HD02"));
             TacticalItemInstanceDto brace = run.RogueRunState.TacticalItemInstances.Single(value => value.DefinitionId == "G-T13");
-            Assert.That(brace.ChargesCurrent, Is.EqualTo(4));
+            Assert.That(brace.ChargesCurrent, Is.EqualTo(3));
             Assert.That(run.Gold, Is.EqualTo(goldBeforeEliteReward + 6));
             Assert.That(run.IsNodeAvailable("S"), Is.True);
 

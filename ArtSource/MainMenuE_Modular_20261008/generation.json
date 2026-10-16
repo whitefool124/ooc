@@ -1,0 +1,32 @@
+[
+  {
+    "name": "room",
+    "path": "C:\\Users\\FNHF\\.codex\\generated_images\\01a1194c-ffa1-74a3-83af-fe2ec28eca2e\\exec-354d4d7f-56c0-474a-b248-46e5dc823726.png",
+    "prompt": "Create an independent EMPTY architectural room base layer for a cozy near-modern magic academy study game menu. Straight-on fixed camera with slightly downward view. Landscape16:9 composition. Only ivory plaster wall on left third, tall warm wood-framed large window occupying right two thirds, simple lower wall and narrow floor margin. No furniture whatsoever: NO desk, bookshelf, books, plants, banner, curtains, cup, lamp, people or UI. Window opening must be genuinely transparent alpha, entirely empty for a separately composed distant landscape. Frame and plaster remain opaque, image perimeter stays rectangular opaque architectural room. Unlit flat base material colors, no sunlight streaks, no cast shadows, no beam, reflections, highlights, AO or gradients. Authentic coarse low resolution pixel game background. ONE square macro pixel grid throughout, clear large hard square cells, moderate sparse shape detail and limited24 flat colors, no antialiasing blur dithering painted texture or within-cell variation. Native scene logical width roughly280 pixels; do not produce high resolution painting. Quiet muted ivory and walnut material palette, architectural structure only."
+  },
+  {
+    "name": "desk",
+    "path": "C:\\Users\\FNHF\\.codex\\generated_images\\01a1194c-ffa1-74a3-83af-fe2ec28eca2e\\exec-4e6300b4-5fe9-4668-afa9-42c63f3a3dce.png",
+    "prompt": "An independent wide wooden desktop foreground layer for a cozy near-modern academy study pixel game menu, isolated against genuine transparent alpha. Empty unobstructed warm walnut desktop, a shallow front apron only, no legs visible, no other objects. Wide horizontal trapezoid seen slightly from above, nearly panoramic aspect about six to one. Straight rear edge, subtly slanting side edges, full shape safely contained. Flat unlit muted warm brown base material with only a handful of restrained darker woodgrain pixel clusters and dark edge separation. Absolutely no directional lighting, cast shadow, light patch, reflection or ambient occlusion. ONE strict coarse square macro pixel lattice, clear square solid cells, native logical breadth around280 pixels; crisp pixel-art asset,16 flat observed colors, no tiny noise, gradients, antialiasing or blur. This is an albedo sprite to receive actual engine lighting."
+  },
+  {
+    "name": "vista",
+    "path": "C:\\Users\\FNHF\\.codex\\generated_images\\01a1194c-ffa1-74a3-83af-fe2ec28eca2e\\exec-4a6fd681-c71e-4654-94ad-fb9c0f05447d.png",
+    "prompt": "Independent distant window-view layer for a near-modern magical academy study game menu. Landscape panorama blue lake, distant wooded hills, pale stone academy buildings with blue roofs, one tall slim tower and low bridge, spacious flat pale blue sky. No window frame, room, desk, furniture, banner, plants in foreground, text, people, UI. Friendly quiet atmosphere. This is a flat-color distant pixel-art panorama, ONE coherent square macro-pixel lattice, broad clear pixel clusters, logical width approximately190 pixels and height100 pixels, sparse architectural detail, limited32 muted ivory blue green colors. No directional cast shadows, reflections, sunbeams, bloom, gradients, dither, fine paint texture, antialiasing or blur. Coarse crisp authentic pixel art that reads as a distant vista, not illustration."
+  },
+  {
+    "name": "shelf",
+    "path": "C:\\Users\\FNHF\\.codex\\generated_images\\01a1194c-ffa1-74a3-83af-fe2ec28eca2e\\exec-6e5c6de3-5b38-4a60-9d86-4bb09fdccc84.png",
+    "prompt": "Independent tall narrow wooden bookcase sprite for cozy magical academy study, complete safely contained object on genuine transparent alpha. Straight-on with very subtle top plane visibility to match slightly downward room camera. Three shelves with restrained clusters of navy green brown book spines, no readable text. Warm walnut material, functional simple near-modern furniture, no medieval carving. Flat base colors with material/plane separation only, no cast shadow, sunlight, glow or baked directional light. ONE large coarse square macro pixel lattice across entire subject, roughly20 native pixels across and100 tall, crisp hard clusters,16 flat colors. No fine texture, gradients, antialiasing blur or dithering. Natural proportions narrow vertical bookshelf, open front, readable sturdy frame."
+  },
+  {
+    "name": "plant",
+    "path": "C:\\Users\\FNHF\\.codex\\generated_images\\01a1194c-ffa1-74a3-83af-fe2ec28eca2e\\exec-dfdeba14-8339-4d1c-abc5-949e4d68ea37.png",
+    "prompt": "Independent small potted trailing green plant sprite for academy study tabletop or sill. Complete connected plant and simple terracotta pot, genuine transparent alpha, safely contained. Slightly downward three-quarter view, modest bushy canopy and a few hanging stems, simple readable silhouette. One single coarse square macro pixel lattice across entire subject, roughly35 native pixels wide and45 tall. Limited16 muted green brown flat base colors, dark outline, no thin floating leaf noise, gradients, antialiasing blur or dithering. No baked scene cast shadow, sunbeam, glow, directional highlight or reflection. Material silhouette and flat cluster separation only. No furniture or other objects."
+  },
+  {
+    "name": "banner",
+    "path": "C:\\Users\\FNHF\\.codex\\generated_images\\01a1194c-ffa1-74a3-83af-fe2ec28eca2e\\exec-0cfd999c-6c58-4cb1-8f58-57dc4b08292d.png",
+    "prompt": "Independent small hanging navy academy banner sprite with restrained brass-gold star emblem, complete cloth and simple horizontal mounting rod on genuine transparent alpha. Front view, slender vertical silhouette safely contained, roughly25 native pixels wide and50 tall. Near-modern magical academy identity, simple functional mounting, no ornate medieval regalia. ONE coherent coarse square macro pixel lattice, hard square cells, limited12 flat navy gold brown colors, minimal broad fold clusters without directional baked light or shine. No cast shadow, glow, gradients, antialiasing blur, noise, dithering or text."
+  }
+]

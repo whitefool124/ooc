@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"No error entries found in cached logs from the last 600 second(s)\"}"
+      }
+    ]
+  }
+}

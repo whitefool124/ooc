@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"path\\\":\\\"E:/数据库/OCC_Codex/UnityProject/Assets\\\",\\\"scene\\\":\\\"Assets/Scenes/CombatPrototype.unity\\\",\\\"dirty\\\":false,\\\"playing\\\":false,\\\"paused\\\":false,\\\"world\\\":false,\\\"probes\\\":0,\\\"pipeline\\\":\\\"UniversalRP\\\"}\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

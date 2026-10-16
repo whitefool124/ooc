@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"section\" requested-start=\"doxcnrvnGtKsT4LmoxAy45LTyTd\"><h3 id=\"doxcnrvnGtKsT4LmoxAy45LTyTd\">A.2.3 资产职责、锚点与场景组合</h3><p id=\"doxcnFsR8OkNnzNnzEyX7fazZma\">生产前必须先声明资产职责，不得等图片生成后再按外观选择角色。地面、不可通行墙体、外沿立面、落地物件、壁挂物件、台面物件、单位与仅供概念陈列的房间壳体分别建档；同一张运行时资产不得同时代表可行走地板和阻挡墙体。将后墙、墙脚和可行走地板合成的整块房间壳体只可作为概念陈列或组合参考，最高为 <code>REVIEW_READY</code>，不得以 <code>modular_structure</code> 的逻辑占格直接进入可行走场景。正式室内场景必须拆为32×32地面、32×32墙体、需要时的32×8前立面或32×40方向外沿，以及独立家具与设备；每项玩法职责分别绑定碰撞、点击、遮挡和导航语义。</p><p id=\"doxcnFIdmiMtSQjGzLnYpnC0bPd\">每项新资产先按 <code>Tools/OCCArt/occ_art_production_brief_template_v1.json</code> 建立生产简报，生产简报和 manifest 必须记录 <code>placement_semantics</code>：用途为运行时布局或概念陈列、安装类型、所属逻辑格、原生锚点、可见接触线、深度排序基线、允许遮挡方向、屏幕轴向以及支撑对象。安装类型至少区分 <code>ground</code>、<code>floor_standing</code>、<code>wall_mounted</code>、<code>tabletop</code>、<code>structural</code> 与 <code>unit</code>。落地物件和单位以可见底部中心接触所属格底边；多格物件以逻辑占格底边和水平中心定位；壁挂物件必须使用专门的壁挂资产与墙面锚点，不得把落地设备仅通过抬高坐标改成壁挂；台面物件必须记录承载台面及其接触高度。深度排序使用可见接触线，不使用透明画布底边或文件尺寸代替。</p><p id=\"doxcnjltj594tZkw359IPU0Ljyg\">场景组合先验证玩法语义，再验证审美。运行时布局必须保留真实可行走格与交互入口，家具不得侵入未声明的墙体、立柱、门窗或其他结构；概念陈列可以放宽通行要求，但仍须满足真实尺度、支撑关系、接触线、透视、光源与遮挡。组合图必须附原生坐标表和绘制顺序，并在1×与标准6×下检查浮空、穿插、错误挂墙、错误前后层和主体越出可承载表面。单件机器通过不等于组合通过。</p><p id=\"doxcnJzAo4uNOcvSqvKNYCZlXAb\">同一场景批次在首次生图前锁定 <code>material_palette_family</code> 与固定左上体积光。共享材料优先引用同一组已批准源色中值和明暗角色；角色或功能强调色可以独立，但普通木材、石材、金属不得在相邻资产中无理由更换综合色相、明度阶数或光向。后处理仍不得新增颜色或将失败原料强制重着色；色族不一致时应重生对应资产，而不是在组合阶段修补。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2715
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

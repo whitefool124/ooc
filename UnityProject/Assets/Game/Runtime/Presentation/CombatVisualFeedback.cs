@@ -42,7 +42,7 @@ namespace OCC.Combat.Presentation
     {
         public int Amount { get; }
         public bool IncludesHealthDamage { get; }
-        public string Text => "-" + Amount;
+        public string Text => (IncludesHealthDamage ? "-" : "盾 -") + Amount;
 
         public CombatDamagePopupPresentation(int amount, bool includesHealthDamage)
         {
@@ -50,8 +50,12 @@ namespace OCC.Combat.Presentation
             IncludesHealthDamage = includesHealthDamage;
         }
 
-        public CombatDamagePopupPresentation Merge(CombatDamagePopupPresentation next) =>
-            new CombatDamagePopupPresentation(Amount + next.Amount, IncludesHealthDamage || next.IncludesHealthDamage);
+        public CombatDamagePopupPresentation Merge(CombatDamagePopupPresentation next)
+        {
+            if (IncludesHealthDamage != next.IncludesHealthDamage)
+                throw new System.ArgumentException("Shield absorption and health loss must remain separate.", nameof(next));
+            return new CombatDamagePopupPresentation(Amount + next.Amount, IncludesHealthDamage);
+        }
 
         public static CombatDamagePopupPresentation From(CombatFeedbackEvent feedback)
         {
@@ -74,6 +78,8 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, float> hitUntil = new Dictionary<string, float>();
         private readonly Dictionary<string, UnitMotion> unitMotions = new Dictionary<string, UnitMotion>();
         private readonly CombatMovementPlayback movementPlayback = new CombatMovementPlayback();
+        public CombatWaterRipples WaterRipples { get; } = new CombatWaterRipples();
+        public CombatStopDust StopDust { get; } = new CombatStopDust();
         private readonly CombatActionPlayback actionPlayback = new CombatActionPlayback();
         private CombatActionCapture actionCapture;
         public bool IsActionPlaying { get { AdvanceActionPlayback(); return actionPlayback.IsPlaying(Time.unscaledTime); } }
@@ -93,10 +99,18 @@ namespace OCC.Combat.Presentation
             if (attack && target.HasValue)
             {
                 UnitState actor = bootstrap.CurrentState.GetUnit(actorId);
+                IAttackDefinition weapon = actor?.BasicAttack;
+                bool magic = weapon != null && weapon.DamageType != DamageType.Physical;
+                bool ranged = !magic && weapon?.Range > 1;
+                bool heavy = !magic && !ranged && (weapon?.ArmorPierce > 0 || weapon?.Id == "hammer");
                 capture.AddDelivery(() =>
                 {
-                    OccSoundEffects.Strike();
-                    PlayUnitMotion(actor, UnitMotionKind.Attack, .30f,
+                    if (magic) OccSoundEffects.Magic();
+                    else if (ranged) OccSoundEffects.RangedRelease();
+                    else if (heavy) OccSoundEffects.MetalImpact();
+                    else OccSoundEffects.Strike();
+                    PlayUnitMotion(actor, magic ? UnitMotionKind.Cast : ranged ? UnitMotionKind.RangedAttack : heavy ? UnitMotionKind.HeavyAttack : UnitMotionKind.Attack,
+                        heavy ? .38f : ranged ? .24f : .30f,
                         GridDirection(capture.Source, target.Value), Vector2.zero);
                 });
             }
@@ -131,10 +145,11 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, Sprite[]> vfxFrames = new Dictionary<string, Sprite[]>();
         private readonly CombatVfxPlayback vfxPlayback = new CombatVfxPlayback();
         private readonly Dictionary<CombatVfxSlot, Image> activeVfx = new Dictionary<CombatVfxSlot, Image>();
+        private readonly Dictionary<CombatVfxSlot, CombatPixelVfxGraphic> pixelVfx = new Dictionary<CombatVfxSlot, CombatPixelVfxGraphic>();
         private readonly HashSet<CombatVfxSlot> visibleVfx = new HashSet<CombatVfxSlot>();
         private readonly List<CombatVfxSlot> expiredVfx = new List<CombatVfxSlot>();
         private RectTransform vfxRoot;
-        private readonly Dictionary<GridPosition, DamagePopupState> activeDamagePopups = new Dictionary<GridPosition, DamagePopupState>();
+        private readonly Dictionary<GameObject, DamagePopupState> activeDamagePopups = new Dictionary<GameObject, DamagePopupState>();
         private readonly List<FeedbackPlacement> feedbackPlacements = new List<FeedbackPlacement>();
         private readonly List<Rect> feedbackReservations = new List<Rect>();
         private FormalBattlefieldView feedbackBattlefield;
@@ -172,7 +187,7 @@ namespace OCC.Combat.Presentation
             public float LastUpdate;
         }
 
-        private enum UnitMotionKind { Move, Attack, Cast, Hit, ShieldHit, Recover, Ready }
+        private enum UnitMotionKind { Move, Attack, HeavyAttack, RangedAttack, Cast, Hit, ShieldHit, Recover, Ready, PrepareMove, PrepareAttack, PrepareCast, Stop }
 
         private readonly struct UnitMotion
         {
@@ -195,15 +210,23 @@ namespace OCC.Combat.Presentation
         public void Initialize(ICombatFeedbackHost source)
         {
             bootstrap = source;
+            movementPlayback.GroundContact -= OnGroundContact;
+            movementPlayback.GroundContact += OnGroundContact;
+            movementPlayback.GroundStop -= OnGroundStop;
+            movementPlayback.GroundStop += OnGroundStop;
+            movementPlayback.Arrived -= OnMovementArrived;
+            movementPlayback.Arrived += OnMovementArrived;
             DOTween.Init(true, true, LogBehaviour.ErrorsOnly).SetCapacity(160, 32);
         }
 
         private void Update()
         {
             if (bootstrap == null || !bootstrap.IsDeveloperCombatActive || bootstrap.CurrentState == null)
-            { ClearVfx(); movementPlayback.Clear(); actionPlayback.Clear(); actionCapture?.Dispose(); return; }
+            { ClearVfx(); movementPlayback.Clear(); unitMotions.Clear(); hitUntil.Clear(); CancelEnemyAction(); actionPlayback.Clear(); actionCapture?.Dispose(); return; }
             AdvanceActionPlayback();
-            if (!AnimationsEnabled) movementPlayback.Clear();
+            if (!AnimationsEnabled) { movementPlayback.Clear(); WaterRipples.Clear(); StopDust.Clear(); unitMotions.Clear(); hitUntil.Clear(); }
+            WaterRipples.Advance(Time.unscaledTime);
+            StopDust.Advance(Time.unscaledTime);
             RefreshVfx(Time.unscaledTime);
             foreach (UnitState unit in bootstrap.CurrentState.Units.Values)
             {
@@ -289,12 +312,17 @@ namespace OCC.Combat.Presentation
             if (canvas != null && canvas.gameObject != gameObject) DestroyFeedbackObject(canvas.gameObject);
         }
 
-        public void BeginEnemyAction(UnitState enemy, EnemyIntentPresentation intent, float visibleSeconds)
+        public void BeginEnemyAction(UnitState enemy, EnemyIntentPresentation intent, float visibleSeconds,
+            CombatCommandType commandType = CombatCommandType.EndTurn)
         {
             if (enemy == null) return;
             CancelEnemyAction();
             focusedEnemyId = enemy.Id;
-            PlayUnitMotion(enemy, UnitMotionKind.Ready, .58f, Vector2.zero, Vector2.zero);
+            UnitMotionKind prepare = commandType == CombatCommandType.Move ? UnitMotionKind.PrepareMove :
+                commandType == CombatCommandType.Attack ? UnitMotionKind.PrepareAttack :
+                commandType == CombatCommandType.UseSkill ? UnitMotionKind.PrepareCast : UnitMotionKind.Ready;
+            PlayUnitMotion(enemy, prepare, EnemyTurnSequence.FocusSeconds,
+                CombatUnitMotionPolicy.PreparationDirection(enemy, intent), Vector2.zero);
             if ((bootstrap?.UiPreferences.AnimationIntensity ?? 1f) > .01f)
                 PulseCell(enemy.Position, new Color(.98f, .42f, .28f), .62f);
 
@@ -311,10 +339,10 @@ namespace OCC.Combat.Presentation
         // The turn banner rides under the header and to the right of the docked mission goal, so
         // it never tucks behind the header strip or collides with the goal card. Values are
         // screen-space in the 1920x1080 reference canvas.
-        private const float TurnBannerLeft = 716f;
-        private const float TurnBannerTop = 76f;
-        private const float TurnBannerWidth = 560f;
-        private const float TurnBannerHeight = 78f;
+        private const float TurnBannerLeft = 512f;
+        private const float TurnBannerTop = 80f;
+        private const float TurnBannerWidth = 320f;
+        private const float TurnBannerHeight = 112f;
 
         // Both factions use this one banner lifecycle. The enemy-only method above merely adds
         // intent focus before it enters the shared visual path.
@@ -326,13 +354,18 @@ namespace OCC.Combat.Presentation
             float centerOffsetX = TurnBannerLeft + TurnBannerWidth * .5f - UiLayoutContract.ReferenceWidth * .5f;
             enemyActionBanner = FormalUiKit.AnchoredPanel("回合行动提示", canvas.transform,
                 new Vector2(.5f, 1f), new Vector2(.5f, 1f), new Vector2(centerOffsetX, -TurnBannerTop),
-                new Vector2(TurnBannerWidth, TurnBannerHeight), new Color(.12f, .025f, .022f, .98f));
+                new Vector2(TurnBannerWidth, TurnBannerHeight), FormalUiTheme.Panel);
             Image panel = enemyActionBanner.GetComponent<Image>();
             if (panel != null) panel.raycastTarget = false;
-            FormalUiKit.Label("行动提示标题", title, enemyActionBanner.transform,
-                new Vector2(20f, -10f), new Vector2(TurnBannerWidth - 40f, 28f), 22, accent, TextAnchor.MiddleLeft);
-            FormalUiKit.Label("行动提示内容", detail, enemyActionBanner.transform,
-                new Vector2(20f, -40f), new Vector2(TurnBannerWidth - 40f, 24f), 17, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            Text titleLabel = FormalUiKit.Label("行动提示标题", title, enemyActionBanner.transform,
+                new Vector2(16f, -12f), new Vector2(TurnBannerWidth - 32f, 40f), 24, accent, TextAnchor.MiddleLeft);
+            float titleHeight = Mathf.Max(40f, Mathf.Ceil(titleLabel.preferredHeight + 4f));
+            titleLabel.rectTransform.sizeDelta = new Vector2(TurnBannerWidth - 32f, titleHeight);
+            Text detailLabel = FormalUiKit.Label("行动提示内容", detail, enemyActionBanner.transform,
+                new Vector2(16f, -20f - titleHeight), new Vector2(TurnBannerWidth - 32f, 40f), 24, FormalUiTheme.Ink, TextAnchor.MiddleLeft);
+            float detailHeight = Mathf.Max(40f, Mathf.Ceil(detailLabel.preferredHeight + 4f));
+            detailLabel.rectTransform.sizeDelta = new Vector2(TurnBannerWidth - 32f, detailHeight);
+            enemyActionBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(TurnBannerWidth, titleHeight + detailHeight + 32f);
 
             RectTransform rect = enemyActionBanner.GetComponent<RectTransform>();
             CanvasGroup group = enemyActionBanner.AddComponent<CanvasGroup>();
@@ -379,6 +412,8 @@ namespace OCC.Combat.Presentation
 
         public void CancelEnemyAction()
         {
+            if (focusedEnemyId != null && unitMotions.TryGetValue(focusedEnemyId, out UnitMotion motion) &&
+                IsPreparation(motion.Kind)) unitMotions.Remove(focusedEnemyId);
             focusedEnemyId = null;
             if (enemyActionBanner == null) return;
             DOTween.Kill(enemyActionBanner);
@@ -395,11 +430,14 @@ namespace OCC.Combat.Presentation
 
         public Vector2 UnitPresentationOffset(UnitState unit)
         {
-            if (unit == null || !unitMotions.TryGetValue(unit.Id, out UnitMotion motion)) return Vector2.zero;
+            if (unit == null) return Vector2.zero;
             float intensity = bootstrap?.UiPreferences.AnimationIntensity ?? 1f;
             if (intensity <= .01f) { unitMotions.Remove(unit.Id); return Vector2.zero; }
+            Vector2 travelBody = movementPlayback.BodyOffset(unit.Id, unit.Position, Time.unscaledTime) * intensity;
+            travelBody = new Vector2(Mathf.Round(travelBody.x), Mathf.Round(travelBody.y));
+            if (!unitMotions.TryGetValue(unit.Id, out UnitMotion motion)) return travelBody;
             float progress = Mathf.Clamp01((Time.unscaledTime - motion.StartedAt) / Mathf.Max(.01f, motion.Duration));
-            if (progress >= 1f) { unitMotions.Remove(unit.Id); return Vector2.zero; }
+            if (progress >= 1f) { unitMotions.Remove(unit.Id); return travelBody; }
             Vector2 offset;
             switch (motion.Kind)
             {
@@ -412,12 +450,31 @@ namespace OCC.Combat.Presentation
                     float thrust = progress < .24f ? -progress / .24f * 2f : progress < .52f ? Mathf.Lerp(-2f, 9f, (progress - .24f) / .28f) : Mathf.Lerp(9f, 0f, (progress - .52f) / .48f);
                     offset = motion.Direction * thrust;
                     break;
+                case UnitMotionKind.HeavyAttack:
+                    float heavyThrust = progress < .28f ? -progress / .28f * 4f : progress < .42f ? Mathf.Lerp(-4f, 12f, (progress - .28f) / .14f) : Mathf.Lerp(12f, 0f, (progress - .42f) / .58f);
+                    offset = motion.Direction * heavyThrust;
+                    break;
+                case UnitMotionKind.RangedAttack:
+                    offset = -motion.Direction * Mathf.Sin(progress * Mathf.PI) * 5f;
+                    break;
                 case UnitMotionKind.Cast:
                     offset = new Vector2(Mathf.Sin(progress * Mathf.PI * 4f) * 2f, -Mathf.Sin(progress * Mathf.PI) * 7f);
                     break;
                 case UnitMotionKind.Hit:
+                    offset = CombatUnitMotionPolicy.Impact(true, motion.Direction, progress);
+                    break;
                 case UnitMotionKind.ShieldHit:
-                    offset = motion.Direction * (1f - progress) * 6f + new Vector2(Mathf.Sin(progress * Mathf.PI * 8f) * 3f, 0f);
+                    offset = CombatUnitMotionPolicy.Impact(false, motion.Direction, progress);
+                    break;
+                case UnitMotionKind.PrepareMove:
+                case UnitMotionKind.PrepareAttack:
+                case UnitMotionKind.PrepareCast:
+                    offset = CombatUnitMotionPolicy.Preparation(motion.Kind == UnitMotionKind.PrepareMove ? CombatCommandType.Move :
+                        motion.Kind == UnitMotionKind.PrepareAttack ? CombatCommandType.Attack : CombatCommandType.UseSkill,
+                        motion.Direction, progress);
+                    break;
+                case UnitMotionKind.Stop:
+                    offset = CombatUnitMotionPolicy.Stop(motion.Direction, progress);
                     break;
                 case UnitMotionKind.Recover:
                 case UnitMotionKind.Ready:
@@ -425,13 +482,14 @@ namespace OCC.Combat.Presentation
                     break;
                 default: offset = Vector2.zero; break;
             }
-            if (!unit.IsHero && (motion.Kind == UnitMotionKind.Attack || motion.Kind == UnitMotionKind.Cast ||
+            if (!unit.IsHero && (motion.Kind == UnitMotionKind.Attack || motion.Kind == UnitMotionKind.HeavyAttack || motion.Kind == UnitMotionKind.RangedAttack || motion.Kind == UnitMotionKind.Cast ||
                 motion.Kind == UnitMotionKind.Hit || motion.Kind == UnitMotionKind.ShieldHit))
             {
                 int jitterPixels = motion.Kind == UnitMotionKind.Hit || motion.Kind == UnitMotionKind.ShieldHit ? 2 : 1;
                 offset += UnitEndpointAnimationPolicy.LocalJitter(progress, motion.Direction, jitterPixels);
             }
-            return new Vector2(Mathf.Round(offset.x * intensity), Mathf.Round(offset.y * intensity));
+            offset = offset * intensity + travelBody;
+            return new Vector2(Mathf.Round(offset.x), Mathf.Round(offset.y));
         }
 
         public Color UnitPresentationTint(UnitState unit)
@@ -443,8 +501,8 @@ namespace OCC.Combat.Presentation
             float progress = Mathf.Clamp01((Time.unscaledTime - motion.StartedAt) / Mathf.Max(.01f, motion.Duration));
             float flash = Mathf.Sin(progress * Mathf.PI) * (bootstrap?.UiPreferences.AnimationIntensity ?? 1f);
             Color tint = Color.white;
-            if (motion.Kind == UnitMotionKind.Hit) tint = Color.Lerp(Color.white, new Color(1f, .36f, .28f), flash * .72f);
-            else if (motion.Kind == UnitMotionKind.ShieldHit) tint = Color.Lerp(Color.white, new Color(.35f, .92f, 1f), flash * .68f);
+            if (motion.Kind == UnitMotionKind.Hit || motion.Kind == UnitMotionKind.ShieldHit)
+                tint = CombatUnitMotionPolicy.ImpactTint(motion.Kind == UnitMotionKind.Hit, progress, bootstrap?.UiPreferences.AnimationIntensity ?? 1f);
             else if (motion.Kind == UnitMotionKind.Recover) tint = Color.Lerp(Color.white, new Color(.48f, 1f, .66f), flash * .52f);
             else if (motion.Kind == UnitMotionKind.Cast) tint = Color.Lerp(Color.white, new Color(.55f, .86f, 1f), flash * .38f);
             else if (motion.Kind == UnitMotionKind.Ready) tint = Color.Lerp(Color.white, new Color(1f, .52f, .28f), flash * .46f);
@@ -488,9 +546,45 @@ namespace OCC.Combat.Presentation
             if (unit == null) return;
             // Entry reactions can displace a unit after the Move result. Do not animate a stale endpoint.
             if (AnimationsEnabled && unit.IsAlive && unit.Position == target)
+            {
+                if (unitMotions.TryGetValue(unit.Id, out UnitMotion motion) && (IsPreparation(motion.Kind) || motion.Kind == UnitMotionKind.Ready || motion.Kind == UnitMotionKind.Stop))
+                    unitMotions.Remove(unit.Id);
                 movementPlayback.Play(unit.Id, source, target, path, Time.unscaledTime);
-            else movementPlayback.Cancel(unit.Id);
+            }
+            else
+            {
+                movementPlayback.Cancel(unit.Id);
+                if (unitMotions.TryGetValue(unit.Id, out UnitMotion motion) && motion.Kind == UnitMotionKind.Stop) unitMotions.Remove(unit.Id);
+                if(unit.IsAlive && source!=target && unit.Position==target && bootstrap.CurrentState.Map.IsInside(target))
+                    OccSoundEffects.GroundStep(bootstrap.CurrentState.Map.GetTile(target).IsWater);
+            }
             positionCache[unit.Id] = unit.Position;
+        }
+
+        private void OnGroundContact(Vector2 foot, float at)
+        {
+            CombatState state = bootstrap?.CurrentState;
+            var position = new GridPosition(Mathf.RoundToInt(foot.x), Mathf.RoundToInt(foot.y));
+            if (!AnimationsEnabled || state == null || !state.Map.IsInside(position)) return;
+            bool water=state.Map.GetTile(position).IsWater;
+            if(Time.unscaledTime-at<=.12f)OccSoundEffects.GroundStep(water);
+            if(water)WaterRipples.Add(foot, at);
+        }
+
+        private void OnGroundStop(Vector2 foot, Vector2 direction, float distance, float at)
+        {
+            CombatState state = bootstrap?.CurrentState;
+            var position = new GridPosition(Mathf.RoundToInt(foot.x), Mathf.RoundToInt(foot.y));
+            if (!AnimationsEnabled || state == null || !state.Map.IsInside(position) || distance < 2f ||
+                Time.unscaledTime - at > .12f || state.Map.GetTile(position).IsWater) return;
+            StopDust.Add(position, direction, at);
+        }
+
+        private void OnMovementArrived(string unitId, Vector2 direction, float at)
+        {
+            UnitState unit = bootstrap?.CurrentState?.GetUnit(unitId);
+            if (unit == null || !unit.IsAlive || !AnimationsEnabled || Time.unscaledTime - at > .10f) return;
+            PlayUnitMotion(unit, UnitMotionKind.Stop, .10f, new Vector2(direction.x, -direction.y), Vector2.zero, at);
         }
 
         public void NotifyArtifact(ArtifactDefinition artifact, GridPosition source, IReadOnlyList<GridPosition> targetCells, ArtifactExecution execution)
@@ -510,6 +604,7 @@ namespace OCC.Combat.Presentation
         // Stable presentation entry point for later skills/effects. It consumes read-only result data only.
         public void Publish(CombatFeedbackEvent feedback)
         {
+            if ((feedback.Kind == CombatFeedbackKind.Damage || feedback.Kind == CombatFeedbackKind.ShieldAbsorb) && feedback.Amount == 0) return;
             if (actionCapture != null) { actionCapture.AddFeedback(feedback); return; }
             OccSoundEffects.CombatFeedback(feedback);
             EnsureCanvas();
@@ -518,7 +613,7 @@ namespace OCC.Combat.Presentation
             if (bootstrap?.UiPreferences.HighContrast == true) color = Color.Lerp(color, Color.white, .18f);
             float intensity = bootstrap?.UiPreferences.AnimationIntensity ?? 1f;
             float duration = (feedback.Kind == CombatFeedbackKind.UnitDefeated || feedback.Kind == CombatFeedbackKind.DestructibleDestroyed ? .24f : .16f) * Mathf.Lerp(.35f, 1f, intensity);
-            string vfx = VfxForFeedback(feedback.Kind);
+            string vfx = VfxForFeedback(feedback.Kind) ?? CombatPixelVfxPolicy.Feedback(feedback.Kind);
             if (vfx != null) PlayFormalVfx(feedback.Target, vfx);
             if (bootstrap?.UiPreferences.FloatingText != false)
             {
@@ -541,13 +636,15 @@ namespace OCC.Combat.Presentation
             {
                 Vector2 direction = GridDirection(feedback.Source, feedback.Target);
                 // Source attack/cast motion is scheduled by the actual action, never inferred from damage.
-                if (targetUnit != null) PlayUnitMotion(targetUnit, feedback.Kind == CombatFeedbackKind.ShieldAbsorb ? UnitMotionKind.ShieldHit : UnitMotionKind.Hit, sourceUnit?.IsHero == false ? .42f : .30f, direction, Vector2.zero);
-                if (intensity > .01f) PulseCell(feedback.Target, color, duration * 1.5f);
+                if (targetUnit != null) PlayUnitMotion(targetUnit,
+                    feedback.Kind == CombatFeedbackKind.ShieldAbsorb ? UnitMotionKind.ShieldHit : UnitMotionKind.Hit,
+                    feedback.Kind == CombatFeedbackKind.ShieldAbsorb ? .20f : .30f, direction, Vector2.zero);
+                if (intensity > .01f && !CombatPixelVfxPolicy.IsShieldResource(feedback.Kind)) PulseCell(feedback.Target, color, duration * 1.5f);
             }
-            else if (targetUnit != null && (feedback.Kind == CombatFeedbackKind.Healing || feedback.Kind == CombatFeedbackKind.ShieldRestore || feedback.Kind == CombatFeedbackKind.ShieldTransferredIn || feedback.Kind == CombatFeedbackKind.ManaRestore || feedback.Kind == CombatFeedbackKind.StatusCleared))
+            else if (targetUnit != null && (feedback.Kind == CombatFeedbackKind.Healing || feedback.Kind == CombatFeedbackKind.ManaRestore || feedback.Kind == CombatFeedbackKind.StatusCleared))
             {
                 PlayUnitMotion(targetUnit, UnitMotionKind.Recover, targetUnit.IsHero ? .30f : .44f, Vector2.zero, Vector2.zero);
-                if (intensity > .01f) PulseCell(feedback.Target, color, duration * 1.7f);
+                if (intensity > .01f && !CombatPixelVfxPolicy.IsShieldResource(feedback.Kind)) PulseCell(feedback.Target, color, duration * 1.7f);
             }
             if (targetUnit != null)
             {
@@ -563,7 +660,7 @@ namespace OCC.Combat.Presentation
                 if (feedback.Kind == CombatFeedbackKind.Burning || feedback.Kind == CombatFeedbackKind.Bound || feedback.Kind == CombatFeedbackKind.BreakStance || feedback.Kind == CombatFeedbackKind.Attribute ||
                     feedback.Kind == CombatFeedbackKind.StatusCleared)
                     statusCache[targetUnit.Id] = targetUnit.Statuses.ToDictionary(entry => entry.Key, entry => entry.Value);
-                if (feedback.Kind == CombatFeedbackKind.Damage || feedback.Kind == CombatFeedbackKind.ShieldAbsorb)
+                if (feedback.Kind == CombatFeedbackKind.Damage)
                     hitUntil[targetUnit.Id] = Time.unscaledTime + .18f;
             }
         }
@@ -583,28 +680,21 @@ namespace OCC.Combat.Presentation
                 if (usesContactMotion && actionCapture != null) actionCapture.SetImpact(target, duration * .52f);
                 PlayUnitMotion(sourceUnit, motion, duration, GridDirection(source, target), Vector2.zero);
             }
-            if (skill.Id == "enemy_stone_snare") { PlayDeliveryVfx(source, target, "bound"); return; }
-            if (skill.Id == "enemy_revealing_lantern") { PlayDeliveryVfx(source, target, "armor_break"); return; }
-            if (skill.Id == "enemy_windlass_bolt") { PlayDeliveryVfx(source, target, "heavy_hit"); return; }
-            if (!skill.Effects.Any(effect => effect.Type == SkillEffectType.Damage && effect.DamageType == DamageType.Fire)) return;
-            string effect = skill.Id == "cinder_sweep" ? "fire_spray" :
-                skill.Id == "searing_mark" ? "fire_detonate" :
-                skill.Delivery == SkillDeliveryMethod.Area ? "fire_cross_blast" : "fire_projectile";
-            PlayDeliveryVfx(source, target, effect);
-            // A Burning status is not a ground fire. Status feedback comes from the resolved unit state.
+            string effect = CombatPixelVfxPolicy.Delivery(skill);
+            if (effect != null) PlayDeliveryVfx(source, target, effect, CombatPixelVfxPolicy.Travels(skill));
         }
 
-        private void PlayDeliveryVfx(GridPosition source, GridPosition target, string effect)
+        private void PlayDeliveryVfx(GridPosition source, GridPosition target, string effect, bool travels = false)
         {
             if (actionCapture != null)
             {
                 actionCapture.SetImpact(target, FireVfxSequence.StageDuration);
                 actionCapture.Duration = Mathf.Max(actionCapture.Duration, FireVfxSequence.StageDuration * 2f);
-                actionCapture.AddDelivery(() => PlayDeliveryVfx(source, target, effect)); return;
+                actionCapture.AddDelivery(() => PlayDeliveryVfx(source, target, effect, travels)); return;
             }
             if (!AnimationsEnabled) return;
-            vfxPlayback.ReplaceAbility(new[] { new CombatVfxCue(target, effect, effect == "fire_projectile" ? 0f : FireVfxSequence.StageDuration,
-                FireVfxSequence.StageDuration, source, effect == "fire_projectile") }, FeedbackTime);
+            vfxPlayback.ReplaceAbility(new[] { new CombatVfxCue(target, effect, travels ? 0f : FireVfxSequence.StageDuration,
+                FireVfxSequence.StageDuration, source, travels) }, FeedbackTime);
             RefreshVfx(Time.unscaledTime);
         }
 
@@ -657,14 +747,25 @@ namespace OCC.Combat.Presentation
             return modules.ToArray();
         }
 
-        private void PlayUnitMotion(UnitState unit, UnitMotionKind kind, float duration, Vector2 direction, Vector2 originOffset)
+        private static bool IsPreparation(UnitMotionKind kind) => kind == UnitMotionKind.PrepareMove ||
+            kind == UnitMotionKind.PrepareAttack || kind == UnitMotionKind.PrepareCast;
+
+        private void PlayUnitMotion(UnitState unit, UnitMotionKind kind, float duration, Vector2 direction, Vector2 originOffset, float? startedAt = null)
         {
             if (actionCapture != null)
             {
                 actionCapture.AddDelivery(() => PlayUnitMotion(unit, kind, duration, direction, originOffset)); return;
             }
             if (unit == null || (bootstrap?.UiPreferences.AnimationIntensity ?? 1f) <= .01f) return;
-            unitMotions[unit.Id] = new UnitMotion(kind, duration, direction, originOffset, FeedbackTime);
+            float at = startedAt ?? FeedbackTime;
+            if (unitMotions.TryGetValue(unit.Id, out UnitMotion old) && at < old.StartedAt + old.Duration)
+            {
+                if (IsPreparation(old.Kind) && kind == UnitMotionKind.Ready) return;
+                bool impact = old.Kind == UnitMotionKind.Hit || old.Kind == UnitMotionKind.ShieldHit;
+                if (impact && (IsPreparation(kind) || kind == UnitMotionKind.Ready || kind == UnitMotionKind.Stop)) return;
+                if (kind == UnitMotionKind.ShieldHit && old.Kind == UnitMotionKind.Hit && Mathf.Abs(at - old.StartedAt) < .015f) return;
+            }
+            unitMotions[unit.Id] = new UnitMotion(kind, duration, direction, originOffset, at);
         }
 
         public static int VfxPriority(string effect)
@@ -733,7 +834,8 @@ namespace OCC.Combat.Presentation
                 }
                 view.name = "正式VFX_" + sample.Cue.Effect;
                 Sprite[] frames = FormalVfxFrames(sample.Cue.Effect);
-                view.sprite = frames[Mathf.Clamp(Mathf.FloorToInt(sample.Progress * frames.Length), 0, frames.Length - 1)];
+                view.enabled = frames.Length > 0;
+                view.sprite = frames.Length > 0 ? frames[Mathf.Clamp(Mathf.FloorToInt(sample.Progress * frames.Length), 0, frames.Length - 1)] : null;
                 Vector2 position = CurrentGridFeedbackPosition(sample.Cue.Position);
                 if (sample.Cue.Travels)
                     position = Vector2.Lerp(CurrentGridFeedbackPosition(sample.Cue.Origin), position, sample.Progress);
@@ -741,11 +843,26 @@ namespace OCC.Combat.Presentation
                 float nativePixel = Mathf.Max(1f, size / 32f);
                 view.rectTransform.anchoredPosition = PixelPresentationMotion.Snap(position, nativePixel);
                 view.rectTransform.sizeDelta = new Vector2(size, size);
+                if (!CombatPixelVfxPolicy.IsShieldResourceEffect(sample.Cue.Effect))
+                {
+                    if (!pixelVfx.TryGetValue(sample.Slot, out CombatPixelVfxGraphic tech) || tech == null)
+                    {
+                        GameObject glow = new GameObject("像素光与冲击", typeof(RectTransform), typeof(CombatPixelVfxGraphic));
+                        glow.transform.SetParent(vfxRoot, false); tech = glow.GetComponent<CombatPixelVfxGraphic>();
+                        tech.rectTransform.anchorMin = tech.rectTransform.anchorMax = new Vector2(.5f, .5f);
+                        pixelVfx[sample.Slot] = tech;
+                    }
+                    tech.rectTransform.anchoredPosition = view.rectTransform.anchoredPosition;
+                    tech.rectTransform.sizeDelta = Vector2.one * size * 3f;
+                    tech.Sample(sample.Cue.Effect, sample.Progress, bootstrap?.UiPreferences.AnimationIntensity ?? 1f, 96f);
+                    tech.transform.SetAsFirstSibling();
+                }
+
                 for (int trail = 0; trail < view.transform.childCount; trail++)
                 {
                     Image ghost = view.transform.GetChild(trail).GetComponent<Image>();
                     float behind = sample.Progress - (trail + 1) * .12f;
-                    ghost.enabled = sample.Cue.Travels && behind > 0f;
+                    ghost.enabled = frames.Length > 0 && sample.Cue.Travels && behind > 0f;
                     if (!ghost.enabled) continue;
                     ghost.sprite = frames[Mathf.Clamp(Mathf.FloorToInt(behind * frames.Length), 0, frames.Length - 1)];
                     ghost.color = new Color(1f, 1f, 1f, trail == 0 ? .375f : .1875f);
@@ -760,14 +877,22 @@ namespace OCC.Combat.Presentation
                 if (!visibleVfx.Contains(entry.Key)) expiredVfx.Add(entry.Key);
                 else if (entry.Key.Layer == CombatVfxLayer.Reaction) entry.Value.transform.SetAsLastSibling();
             foreach (CombatVfxSlot slot in expiredVfx)
-            { if (activeVfx[slot] != null) DestroyFeedbackObject(activeVfx[slot].gameObject); activeVfx.Remove(slot); }
+            {
+                if (activeVfx[slot] != null) DestroyFeedbackObject(activeVfx[slot].gameObject);
+                activeVfx.Remove(slot);
+                if (pixelVfx.TryGetValue(slot, out CombatPixelVfxGraphic tech) && tech != null) DestroyFeedbackObject(tech.gameObject);
+                pixelVfx.Remove(slot);
+            }
         }
 
         private void ClearVfx()
         {
+            WaterRipples.Clear();
+            StopDust.Clear();
             vfxPlayback.Clear();
             foreach (Image view in activeVfx.Values) if (view != null) DestroyFeedbackObject(view.gameObject);
-            activeVfx.Clear(); visibleVfx.Clear(); expiredVfx.Clear();
+            foreach (CombatPixelVfxGraphic tech in pixelVfx.Values) if (tech != null) DestroyFeedbackObject(tech.gameObject);
+            pixelVfx.Clear(); activeVfx.Clear(); visibleVfx.Clear(); expiredVfx.Clear();
             if (battlefieldClip != null)
                 foreach (Transform child in battlefieldClip.Cast<Transform>().Where(child => child.name == "战斗反馈脉冲").ToArray())
                 { DOTween.Kill(child.gameObject); DestroyFeedbackObject(child.gameObject); }
@@ -782,6 +907,7 @@ namespace OCC.Combat.Presentation
 
         private Sprite[] FormalVfxFrames(string effect)
         {
+            if (CombatPixelVfxPolicy.IsTechnical(effect)) return System.Array.Empty<Sprite>();
             if (vfxFrames.TryGetValue(effect, out Sprite[] cached)) return cached;
             string root = FormalArtRegistry.VfxPath(effect);
             Sprite[] frames = Enumerable.Range(0, 6).Select(index => Resources.Load<Sprite>(root + "/frame_" + index.ToString("00"))).ToArray();
@@ -790,30 +916,11 @@ namespace OCC.Combat.Presentation
             return frames;
         }
 
+        // Sprite reactions never claim a hit or recovery for an auxiliary result.
         private static string VfxForFeedback(CombatFeedbackKind kind)
         {
-            switch (kind)
-            {
-                case CombatFeedbackKind.Damage: return "hit";
-                case CombatFeedbackKind.ShieldAbsorb: return "shield_absorb";
-                case CombatFeedbackKind.ArmorBreak: return "armor_break";
-                case CombatFeedbackKind.BreakStance: return "armor_break";
-                case CombatFeedbackKind.Attribute: return null;
-                case CombatFeedbackKind.Burning: return "burning";
-                case CombatFeedbackKind.Bound: return "bound";
-                case CombatFeedbackKind.Slow: return "slow";
-                case CombatFeedbackKind.Healing: return "health_repair";
-                case CombatFeedbackKind.ShieldRestore: return "shield_restore";
-                case CombatFeedbackKind.ManaRestore: return "mana_restore";
-                case CombatFeedbackKind.StatusCleared: return "cleanse";
-                case CombatFeedbackKind.Movement: return "path";
-                case CombatFeedbackKind.DestructibleDamaged: return "object_damage";
-                case CombatFeedbackKind.DestructibleDestroyed: return "object_break";
-                case CombatFeedbackKind.UnitDefeated: return "heavy_hit";
-                case CombatFeedbackKind.ShieldConsumed: case CombatFeedbackKind.ShieldTransferredOut:
-                case CombatFeedbackKind.ShieldTransferredIn: case CombatFeedbackKind.UtilityResolved: return null;
-                default: throw new KeyNotFoundException("Missing formal VFX semantic: " + kind);
-            }
+            string effect = CombatPixelVfxPolicy.Feedback(kind);
+            return CombatPixelVfxPolicy.IsTechnical(effect) ? null : effect;
         }
 
         private void PulseCell(GridPosition position, Color color, float duration)
@@ -857,6 +964,7 @@ namespace OCC.Combat.Presentation
             GameObject labelObject = new GameObject("反馈文字"); labelObject.transform.SetParent(textObject.transform, false);
             RectTransform labelRect = labelObject.AddComponent<RectTransform>(); labelRect.anchorMin = Vector2.zero; labelRect.anchorMax = Vector2.one; labelRect.offsetMin = new Vector2(40, 0); labelRect.offsetMax = Vector2.zero;
             Text text = labelObject.AddComponent<Text>(); text.font = FormalUiKit.Font; text.fontSize = FormalUiTheme.BodyFontSize; text.fontStyle = FontStyle.Normal; text.alignment = TextAnchor.MiddleLeft; text.text = message; text.color = FormalUiTheme.ReadableLabelColor(color); text.raycastTarget = false;
+            if(feedbackBattlefield?.Hd2DPreview!=null)Hd2DTacticalGlow.Attach(text,1);
             CanvasGroup group = textObject.AddComponent<CanvasGroup>();
             if (!AnimationsEnabled)
             {
@@ -874,15 +982,6 @@ namespace OCC.Combat.Presentation
         {
             CombatDamagePopupPresentation next = CombatDamagePopupPresentation.From(feedback);
             float now = Time.unscaledTime;
-            if (activeDamagePopups.TryGetValue(feedback.Target, out DamagePopupState current) &&
-                current?.Root != null && now - current.LastUpdate <= .10f)
-            {
-                current.Presentation = current.Presentation.Merge(next);
-                current.LastUpdate = now;
-                ApplyDamagePopupStyle(current);
-                return;
-            }
-
             EnsureCanvas();
             int lane = damagePopupSerial++ % 3;
             GameObject root = new GameObject("实际伤害跳字");
@@ -890,14 +989,26 @@ namespace OCC.Combat.Presentation
             RectTransform rect = root.AddComponent<RectTransform>();
             rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
             rect.sizeDelta = DamageTextSize;
-            FeedbackPlacement placement = PlaceFeedback(rect, feedback.Target, DamagePopupPosition(feedback.Target, lane), DamageTextRise);
             Text label = root.AddComponent<Text>();
+            if(feedbackBattlefield?.Hd2DPreview!=null)Hd2DTacticalGlow.Attach(label,1);
             label.font = FormalUiKit.Font;
-            label.fontSize = FormalUiTheme.FeedbackFontSize;
+            label.fontSize = next.IncludesHealthDamage ? FormalUiTheme.FeedbackFontSize : 48;
             label.fontStyle = FontStyle.Normal;
             label.alignment = TextAnchor.MiddleCenter;
+            label.horizontalOverflow = HorizontalWrapMode.Overflow;
+            label.verticalOverflow = VerticalWrapMode.Overflow;
+            label.resizeTextForBestFit = false;
+            label.text = next.Text;
             label.raycastTarget = false;
+            rect.sizeDelta = new Vector2(Mathf.Max(DamageTextSize.x,
+                2f * Mathf.Ceil((label.preferredWidth + 16f) / 2f)), DamageTextSize.y);
+            FeedbackPlacement placement = PlaceFeedback(rect, feedback.Target, DamagePopupPosition(feedback.Target, lane), DamageTextRise);
+            Outline outline = root.AddComponent<Outline>();
+            outline.effectColor = new Color(0f, 0f, 0f, .9f);
+            outline.effectDistance = new Vector2(1f, -1f);
             CanvasGroup group = root.AddComponent<CanvasGroup>();
+            group.blocksRaycasts = false;
+            group.interactable = false;
             DamagePopupState popup = new DamagePopupState
             {
                 Root = root,
@@ -908,22 +1019,24 @@ namespace OCC.Combat.Presentation
                 Placement = placement,
                 LastUpdate = now
             };
-            activeDamagePopups[feedback.Target] = popup;
+            activeDamagePopups[root] = popup;
             ApplyDamagePopupStyle(popup);
 
             if (!AnimationsEnabled)
             {
                 group.alpha = 1f;
-                DOVirtual.DelayedCall(.48f, () => CompleteDamagePopup(feedback.Target, popup)).SetUpdate(true).SetTarget(root);
+                DOVirtual.DelayedCall(.72f, () => CompleteDamagePopup(popup)).SetUpdate(true).SetTarget(root);
                 return;
             }
 
             float targetY = rect.anchoredPosition.y + DamageTextRise;
             DOTween.Sequence().SetUpdate(true).SetTarget(root)
                 .Join(DOTween.To(() => rect.anchoredPosition.y,
-                    value => MoveFeedback(placement, value), targetY, .56f).SetEase(Ease.OutCubic))
-                .Insert(.28f, DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .28f))
-                .OnComplete(() => CompleteDamagePopup(feedback.Target, popup));
+                    value => MoveFeedback(placement, value), rect.anchoredPosition.y + 8f, .08f).SetEase(Ease.OutQuad))
+                .Insert(.20f, DOTween.To(() => rect.anchoredPosition.y,
+                    value => MoveFeedback(placement, value), targetY, .52f).SetEase(Ease.OutCubic))
+                .Insert(.48f, DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .24f))
+                .OnComplete(() => CompleteDamagePopup(popup));
         }
 
         private void ApplyDamagePopupStyle(DamagePopupState popup)
@@ -938,10 +1051,9 @@ namespace OCC.Combat.Presentation
             if (popup.Placement != null) UpdateFeedbackLeader(popup.Placement);
         }
 
-        private void CompleteDamagePopup(GridPosition position, DamagePopupState popup)
+        private void CompleteDamagePopup(DamagePopupState popup)
         {
-            if (activeDamagePopups.TryGetValue(position, out DamagePopupState current) && ReferenceEquals(current, popup))
-                activeDamagePopups.Remove(position);
+            if (popup?.Root != null) activeDamagePopups.Remove(popup.Root);
             if (popup?.Root != null) DestroyFeedbackObject(popup.Root);
         }
 
@@ -976,12 +1088,20 @@ namespace OCC.Combat.Presentation
 
         private Vector2 CurrentGridFeedbackCanvasPosition(GridPosition position) =>
             bootstrap != null ? bootstrap.GridToFeedbackPosition(position) : GridFeedbackPosition(position);
+        private Vector2 CurrentUnitFeedbackCanvasPosition(GridPosition position)
+        {
+            if(feedbackBattlefield==null)TryGetComponent(out feedbackBattlefield);
+            return feedbackBattlefield?.Hd2DPreview!=null&&feedbackBattlefield.Hd2DPreview.isActiveAndEnabled
+                ?feedbackBattlefield.Hd2DPreview.UnitToFeedbackPosition(position):CurrentGridFeedbackCanvasPosition(position);
+        }
 
         private float CurrentFeedbackCellSize()
         {
+            if(feedbackBattlefield==null)TryGetComponent(out feedbackBattlefield);
             if (bootstrap == null) return BattlefieldPresentationAdapter.OverviewCellSize;
             float cell = Mathf.Abs(bootstrap.GridToFeedbackPosition(new GridPosition(1, 0)).x -
                 bootstrap.GridToFeedbackPosition(new GridPosition(0, 0)).x);
+            if(feedbackBattlefield?.Hd2DPreview!=null)return Mathf.Max(1f,cell);
             return Mathf.Max(64f, Mathf.Round(cell / 64f) * 64f);
         }
 
@@ -990,7 +1110,7 @@ namespace OCC.Combat.Presentation
 
         private Vector2 FloatingFeedbackPosition(GridPosition position)
         {
-            Vector2 center = CurrentGridFeedbackCanvasPosition(position) + new Vector2(0, 34);
+            Vector2 center = CurrentUnitFeedbackCanvasPosition(position) + new Vector2(0, 34);
             center = ClampFeedbackCenter(center, FloatingTextSize, CurrentFeedbackViewport,
                 AnimationsEnabled ? FloatingTextRise : 0f);
             return CanvasToFeedbackLocal(center, battlefieldClip != null ? battlefieldClip.anchoredPosition : Vector2.zero);
@@ -998,7 +1118,7 @@ namespace OCC.Combat.Presentation
 
         private Vector2 DamagePopupPosition(GridPosition position, int lane)
         {
-            Vector2 center = CurrentGridFeedbackCanvasPosition(position) + new Vector2((lane - 1) * 12f, 20f + lane * 4f);
+            Vector2 center = CurrentUnitFeedbackCanvasPosition(position) + new Vector2((lane - 1) * 12f, 20f + lane * 4f);
             center = ClampFeedbackCenter(center, DamageTextSize, CurrentFeedbackViewport,
                 AnimationsEnabled ? DamageTextRise : 0f);
             return CanvasToFeedbackLocal(center, battlefieldClip != null ? battlefieldClip.anchoredPosition : Vector2.zero);

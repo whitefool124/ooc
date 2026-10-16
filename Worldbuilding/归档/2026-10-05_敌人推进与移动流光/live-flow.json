@@ -1,0 +1,114 @@
+{
+  "success": true,
+  "command": "command console",
+  "data": {
+    "command": "console",
+    "parameters": {
+      "level": "log",
+      "tail": "8"
+    },
+    "result": {
+      "entries": [
+        {
+          "seq": 1533,
+          "timestampUtc": "2026-10-05T05:32:26.8707932Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\PresentationSceneAnchors.cs(14,48): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 1534,
+          "timestampUtc": "2026-10-05T05:32:26.8707932Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Assets\\Game\\Runtime\\Presentation\\PresentationSceneAnchors.cs(28,48): warning CS0618: 'Object.FindFirstObjectByType<T>(FindObjectsInactive)' is obsolete: 'FindFirstObjectByType has been deprecated because it relies on instance ID ordering. Use FindAnyObjectByType instead, which does not depend on ordering.'",
+          "stackTrace": "",
+          "seeded": false
+        },
+        {
+          "seq": 1535,
+          "timestampUtc": "2026-10-05T05:32:55.7772499Z",
+          "level": "warn",
+          "logType": "Warning",
+          "message": "Releasing render texture that is set to be RenderTexture.active!",
+          "stackTrace": "UnityEngine.RenderTexture:Release ()\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions:ReadTextureToTexture2D (UnityEngine.Texture,int,int,bool) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:1309)\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions:TryCapturePlayModeViewPngBytes (object,int,int) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:1382)\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions/<CaptureGameView>d__12:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:187)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder:SetResult ()\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions/<RefreshGameViewBeforeCaptureAsync>d__27:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:783)\nSystem.Threading.Tasks.TaskCompletionSource`1<bool>:TrySetResult (bool)\nFunplay.Editor.Tools.Builtins.ScreenshotFunctions/<>c__DisplayClass31_0:<WaitForEditorFramesAsync>g__Tick|0 () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScreenshotFunctions.cs:953)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 1536,
+          "timestampUtc": "2026-10-05T05:33:11.3534031Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "MOVE_PLAN enemy_0 from=(5, 3) to=(2, 3) route=(5, 3);(4, 3);(3, 3);(2, 3)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nCheck:Execute (Funplay.Editor.Tools.Scripting.ExecutionContext)\nFunplay.Editor.Tools.Builtins.ScriptExecutionFunctions:ExecuteAsCommand (System.Type,string) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScriptExecutionFunctions.cs:611)\nFunplay.Editor.Tools.Builtins.ScriptExecutionFunctions:ExecuteCompiledAssembly (System.Reflection.Assembly,string,string,System.Collections.Generic.List`1<Funplay.Editor.Tools.Scripting.ScriptCompilerAttempt>) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScriptExecutionFunctions.cs:568)\nFunplay.Editor.Tools.Builtins.ScriptExecutionFunctions:CompileAndExecute (string,string,string) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScriptExecutionFunctions.cs:370)\nFunplay.Editor.Tools.Builtins.ScriptExecutionFunctions/<ExecuteCode>d__3:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScriptExecutionFunctions.cs:98)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<object>:Start<Funplay.Editor.Tools.Builtins.ScriptExecutionFunctions/<ExecuteCode>d__3> (Funplay.Editor.Tools.Builtins.ScriptExecutionFunctions/<ExecuteCode>d__3&)\nFunplay.Editor.Tools.Builtins.ScriptExecutionFunctions:ExecuteCode (string,System.Nullable`1<bool>,bool,string)\nSystem.Reflection.MethodBase:Invoke (object,object[])\nFunplay.Editor.Tools.FunctionInvokerController/<InvokeAsync>d__1:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/FunctionInvokerController.cs:62)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>:Start<Funplay.Editor.Tools.FunctionInvokerController/<InvokeAsync>d__1> (Funplay.Editor.Tools.FunctionInvokerController/<InvokeAsync>d__1&)\nFunplay.Editor.Tools.FunctionInvokerController:InvokeAsync (Funplay.Editor.Tools.FunctionCall)\nFunplay.Editor.MCP.Server.MCPExecutionBridge/<>c__DisplayClass6_0/<<ExecuteToolAsync>b__0>d:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/MCP/Server/MCPExecutionBridge.cs:102)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>:Start<Funplay.Editor.MCP.Server.MCPExecutionBridge/<>c__DisplayClass6_0/<<ExecuteToolAsync>b__0>d> (Funplay.Editor.MCP.Server.MCPExecutionBridge/<>c__DisplayClass6_0/<<ExecuteToolAsync>b__0>d&)\nFunplay.Editor.MCP.Server.MCPExecutionBridge/<>c__DisplayClass6_0:<ExecuteToolAsync>b__0 ()\nFunplay.Editor.Threading.EditorThreadHelper:ExecuteAsyncOnEditorThreadAsync<string> (System.Func`1<System.Threading.Tasks.Task`1<string>>) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Threading/EditorThreadHelper.cs:100)\nFunplay.Editor.MCP.Server.MCPExecutionBridge/<ExecuteToolAsync>d__6:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/MCP/Server/MCPExecutionBridge.cs:50)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>:Start<Funplay.Editor.MCP.Server.MCPExecutionBridge/<ExecuteToolAsync>d__6> (Funplay.Editor.MCP.Server.MCPExecutionBridge/<ExecuteToolAsync>d__6&)\nFunplay.Editor.MCP.Server.MCPExecutionBridge:ExecuteToolAsync (string,System.Collections.Generic.Dictionary`2<string, object>,System.Threading.CancellationToken)\nFunplay.Editor.MCP.Server.MCPRequestHandler/<HandleToolsCallAsync>d__11:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/MCP/Server/MCPRequestHandler.cs:139)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<Funplay.Editor.MCP.Server.MCPResponse>:Start<Funplay.Editor.MCP.Server.MCPRequestHandler/<HandleToolsCallAsync>d__11> (Funplay.Editor.MCP.Server.MCPRequestHandler/<HandleToolsCallAsync>d__11&)\nFunplay.Editor.MCP.Server.MCPRequestHandler:HandleToolsCallAsync (Funplay.Editor.MCP.Server.MCPRequest,System.Threading.CancellationToken)\nFunplay.Editor.MCP.Server.MCPRequestHandler/<HandleRequestAsync>d__8:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/MCP/Server/MCPRequestHandler.cs:63)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<Funplay.Editor.MCP.Server.MCPResponse>:Start<Funplay.Editor.MCP.Server.MCPRequestHandler/<HandleRequestAsync>d__8> (Funplay.Editor.MCP.Server.MCPRequestHandler/<HandleRequestAsync>d__8&)\nFunplay.Editor.MCP.Server.MCPRequestHandler:HandleRequestAsync (Funplay.Editor.MCP.Server.MCPRequest,System.Threading.CancellationToken)\nFunplay.Editor.MCP.Server.MCPServerService/<>c__DisplayClass44_1/<<HandleRequestReceived>b__1>d:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/MCP/Server/MCPServerService.cs:503)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<Funplay.Editor.MCP.Server.MCPResponse>:Start<Funplay.Editor.MCP.Server.MCPServerService/<>c__DisplayClass44_1/<<HandleRequestReceived>b__1>d> (Funplay.Editor.MCP.Server.MCPServerService/<>c__DisplayClass44_1/<<HandleRequestReceived>b__1>d&)\nFunplay.Editor.MCP.Server.MCPServerService/<>c__DisplayClass44_1:<HandleRequestReceived>b__1 ()\nFunplay.Editor.Threading.EditorThreadHelper/<>c__DisplayClass10_0`1<Funplay.Editor.MCP.Server.MCPResponse>:<ExecuteAsyncOnEditorThreadAsync>b__1 () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Threading/EditorThreadHelper.cs:119)\nFunplay.Editor.Threading.EditorThreadHelper:ProcessQueues () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Threading/EditorThreadHelper.cs:159)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 1537,
+          "timestampUtc": "2026-10-05T05:33:11.3544123Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "MOVE_PLAN enemy_1 from=(6, 5) to=(3, 3) route=(6, 5);(5, 5);(4, 5);(4, 4);(4, 3);(3, 3)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nCheck:Execute (Funplay.Editor.Tools.Scripting.ExecutionContext)\nFunplay.Editor.Tools.Builtins.ScriptExecutionFunctions:ExecuteAsCommand (System.Type,string) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScriptExecutionFunctions.cs:611)\nFunplay.Editor.Tools.Builtins.ScriptExecutionFunctions:ExecuteCompiledAssembly (System.Reflection.Assembly,string,string,System.Collections.Generic.List`1<Funplay.Editor.Tools.Scripting.ScriptCompilerAttempt>) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScriptExecutionFunctions.cs:568)\nFunplay.Editor.Tools.Builtins.ScriptExecutionFunctions:CompileAndExecute (string,string,string) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScriptExecutionFunctions.cs:370)\nFunplay.Editor.Tools.Builtins.ScriptExecutionFunctions/<ExecuteCode>d__3:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/Builtins/ScriptExecutionFunctions.cs:98)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<object>:Start<Funplay.Editor.Tools.Builtins.ScriptExecutionFunctions/<ExecuteCode>d__3> (Funplay.Editor.Tools.Builtins.ScriptExecutionFunctions/<ExecuteCode>d__3&)\nFunplay.Editor.Tools.Builtins.ScriptExecutionFunctions:ExecuteCode (string,System.Nullable`1<bool>,bool,string)\nSystem.Reflection.MethodBase:Invoke (object,object[])\nFunplay.Editor.Tools.FunctionInvokerController/<InvokeAsync>d__1:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Tools/FunctionInvokerController.cs:62)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>:Start<Funplay.Editor.Tools.FunctionInvokerController/<InvokeAsync>d__1> (Funplay.Editor.Tools.FunctionInvokerController/<InvokeAsync>d__1&)\nFunplay.Editor.Tools.FunctionInvokerController:InvokeAsync (Funplay.Editor.Tools.FunctionCall)\nFunplay.Editor.MCP.Server.MCPExecutionBridge/<>c__DisplayClass6_0/<<ExecuteToolAsync>b__0>d:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/MCP/Server/MCPExecutionBridge.cs:102)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>:Start<Funplay.Editor.MCP.Server.MCPExecutionBridge/<>c__DisplayClass6_0/<<ExecuteToolAsync>b__0>d> (Funplay.Editor.MCP.Server.MCPExecutionBridge/<>c__DisplayClass6_0/<<ExecuteToolAsync>b__0>d&)\nFunplay.Editor.MCP.Server.MCPExecutionBridge/<>c__DisplayClass6_0:<ExecuteToolAsync>b__0 ()\nFunplay.Editor.Threading.EditorThreadHelper:ExecuteAsyncOnEditorThreadAsync<string> (System.Func`1<System.Threading.Tasks.Task`1<string>>) (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Threading/EditorThreadHelper.cs:100)\nFunplay.Editor.MCP.Server.MCPExecutionBridge/<ExecuteToolAsync>d__6:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/MCP/Server/MCPExecutionBridge.cs:50)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>:Start<Funplay.Editor.MCP.Server.MCPExecutionBridge/<ExecuteToolAsync>d__6> (Funplay.Editor.MCP.Server.MCPExecutionBridge/<ExecuteToolAsync>d__6&)\nFunplay.Editor.MCP.Server.MCPExecutionBridge:ExecuteToolAsync (string,System.Collections.Generic.Dictionary`2<string, object>,System.Threading.CancellationToken)\nFunplay.Editor.MCP.Server.MCPRequestHandler/<HandleToolsCallAsync>d__11:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/MCP/Server/MCPRequestHandler.cs:139)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<Funplay.Editor.MCP.Server.MCPResponse>:Start<Funplay.Editor.MCP.Server.MCPRequestHandler/<HandleToolsCallAsync>d__11> (Funplay.Editor.MCP.Server.MCPRequestHandler/<HandleToolsCallAsync>d__11&)\nFunplay.Editor.MCP.Server.MCPRequestHandler:HandleToolsCallAsync (Funplay.Editor.MCP.Server.MCPRequest,System.Threading.CancellationToken)\nFunplay.Editor.MCP.Server.MCPRequestHandler/<HandleRequestAsync>d__8:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/MCP/Server/MCPRequestHandler.cs:63)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<Funplay.Editor.MCP.Server.MCPResponse>:Start<Funplay.Editor.MCP.Server.MCPRequestHandler/<HandleRequestAsync>d__8> (Funplay.Editor.MCP.Server.MCPRequestHandler/<HandleRequestAsync>d__8&)\nFunplay.Editor.MCP.Server.MCPRequestHandler:HandleRequestAsync (Funplay.Editor.MCP.Server.MCPRequest,System.Threading.CancellationToken)\nFunplay.Editor.MCP.Server.MCPServerService/<>c__DisplayClass44_1/<<HandleRequestReceived>b__1>d:MoveNext () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/MCP/Server/MCPServerService.cs:503)\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<Funplay.Editor.MCP.Server.MCPResponse>:Start<Funplay.Editor.MCP.Server.MCPServerService/<>c__DisplayClass44_1/<<HandleRequestReceived>b__1>d> (Funplay.Editor.MCP.Server.MCPServerService/<>c__DisplayClass44_1/<<HandleRequestReceived>b__1>d&)\nFunplay.Editor.MCP.Server.MCPServerService/<>c__DisplayClass44_1:<HandleRequestReceived>b__1 ()\nFunplay.Editor.Threading.EditorThreadHelper/<>c__DisplayClass10_0`1<Funplay.Editor.MCP.Server.MCPResponse>:<ExecuteAsyncOnEditorThreadAsync>b__1 () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Threading/EditorThreadHelper.cs:119)\nFunplay.Editor.Threading.EditorThreadHelper:ProcessQueues () (at ./Library/PackageCache/com.gamebooom.unity.mcp@7310de901a8c/Editor/Threading/EditorThreadHelper.cs:159)\nUnityEditor.EditorApplication:Internal_CallUpdateFunctions ()\n",
+          "seeded": false
+        },
+        {
+          "seq": 1538,
+          "timestampUtc": "2026-10-05T05:33:11.5027539Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "MOVE_FLOW t=23.96483 mesh=37791249 verts=208 raycast=False pivot=(0.00, 1.00)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nCheck/<Sample>d__1:MoveNext ()\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)\n",
+          "seeded": false
+        },
+        {
+          "seq": 1539,
+          "timestampUtc": "2026-10-05T05:33:11.6542073Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "MOVE_FLOW t=24.11801 mesh=-999512559 verts=208 raycast=False pivot=(0.00, 1.00)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nCheck/<Sample>d__1:MoveNext ()\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)\n",
+          "seeded": false
+        },
+        {
+          "seq": 1540,
+          "timestampUtc": "2026-10-05T05:33:11.8007825Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "MOVE_FLOW t=24.264 mesh=290211601 verts=200 raycast=False pivot=(0.00, 1.00)",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nCheck/<Sample>d__1:MoveNext ()\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)\n",
+          "seeded": false
+        }
+      ],
+      "cursor": 1540,
+      "session": "71f6c7d3ecf04f7c80e50d5ed86ed0b3",
+      "returned": 8,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 819,
+        "warn": 533,
+        "log": 188
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-10-05T05:33:30.2179525Z",
+        "ageMs": 29,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 1,
+        "consoleLogs": 5,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "E:\\数据库\\OCC_Codex\\UnityProject"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

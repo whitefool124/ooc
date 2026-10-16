@@ -1,0 +1,101 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "breach_ram_triangle_candidate_20261016",
+  "role": "tactical_unit_adaptive_32ppu",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in generation preserving user-selected old triangle-head identity; round1 rejected unstable grid; round2 lossless decode",
+    "source_path": "ArtSource/breach_ram_triangle_20261016/round2_source.png",
+    "source_sha256": "a34f5abb40caf89561708760172f10d308873775e010d408e76335cd274754aa",
+    "reference_path": "Worldbuilding/归档/2026-10-16_楔角旧形象与文字反馈/old_reference.png"
+  },
+  "delivery": {
+    "output_path": "ArtSource/breach_ram_triangle_20261016/breach_ram.png",
+    "output_sha256": "6e8b972bf3bd10eea5c8e0546fe50a1b06ddbc6cad063e7f64a91123b94ad431",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 32,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Native 32 PPU battlefield sprite; migrated HD2D camera projects the same world pixel pitch as current 32 PPU units."
+  },
+  "application": {
+    "runtime_draw_rect": "64x64 at32PPU; one logical cell; feetY62",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1,
+    "review_scope": "User-adopted artwork in default FIRST-X runtime lookup; scene density/performance/motion quality approval remains separate"
+  },
+  "evidence": {
+    "one_x": "ArtSource/breach_ram_triangle_20261016/1x.png",
+    "four_x": "ArtSource/breach_ram_triangle_20261016/4x.png",
+    "six_x": "ArtSource/breach_ram_triangle_20261016/6x.png",
+    "grayscale": "ArtSource/breach_ram_triangle_20261016/grayscale.png",
+    "checker": "ArtSource/breach_ram_triangle_20261016/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-16_楔角正式接入与剩余待办/runtime/ram.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "user",
+    "date": "2026-10-16",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "User explicitly approved the exact shown delivery image: 就用这个吧 接入正式资源 然后继续下一步 看看还有什么待办. This approves source artwork/adoption, not a complete scene quality baseline."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/breach_ram.png",
+    "stable_guid": "b05755e06f213d24686d0c5345b35505",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "native_ppu": 32,
+    "review_scope": "Default runtime registry; Editor candidate switch false; same PNG and stable GUID as user-approved image"
+  },
+  "processing": {
+    "decoder_report": "ArtSource/breach_ram_triangle_20261016/round2_qa.json",
+    "placement_offset": [
+      11,
+      17
+    ],
+    "source_logical_size": [
+      41,
+      45
+    ],
+    "geometric_resize": false,
+    "outline": "Replace existing outermost opaque ring with black; preserve alpha",
+    "native_world_pixel_pitch": 0.03125,
+    "baseline_y": 62,
+    "palette_count": 13
+  },
+  "production_binding": {
+    "status": "USER_ADOPTED",
+    "default_enabled": true,
+    "resource": "Art/FormalUnits64/breach_ram",
+    "approved_delivery_sha256": "6e8b972bf3bd10eea5c8e0546fe50a1b06ddbc6cad063e7f64a91123b94ad431",
+    "approval_quote": "就用这个吧 接入正式资源 然后继续下一步 看看还有什么待办",
+    "adoption_record": "Worldbuilding/归档/2026-10-16_楔角正式接入与剩余待办/adoption.json"
+  }
+}

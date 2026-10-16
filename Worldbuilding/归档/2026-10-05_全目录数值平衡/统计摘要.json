@@ -1,0 +1,19 @@
+{
+  "catalog": {
+    "spells": 80,
+    "artifacts": 20,
+    "enemies": 17
+  },
+  "bench": 100,
+  "bench_errors": 0,
+  "fights": 251,
+  "outcomes": {
+    "victory": 251,
+    "defeat": 0,
+    "limit": 0,
+    "error": 0
+  },
+  "command_errors": 0,
+  "spell_cast_coverage": 24,
+  "artifact_use_coverage": 10
+}

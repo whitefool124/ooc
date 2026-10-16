@@ -1,0 +1,3 @@
+hero (2, 3) HP=50 shield=2
+enemy_0 (5, 3) HP=12 shield=0
+enemy_1 (6, 5) HP=16 shield=0

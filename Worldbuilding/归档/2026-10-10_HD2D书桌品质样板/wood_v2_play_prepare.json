@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"33e74685b43348d38bae9006551811bd\",\"request_key\":\"wood-v2-play-20261010\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"edit\",\"status\":\"failed\",\"phase\":\"failed\",\"created_at\":\"2026-10-10T07:25:08.4650000+00:00\",\"updated_at\":\"2026-10-10T07:25:08.8470000+00:00\",\"finished_at\":\"2026-10-10T07:25:08.8470000+00:00\",\"error_code\":\"EDITOR_OPERATION_FAILED\",\"message\":\"无法删除要被替换的文件。\",\"refresh_assets\":true,\"timeout_seconds\":120,\"step\":2,\"created_seconds\":1791617108.465,\"deadline_seconds\":1791617228.465,\"settle_since\":0.0,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T07:25:08.4650000+00:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"},{\"timestamp\":\"2026-10-10T07:25:08.8030000+00:00\",\"phase\":\"importing\",\"message\":null},{\"timestamp\":\"2026-10-10T07:25:08.8470000+00:00\",\"phase\":\"failed\",\"message\":\"无法删除要被替换的文件。\"}]},\"current_editor\":{\"is_compiling\":false,\"is_updating\":false,\"is_playing\":false,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":true},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":0,\"journal_error\":\"无法删除要被替换的文件。\",\"task\":{\"task_id\":\"editor:33e74685b43348d38bae9006551811bd\",\"kind\":\"editor\",\"id\":\"33e74685b43348d38bae9006551811bd\",\"status\":\"failed\",\"phase\":\"failed\",\"revision\":\"b5d7849bfeb0f48ad219f62cd79a4c0a134d2beb4a1d69f9c163c43c9f3e31a6\",\"changed\":true,\"wait_complete\":true,\"poll_after_ms\":0,\"wait_reason\":\"completed\",\"waited_ms\":380,\"snapshot_at\":\"2026-10-10T07:25:08.8670276Z\"}}}"
+      }
+    ]
+  }
+}

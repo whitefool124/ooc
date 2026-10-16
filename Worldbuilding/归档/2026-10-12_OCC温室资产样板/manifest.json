@@ -1,0 +1,66 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "occ.battle.environment.greenhouse.facade.r1",
+  "role": "hd2d_environment_module",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent greenhouse facade; no reference-game art reused",
+    "source_path": "Worldbuilding/归档/2026-10-12_OCC温室资产样板/greenhouse_raw_r1.png",
+    "source_sha256": "44e1937329af5c3d6e640c09e7184cee6bf86b51856adf9ffc9f422399c6cfc4"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-10-12_OCC温室资产样板/greenhouse_candidate_r1.png",
+    "output_sha256": "b94bb42ebdd9587fcf31b24ace148cb8412c88f55482c9bb48cc6ec21d576034",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "battlefield_hd2d_environment",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "PLANNED: 8m x 3m upright noninteractive facade card; unit scale; contact anchor at visible base; not placed yet"
+  },
+  "placement_semantics": {
+    "application_scope": "runtime_layout",
+    "mount_type": "structural",
+    "logical_cell": null,
+    "native_anchor": [
+      128,
+      94
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 94
+    },
+    "depth_sort_baseline": 94,
+    "allowed_occlusion_direction": "noninteractive background only",
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": "PLANNED: greenhouse stone plinth"
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-10-12_OCC温室资产样板/one_x.png",
+    "four_x": "Worldbuilding/归档/2026-10-12_OCC温室资产样板/four_x.png",
+    "grayscale": "Worldbuilding/归档/2026-10-12_OCC温室资产样板/grayscale.png",
+    "checker": "Worldbuilding/归档/2026-10-12_OCC温室资产样板/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-12_OCC温室资产样板/application_contact_1080.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING"
+  },
+  "blockers": [
+    "Editor-only 1080 application evidence available; 540 and motion review missing",
+    "Companion normal and surface maps not provided",
+    "Complete scene density inventory and human review pending"
+  ]
+}

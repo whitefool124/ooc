@@ -1,0 +1,612 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "38625900f0f7a2c9c8c48eddc0291138ddbf9d5238cf65825426f6b91cb5f4d6",
+  "scene_kind": "desk",
+  "baseline_id": "desk-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DPaperSkin.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DContentGeometry.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DServiceReadingText.cs",
+    "UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapRun.cs",
+    "UnityProject/Assets/Game/Tests/EditMode/AcademyLayerFlowTests.cs",
+    "UnityProject/Assets/Game/Editor/Hd2DFullJourneyAudit.cs"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "a56fcda805d24107788f9c67e1c9e4f9dabbf25034a1f53d58416e3eb1f22553"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/MainMenuHd2DStage.cs",
+      "sha256": "cc14c25431840009bd15a534a7ae7d7e74196c347d5c5964bfee829dd6da35d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+      "sha256": "59de62f8131eb82c59cb7bdb828e9bb56a72656f58296d4549b345187fb61987"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DAtmosphere.asset",
+      "sha256": "adf26689a7e80b22ef256d4a7c516929d51aea7f3af97bbe91cb136db3a685f0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Lighting.cs",
+      "sha256": "170ae60a296ec9184ccbe504cc90a2834dd8526538029397f85e19e7e0f3d790"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DPaperSkin.cs",
+      "sha256": "f1180414ac9aacd393655ca4a4622ec1b11999137a7ac478252af7c3b964e91e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DContentGeometry.cs",
+      "sha256": "b156e6b9eb6601073364e92165601d2dbc0e93bc68d3b58745cc45421100831d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DServiceReadingText.cs",
+      "sha256": "5385577604a524a75d27c5dfcf40d048b43c210d14d18f61ed8fe8fe20f86b9d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Campaign/RogueliteMapRun.cs",
+      "sha256": "df5f17d7d87493d46490f5b44ec2e0bbdc34f0fa25394040b9a06edc09fe441e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Tests/EditMode/AcademyLayerFlowTests.cs",
+      "sha256": "14eeb22e57938786b7a2e547d08676746b15e4c004c4e2f41bb1d6d22b5c5784"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DFullJourneyAudit.cs",
+      "sha256": "d1649243810b97709e9ee6c40d3eb171942b5a75081a2d9dd0d6fc2d6113fb0c"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 35,
+    "yaw": 0,
+    "field_of_view": 24
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": true,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": true,
+    "resource_lifetime_pass": false,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/functional_summary.json",
+      "sha256": "7cb7c4d26f6deff6b87d736a930d35e9c6ec530f3287d1993941549b1e4b6943"
+    }
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Native 1920/960 interactions are not covered by actual Screen640x480 background input",
+    "Editor-only GameView experiment exceptions retained in historical successful journey logs; experiment removed",
+    "Density, full motion, performance, full configuration and genuine human aesthetic approval pending"
+  ],
+  "local_evidence": [
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/001_landing.json",
+      "sha256": "c48abbaf9c3a78448f4ccce68149647cdabbdeac515d9a40e109eb8c93329881"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/001_landing.png",
+      "sha256": "fb2478468fb4e5ae39db6d86dcce28d6af287dcc60a938f4a3429c3a606ac4ca"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/001_landing_960.png",
+      "sha256": "806fe37b86981b36bb50828f0af659bd44185610e5a0f3b786e76d7d0a7ee29a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/002_academy_map.json",
+      "sha256": "2aff4b174887fc21fd0e1de3922817e588ff3916153c7a0ca42acb20aae6a9f2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/002_academy_map.png",
+      "sha256": "5f5ba0994fa5f1d447367f38bd219168b673413681290e840a34c2f3a6a1a510"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/002_academy_map_960.png",
+      "sha256": "4fc6baf580912f95090018dd7a89a08e9ed9c5c94782598d322f0b4729b61685"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/003_loadout_before.json",
+      "sha256": "596ac10522069c4ed71502b8b329837eecebd37660a7017cd65448ba2b6b0eb5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/003_loadout_before.png",
+      "sha256": "cf10c24f66cff4348daa1ad55aa26e15c27f8f2c6602cbb4fc9fac29a72faf63"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/003_loadout_before_960.png",
+      "sha256": "7228f5d992a17ba9da30af8811c08a53c25634d190d338eaabe02f87cf18cf1e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/004_loadout_after_drag.json",
+      "sha256": "1e3f8959ed29bf1559bf5bf67b651cbb53bf6559fe896fc35a60efd49589d264"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/004_loadout_after_drag.png",
+      "sha256": "501e17fa9fddf1ba2bcd64abb5ede722bc58daec9987300bc5653193765a5df6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/004_loadout_after_drag_960.png",
+      "sha256": "4ceb7098d19e77e11d11112a2b38bd2cd38a7ead4d2a68c5419f32ab94ad3f8c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/005_finale_confirmation.json",
+      "sha256": "942f4801725a701d3418819ad862da056c583f3d73bf3b898bf857167c53aa2d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/005_finale_confirmation.png",
+      "sha256": "bc817dccbd16aba8b327c3a25a6b81ba22cde2278193ef5af5354587165053a9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/005_finale_confirmation_960.png",
+      "sha256": "6ef62af0d60ed5a9286e5d3b3564a9c10072742fcb2121d3c8715441b7f992ec"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/006_battle_core_finale_Victory.json",
+      "sha256": "73d55a6a89ceac63a806cfabf44cfe11747d9a55d4a848439cf74832f008c8fd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/006_battle_core_finale_Victory.png",
+      "sha256": "9413f11c2afcd02b6924f9a48a2673fc7b35935baeb844a9f288f337199f4061"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/006_battle_core_finale_Victory_960.png",
+      "sha256": "0ac80b396b44d054ef2c746d5c702cdbf1c8e7636a68f854c81fd32dfb1230bc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/007_reveal.json",
+      "sha256": "a4bb8e4ea66d53508cdcc85cb95ac8706af59c9b76f94f0029b53fdbf26586e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/007_reveal.png",
+      "sha256": "11284fdb83b98fd38bd39ccc1d7405efcc09559e868885ac311b4e96a0ffe560"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/007_reveal_960.png",
+      "sha256": "f94f1f7d7324eb377b3963dc714e8993d194691208ad47fd5042d1bcc4eac5b9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/008_rewards.json",
+      "sha256": "721b8929ff2bf58baec05dd6ade4232d29da43c5213ee20acd49c449783089dc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/008_rewards.png",
+      "sha256": "1c4356c9253f8628b26b09561f027f1a29b2e2f1957b2874635e89147f741a8c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/008_rewards_960.png",
+      "sha256": "1db4e458f261bc1f32ad4f6b15ac739042af7746d83ba4f2f73da0e86940117d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/009_summary.json",
+      "sha256": "268eca3fab6a4d11d30730a8184a13fd2cb3de68ab89ecfbbeb18bce2e748f6d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/009_summary.png",
+      "sha256": "1050a8c91c3490a5393bcacf6253e5a96b22f0d89a841238a0155c1dcdabcfd3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/009_summary_960.png",
+      "sha256": "63d5770a2c9c6f1b75982ed66e196de3cebaa55d0feff6e3627cc56ffa5416d3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/cleanup.json",
+      "sha256": "77a2cbb5c83c6553ed54d9402cfd7ea431ebab6dd205c6f7245a31d926441d8e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/completed.json",
+      "sha256": "2287dd677cc7477c4e49585c07267e5ea215abec2b423eae60cde7153d35d091"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime/save_isolation.json",
+      "sha256": "7f4ecdd01fba46f952915175bb49440a010a8f067f45bc23e6286b500094871d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/001_death_outcome.json",
+      "sha256": "ca43fc12c6522c4cd1098d9d6f669ff751d0467caa388fd2b88afa327bee1338"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/001_death_outcome.png",
+      "sha256": "bb84debd88b02b8cb03fee6cccb1f2c66eea2745a2c539a967dae3e36a7958a1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/001_death_outcome_960.png",
+      "sha256": "3dfc6e1360d87ddf0042341b254b660cd4c2ebd5b1c907d1f8a885dab606cc67"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/002_abandon_summary.json",
+      "sha256": "9518369dc41c2dd05b8ca72c8d2b597700996521bea0e311a96b6af84eeeb927"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/002_abandon_summary.png",
+      "sha256": "11a4cc318e244162706c940cab2c1ebe5888bf8af24b71e859edf4fdac9f2991"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/002_abandon_summary_960.png",
+      "sha256": "d04c1d469de0de19190d418b32f59b489e7d40ce148b8e3e50b4d87bbd23a4b8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/003_returned_home.json",
+      "sha256": "ae67e202b794577cd9e36d98bf01016212b22daaf7f9d5b3fa2f065ee6c721b8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/003_returned_home.png",
+      "sha256": "078850dd00810749e3cd1f93dd09d4a7e284c14ef191ed6cf623784a5fc3c905"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/003_returned_home_960.png",
+      "sha256": "edcb648c26c2d85fe66250f384619d9f36d2acdf4d6d0810142e867c4d5536c0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/cleanup.json",
+      "sha256": "77a2cbb5c83c6553ed54d9402cfd7ea431ebab6dd205c6f7245a31d926441d8e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/completed.json",
+      "sha256": "dee7504ecb19e6b11f57523cc66863a9d3a35025d5bce8b35e862d79a1806e64"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/render_api.json",
+      "sha256": "dc2a68d34fd7fc6483cafcf0f10ab2e33a18ba2c521d7de9fa59a8290c311f0f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_branches/save_isolation.json",
+      "sha256": "cc3cd20ae239e7478f339c2ec466cd9a6a0bcd41b88d11de942eafa57b004a41"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/001_shop_before.json",
+      "sha256": "d346e3b1b267ae462de31339400c9b815410ad8f0cdfe8bea70191d1bf9ae3fc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/001_shop_before.png",
+      "sha256": "51ad4419ec5e6813868a27efeead8f3f8438a29a3b0bfc6a7a1300332f29e7be"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/001_shop_before_960.png",
+      "sha256": "6dbd99871431dac3b2cb645a6ee02907d18c635b44b4e1dab7dd4cebbfcf507a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/002_shop_after.json",
+      "sha256": "d8e584da6dc17e843fde9580810a698ca96a38554e0b5596f1fcaaf64dab8a11"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/002_shop_after.png",
+      "sha256": "bc05b0c8d6334a879101120adb9ea3016daea6d169740e956ca8c24c0c66083f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/002_shop_after_960.png",
+      "sha256": "4fba7d63766d5f64f35ef56651da35543afc714dd513cd0f8b2110722c6378cf"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/003_shop_inventory.json",
+      "sha256": "cfdaaaed942ae2d9fe12cac1776994d9f4de01f3f51ca292f41b16958fba9113"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/003_shop_inventory.png",
+      "sha256": "d36cdc15ece260eb2a8a8465072e2400a86cb3f488ce59c38b7cc3ba8772680a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/003_shop_inventory_960.png",
+      "sha256": "4115cfed1066013c1ec314623a1570d2e5ed48c8e48c7e793d57396085e19d45"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/004_map_reading.json",
+      "sha256": "3db00a8700005b5917b6dcc6f971d4cb8be6e5779ab5a2c487c152115e2c2a09"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/004_map_reading.png",
+      "sha256": "8da769dc94bdf3c34c75f02b725468fa2dac1a99b0ba0b21e2a95b6d97fc925e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/004_map_reading_960.png",
+      "sha256": "bdec80d69cb6053ef7832e3d15a9d62798ab41927e91e6ea8aaf5960ed0f1556"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/005_workshop_reading.json",
+      "sha256": "3a9f6c2ad654afe3a514799e43065781b59851f56d0ee3b6f492b6e618a8a508"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/005_workshop_reading.png",
+      "sha256": "7a4b43b37a12cb618e86275327160583a1b9c67accab6e7539c9bd3e6b8d8cde"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/005_workshop_reading_960.png",
+      "sha256": "758cf8678f2d1d6beeebe83d5e476cdf969412f52bfd7265663d166400d971ff"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/006_workshop_selected.json",
+      "sha256": "313e9ee5616f4481e4b2fa6feb72ab73f83dcd59a9d7151fbf7c82abee4d990e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/006_workshop_selected.png",
+      "sha256": "8f50565b60f6a2b63d81dd9863014f1c2e76a4208a866a3a4eb7d97df6362993"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/006_workshop_selected_960.png",
+      "sha256": "2b8c68ee75424483b0b7d69b4e3aa4ce1cc8f7e25459bd63e98eb07d5def7b95"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/007_specialization_tab.json",
+      "sha256": "033a1fcd9464d5ec1197f328f1a8ba96177bbe67f8ce9893fd557074764f5bdc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/007_specialization_tab.png",
+      "sha256": "7449389bf4c73bc9d1d9d832134cded9959d08de79310ee2fe950d4d8843013a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/007_specialization_tab_960.png",
+      "sha256": "003a2a17457e7c86b068c625a8b2c8893933d0054224ef677db3c01ea7364c5b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/cleanup.json",
+      "sha256": "77a2cbb5c83c6553ed54d9402cfd7ea431ebab6dd205c6f7245a31d926441d8e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/completed.json",
+      "sha256": "42bd34aa6c14faae2598a39ebeeaef3b5ade0e13d1ca41b0ebcf477cfee0342e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_HD2D完整流程交互验收/runtime_supplement/save_isolation.json",
+      "sha256": "8f12bdb7b0e1ad918eaf1c4e1463e9caa643bb0f43b6f82a9b37dca752941c7f"
+    }
+  ]
+}

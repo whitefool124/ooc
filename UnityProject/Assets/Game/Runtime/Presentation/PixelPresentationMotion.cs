@@ -24,6 +24,8 @@ namespace OCC.Combat.Presentation
                 child.gameObject.AddComponent<PixelPresentationMotion>().StartCoroutine(
                     Reveal(rect, Mathf.Min(index++ * .035f, .105f), intensity));
             }
+            PeripheralPixelVfx.Spawn(page, "page", intensity, new Vector2(240f, 8f),
+                new Vector2(0f, -6f), new Vector2(.5f, 1f));
         }
 
         private static IEnumerator Reveal(RectTransform rect, float delay, float intensity)

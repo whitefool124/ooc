@@ -1,0 +1,586 @@
+{
+  "schema": "occ-vfx-reference-lock-v1",
+  "id": "sky_furnace_glow_rain_20261016",
+  "recipe_id": "sky_furnace_glow_rain_v2",
+  "acceptance": {
+    "kind": "QA_PENDING_VISUAL_REVIEW",
+    "date": "2026-10-16",
+    "scope": "User requested stronger pixel/inner/outer emission and night rain; this revision has not received human approval.",
+    "formal_hd2d_baseline": "QA_PENDING"
+  },
+  "scope": "Current local optics/weather candidate. Previous accepted fracture reference is preserved separately.",
+  "inputs": [
+    {
+      "path": "ArtSource/SkyFurnaceCardsClean_20261015/caster.occ-art-manifest-v1.json",
+      "sha256": "9b7bac2fa4e0f2e91801b57ef1d36c86f07a45676eb7e5ed07f02fa4a9bf5254",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/ArtSource/SkyFurnaceCardsClean_20261015/caster.occ-art-manifest-v1.json"
+    },
+    {
+      "path": "ArtSource/SkyFurnaceCardsClean_20261015/core.occ-art-manifest-v1.json",
+      "sha256": "725aac0dad70de552c82405f310daa1f3e9c841079b2de4fbd6f0934e80f20d1",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/ArtSource/SkyFurnaceCardsClean_20261015/core.occ-art-manifest-v1.json"
+    },
+    {
+      "path": "ArtSource/SkyFurnaceCardsClean_20261015/outer.occ-art-manifest-v1.json",
+      "sha256": "96fae9e2b59f7e3e7ce6aff6fa91d88980a6dc5a64159aeaccb787f1842ba5e5",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/ArtSource/SkyFurnaceCardsClean_20261015/outer.occ-art-manifest-v1.json"
+    },
+    {
+      "path": "ArtSource/SkyFurnaceCardsClean_20261015/sigils.occ-art-manifest-v1.json",
+      "sha256": "17f06dbfb1bdeab825fbbc62e0cc971e538776ce04874f5243ad576e52d42f66",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/ArtSource/SkyFurnaceCardsClean_20261015/sigils.occ-art-manifest-v1.json"
+    },
+    {
+      "path": "ArtSource/SkyFurnace_20261014/fire_crown.occ-art-manifest-v1.json",
+      "sha256": "9c768ca6d15cfd2aaaa73f86051f858248c5fdb001ef621a761d2819f48b7f87",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/ArtSource/SkyFurnace_20261014/fire_crown.occ-art-manifest-v1.json"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+      "sha256": "a32a289d761b1dd9ba2f2f41fa0c1f2906fa68e3696d65c8f86f5d643b5b15f3",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs.meta",
+      "sha256": "5eaece5bf0a73a188188a6b7e0526d5d8b233192be9abccf1cb274ed77286aad",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs",
+      "sha256": "3da61d5f3ed69a48908842d1e4f3f947bb7e9d2df4d602aeac73d01d0f4b3e62",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs.meta",
+      "sha256": "b170d448313b3ceceae41d7c1ec3dcb0b224308a2ab4b2ac25c24289def680c7",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png",
+      "sha256": "600006205fbf16204a98afcf272a2a420b618042e4f2d4cc18cef65d675f3d24",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png.meta",
+      "sha256": "7e8a9909c0deceac1549b2eae5c8a4949acc532ac08e11b88719359a99c56845",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_decoy_lantern_active.png",
+      "sha256": "0c2e6cf9cdc2d00c01218382ca2f0f264b30155900f869d34191f104d60d97d1",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_decoy_lantern_active.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_decoy_lantern_active.png.meta",
+      "sha256": "8f961b18c1ad1c966c5b3c23431e1eb269e0a6e0f9086a2fe1f6a540c01cd818",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_decoy_lantern_active.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_planter_intact.png",
+      "sha256": "093279eea84c12bb7e1ebeb81c84ccd0fdf22d06404339640536140106b8b2c2",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_planter_intact.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_planter_intact.png.meta",
+      "sha256": "f935062c53c7f74dba69462d7c707f74ba8644f4c2755302875a6d99d39ac3a8",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_planter_intact.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+      "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png.meta",
+      "sha256": "829778e94d7f21beedb404b2740623a2a734226224280f341193bb23d3e14607",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png",
+      "sha256": "d826c048290a40dc80336df73f74d5c11a30cc0414ca38b7528dc776088a860a",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png.meta",
+      "sha256": "a4fb1fa473dac1cccbde8c9dff8e527b11a066ce2107e460e6c57c8ed8221fa4",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png",
+      "sha256": "f1705cf02ff32e1b1bc4d1161b4b659fb34a7c084f13ab74a9cee93fbca5b5ed",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png.meta",
+      "sha256": "5cda836b364a6d7fae3ec79d75e3250a2815ae891ad41a26eabfec81b661e9a4",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DRenderer.asset",
+      "sha256": "c683556b77b6e0b3fec4a313ba90161b27da8fb441d8bf9dc84d67d48bb6089f",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DRenderer.asset"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DRenderer.asset.meta",
+      "sha256": "83f8d24ec7088b3887f4172414b4c33eefad09332a6fd35e4bd047bb73961afa",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DRenderer.asset.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_crown.png",
+      "sha256": "f1d909b1ab2393ba03efcd518c0cf55d7cbf74b5f73aa6e900ca36dabaa7418c",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_crown.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_crown.png.meta",
+      "sha256": "79d713f47365c290968b602f71d6ccb06cf8599550e9d2d87ea90d9c6195add2",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_crown.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_caster.png",
+      "sha256": "21bda3c898714f638ddf5b5bccf30b75155e8d7c583e78e664f089d4366db5a8",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_caster.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_caster.png.meta",
+      "sha256": "22abf882dd1331560094fa2975ee854b4dc9e83bdfe7a5939e7809271749acd3",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_caster.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_core.png",
+      "sha256": "6a0f1fcc14c18d49dba25597a1a0f07ebbc158133ffab5fb23002ebe158924ef",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_core.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_core.png.meta",
+      "sha256": "ac863645b37123217b05249e055934e5812700c72c75bcc1b78c4ca8faba4383",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_core.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_outer.png",
+      "sha256": "3c651ece76eebcc2f43c6047330e4486d5e15be14bff60b0552405560b853510",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_outer.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_outer.png.meta",
+      "sha256": "9d95c0655cdd7d43bf67cd96d1b846d5dd05e16a2c2740595e257ae25eba45b4",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_outer.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_sigils.png",
+      "sha256": "348292f064ff8eee67263467822bd8d39961956638748cce0c7a53c29f11f0c0",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_sigils.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_sigils.png.meta",
+      "sha256": "5a71c7304cb959abff9386a1447ae1d81543f19372c7d956d4dfacc9c91c12e9",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_sigils.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/pyromancer_cast.png",
+      "sha256": "91c04b17c1019469e60a6d07b12e4b687d009162a186322b4d5688a2e2e9cfb4",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/pyromancer_cast.png"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/pyromancer_cast.png.meta",
+      "sha256": "a2b7d8014bef9510465f9d134ac3928d8a6c662d1d2504dbabe1cb0ed051e02e",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/pyromancer_cast.png.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_cutout.mat",
+      "sha256": "326722cf4eac49349711e495aaf63cae4d5a59e2110060931413cb049a1c521b",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_cutout.mat"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_cutout.mat.meta",
+      "sha256": "98d56bd353e25d8cfd5c2baef42dd452b0b50a8005dac1df1c218d01ba55290d",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_cutout.mat.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_fire_light.asset",
+      "sha256": "e5c0c932face49563e5102f9d67bd8069c2e98accc082586fb0f97e0806e9f9b",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_fire_light.asset"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_fire_light.asset.meta",
+      "sha256": "7607a3ed6eeb81a350439c145bcab1a7abcb40e8c719e01d8e6e0787ec0076a0",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_fire_light.asset.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_vfx_lit_card.mat",
+      "sha256": "886066be0217431929e5d802a374bf221cf90e6c28fef886bc6866214ffced7b",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_vfx_lit_card.mat"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_vfx_lit_card.mat.meta",
+      "sha256": "69316e6f299f4f1a7ff7fe4f56b3692dc74a0f50421697b5053af7274a246e4a",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Art/SkyFurnace/sky_furnace_vfx_lit_card.mat.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader",
+      "sha256": "602d1453f4ed370cd7a69a03215b9fc6ce364f1e34c0e337d0f6708d8c3d33ae",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader.meta",
+      "sha256": "f94edf33c007eaacfdb119c9c01f40fbc520be9696ed139ef8be31eca026017a",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceContourGlow.shader",
+      "sha256": "f2d5cec4d282d16d5bcb36fe066564d559b6d371c161a59656024325d58674dd",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceContourGlow.shader"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceContourGlow.shader.meta",
+      "sha256": "ec58e6307f72c1a595365cea72ac81fb04c128f80c9b2b910c2e655819d75beb",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceContourGlow.shader.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceSolidPixel.shader",
+      "sha256": "13047c685d5f2eb429c96fbeeaef50157f4fa92f002b396449eece5a2d02e1e6",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceSolidPixel.shader"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceSolidPixel.shader.meta",
+      "sha256": "0341165c0d730ffb8aa320cb83005b7eba77348072ddecc1560f5f575d087761",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceSolidPixel.shader.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DFireLightRecipe.cs",
+      "sha256": "534da2d9b20775d6aa993e96246c7deb850464f3d018ab5b659933bc7a1e2248",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Hd2DFireLightRecipe.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DFireLightRecipe.cs.meta",
+      "sha256": "69c2758d9bb58effa44c0b780e2b9cf47e2bbb74a7bd6e99856ab73b3dbf0800",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Hd2DFireLightRecipe.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelEffectCard.cs",
+      "sha256": "1ca9c8d4e1637ef841f74044bac0950d513f7269ed413e363fd67bfa13cd65fb",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/PixelEffectCard.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelEffectCard.cs.meta",
+      "sha256": "4ced55a7b023c2a8350d7daba37df42ba6890b55a29ea9fb7b092eab9bcf1f19",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/PixelEffectCard.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelIgnitionMap.cs",
+      "sha256": "c4bfec5deb4ed17086bda7f9f0637ad655ff582297ab5a8824896746ca0baba3",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/PixelIgnitionMap.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelIgnitionMap.cs.meta",
+      "sha256": "a2c8bd7e5f104cc9107e8a4d9b354678356d7eceab2a3ed0001750c225e94e76",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/PixelIgnitionMap.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxLitCard.shader",
+      "sha256": "16cff3f51dbd7103d6d728ab7ded5832634f9552280bec8542d92ee6027fb541",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxLitCard.shader"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxLitCard.shader.meta",
+      "sha256": "31f5472b7ed1ba48382fde3d36387159b1955ce258e235d099be46902e4f65ce",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxLitCard.shader.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader",
+      "sha256": "405310975cb9bad36ad2cf6e9e1261975d14fa586de7d51da22b29539eecffe2",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader.meta",
+      "sha256": "9badd21644749d37550f57663265e6eed8852705f28aa7e9db88103d44c11833",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceCloud.shader",
+      "sha256": "56cd549cf1da811d6689651501559378a2450e895ab3dd2a2cd76d90a1f1fd0a",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceCloud.shader"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceCloud.shader.meta",
+      "sha256": "a3414ce4cfabc52a6a91edc60b9abde4a410a89fb4d8d1305585658ca56c11d7",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceCloud.shader.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceEnergy.shader",
+      "sha256": "a15de9af2c8c18b83ee9a7fdf28403a90cec522c0550e74d2ece8edbe3f99b3a",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceEnergy.shader"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceEnergy.shader.meta",
+      "sha256": "da6250f514bc689568d78fd02b6b1612548c6c7bdd4c4a61bad1d0b28a081f7f",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceEnergy.shader.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceHeat.shader",
+      "sha256": "b87b3e19708b773a75f18a30a1565edc8fb71afcfe87a5db9d04bd06410be60a",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceHeat.shader"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceHeat.shader.meta",
+      "sha256": "165d68b1b22b960bf09239be5d2517d43cd133e05477b4a0c1dac7ab34288ce5",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceHeat.shader.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+      "sha256": "6287e9a9583f20b8c30ef725ca724752e7d5ee53d4da3e398caa0780dfa43756",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader.meta",
+      "sha256": "76aeacc9e21c9f8d89cc4d41fc1c627ea3e8d7efcfc5f57b14a53979ca3e97ec",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceBurstParticles.cs",
+      "sha256": "35de21d8416cf0f6c5f94e0ddce79356ef1a39340ddfe193d90ef51b1a30c023",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceBurstParticles.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceBurstParticles.cs.meta",
+      "sha256": "abf61bec90856111bf7143cebe18eccaa0146eed8446a4f331b06803f0aaaacc",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceBurstParticles.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+      "sha256": "d63d00e3ab848b070c725929ae09d7bfe34c49d84194807e353566ae0213608f",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs.meta",
+      "sha256": "3e9f9cae4c9769fb776e7926e07cdb6e100cde573f9cc846fcfd853b226200be",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePixelDisassembly.cs",
+      "sha256": "f2a34f84ff3c7cfcbbdbe2401a1eaddfcdd17b9cdd6ddbd85cd79b06e325120f",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePixelDisassembly.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePixelDisassembly.cs.meta",
+      "sha256": "3f3d725396bfea5b4809229240f78cf53268f65c2635235b65eeceac78089ef1",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePixelDisassembly.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePlayerProbe.cs",
+      "sha256": "e5fab999793fd650c9d92412380f9effdc8a4ae27d9d09d70605134790258e17",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePlayerProbe.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePlayerProbe.cs.meta",
+      "sha256": "27755157ff6731a4e1d98339e1a2495eff7a4563a632558b64788f9dd4d8b78e",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePlayerProbe.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceRainParticles.cs",
+      "sha256": "c1379c19284dd9b43ac097b2663930d1937342749a535eca678b435c30df94b7",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceRainParticles.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceRainParticles.cs.meta",
+      "sha256": "553b52672ba8ce5eb4010513d372e34b42de3e2c8e2a65d27dfd6d6650833714",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceRainParticles.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceSmokeParticles.cs",
+      "sha256": "880f459430a895525508bd6e82db910c4d76ddd1e53bd92e39285fc76678858e",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceSmokeParticles.cs"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceSmokeParticles.cs.meta",
+      "sha256": "771d613de1b3b5d0a0e35c604ef285107bf25998b4756845dbfaa53d5179b363",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceSmokeParticles.cs.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Scenes/SkyFurnace.unity",
+      "sha256": "d27f7982036d600b9faea8e6834115d3a0d9c6d014a99992da02b3b961ad20a6",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Scenes/SkyFurnace.unity"
+    },
+    {
+      "path": "UnityProject/Assets/Scenes/SkyFurnace.unity.meta",
+      "sha256": "218558caaa552cead2c3ead37341b9207f1e8a93a6a1624326fb0bb6cac013f9",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Scenes/SkyFurnace.unity.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Settings/DefaultVolumeProfile.asset",
+      "sha256": "4789b43834dd5efb32eec4c3b436baf0895c9f8cf2a0624121da8dd812ee984a",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Settings/DefaultVolumeProfile.asset"
+    },
+    {
+      "path": "UnityProject/Assets/Settings/DefaultVolumeProfile.asset.meta",
+      "sha256": "037700fc76ee8e15bf57a6608bf0229b50b9ba78a1095a943fe0add01a6bf5c5",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Settings/DefaultVolumeProfile.asset.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Settings/Renderer2D.asset",
+      "sha256": "900455794d0d788504847c3aa54e03a0374fd3635afa295ed05c2f646f974705",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Settings/Renderer2D.asset"
+    },
+    {
+      "path": "UnityProject/Assets/Settings/Renderer2D.asset.meta",
+      "sha256": "9689252004910cfad653e8a8d09b8c96befb560e1fb583033630db0f5bb76420",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Settings/Renderer2D.asset.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Settings/UniversalRP.asset",
+      "sha256": "21c90f829a38e1a795b9422c1bdbe3c14bbb7e7854c15b07d3fcb1748920cf12",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Settings/UniversalRP.asset"
+    },
+    {
+      "path": "UnityProject/Assets/Settings/UniversalRP.asset.meta",
+      "sha256": "8b7653265c1a9a054461264fc7b03bdbafc030149949fce5bf9e85924fb565a5",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Settings/UniversalRP.asset.meta"
+    },
+    {
+      "path": "UnityProject/Assets/Settings/UniversalRenderPipelineGlobalSettings.asset",
+      "sha256": "18a32afdd65f847348a95412183812a35170e7411bf87704a215b9b1ab8619ca",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Settings/UniversalRenderPipelineGlobalSettings.asset"
+    },
+    {
+      "path": "UnityProject/Assets/Settings/UniversalRenderPipelineGlobalSettings.asset.meta",
+      "sha256": "746a38b93f8f49b644ff6893456cf24db401e5c342aaae3864e91560d37c5422",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Assets/Settings/UniversalRenderPipelineGlobalSettings.asset.meta"
+    },
+    {
+      "path": "UnityProject/Packages/manifest.json",
+      "sha256": "648dc53ac8daca0349e057d355a17905e7dad723c829a5c3bf6a34d6f7008f23",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Packages/manifest.json"
+    },
+    {
+      "path": "UnityProject/Packages/packages-lock.json",
+      "sha256": "a93527fc20e5c2e864b99499c405e14716eb88138f85f7dafce32f74e0340215",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/Packages/packages-lock.json"
+    },
+    {
+      "path": "UnityProject/ProjectSettings/GraphicsSettings.asset",
+      "sha256": "633877667963839cb174fcf4022a0c12675e785532b98861c0545c4725152f85",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/ProjectSettings/GraphicsSettings.asset"
+    },
+    {
+      "path": "UnityProject/ProjectSettings/ProjectVersion.txt",
+      "sha256": "0bd10e7d104bdb396187fb2b4c47d1f5494041120bd8fe22d47c678939c2bc47",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/ProjectSettings/ProjectVersion.txt"
+    },
+    {
+      "path": "UnityProject/ProjectSettings/QualitySettings.asset",
+      "sha256": "7ec339d3e5e2b8cc73548e69256f6151782bb68a4afb64f865fd94704dbf0de3",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/UnityProject/ProjectSettings/QualitySettings.asset"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/fixed_runtime_checks.json",
+      "sha256": "2f3f82183b2212571dfa70d844249146ed85cbf8fd380b0f81ae8df386aed06b",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/fixed_runtime_checks.json"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/fixed_film_capture.json",
+      "sha256": "31a4a092195c234842feb96a12f6400d878152a0bf5acc991ff294c930695514",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/fixed_film_capture.json"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/burst_study/burst_checks.json",
+      "sha256": "6fa72894945fffbdf4ab54d23afd6212a8ee6c844e6924eb8cf5e3a83fdb6437",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/burst_study/burst_checks.json"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/burst_study/geometry_checks.json",
+      "sha256": "77a0cde9e5894505d5958867b9208f6e01a4b04a0d79283c3620e75c9dbdabf1",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/burst_study/geometry_checks.json"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/optics_readback.json",
+      "sha256": "32add534816c8f4eacdabbc4fb470b9d9b3346a511cc13f4e1463f199fe87a4f",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/optics_readback.json"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/fixed_comparison_1920x1080.png",
+      "sha256": "86029a522310579455a71566b0b280e73c21e3ffe6309b761b4fe6140a4dce01",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/fixed_comparison_1920x1080.png"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/fixed_comparison_960x540.png",
+      "sha256": "11be981bca0259ed8a2cc456e7be3858cc203197baf383da6aafc3ea6dc874fb",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/fixed_comparison_960x540.png"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/day_before_06.60.png",
+      "sha256": "0dd15f0514b2219e73ae9b035db6a1f741fe5f06acaa9b3baa63da3e97500431",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/day_before_06.60.png"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/day_before_06.60_540.png",
+      "sha256": "6c3e6cec8d2dffd860fade32ed207b3690173d15c96168fe8cec5e995083bc04",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/day_before_06.60_540.png"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/day_glow_06.60.png",
+      "sha256": "a6a84e9c0642c666e647b2040f58359f5a20d0e3e466b8d0f7e6c437cb9ede19",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/day_glow_06.60.png"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/day_glow_06.60_540.png",
+      "sha256": "2f41e56fd0ee922d742c3dc435ed1f4ba7421e6d4314c31e0a213952f5e035d8",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/day_glow_06.60_540.png"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/night_rain_before_06.60.png",
+      "sha256": "06505a2c690f8f0079755bc6dd8412c86f88dd73a4c6a6fd72638a216cd7a57e",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/night_rain_before_06.60.png"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/night_rain_before_06.60_540.png",
+      "sha256": "d9ce5eaabe1af6e0087f90a51b61750022e28dec5c2348d5ffe4335ef622e6fa",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/night_rain_before_06.60_540.png"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/night_rain_glow_06.60.png",
+      "sha256": "48c2322797924045bdf07de3e0019e123b92a4ceca4dec5a95b6654325f95464",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/night_rain_glow_06.60.png"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/night_rain_glow_06.60_540.png",
+      "sha256": "29b3313eeadb25e23b44e99b3b601f40dd4a5ea88d64ea1bad5c95c1daa9bdeb",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/glow_weather/night_rain_glow_06.60_540.png"
+    },
+    {
+      "path": "Artifacts/SkyFurnaceGlowRain_20261016/天穹熔炉_辉光与夜雨.mp4",
+      "sha256": "e95145f2df9733b0543890f40d8c200d23a37f4fde91f1667707f5d0f2bd6ad8",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Artifacts/SkyFurnaceGlowRain_20261016/天穹熔炉_辉光与夜雨.mp4"
+    },
+    {
+      "path": "Artifacts/SkyFurnaceGlowRain_20261016/夜雨_蓄能爆发与飘散.mp4",
+      "sha256": "c5b03f32710e751c29566475679484c02128532b4ac6dcf3880be83e53e209e4",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Artifacts/SkyFurnaceGlowRain_20261016/夜雨_蓄能爆发与飘散.mp4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/PlayerCheck/player_checks.json",
+      "sha256": "364a18ba5596d024544efbb12e944b8dc3ab552c5c6275eb406960d03badef00",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/PlayerCheck/player_checks.json"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/build_status.json",
+      "sha256": "ce9081dd96883570edd8cff18f0940fd4ed56b32f271e60a43f99f3958b46d40",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/build_status.json"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/console.json",
+      "sha256": "0670fc584806502902fa9546c01bd28aec6c13b4f682bd504e0e5e1b89a218cf",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/console.json"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/local_validation.json",
+      "sha256": "29d63ae09ad11e0f0a1bb7ccf17f3bcd5f7088e8e9304bd89ce972dc301fa69e",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/local_validation.json"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/pipeline_tests.txt",
+      "sha256": "df50fcb9149b7d70860387829b438a11cc8173ec4f3b437d86ffede4e57e7148",
+      "snapshot_path": "Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/候选快照/Worldbuilding/归档/2026-10-16_天穹熔炉轮廓辉光与夜雨/pipeline_tests.txt"
+    }
+  ]
+}

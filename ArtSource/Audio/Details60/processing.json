@@ -1,0 +1,20 @@
+[
+  {
+    "name": "wind",
+    "source": "ArtSource/Audio/Details60/wind.wav",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/Ambience/wind.wav",
+    "gain": 3.62503361494399,
+    "peak": 0.27313867173146705,
+    "duration": 59.49891156462585,
+    "sha256": "f4d7ad978a665588294b07f0399b863a63d573ff50bd14a9916295a79f103284"
+  },
+  {
+    "name": "room",
+    "source": "ArtSource/Audio/Details60/rooms/TheShopCollection_convenience_store_drinks_fridge_drone.wav",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/Ambience/room.wav",
+    "gain": 0.16115924026527367,
+    "peak": 0.1480106329930975,
+    "duration": 10.937301587301587,
+    "sha256": "978afd6c711a62effd8e20dd4e256d3699c189930ae8bfc2173f5ad833af2877"
+  }
+]

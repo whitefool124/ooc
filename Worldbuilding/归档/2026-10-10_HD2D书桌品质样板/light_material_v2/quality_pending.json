@@ -1,0 +1,469 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.3",
+  "contract_sha256": "5f1b45719f50c7544ba5c901dd3eefbbc0a0181eeb86f039e5553c2a805d109b",
+  "scene_kind": "desk",
+  "baseline_id": "desk-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DDeskArtCandidate.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DSurfaceProfile.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Art.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Lighting.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DDeskLampControl.cs",
+    "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/Hd2DSurface.shader"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "e3d411ed5c97764ebfd06659ab7dc4b12303319622a6401e6d59ee39b1fbf371"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "296d00399e90e469d9f84bf3e44cee5d7074748a3243a1da9dc2412d5812ef42"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/MainMenuHd2DStage.cs",
+      "sha256": "cc14c25431840009bd15a534a7ae7d7e74196c347d5c5964bfee829dd6da35d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+      "sha256": "8f0a5ae1a4725df57557489da66062c378e6b8cb007ead945a63fa6dad0c9363"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DAtmosphere.asset",
+      "sha256": "adf26689a7e80b22ef256d4a7c516929d51aea7f3af97bbe91cb136db3a685f0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DDeskArtCandidate.cs",
+      "sha256": "273e1be210e7f69e827661d704dc9b3c513f4cea011373370bcee49e71052136"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DSurfaceProfile.cs",
+      "sha256": "4e41cbc22f92e03d891ecafa3e52d531dd7133dc052417da5f8d8027d67274e4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Art.cs",
+      "sha256": "f23bcb00d46783fa3ee97f24d2f1b4b45db8775117399afc9cfb8ef07499d622"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Lighting.cs",
+      "sha256": "20c0b469dc199fec474cfabc5a010507bdb228ec6742fc5da89523493d0a749f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DDeskLampControl.cs",
+      "sha256": "4f07a44a6c05325545e694b03e6120a82d1b09b26852e8177e506254ed813c8e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/Hd2DSurface.shader",
+      "sha256": "df3bf38f7c6efa42c6ed5c476ed92275b2abc10d027732c0b1d460fd04bfa216"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": false,
+    "output_policy": "HD 1920x1080 and actual 960x540 GameView; renderScale 1 unchanged",
+    "tone_mapping": "ACES",
+    "exposure": 0.35,
+    "bloom": {
+      "intensity": 0.45,
+      "threshold": 1.3,
+      "scatter": 0.6
+    },
+    "depth_of_field": "off on working plane; no focus change this iteration",
+    "shadows": {
+      "soft": true,
+      "resolution": 4096,
+      "cascades": 2,
+      "desk_strength": 0.88,
+      "crystal_spot_strength": 0.75
+    },
+    "main_light": {
+      "intensity": 2.3,
+      "rotation": [
+        32,
+        165,
+        0
+      ],
+      "colour": [
+        1,
+        0.97,
+        0.91
+      ]
+    },
+    "fill_light": {
+      "window_point": 1.3,
+      "room_bounce_directional": 0.6,
+      "room_bounce_rotation": [
+        25,
+        0,
+        0
+      ],
+      "local_point": 1.1
+    },
+    "local_lights": {
+      "crystal_spot_intensity": "6 * slider",
+      "crystal_mask_emission": "10 * slider",
+      "source_brightness_samples": [
+        0,
+        0.4,
+        1
+      ]
+    },
+    "material_profile": {
+      "wood_base_smoothness": 0.18,
+      "wood_albedo_derived_relief": 0,
+      "wood_albedo_derived_roughness": 0,
+      "desktop_coat": 0.28,
+      "edge_coat": 0.16,
+      "architecture_coat": 0,
+      "coat_smoothness": 0.8,
+      "independent_maps": "Inputs implemented; no independent normal/property map authored or bound this iteration"
+    },
+    "source_sampling": "Existing native colour textures and 32 PPU UVs unchanged; Point sampling",
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 35,
+    "yaw": 0,
+    "field_of_view": 24,
+    "probe_update": {
+      "resolution": 256,
+      "mode": "IndividualFaces",
+      "settle_seconds": 0.15,
+      "minimum_interval_seconds": 0.4,
+      "trigger": "construction and visible crystal slider changes"
+    }
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": true,
+    "console_clear": false,
+    "interaction_pass": true,
+    "isolation_pass": false,
+    "resource_lifetime_pass": true,
+    "record": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/response_v2_final_entry_status.json"
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Human visual and full density/motion review pending; no approved baseline promotion",
+    "Independent normal/property maps and spatial indirect illumination remain future work; inputs alone are not completed authored materials",
+    "Standalone Player performance / P95 and probe-refresh peak unmeasured",
+    "Existing QuickInstaller byte-sequence Console exception remains"
+  ],
+  "captures": [
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/response_v2_before_1920.png",
+      "sha256": "f1a43affde3e1f642f312dcb2dbaf75c356d56addec7862f6064d2594d5f5d15"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/response_v2_final_default_1920.png",
+      "sha256": "f18feef43e37d2561d5b98eb4c8b0111781a4e60d0ac3dda91012aa11896a2b2"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/response_v2_final_no_bloom_1920.png",
+      "sha256": "3dce7dd4833f9067e3d2481456cbeb64150f0f3fe341a33dce06d7298e988fa9"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/response_v2_final_high_1920.png",
+      "sha256": "72e5020b9d8101c372485612a1c723ab671e1b37d4585dedd1a4cde860b49947"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/response_v2_final_off_1920.png",
+      "sha256": "f4150aec30ed6d264028f9a5ff246c57a62c830f8fbf7e1f77957a55ed2151e7"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/response_v2_final_default_960.png",
+      "sha256": "778c5c60c8e9ef2b1e76b8f6d39271d1f90d7bfbaf6f7cc00f41eade33487fd0"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/response_v2_final_no_bloom_960.png",
+      "sha256": "e562161ccf26c6204ba8de24187808b902eb312bdd474cda3b30b2c5504b060a"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/response_v2_final_high_960.png",
+      "sha256": "c11bc32572c4ed69ba37b5aa2e899861d73f0ac9181986feea6819e112875111"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/response_v2_final_off_960.png",
+      "sha256": "c207f1988bb82ec8d4db14a0dc07a0d75242c45fddc87a3b4b8befe4b1ea062e"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/response_v2_final_spell_1920.png",
+      "sha256": "0277549376919957f55b862c6cca1b54632b8676dfc51d9368712034ef6c2862"
+    }
+  ],
+  "runtime_records": [
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/response_v2_final_editor_state.json",
+      "sha256": "3c1a428925f665eec1274197917d202c7412e551db50b441ba69d678e3391a78"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/response_v2_final_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/response_v2_final_default_readback.json",
+      "sha256": "e7e8fbdb4eafaaf2c9a99d043e9b51d9de40cff574004a4d37bef73f89721290"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/response_v2_final_high_readback.json",
+      "sha256": "ef9ecf2e9ec3b22bed9b071d41b49a8edac9caed69721166fbf20ec9b5900100"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/response_v2_final_off_readback.json",
+      "sha256": "e1c17c57ad40bc9a5b2d40b83ae3276e4fa0263a61e6dc3fc27323423d2f009b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/response_v2_final_quiet_readback.json",
+      "sha256": "ce3174029bf0b00903bacb3c33d84e522e8caa5c7aa9f425b889e03dd9709a6b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/response_v2_final_lifetime.json",
+      "sha256": "5c20b049e2ab4b9519edad680a4b28bf3c165c24f5dbfa8f73aaf9b4ca878512"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/response_v2_final_console.json",
+      "sha256": "f08a96fe3d930cc199901961e8d40bfea3f2b911b583819cf575204b73fd0d76"
+    }
+  ],
+  "scope": "desk only; Surface shader references audited to desk presentation only; no shared URP asset/pipeline changes or battlefield use"
+}

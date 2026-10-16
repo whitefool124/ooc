@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Screenshot saved to file.\",\"data\":{\"path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\ReviewEvidence\\\\20261010_hd2d_desk\\\\materials_off_960.png\",\"bytes\":208804,\"fell_back_to_file\":false,\"geometry\":{\"schema_version\":1,\"capture_id\":\"6ee59a9aa37f4d9794a1d04817b6ae63\",\"captured_at\":\"2026-10-10T07:12:34.7101004Z\",\"surface\":\"game_view\",\"view_id\":\"568105584918845924\",\"editor_epoch\":\"9a5897b289ce4e37a5f7bf56fe5d8199\",\"scene_signature\":\"Assets/Scenes/CombatPrototype.unity:568105589212263366:True\",\"camera_signature\":\"568105584918861764:(x:0.0000, y:0.0000, width:1.0000, height:1.0000):0\",\"units\":\"pixels\",\"image_origin\":\"top_left\",\"render_origin\":\"bottom_left\",\"render_width\":960,\"render_height\":540,\"output_width\":960,\"output_height\":540,\"viewport\":{\"x\":0.0,\"y\":0.0,\"width\":960.0,\"height\":540.0},\"output_to_render_x\":1.0,\"output_to_render_y\":1.0,\"interactive\":true,\"is_playing\":true,\"note\":\"Render framebuffer coordinates, not desktop/editor-window coordinates. Image viewport excludes editor chrome. Camera letterboxing remains part of the framebuffer. Geometry freshness does not prove that animated UI contents are unchanged.\"}}}"
+      }
+    ]
+  }
+}

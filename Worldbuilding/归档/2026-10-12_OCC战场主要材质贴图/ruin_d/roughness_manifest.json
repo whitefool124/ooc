@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_block_ruin_d_roughness",
+  "role": "hd2d_material_data_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_d/paired_raw_r1.png",
+    "source_sha256": "a3470f29b8d6e4a0d02ae81ee05e6240e5b7579f0afb6e447e40fddb1ca65dda",
+    "component_source": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_d/roughness_panel_r1.png",
+      "sha256": "26c87ab6556b83e83ebaec8865c33f5d66d40fe3ce60a47a181cf6c4b8008325"
+    },
+    "registration": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_d/roughness_registration.json",
+      "sha256": "f4b825703889887d00e59d5dbdfb94ff5e4b2ddbdb82285cad5e103c630d0dc1"
+    }
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_d/roughness.png",
+    "output_sha256": "cc1cf44b68f0f77a2dbcdc2b81253a698061521e2a8f4d080ff6161d12056790",
+    "native_ppu": 32,
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "unity_import": {
+    "guid": "2a3f76ccf8d65484eb8bc12c932d6b67",
+    "filter_mode": "Point",
+    "colour_space": "linear",
+    "mipmaps": false,
+    "compression": "Uncompressed",
+    "wrap_mode": "Repeat"
+  },
+  "application": {
+    "albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_d.png",
+      "sha256": "8fd06628aeaed8aca987699e86a2d1125b156ba6429e191cfef6fd2b6c29754d"
+    },
+    "shared_uv": true,
+    "world_pixel_pitch": 0.03125,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/probe/academy_block_ruin_d_dry/result.json",
+      "sha256": "e6c0ea45585e5b2629d215209221dc2401b6284206c18e25af956ef8aa53bd38"
+    }
+  },
+  "human_review": {
+    "overall": "PENDING"
+  },
+  "admission_blockers": [
+    "Numeric material data role not registered in Sprite admission contract; cannot promote to FORMAL",
+    "Full-scene density inventory and genuine human registration/material review pending"
+  ]
+}

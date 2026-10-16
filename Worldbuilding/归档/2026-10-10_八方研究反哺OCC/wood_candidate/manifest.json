@@ -1,0 +1,35 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "occ.desk.wood.albedo.r1",
+  "role": "hd2d_material_tile_pending_definition",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "Worldbuilding/归档/2026-10-10_八方研究反哺OCC/wood_candidate/wood_albedo_raw_r1.png",
+    "source_sha256": "8d4e071fa68fa50ccccfca968f997546b2f2831f9d6712d7505862b44d8d2f24",
+    "source_descriptor": "Independent OCC wood albedo generation; no reference-game texture reuse"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-10-10_八方研究反哺OCC/wood_candidate/wood_tile64_candidate.png",
+    "output_sha256": "f4a48edaa0f24944019f950a5cb61d997769a3086f82e9e5f96b6b428e3e8a01",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 1180
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-10-10_八方研究反哺OCC/wood_candidate/one_x.png",
+    "four_x": "Worldbuilding/归档/2026-10-10_八方研究反哺OCC/wood_candidate/four_x.png",
+    "grayscale": "Worldbuilding/归档/2026-10-10_八方研究反哺OCC/wood_candidate/grayscale.png",
+    "checker": "Worldbuilding/归档/2026-10-10_八方研究反哺OCC/wood_candidate/checker.png"
+  },
+  "human_review": {
+    "overall": "PENDING"
+  },
+  "blockers": [
+    "Native tile seams and scene grain comparison pending",
+    "Opaque material tile has no applicable admission role in current contract",
+    "Independent normal and surface maps not provided",
+    "Human review and Unity application pending"
+  ]
+}

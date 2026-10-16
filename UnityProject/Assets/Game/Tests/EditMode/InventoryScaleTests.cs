@@ -55,7 +55,7 @@ namespace OCC.Combat.Tests
             InventoryContainerState second = InventoryContainerState.FromLegacyMap9DataString(raw);
 
             Assert.That(first.Items.Select(item => item.InstanceId), Is.EquivalentTo(new[] { "old-a", "old-b" }));
-            Assert.That(first.Get("old-a").RemainingUses, Is.EqualTo(3));
+            Assert.That(first.Get("old-a").RemainingUses, Is.EqualTo(2));
             Assert.That(first.Get("old-b").RemainingUses, Is.EqualTo(2));
             Assert.That(first.ToDataString(), Is.EqualTo(second.ToDataString()));
             Assert.That(first.CanPlace(first.Get("old-a"), first.PlacementOf("old-a").Value.X, first.PlacementOf("old-a").Value.Y, "old-a", first.PlacementOf("old-a").Value.Rotated).Success, Is.True);

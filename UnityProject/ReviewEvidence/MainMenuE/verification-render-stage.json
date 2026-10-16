@@ -1,0 +1,15 @@
+{
+  "scope": "E menu rendering correction; REVIEW_ONLY",
+  "pipeline": "URP Renderer2D, separate lit desktop/props and baked unlit distant vista",
+  "output": "320x180 RenderTexture, Point, URP PixelPerfectCamera UpscaleRenderTexture/Windowbox, no HDR/MSAA/post-processing",
+  "lighting": "shared warm window key, ambient fill, local aether; only window key casts shadows (0.14)",
+  "geometry": "5 coarse surface proxy normal maps and ground footprint shadow casters; no new albedo painting",
+  "grid": "1920x1080 real capture: background/book/cup/lamp all tier6 offset0, PASS",
+  "tests": "2/2 EditMode transition tests passed after limiting stage creation to runtime",
+  "start": "Real Start pointer click > book transition > Configuration; active stage disabled on handoff",
+  "continue": "Real Continue pointer click > book transition > saved Map node O; active stage disabled on handoff",
+  "save_routing": "AcademyJourneyAudit isolated verification profiles; original slot integrity checked on exit",
+  "console": "No errors during final runtime interval",
+  "art_limit": "Existing albedos retain baked lighting; normal/footprint data are coarse proxies; aesthetic consistency and FORMAL art promotion remain unapproved",
+  "raw_generation": "4 built-in relighting sources generated before rendering-scope correction, preserved NOT_APPLIED"
+}

@@ -43,11 +43,11 @@ namespace OCC.Combat.Presentation
         public string UnitId => sequence.UnitId;
         public bool IsRunning => sequence.IsRunning;
 
-        public EnemyTurnAdvance Advance(UnitState enemy, float now, Func<UnitState, CombatCommand> commandFactory)
+        public EnemyTurnAdvance Advance(UnitState enemy, float now, Func<UnitState, CombatCommand> commandFactory, bool animationsEnabled = true)
         {
             if (sequence.Phase == EnemyTurnSequencePhase.ActorGap)
             {
-                if (sequence.Advance(now) != EnemyTurnSequenceSignal.ReadyForNext)
+                if (sequence.Advance(now, animationsEnabled) != EnemyTurnSequenceSignal.ReadyForNext)
                     return new EnemyTurnAdvance(EnemyTurnAdvanceKind.None, sequence.UnitId, sequence.CommandType);
                 pendingCommand = null;
                 return new EnemyTurnAdvance(EnemyTurnAdvanceKind.ReadyForNext);
@@ -76,7 +76,7 @@ namespace OCC.Combat.Presentation
                 return new EnemyTurnAdvance(EnemyTurnAdvanceKind.ActorChanged, previousUnitId);
             }
 
-            EnemyTurnSequenceSignal signal = sequence.Advance(now);
+            EnemyTurnSequenceSignal signal = sequence.Advance(now, animationsEnabled);
             if (signal == EnemyTurnSequenceSignal.ResolveCommand)
                 return new EnemyTurnAdvance(EnemyTurnAdvanceKind.ResolveCommand, enemy.Id,
                     sequence.CommandType, pendingCommand);

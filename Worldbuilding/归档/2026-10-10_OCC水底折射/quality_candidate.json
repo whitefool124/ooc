@@ -1,0 +1,442 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "c6e069ff0f1f014e37e0dddf207f6b9dc3b1dd137a4d3a77ff25ba9de70ba1c7",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DCourtyardWater.shader",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DCourtyardWaterMaterial.cs"
+  ],
+  "inputs": [
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "75c2acbf1878900a00f77d93cdaa165b753f9a2ae35e43eafbdda0037467c7d4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalFirstBattle32/rain_court_water.png",
+      "sha256": "59d59b5c60548c95477e98213a96ee2b6b1a9d9a1fb157717c39055489399315"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DCourtyardWater.shader",
+      "sha256": "19d93587067a9fb6dd5dfb0e3da5958289105dac493b9b6e93b87ce80b70d4ca"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "1aa1017bd487b2eb8d759e1e3d7123d401e09abef31e6ec528eca09fe76aee6a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "b9e60306ff22219dfe590c82abf2fb7f0b53ae23818fc0b9e3973bc6e83a29ad"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "b6e9512854f40b266735f2ead588b3cf15932d8857825d2d27a1f14c47df8e7b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DCourtyardWaterMaterial.cs",
+      "sha256": "5b72ce80c49966cb6d44a75fc93ee09d43adfd954a946c83f18e3795cc817f08"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "72a78ddf11b8a002f1ce8b979c348fcd54f15d179f26da00e329ec78359df08c"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": {
+      "shader": "OCC/HD2D/CourtyardWater",
+      "smoothness": 0.82,
+      "refraction_strength": 0.35,
+      "air_water_ratio": 0.7501875468867217,
+      "depth_source": "authored basin plane approximation",
+      "sampling": "Point; 32 texels/world unit after ray intersection",
+      "shore_limit": "min(.35, edge*.65)",
+      "reflection": "existing local cubemap; not planar reflection"
+    },
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 45,
+    "yaw": 0,
+    "wall_height": 0.65,
+    "unit_ground_angle": 45
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": true,
+    "console_clear": false,
+    "interaction_pass": true,
+    "isolation_pass": false,
+    "resource_lifetime_pass": true,
+    "record": null
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Human full-scene pixel density and aesthetic approval pending",
+    "Complete configuration/construction inventory pending",
+    "Player 60 FPS / P95 16.7ms unmeasured",
+    "Basin-only analytic refraction and cubemap approximation; not real displaced scene refraction or planar reflections"
+  ],
+  "additional_evidence": [
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水底折射/evidence/occ_water_refract_1080.png",
+      "sha256": "413d2e5a683f6a474cf70ad540722fddbafc3809af0dc926409566941bfbd625"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水底折射/evidence/occ_water_refract_soft_1080.png",
+      "sha256": "5dc503ac17688dc8feb7b2dd84e7e6d773c8ecb1fe9ffceff04066f4746c4556"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水底折射/evidence/occ_water_refract_final_1080.png",
+      "sha256": "e2ef697087796fafb2113e6d7f64e0b9a8f4858757321361e36fcbaa2c9b0da6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水底折射/evidence/occ_water_refract_final_540.png",
+      "sha256": "2537d921004a0de05c1e5425e31e0fd590a2b01bf7d6aecf172322210e46230b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水底折射/evidence/occ_water_refract_previous_1080.png",
+      "sha256": "0fe555fe907c768f49b3b5fff198bd578767275d5ba6fd789b48188624111376"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水底折射/evidence/occ_water_refract_victory.png",
+      "sha256": "e3a65fe1b35ea39dcd5971bac6e76ead548f6d10b9dd77b879bc361859c182d7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水底折射/evidence/occ_water_refract_motion_t5.png",
+      "sha256": "cf1af04d52117249b1607ce85152cf4bfc5b542b7f740f7c227b4c3c6e0a0ddb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水底折射/evidence/water_refraction.mp4",
+      "sha256": "22ba29d649f74b2c156d4dd788b77e9b388a33a37dce0e3ef9c2afe5b7415c4c"
+    }
+  ],
+  "runtime_observations": {
+    "configuration": {
+      "projection": 30,
+      "supported": true,
+      "messages": [],
+      "water": [
+        {
+          "name": "环境_(3, 3)",
+          "smoothness": 0.82,
+          "refraction": 0.35,
+          "filter": "Point"
+        },
+        {
+          "name": "环境_(4, 3)",
+          "smoothness": 0.82,
+          "refraction": 0.35,
+          "filter": "Point"
+        },
+        {
+          "name": "浅水面",
+          "smoothness": 0.82,
+          "refraction": 0.35,
+          "filter": "Point"
+        },
+        {
+          "name": "环境_(2, 3)",
+          "smoothness": 0.82,
+          "refraction": 0.35,
+          "filter": "Point"
+        }
+      ]
+    },
+    "combat": {
+      "status": "PASS commands=14 moves=3 attacks=8  victory=PASS saved=True",
+      "commands": 14,
+      "moves": 3,
+      "attacks": 8,
+      "evidence": " victory=PASS saved=True",
+      "waterMaterials": 0
+    },
+    "cleanup": {
+      "path": "E:/数据库/OCC_Codex/UnityProject/Assets",
+      "play": false,
+      "compiling": false,
+      "resolutionIndex": 3,
+      "scenes": [
+        {
+          "path": "Assets/Scenes/CombatPrototype.unity",
+          "dirty": false
+        }
+      ],
+      "waterMaterials": 0
+    }
+  }
+}

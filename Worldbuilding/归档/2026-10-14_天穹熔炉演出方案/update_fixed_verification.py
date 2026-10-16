@@ -1,0 +1,26 @@
+from pathlib import Path
+root=Path(__file__).resolve().parents[3]
+editor=root/'UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs'
+s=editor.read_text(encoding='utf-8-sig')
+s=s.replace('normal22s runtime playback','normal16s fixed-camera runtime playback')
+s=s.replace('"film_frames"','"fixed_film_frames"').replace('"film_capture.json"','"fixed_film_capture.json"')
+s=s.replace('frame>660','frame>Mathf.RoundToInt(SkyFurnaceDirector.Duration*30)')
+s=s.replace('duration=22','duration=SkyFurnaceDirector.Duration').replace('synchronized22-second','synchronized16-second')
+s=s.replace('float[] times={.8f,6.6f,8.8f,13,20};','float[] times={.8f,4.5f,6.5f,7.35f,8.1f,12.5f,15.8f};')
+s=s.replace('"live_"','"fixed_live_"')
+s=s.replace('if(age<22)return;','Assert(director.CameraLocked,"Camera moved during playback");\n                if(age<SkyFurnaceDirector.Duration)return;')
+s=s.replace('Assert(director.BrokenPieces==72,"Normal playback did not finish all72 pieces");','Assert(director.BrokenPieces==0,"Unexpected destruction in spell-only playback");')
+s=s.replace('director.Age==22&&director.BrokenPieces==72','director.Age==SkyFurnaceDirector.Duration&&director.BrokenPieces==0&&director.CameraLocked')
+s=s.replace('director.Seek(8.8f);','director.Seek(8.1f);')
+s=s.replace('"comparison_960x540.png"','"fixed_comparison_960x540.png"').replace('"comparison_1920x1080.png"','"fixed_comparison_1920x1080.png"').replace('"local_runtime_checks.json"','"fixed_runtime_checks.json"')
+s=s.replace('normalCompletePlayback=true,','normalCompletePlayback=true,fixedCamera=true,terrainDestruction=false,')
+editor.write_text(s,encoding='utf-8')
+player=root/'UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePlayerProbe.cs'
+s=player.read_text(encoding='utf-8-sig')
+s=s.replace('normal22Seconds','normalCompletePlayback').replace('director.Age<22','director.Age<SkyFurnaceDirector.Duration').replace('director.Age>=22','director.Age>=SkyFurnaceDirector.Duration').replace('director.Age==22','director.Age==SkyFurnaceDirector.Duration')
+s=s.replace('director.BrokenPieces==72','director.BrokenPieces==0').replace('report.brokenPieces==72','report.brokenPieces==0').replace('director.Seek(8.8f)','director.Seek(8.1f)')
+s=s.replace('public bool normalCompletePlayback,','public bool fixedCamera,terrainDestruction=false,normalCompletePlayback,')
+s=s.replace('report.normalCompletePlayback=director.Age>=SkyFurnaceDirector.Duration;','report.normalCompletePlayback=director.Age>=SkyFurnaceDirector.Duration;report.fixedCamera=director.CameraLocked;')
+s=s.replace('report.status=report.normalCompletePlayback&&','report.status=report.fixedCamera&&report.normalCompletePlayback&&')
+player.write_text(s,encoding='utf-8')
+print('Updated fixed-camera verification')

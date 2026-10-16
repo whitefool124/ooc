@@ -1,0 +1,109 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "field_smoke_05_candidate_20261016",
+  "role": "vfx_frame_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "New independent Codex built-in image generation; regular sheet crops if applicable; subject-inferred grid; no geometric resize",
+    "source_path": "ArtSource/field_effect_reset_20261016/smoke/raw/r3_source.png",
+    "source_sha256": "f2c59a3032d06c5b5162815f099eb90e4380a984a73eff75628068288c693561"
+  },
+  "delivery": {
+    "output_path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_05.png",
+    "output_sha256": "f360f91ad28f8e17182a9f7b61acf8f2e896ae0e59c1ddde075f664637f12e2d",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "One cell; 32 PPU, source pixel pitch 0.03125m. Upright one-metre canvas with common bottom-centre anchor."
+  },
+  "application": {
+    "runtime_draw_rect": "1x1 metre, bottom centre at cell centre",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1,
+    "review_scope": "Adopted existing source; default runtime local evidence in2026-10-16 stage-one closure archive. Whole scene aesthetics/performance remain separate."
+  },
+  "evidence": {
+    "one_x": "ArtSource/field_effect_reset_20261016/smoke/qa/field_smoke_05/1x.png",
+    "four_x": "ArtSource/field_effect_reset_20261016/smoke/qa/field_smoke_05/4x.png",
+    "grayscale": "ArtSource/field_effect_reset_20261016/smoke/qa/field_smoke_05/grayscale.png",
+    "checker": "ArtSource/field_effect_reset_20261016/smoke/qa/field_smoke_05/checker.png",
+    "application_contact": "ArtSource/field_effect_reset_20261016/smoke/qa/field_smoke_05/contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "PENDING. Source contact composition is not a game screenshot."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_smoke_05.png",
+    "stable_guid": "2dacb617171bd3a469bcaa7ec1418ec0",
+    "native_ppu": 32,
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "review_scope": "Default player lookup and representative local capture; sequence frames all loaded, no whole-scene motion approval"
+  },
+  "processing": {
+    "decode_report": "ArtSource/field_effect_reset_20261016/smoke/qa/r3_00_decode.json",
+    "geometric_resize": false,
+    "new_colours": "black one-native-pixel external contour for prop roles only",
+    "source_subject_preserved": true,
+    "placement": "bottom centre y30",
+    "upright": true,
+    "native_ppu": 32,
+    "world_pixel_pitch": 0.03125,
+    "visible_bounds": [
+      5,
+      12,
+      26,
+      30
+    ],
+    "source_crop": {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/raw/r3_crop_00.png",
+      "sha256": "bbe9622917e41fccb9c89805b7c38308229ec6811b9e0af18dce187207c141f1",
+      "sheet_cell": [
+        0,
+        0
+      ],
+      "sheet_layout": [
+        3,
+        2
+      ],
+      "cropped_only": true,
+      "geometric_rescale": false
+    }
+  },
+  "production_binding": {
+    "status": "USER_AUTHORIZED",
+    "default_enabled": true,
+    "authorization": "2026-10-16 user: 自己把待办清空",
+    "delivery_sha256": "f360f91ad28f8e17182a9f7b61acf8f2e896ae0e59c1ddde075f664637f12e2d",
+    "guid_preserved": true
+  }
+}

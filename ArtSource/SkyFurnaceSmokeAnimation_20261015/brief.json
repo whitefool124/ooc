@@ -1,0 +1,23 @@
+{
+  "role": "Single coherent smoke flipbook",
+  "native_frame": [
+    32,
+    32
+  ],
+  "frames": 8,
+  "sheet_grid": [
+    4,
+    2
+  ],
+  "world_pixel_pitch": 0.03125,
+  "frame_world_size": [
+    1,
+    1
+  ],
+  "reference": "Existing SkyFurnace32PPU courtyard and paper seals; smoke pixel pitch1/32m",
+  "motion": "Contact puff -> swell -> clockwise curl -> open crescent -> split lobes -> fragments -> last flecks -> empty",
+  "shape_invariants": "same root anchor and fixed canvas; no scale interpolation",
+  "provider": "codex_builtin_imagegen",
+  "status": "QA_PENDING",
+  "runtime_geometry": "one-pixel-thick image cards only"
+}

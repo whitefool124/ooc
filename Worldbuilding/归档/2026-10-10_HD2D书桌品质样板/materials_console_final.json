@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Console logs (1 entries, filter: error, source: cache, last 180s):\\n[ERROR] ExecutionEngineException: String conversion error: Illegal byte sequence encounted in the input.\\n    System.Reflection.RuntimeAssembly.GetCodeBase (System.Reflection.Assembly a, System.Boolean escaped) (at <816f70bc2a9c4332b0bd119906a8d40e>:0)\\n    System.Reflection.RuntimeAssembly.get_CodeBase () (at <816f70bc2a9c4332b0bd119906a8d40e>:0)\\n    System.Reflection.AssemblyName.Create (System.Reflection.Assembly assembly, System.Boolean fillCodebase) (at <816f70bc2a9c4332b0bd119906a8d40e>:0)\\n    System.Reflection.RuntimeAssembly.GetName (System.Boolean copiedName) (at <816f70bc2a9c4332b0bd119906a8d40e>:0)\\n    System.Reflection.Assembly.GetName () (at <816f70bc2a9c4332b0bd119906a8d40e>:0)\\n    UnityEditor.QuickInstall.QuickInstaller.DetectPackagesFromLoadedAssemblies () (at <e9250a945ef442209443d82e911561bf>:0)\\n    UnityEditor.QuickInstall.QuickInstaller.PackageListHandler (UnityEditor.PackageManager.Requests.ListRequest request, UnityEditor.EditorApplication+CallbackFunction registeredCallback) (at <e9250a945ef442209443d82e911561bf>:0)\\n    UnityEditor.QuickInstall.QuickInstaller+<>c__DisplayClass21_0.<CreatePackageListHandler>b__0 () (at <e9250a945ef442209443d82e911561bf>:0)\\n    UnityEditor.EditorApplication.Internal_CallUpdateFunctions () (at <9f0190d699cd4c4dae622c5912d5b6a2>:0)\\r\\n\"}"
+      }
+    ]
+  }
+}

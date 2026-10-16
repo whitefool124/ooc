@@ -1,0 +1,24 @@
+{
+  "source_round": "r2",
+  "source_frame_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "fps": 8,
+  "unique_keyframes": 6,
+  "closing_hold": null,
+  "rejected_source_frames": [],
+  "world_canvas_m": [
+    1,
+    1
+  ],
+  "max_authored_extent_m": [
+    0.6875,
+    0.78125
+  ],
+  "geometric_frame_scale": false
+}

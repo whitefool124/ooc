@@ -1,0 +1,11 @@
+{
+  "status": "QA_PENDING",
+  "source": "academy_aether_crystal_intact",
+  "renderer": "物件_(5, 2)",
+  "pixelCount": 161,
+  "lightGroups": 3,
+  "coordinates": "source bottom-left; crystal regions (22,24,7,9), (37,33,7,7), (58,22,7,7); original alpha clips silhouette",
+  "albedoChanged": false,
+  "formalReplacement": false,
+  "scope": "One runtime crystal sample; other unit/model bindings not runtime reviewed"
+}

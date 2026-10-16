@@ -37,8 +37,8 @@ namespace OCC.Combat.Presentation
         private const float RevealZoomScale = 1.15f;
         private const float OverlaySortingOffset = -10f;
         private const float StartNoticeHoldSeconds = 1.3f;
-        // The goal box sits just under the combat header and inside the board's left edge.
-        private const float ObjectiveTopInset = -92f;
+        // Keep the goal box and its collapsed tab below the left-top hero detail card.
+        private const float ObjectiveTopInset = -384f;
         private const float ObjectiveChipWidth = 520f;
         private const float ObjectiveChipHeight = 132f;
         private const float ObjectiveChipLeft = 48f;
@@ -51,7 +51,7 @@ namespace OCC.Combat.Presentation
         // Battlefield viewport geometry in the 1920x1080 reference canvas (top-left origin).
         private const float BoardViewportX = 16f;
         private const float BoardViewportY = 80f;
-        private const float BoardViewportWidth = 1408f;
+        private const float BoardViewportWidth = 1888f;
         private const float BoardViewportHeight = 768f;
 
         private ICombatEntrySequenceHost host;
@@ -261,9 +261,21 @@ namespace OCC.Combat.Presentation
             float cellSize = host.BattlefieldViewport.CellSize;
             float pixel = cellSize / 32f;
             float size = cellSize + pixel * 2f;
+            var hd=host.BattlefieldEntryFocusUnderlay?.GetComponent<Hd2DBattlefieldSample>();
+            if(hd!=null)
+            {
+                var rect=(RectTransform)hd.transform;var root=hd.GetComponentInParent<Canvas>().rootCanvas;
+                Vector2 point=rect.InverseTransformPoint(root.transform.TransformPoint(hd.GridToFeedbackPosition(revealedEnemy.Position)));
+                revealFrameRect.anchorMin=revealFrameRect.anchorMax=new Vector2(.5f,.5f);
+                revealFrameRect.anchoredPosition=point;size=Mathf.Abs(hd.GridToFeedbackPosition(new GridPosition(revealedEnemy.Position.X+1,revealedEnemy.Position.Y)).x-hd.GridToFeedbackPosition(revealedEnemy.Position).x);pixel=2;
+            }
+            else
+            {
+            revealFrameRect.anchorMin=revealFrameRect.anchorMax=new Vector2(0,1);
             revealFrameRect.anchoredPosition = new Vector2(
                 (revealedEnemy.Position.X + .5f) * cellSize,
                 -(host.CurrentState.Map.Height - revealedEnemy.Position.Y - .5f) * cellSize);
+            }
             revealFrameRect.sizeDelta = new Vector2(size, size);
             SetRevealFrameEdge(0, Vector2.zero, new Vector2(size, pixel));
             SetRevealFrameEdge(1, new Vector2(0f, -size + pixel), new Vector2(size, pixel));

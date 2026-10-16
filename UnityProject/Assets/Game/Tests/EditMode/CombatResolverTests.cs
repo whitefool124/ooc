@@ -6,6 +6,20 @@ namespace OCC.Combat.Tests
     public sealed class CombatResolverTests
     {
         [Test]
+        public void Clone_AllowsASurvivorToOccupyADeadUnitsCell()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var enemy = new UnitState("enemy", false, new GridPosition(1, 0));
+            var state = new CombatState(new GridMap(3, 1), new[] { hero, enemy });
+            typeof(UnitState).GetProperty("Health").SetValue(enemy, 0);
+            typeof(UnitState).GetProperty("Position").SetValue(hero, enemy.Position);
+            var clone = state.Clone();
+            Assert.That(clone.GetUnit("enemy").IsAlive, Is.False);
+            Assert.That(clone.GetUnit("hero").Position, Is.EqualTo(enemy.Position));
+            Assert.That(clone.GetUnit("hero"), Is.Not.SameAs(hero));
+        }
+
+        [Test]
         public void Move_RejectsBlockedDestination()
         {
             CombatState state = CreateHeroState(new GridPosition(1, 0));

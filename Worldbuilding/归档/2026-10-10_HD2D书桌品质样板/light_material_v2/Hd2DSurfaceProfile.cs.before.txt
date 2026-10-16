@@ -1,0 +1,34 @@
+using UnityEngine;
+using UnityEngine.Rendering;
+
+namespace OCC.Combat.Presentation
+{
+    // Candidate desk profiles. Source textures, UV density and silhouettes stay intact.
+    internal enum Hd2DSurfaceRole { Paper, Wood, Plaster, Ceramic, CrystalBrass }
+    internal static class Hd2DSurfaceProfile
+    {
+        internal static Material Create(Texture texture,Color tint,Hd2DSurfaceRole role,bool cutout=false)
+        {
+            var shader=Shader.Find("OCC/HD2D/Surface");
+            if(shader==null)throw new System.InvalidOperationException("Missing desk surface shader.");
+            var material=new Material(shader){name="QA_PENDING surface "+role,mainTexture=texture,color=tint};
+            material.SetColor("_SpecColor",new Color(.04f,.04f,.04f,1));
+            material.SetFloat("_Smoothness",role==Hd2DSurfaceRole.Wood?.52f:
+                role==Hd2DSurfaceRole.Ceramic?.65f:role==Hd2DSurfaceRole.Paper?.08f:.02f);
+            if(role==Hd2DSurfaceRole.Wood)
+            {material.SetFloat("_ReliefStrength",1.15f);material.SetFloat("_RoughnessVariation",.28f);}
+            if(role==Hd2DSurfaceRole.CrystalBrass)
+            {
+                material.SetFloat("_CrystalMask",1);
+                material.SetFloat("_EmissionStrength",3.2f);
+                material.SetColor("_EmissionColor",new Color(.35f,1f,1.5f,1));
+            }
+            if(cutout)
+            {
+                material.SetFloat("_AlphaClip",1);material.EnableKeyword("_ALPHATEST_ON");
+                material.renderQueue=(int)RenderQueue.AlphaTest;
+            }
+            return material;
+        }
+    }
+}

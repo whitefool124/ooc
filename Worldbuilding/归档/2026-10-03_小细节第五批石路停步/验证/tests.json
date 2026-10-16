@@ -1,0 +1,76 @@
+{
+  "status": "completed",
+  "duration": 0.58,
+  "summary": {
+    "total": 9,
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.CombatMovementPlaybackTests.BodyAndVitals_UseTheSameTravelAtBothZoomTiers(192.0f)",
+      "Status": "Passed",
+      "Duration": 0.1570441,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMovementPlaybackTests.BodyAndVitals_UseTheSameTravelAtBothZoomTiers(384.0f)",
+      "Status": "Passed",
+      "Duration": 0.0092322,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMovementPlaybackTests.CancelledAndDisplacedMovement_DoNotPublishStops",
+      "Status": "Passed",
+      "Duration": 0.0034523,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMovementPlaybackTests.ConsecutiveMoves_PreserveCurrentPoseAndBothOldAndNewCorners",
+      "Status": "Passed",
+      "Duration": 0.0050976,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMovementPlaybackTests.GroundStop_UsesLastSegmentAndActualArrivalOnlyOnce",
+      "Status": "Passed",
+      "Duration": 0.0013258,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMovementPlaybackTests.InvalidOrStaleRoutes_AlignToFinalStateWithoutInventingAStraightLine",
+      "Status": "Passed",
+      "Duration": 0.0008173,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMovementPlaybackTests.PublishingThenDisableOrReset_ClearsTheRouteWithoutChangingTheResolvedActor(False)",
+      "Status": "Passed",
+      "Duration": 0.0528588,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMovementPlaybackTests.PublishingThenDisableOrReset_ClearsTheRouteWithoutChangingTheResolvedActor(True)",
+      "Status": "Passed",
+      "Duration": 0.000896,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMovementPlaybackTests.ResolvedDetour_VisitsEveryActualSegmentAndNeverCrossesTheObstacle",
+      "Status": "Passed",
+      "Duration": 0.0049313,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

@@ -43,9 +43,20 @@ namespace OCC.Combat.Tests
             float attack = EnemyTurnSequence.ResultHoldFor(CombatCommandType.Attack);
             float skill = EnemyTurnSequence.ResultHoldFor(CombatCommandType.UseSkill);
 
-            Assert.That(movement, Is.GreaterThanOrEqualTo(.7f));
+            Assert.That(movement, Is.InRange(.1f, .25f));
             Assert.That(attack, Is.GreaterThanOrEqualTo(movement));
             Assert.That(skill, Is.GreaterThanOrEqualTo(attack));
+        }
+
+        [Test]
+        public void DisabledAnimations_StillEmitsEachMutationOnceWithoutPresentationWaits()
+        {
+            var sequence = new EnemyTurnSequence();
+            sequence.Begin("enemy-a", CombatCommandType.Attack, 10f);
+            Assert.That(sequence.Advance(10f, false), Is.EqualTo(EnemyTurnSequenceSignal.ResolveCommand));
+            Assert.That(sequence.Advance(10f, false), Is.EqualTo(EnemyTurnSequenceSignal.EndTurn));
+            Assert.That(sequence.Advance(10f, false), Is.EqualTo(EnemyTurnSequenceSignal.ReadyForNext));
+            Assert.That(sequence.Advance(10f, false), Is.EqualTo(EnemyTurnSequenceSignal.None));
         }
 
         [Test]

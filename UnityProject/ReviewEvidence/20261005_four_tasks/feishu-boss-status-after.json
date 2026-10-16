@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"首领三阶段、机关反制\"><excerpt top-block-id=\"doxcnXSFhjb9kXhke640LnLF3lc\"><table id=\"doxcnXSFhjb9kXhke640LnLF3lc\"><thead><tr><th vertical-align=\"top\"><p id=\"doxcnOLlxPRNVcS4EkqxPvUezHe\">流程段</p></th><th vertical-align=\"top\"><p id=\"doxcn7dj2rDYxPmMdlmmtJ05cbe\">玩家起点</p></th><th vertical-align=\"top\"><p id=\"doxcnBJsELB48BoZKWbSCPSFlQc\">玩家可完成的主要内容</p></th><th vertical-align=\"top\"><p id=\"doxcnhplitBvwxOEOPYHkyg3lte\">正常出口</p></th><th vertical-align=\"top\"><p id=\"doxcncZr10iQQCjIl5B7wYu7XIc\">当前内容边界</p></th></tr></thead><tbody><tr><td vertical-align=\"top\"><p id=\"doxcnGdNfghIetgGZF1NI8zsLBh\">P4 首领阶段</p></td><td vertical-align=\"top\"><p id=\"doxcnt7nZmh3dTLxPyUQ9kaG4pe\">强制门槛或提前挑战确认</p></td><td vertical-align=\"top\"><p id=\"doxcnL8oyxTxFiwKjIJ5MYxgUOe\">最后整备、学院封存塔核心首领战（塔之守卫）与首领奖励</p></td><td vertical-align=\"top\"><p id=\"doxcnibVvamZPXhTRuGptFspAhh\">胜利进入单轮结算；失败进入失败／放弃结算</p></td><td vertical-align=\"top\"><p id=\"doxcnikjdIeGgqeWUjPZfv6TsYd\">首领三阶段、机关反制与基线实战数值已验收；正常随机地图至首领奖励、单轮总结的完整主路径仍待验收</p></td></tr></tbody></table></excerpt></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2656
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

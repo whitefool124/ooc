@@ -1,0 +1,38 @@
+{
+  "schema": "occ-registered-material-data-decode-v1",
+  "status": "REVIEW_READY",
+  "kind": "roughness",
+  "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-12_OCC战场主要材质贴图\\road_b\\roughness_raw_r2.png",
+  "source_sha256": "88d5418e8ae2a359fa7b80a5555f381cfc1ce9987fc8230a14f332db87b9fe97",
+  "reference": "E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalAcademyIndependentFloors32\\academy_block_road_b.png",
+  "reference_sha256": "87caaefb6c5858ff1ae5f389af7e10a273c0daa843db4df82761a67098a26b76",
+  "native_grid": [
+    32,
+    32
+  ],
+  "source_macro_pitch_xy": [
+    39.1875,
+    39.1875
+  ],
+  "registration_basis": "Full opaque UV field; one rim cell on the supplied native32 stone; fixed normalized32x32 layout. Sparse/repetitive numeric fields are not sprite silhouettes.",
+  "output": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-12_OCC战场主要材质贴图\\road_b\\roughness32.png",
+  "output_sha256": "29072c24bbfd95f0fa1ba08b9e9db71aa03bd03d6568092b145933e500870ccb",
+  "geometry_resize_or_interpolation_performed": false,
+  "new_rgb_colours_introduced": false,
+  "background_pixels_removed": 0,
+  "macro_cell_rgb_selection": "observed central-cell RGB medoid",
+  "max_central_cell_std": 6.065215180029095,
+  "rgb_min": [
+    154,
+    154,
+    153
+  ],
+  "rgb_max": [
+    240,
+    240,
+    240
+  ],
+  "manual_registered_field_review_required": true,
+  "human_registration_review": "PENDING",
+  "limitation": "No lowered generic1.2 threshold and no automatic formal approval. Validate actual map alignment and neutral/default/rotated-light response."
+}

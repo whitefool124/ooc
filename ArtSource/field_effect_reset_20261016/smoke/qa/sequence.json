@@ -1,0 +1,26 @@
+{
+  "source_round": "r3",
+  "source_frame_indices": [
+    0,
+    1,
+    2,
+    4,
+    5,
+    0
+  ],
+  "fps": 8,
+  "unique_keyframes": 5,
+  "closing_hold": "first pose repeated on closing exposure",
+  "rejected_source_frames": [
+    3
+  ],
+  "world_canvas_m": [
+    1,
+    1
+  ],
+  "max_authored_extent_m": [
+    0.71875,
+    0.75
+  ],
+  "geometric_frame_scale": false
+}

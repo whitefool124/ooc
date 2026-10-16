@@ -1,0 +1,500 @@
+{
+  "schema": "occ-native32-generation-profiles-v1",
+  "backend": "codex_builtin_imagegen_only",
+  "delivery": {
+    "gameplay_cell_pixels": 32,
+    "ground_tile_pixels": [
+      32,
+      32
+    ],
+    "ground_tiles_per_gameplay_cell": [
+      1,
+      1
+    ],
+    "ground_front_face_pixels": [
+      32,
+      8
+    ],
+    "multi_cell_formula": "logical_width_times_32_by_logical_height_times_32",
+    "runtime_scaling": "integer_only",
+    "candidate_status": "QA_PENDING_until_machine_and_human_review"
+  },
+  "display_policy": {
+    "locked": "2026-09-16",
+    "native_buffer": [
+      320,
+      180
+    ],
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "battlefield_viewport": [
+      1888,
+      768
+    ],
+    "visible_gameplay_cells_at_canonical": [
+      9,
+      4
+    ],
+    "gameplay_cell_native_px": 32,
+    "gameplay_cell_screen_units_at_canonical": 192,
+    "role_native_ppu": {
+      "ground_field_32": 32,
+      "ground_front_face_32x8": 32,
+      "directional_edge_32x40": 32,
+      "combat_prop_32": 32,
+      "structure_32": 32,
+      "unit_sideview": 32
+    },
+    "single_ppu_note": "the whole battlefield is one 32 PPU grid: one 32x32 ground square per cell, a 32x8 front face for depth, structures and units on the same grid; every native pixel is exactly 6 screen pixels at the canonical tier, so nothing can drift out of scale against anything else",
+    "fractional_scale_forbidden": true,
+    "fractional_transform_scale_forbidden": true,
+    "position_snap_native_px": 1,
+    "non_integer_resolution_policy": "integer scale plus letterbox; never fractional upscale and never half-pixel placement",
+    "reference_basis": "measured from the primary reference: one integer upscale of a native buffer, unlit areas keep zero intra-block variance and lighting is composited after the upscale"
+  },
+  "lighting_policy": {
+    "locked": "2026-09-16",
+    "scene_lighting": "forbidden in the asset: no baked light pool, no cast floor shadow, no vignette, no ambient darkening gradient, no darkened border, no torch or aether glow",
+    "form_shading": "the only shading the asset carries: one fixed upper-left direction (lit top face, dark front face) so a solid reads as a volume; this is shape language, not illumination, and no role may vary it",
+    "runtime_owner": "URP 2D Light2D (day cycle, character light, baked shadow overlay sprites) owns all scene light and shadow at runtime",
+    "reason": "the reference measures zero intra-block variance in unlit regions and 5-10 percent changed pixels in lit regions, which is only possible when light is applied after the integer upscale rather than painted into the art",
+    "reject_if": [
+      "baked scene lighting",
+      "floor shadow or light pool baked into a ground tile",
+      "vignette or edge darkening",
+      "global ambient gradient across the piece",
+      "torch or aether glow baked into a prop"
+    ]
+  },
+  "scene_assembly_contract": {
+    "locked": "2026-09-21",
+    "production_brief_required_before_generation": [
+      "asset_role",
+      "application_scope",
+      "logical_cells",
+      "real_dimensions_m",
+      "mount_type",
+      "native_anchor",
+      "visible_contact_line",
+      "depth_sort_baseline",
+      "support_asset",
+      "screen_axis",
+      "material_palette_family",
+      "light_direction"
+    ],
+    "application_scopes": [
+      "runtime_layout",
+      "concept_display"
+    ],
+    "mount_types": [
+      "ground",
+      "floor_standing",
+      "wall_mounted",
+      "tabletop",
+      "structural",
+      "unit"
+    ],
+    "runtime_role_substitution_forbidden": true,
+    "combined_walkable_floor_and_blocking_wall_asset_forbidden": true,
+    "concept_room_shell_maximum_status": "REVIEW_READY",
+    "depth_sort_source": "visible_contact_line_not_canvas_bottom",
+    "wall_mount_rule": "dedicated wall-mounted source and wall anchor required; do not raise a floor-standing prop",
+    "tabletop_rule": "declare support asset and native support height",
+    "palette_rule": "lock material_palette_family and upper-left form light before the first source in a scene batch; regenerate mismatched assets instead of recolouring them during assembly",
+    "assembly_evidence": [
+      "native_coordinate_table",
+      "draw_order",
+      "one_x_application_contact",
+      "six_x_application_contact"
+    ]
+  },
+  "generation_loop": {
+    "candidates_per_round": 1,
+    "maximum_rounds": 3,
+    "retry_strategy": "change_only_the_failed_visual_dimension",
+    "source_policy": "new independent Image output for every retry",
+    "manual_redraw_forbidden": true,
+    "academy_permanent_wall_exception": "independent built-in generated material/massing reference plus user-authorized manual native-grid 32x64 canvas wall-mask authoring with a bottom-anchored 42px-tall stepped silhouette and no transparent holes; every variant retains its own manifest and full QA; no other role inherits this exception",
+    "automatic_retry_triggers": [
+      "subject_lattice_confidence_below_1_2",
+      "mixed_subject_pixel_scale",
+      "single_cell_prop_requires_visual_canvas_larger_than_64x64",
+      "visual_silhouette_breaks_declared_occupancy",
+      "baked_scene_lighting_detected",
+      "role_ppu_mismatch_against_display_policy",
+      "decoded_design_field_larger_than_1_4x_the_delivery",
+      "missing_or_black_cell_border",
+      "dominant_tone_below_45_percent"
+    ]
+  },
+  "shared_prompt": {
+    "pixel_language": "authentic coarse low-resolution pixel design shown enlarged with one uniform square macro-pixel lattice across the complete subject; large deliberate clusters; crisp hard edges; sparse controlled detail; limited cohesive palette; do not force the subject into a 32x32 generated-image composition",
+    "ground_square": "the subject is exactly one square battlefield cell, complete and self-contained: a near-flat paving square with at most three darker clusters and a clearly visible 1-pixel border on all four edges in the material's own dark tone (never pure black), plus a slightly lighter lip just inside that border; the whole design spans about 32 macro pixels across, not a crop of a larger floor",
+    "illumination": "flat even illumination with no directional scene light, no cast shadows, no glow and no darkening at the edges; the only shading is the fixed upper-left form shading on solid volumes",
+    "reference_policy": "Sephiria screenshot controls map readability and density; an approved OCC asset controls family scale (for paving: ArtSource/sephiria_style_study_2026-09-16/project_assets/approved_ground_stone_16_at6x.png - 2 colours, dominant 88 percent, zero isolated pixels); references never authorize copying their subject design",
+    "avoid": "antialiasing, blur, gradients, tiny decoration, high-frequency texture, isolated speckles, high-resolution illustration compressed to appear pixelated, baked lighting or shadow, evenly spread palette steps that read as dither noise"
+  },
+  "profiles": {
+    "ground_field_32": {
+      "view": "orthographic top-down material field: exactly one square gameplay cell, self-contained; no object, no facade, no neighbouring tile",
+      "content_variables": [
+        "theme_material_story",
+        "one_surface_identity",
+        "wear_level",
+        "wetness_level"
+      ],
+      "canvas": "fixed_32x32",
+      "native_ppu": 32,
+      "logical_cells": [
+        1,
+        1
+      ],
+      "tiles_per_gameplay_cell": [
+        1,
+        1
+      ],
+      "palette_max": 6,
+      "target_palette": "3 or fewer: the approved stone baseline uses 2",
+      "transparent_border_min": 0,
+      "baked_cell_border": "required: 1 native px on all four edges in the material's own dark tone (never pure black), plus a 1 px lighter lip inside it so the square reads as raised; adjacent tiles must overlap into one seam line",
+      "why_border": "this version ships no material transitions, so the baked border is the only visible cell separation and it also gives the map editor an obvious square to select",
+      "surface_detail_policy": "near-flat field: dominant tone at least 45 percent and for a paving theme target 75-90 percent; at most three connected darker clusters; isolated one pixel noise forbidden; no dithering, no gradient, no microtexture",
+      "measured_authoring_values": {
+        "stone_slab_pitch_px": 8,
+        "wood_plank_pitch_px": 4,
+        "structural_seam_px": 1,
+        "organic_cluster_px": "4-8",
+        "cell_border_px": 1
+      },
+      "lighting": "no scene lighting; a paving surface stays tonally neutral (no directional shading); see lighting_policy",
+      "reject_if": [
+        "missing or black cell border",
+        "baked lighting or shadow",
+        "isolated single-pixel noise",
+        "dominant tone below 45 percent",
+        "even spread of all palette steps (dither noise)",
+        "microtexture",
+        "gradient",
+        "cross-cell continuation",
+        "a fragment of a larger design rather than one whole square"
+      ]
+    },
+    "ground_front_face_32x8": {
+      "view": "the south front face of one raised ground square: a 32x8 strip showing the tile's thickness",
+      "canvas": "fixed_32x8",
+      "native_ppu": 32,
+      "palette_max": 6,
+      "placement": "bottom edge of the owning cell, overlapping the top 8 px of the next row; drawn after the next row's ground and before that row's walls, structures, props and units; optional per cell, added where a height step is wanted",
+      "surface_detail_policy": "one flat face tone plus at most two connected darker bands; dominant tone at least 45 percent; the topmost 1 px repeats the tile border tone so the face joins the border without a seam",
+      "lighting": "no scene lighting; the face is darker than the tile top by material form only; see lighting_policy",
+      "reject_if": [
+        "lighting or cast shadow baked in",
+        "face tone lighter than the tile top",
+        "isolated single-pixel noise",
+        "a second decorative perimeter"
+      ]
+    },
+    "permanent_wall_32x64": {
+      "view": "shared oblique top-down screen-axis low masonry wall family: exposed north edge shows an ivory warm-stone top, exposed south edge shows a related warm-grey front foot, connected body suppresses repeated top bands; isolated cell reads as a solid pier; visible wall height 42 native pixels, about 1.3 logical cell heights",
+      "canvas": "fixed_32x64 transparent hard-alpha canvas; visible silhouette bounds x0..31/y22..63, 42px tall, bottom-centre anchored to the owning 32x32 cell and overhanging 10px north only; inset stepped top/end corners permitted, no transparent holes inside the masonry body",
+      "native_ppu": 32,
+      "logical_cells": [
+        1,
+        1
+      ],
+      "palette_max": 6,
+      "content_variables": [
+        "theme_material_story",
+        "masonry_blocking_story",
+        "N_E_S_W_adjacency_mask"
+      ],
+      "reading": "a solid Academy architectural boundary that remains legible as impassable and indestructible terrain across isolated cells, horizontal and vertical runs, ends, corners, and narrow passages",
+      "must_not_show": [
+        "cracks",
+        "chips",
+        "rubble",
+        "damage",
+        "destructible cover treatment"
+      ],
+      "tiling": "select a preauthored 32x64 structural mask by same-kind-wall N/E/S/W adjacency, then its A/B stone-texture variant by (x+y) parity; no runtime rotation or mirroring; visible-body contact edges match, with top lip only on exposed north and front foot only on exposed south; wall rows draw north-to-south for consistent overhang",
+      "lighting": "no scene lighting; fixed upper-left form shading only; see lighting_policy",
+      "reject_if": [
+        "baked scene lighting or floor shadow",
+        "damage or breakable-cover reading",
+        "transparent holes inside the visible masonry silhouette",
+        "edges that do not join",
+        "visible wall bounds not 42px tall",
+        "top plane repeated on every tile of a vertical run",
+        "dark teal front panel",
+        "microtexture",
+        "dither",
+        "gradient"
+      ]
+    },
+    "directional_edge_32x40": {
+      "view": "one 32x32 walkable surface aligned to the board edge plus an 8 px exterior facade hanging outside the board",
+      "canvas": "fixed_32x40",
+      "native_ppu": 32,
+      "walkable_px": [
+        32,
+        32
+      ],
+      "facade_overhang_px": 8,
+      "palette_max": 10,
+      "rotation_policy": "authored per direction; runtime rotation forbidden when the piece carries light, facade, wear or shadow direction",
+      "reject_if": [
+        "facade inside the walkable area",
+        "missing facade",
+        "directional identity lost",
+        "baked lighting or shadow"
+      ]
+    },
+    "ui_resource_bar_32": {
+      "view": "front-facing square nine-slice source for a horizontal academy dossier resource gauge; complete frame or complete fill-cap tile, not a long composed bar",
+      "canvas": "fixed_32x32",
+      "native_ppu": 32,
+      "palette_max": 10,
+      "stretch_policy": "only the quiet central strip may stretch; the 1 px outer contour, corners, clasps and end-cap thickness remain fixed",
+      "material_story": "charcoal ink contour, warm ivory or pale academy stone frame, sparse oxidized brass structure, dark recessed track; semantic fills use sealed red, steel silver or aether cyan",
+      "lighting": "no scene lighting; fixed upper-left form shading only; see lighting_policy",
+      "reject_if": [
+        "terminal-blue global skin",
+        "gradient",
+        "antialiasing",
+        "microtexture",
+        "text or numerals",
+        "dense ornament",
+        "baked glow",
+        "corner details entering the stretch region"
+      ]
+    },
+    "ui_unit_bar_16": {
+      "view": "front-facing square nine-slice source for a compact horizontal unit health or shield gauge; complete frame or complete fill-cap tile",
+      "canvas": "fixed_16x16",
+      "native_ppu": 16,
+      "palette_max": 6,
+      "production_route": "generated_reference_plus_manual_pixel_authoring_user_authorized_2026_09_24",
+      "stretch_policy": "only the quiet central strip may stretch; the 1 px contour and end caps remain fixed",
+      "material_story": "compact descendant of the 32 px academy dossier gauge: charcoal contour, pale stone frame, one structural highlight, dark recessed track; sealed red or steel silver semantic fill",
+      "lighting": "no scene lighting; fixed upper-left form shading only; see lighting_policy",
+      "reject_if": [
+        "downscaled 32 px source",
+        "terminal-blue global skin",
+        "gradient",
+        "antialiasing",
+        "microtexture",
+        "text or numerals",
+        "ornament obscuring the fill"
+      ]
+    },
+    "unit_sideview": {
+      "view": "strict 90-degree side profile; only one eye may be visible; torso, pelvis, feet and equipment all face the same side",
+      "content_variables": [
+        "unit_identity",
+        "gameplay_role",
+        "faction_material_story",
+        "single_identity_accent"
+      ],
+      "canvas": "auto_round_each_axis_up_to_a_multiple_of_32; typical_humanoid_is_32x64",
+      "native_ppu": 32,
+      "logical_footprint": [
+        1,
+        1
+      ],
+      "visual_footprint_note": "the canvas may exceed one gameplay cell: OCC characters are deliberately about two cells tall while the reference is about 1.2",
+      "palette_max_before_outline": 32,
+      "height_range": [
+        46,
+        58
+      ],
+      "height_range_note": "user decision 2026-09-16: the fire mage (body 51 px = 1.59 of a 32 px cell) is the approved proportion; a new humanoid should read as clearly overhanging its cell, so aim at 46-58 px. Quadrupeds and genuinely small units are judged separately and may sit inside their cell.",
+      "width_max": 30,
+      "baseline_y": "canvas_height_minus_2",
+      "reject_if": [
+        "three_quarter_body",
+        "front_facing_torso",
+        "oversized_head_hides_body",
+        "equipment_hides_body",
+        "broken_silhouette",
+        "muddy_clusters",
+        "baked_scene_lighting"
+      ]
+    },
+    "prop_oblique": {
+      "view": "shared oblique top-down map view with visible top and front faces; screen-axis alignment; never diagonal placement",
+      "content_variables": [
+        "object_identity",
+        "gameplay_use",
+        "theme_material_story",
+        "single_identity_feature"
+      ],
+      "canvas": "auto_round_each_axis_up_to_a_multiple_of_32",
+      "native_ppu": 32,
+      "ordinary_single_cell_visual_canvas_review_limit": [
+        64,
+        64
+      ],
+      "logical_footprint": "declared_separately_from_visual_canvas",
+      "palette_max_before_outline": 24,
+      "baseline_y": "canvas_height_minus_2",
+      "reject_if": [
+        "flat_front_only",
+        "top_and_front_merge",
+        "diagonal_placement",
+        "miniature_building_overdetail",
+        "broken_silhouette",
+        "muddy_clusters",
+        "baked_scene_lighting"
+      ]
+    }
+  },
+  "approved_calibration_assets": {
+    "unit_sideview": {
+      "asset_id": "field_technician_native32x64_v1",
+      "canvas": [
+        32,
+        64
+      ],
+      "subject_bounds_size": [
+        21,
+        48
+      ],
+      "palette_colors": 32,
+      "status": "FORMAL_CANDIDATE"
+    },
+    "prop_oblique": {
+      "asset_id": "sephiria_loot_chest_adaptive_pitch20_v1",
+      "canvas": [
+        64,
+        64
+      ],
+      "subject_bounds_size": [
+        38,
+        32
+      ],
+      "palette_colors": 24,
+      "status": "FORMAL_CANDIDATE"
+    }
+  },
+  "deterministic_postprocess": [
+    "infer_subject_pixel_pitch_and_phase_from_its_own_contour_and_colour_boundaries",
+    "reject_when_subject_lattice_confidence_is_below_1_2",
+    "remove_only_edge_connected_baked_checkerboard",
+    "decode_one_macro_pixel_to_one_native_pixel_using_an_observed_medoid_colour",
+    "select_the_smallest_canvas_whose_axes_are_multiples_of_the_role_native_ppu_grid_and_fit_the_subject_without_resizing",
+    "crop_authored_silhouette_without_resampling",
+    "hard_alpha",
+    "merge_near_duplicate_generated_rgb_noise_to_observed_source_medoids_without_dither",
+    "replace_existing_outermost_opaque_pixels_with_one_pure_black_pixel",
+    "anchor_to_role_baseline",
+    "never_paint_or_restore_lighting: a source whose lighting was removed by decoding is rejected, not repaired",
+    "reject_when_the_decoded_design_field_exceeds_1_4x_the_delivery_in_either_axis: a window that crops a finer-grained design yields a fragment of a bigger picture rather than one whole square, which is the recorded failure mode for ground tiles",
+    "verify_the_baked_cell_border_exists_on_all_four_edges_in_the_material_own_dark_tone_before_delivery"
+  ],
+  "machine_qa": [
+    "canvas_matches_the_role_delivery_size_or_is_multiples_of_the_role_native_ppu_grid",
+    "logical_occupancy_is_declared_separately_from_visual_canvas",
+    "binary_alpha",
+    "palette_limit",
+    "single_connected_silhouette",
+    "safe_canvas_border",
+    "role_occupancy",
+    "ground_role_tile_is_32x32_self_contained_with_a_visible_border",
+    "front_face_role_is_32x8",
+    "decoded_design_field_is_within_1_4x_the_delivery_in_each_axis",
+    "visible_border_is_the_material_own_dark_tone_and_never_pure_black"
+  ],
+  "visual_qa": [
+    "role_view",
+    "silhouette_readability_at_1x",
+    "identity_feature_survives_at_1x",
+    "pixel_scale_matches_approved_family",
+    "application_contact_on_game_ground",
+    "single_cell_prop_visual_overhang_remains_limited_and_does_not_read_as_a_multi_cell_wall",
+    "no_baked_scene_lighting_anywhere_in_the_piece",
+    "rendered_pixel_size_is_identical_across_ground_structures_props_and_units",
+    "the_square_reads_as_one_whole_cell_with_a_visible_border_and_not_as_a_crop_of_a_larger_field",
+    "the_tile_is_near_flat_against_the_approved_stone_baseline",
+    "tile_plus_front_face_reads_as_a_raised_block_at_6x",
+    "asset_mount_type_matches_its_visual_support_and_application",
+    "visible_contact_line_is_not_floating_or_penetrating_its_support",
+    "runtime_room_assets_keep_walkable_ground_separate_from_blocking_walls",
+    "scene_draw_order_uses_visible_contact_lines",
+    "scene_batch_uses_one_material_palette_family_and_fixed_upper_left_form_light"
+  ],
+  "runtime_promotion_gates": {
+    "locked": "2026-09-16",
+    "importer": {
+      "filter_mode": "Point",
+      "mesh_type": "Full Rect",
+      "compression": "None",
+      "mipmaps": false,
+      "wrap_mode": "Clamp",
+      "atlas": "padding 0, rotation off, tight packing off, extrude 0",
+      "reason": "a tight mesh crops the quad and shifts the sprite off the native pixel lattice, which breaks both uniform pixel size and seam-free adjacency"
+    },
+    "runtime_lattice_check": {
+      "tool": "Tools/OCCArt/verify_runtime_pixel_grid.py",
+      "method": "capture the running game at the target resolution and measure block uniformity: the true tier makes nearly every p x p block internally uniform at p = screen px per native px, and the lattice must be aligned to the image origin",
+      "pass_condition": "integer tier detected at the expected canonical multiple, lattice offset zero on both axes"
+    },
+    "placement_rules": [
+      "R1 gameplay cell = 32x32 native px; exactly one 32x32 ground tile per cell, no subgrid and no cross-cell base texture",
+      "R2 objects anchor bottom-center to the owning cell bottom edge; multi-cell objects own their bottom-left cell",
+      "R3 overhang above, left and right is allowed; overhang past the footprint bottom edge toward the screen bottom is forbidden, except for the ground front face which is defined to overhang its own cell southward by 8 px",
+      "R4 layer order back to front: ground, ground front faces, ground overlays, walls, large structures, small props, units, overlays",
+      "R5 within a layer sort by bottom-edge y ascending, then structure < prop < unit",
+      "R6 units keep a 32x64 canvas with the body on the canvas bottom edge and a zero foot offset",
+      "R7 a ground front face is drawn after the next row's ground and before any wall, structure, prop or unit in that row",
+      "R8 new assets declare application scope, mount type, native anchor, visible contact line, depth baseline and support before generation",
+      "R9 floor-standing, wall-mounted and tabletop variants are separate roles; scene coordinates cannot change mount type",
+      "R10 runtime rooms split walkable ground, blocking walls, directional edges or front faces and independent props; combined shells are concept-only",
+      "R11 verify walkability, collision, click ownership and occlusion before aesthetic approval",
+      "R12 record native coordinates and draw order and review the assembly at 1x and canonical 6x"
+    ],
+    "formal_requires": "machine PASS plus human PASS plus stable GUID plus verified importer plus a runtime contact capture that passes the lattice check"
+  },
+  "stability_baseline_2026_09_14": {
+    "batch": "academy_maintenance_mixed_v1",
+    "assets": 6,
+    "independent_generations": 11,
+    "first_pass_technical_grid_success": "2/6",
+    "success_after_one_targeted_uniform_lattice_retry": "6/6",
+    "machine_manifest_validation": "6/6",
+    "interpretation": "one-shot generation is not stable enough for unattended promotion; automatic rejection plus one targeted regeneration is part of the production loop"
+  },
+  "nonbattlefield_display_exception": {
+    "confirmed": "2026-10-03",
+    "canvas": "complete subject plus safe border; no fixed size or 32px multiple",
+    "priority": "consistent art style and natural UI scale",
+    "battlefield_contract_unchanged": true
+  },
+  "main_menu_hd2d_display_exception": {
+    "authorized": "2026-10-08",
+    "source_grid_confidence_min": 1.2,
+    "source_canvas_rules_unchanged": true,
+    "source_geometric_resizing": false,
+    "texture_filter": "Point",
+    "scene_output": [
+      1920,
+      1080
+    ],
+    "projection": "perspective",
+    "whole_scene_integer_scale_required": false,
+    "scope": "E main menu only"
+  },
+  "hd2d_project_direction": {
+    "scope": "whole project migration",
+    "source_rules_unchanged": true,
+    "prototype_camera": {
+      "pitch": 35,
+      "yaw": 12,
+      "vertical_fov": 24
+    },
+    "no_claim_of_completed_battlefield_migration": true
+  }
+}

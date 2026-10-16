@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "source": "Unity runtime ignition map + active pool measurements",
+  "roots": [
+    2,
+    2,
+    2,
+    1
+  ],
+  "maximumBranches": 4,
+  "detachedBirths": 0,
+  "completeAt6_6": true,
+  "emptyAtZero": true,
+  "absorbingCubesInPool": 24,
+  "cubeEdgeMetres": 0.03125,
+  "maximumSingleParticleTravelMetres": 0.418688416,
+  "activeAtSampleTimes": {
+    "0.0": 0,
+    "0.3": 4,
+    "0.76": 2,
+    "0.78": 2,
+    "0.84": 3,
+    "0.86": 3,
+    "1.6": 4,
+    "3.4": 3,
+    "5.5": 4,
+    "6.6": 0,
+    "7.25": 0,
+    "7.4": 0
+  },
+  "console": {
+    "sampledUtc": "2026-10-16T02:57:34.8095956Z",
+    "ageMs": 10,
+    "compilationFailed": false,
+    "compiling": false,
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "consoleLogs": 2,
+    "seeded": true
+  }
+}

@@ -12,6 +12,9 @@ namespace OCC.Combat.Presentation
 
         public string Action { get; private set; } = "移动";
         public string TargetId { get; private set; }
+        public bool HasPointerSelection { get; private set; }
+        public GridPosition PointerPosition { get; private set; }
+        public void SelectPointerPosition(GridPosition position) { PointerPosition = position; HasPointerSelection = true; SetPreviewPosition(position); }
         public bool HasPreviewPosition { get; private set; }
         public GridPosition PreviewPosition { get; private set; }
         public bool IsKeyboardTargeting => navigation.Active;
@@ -45,6 +48,7 @@ namespace OCC.Combat.Presentation
             Action = string.IsNullOrEmpty(action) ? "移动" : action;
             TargetId = null;
             HasPreviewPosition = false;
+            HasPointerSelection = false;
             ClearMenuPreview();
         }
 
@@ -54,6 +58,7 @@ namespace OCC.Combat.Presentation
             Action = action;
             TargetId = null;
             HasPreviewPosition = false;
+            HasPointerSelection = false;
             ClearMenuPreview();
         }
 
@@ -67,7 +72,7 @@ namespace OCC.Combat.Presentation
             return true;
         }
 
-        public bool ClearTarget() => SetKnownTarget(null);
+        public bool ClearTarget() { HasPointerSelection = false; return SetKnownTarget(null); }
 
         public void SetPreviewPosition(GridPosition position)
         {
@@ -82,6 +87,7 @@ namespace OCC.Combat.Presentation
             UnitState hero = state?.GetUnit("hero");
             if (hero == null || !hero.IsAlive || state.ActiveUnitId != hero.Id) return false;
             UnitState selected = string.IsNullOrEmpty(TargetId) ? null : state.GetUnit(TargetId);
+            HasPointerSelection = false;
             navigation.Begin(selected?.Position ?? hero.Position, state.Map.Width, state.Map.Height);
             SetPreviewPosition(navigation.Position);
             return true;

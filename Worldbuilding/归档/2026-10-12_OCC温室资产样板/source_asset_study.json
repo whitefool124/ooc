@@ -1,0 +1,85 @@
+{
+  "schema": "occ-reference-asset-study-v1",
+  "source_install": "E:/SteamLibrary/steamapps/common/OCTOPATH TRAVELER",
+  "method": "Read-only existing local export; no reference textures or meshes copied into OCC runtime",
+  "inputs": [
+    {
+      "path": "Worldbuilding/归档/2026-10-10_八方旅人还原样板/scene_data/Octopath_Traveler/Content/Map/Resource/BP/BP_Building/BP_BD_Plain/Material/MbdMI_Plain.json",
+      "sha256": "e1fffedbffe2fe78229f6e31e43ca640851123663c6473725d893717fda18860"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_八方旅人还原样板/scene_data/Octopath_Traveler/Content/Map/Resource/BP/BP_Building/BP_BD_Plain/Texture/MbdTX_Plain_cl.png",
+      "sha256": "4936013a448ef4594aff0e80987b4f1dc2549fc81d5865914c551b4d02da9703"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_八方旅人还原样板/scene_data/Octopath_Traveler/Content/Map/Resource/BP/BP_Building/BP_BD_Plain/Texture/MbdTX_Plain_no.png",
+      "sha256": "c435ff0f02ec37e477b439d5d1e9af84195d89661560a881d435a89d89adc91b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_八方旅人还原样板/scene_data/meshes.json",
+      "sha256": "23ed6c6ed65f0db0460fc213ef940a3f12dc02c7c2eb29950bb46a360470ffdb"
+    }
+  ],
+  "building_material": {
+    "textures": {
+      "PM_SpecularMasks": "Octopath_Traveler/Content/Map/Resource/BP/BP_Building/BP_BD_Plain/Texture/MbdTX_Plain_cl.MbdTX_Plain_cl",
+      "ColorMap": "Octopath_Traveler/Content/Map/Resource/BP/BP_Building/BP_BD_Plain/Texture/MbdTX_Plain_cl.MbdTX_Plain_cl",
+      "PM_Normals": "Octopath_Traveler/Content/Map/Resource/BP/BP_Building/BP_BD_Plain/Texture/MbdTX_Plain_no.MbdTX_Plain_no",
+      "NormalMap": "Octopath_Traveler/Content/Map/Resource/BP/BP_Building/BP_BD_Plain/Texture/MbdTX_Plain_no.MbdTX_Plain_no"
+    },
+    "parameters": {
+      "Colors": {
+        "BottomColor": {
+          "R": 0.2,
+          "G": 0.126518,
+          "B": 0.115,
+          "A": 1.0,
+          "Hex": "7C645F"
+        },
+        "TopColor": {
+          "R": 1.0,
+          "G": 1.0,
+          "B": 1.0,
+          "A": 1.0,
+          "Hex": "FFFFFF"
+        }
+      },
+      "Scalars": {
+        "RefractionDepthBias": 0.0,
+        "GradientPos": 0.0,
+        "GradientScale": 200.0
+      },
+      "Switches": {
+        "GradationSwitch": true
+      }
+    }
+  },
+  "paired_atlas_dimensions": {
+    "albedo": [
+      512,
+      512
+    ],
+    "normal": [
+      512,
+      512
+    ]
+  },
+  "export_mesh_count": 235,
+  "observed": [
+    "Colour atlas contains separate roof, wall, window and door regions",
+    "A separate normal atlas has corresponding structural regions",
+    "Building material references these maps and a height gradient",
+    "PM_SpecularMasks aliases the colour map in this exported material; that alias does not prove channel semantics"
+  ],
+  "transfer": [
+    "Author facade/card and simple environment volume separately",
+    "Keep colour, normal, surface, metal and emission records separate",
+    "Keep every visible source pixel at world pitch 1/32m",
+    "Preserve direct lighting and specular response when applying ambient visibility"
+  ],
+  "limits": [
+    "Missing material function connections and runtime scalar overrides remain unresolved",
+    "Reference-game atlas density is not an approved OCC density",
+    "No normal, roughness, metal or emission data inferred from albedo luminance/hue"
+  ]
+}

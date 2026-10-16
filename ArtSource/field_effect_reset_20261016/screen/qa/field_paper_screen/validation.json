@@ -1,0 +1,23 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "field_paper_screen_candidate_20261016",
+  "role": "single_cell_prop_32",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      32,
+      32
+    ],
+    "bounds": [
+      2,
+      11,
+      29,
+      30
+    ],
+    "hard_alpha": true,
+    "fully_opaque": false,
+    "visible_colors": 10,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

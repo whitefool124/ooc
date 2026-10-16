@@ -1,0 +1,125 @@
+{
+  "status": "QA_PENDING",
+  "totals": {
+    "levels": 18,
+    "environmentFamilies": 6,
+    "legacyPlacements": 111,
+    "acceptedRaisedModules": 0,
+    "groundPlacements": 54,
+    "groundAssetTypes": 20,
+    "levelsWithRestoredFurniture": 5,
+    "restoredFixturePlacements": 9
+  },
+  "tests": {
+    "id": "2",
+    "testcasecount": "6",
+    "result": "Passed",
+    "total": "6",
+    "passed": "6",
+    "failed": "0",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-16 09:45:58Z",
+    "end-time": "2026-10-16 09:45:59Z",
+    "duration": "0.6257107"
+  },
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "8026256376fcbbb14b48a072a79522cf0ed9278744c0507c97b848b89d29e531"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "da0d457d538980b54e2db67889d5760bf0b037f176678d9ccace7a0c76ada861"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "02db449a5dda7f4a8d22ba78df12388077c4d4ebc7d3e696540a7a45f87dda00"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "cd7c15b62e32ffed2b8cf9c5044b0f6dab63a15eae8d0b959c7647c38f07e36a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/AcademyBattlefieldLayoutCatalog.cs",
+      "sha256": "955593a1710a99c7a6d8526877b0aedf6fd1fc371d9f0d1ef6fa2657c6aaba43"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldProfile.cs",
+      "sha256": "25177dacb16da60fc5203cee7d7cea6ddd1fdef2ed41d5b8b5ffbbf0c5357b9b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/StageSceneryBindingAudit.cs",
+      "sha256": "75e58e804d619429ab45e513f602a0942f980a084c23a0b87f7f399d82cb2ec9"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/StageSceneryRuntimeScreenshots.cs",
+      "sha256": "9f8efb75e37d6ef8d5e6a956cdc46654c25f037d3f4f2a4e970bc39b1bab21c4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Tests/EditMode/StageSceneryBindingTests.cs",
+      "sha256": "8ef5d0ece94b19eee7c2696a696ec58ffd062aaa4ba22d81f490fc430ffd0f3a"
+    },
+    {
+      "path": "Worldbuilding/数据表/OCC_学院第一阶段美术资产生产清单_v1.0.csv",
+      "sha256": "013ed950ef1e7e2cd4391fed0c04794c59d1a7f0d30455bdf8ebf624fb21109e"
+    },
+    {
+      "path": "Worldbuilding/数据表/OCC_学院第一阶段全流程内容清单_v1.0.csv",
+      "sha256": "80f721e8e61bbe875924b222a3f1af9aef9528dd986d6e1e1fa389a6ccf69f86"
+    },
+    {
+      "path": "Worldbuilding/数据表/OCC_第一阶段战斗地图与敌人美术缺口矩阵_v1.0.csv",
+      "sha256": "eb067e050f99a93194bd78699a2308be563e068434b4934e1bf3ea2048a5f455"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_low_bookcase_2x1.png",
+      "sha256": "812da51bc08b6e469f5ce5c56d49905fe9700c3865d36ac60c53d932c7b3107d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_smithing_table_2x1.png",
+      "sha256": "3b055c12c9e92ea7005b8c2eaaa0bf3d5d2b89a0f1e17b6fe42974589e5dd778"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_tool_cabinet_2x1.png",
+      "sha256": "be7a009d010ce947f9d09574c630d53f33b7b0c795cc693e580b53cc324f6c95"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_关卡陈设盘点/bindings.json",
+      "sha256": "c502c8fd90c476f5d75ef4c752c437f1db19f9323e8d6698c0f62032286c264d"
+    }
+  ],
+  "runtime_images": [
+    {
+      "path": "Worldbuilding/归档/2026-10-16_关卡陈设盘点/runtime/elite_foundry.png",
+      "sha256": "4652a4bdc9664d86ee2ea18d567dcb5779ea3f5f5779759bc38ebda82373d95d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_关卡陈设盘点/runtime/elite_foundry_960.png",
+      "sha256": "3dd61f81ae752398403f56eaf26e17abea5b6986c29de88615b03473af2280fb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_关卡陈设盘点/runtime/library_discipline.png",
+      "sha256": "1ff88b1a15645a0fd05ef9d9e034050e535f3563baaa81455c63f0b0f7df987a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_关卡陈设盘点/runtime/library_discipline_960.png",
+      "sha256": "0bc8027186112d10800868d08ed47c468909b5c3519c3ecbbf5749478cd7f5a3"
+    }
+  ]
+}

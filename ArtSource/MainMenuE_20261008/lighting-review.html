@@ -1,0 +1,8 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>以太 · 光照对比</title>
+<style>body{margin:0;background:#201c18;color:#eee0c6;font:16px/1.6 system-ui}main{max-width:1440px;margin:auto;padding:24px}h1{font-size:24px}p{color:#c3b49d}button{background:#ddc99f;color:#282018;border:0;padding:10px 24px;margin:0 10px 16px 0;cursor:pointer}button[aria-pressed=true]{outline:2px solid #fff1cd}img,video{display:block;width:100%;image-rendering:pixelated}a{color:#ddc99f}section{margin-top:28px}</style>
+<main><h1>以太 · 光照调整</h1><p>Unity 实际画面：三段窗光照入桌面，物件投影朝向一致，以太灯提供局部冷光。</p>
+<button id="before" aria-pressed="false">调整前</button><button id="after" aria-pressed="true">调整后</button>
+<img id="scene" src="lighting-after.png" alt="光照调整后的主界面">
+<section><p>实际开书流程：开始游戏 → 角色配置</p><video controls preload="metadata" src="lighting-start.mp4" poster="lighting-after.png"></video></section>
+<p>场景六个区域实测共用 6px 显示网格，未新增背景光线贴图。<a href="modular-review.html">查看独立素材与组合样板</a></p></main>
+<script>for(const key of ['before','after'])document.getElementById(key).onclick=()=>{document.getElementById('scene').src='lighting-'+key+'.png';document.getElementById('scene').alt=key==='before'?'光照调整前':'光照调整后';for(const k of ['before','after'])document.getElementById(k).setAttribute('aria-pressed',k===key)};</script></html>

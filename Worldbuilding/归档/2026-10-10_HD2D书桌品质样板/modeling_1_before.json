@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"战斗外HD-2D内容制作补充\"><p id=\"doxcnp9MY3CVG81WL0HI5D1S7ng\">战斗外HD-2D内容制作补充（用户确认，2026-10-09）：除设置等系统页面外，游戏内容、容器和按钮位于场景中的实际空间，以独立2D像素资产按前景边沿、承载面、内容物、标签和后景组合，使用同一场景相机形成前后遮挡与深度。不得将旧全屏界面贴图换成受光网格后仍逐帧锁在屏幕坐标上，冒充场景改造；该条覆盖旧版信息页面控件常驻屏幕平面的制作口径。减少建模，优先生产独立的容器、纸页、翻盖、边沿和按钮贴片，少量几何只用于承载、遮挡和光影代理，不为每个格子建立实体盒模型。文字使用清晰的平面文字，并随实际承载物件布置；必要的悬停详情和系统提示可保留屏幕浮层，不能借场景透视牺牲正文阅读或点击命中。非战斗展示物件沿用完整主体加安全边的自适应画布、统一像素簇和来源审核，不能套用战场占格尺寸。玩法、装备拖放、页面操作和存档结果保持不变。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2721
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "purpose": "OCC main menu continuous opening animation candidate",
+  "provider": "Codex built-in image_gen",
+  "frames": 8,
+  "layout": "4 columns x 2 rows, row-major",
+  "beats": [
+    "closed",
+    "cover lifts slightly",
+    "cover at 45 degrees",
+    "cover upright",
+    "cover falls left",
+    "pages settle",
+    "almost open",
+    "fully open"
+  ],
+  "anchor": "stationary spine and bottom desk contact",
+  "invariants": [
+    "same native square pixel pitch",
+    "navy cloth cover",
+    "brass corners and small central diamond",
+    "cream blank paper",
+    "same perspective and scale",
+    "no baked cast shadows or scene lighting"
+  ],
+  "target_canvas": "shared adaptive canvas large enough for full open book; no geometric resizing",
+  "duration_ms": 1300,
+  "max_independent_attempts": 3,
+  "status": "REJECTED: 3 independent attempts; unstable frame lattice and registration; not imported",
+  "known_cost": null
+}

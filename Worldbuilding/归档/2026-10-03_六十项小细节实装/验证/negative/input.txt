@@ -1,0 +1,1 @@
+source=starter-chest hit=背包物品_starter-chest cell=64 from=(1385.40, 777.60) to=(1449.40, 777.60)

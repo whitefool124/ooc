@@ -1,0 +1,62 @@
+[
+  {
+    "key": "bench_gen",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-5ced529e-ae58-43e0-b155-410aca3f5ad7.png",
+    "status": "REJECTED",
+    "reason": "Bench silhouette narrowed in generated atlas"
+  },
+  {
+    "key": "pad_gen",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-c682cfd3-18a9-4bf3-a3df-ea8d97a0501f.png",
+    "status": "REJECTED",
+    "reason": "Wrong atlas aspect ratio"
+  },
+  {
+    "key": "bench_normal_r2",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-d291c8f8-e57c-4d63-978e-ef2f13c3e200.png",
+    "status": "QA_PENDING"
+  },
+  {
+    "key": "bench_rough",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-2bd8518c-1a88-4275-bfb2-fdae62852c8f.png",
+    "status": "QA_PENDING"
+  },
+  {
+    "key": "pad_normal",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-822b3455-b6c4-4cad-b6a0-3a609aabdb6f.png",
+    "status": "REJECTED",
+    "reason": "Pad raised and lower support misregistered"
+  },
+  {
+    "key": "pad_normal_r3",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-39584b67-75c7-439b-adbd-02bbfec63aa0.png",
+    "status": "QA_PENDING"
+  },
+  {
+    "key": "pad_rough",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-400b26f4-95c3-4a02-afd0-613913114229.png",
+    "status": "QA_PENDING"
+  },
+  {
+    "key": "planter_normal",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-06958d12-d558-4bd3-93c5-f6965dedce79.png",
+    "status": "REJECTED",
+    "reason": "Normal amplitudes excessive"
+  },
+  {
+    "key": "planter_normal_r2",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-0e4e74c9-7377-4d7a-a31f-2785a7273983.png",
+    "status": "QA_PENDING"
+  },
+  {
+    "key": "planter_rough",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-0b2ab08f-bc47-4f85-a4ab-7d5876636a2f.png",
+    "status": "REJECTED",
+    "reason": "Generated black boundaries are invalid roughness"
+  },
+  {
+    "key": "planter_rough_r2",
+    "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-45a814e5-852e-4d96-b535-15b0e4766152.png",
+    "status": "QA_PENDING"
+  }
+]

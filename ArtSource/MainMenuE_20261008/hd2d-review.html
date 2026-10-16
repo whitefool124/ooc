@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>以太 · HD-2D 开场样板</title>
+<style>body{margin:0;background:#211b17;color:#eee3ce;font:16px/1.7 system-ui}main{max-width:1440px;margin:auto;padding:28px}h1{font-size:28px;margin:0}p{color:#c9bea9}video,img{display:block;width:100%;border-radius:3px}button{background:#e9dcc2;color:#30251b;border:0;padding:12px 20px;margin:12px 8px 12px 0;cursor:pointer}button[aria-pressed=true]{background:#97c4bc}details{margin:24px 0}summary{cursor:pointer}a{color:#d5c5a2}.tag{color:#aecbc4;font-size:13px;letter-spacing:2px}</style>
+<main><span class="tag">UNITY 实机 · HD-2D 制作样板</span><h1>窗边书桌 · 从房间进入档案</h1><p>像素书页、植物与学院窗景，组合真实房间、桌面和杯碟体积。日光与以太灯统一作用于场景，开书时镜头向书页推进。</p>
+<div id="tabs"><button data-src="hd2d-book-loop.mp4" aria-pressed="true">无遮挡开书</button><button data-src="hd2d-start.mp4">开始游戏</button><button data-src="hd2d-continue.mp4">继续游戏</button></div>
+<video id="review" controls autoplay muted loop playsinline src="hd2d-book-loop.mp4" poster="hd2d-open-final.png"></video><p id="caption">固定书脊开合与镜头推进；移除菜单和转场遮罩后录制。</p>
+<details open><summary>主菜单 · 没有进行中的一局</summary><img src="hd2d-menu.png" alt="HD2D主菜单实机画面"></details>
+<details><summary>书页近景</summary><img src="hd2d-open-final.png" alt="真实桌面上的展开书页"></details>
+<details><summary>实际目的界面</summary><p>开始游戏 → 角色档案；继续游戏 → 隔离验证存档的学院地图。</p><img src="hd2d-dossier.png" alt="角色档案"><img src="hd2d-continue-map.png" alt="学院地图"></details>
+<p>当前是可运行的制作样板，房间与杯碟使用基础模型，墙面、木料和物件细节尚未完成正式材质制作。书页原料与导入已校验，人工审美确认待定。本轮仅切换主菜单的场景渲染，后续界面沿用当前纸页版本。</p><p><a href="paper-review.html">战斗外纸页界面</a></p></main>
+<script>const captions={'hd2d-book-loop.mp4':'固定书脊开合与镜头推进；移除菜单和转场遮罩后录制。','hd2d-start.mp4':'真实点击开始游戏：菜单淡出、开书、推进、进入角色档案。','hd2d-continue.mp4':'真实点击继续游戏：打开书本后进入学院地图。'};document.querySelectorAll('[data-src]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-src]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));const v=document.getElementById('review');v.src=b.dataset.src;v.play();document.getElementById('caption').textContent=captions[b.dataset.src]}));</script></html>

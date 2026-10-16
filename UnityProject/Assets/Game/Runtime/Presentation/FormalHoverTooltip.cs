@@ -261,6 +261,11 @@ namespace OCC.Combat.Presentation
                 throw new InvalidOperationException("Missing formal hover tooltip prefab at Resources/" + ResourcePath + ".prefab");
             FormalHoverTooltip view = Instantiate(prefab, hostCanvas.transform, false);
             view.name = "通用悬浮窗";
+            // Sibling order cannot raise a tooltip above another canvas's HUD or preview layers.
+            Canvas tooltipCanvas = view.GetComponent<Canvas>();
+            if (tooltipCanvas == null) tooltipCanvas = view.gameObject.AddComponent<Canvas>();
+            tooltipCanvas.overrideSorting = true;
+            tooltipCanvas.sortingOrder = Mathf.Max(UiLayoutContract.TooltipSortingOrder, hostCanvas.sortingOrder + 1);
             view.Initialize(hostCanvas);
             return view;
         }
@@ -638,6 +643,11 @@ namespace OCC.Combat.Presentation
         public void Hide(object source)
         {
             if (!ReferenceEquals(owner, source)) return;
+            HideAll();
+        }
+
+        public void HideAll()
+        {
             owner = null;
             if (panel != null) panel.gameObject.SetActive(false);
         }
@@ -671,7 +681,19 @@ namespace OCC.Combat.Presentation
         {
             if (!NavigationFocusRequestedThisFrame()) return;
             RectTransform rect = transform as RectTransform;
-            Vector2 position = rect == null ? Vector2.zero : RectTransformUtility.WorldToScreenPoint(null, rect.TransformPoint(rect.rect.center));
+            Vector2 position = Vector2.zero;
+            if (rect != null)
+            {
+                Canvas canvas = rect.GetComponentInParent<Canvas>();
+                Camera camera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
+                Vector3 centre = rect.TransformPoint(rect.rect.center);
+                if (camera != null && camera.targetTexture != null)
+                {
+                    Vector3 viewport = camera.WorldToViewportPoint(centre);
+                    position = new Vector2(viewport.x * Screen.width, viewport.y * Screen.height);
+                }
+                else position = RectTransformUtility.WorldToScreenPoint(camera, centre);
+            }
             Show(position);
         }
 

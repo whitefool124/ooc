@@ -1,0 +1,177 @@
+{
+  "status": "QA_PENDING",
+  "tests": {
+    "id": "2",
+    "testcasecount": "30",
+    "result": "Passed",
+    "total": "30",
+    "passed": "30",
+    "failed": "0",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-16 09:27:36Z",
+    "end-time": "2026-10-16 09:27:37Z",
+    "duration": "1.0674658"
+  },
+  "inventory_changed_cells": [
+    [
+      36,
+      9
+    ]
+  ],
+  "source_and_binding_inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "8026256376fcbbb14b48a072a79522cf0ed9278744c0507c97b848b89d29e531"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "da0d457d538980b54e2db67889d5760bf0b037f176678d9ccace7a0c76ada861"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "02db449a5dda7f4a8d22ba78df12388077c4d4ebc7d3e696540a7a45f87dda00"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "cb0d43a9604da681e1d28b56f540b3daf75394b36d949ec78bcf56796d00568b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/BattlefieldCellPresentation.cs",
+      "sha256": "b2c82a9fda5fee52543da58a4d93df33e6504657bd4bdcd718a32718e49fe4e0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/CombatBattlefieldCellPresenter.cs",
+      "sha256": "42bb60d1cf5c6c2018587d5597e4a2f4755f3dbb200cf0ebd043fdde49071104"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/CombatFormalVisualAssets.cs",
+      "sha256": "3abb59c9a95313f48f23f0389ae2e41a6a12dc08154ac74bbfa5248bb3746f01"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs",
+      "sha256": "86010081f03cac5abbcafbe0b43632737b1aedff3f9928a1aef8fbbac0aa0855"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DFieldEffectLabels.cs",
+      "sha256": "785e50d3b7dad8903175c1a55f93ae6f5e59fe4a5782a29dc533e74ef9f77ece"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/BattlefieldDeviceArtCandidates.cs",
+      "sha256": "4df8feeb0021873802b36ae20f5202932e2a883e8a73c0266627ec564884527a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/BattlefieldDeviceCandidateReview.cs",
+      "sha256": "a0aa09776e1edc433e6f22bd4843a326a9d2b64d3b7eeb2f4e2611f9ff5d09f2"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Tests/EditMode/DeviceMaterialPresentationTests.cs",
+      "sha256": "ae603407cc7e3b6cdd72bc46f7ed3a98b5d81c333dd7211db68e9af5edaa0657"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/EnemyFieldRuntimeScreenshots.cs",
+      "sha256": "65d8db3d3ca98eb3543b0f7c7c8ad83c51b7ae5702bbd6010da4b88949680c37"
+    },
+    {
+      "path": "Worldbuilding/数据表/OCC_学院第一阶段全流程内容清单_v1.0.csv",
+      "sha256": "7919a15cb8e1ae0420df210b8a1e291361fada2187e11714d22d4227a758b4dd"
+    },
+    {
+      "path": "ArtSource/device_material_candidates_20261016/overload/asset/device_overload.occ-art-manifest-v1.json",
+      "sha256": "5d92ace5bf3e2e90bb7e6618f1d7d1f8181a03d888a28783b58d69908a1ae446"
+    },
+    {
+      "path": "ArtSource/device_material_candidates_20261016/overload/asset/device_overload.png",
+      "sha256": "86411bb1e4891803e4b428cfee78e7fea64f48c118ba1928474fd58ba3443252"
+    },
+    {
+      "path": "ArtSource/device_material_candidates_20261016/shard/asset/material_crystal_shards.occ-art-manifest-v1.json",
+      "sha256": "6097f981b78ead6f1dc66b8f1dc441110e28f8dc48be9092614847373fc9c9f2"
+    },
+    {
+      "path": "ArtSource/device_material_candidates_20261016/shard/asset/material_crystal_shards.png",
+      "sha256": "1926abd5fd6dea81858e0252a1ffdd667f86d3d4b7cdac5dfcba0ca0e243a298"
+    },
+    {
+      "path": "ArtSource/device_material_candidates_20261016/tower/asset/device_tower_mechanism.occ-art-manifest-v1.json",
+      "sha256": "286ba462b77c1807c93429dc03f8244e7736229f1259ebcf8154be0b23cdb565"
+    },
+    {
+      "path": "ArtSource/device_material_candidates_20261016/tower/asset/device_tower_mechanism.png",
+      "sha256": "511b10d5fec6e3a22e351acad11e4ac4a2bfa42a8d0cd625d8d5347a8ffc1541"
+    },
+    {
+      "path": "ArtSource/device_material_candidates_20261016/ward/asset/device_ward_generator.occ-art-manifest-v1.json",
+      "sha256": "4162981e5a9dac1d23c163cc9b35a28028d6cfebc37ee5b291ae32cf3b198862"
+    },
+    {
+      "path": "ArtSource/device_material_candidates_20261016/ward/asset/device_ward_generator.png",
+      "sha256": "cf28bc00a9666049d2167150fb6277438c68e3ea7a7928d49a4e94a6128f0318"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/DeviceMaterialCandidates32/device_overload.png",
+      "sha256": "86411bb1e4891803e4b428cfee78e7fea64f48c118ba1928474fd58ba3443252"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/DeviceMaterialCandidates32/device_overload.png.meta",
+      "sha256": "38100a57b76d996540dc641c86e8867bc3f108284a27052cc48e092d2db02bd1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/DeviceMaterialCandidates32/device_tower_mechanism.png",
+      "sha256": "511b10d5fec6e3a22e351acad11e4ac4a2bfa42a8d0cd625d8d5347a8ffc1541"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/DeviceMaterialCandidates32/device_tower_mechanism.png.meta",
+      "sha256": "c7ace0ccc692797f19a1b226fb59adb555f0bd46646b3e9c7052e200a03cc021"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/DeviceMaterialCandidates32/device_ward_generator.png",
+      "sha256": "cf28bc00a9666049d2167150fb6277438c68e3ea7a7928d49a4e94a6128f0318"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/DeviceMaterialCandidates32/device_ward_generator.png.meta",
+      "sha256": "8bbcc2e9c372dda10cc4eff7805a07be4759bc47cafeba0fc602fb1c221b70e2"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/DeviceMaterialCandidates32/material_crystal_shards.png",
+      "sha256": "1926abd5fd6dea81858e0252a1ffdd667f86d3d4b7cdac5dfcba0ca0e243a298"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/DeviceMaterialCandidates32/material_crystal_shards.png.meta",
+      "sha256": "93a0c5068dfdda0f88591fc52b785f17ad155a39c3868fc9432ff516808ea326"
+    }
+  ],
+  "runtime_images": [
+    {
+      "path": "Worldbuilding/归档/2026-10-16_装置与碎晶辨识/runtime/01_devices_and_shards.png",
+      "sha256": "6210f12f888b8594109915eb3f8fe43dcc95965bcb9e586d6b572e2f39fbaf0f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_装置与碎晶辨识/runtime/02_damaged_devices.png",
+      "sha256": "3792b5ffc0cd7860b757d1d2c30c67fcbc6dbce6b08c99cad6ffa180e9e8888f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_装置与碎晶辨识/runtime/03_destroyed_devices.png",
+      "sha256": "b5c17edc894537afa272d8250e935b117b8e1c1b964ae810df468684a6ec7bfd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_装置与碎晶辨识/runtime/03_destroyed_devices_960.png",
+      "sha256": "03c54a2276d2f1063a364f32665362b7676443434cfc73afa20574e9970f1734"
+    }
+  ]
+}

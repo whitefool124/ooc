@@ -1,0 +1,92 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "hd2d_pixel_library_dossier",
+  "role": "hd2d_library_display",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "ArtLibrary/HD2D/20261009/pixel-v2/dossier/source-03.png",
+    "source_sha256": "4d1eb213994fd0f0d0bc5b4ace454991e621989aa2049563714379efc7f1d6d6",
+    "generation_attempt": 3,
+    "style_reference": null,
+    "source_descriptor": "Independent Codex builtin imagegen; dossier is material/style reference only."
+  },
+  "delivery": {
+    "output_path": "ArtLibrary/HD2D/20261009/pixel-v2/dossier/delivery.png",
+    "output_sha256": "3c6c2720e73d9e8bc0fcf0a852e7a337615bd11fd1a513b2cb606c84c145044a",
+    "logical_cells": null,
+    "palette_max": 1000000,
+    "size": [
+      1166,
+      683
+    ],
+    "alpha_policy": "transparent_soft_alpha",
+    "native_anchor": [
+      583,
+      667
+    ],
+    "processing": {
+      "alpha_zero_at_or_below": 8,
+      "alpha_opaque_at_or_above": 248,
+      "zero_hidden_rgb": true,
+      "crop_source_bbox": [
+        201,
+        176,
+        1335,
+        827
+      ],
+      "transparent_padding_px": 16,
+      "delivery_resized": false,
+      "palette_quantized": false,
+      "art_redrawn": false,
+      "matte_removal": "Only dossier source-03: set alpha=0 for dedicated magenta matte R>200 B>200 G<100; object RGB unchanged."
+    }
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "application": "PENDING",
+    "note": "Existing family direction is approved; these individual generated assets have not been approved or imported."
+  },
+  "prompt": "Create ONE open student dossier as TRUE coarse low-resolution 32-bit-era PIXEL ART. Large square pixel blocks, clear stepped contour, sparse simple clustered shading, dark walnut spine, small muted brass rings and teal cloth cover. Two wide completely BLANK IVORY PAPER pages are solid opaque flat cream color; no patterns, no stains, no dirt, no translucent spots, no erased writing, no gradients within the pages. Front facing camera-parallel pages and thin lower paper edge. Visually approximately 120 art pixels across the entire book, magnified crisp square pixels. No hand painting, no wood grain, no fabric noise, no smooth curves, no blur, no high-resolution detail. Fully opaque object. Place it on a perfectly flat uniform saturated bright MAGENTA (#FF00FF) chroma-key background. Background has no texture, no shadow, no glow, no gradients. No magenta anywhere on the book itself. Whole book inside frame with generous magenta margin. This is game sprite raw material; no scene, no letters, no text.",
+  "style_policy": "32-bit-era coarse pixel art; preserve existing pixel language, no forced 32x32 canvas",
+  "application": {
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "Pending Unity application; camera-parallel sprite, preserve aspect ratio; catalog uses proportional display.",
+    "current_evidence_scope": "library display and live-text prototype only; no Unity runtime verification",
+    "recommended_importer": {
+      "filterMode": "Point",
+      "mipmaps": false,
+      "compression": "None",
+      "meshType": "FullRect"
+    },
+    "external_lighting": "Scene-owned; do not bake floor shadow into asset"
+  },
+  "placement_semantics": {
+    "application_scope": "concept_display",
+    "mount_type": "tabletop",
+    "logical_cell": null,
+    "native_anchor": [
+      583,
+      667
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 667
+    },
+    "depth_sort_baseline": 667,
+    "allowed_occlusion_direction": "front_to_back_by_contact_baseline",
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": "shared academy desktop",
+    "combined_room_shell": false,
+    "contact_verification": "Pending physical scene placement; isolated display only"
+  },
+  "evidence": {
+    "one_x": "ArtLibrary/HD2D/20261009/pixel-v2/dossier/delivery.png",
+    "four_x": "ArtLibrary/HD2D/20261009/pixel-v2/dossier/qa/four-x.png",
+    "grayscale": "ArtLibrary/HD2D/20261009/pixel-v2/dossier/qa/grayscale.png",
+    "checker": "ArtLibrary/HD2D/20261009/pixel-v2/dossier/qa/checker.png",
+    "application_contact": "ArtLibrary/HD2D/20261009/pixel-v2/index.html"
+  }
+}

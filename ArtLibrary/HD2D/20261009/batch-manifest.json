@@ -1,0 +1,155 @@
+{
+  "schema": "occ-hd2d-library-batch-v1",
+  "date": "2026-10-09",
+  "scope": "noncombat text carriers and display props",
+  "pixel_alignment_required": false,
+  "priority": [
+    "beauty",
+    "cohesive style",
+    "readability",
+    "complete silhouette",
+    "alpha usability"
+  ],
+  "reuse": [
+    "student_dossier",
+    "equipment_case",
+    "action_plaque",
+    "hot_drink",
+    "work tray",
+    "market balance"
+  ],
+  "items": [
+    {
+      "id": "dossier",
+      "title": "展开档案册",
+      "prompt": "OCC reusable HD2D scene asset, original near-modern magical academy visual language. Clean Japanese game illustration with tactile painted sprite materials and restrained pixel-inspired edges; BEAUTY AND COHESIVE STYLE FIRST, no strict pixel grid or pixel quantization. Paper ivory/cream rather than white, walnut brown and desaturated dark teal covers, small aged brass fittings, muted cyan glass. Calm broad value shapes, crisp readable silhouette, restrained fine detail, no gritty noise, no grunge, no ornate medieval fantasy or excessive steampunk gears. Front facing, zero yaw, camera-parallel main face, subtle shallow overhead reveal, no dramatic perspective. Soft neutral upper-left form shading, low contrast, NO warm orange lighting, NO glow, NO atmospheric haze, NO external cast shadow, no floor or scene. ONE complete isolated object on genuine transparent alpha background with generous transparent padding. Blank surfaces for dynamic Chinese text, no letters, numbers, symbols pretending to be text, decorative pseudo-writing, labels or UI mockup. Same material family and lighting throughout. SUBJECT: A broad open student dossier, two wide blank ivory writing pages with softly bowed top contours and layered lower page edges, a narrow central walnut binding with restrained brass rings, small desaturated teal cloth cover protruding around edges. Very generous clean writing space. Physically believable thin paper stack, elegant restrained hardware. The two pages are flat toward camera for live text; book volume shown in spine and perimeter.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/dossier/source-01.png",
+      "delivery_path": "ArtLibrary/HD2D/20261009/dossier/delivery.png",
+      "source_sha256": "bd0d4c8946e1f7c5813296b87d50c7ae9f7a1acc927d7fd383d4088f13d34010",
+      "delivery_sha256": "71517b7fc35b2bfb6fd6521a3f695eac1b19db50215b1ae004c07fc3f0795e1b",
+      "delivery_size": [
+        1526,
+        875
+      ]
+    },
+    {
+      "id": "notes",
+      "title": "装订便笺",
+      "prompt": "OCC reusable HD2D scene asset, original near-modern magical academy visual language. Clean Japanese game illustration with tactile painted sprite materials and restrained pixel-inspired edges; BEAUTY AND COHESIVE STYLE FIRST, no strict pixel grid or pixel quantization. Paper ivory/cream rather than white, walnut brown and desaturated dark teal covers, small aged brass fittings, muted cyan glass. Calm broad value shapes, crisp readable silhouette, restrained fine detail, no gritty noise, no grunge, no ornate medieval fantasy or excessive steampunk gears. Front facing, zero yaw, camera-parallel main face, subtle shallow overhead reveal, no dramatic perspective. Soft neutral upper-left form shading, low contrast, NO warm orange lighting, NO glow, NO atmospheric haze, NO external cast shadow, no floor or scene. ONE complete isolated object on genuine transparent alpha background with generous transparent padding. Blank surfaces for dynamic Chinese text, no letters, numbers, symbols pretending to be text, decorative pseudo-writing, labels or UI mockup. Same material family and lighting throughout. SUBJECT: A compact wide ivory memo pad with softly rounded paper corners, a walnut top binding strip and small brass clip, a few staggered blank pages underneath. Large clean blank writing surface. An asymmetrical small muted teal cloth tab protrudes from the side. Physical stationery, not a generic rectangular UI frame.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/notes/source-01.png",
+      "delivery_path": "ArtLibrary/HD2D/20261009/notes/delivery.png",
+      "source_sha256": "884bdd833d1b0a6b45d0252588a59a603a4c8ea8bd349c50d0edf996d7c954c1",
+      "delivery_sha256": "7fd8b180a023bfcb16c01bb2102065d246cc4f5f3b21596a598fc375943a1e53",
+      "delivery_size": [
+        1467,
+        846
+      ]
+    },
+    {
+      "id": "plaque",
+      "title": "悬挂铭牌",
+      "prompt": "OCC reusable HD2D scene asset, original near-modern magical academy visual language. Clean Japanese game illustration with tactile painted sprite materials and restrained pixel-inspired edges; BEAUTY AND COHESIVE STYLE FIRST, no strict pixel grid or pixel quantization. Paper ivory/cream rather than white, walnut brown and desaturated dark teal covers, small aged brass fittings, muted cyan glass. Calm broad value shapes, crisp readable silhouette, restrained fine detail, no gritty noise, no grunge, no ornate medieval fantasy or excessive steampunk gears. Front facing, zero yaw, camera-parallel main face, subtle shallow overhead reveal, no dramatic perspective. Soft neutral upper-left form shading, low contrast, NO warm orange lighting, NO glow, NO atmospheric haze, NO external cast shadow, no floor or scene. ONE complete isolated object on genuine transparent alpha background with generous transparent padding. Blank surfaces for dynamic Chinese text, no letters, numbers, symbols pretending to be text, decorative pseudo-writing, labels or UI mockup. Same material family and lighting throughout. SUBJECT: A small wide horizontal ivory enamel sign suspended from a short walnut bracket by two curved brass loops; subtly scalloped clipped ends and a narrow dark teal edge. Broad completely blank inscription area. Tactile enamel, believable small mounting hardware, restrained depth. No ornamental frame.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/plaque/source-01.png",
+      "delivery_path": "ArtLibrary/HD2D/20261009/plaque/delivery.png",
+      "source_sha256": "5c67c0141686e5b12a8253295bfa2a421099cf0564fdcf414bb340e81158aea2",
+      "delivery_sha256": "3ea6bc346ad0653bd277b56fd5d4ae3705237465b9ede696891518bc43b58e4a",
+      "delivery_size": [
+        1667,
+        716
+      ]
+    },
+    {
+      "id": "price_tag",
+      "title": "商品吊牌",
+      "prompt": "OCC reusable HD2D scene asset, original near-modern magical academy visual language. Clean Japanese game illustration with tactile painted sprite materials and restrained pixel-inspired edges; BEAUTY AND COHESIVE STYLE FIRST, no strict pixel grid or pixel quantization. Paper ivory/cream rather than white, walnut brown and desaturated dark teal covers, small aged brass fittings, muted cyan glass. Calm broad value shapes, crisp readable silhouette, restrained fine detail, no gritty noise, no grunge, no ornate medieval fantasy or excessive steampunk gears. Front facing, zero yaw, camera-parallel main face, subtle shallow overhead reveal, no dramatic perspective. Soft neutral upper-left form shading, low contrast, NO warm orange lighting, NO glow, NO atmospheric haze, NO external cast shadow, no floor or scene. ONE complete isolated object on genuine transparent alpha background with generous transparent padding. Blank surfaces for dynamic Chinese text, no letters, numbers, symbols pretending to be text, decorative pseudo-writing, labels or UI mockup. Same material family and lighting throughout. SUBJECT: An ivory thick paper price tag with softly clipped upper corners, a little brass eyelet and a short neatly looped muted teal cord. Front facing wide enough for two lines of live text. Blank cream writing area, restrained stacked-paper thickness and clean intact cord silhouette. No text.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/price_tag/source-01.png",
+      "delivery_path": "ArtLibrary/HD2D/20261009/price_tag/delivery.png",
+      "source_sha256": "5213f38416b7ffca4c790105b119d6512c8fefd7182008242e664aa865f9c56a",
+      "delivery_sha256": "1bacd95eef574049c959fb75e6c7cd058c608cf825d59e7188b3aa5c7b5bac6a",
+      "delivery_size": [
+        1412,
+        964
+      ]
+    },
+    {
+      "id": "service_label",
+      "title": "桌面服务牌",
+      "prompt": "OCC reusable HD2D scene asset, original near-modern magical academy visual language. Clean Japanese game illustration with tactile painted sprite materials and restrained pixel-inspired edges; BEAUTY AND COHESIVE STYLE FIRST, no strict pixel grid or pixel quantization. Paper ivory/cream rather than white, walnut brown and desaturated dark teal covers, small aged brass fittings, muted cyan glass. Calm broad value shapes, crisp readable silhouette, restrained fine detail, no gritty noise, no grunge, no ornate medieval fantasy or excessive steampunk gears. Front facing, zero yaw, camera-parallel main face, subtle shallow overhead reveal, no dramatic perspective. Soft neutral upper-left form shading, low contrast, NO warm orange lighting, NO glow, NO atmospheric haze, NO external cast shadow, no floor or scene. ONE complete isolated object on genuine transparent alpha background with generous transparent padding. Blank surfaces for dynamic Chinese text, no letters, numbers, symbols pretending to be text, decorative pseudo-writing, labels or UI mockup. Same material family and lighting throughout. SUBJECT: A small tabletop standing service sign: broad rounded ivory enamel inscription face in a dark walnut lower support with short brass feet. Camera-parallel blank writing surface. A compact connected object with a stable support edge, no box-like UI panel, no elaborate frame.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/service_label/source-01.png",
+      "delivery_path": "ArtLibrary/HD2D/20261009/service_label/delivery.png",
+      "source_sha256": "29ce834479bce336d7ef830cc0d9cfee1dc2d34b4026a5cde686179911ada39a",
+      "delivery_sha256": "717c447eafbe3b9f59287266a161e23b6b685180e610081dffd002897f8dbf8e",
+      "delivery_size": [
+        1507,
+        664
+      ]
+    },
+    {
+      "id": "cloth_display",
+      "title": "布垫陈列座",
+      "prompt": "OCC reusable HD2D scene asset, original near-modern magical academy visual language. Clean Japanese game illustration with tactile painted sprite materials and restrained pixel-inspired edges; BEAUTY AND COHESIVE STYLE FIRST, no strict pixel grid or pixel quantization. Paper ivory/cream rather than white, walnut brown and desaturated dark teal covers, small aged brass fittings, muted cyan glass. Calm broad value shapes, crisp readable silhouette, restrained fine detail, no gritty noise, no grunge, no ornate medieval fantasy or excessive steampunk gears. Front facing, zero yaw, camera-parallel main face, subtle shallow overhead reveal, no dramatic perspective. Soft neutral upper-left form shading, low contrast, NO warm orange lighting, NO glow, NO atmospheric haze, NO external cast shadow, no floor or scene. ONE complete isolated object on genuine transparent alpha background with generous transparent padding. Blank surfaces for dynamic Chinese text, no letters, numbers, symbols pretending to be text, decorative pseudo-writing, labels or UI mockup. Same material family and lighting throughout. SUBJECT: A shallow walnut display cradle with a soft folded ivory cloth laid over its center, cloth corners gently draping over the rim, subtle desaturated teal sewn trim. Complete low wide silhouette, empty central presentation area for interchangeable product sprites. No goods, no text. Camera-parallel shallow overhead reveal.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/cloth_display/source-01.png",
+      "delivery_path": "ArtLibrary/HD2D/20261009/cloth_display/delivery.png",
+      "source_sha256": "45fa720d66a84153b3fdbff963c92072b1a50fdc58d38c15f0f35a6fc978dd11",
+      "delivery_sha256": "ff125086d470242eaf207c2192ec0dafeca4006377c4c18310c467ec81cd8045",
+      "delivery_size": [
+        1494,
+        607
+      ]
+    },
+    {
+      "id": "tool_rack",
+      "title": "校准工具架",
+      "prompt": "OCC reusable HD2D scene asset, original near-modern magical academy visual language. Clean Japanese game illustration with tactile painted sprite materials and restrained pixel-inspired edges; BEAUTY AND COHESIVE STYLE FIRST, no strict pixel grid or pixel quantization. Paper ivory/cream rather than white, walnut brown and desaturated dark teal covers, small aged brass fittings, muted cyan glass. Calm broad value shapes, crisp readable silhouette, restrained fine detail, no gritty noise, no grunge, no ornate medieval fantasy or excessive steampunk gears. Front facing, zero yaw, camera-parallel main face, subtle shallow overhead reveal, no dramatic perspective. Soft neutral upper-left form shading, low contrast, NO warm orange lighting, NO glow, NO atmospheric haze, NO external cast shadow, no floor or scene. ONE complete isolated object on genuine transparent alpha background with generous transparent padding. Blank surfaces for dynamic Chinese text, no letters, numbers, symbols pretending to be text, decorative pseudo-writing, labels or UI mockup. Same material family and lighting throughout. SUBJECT: A compact arched walnut calibration rack with broad recognizable hand tools hanging from brass loops and an ivory ceramic conductor cradle on the base. Muted cyan conductor coil. Open gaps, curved silhouette, clean practical magical engineering. Complete stable base. Not a UI rectangle.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/tool_rack/source-01.png",
+      "delivery_path": "ArtLibrary/HD2D/20261009/tool_rack/delivery.png",
+      "source_sha256": "6dad2e19efef6700f6fa5db2395fbac612e92801e6b7a2ac79c6cbfbe9023803",
+      "delivery_sha256": "bf576f51a4331eb898033f4f566bf6a537983ff532d2f9feac0d63d8bdb105dc",
+      "delivery_size": [
+        1423,
+        973
+      ]
+    },
+    {
+      "id": "apothecary",
+      "title": "药剂收纳提箱",
+      "prompt": "OCC reusable HD2D scene asset, original near-modern magical academy visual language. Clean Japanese game illustration with tactile painted sprite materials and restrained pixel-inspired edges; BEAUTY AND COHESIVE STYLE FIRST, no strict pixel grid or pixel quantization. Paper ivory/cream rather than white, walnut brown and desaturated dark teal covers, small aged brass fittings, muted cyan glass. Calm broad value shapes, crisp readable silhouette, restrained fine detail, no gritty noise, no grunge, no ornate medieval fantasy or excessive steampunk gears. Front facing, zero yaw, camera-parallel main face, subtle shallow overhead reveal, no dramatic perspective. Soft neutral upper-left form shading, low contrast, NO warm orange lighting, NO glow, NO atmospheric haze, NO external cast shadow, no floor or scene. ONE complete isolated object on genuine transparent alpha background with generous transparent padding. Blank surfaces for dynamic Chinese text, no letters, numbers, symbols pretending to be text, decorative pseudo-writing, labels or UI mockup. Same material family and lighting throughout. SUBJECT: A physician's open rounded ivory fabric apothecary satchel, arched walnut carry handle, brass latch and tidy broad muted blue glass bottles with folded cloth inside. A complete elegant soft silhouette with a stable contact edge, clean practical academy medical equipment. No writing or medical text.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/apothecary/source-01.png",
+      "delivery_path": "ArtLibrary/HD2D/20261009/apothecary/delivery.png",
+      "source_sha256": "61b964915fbc2049b3fdfc47faf3aed44241a8af4e80c9a1d9377ea854054a43",
+      "delivery_sha256": "49fa90c63bee068b56420beeb1ce1b70345dc7d62232645c804dc7585e461087",
+      "delivery_size": [
+        1451,
+        1002
+      ]
+    }
+  ],
+  "status": "REJECTED_STYLE",
+  "application_status": "NOT_IMPORTED; no Unity runtime or contact proof",
+  "rejection": "User 2026-10-09: must retain basic 32-bit-era pixel art. Painted version is withdrawn.",
+  "replacement": "pixel-v2/batch-manifest.json"
+}

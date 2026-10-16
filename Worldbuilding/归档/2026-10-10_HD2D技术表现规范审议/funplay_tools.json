@@ -1,0 +1,3852 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "tools": [
+      {
+        "name": "add_component",
+        "description": "Add a component to a GameObject. Returns the new component's instanceId.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Identifier of the GameObject"
+            },
+            "component_type": {
+              "type": "string",
+              "description": "Component type name (e.g. 'Rigidbody', 'BoxCollider', 'AudioSource')"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target"
+            }
+          },
+          "required": [
+            "target",
+            "component_type"
+          ]
+        }
+      },
+      {
+        "name": "add_component_to_many",
+        "description": "Add a component of component_type to many GameObjects in one Undo-tracked call. `targets` is a comma-separated list of identifiers, or a single find spec that resolves to at most 100 objects. Returns per-target success with each new component's instanceId.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "targets": {
+              "type": "string",
+              "description": "Comma-separated identifiers, or a single find spec resolving to at most 100 objects"
+            },
+            "component_type": {
+              "type": "string",
+              "description": "Component type name to add (e.g. 'BoxCollider', 'UnityEngine.UI.Image')"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve targets"
+            }
+          },
+          "required": [
+            "targets",
+            "component_type"
+          ]
+        }
+      },
+      {
+        "name": "add_layer",
+        "description": "Add a new layer to the first empty user slot (8-31). Errors if no slot is free.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "layer": {
+              "type": "string",
+              "description": "Layer name to add"
+            }
+          },
+          "required": [
+            "layer"
+          ]
+        }
+      },
+      {
+        "name": "add_tag",
+        "description": "Add a new tag to TagManager (no-op if it already exists).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tag": {
+              "type": "string",
+              "description": "Tag name to add"
+            }
+          },
+          "required": [
+            "tag"
+          ]
+        }
+      },
+      {
+        "name": "analyze_scene_complexity",
+        "description": "Analyze the current scene for common performance hotspots. Summarizes scene complexity and lists the heaviest objects by triangle count, material count, and component count.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "top_n": {
+              "type": "integer",
+              "description": "Number of heaviest objects to return"
+            },
+            "include_inactive": {
+              "type": "boolean",
+              "description": "Include inactive objects in the analysis"
+            }
+          }
+        }
+      },
+      {
+        "name": "assign_animator",
+        "description": "Assign an Animator Controller to a GameObject",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "game_object_name": {
+              "type": "string",
+              "description": "GameObject name, hierarchy path, or instance ID. Finds inactive objects too."
+            },
+            "controller_path": {
+              "type": "string",
+              "description": "Path to the Animator Controller asset"
+            }
+          },
+          "required": [
+            "game_object_name",
+            "controller_path"
+          ]
+        }
+      },
+      {
+        "name": "assign_material",
+        "description": "Assign a material to a GameObject's renderer",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "game_object_name": {
+              "type": "string",
+              "description": "GameObject name, hierarchy path, or instance ID. Finds inactive objects too."
+            },
+            "material_path": {
+              "type": "string",
+              "description": "Path to the material asset"
+            }
+          },
+          "required": [
+            "game_object_name",
+            "material_path"
+          ]
+        }
+      },
+      {
+        "name": "audit_ui",
+        "description": "Read-only UI audit over selection, live roots, prefabs or saved scenes. MCP briefly waits for small scans; otherwise use get_task for bounded waiting and finding pages. Reports Sprite borders, references, invisible raycast targets, text/clipping/layout concerns with evidence. Never fixes or saves assets.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "type": "string",
+              "description": "selection, scene, prefabs, scenes or assets"
+            },
+            "paths": {
+              "type": "string",
+              "description": "JSON array of Assets paths/folders for asset scopes"
+            },
+            "roots": {
+              "type": "string",
+              "description": "JSON array of live root IDs/paths; omitted means all loaded scene roots"
+            },
+            "configuration": {
+              "type": "string",
+              "description": "Optional JSON required_references and suppressions; otherwise reads ProjectSettings/FunplayMcp.UIAudit.json"
+            },
+            "include_inactive": {
+              "type": "boolean",
+              "description": "Include inactive objects"
+            },
+            "max_objects": {
+              "type": "integer",
+              "description": "Maximum scanned objects, 1..100000"
+            },
+            "max_findings": {
+              "type": "integer",
+              "description": "Maximum recorded findings, 1..5000"
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "description": "Total time budget, 1..300 seconds; individual Unity asset loads cannot be preempted"
+            },
+            "wait_seconds": {
+              "type": "integer",
+              "description": "MCP completion wait, 0..30 seconds"
+            }
+          }
+        }
+      },
+      {
+        "name": "bake_lightmaps",
+        "description": "Start an asynchronous lightmap bake of the current scene. Low value for a 2D project. Fails if a bake is already running; poll get_lighting_settings (is_running) to track progress.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "cancel_editor_operation",
+        "description": "Cancel future preparation steps. Already-started native imports, compilation or Play transitions are not cancelled or rolled back. Repeated cancellation is safe.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "operation_id": {
+              "type": "string",
+              "description": "Operation ID"
+            }
+          },
+          "required": [
+            "operation_id"
+          ]
+        }
+      },
+      {
+        "name": "cancel_test_run",
+        "description": "Cancel a running test run. Use when a run appears stuck (e.g. a PlayMode run that never finishes).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Job id returned by run_tests. Omit to cancel the most recent run."
+            }
+          }
+        }
+      },
+      {
+        "name": "cancel_ui_audit",
+        "description": "Cancel the read-only UI audit and close only its owned preview scene. Results already gathered remain available.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Audit job ID"
+            }
+          },
+          "required": [
+            "job_id"
+          ]
+        }
+      },
+      {
+        "name": "capture_editor_window",
+        "description": "Capture a screenshot of any open EditorWindow (Inspector, Console, Project, custom tool windows...) identified by its title or type name. Captures directly from the window's render surface via the editor's internal GUIView, so the window does not need to be unoccluded on screen (it does need to be open). Returns a base64-encoded PNG image, or a saved file path when save_to_file=true.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "window": {
+              "type": "string",
+              "description": "Window title (e.g. 'Inspector', 'MCP Server') or window type name (e.g. 'ConsoleWindow'). Case-insensitive. Exact title match wins, then title contains, then type name."
+            },
+            "width": {
+              "type": "integer",
+              "description": "Width of the screenshot in pixels. 0 keeps the window's native size."
+            },
+            "height": {
+              "type": "integer",
+              "description": "Height of the screenshot in pixels. 0 keeps the window's native size."
+            },
+            "save_to_file": {
+              "type": "boolean",
+              "description": "Save the PNG to disk and return its file path instead of base64 image data. Use for high-resolution captures whose base64 payload would be too large for the transport."
+            },
+            "output_path": {
+              "type": "string",
+              "description": "Optional output .png path under the Unity project root (absolute, or relative to the project root). Default: Library/FunplayMcp/Screenshots/<name>-<timestamp>.png. Only used when save_to_file=true."
+            },
+            "focus": {
+              "type": "boolean",
+              "description": "Focus the window before capturing (brings its tab to the front of its dock area). Default true."
+            }
+          },
+          "required": [
+            "window"
+          ]
+        }
+      },
+      {
+        "name": "capture_game_view",
+        "description": "Capture a fresh screenshot of the Game View (what the main camera sees). Requests a Game View repaint and waits for Editor frames before readback. Returns a base64-encoded PNG image, or a saved file path when save_to_file=true.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer",
+              "description": "Width of the screenshot in pixels"
+            },
+            "height": {
+              "type": "integer",
+              "description": "Height of the screenshot in pixels"
+            },
+            "save_to_file": {
+              "type": "boolean",
+              "description": "Save the PNG to disk and return its file path instead of base64 image data. Use for high-resolution captures whose base64 payload would be too large for the transport."
+            },
+            "output_path": {
+              "type": "string",
+              "description": "Optional output .png path under the Unity project root (absolute, or relative to the project root). Default: Library/FunplayMcp/Screenshots/<name>-<timestamp>.png. Only used when save_to_file=true."
+            }
+          }
+        }
+      },
+      {
+        "name": "capture_multiview",
+        "description": "Capture the scene from multiple synthesized camera angles around a target. Useful for visual reviews (\"show me this prefab/object from every side\") without manually moving the editor camera. Two modes:\n  - surround: 6 axis-aligned views (front/back/left/right/top/bottom).\n  - orbit: cartesian product of evenly-spaced azimuth angles × explicit elevations.\nTarget defaults to the active scene's bounds center; pass target_name to focus on a specific GameObject. Each capture is rendered with a temporary camera (current scene cameras are not modified). Returns base64 PNG images in data.captures[] together with the angle metadata of each.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target_name": {
+              "type": "string",
+              "description": "GameObject name, hierarchy path, or instance ID to focus on (finds inactive objects too). Empty/null uses the active scene's bounds center."
+            },
+            "mode": {
+              "type": "string",
+              "description": "Capture mode: surround (6 axis views, default) or orbit (azimuth × elevations grid)."
+            },
+            "width": {
+              "type": "integer",
+              "description": "Per-frame width in pixels. Default 512."
+            },
+            "height": {
+              "type": "integer",
+              "description": "Per-frame height in pixels. Default 512."
+            },
+            "orbit_angles": {
+              "type": "integer",
+              "description": "Orbit only: number of evenly-spaced azimuth samples (1-36). Default 8."
+            },
+            "orbit_elevations": {
+              "type": "string",
+              "description": "Orbit only: comma-separated elevations in degrees (e.g. \"0,30,-15\"). Default \"0,30,-15\"."
+            },
+            "orbit_distance": {
+              "type": "number",
+              "description": "Camera distance from target. 0 = auto-fit based on target bounds. Default 0."
+            },
+            "orbit_fov": {
+              "type": "number",
+              "description": "Camera vertical field of view in degrees. Default 60."
+            },
+            "save_to_file": {
+              "type": "boolean",
+              "description": "Save each frame as a PNG under Library/FunplayMcp/Screenshots and return file paths instead of base64 image data. Use for large captures whose combined base64 payload would be too large for the transport."
+            }
+          }
+        }
+      },
+      {
+        "name": "capture_scene_view",
+        "description": "Capture a screenshot of the Scene View (the editor's scene camera perspective). By default, active Screen Space Overlay canvases from the current Stage are composited into the image; set include_ui=false for the previous camera-only behavior. Returns a base64-encoded PNG image, or a saved file path when save_to_file=true.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer",
+              "description": "Width of the screenshot in pixels"
+            },
+            "height": {
+              "type": "integer",
+              "description": "Height of the screenshot in pixels"
+            },
+            "include_ui": {
+              "type": "boolean",
+              "description": "Composite active Screen Space Overlay canvases from the current Scene or Prefab Stage."
+            },
+            "save_to_file": {
+              "type": "boolean",
+              "description": "Save the PNG to disk and return its file path instead of base64 image data. Use for high-resolution captures whose base64 payload would be too large for the transport."
+            },
+            "output_path": {
+              "type": "string",
+              "description": "Optional output .png path under the Unity project root (absolute, or relative to the project root). Default: Library/FunplayMcp/Screenshots/<name>-<timestamp>.png. Only used when save_to_file=true."
+            }
+          }
+        }
+      },
+      {
+        "name": "capture_simulator_view",
+        "description": "Capture the Unity Device Simulator screen. Optionally selects a Simulator device and draws a Safe Area outline over the captured image. If the Simulator view has to be opened or the device changes, retry once after Unity renders the next editor frame.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer",
+              "description": "Width of the screenshot in pixels. Default uses the simulator screen texture size. If only width is provided, height preserves source aspect."
+            },
+            "height": {
+              "type": "integer",
+              "description": "Height of the screenshot in pixels. Default uses the simulator screen texture size. If only height is provided, width preserves source aspect."
+            },
+            "device_name": {
+              "type": "string",
+              "description": "Simulator device name to select before capture, e.g. 'iPhone 12' or 'Apple iPad Pro 12.9 (2018)'."
+            },
+            "safe_area_overlay": {
+              "type": "boolean",
+              "description": "Draw a high-contrast Safe Area outline on top of the captured simulator image."
+            },
+            "open_if_needed": {
+              "type": "boolean",
+              "description": "Open the Simulator view if no Simulator window is currently open."
+            },
+            "save_to_file": {
+              "type": "boolean",
+              "description": "Save the PNG to disk and return its file path instead of base64 image data. Use for high-resolution captures whose base64 payload would be too large for the transport."
+            },
+            "output_path": {
+              "type": "string",
+              "description": "Optional output .png path under the Unity project root (absolute, or relative to the project root). Default: Library/FunplayMcp/Screenshots/<name>-<timestamp>.png. Only used when save_to_file=true."
+            }
+          }
+        }
+      },
+      {
+        "name": "clear_execute_code_history",
+        "description": "Erase the entire execute_code history for the current Editor session. Useful when you want a clean slate before a fresh experiment or before sharing a session recording.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "close_prefab_stage",
+        "description": "Close the currently open prefab stage and return to the main stage. By default pending edits are saved first; pass save=false to DISCARD unsaved edits. Never shows a blocking save dialog: discarding clears the stage's dirty flag before closing.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "save": {
+              "type": "boolean",
+              "description": "Save pending edits before closing (false discards them)"
+            }
+          }
+        }
+      },
+      {
+        "name": "configure_ui_defaults",
+        "description": "Replace project-scoped UI defaults using validated JSON schema_version=1; text_component auto/tmp/legacy, font_asset/font_material, input_module auto/input_system/legacy, canvas/button/text template objects {asset_path,text_path}. All fields validated before atomic save. No scene changes or dependency installation.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "configuration": {
+              "type": "string",
+              "description": "Full project UI configuration JSON"
+            }
+          },
+          "required": [
+            "configuration"
+          ]
+        }
+      },
+      {
+        "name": "copy_asset",
+        "description": "Copy an asset to a new location",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "source_path": {
+              "type": "string",
+              "description": "Source asset path"
+            },
+            "destination_path": {
+              "type": "string",
+              "description": "Destination asset path"
+            }
+          },
+          "required": [
+            "source_path",
+            "destination_path"
+          ]
+        }
+      },
+      {
+        "name": "copy_component",
+        "description": "Copy a component from a source GameObject into the editor's SHARED component clipboard so its values can be pasted onto other objects with paste_component_values. Resolves the source through ObjectsHelper (instance id, name, path, tag, layer, component). NOTE: this overwrites Unity's global component clipboard (the same one a manual Ctrl+C uses), so it is not a pure read -- a subsequent manual paste by the user will paste this component.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "source_target": {
+              "type": "string",
+              "description": "Source GameObject identifier (instance id, name, path, tag…)"
+            },
+            "component_type": {
+              "type": "string",
+              "description": "Component type name to copy (e.g. 'Rigidbody', 'BoxCollider', 'UnityEngine.UI.Image')"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve the source target"
+            }
+          },
+          "required": [
+            "source_target",
+            "component_type"
+          ]
+        }
+      },
+      {
+        "name": "create_animation_clip",
+        "description": "Create an Animation Clip asset",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the animation clip"
+            },
+            "save_path": {
+              "type": "string",
+              "description": "Save path"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "create_animator_controller",
+        "description": "Create an Animator Controller asset",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the controller"
+            },
+            "save_path": {
+              "type": "string",
+              "description": "Save path"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "create_button",
+        "description": "Create an Edit Mode UI Button using project prefab/typography defaults. Preserves template bindings; no runtime UI reconstruction.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Button name"
+            },
+            "text": {
+              "type": "string",
+              "description": "Button label"
+            },
+            "parent_name": {
+              "type": "string",
+              "description": "Unique parent name/path/instance ID"
+            },
+            "position": {
+              "type": "string",
+              "description": "Optional anchored x,y"
+            },
+            "size": {
+              "type": "string",
+              "description": "Optional width,height"
+            },
+            "anchor": {
+              "type": "string",
+              "description": "Optional anchor preset"
+            },
+            "pivot": {
+              "type": "string",
+              "description": "Optional pivot x,y"
+            },
+            "text_component": {
+              "type": "string",
+              "description": "auto, tmp or legacy"
+            },
+            "template_path": {
+              "type": "string",
+              "description": "Optional prefab asset"
+            },
+            "text_path": {
+              "type": "string",
+              "description": "Label path relative to template root"
+            },
+            "font_asset": {
+              "type": "string",
+              "description": "Optional font asset override"
+            },
+            "font_material": {
+              "type": "string",
+              "description": "Optional shared font material preset"
+            }
+          },
+          "required": [
+            "name",
+            "text"
+          ]
+        }
+      },
+      {
+        "name": "create_canvas",
+        "description": "Create an Edit Mode Canvas from the project template/defaults, preserving existing EventSystems. Does not save automatically.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Canvas name"
+            },
+            "render_mode": {
+              "type": "string",
+              "description": "Optional render-mode override; omitted preserves the template"
+            },
+            "template_path": {
+              "type": "string",
+              "description": "Optional Canvas prefab asset"
+            },
+            "input_module": {
+              "type": "string",
+              "description": "auto, input_system or legacy; never replaces existing modules"
+            }
+          }
+        }
+      },
+      {
+        "name": "create_game_object",
+        "description": "Create a new empty GameObject in the scene. Returns the new instanceId so it can be targeted by_id in follow-up calls.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the new GameObject"
+            },
+            "parent": {
+              "type": "string",
+              "description": "Parent GameObject identifier (instance id, name, or path)"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve parent (by_id, by_name, by_path, by_id_or_name_or_path)"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "create_image",
+        "description": "Create a UI Image element",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name for the image element"
+            },
+            "parent_name": {
+              "type": "string",
+              "description": "Parent Canvas/UI element name, hierarchy path, or instance ID (finds inactive too)"
+            },
+            "color": {
+              "type": "string",
+              "description": "Color as 'r,g,b,a' or hex"
+            },
+            "size": {
+              "type": "string",
+              "description": "Size as 'width,height'"
+            },
+            "position": {
+              "type": "string",
+              "description": "Anchored position as 'x,y'"
+            },
+            "anchor": {
+              "type": "string",
+              "description": "Anchor preset: 'top-left','top-center','top-right','middle-left','center','middle-right','bottom-left','bottom-center','bottom-right','stretch-horizontal','stretch-vertical','stretch-full'"
+            },
+            "pivot": {
+              "type": "string",
+              "description": "Pivot as 'x,y' (0-1)"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "create_material",
+        "description": "Create a new material with a specified color",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the material"
+            },
+            "color": {
+              "type": "string",
+              "description": "Color as 'r,g,b,a' or hex '#RRGGBB'"
+            },
+            "shader": {
+              "type": "string",
+              "description": "Shader name (default: Standard)"
+            },
+            "save_path": {
+              "type": "string",
+              "description": "Save path (e.g. 'Assets/Materials/')"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "create_new_scene",
+        "description": "Create a new empty scene",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name for the new scene"
+            },
+            "save_path": {
+              "type": "string",
+              "description": "Path to save (e.g. 'Assets/Scenes/')"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "create_prefab",
+        "description": "Create a prefab from a GameObject in the scene",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "game_object_name": {
+              "type": "string",
+              "description": "GameObject name, hierarchy path, or instance ID. Finds inactive objects too."
+            },
+            "save_path": {
+              "type": "string",
+              "description": "Path to save prefab (e.g. 'Assets/Prefabs/')"
+            }
+          },
+          "required": [
+            "game_object_name"
+          ]
+        }
+      },
+      {
+        "name": "create_primitive",
+        "description": "Create a primitive GameObject (Cube, Sphere, Capsule, Cylinder, Plane, Quad).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the new object"
+            },
+            "primitive_type": {
+              "type": "string",
+              "description": "Primitive type: Cube, Sphere, Capsule, Cylinder, Plane, Quad"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position as 'x,y,z'"
+            },
+            "scale": {
+              "type": "string",
+              "description": "Scale as 'x,y,z'"
+            }
+          },
+          "required": [
+            "name",
+            "primitive_type"
+          ]
+        }
+      },
+      {
+        "name": "create_project_ui",
+        "description": "Author a canvas/button/text in Edit Mode using a configured or explicit UI prefab, or project-aware primitives when no template is configured. Preserve prefab references, typography and layout unless explicitly overridden. Save the resulting scene/prefab deliberately. Requires TMP resources when TMP is selected; never substitutes legacy Text silently.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "description": "canvas, button or text"
+            },
+            "name": {
+              "type": "string",
+              "description": "New object name"
+            },
+            "text": {
+              "type": "string",
+              "description": "Label content; omitted preserves the template label"
+            },
+            "parent": {
+              "type": "string",
+              "description": "Unique parent name/path/instance ID; canvas can be a root"
+            },
+            "template_path": {
+              "type": "string",
+              "description": "Optional prefab asset path"
+            },
+            "text_path": {
+              "type": "string",
+              "description": "Optional label path relative to prefab root"
+            },
+            "position": {
+              "type": "string",
+              "description": "Optional anchored x,y"
+            },
+            "size": {
+              "type": "string",
+              "description": "Optional width,height"
+            },
+            "anchor": {
+              "type": "string",
+              "description": "Optional anchor preset"
+            },
+            "pivot": {
+              "type": "string",
+              "description": "Optional pivot x,y"
+            },
+            "text_component": {
+              "type": "string",
+              "description": "auto, tmp or legacy"
+            },
+            "font_asset": {
+              "type": "string",
+              "description": "Optional font asset"
+            },
+            "font_material": {
+              "type": "string",
+              "description": "Optional shared font material preset"
+            },
+            "font_size": {
+              "type": "string",
+              "description": "Optional font size"
+            },
+            "render_mode": {
+              "type": "string",
+              "description": "Optional Canvas render mode"
+            },
+            "input_module": {
+              "type": "string",
+              "description": "auto, input_system or legacy"
+            }
+          },
+          "required": [
+            "kind",
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "create_script",
+        "description": "Create a new C# script with the specified content",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Script file name (without .cs)"
+            },
+            "content": {
+              "type": "string",
+              "description": "C# source code content"
+            },
+            "save_path": {
+              "type": "string",
+              "description": "Path to save (e.g. 'Assets/Scripts/')"
+            }
+          },
+          "required": [
+            "name",
+            "content"
+          ]
+        }
+      },
+      {
+        "name": "create_scriptable_object",
+        "description": "Create a new ScriptableObject asset of the given type at the given path. The type must derive from ScriptableObject and must not be abstract. Follow with set_scriptable_object_properties to fill in fields.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type_name": {
+              "type": "string",
+              "description": "ScriptableObject-derived type name (e.g. 'MyGameConfig' or full 'MyGame.Configs.MyGameConfig')"
+            },
+            "asset_path": {
+              "type": "string",
+              "description": "Asset path to create (e.g. 'Assets/Configs/NewConfig.asset')"
+            }
+          },
+          "required": [
+            "type_name",
+            "asset_path"
+          ]
+        }
+      },
+      {
+        "name": "create_text",
+        "description": "Create an Edit Mode text element using project prefab/typography defaults. Empty projects prefer TextMeshProUGUI; missing TMP resources are reported without fallback.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Object name"
+            },
+            "text": {
+              "type": "string",
+              "description": "Text content"
+            },
+            "parent_name": {
+              "type": "string",
+              "description": "Unique parent name/path/instance ID"
+            },
+            "font_size": {
+              "type": "string",
+              "description": "Optional font size override"
+            },
+            "position": {
+              "type": "string",
+              "description": "Optional anchored x,y"
+            },
+            "size": {
+              "type": "string",
+              "description": "Optional width,height"
+            },
+            "anchor": {
+              "type": "string",
+              "description": "Optional anchor preset"
+            },
+            "pivot": {
+              "type": "string",
+              "description": "Optional pivot x,y"
+            },
+            "text_component": {
+              "type": "string",
+              "description": "auto, tmp or legacy"
+            },
+            "template_path": {
+              "type": "string",
+              "description": "Optional prefab asset"
+            },
+            "text_path": {
+              "type": "string",
+              "description": "Label path relative to template root"
+            },
+            "font_asset": {
+              "type": "string",
+              "description": "Optional font asset override"
+            },
+            "font_material": {
+              "type": "string",
+              "description": "Optional shared font material preset"
+            }
+          },
+          "required": [
+            "name",
+            "text"
+          ]
+        }
+      },
+      {
+        "name": "delete_asset",
+        "description": "Delete an asset",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the asset"
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "delete_game_object",
+        "description": "Delete a GameObject. Targets resolved through ObjectsHelper (instance id, name, path, tag, layer, component).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Identifier of the GameObject to delete"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve the target (by_id/by_name/by_path/by_tag/by_layer/by_component)"
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "director_evaluate",
+        "description": "Set a PlayableDirector's playback time and Evaluate() it — samples the bound Timeline at that time in the editor. Fully reflection-based, compiles without a com.unity.timeline reference. Reports the director's duration and PlayState. WARNING: Evaluate() destructively scrubs the sampled pose into the bound scene objects (Transforms/components); those writes are NOT individually undoable, so the owning scene is marked dirty and you should discard/reload the scene without saving if you only wanted a transient sample.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Identifier of the GameObject holding a PlayableDirector (instance id, name, or path). Finds inactive objects too."
+            },
+            "time": {
+              "type": "number",
+              "description": "Playback time in seconds to set before evaluating (default 0)."
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "duplicate_game_object",
+        "description": "Duplicate a GameObject and optionally rename the copy.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Identifier of the GameObject to duplicate"
+            },
+            "new_name": {
+              "type": "string",
+              "description": "Name for the duplicate"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target"
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "edit_script",
+        "description": "Edit/replace the contents of an existing script",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the script file"
+            },
+            "content": {
+              "type": "string",
+              "description": "New full content for the script"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        }
+      },
+      {
+        "name": "end_ui_preview_session",
+        "description": "End the identified preview: asynchronously exit Play, restore original scenes/selection/supported Game View settings, remove only owned temporary files. Refuses unrelated open scenes and unsaved preview edits. Repeated end is safe. Inspect restoration flags/warnings; never assume network/save-game effects were rolled back.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "description": "Preview session ID"
+            },
+            "discard_preview_changes": {
+              "type": "boolean",
+              "description": "Explicitly discard changes to this session's temporary scene only, never unrelated scenes/assets"
+            },
+            "wait_seconds": {
+              "type": "integer",
+              "description": "MCP completion wait, 0..30 seconds"
+            }
+          },
+          "required": [
+            "session_id"
+          ]
+        }
+      },
+      {
+        "name": "enter_play_mode",
+        "description": "Enter play mode in the editor",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "execute_menu_item",
+        "description": "Execute an editor menu item by its full path. Examples: 'GameObject/2D Object/Sprites/Square', 'Window/Layouts/Default', 'Edit/Undo'. Returns success/failure based on whether the menu item exists and was triggered.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "menu_path": {
+              "type": "string",
+              "description": "Full menu path, e.g. 'GameObject/2D Object/Sprite'"
+            }
+          },
+          "required": [
+            "menu_path"
+          ]
+        }
+      },
+      {
+        "name": "exists",
+        "description": "Check if a file or directory exists",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to check"
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "exit_play_mode",
+        "description": "Exit play mode in the editor",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "extract_recording_frames",
+        "description": "Extract 1..16 PNG frames from a finalized recording with Unity's decoder. start takes recording_id and JSON timestamps; MCP briefly waits, then get_task reads progress/results. Returns requested/actual times and paths. Legacy status/cancel/cleanup take job_id; cleanup deletes only generated PNGs, never video. Reload interrupts extraction; times are sorted/deduplicated.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "start, status, cancel or cleanup"
+            },
+            "recording_id": {
+              "type": "string",
+              "description": "Finalized recording ID for start"
+            },
+            "timestamps": {
+              "type": "string",
+              "description": "JSON timestamps, e.g. [0,1.5,3]"
+            },
+            "job_id": {
+              "type": "string",
+              "description": "Extraction job ID for status/cancel/cleanup"
+            },
+            "wait_seconds": {
+              "type": "integer",
+              "description": "MCP completion wait, 0..30 seconds"
+            }
+          }
+        }
+      },
+      {
+        "name": "find_assets",
+        "description": "Search for assets by type and name",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "filter": {
+              "type": "string",
+              "description": "Search filter (e.g. 't:Material red', 't:Prefab Player', 't:Texture')"
+            }
+          },
+          "required": [
+            "filter"
+          ]
+        }
+      },
+      {
+        "name": "find_broken_references",
+        "description": "Scan for broken references: (a) missing MonoBehaviour scripts (a null Component entry) and (b) dangling Object references (a serialized ObjectReference whose instanceID is non-zero but whose resolved value is null). scope='scene' walks every root GameObject of all loaded scenes recursively; scope='assets' requires 'path' and loads that prefab/asset (a prefab's whole hierarchy is walked, any other UnityEngine.Object is scanned directly). Findings are capped at max_results (truncated=true when the cap is hit).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scope": {
+              "type": "string",
+              "description": "Scan scope: 'assets' (a single prefab/asset via 'path') or 'scene' (all loaded scenes)"
+            },
+            "path": {
+              "type": "string",
+              "description": "Asset path to scan (required when scope='assets')"
+            },
+            "max_results": {
+              "type": "integer",
+              "description": "Maximum findings to collect (default 200)"
+            }
+          }
+        }
+      },
+      {
+        "name": "find_game_objects",
+        "description": "Find GameObjects by id/name/path/tag/layer/component. Returns full structured results so the agent can chain by_id calls.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Search query; omit for a structured filter-only scan"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "Search method (by_id/by_name/by_path/by_tag/by_layer/by_component)"
+            },
+            "include_inactive": {
+              "type": "string",
+              "description": "Include inactive objects"
+            },
+            "in_parent": {
+              "type": "string",
+              "description": "Limit results to children of this GameObject identifier (used with find_method=by_*)"
+            },
+            "max": {
+              "type": "string",
+              "description": "Maximum results to return (default 50)"
+            },
+            "filter": {
+              "type": "string",
+              "description": "JSON {component, assembly?, where:[{property,op,value}], select:[serializedPaths]}. Predicates AND on the same component; no arbitrary property getters."
+            },
+            "scope": {
+              "type": "string",
+              "description": "Structured scope: scene, selection, prefabs; omitted preserves legacy query behavior"
+            },
+            "asset_paths": {
+              "type": "string",
+              "description": "JSON prefab paths/folders for scope=prefabs"
+            },
+            "offset": {
+              "type": "integer",
+              "description": "Structured result page offset"
+            },
+            "scan_limit": {
+              "type": "integer",
+              "description": "Structured scan limit, 1..50000"
+            },
+            "snapshot_id": {
+              "type": "string",
+              "description": "Read a stable query snapshot page (120-second lifetime; lost on reload)"
+            }
+          }
+        }
+      },
+      {
+        "name": "find_project_types",
+        "description": "Find project and Unity type full names/assemblies, including non-Component helpers. Exact short-name matches explicitly report ambiguity. No instantiation or code execution; use assembly-qualified names when multiple assemblies define the same type.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Full/short name or substring"
+            },
+            "exact": {
+              "type": "boolean",
+              "description": "Exact name match"
+            },
+            "assembly": {
+              "type": "string",
+              "description": "Exact assembly name"
+            },
+            "kind": {
+              "type": "string",
+              "description": "any, component or unity_object"
+            },
+            "offset": {
+              "type": "integer",
+              "description": "Zero-based offset"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Page size 1..200"
+            }
+          }
+        }
+      },
+      {
+        "name": "find_references",
+        "description": "Find asset references in both directions. 'depends_on' = the target's direct forward dependencies (AssetDatabase.GetDependencies(path, recursive:false)). 'referenced_by' = a reverse scan of 'Assets/' paths asking which ones directly depend on the target. The reverse scan yields between batches and is bounded by result, asset-count, and wall-clock limits; the response reports whether and why it was truncated. Set include_referenced_by=false for a fast forward-only query.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Project-relative asset path (e.g. 'Assets/Art/hero.prefab')"
+            },
+            "max_results": {
+              "type": "integer",
+              "description": "Maximum entries to collect per direction (default 200)"
+            },
+            "include_referenced_by": {
+              "type": "boolean",
+              "description": "Whether to scan the project for assets that reference this target. Set false for a fast forward-dependency-only query."
+            },
+            "max_assets_scanned": {
+              "type": "integer",
+              "description": "Maximum asset files to inspect during the reverse scan (default 10000, max 50000)."
+            },
+            "max_scan_seconds": {
+              "type": "integer",
+              "description": "Maximum wall-clock seconds for the reverse scan (default 10, range 1-60)."
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "focus_on_object",
+        "description": "Focus the Scene View camera on a specific GameObject",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "GameObject name, hierarchy path, or instance ID. Finds inactive objects too."
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "frame_debugger_disable",
+        "description": "Disable the Frame Debugger and close its window. IMPORTANT: always call this after frame_debugger_enable when done inspecting, otherwise a Frame Debugger window is left open in the editor layout. Note: this closes ALL currently open Frame Debugger windows, including any a developer opened manually (not just the one this tool opened) — mention this to the user if they may have one open.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "frame_debugger_enable",
+        "description": "Enable the Frame Debugger by opening a Frame Debugger window and driving its internal capture loop (a bare static SetEnabled call does not populate events without a live window instance). Follow with frame_debugger_get_events after a moment, then frame_debugger_disable when done.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "frame_debugger_get_events",
+        "description": "List frame debugger events for the currently captured frame (requires frame_debugger_enable first, and a moment for the editor to actually render/capture a frame). Best-effort: returns event name and associated object per event, not full per-draw-call shader parameters.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "max_events": {
+              "type": "integer",
+              "description": "Maximum number of events to return"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_active_tool",
+        "description": "Get the currently active editor manipulation tool (Move/Rotate/Scale/Rect/Transform/View/None/Custom).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_animator_state",
+        "description": "Get an Animator's current runtime state: active state name (resolved from the controller when possible), normalized time, transition status, and all parameters with their current values. Most useful in Play Mode; in Edit Mode a non-playing Animator reports default state info.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "GameObject identifier (instance id, name, path, tag…)"
+            },
+            "layer": {
+              "type": "integer",
+              "description": "Layer index to report the current state for"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target"
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "get_asset_import_settings",
+        "description": "Read the import settings of an asset via its AssetImporter. Understands TextureImporter (textureType, maxTextureSize, textureCompression, filterMode, wrapMode, sRGBTexture, mipmapEnabled, isReadable, alphaSource + the DefaultTexturePlatform override format/maxTextureSize/overridden), AudioImporter (defaultSampleSettings loadType/compressionFormat/quality/sampleRateSetting, forceToMono, preloadAudioData, loadInBackground), and ModelImporter (globalScale, importBlendShapes, importCameras, importLights, meshCompression, isReadable, animationType, materialImportMode). Any other importer type is reported by type name with a 'no typed reader' note.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Project-relative asset path, e.g. 'Assets/Art/icon.png'"
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "get_build_settings",
+        "description": "Get build settings: enabled scenes (in build order), active build target, scripting backend.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_camera_properties",
+        "description": "Get all camera properties including type, FOV, clipping planes, background, and culling mask",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "game_object_name": {
+              "type": "string",
+              "description": "Camera GameObject name, hierarchy path, or instance ID (default: Main Camera). Finds inactive objects too."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_compilation_errors",
+        "description": "Get the latest Unity script compilation errors from the most recent compilation cycle.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "max_entries": {
+              "type": "integer",
+              "description": "Maximum number of issues to return"
+            },
+            "include_warnings": {
+              "type": "boolean",
+              "description": "Include warnings in addition to errors"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_component_properties",
+        "description": "Get all serialized properties on a component, including [SerializeField] private fields. Component can be addressed by type name on a GameObject, or directly by component instanceId.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "GameObject identifier (omit if using component_instance_id)"
+            },
+            "component": {
+              "type": "string",
+              "description": "Component type name (e.g. 'Rigidbody'). Omit if using component_instance_id."
+            },
+            "component_instance_id": {
+              "type": "string",
+              "description": "Component instanceId (alternative to target+component)"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_console_logs",
+        "description": "Get recent console log messages from Unity. Returns Debug.Log, Debug.LogWarning, and Debug.LogError output. Useful for checking runtime behavior after play mode actions. Supports reading from the live log cache, clearing the cache, time-based filtering, case-insensitive text filtering, collapsing repeated identical messages into one 'message (xN)' line so spammy warnings don't drown out unique entries, and optionally including each entry's stack trace (truncated separately from the message).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "log_type": {
+              "type": "string",
+              "description": "Filter by log type: 'all', 'log', 'warning', 'error'"
+            },
+            "count": {
+              "type": "integer",
+              "description": "Maximum number of entries to return"
+            },
+            "source": {
+              "type": "string",
+              "description": "Source: 'auto', 'cache', or 'console'"
+            },
+            "clear_cache": {
+              "type": "boolean",
+              "description": "Clear the cached logs before reading"
+            },
+            "since_seconds": {
+              "type": "integer",
+              "description": "Only include cached log entries from the last N seconds (cache/auto only)"
+            },
+            "filter_text": {
+              "type": "string",
+              "description": "Only include entries whose message contains this text (case-insensitive)"
+            },
+            "group_duplicates": {
+              "type": "boolean",
+              "description": "Collapse repeated identical messages into one line with a (xN) count"
+            },
+            "include_stack_trace": {
+              "type": "boolean",
+              "description": "Include each entry's stack trace, indented below the message (its own truncation cap, separate from the message's)."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_counters",
+        "description": "Read current values of high-signal rendering/memory counters (Draw Calls, Batches, Triangles, SetPass Calls, GC/Gfx memory, etc). Requires profiler_start to have been called at least a few frames earlier; if not running, starts recorders automatically and reports warming-up values explicitly. In the Unity Editor, rendering counters use the Game View's UnityStats values because the equivalent ProfilerRecorder counters can remain 0 during confirmed active rendering. Memory counters continue to use ProfilerRecorder.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "string",
+              "description": "Comma-separated list of specific counter names to query (e.g. 'Draw Calls Count,Triangles Count'). Omit for the default set."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_editor_operation",
+        "description": "Read an editor preparation by operation_id or request_key. Same ID survives domain reload. A historical ready result is separate from current_editor.ready. During HTTP reconnection retry this read, not the original mutation. Local clients can also inspect the returned journal_path while the Editor is offline.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "operation_id": {
+              "type": "string",
+              "description": "Operation ID"
+            },
+            "request_key": {
+              "type": "string",
+              "description": "Original idempotency key"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_editor_state",
+        "description": "Get high-level editor runtime state: play mode, paused, compiling, updating, time-since-startup.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_execute_code_history",
+        "description": "Return the most recent execute_code invocations (success or failure) from the current Editor session. Use replay_execute_code to re-run a past entry by index. History survives domain reloads but is cleared when the Editor closes (uses SessionState). Cap is 50 entries; older entries are dropped.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "description": "Number of most-recent entries to return (1-50). Default 10."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_frame_timing",
+        "description": "Get CPU/GPU frame timing for the most recently completed frame(s). Does not require profiler_start. Uses FrameTimingManager.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sample_frames": {
+              "type": "integer",
+              "description": "Number of recent frames to sample and average (1-30)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_game_object_info",
+        "description": "Get full info on a GameObject: transform, components (with instance ids), active state, tag, layer.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Identifier of the GameObject"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target"
+            },
+            "include_children": {
+              "type": "string",
+              "description": "Include immediate children list"
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "get_hierarchy",
+        "description": "Browse the scene hierarchy tree. Returns a tree-like view of GameObjects with their components, active state, and tags. Use root_name to start from a specific object, or leave empty for full scene.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "root_name": {
+              "type": "string",
+              "description": "Root object name, hierarchy path, or instance ID to start from (empty = entire scene). Finds inactive objects too."
+            },
+            "depth": {
+              "type": "integer",
+              "description": "Maximum depth to traverse (1-10)"
+            },
+            "include_components": {
+              "type": "boolean",
+              "description": "Include component names on each object"
+            },
+            "include_inactive": {
+              "type": "boolean",
+              "description": "Include inactive objects"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_layers",
+        "description": "List all 32 layer slots with their names (empty for unused slots).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_lighting_settings",
+        "description": "Read the active scene's environment lighting: ambient (mode/light/intensity), skybox material, fog (enabled/mode/color/density), the active LightingSettings asset (if any), and whether a lightmap bake is running.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_material_properties",
+        "description": "Inspect a Material: shader name, enabled keywords, render queue, and every shader property with its type and current value. 'path' is preferred as an asset path (e.g. 'Assets/Foo.mat'); if it does not resolve to a material asset it is treated as a scene GameObject identifier and the first Renderer.sharedMaterial is used.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Material asset path (e.g. 'Assets/Materials/Foo.mat'), or a scene GameObject id/name/path whose Renderer.sharedMaterial is inspected."
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "get_mesh_info",
+        "description": "Inspect a Mesh. Resolves the mesh from EITHER an asset path (e.g. 'Assets/Models/foo.fbx' — for a model/fbx every embedded Mesh sub-asset is reported; a bare .mesh/.asset reports that one) OR a scene GameObject identifier (instance id, name, or path — reads MeshFilter.sharedMesh, falling back to SkinnedMeshRenderer.sharedMesh). Reports per mesh: name, vertexCount, triangleCount, subMeshCount, bounds, populated UV channels, hasNormals/Tangents/Colors, isReadable, blendShapeCount.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Asset path to a mesh/model, or a scene GameObject identifier (instance id, name, or path)"
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "get_object_memory",
+        "description": "Get the runtime memory footprint of a specific asset (by project path) or scene GameObject (by name, hierarchy path e.g. 'Canvas/Panel/Icon', or instance ID -- inactive objects included). Useful for diagnosing texture/atlas memory leaks.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Asset path (e.g. 'Assets/Art/atlas.png'), or scene GameObject name/hierarchy path/instance ID"
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "get_object_screen_bounds",
+        "description": "Read RectTransform/Renderer screen bounds in bottom-left render pixels and top-left image pixels using the same contract as capture/click/raycast. Optional fresh capture_id maps bounds into that image's resolution. Returns corners and depth/visibility hints; bounds alone do not prove visibility, masking or input reachability.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Exact object ID/path/name"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "Object selector, prefer by_id"
+            },
+            "camera_id": {
+              "type": "string",
+              "description": "Optional Camera ID (required when the object has no applicable camera)"
+            },
+            "capture_id": {
+              "type": "string",
+              "description": "Optional fresh screenshot ID"
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "get_performance_snapshot",
+        "description": "Get a lightweight performance snapshot of the current Unity session. Returns frame timing, memory usage, scene scale, and a few high-signal rendering counts. Useful as a first pass before deeper profiling.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "include_scene_counts": {
+              "type": "boolean",
+              "description": "Include scene object and renderer counts"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_prefab_stage",
+        "description": "Get info about the currently open prefab stage (if any). Returns prefab asset path, root instance id, and dirty state.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_project_settings",
+        "description": "Report a flat snapshot of project settings: QualitySettings (level names + current level index/name), PlayerSettings (applicationIdentifier, productName, companyName, Android/Standalone scripting backend, Android target/min SDK versions), and the active build target. Each PlayerSettings read is guarded individually so one unavailable field (e.g. Android module not installed) does not fail the whole call — unreadable fields are omitted from the data and listed in the 'failures' array.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_recording_frame",
+        "description": "Return one extracted video frame as a native MCP image plus timestamp/geometry metadata, or path-only. Historical frames are not valid live click captures. Index is in the extraction job's sorted timestamp list.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Extraction job ID"
+            },
+            "index": {
+              "type": "integer",
+              "description": "Zero-based frame index"
+            },
+            "inline": {
+              "type": "boolean",
+              "description": "Include native image; false returns file receipt only"
+            }
+          },
+          "required": [
+            "job_id",
+            "index"
+          ]
+        }
+      },
+      {
+        "name": "get_reload_recovery_status",
+        "description": "Get the latest domain reload recovery event, if any. Useful after Unity recompiles scripts and an MCP request gets interrupted.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "consume": {
+              "type": "boolean",
+              "description": "Consume and clear the stored recovery event after reading"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_scene_info",
+        "description": "Get information about every loaded scene (the active scene plus any additively loaded ones), including path, dirty state, and a shallow root-object hierarchy per scene.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_scriptable_object",
+        "description": "Get all serialized properties of a ScriptableObject asset, including [SerializeField] private fields. Works on any .asset file whose main object derives from ScriptableObject.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "asset_path": {
+              "type": "string",
+              "description": "Asset path (e.g. 'Assets/Configs/GameConfig.asset')"
+            }
+          },
+          "required": [
+            "asset_path"
+          ]
+        }
+      },
+      {
+        "name": "get_selection",
+        "description": "Get the current Hierarchy selection: instance ids, names, and paths.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_tags",
+        "description": "List every defined tag in TagManager.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_task",
+        "description": "Read an async task without starting, cancelling or cleaning it. Use the returned task_id; for a lost editor/preview start response use kind + request_key. MCP waits up to wait_seconds for completion, or a phase/status change after after_revision. Return the latest revision next time and obey poll_after_ms. A preview ready state completes preparation, not session restoration. Original task payloads remain under data.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "task_id": {
+              "type": "string",
+              "description": "Namespaced task ID returned in data.task.task_id"
+            },
+            "kind": {
+              "type": "string",
+              "description": "For request-key lookup: editor or ui_preview. Bare IDs additionally support ui_audit, recording, recording_frames, tests."
+            },
+            "request_key": {
+              "type": "string",
+              "description": "Original preparation/preview request key"
+            },
+            "after_revision": {
+              "type": "string",
+              "description": "Last data.task.revision; waits for a meaningful state change, not each progress counter"
+            },
+            "wait_seconds": {
+              "type": "integer",
+              "description": "MCP bounded wait, 0..30 seconds; zero returns immediately"
+            },
+            "offset": {
+              "type": "integer",
+              "description": "UI audit finding offset"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "UI audit finding page size, 1..500"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_test_job",
+        "description": "Get the status and results of a test run started by run_tests. While running, reports progress; when finished, reports pass/fail/skip counts and details for failed tests. If no test-runner callback has fired for a while, the response includes possiblyStuck=true with the current phase, current test (when known), and a diagnostic hint. Runner start/transition uses a 30-second threshold; a known in-progress test uses 120 seconds to avoid flagging ordinary long-running tests too early.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Job id returned by run_tests. Omit to query the most recent run."
+            }
+          }
+        }
+      },
+      {
+        "name": "get_time_scale",
+        "description": "Get the current time scale and time information",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_tool_capabilities",
+        "description": "Discover implemented tools versus tools currently exposed by the active Core/Full configuration, including disabled tools. This is read-only; it never enables tools. Prefer structured tools for supported tasks; execute_code is a fallback for project-specific gaps.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Optional name substring"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_top_memory_objects",
+        "description": "List the top N memory-consuming loaded objects of a given type (Texture2D, RenderTexture, Mesh, AudioClip, Material, AnimationClip, Shader, Sprite, or any UnityEngine.Object-derived type by name), enumerated via Resources.FindObjectsOfTypeAll and measured with Profiler.GetRuntimeMemorySizeLong. Complements memory_take_snapshot/memory_compare_snapshots: after a snapshot diff shows growth, use this to find WHICH objects are consuming the memory. Pass type_name='All' for a per-type total summary instead of individual objects. Note: in the Editor this also enumerates editor-owned objects; a non-empty flags column (e.g. HideAndDontSave) usually indicates editor internals or runtime-created objects.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "type_name": {
+              "type": "string",
+              "description": "Type to enumerate (e.g. 'Texture2D'), or 'All' for a per-type summary"
+            },
+            "top_n": {
+              "type": "integer",
+              "description": "Number of top objects to return (1-100)"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_ui_audit",
+        "description": "Read UI audit status and a findings page. complete=false means limits, skipped assets, cancellation or interruption; never treat an incomplete empty report as a clean project. Latest job retained across domain reload; unfinished scans are marked interrupted, not silently resumed.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "job_id": {
+              "type": "string",
+              "description": "Audit job ID"
+            },
+            "offset": {
+              "type": "integer",
+              "description": "Zero-based finding offset"
+            },
+            "limit": {
+              "type": "integer",
+              "description": "Page size, 1..500"
+            }
+          },
+          "required": [
+            "job_id"
+          ]
+        }
+      },
+      {
+        "name": "get_ui_defaults",
+        "description": "Read project UI templates/defaults and bounded counts of existing Text/TMP fonts and input modules. Ties/incomplete scans are unresolved, never silently guessed. New projects prefer TMP. Does not install packages or change settings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prefab_scan_limit": {
+              "type": "integer",
+              "description": "Prefab scan cap, 1..2000"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_ui_preview_session",
+        "description": "Read current/most recent preview session, editor state and restoration flags. Domain reload does not lose its ID. A restarted Editor requires explicit recovery, never automatic scene closure.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "description": "Preview ID; omitted reads latest"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_undo_state",
+        "description": "Read the current state of the Editor's undo stack (top group name and index). NOTE: this reflects the shared Editor's global undo stack, which includes whatever the user last did too; use with care.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "get_visual_coordinates",
+        "description": "Read the current Game View coordinate contract, or a retained screenshot receipt by capture_id. Captures are retained for 32 images within this domain; interaction requires the same render geometry/mode and age <=30 seconds. No screenshot is taken by this query.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "capture_id": {
+              "type": "string",
+              "description": "Optional screenshot ID"
+            }
+          }
+        }
+      },
+      {
+        "name": "get_windows",
+        "description": "List all currently open EditorWindows: title, type, and focused state.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "inspect_ui_sprites",
+        "description": "Batch inspect Image → effective Sprite → source TextureImporter, including actual borders, Single/Multiple metadata, packed status and sub-asset GUID/local IDs. selectors is a JSON array: {image_id:123}, {asset_path:'Assets/x.png', sprite_name?:'...', local_file_id?:123}, or {prefab_path:'Assets/UI.prefab'}. Partial failures are explicit. Does not save/reimport or assign borders.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "selectors": {
+              "type": "string",
+              "description": "JSON selector array, 1..100 entries"
+            },
+            "include_dependents": {
+              "type": "boolean",
+              "description": "Bounded prefab/scene/atlas reverse dependency scan"
+            },
+            "dependent_scan_limit": {
+              "type": "integer",
+              "description": "Dependent scan limit, 1..5000"
+            }
+          },
+          "required": [
+            "selectors"
+          ]
+        }
+      },
+      {
+        "name": "install_package",
+        "description": "Install a Unity package by name",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "package_id": {
+              "type": "string",
+              "description": "Package identifier (e.g. 'com.unity.textmeshpro', 'com.unity.cinemachine')"
+            }
+          },
+          "required": [
+            "package_id"
+          ]
+        }
+      },
+      {
+        "name": "instantiate_prefab",
+        "description": "Instantiate a prefab in the scene",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prefab_path": {
+              "type": "string",
+              "description": "Path to the prefab asset"
+            },
+            "name": {
+              "type": "string",
+              "description": "Name for the instance"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position as 'x,y,z'"
+            }
+          },
+          "required": [
+            "prefab_path"
+          ]
+        }
+      },
+      {
+        "name": "list_components",
+        "description": "List components on a GameObject. Each entry includes its instanceId so subsequent set_component_property calls can disambiguate when a GameObject has multiple components of the same type.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "GameObject identifier (instance id, name, path, tag…)"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target"
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "list_directory",
+        "description": "List files and directories in a directory",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to directory"
+            },
+            "recursive": {
+              "type": "string",
+              "description": "Include subdirectories"
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "list_dirty_scenes",
+        "description": "List all loaded scenes that have unsaved changes (isDirty).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_editor_operations",
+        "description": "List the most recent 32 durable editor preparation receipts and current editor readiness.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_packages",
+        "description": "List all installed packages",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "list_scenes",
+        "description": "List all scenes in the project",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "load_scene_additive",
+        "description": "Additively load a scene alongside the currently loaded scene(s) without unloading them.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the scene asset (e.g. 'Assets/Scenes/Main.unity')"
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "log_message",
+        "description": "Log a message to the Unity console",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string",
+              "description": "Message to log"
+            },
+            "log_type": {
+              "type": "string",
+              "description": "Log type: info, warning, error"
+            }
+          },
+          "required": [
+            "message"
+          ]
+        }
+      },
+      {
+        "name": "mark_recording",
+        "description": "Add a named marker to the active recording's real elapsed-time timeline. Use before/after project-specific actions. Click, drag and scroll tools also record markers automatically. No recording means an explicit error.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "Short marker label, 1..160 characters"
+            },
+            "recording_id": {
+              "type": "string",
+              "description": "Active recording ID"
+            }
+          },
+          "required": [
+            "label",
+            "recording_id"
+          ]
+        }
+      },
+      {
+        "name": "memory_compare_snapshots",
+        "description": "Compare two lightweight memory snapshots (by file name, with or without .json extension) and report the delta for each aggregate category. Best-effort: not a full per-type/per-object diff.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path_a": {
+              "type": "string",
+              "description": "First snapshot file name (from memory_list_snapshots)"
+            },
+            "path_b": {
+              "type": "string",
+              "description": "Second snapshot file name (from memory_list_snapshots)"
+            }
+          },
+          "required": [
+            "path_a",
+            "path_b"
+          ]
+        }
+      },
+      {
+        "name": "memory_list_full_snapshots",
+        "description": "List the REAL .snap memory snapshots in the Memory Profiler package's snapshot folder (the ones memory_take_full_snapshot writes and the Memory Profiler window lists). For the lightweight aggregate JSON snapshots, use memory_list_snapshots instead.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "memory_list_snapshots",
+        "description": "List previously saved lightweight memory snapshots (see memory_take_snapshot).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "memory_open_snapshot_in_profiler",
+        "description": "Open a REAL .snap memory snapshot in the Memory Profiler package window for object-level reference-chain analysis. Accepts an absolute path or a file name from the snapshot folder (see memory_list_full_snapshots). Requires the com.unity.memoryprofiler package. Combine with capture_editor_window('Memory Profiler') to inspect the loaded analysis visually.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "snapshot": {
+              "type": "string",
+              "description": "Absolute .snap path, or a file name inside the snapshot folder (with or without the .snap extension)."
+            }
+          },
+          "required": [
+            "snapshot"
+          ]
+        }
+      },
+      {
+        "name": "memory_query_references",
+        "description": "Query a REAL .snap memory snapshot for what references a specific native object, or what it references -- structured JSON reference-chain data, no window or screenshot needed. Answers 'who is keeping this texture alive'. Pass the object name or native_object_index from memory_query_top_objects. Loads headlessly via the Memory Profiler package's crawler; requires the com.unity.memoryprofiler package. Only native objects can be looked up directly; the returned reference lists may include managed objects and GC handles as informational entries.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "snapshot": {
+              "type": "string",
+              "description": "Absolute .snap path, or a file name inside the snapshot folder (with or without the .snap extension)."
+            },
+            "target": {
+              "type": "string",
+              "description": "Native object name (exact match preferred, falls back to a case-insensitive substring match) or the native_object_index from memory_query_top_objects."
+            },
+            "direction": {
+              "type": "string",
+              "description": "'referenced_by' (default, what keeps this object alive) or 'references_to' (what this object points to)."
+            },
+            "max_results": {
+              "type": "integer",
+              "description": "Maximum number of references to return (1-200). Default 30."
+            }
+          },
+          "required": [
+            "snapshot",
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "memory_query_top_objects",
+        "description": "Query a REAL .snap memory snapshot for the largest native objects (Texture2D, Mesh, RenderTexture, AudioClip, etc.) -- structured JSON, no window or screenshot needed. This is the 'WHAT is holding the memory' half of the workflow started by memory_take_full_snapshot. Loads headlessly via the Memory Profiler package's crawler (no window opened); requires the com.unity.memoryprofiler package.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "snapshot": {
+              "type": "string",
+              "description": "Absolute .snap path, or a file name inside the snapshot folder (with or without the .snap extension)."
+            },
+            "type_filter": {
+              "type": "string",
+              "description": "Only include objects whose native type name contains this text (case-insensitive), e.g. 'Texture2D'."
+            },
+            "top_n": {
+              "type": "integer",
+              "description": "Number of objects to return (1-500). Default 20."
+            }
+          },
+          "required": [
+            "snapshot"
+          ]
+        }
+      },
+      {
+        "name": "memory_take_full_snapshot",
+        "description": "Capture a REAL Unity memory snapshot (.snap) -- the full-detail file the Memory Profiler package opens for object-level reference-chain analysis ('who is holding this texture alive'). Complements memory_take_snapshot, which only records lightweight aggregate counters: use that to detect THAT memory grew, and this to find out WHAT is holding it. The file is written into the Memory Profiler package's snapshot folder (default 'MemoryCaptures/' at the project root) so it shows up in the window's snapshot list. WARNING: in-editor captures include editor-owned memory and can be hundreds of MB to several GB on large projects; the capture stalls the editor for a few seconds while it runs.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Base file name (timestamp and .snap extension are appended). Default 'mcp'."
+            },
+            "capture_flags": {
+              "type": "string",
+              "description": "Comma-separated capture flags: ManagedObjects, NativeObjects, NativeAllocations, NativeAllocationSites, NativeStackTraces. Default 'ManagedObjects,NativeObjects' (what reference-chain analysis needs; the NativeAllocation* flags add a lot of size)."
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "description": "Maximum seconds to wait for the capture to finish. Default 180."
+            },
+            "open_in_profiler": {
+              "type": "boolean",
+              "description": "Open the finished snapshot in the Memory Profiler window (requires the com.unity.memoryprofiler package)."
+            }
+          }
+        }
+      },
+      {
+        "name": "memory_take_snapshot",
+        "description": "Take a lightweight memory snapshot (aggregate numbers only, NOT a real Unity .snap file openable in the Memory Profiler window) and save it as JSON under MemoryCaptures/mcp-snapshots/. Use memory_compare_snapshots to diff two of these.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Optional name for the snapshot file (without extension)"
+            }
+          }
+        }
+      },
+      {
+        "name": "open_prefab_stage",
+        "description": "Open a prefab asset in Prefab Mode (an isolated prefab stage) for editing its contents directly, without instantiating it into a scene. While the stage is open, hierarchy/component tools and execute_code operate on the prefab contents. Persist edits with save_prefab_stage, then close_prefab_stage when done. If another prefab stage is already open with unsaved changes, this returns an error instead of silently discarding them.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prefab_path": {
+              "type": "string",
+              "description": "Path to the prefab asset (e.g. 'Assets/Prefabs/Item.prefab')"
+            }
+          },
+          "required": [
+            "prefab_path"
+          ]
+        }
+      },
+      {
+        "name": "open_scene",
+        "description": "Open an existing scene by path",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the scene asset (e.g. 'Assets/Scenes/Main.unity')"
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "particle_control",
+        "description": "Control a ParticleSystem's playback for deterministic VFX inspection/screenshots. action='simulate' fast-forwards the system to a fixed time (useful in Edit Mode to freeze a VFX at a repeatable frame for capture); 'play'/'pause'/'stop'/'restart' drive the matching playback state. Resolves the ParticleSystem on the target GameObject (or its first child that has one). Returns the resulting playback state (isPlaying/isEmitting/isStopped/particleCount) plus the main module's loop/duration.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Identifier of the GameObject holding the ParticleSystem (instance id, name, or hierarchy path). Inactive objects are found."
+            },
+            "action": {
+              "type": "string",
+              "description": "Action: 'simulate' | 'play' | 'pause' | 'stop' | 'restart'"
+            },
+            "time": {
+              "type": "number",
+              "description": "Time in seconds to fast-forward to (only used by action='simulate')"
+            },
+            "with_children": {
+              "type": "boolean",
+              "description": "Apply the action to child ParticleSystems as well"
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "paste_component_values",
+        "description": "Paste the editor's SHARED component clipboard (last filled by copy_component) onto many GameObjects. `targets` is a comma-separated list of identifiers, or a single find spec that resolves to at most 100 objects (e.g. a tag with find_method=by_tag). When as_new is true a NEW component is added to each target; otherwise the clipboard values are pasted onto each target's existing component of component_type. Returns per-target success so partial failures are diagnosable. NOTE: Unity exposes no API to read back the clipboard, so this pastes whatever is currently on the shared editor clipboard -- if a manual Ctrl+C or another copy happened since copy_component, that newer component is what gets pasted.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "targets": {
+              "type": "string",
+              "description": "Comma-separated identifiers, or a single find spec resolving to at most 100 objects"
+            },
+            "component_type": {
+              "type": "string",
+              "description": "Component type to paste onto each target (required unless as_new). e.g. 'Rigidbody'"
+            },
+            "as_new": {
+              "type": "boolean",
+              "description": "true to paste as a NEW component on each target instead of onto an existing one"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve targets"
+            }
+          },
+          "required": [
+            "targets"
+          ]
+        }
+      },
+      {
+        "name": "patch_script",
+        "description": "Patch a script by finding and replacing specific text. Safer than edit_script for small changes since it doesn't require sending the entire file content. The old_text must match exactly (including whitespace and indentation).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the script file"
+            },
+            "old_text": {
+              "type": "string",
+              "description": "Exact text to find in the file"
+            },
+            "new_text": {
+              "type": "string",
+              "description": "Replacement text"
+            },
+            "replace_all": {
+              "type": "boolean",
+              "description": "Replace all occurrences (default: false, only first)"
+            }
+          },
+          "required": [
+            "path",
+            "old_text",
+            "new_text"
+          ]
+        }
+      },
+      {
+        "name": "physics2d_overlap_point",
+        "description": "2D overlap-point query (Physics2D.OverlapPointAll) for the 2D merge board. Returns every 2D collider overlapping the point. Works in Edit Mode. point is an 'x,y' string.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "point": {
+              "type": "string",
+              "description": "Point as 'x,y'"
+            },
+            "layer_mask": {
+              "type": "integer",
+              "description": "Layer mask bitfield (-1 = all layers)"
+            }
+          },
+          "required": [
+            "point"
+          ]
+        }
+      },
+      {
+        "name": "physics_overlap",
+        "description": "Overlap query against 3D scene colliders using Physics.OverlapSphere (shape=sphere) or Physics.OverlapBox (shape=box). Returns the overlapping colliders. Works in Edit Mode against static colliders. center/size are 'x,y,z' strings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "center": {
+              "type": "string",
+              "description": "Center as 'x,y,z'"
+            },
+            "shape": {
+              "type": "string",
+              "description": "Shape: 'sphere' or 'box'"
+            },
+            "radius": {
+              "type": "number",
+              "description": "Sphere radius (used when shape=sphere)"
+            },
+            "size": {
+              "type": "string",
+              "description": "Box full size as 'x,y,z' (used when shape=box)"
+            },
+            "layer_mask": {
+              "type": "integer",
+              "description": "Layer mask bitfield (-1 = all layers)"
+            },
+            "max_hits": {
+              "type": "integer",
+              "description": "Maximum hits to return"
+            }
+          },
+          "required": [
+            "center"
+          ]
+        }
+      },
+      {
+        "name": "physics_raycast",
+        "description": "Cast a 3D ray against scene colliders (Physics.RaycastAll) and return every hit ordered nearest-first. Works in Edit Mode against static colliders. origin/direction are 'x,y,z' strings; direction is normalized internally.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "origin": {
+              "type": "string",
+              "description": "Ray origin as 'x,y,z'"
+            },
+            "direction": {
+              "type": "string",
+              "description": "Ray direction as 'x,y,z' (normalized internally)"
+            },
+            "max_distance": {
+              "type": "number",
+              "description": "Maximum ray distance"
+            },
+            "layer_mask": {
+              "type": "integer",
+              "description": "Layer mask bitfield (-1 = all layers)"
+            },
+            "max_hits": {
+              "type": "integer",
+              "description": "Maximum hits to return"
+            }
+          },
+          "required": [
+            "origin",
+            "direction"
+          ]
+        }
+      },
+      {
+        "name": "ping_asset",
+        "description": "Ping/highlight an asset in the Project window",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the asset"
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "play_animator_state",
+        "description": "Play a specific Animator state by name, e.g. to drive UI or a character to a known visual state before taking a screenshot. In Edit Mode the animator is force-evaluated once so the pose applies without entering Play Mode. Runtime-only state: not undoable.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "GameObject identifier (instance id, name, path, tag…)"
+            },
+            "state": {
+              "type": "string",
+              "description": "State name as defined in the Animator Controller (e.g. 'Idle' or 'Base Layer.Idle')"
+            },
+            "layer": {
+              "type": "integer",
+              "description": "Layer index; -1 lets Unity pick the first layer containing the state"
+            },
+            "normalized_time": {
+              "type": "number",
+              "description": "Normalized start time 0-1; omit to keep Unity's default"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target"
+            }
+          },
+          "required": [
+            "target",
+            "state"
+          ]
+        }
+      },
+      {
+        "name": "prepare_editor",
+        "description": "Prepare Edit/Play Mode with a durable task: exit Play if needed, import/compile and verify readiness. MCP briefly waits when request_key is supplied; otherwise returns the receipt before possible reload. Continue with get_task, including kind=editor + request_key after a lost response. Does not save scenes or replay arbitrary code.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "edit or play"
+            },
+            "refresh_assets": {
+              "type": "boolean",
+              "description": "Import external changes and verify scripts before readiness"
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "description": "Total deadline, 5..900 seconds"
+            },
+            "request_key": {
+              "type": "string",
+              "description": "Caller-chosen idempotency key, up to 128 characters; recommended"
+            },
+            "wait_seconds": {
+              "type": "integer",
+              "description": "MCP completion wait, 0..30 seconds; requires request_key for reload recovery"
+            }
+          }
+        }
+      },
+      {
+        "name": "profiler_start",
+        "description": "Start a Profiler capture session (enables UnityEngine.Profiling.Profiler and starts a set of persistent ProfilerRecorder counters used by get_counters/get_frame_timing). Safe to call again while already running.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "profiler_status",
+        "description": "Report whether a Profiler capture session is currently running and how many counters are active.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "profiler_stop",
+        "description": "Stop the current Profiler capture session and dispose all persistent ProfilerRecorder counters.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "raycast_at_point",
+        "description": "Diagnose what UI (or physics) elements a click/tap at a screen point would hit, using the live EventSystem's RaycastAll. Returns the full ordered hit chain -- for each hit: hierarchy path, the raycast-receiving Graphic and its raycastTarget flag, sorting info, and the IPointerClickHandler that would actually receive the click (resolved by bubbling up the hierarchy, exactly like uGUI does). The summary names the click receiver, or the element silently swallowing the click when the topmost hit has no click handler anywhere up its parent chain -- the classic 'invisible raycast blocker' bug. Requires a live EventSystem (Play Mode).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number",
+              "description": "X coordinate of the point to test."
+            },
+            "y": {
+              "type": "number",
+              "description": "Y coordinate of the point to test."
+            },
+            "normalized": {
+              "type": "boolean",
+              "description": "Interpret x/y as normalized 0-1 viewport coordinates instead of pixels."
+            },
+            "origin": {
+              "type": "string",
+              "description": "Coordinate origin: 'bottom_left' (Unity screen space, default) or 'top_left' (screenshot/image space)."
+            },
+            "max_results": {
+              "type": "integer",
+              "description": "Maximum number of hits to include in the result. Default 20."
+            },
+            "coordinate_space": {
+              "type": "string",
+              "description": "render_pixels, image_pixels or normalized. Omitted preserves the normalized flag."
+            },
+            "capture_id": {
+              "type": "string",
+              "description": "Screenshot ID, required for image_pixels; freshness/geometry validated"
+            }
+          },
+          "required": [
+            "x",
+            "y"
+          ]
+        }
+      },
+      {
+        "name": "read_file",
+        "description": "Read the contents of a file",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the file (relative to project root or absolute)"
+            }
+          },
+          "required": [
+            "path"
+          ]
+        }
+      },
+      {
+        "name": "record_game_view",
+        "description": "Record a silent MP4 of the rendered Game View, including UI, on macOS or Windows. Use action=start in Play Mode, then perform actions and use get_task for bounded status waits or action=stop to finish early. Start returns immediately for interaction; stop/status may briefly wait. Recording ends at duration_seconds. Only read the local video path when ready=true. No video/base64 is sent through MCP. Use this for visual review, not frame-accurate performance measurement. Requires a visible, rendering Game View.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "description": "start, status, or stop"
+            },
+            "duration_seconds": {
+              "type": "integer",
+              "description": "Maximum wall-clock duration in seconds, 1-120. Used by start only."
+            },
+            "fps": {
+              "type": "integer",
+              "description": "Target capture rate, 1-60 frames per second. Slow frames retain their real timestamps."
+            },
+            "max_dimension": {
+              "type": "integer",
+              "description": "Maximum output width or height, 128-1920. Preserves aspect ratio without upscaling."
+            },
+            "recording_id": {
+              "type": "string",
+              "description": "Recording ID returned by start. Recommended for status/stop to avoid controlling a newer recording."
+            },
+            "wait_seconds": {
+              "type": "integer",
+              "description": "MCP wait for stop/status, 0..30 seconds; start always returns immediately"
+            }
+          }
+        }
+      },
+      {
+        "name": "redo",
+        "description": "Perform a single Redo step. NOTE: operates on the shared Editor's global undo stack — this reapplies whatever was last undone in the Editor, including the user's own actions; use with care.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "remove_package",
+        "description": "Remove a Unity package",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "package_name": {
+              "type": "string",
+              "description": "Package name to remove"
+            }
+          },
+          "required": [
+            "package_name"
+          ]
+        }
+      },
+      {
+        "name": "remove_tag",
+        "description": "Remove a tag from TagManager. Errors if the tag is still in use.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tag": {
+              "type": "string",
+              "description": "Tag name to remove"
+            }
+          },
+          "required": [
+            "tag"
+          ]
+        }
+      },
+      {
+        "name": "rename_asset",
+        "description": "Rename an asset",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Current path of the asset"
+            },
+            "new_name": {
+              "type": "string",
+              "description": "New name (without extension)"
+            }
+          },
+          "required": [
+            "path",
+            "new_name"
+          ]
+        }
+      },
+      {
+        "name": "rename_game_object",
+        "description": "Rename a GameObject.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Identifier of the GameObject"
+            },
+            "new_name": {
+              "type": "string",
+              "description": "New name"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target"
+            }
+          },
+          "required": [
+            "target",
+            "new_name"
+          ]
+        }
+      },
+      {
+        "name": "replay_execute_code",
+        "description": "Re-run a past execute_code invocation by index (use get_execute_code_history to discover indices). The original code is re-compiled and executed; this also appends a new history entry. Pass safety_checks to override the MCP Settings window default.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "index": {
+              "type": "integer",
+              "description": "History index to replay (as returned by get_execute_code_history)."
+            },
+            "safety_checks": {
+              "type": "boolean",
+              "description": "If true, re-evaluate the safety blocklist before re-running. If omitted, uses the MCP Settings window default."
+            }
+          },
+          "required": [
+            "index"
+          ]
+        }
+      },
+      {
+        "name": "request_recompile",
+        "description": "IMPORTANT: This should be the AI's default next step immediately after editing project files outside the Unity Editor. Treat this as required after any external code or asset change. Call it after modifying .cs, .asmdef, .shader, prefabs, scenes, ScriptableObjects, or other Assets files, and before running tests, entering Play Mode, executing follow-up tools, or assuming Unity has imported the latest state. It forces Unity to import external file changes and handles any resulting script compilation or domain reload recovery.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "timeout_seconds": {
+              "type": "integer",
+              "description": "Maximum seconds to wait for compilation"
+            }
+          }
+        }
+      },
+      {
+        "name": "run_tests",
+        "description": "Run Unity Test Runner tests (EditMode or PlayMode) asynchronously. Returns a job_id immediately; use get_task for bounded status waits and results (get_test_job remains compatible). Only one test run can be active at a time (a Unity Test Runner limitation). PlayMode runs enter Play Mode and trigger domain reloads -- the job state survives them. Optional filters narrow the run to specific tests, categories, or assemblies.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "description": "Test mode: 'EditMode' or 'PlayMode'"
+            },
+            "test_names": {
+              "type": "string",
+              "description": "Comma-separated fully qualified test names to run (e.g. 'MyTests.LoginTest.CanLogin')"
+            },
+            "category_names": {
+              "type": "string",
+              "description": "Comma-separated NUnit category names to run"
+            },
+            "assembly_names": {
+              "type": "string",
+              "description": "Comma-separated test assembly names to run (e.g. 'MyGame.Tests')"
+            }
+          }
+        }
+      },
+      {
+        "name": "save_all_scenes",
+        "description": "Save all open (loaded) scenes that have unsaved changes. If more than one scene is dirty, confirm_all=true is required so unrelated changes are not saved accidentally.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "confirm_all": {
+              "type": "boolean",
+              "description": "Required when more than one loaded scene is dirty. Confirms every reported dirty scene should be saved."
+            }
+          }
+        }
+      },
+      {
+        "name": "save_prefab_stage",
+        "description": "Save the currently open prefab stage back to its .prefab asset, without closing the stage. Use after editing prefab contents via component tools or execute_code inside an open prefab stage. Prefab Mode saves the full in-memory graph. When edit-time layout, TMP auto-size, or Spine components are present, the response warns that their derived state may also be serialized. For field-only edits, prefer set_prefab_property and verify its persisted readback.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "save_scene",
+        "description": "Save the current scene",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "search_files",
+        "description": "Search for files by name pattern in the project",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "pattern": {
+              "type": "string",
+              "description": "Search pattern (e.g. '*.cs', 'Player*', '*.prefab')"
+            },
+            "directory": {
+              "type": "string",
+              "description": "Directory to search in"
+            }
+          },
+          "required": [
+            "pattern"
+          ]
+        }
+      },
+      {
+        "name": "select_object",
+        "description": "Select a GameObject in the scene hierarchy and inspector",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "GameObject name, hierarchy path, or instance ID. Finds inactive objects too."
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      },
+      {
+        "name": "set_active",
+        "description": "Activate or deactivate a GameObject. Pass `target` for one object, or `targets` (comma-separated identifiers, or a single find spec resolving to at most 100 objects) for a batch — the batch form returns per-target results.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Identifier of a single GameObject (omit if using targets)"
+            },
+            "active": {
+              "type": "string",
+              "description": "true to activate, false to deactivate"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target(s)"
+            },
+            "targets": {
+              "type": "string",
+              "description": "Comma-separated identifiers, or a single find spec resolving to at most 100 objects (alternative to target)"
+            }
+          },
+          "required": [
+            "active"
+          ]
+        }
+      },
+      {
+        "name": "set_active_tool",
+        "description": "Set the active editor manipulation tool. Accepts: View, Move, Rotate, Scale, Rect, Transform, None.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "tool": {
+              "type": "string",
+              "description": "Tool name: View, Move, Rotate, Scale, Rect, Transform, None"
+            }
+          },
+          "required": [
+            "tool"
+          ]
+        }
+      },
+      {
+        "name": "set_animator_parameter",
+        "description": "Set an Animator parameter by name. The parameter type (Float/Int/Bool/Trigger) is detected automatically from the controller. For Trigger parameters pass true (or 'set') to fire, false (or 'reset') to clear. Runtime-only state: not undoable, resets when Play Mode exits.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "GameObject identifier (instance id, name, path, tag…)"
+            },
+            "parameter": {
+              "type": "string",
+              "description": "Parameter name as defined in the Animator Controller"
+            },
+            "value": {
+              "type": "string",
+              "description": "Value: number for Float/Int, true/false for Bool, true/'set'/false/'reset' for Trigger"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target"
+            }
+          },
+          "required": [
+            "target",
+            "parameter",
+            "value"
+          ]
+        }
+      },
+      {
+        "name": "set_asset_import_settings",
+        "description": "Apply import settings to an asset. settings_json is a JSON object of field->value using the same field names get_asset_import_settings returns for the resolved importer type. TextureImporter: maxTextureSize, textureCompression(enum name), filterMode, wrapMode, sRGBTexture, mipmapEnabled, isReadable. AudioImporter: forceToMono, preloadAudioData, loadInBackground, loadType(enum name), compressionFormat(enum name), quality. ModelImporter: globalScale, isReadable, meshCompression(enum name), importBlendShapes. The complete request is validated before any importer field is changed; unknown or malformed fields fail the call without a partial reimport. Returns each applied field read back FROM the importer after reimport so postprocessor overrides are visible.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Project-relative asset path, e.g. 'Assets/Art/icon.png'"
+            },
+            "settings_json": {
+              "type": "string",
+              "description": "JSON object of field->value to apply (same field names get_asset_import_settings returns for this importer type)"
+            }
+          },
+          "required": [
+            "path",
+            "settings_json"
+          ]
+        }
+      },
+      {
+        "name": "set_camera_culling_mask",
+        "description": "Set the camera culling mask to show/hide specific layers",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "layers": {
+              "type": "string",
+              "description": "Comma-separated layer names to show (e.g. 'Default,UI,Water')"
+            },
+            "game_object_name": {
+              "type": "string",
+              "description": "Camera GameObject name, hierarchy path, or instance ID. Finds inactive objects too."
+            },
+            "mode": {
+              "type": "string",
+              "description": "Mode: 'set' replaces mask, 'add' adds layers, 'remove' removes layers"
+            }
+          },
+          "required": [
+            "layers"
+          ]
+        }
+      },
+      {
+        "name": "set_camera_projection",
+        "description": "Set camera projection to orthographic or perspective with size/FOV",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "projection": {
+              "type": "string",
+              "description": "Projection type: 'orthographic' or 'perspective'"
+            },
+            "size": {
+              "type": "number",
+              "description": "Orthographic size or FOV value"
+            },
+            "game_object_name": {
+              "type": "string",
+              "description": "Camera GameObject name, hierarchy path, or instance ID. Finds inactive objects too."
+            }
+          },
+          "required": [
+            "projection"
+          ]
+        }
+      },
+      {
+        "name": "set_camera_settings",
+        "description": "Set camera clipping planes, background color, and clear flags",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "game_object_name": {
+              "type": "string",
+              "description": "Camera GameObject name, hierarchy path, or instance ID. Finds inactive objects too."
+            },
+            "near": {
+              "type": "number",
+              "description": "Near clip plane distance"
+            },
+            "far": {
+              "type": "number",
+              "description": "Far clip plane distance"
+            },
+            "background_color": {
+              "type": "string",
+              "description": "Background color as 'r,g,b,a' or hex"
+            },
+            "clear_flags": {
+              "type": "string",
+              "description": "Clear flags: 'Skybox','SolidColor','Depth','Nothing'"
+            },
+            "depth": {
+              "type": "number",
+              "description": "Camera depth (render order)"
+            }
+          }
+        }
+      },
+      {
+        "name": "set_component_properties",
+        "description": "Set multiple properties on a component in one call. Pass `properties` as a JSON object: {\"mass\": 5, \"isKinematic\": true, \"material\": {\"fileID\": 12345}}. Returns per-field success so partial failures are diagnosable, plus the post-write serialized values of the fields that applied ('applied'). Pass `targets` (comma-separated identifiers, or a find spec resolving to at most 100 objects) with a `component` type name to apply the SAME properties to many objects (returns per-target results).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "GameObject identifier (omit if using component_instance_id or targets)"
+            },
+            "component": {
+              "type": "string",
+              "description": "Component type name (omit if using component_instance_id)"
+            },
+            "properties": {
+              "type": "string",
+              "description": "JSON object of property→value pairs"
+            },
+            "component_instance_id": {
+              "type": "string",
+              "description": "Component instanceId (alternative to target+component)"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target(s)"
+            },
+            "targets": {
+              "type": "string",
+              "description": "Comma-separated identifiers, or a find spec resolving to at most 100 objects (batch; requires `component`)"
+            }
+          },
+          "required": [
+            "properties"
+          ]
+        }
+      },
+      {
+        "name": "set_component_property",
+        "description": "Set a single property or field on a component. Use simple JSON for value (e.g. '5', 'true', '\"text\"', '[1,2,3]'). For Object references pass {\"fileID\": <instanceId>} or {\"assetPath\": \"Assets/...\"}. The success response echoes the post-write serialized value ('newValue'). Pass `targets` (comma-separated identifiers, or a find spec resolving to at most 100 objects) with a `component` type name to apply the SAME field to many objects (returns per-target results).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "GameObject identifier (omit if using component_instance_id or targets)"
+            },
+            "component": {
+              "type": "string",
+              "description": "Component type name (omit if using component_instance_id)"
+            },
+            "property": {
+              "type": "string",
+              "description": "Property/field name to set"
+            },
+            "value": {
+              "type": "string",
+              "description": "New value as JSON literal"
+            },
+            "component_instance_id": {
+              "type": "string",
+              "description": "Component instanceId (alternative to target+component)"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target(s)"
+            },
+            "targets": {
+              "type": "string",
+              "description": "Comma-separated identifiers, or a find spec resolving to at most 100 objects (batch; requires `component`)"
+            }
+          },
+          "required": [
+            "property",
+            "value"
+          ]
+        }
+      },
+      {
+        "name": "set_lighting_settings",
+        "description": "Set scene environment lighting. Only the parameters you provide are applied; the rest are left untouched. Marks the active scene dirty (save the scene to persist). Returns a full read-back of the resulting settings.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "ambient_mode": {
+              "type": "string",
+              "description": "Ambient source mode: Skybox, Trilight, Flat, or Custom."
+            },
+            "ambient_light": {
+              "type": "string",
+              "description": "Ambient light color as 'r,g,b[,a]' (0-1 floats) or #hex."
+            },
+            "fog": {
+              "type": "boolean",
+              "description": "Enable (true) or disable (false) fog. Omit to leave unchanged."
+            },
+            "fog_color": {
+              "type": "string",
+              "description": "Fog color as 'r,g,b[,a]' (0-1 floats) or #hex."
+            },
+            "fog_density": {
+              "type": "number",
+              "description": "Fog density for exponential fog modes (>= 0). -1 leaves it unchanged."
+            }
+          }
+        }
+      },
+      {
+        "name": "set_material_property",
+        "description": "Set a single shader property on a Material and save the asset. type='auto' (default) detects the property kind from the shader; or force one of float|color|vector|texture|int. Float/Range parse a number; Color parses 'r,g,b[,a]' or '#RRGGBB[AA]'; Vector parses 'x,y,z,w'; Texture loads a Texture at the given asset path (empty value clears the texture). Returns the read-back value.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Material asset path (preferred), or a scene GameObject id/name/path whose Renderer.sharedMaterial is edited."
+            },
+            "name": {
+              "type": "string",
+              "description": "Shader property name (case-sensitive, e.g. '_BaseColor', '_Metallic', '_MainTex')."
+            },
+            "value": {
+              "type": "string",
+              "description": "Value to set, format depends on type (number / 'r,g,b[,a]' or '#hex' / 'x,y,z,w' / texture asset path)."
+            },
+            "type": {
+              "type": "string",
+              "description": "Property kind: 'auto' (detect from shader), or float|color|vector|texture|int."
+            }
+          },
+          "required": [
+            "path",
+            "name",
+            "value"
+          ]
+        }
+      },
+      {
+        "name": "set_parent",
+        "description": "Reparent a GameObject. Pass empty parent to unparent.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "child": {
+              "type": "string",
+              "description": "Child GameObject identifier"
+            },
+            "parent": {
+              "type": "string",
+              "description": "Parent GameObject identifier (empty to unparent)"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve targets"
+            }
+          },
+          "required": [
+            "child"
+          ]
+        }
+      },
+      {
+        "name": "set_prefab_properties",
+        "description": "Set multiple serialized fields on one component in a prefab asset without opening Prefab Mode. Path validation, ambiguity handling, save, synchronous reimport, and persisted readback match set_prefab_property. Pass properties as a JSON object. Fields are applied independently and the response reports partial failures; if every field fails, the tool returns an error and does not save the asset.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prefab_path": {
+              "type": "string",
+              "description": "Path to the .prefab asset"
+            },
+            "component": {
+              "type": "string",
+              "description": "Component type name"
+            },
+            "properties": {
+              "type": "string",
+              "description": "JSON object of property→value pairs"
+            },
+            "game_object_path": {
+              "type": "string",
+              "description": "Exact '/'-separated child path relative to the prefab root (empty or '/' = root)"
+            },
+            "game_object_index": {
+              "type": "integer",
+              "description": "Zero-based match index when duplicate hierarchy paths exist; omit to reject ambiguity"
+            },
+            "component_index": {
+              "type": "integer",
+              "description": "Zero-based match index when the target has duplicate components of this type; omit to reject ambiguity"
+            }
+          },
+          "required": [
+            "prefab_path",
+            "component",
+            "properties"
+          ]
+        }
+      },
+      {
+        "name": "set_prefab_property",
+        "description": "Set one serialized field on a component in a prefab asset without opening Prefab Mode. The prefab path must be a normalized Assets/**/*.prefab path. Exact hierarchy and component matches are required; pass game_object_index or component_index only after an ambiguity response identifies duplicates. This avoids live Prefab Stage layout/TMP/Spine recomputation, but Unity serialization callbacks can still run. The asset is saved with PrefabUtility, synchronously reimported, and the persisted value is read back. Only serialized fields are accepted; public-member reflection fallback is intentionally disabled. For structural edits such as adding, removing, or reparenting objects, use Prefab Mode.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prefab_path": {
+              "type": "string",
+              "description": "Path to the .prefab asset (e.g. 'Assets/Prefabs/UIFoo.prefab')"
+            },
+            "component": {
+              "type": "string",
+              "description": "Component type name (e.g. 'TextMeshProUGUI', 'UnityEngine.UI.Image')"
+            },
+            "property": {
+              "type": "string",
+              "description": "Property/field name to set"
+            },
+            "value": {
+              "type": "string",
+              "description": "New value as JSON literal"
+            },
+            "game_object_path": {
+              "type": "string",
+              "description": "Exact '/'-separated child path relative to the prefab root (empty or '/' = root)"
+            },
+            "game_object_index": {
+              "type": "integer",
+              "description": "Zero-based match index when duplicate hierarchy paths exist; omit to reject ambiguity"
+            },
+            "component_index": {
+              "type": "integer",
+              "description": "Zero-based match index when the target has duplicate components of this type; omit to reject ambiguity"
+            }
+          },
+          "required": [
+            "prefab_path",
+            "component",
+            "property",
+            "value"
+          ]
+        }
+      },
+      {
+        "name": "set_scriptable_object_properties",
+        "description": "Set one or more serialized properties on a ScriptableObject asset and save it. Pass `properties` as a JSON object: {\"maxHealth\": 100, \"displayName\": \"Boss\", \"icon\": {\"assetPath\": \"Assets/...\"}}. Returns per-field success so partial failures are diagnosable. Changes are Undo-able and persisted to disk.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "asset_path": {
+              "type": "string",
+              "description": "Asset path (e.g. 'Assets/Configs/GameConfig.asset')"
+            },
+            "properties": {
+              "type": "string",
+              "description": "JSON object of property→value pairs"
+            }
+          },
+          "required": [
+            "asset_path",
+            "properties"
+          ]
+        }
+      },
+      {
+        "name": "set_selection",
+        "description": "Replace the current selection. Pass either a comma-separated list of instance ids, names, or paths. Use find_method to control how each token is resolved (by_id, by_name, by_path).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "targets": {
+              "type": "string",
+              "description": "Comma-separated instance ids, names, or paths"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve each token (by_id, by_name, by_path, by_id_or_name_or_path)"
+            }
+          },
+          "required": [
+            "targets"
+          ]
+        }
+      },
+      {
+        "name": "set_tag_and_layer",
+        "description": "Set tag and/or layer on a GameObject.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Identifier of the GameObject"
+            },
+            "tag": {
+              "type": "string",
+              "description": "Tag to set"
+            },
+            "layer": {
+              "type": "string",
+              "description": "Layer name to set"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target"
+            }
+          },
+          "required": [
+            "target"
+          ]
+        }
+      },
+      {
+        "name": "set_time_scale",
+        "description": "Set the game time scale. Use 0 to pause, 1 for normal speed, 2 for double speed, etc. Useful for testing or slow-motion debugging.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "scale": {
+              "type": "number",
+              "description": "Time scale value (0=paused, 1=normal, 2=double speed, etc.)"
+            }
+          },
+          "required": [
+            "scale"
+          ]
+        }
+      },
+      {
+        "name": "set_transform",
+        "description": "Set position, rotation, and/or scale on a GameObject's transform. Pass `target` for one object, or `targets` (comma-separated identifiers, or a single find spec that resolves to at most 100 objects) to apply the SAME values to many objects at once — the batch form returns per-target results.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "target": {
+              "type": "string",
+              "description": "Identifier of a single GameObject (omit if using targets)"
+            },
+            "position": {
+              "type": "string",
+              "description": "Position as 'x,y,z'"
+            },
+            "rotation": {
+              "type": "string",
+              "description": "Euler rotation as 'x,y,z'"
+            },
+            "scale": {
+              "type": "string",
+              "description": "Scale as 'x,y,z'"
+            },
+            "find_method": {
+              "type": "string",
+              "description": "How to resolve target(s)"
+            },
+            "targets": {
+              "type": "string",
+              "description": "Comma-separated identifiers, or a single find spec resolving to at most 100 objects (alternative to target)"
+            }
+          }
+        }
+      },
+      {
+        "name": "show_dialog",
+        "description": "Display a dialog box to the user",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Dialog title"
+            },
+            "message": {
+              "type": "string",
+              "description": "Dialog message"
+            }
+          },
+          "required": [
+            "title",
+            "message"
+          ]
+        }
+      },
+      {
+        "name": "simulate_key_combo",
+        "description": "Simulate multiple keys held simultaneously in Play Mode, for example W plus LeftShift.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "keys": {
+              "type": "string",
+              "description": "Comma-separated key names, for example 'W,LeftShift' or 'A,Space'"
+            },
+            "duration": {
+              "type": "number",
+              "description": "Duration in seconds to hold the combo"
+            }
+          },
+          "required": [
+            "keys"
+          ]
+        }
+      },
+      {
+        "name": "simulate_key_press",
+        "description": "Simulate keyboard input in Play Mode. Queues key events that the Unity Input System will process. Supports key names like W, A, S, D, Space, LeftShift, E, Q, and number keys.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string",
+              "description": "Key name, for example W, Space, LeftShift, E, or 1"
+            },
+            "duration": {
+              "type": "number",
+              "description": "Duration in seconds to hold the key. Use 0 for a tap."
+            },
+            "action": {
+              "type": "string",
+              "description": "Action type: press, release, or tap"
+            }
+          },
+          "required": [
+            "key"
+          ]
+        }
+      },
+      {
+        "name": "simulate_mouse_click",
+        "description": "Simulate a mouse click at a screen position in Play Mode. Coordinates are in screen pixels with 0,0 at the bottom-left. Works without the Input System by dispatching UI and physics events. Returns a structured result reporting whether a target was actually hit, by which strategy, and the object that was clicked (or null when nothing was hit).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number",
+              "description": "X coordinate (pixels by default)"
+            },
+            "y": {
+              "type": "number",
+              "description": "Y coordinate (pixels by default)"
+            },
+            "button": {
+              "type": "string",
+              "description": "Mouse button: left, right, or middle"
+            },
+            "coordinate_space": {
+              "type": "string",
+              "description": "render_pixels (legacy default), image_pixels, or normalized"
+            },
+            "origin": {
+              "type": "string",
+              "description": "bottom_left (legacy default) or top_left"
+            },
+            "capture_id": {
+              "type": "string",
+              "description": "Screenshot capture ID; required for image_pixels. Rejects changed geometry/mode or captures older than 30 seconds."
+            }
+          },
+          "required": [
+            "x",
+            "y"
+          ]
+        }
+      },
+      {
+        "name": "simulate_mouse_drag",
+        "description": "Simulate a mouse drag from one screen position to another in Play Mode using the Unity Input System.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "start_x": {
+              "type": "number",
+              "description": "Start X coordinate (pixels by default)"
+            },
+            "start_y": {
+              "type": "number",
+              "description": "Start Y coordinate (pixels by default)"
+            },
+            "end_x": {
+              "type": "number",
+              "description": "End X coordinate (pixels by default)"
+            },
+            "end_y": {
+              "type": "number",
+              "description": "End Y coordinate (pixels by default)"
+            },
+            "duration": {
+              "type": "number",
+              "description": "Duration of the drag in seconds"
+            },
+            "button": {
+              "type": "string",
+              "description": "Mouse button: left, right, or middle"
+            },
+            "coordinate_space": {
+              "type": "string",
+              "description": "render_pixels, image_pixels or normalized"
+            },
+            "origin": {
+              "type": "string",
+              "description": "bottom_left or top_left"
+            },
+            "capture_id": {
+              "type": "string",
+              "description": "Fresh screenshot ID, required for image_pixels"
+            }
+          },
+          "required": [
+            "start_x",
+            "start_y",
+            "end_x",
+            "end_y"
+          ]
+        }
+      },
+      {
+        "name": "simulate_ui_scroll",
+        "description": "Dispatch one UI scroll event at a validated screen/image point in Play Mode. Uses the top raycast hit's IScrollHandler (no click-through). Deltas are uGUI wheel units, not pixels; ScrollRect sensitivity belongs to the project. Records a timeline marker when recording is active.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number",
+              "description": "X coordinate"
+            },
+            "y": {
+              "type": "number",
+              "description": "Y coordinate"
+            },
+            "delta_y": {
+              "type": "number",
+              "description": "Vertical wheel delta; negative normally scrolls down"
+            },
+            "delta_x": {
+              "type": "number",
+              "description": "Horizontal wheel delta"
+            },
+            "coordinate_space": {
+              "type": "string",
+              "description": "render_pixels, image_pixels or normalized"
+            },
+            "origin": {
+              "type": "string",
+              "description": "bottom_left or top_left"
+            },
+            "capture_id": {
+              "type": "string",
+              "description": "Fresh screenshot ID; required for image_pixels"
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "delta_y"
+          ]
+        }
+      },
+      {
+        "name": "start_ui_preview_session",
+        "description": "Start a temporary prefab/scene-template preview. Requires idle Edit Mode, saved clean scenes and no Prefab Stage. Snapshots original scenes, selection and supported Game View settings. MCP briefly waits with request_key; continue through get_task. Business data is project-owned; Play preparation survives reload. Full-profile workflow.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prefab_paths": {
+              "type": "string",
+              "description": "JSON array of 0..20 prefab asset paths"
+            },
+            "scene_template": {
+              "type": "string",
+              "description": "Saved scene copied into the temporary environment; original is not modified"
+            },
+            "enter_play_mode": {
+              "type": "boolean",
+              "description": "Enter Play Mode after preparing environment"
+            },
+            "width": {
+              "type": "integer",
+              "description": "Temporary Game View width 128..4096; both dimensions zero preserves current size"
+            },
+            "height": {
+              "type": "integer",
+              "description": "Temporary Game View height 128..4096"
+            },
+            "request_key": {
+              "type": "string",
+              "description": "Idempotency key to recover an ambiguous start response"
+            },
+            "wait_seconds": {
+              "type": "integer",
+              "description": "MCP completion wait, 0..30 seconds; requires request_key for recovery"
+            }
+          }
+        }
+      },
+      {
+        "name": "undo",
+        "description": "Perform a single Undo step. NOTE: operates on the shared Editor's global undo stack — this reverts whatever was last done in the Editor, including the user's own actions; use with care.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "unload_scene",
+        "description": "Unload (close and remove) an additively loaded scene by name or path. Refuses to unload the last remaining loaded scene. Refuses to unload a scene with unsaved changes unless force=true (which permanently discards them). If multiple loaded scenes share a name, pass the exact Assets/... path.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name_or_path": {
+              "type": "string",
+              "description": "Name or path of the loaded scene to unload"
+            },
+            "force": {
+              "type": "boolean",
+              "description": "Discard unsaved changes and unload anyway (default false)"
+            }
+          },
+          "required": [
+            "name_or_path"
+          ]
+        }
+      },
+      {
+        "name": "unpack_prefab",
+        "description": "Unpack a prefab instance in the scene",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "game_object_name": {
+              "type": "string",
+              "description": "Prefab instance name, hierarchy path, or instance ID. Finds inactive objects too."
+            },
+            "mode": {
+              "type": "string",
+              "description": "Unpack mode: 'completely' or 'outermost'"
+            }
+          },
+          "required": [
+            "game_object_name"
+          ]
+        }
+      },
+      {
+        "name": "validate_menu_item",
+        "description": "Validate that a menu item exists without executing it. Useful when an agent wants to discover the right path before triggering side effects.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "menu_path": {
+              "type": "string",
+              "description": "Full menu path to validate"
+            }
+          },
+          "required": [
+            "menu_path"
+          ]
+        }
+      },
+      {
+        "name": "wait_for_compilation",
+        "description": "Force Unity to refresh and wait until script compilation is complete without blocking the editor thread. Use this after editing scripts to ensure the latest code is active before entering Play Mode. Returns compilation errors if any, or a success message.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "force_refresh": {
+              "type": "boolean",
+              "description": "Force a reimport/refresh before waiting"
+            },
+            "timeout_seconds": {
+              "type": "integer",
+              "description": "Maximum seconds to wait for compilation"
+            }
+          }
+        }
+      },
+      {
+        "name": "write_file",
+        "description": "Write content to a file (creates or overwrites)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string",
+              "description": "Path to the file"
+            },
+            "content": {
+              "type": "string",
+              "description": "Content to write"
+            }
+          },
+          "required": [
+            "path",
+            "content"
+          ]
+        }
+      },
+      {
+        "name": "execute_code",
+        "description": "[fallback] Fallback for project-specific operations. Prefer structured tools when available. Compiles a C# snippet with Unity's Roslyn csc first while preserving the in-memory compilation/execution flow, then runs the compiled assembly on the editor thread. Two templates are supported:\n  1) Recommended: implement IFunplayCommand on a class — receives an ExecutionContext (ctx) with RegisterObjectCreation/RegisterObjectModification/DestroyObject (auto-Undo + tracked) and Log/LogWarning/LogError (returned in the response).\n  2) Legacy: any class with `public static string Run()` — return value becomes the response message.\nBefore compiling, the editor's AssetDatabase is refreshed and pending compilation is awaited, so external file edits are picked up automatically without a separate request_recompile (pass skip_refresh=true to bypass this for read-only snippets or a live Play Mode session you must not disturb). When a full-class snippet implements IFunplayCommand, the required Funplay.Editor.Tools.Scripting using is added automatically if omitted. The snippet is compiled into a SEPARATE assembly, so funplay package internal types (e.g. ToolRegistry) cannot be referenced directly from the snippet -- reach them via reflection. safety_checks blocks a small set of obviously dangerous patterns (File.Delete, Process.Start, while(true), Environment.Exit, AssetDatabase.DeleteAsset, etc) and, when strict filesystem safety is enabled, broad System.IO writes plus obvious absolute/system/traversal paths. This is a defensive layer, not a full sandbox. If omitted, the MCP Settings window's default safety-check setting is used (enabled by default); explicitly passing true or false overrides that default. Project namespaces are not auto-injected by default; add `using` directives in the snippet, or enable the ScriptAssemblies-based convenience toggle in the MCP Settings window. If a compile fails with CS0104 (a type name ambiguous between two imported namespaces, e.g. System.Random vs UnityEngine.Random) or CS0433 (a type provided by multiple loaded assemblies) the error carries a structured `ambiguous` list; for CS0104 pass preferred_namespaces (comma-separated) to auto-insert a using-alias binding the name to that namespace and recompile once. CS0433 (same fully-qualified type in two assemblies) can't be fixed by an alias — use extern alias / drop a reference / reflection. Every invocation is appended to a session-scoped history (see get_execute_code_history / replay_execute_code).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "description": "C# code to execute. See description for IFunplayCommand vs legacy Run() templates."
+            },
+            "safety_checks": {
+              "type": "boolean",
+              "description": "If true, reject the call before compile when the code contains obviously dangerous patterns. If omitted, uses the MCP Settings window default."
+            },
+            "skip_refresh": {
+              "type": "boolean",
+              "description": "If true, skip the pre-compile AssetDatabase.Refresh + wait-for-ready. Use only when the editor is already up to date -- e.g. a read-only inspection snippet, or during a live Play Mode session you must not disturb. The default refresh can trigger an import/domain reload (from your own OR another actor's pending changes in a shared editor) that wipes Play Mode runtime state. When skipped, external file edits made since the last compile are NOT picked up."
+            },
+            "preferred_namespaces": {
+              "type": "string",
+              "description": "Optional comma-separated namespaces used to auto-resolve CS0104 ambiguity: when an unqualified type name is ambiguous between two imported namespaces, a using-alias binding that name to the candidate in the listed (winning) namespace is inserted and the snippet is recompiled once. Does NOT fix CS0433 (same fully-qualified type in two assemblies). If it stays ambiguous, a structured COMPILATION_FAILED error with an `ambiguous` array is returned."
+            }
+          },
+          "required": [
+            "code"
+          ]
+        }
+      }
+    ]
+  }
+}

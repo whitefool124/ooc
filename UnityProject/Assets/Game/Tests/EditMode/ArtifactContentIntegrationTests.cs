@@ -83,7 +83,9 @@ namespace OCC.Combat.Tests
                 reachable.Add(loot.Id);
             }
 
-            Assert.That(reachable, Is.SupersetOf(ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id)).Select(artifact => artifact.Id)));
+            Assert.That(reachable, Is.SupersetOf(ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id) && artifact.Id != "G-T19").Select(artifact => artifact.Id)));
+            Assert.That(reachable, Does.Not.Contain("G-T19"), "冒险封签只由T02固定事件提供");
+            Assert.That(ArtifactCatalog.FortuneSeal.ContentSources, Is.EqualTo(ArtifactContentSource.Event));
             Assert.That(reachable, Does.Contain("G-T18"));
         }
 

@@ -1778,9 +1778,12 @@ namespace OCC.Combat
                     bool alternate = rule.AlternateAmount > 0 && ((rule.Condition == FireCondition.TargetBurningOrArmorBroken || rule.Condition == FireCondition.TargetBurningOrBreakStance) ? both :
                         rule.Condition == FireCondition.Always ? broken : unit.HasStatus(StatusType.Burning));
                     int requested = alternate ? rule.AlternateAmount : rule.Amount;
+                    if(rule.Kind==FireRuleKind.WeaponDamage&&source.IsHero&&battle.Combat.Ruleset==CombatRuleset.Roguelite)
+                        requested+=battle.Combat.RogueEquipment?.MealWeaponDamageBonus??0;
                     int applied = rule.Kind == FireRuleKind.WeaponDamage
                         ? FireBattleState.ApplyRawWeaponDamage(source, unit, requested, battle.Combat)
                         : FireBattleState.ApplyRawFireDamage(unit, CombatDebugTuning.OutgoingDamageFor(source, requested, DamageType.Fire), battle.Combat);
+                    if(rule.Kind==FireRuleKind.WeaponDamage)battle.Combat.RogueEquipment?.ConsumeMealWeaponHit(source.Id);
                     Add(steps, spell, rule.Kind, unit.Id, unit.Position, CombatDebugTuning.OutgoingDamageFor(source, requested,
                         rule.Kind == FireRuleKind.WeaponDamage ? DamageType.Physical : DamageType.Fire), applied,
                         rule.Kind == FireRuleKind.WeaponDamage ? "weapon_damage" : "fire_damage");

@@ -46,6 +46,7 @@ namespace OCC.Combat
         public bool IsPermanentWall { get; set; }
         public bool IsScorched { get; set; }
         public int SmokeExpiresAt { get; set; }
+        public int SmokePublicRoundsRemaining { get; set; }
         /// <summary>散页：效果层。移动消耗 2，可被点燃或被风逐格搬动；浅水覆盖时直接清除。</summary>
         public bool IsLoosePaper { get; set; }
         /// <summary>痕迹：效果层。供追踪类单位读取；被浅水、火场或强风清除。</summary>
@@ -83,7 +84,7 @@ namespace OCC.Combat
         public TileState Clone() => new TileState { Cover = Cover, Durability = Durability, MaxDurability = MaxDurability, StructureOwnerUnitId = StructureOwnerUnitId, IsObjective = IsObjective, IsDevice = IsDevice,
             IsWater = IsWater, IsLampVine = IsLampVine, IsAetherCrystal = IsAetherCrystal, IsPressureCrystal = IsPressureCrystal, IsLootChest = IsLootChest, IsDecoy = IsDecoy, IsCrystalShard = IsCrystalShard,
             IsPermanentWall = IsPermanentWall,
-            IsScorched = IsScorched, SmokeExpiresAt = SmokeExpiresAt,
+            IsScorched = IsScorched, SmokeExpiresAt = SmokeExpiresAt, SmokePublicRoundsRemaining = SmokePublicRoundsRemaining,
             IsLoosePaper = IsLoosePaper, HasTrace = HasTrace, IsDeepTrace = IsDeepTrace, IsBindingMark = IsBindingMark,
             HasPaperScreen = HasPaperScreen, EffectSourceId = EffectSourceId,
             IsOverloadDevice = IsOverloadDevice,
@@ -92,7 +93,7 @@ namespace OCC.Combat
         /// <summary>清除本格的全部效果层。调用方随后设置新的效果层，即可满足"后生成者覆盖先在者"。</summary>
         public void ClearEffectLayers()
         {
-            IsWater = false; IsScorched = false; SmokeExpiresAt = 0;
+            IsWater = false; IsScorched = false; SmokeExpiresAt = 0; SmokePublicRoundsRemaining = 0;
             IsLoosePaper = false; HasTrace = false; IsDeepTrace = false; IsBindingMark = false;
             HasPaperScreen = false; EffectSourceId = null;
         }

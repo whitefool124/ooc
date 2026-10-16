@@ -1,0 +1,509 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "154a164b50e13c8aee31834246f52ff0b87beb66ad70e39e02d45ff9c4e21eb2",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Editor/Hd2DContinuousBattleCapture.cs",
+    "UnityProject/Assets/Game/Editor/Hd2DBattleWeatherPreview.cs",
+    "UnityProject/Assets/Game/Editor/Hd2DBattleLocalEvidence.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DWeatherRainPreview.cs",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DWeatherPreviewRain.shader"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "f58a11f55edbac3893e59fd81d0089ac6ef97a105950ecd87687207204609b94"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "0c2279554ce91db114bcdae35d58fc0ede2befa6490ebaad97fa23e6d8342587"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "b6e9512854f40b266735f2ead588b3cf15932d8857825d2d27a1f14c47df8e7b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "850b28b54eed633573b2f8054c60d704f14591d963881941566cae35e48c8fd1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DContinuousBattleCapture.cs",
+      "sha256": "909013f192be9dd545d398757ba4d11c1a28f148b5db251bd0de1ef5be5ec3a0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DBattleWeatherPreview.cs",
+      "sha256": "6e1e6caae3b1cd9ac7ccb4b8a88631818555a536902b818afd8eae96a89d6858"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DBattleLocalEvidence.cs",
+      "sha256": "f7cc490326c5eb3262582d8032486eb075ae76d9f2a766a9815ea44815f3c3f8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DWeatherRainPreview.cs",
+      "sha256": "38cad53c81ae82f17a9e3c50df6c7b84c29b28c29128018e0ee0794cdab63cbc"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DWeatherPreviewRain.shader",
+      "sha256": "99c414437bb07313f795f1e737aaf17ee4d22b15e23e50f6e6f44b791cbb8f8d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/capture.json",
+      "sha256": "ec1b374ea05127668db019b062cefd4850ee245b12d0b59f72031749d1a8885b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/cleanup.json",
+      "sha256": "047a447bab8ea723201c2bb8f1588ad01675382fb288210860487db54bf9a1a2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/full_battle_rt.png",
+      "sha256": "86bd6c860aec6c67d29c5c55ec43863b54cfe0cacbb2322f4454dd8e9eb18b53"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/full_output_offscreen_1920x1080.png",
+      "sha256": "fb41cb5d24fe90516705b357512d653ef5811c95ea41a5190d290b431f876463"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/full_output_offscreen_960x540.png",
+      "sha256": "479fbc0434a8ed6d5e9c57a307297727e50a374e29c362e208994fea1fadbafb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/local_density_configuration.json",
+      "sha256": "89192ec76e8e2a1202042de51a441e0c58ecc0449e756d5c2e6969ee06fe4adc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/no_contact_battle_rt.png",
+      "sha256": "42500277532803756712feed5445130f7df2b1ce0bc66f1579b6c8c0318faeba"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/no_diffuse_battle_rt.png",
+      "sha256": "88731432ea1a2f1b0e85abda7f0f9e66b15b4b62fc70009894f1e8118bdf31e0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/no_local_lighting_battle_rt.png",
+      "sha256": "e7ae615503da684f2afd4a26731b20dc0d8fa47367663a0f10ab97614c844e4b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/no_post_battle_rt.png",
+      "sha256": "d616200abd82cd93b9aacd0ccc3890e82555dd6c00b4c4de19f3974a4b115b7a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/weather_preview.json",
+      "sha256": "787ef152a54a993edd50d4619074f9c6d42334fcf5a3350b845f98fd201e5572"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/capture.json",
+      "sha256": "eebe79b23ef7b02af2e9389c9eb8030957c638b00b5597d4cde8a8ed52187583"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/cleanup.json",
+      "sha256": "047a447bab8ea723201c2bb8f1588ad01675382fb288210860487db54bf9a1a2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/full_battle_rt.png",
+      "sha256": "96e8c6aab41bdc9e8a835ebb61214b86a362965f7155d5ecf9a69640f05c31c9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/full_output_offscreen_1920x1080.png",
+      "sha256": "7f6ede8f7bf2e5dc7477e0e8b6837572bf6bdf3d97c1cd3972515c1dda3ac21d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/full_output_offscreen_960x540.png",
+      "sha256": "523aeadefa732c1cc02f22434c49311d4c28c2ce1307661b91f0f1f1d29ada1e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/local_density_configuration.json",
+      "sha256": "a8bbb2900dbdb360d434d75015cdae2a8aca44576cf2a1a718c3af95c2c27845"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/no_contact_battle_rt.png",
+      "sha256": "09282e023870c1b00915dfab6e31f28bd45ed5ae26dbafdb1beda547430023a2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/no_diffuse_battle_rt.png",
+      "sha256": "7bbe3805f8bd2045f06f28923d57b42cefefe95c3f81c29a45d2440ded3a53f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/no_local_lighting_battle_rt.png",
+      "sha256": "e2c974570b9e61e2ad4a8e689c44d8d281f456fe30e987a4d4448dc170d3e79b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/no_post_battle_rt.png",
+      "sha256": "feb40b76aacd33ee7cf977fb1b5a2c5fb6525e5208f180d282b356864b0dcdd9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/rain_frame_00.png",
+      "sha256": "a6bffa4e66e8773d95dce033c2aa08c59aa6ed381c8a945d24519b72e7e76170"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/rain_frame_01.png",
+      "sha256": "1f98d544215535b35ca230e9648fc8c92f6ea27c92a288a8bd215421184abea6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/rain_frame_02.png",
+      "sha256": "b93b96cf62df8a5dfaf7abb53b8dfcef40021099048670efda92ca29351e3222"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/rain_frame_03.png",
+      "sha256": "d112675497dc8ca594927f623700e50c6c4224e4d804e7621e961a4ae0768cff"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/rain_frame_04.png",
+      "sha256": "5a85c2be3e615c3eb37f652cf8c7e0d4de83762a379fb7169b3e2f0aa87c7d47"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/rain_frame_05.png",
+      "sha256": "08be88cadb5c12aafd6fc6b47d679d13d46cf15c4160c84d2ccb6b4654592b50"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/rain_frame_06.png",
+      "sha256": "9237668d4ab127e39072290b2c0444dbe162e70eebb24bf686c6b7a8df5d9001"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/rain_frame_07.png",
+      "sha256": "cc6f19bbeb24caf8d821bcd3c7a1719fe798adc9a91613405b91342176654105"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/weather_preview.json",
+      "sha256": "e0f336113001d858dc3fcd443dfb97a153aa20f1199c5aef7068769671070980"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 45,
+    "yaw": 0,
+    "wall_height": 0.65,
+    "unit_ground_angle": 45
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": null
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Local isolated Editor preview only; no normal entry or Player performance evidence",
+    "Complete density and construction review pending",
+    "Weather appearance has not yet received human review"
+  ],
+  "local_preview": [
+    {
+      "preset": "Sunset",
+      "runtime": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/capture.json",
+        "sha256": "ec1b374ea05127668db019b062cefd4850ee245b12d0b59f72031749d1a8885b"
+      },
+      "cleanup": {
+        "play": false,
+        "dirty": false,
+        "scenePreserved": true,
+        "pipelineRestored": true,
+        "windowPreferencesRestored": true
+      },
+      "configuration": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Sunset/weather_preview.json",
+        "sha256": "787ef152a54a993edd50d4619074f9c6d42334fcf5a3350b845f98fd201e5572"
+      }
+    },
+    {
+      "preset": "RainNight",
+      "runtime": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/capture.json",
+        "sha256": "eebe79b23ef7b02af2e9389c9eb8030957c638b00b5597d4cde8a8ed52187583"
+      },
+      "cleanup": {
+        "play": false,
+        "dirty": false,
+        "scenePreserved": true,
+        "pipelineRestored": true,
+        "windowPreferencesRestored": true
+      },
+      "configuration": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/RainNight/weather_preview.json",
+        "sha256": "e0f336113001d858dc3fcd443dfb97a153aa20f1199c5aef7068769671070980"
+      }
+    }
+  ]
+}

@@ -12,11 +12,17 @@ namespace OCC.Combat.Presentation
         [SerializeField] private RectTransform rightConsole;
         [SerializeField] private RectTransform actionPointBadge;
         [SerializeField] private RectTransform commands;
+        [SerializeField] private RectTransform heroStatus;
+        [SerializeField] private RectTransform actionOrder;
+        [SerializeField] private RectTransform timelineTab;
 
         public RectTransform Header => header;
         public RectTransform RightConsole => rightConsole;
         public RectTransform ActionPointBadge => actionPointBadge;
         public RectTransform Commands => commands;
+        public RectTransform HeroStatus => heroStatus;
+        public RectTransform ActionOrder => actionOrder;
+        public RectTransform TimelineTab => timelineTab;
 
         public static FormalCombatHudShellView Create(Transform parent)
         {
@@ -40,7 +46,8 @@ namespace OCC.Combat.Presentation
 
         public void ValidateReferences()
         {
-            if (header == null || rightConsole == null || actionPointBadge == null || commands == null)
+            if (header == null || rightConsole == null || actionPointBadge == null || commands == null ||
+                heroStatus == null || actionOrder == null || timelineTab == null)
                 throw new InvalidOperationException("Formal combat HUD shell prefab has incomplete serialized references.");
         }
     }

@@ -87,7 +87,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void DamagePopup_MergesShieldAndHealthIntoOneActualNumber()
+        public void DamagePopup_KeepsShieldAndHealthReadableAsSeparateActualNumbers()
         {
             GridPosition target = new GridPosition(3, 4);
             CombatDamagePopupPresentation shield = CombatDamagePopupPresentation.From(
@@ -95,11 +95,9 @@ namespace OCC.Combat.Tests
             CombatDamagePopupPresentation health = CombatDamagePopupPresentation.From(
                 new CombatFeedbackEvent(CombatFeedbackKind.Damage, target, 5));
 
-            CombatDamagePopupPresentation merged = shield.Merge(health);
-
-            Assert.That(merged.Amount, Is.EqualTo(8));
-            Assert.That(merged.Text, Is.EqualTo("-8"));
-            Assert.That(merged.IncludesHealthDamage, Is.True);
+            Assert.That(shield.Text, Is.EqualTo("盾 -3"));
+            Assert.That(health.Text, Is.EqualTo("-5"));
+            Assert.That(() => shield.Merge(health), Throws.ArgumentException);
         }
 
         [Test]
@@ -108,6 +106,36 @@ namespace OCC.Combat.Tests
             Assert.That(() => CombatDamagePopupPresentation.From(
                 new CombatFeedbackEvent(CombatFeedbackKind.Healing, new GridPosition(0, 0), 3)),
                 Throws.ArgumentException);
+        }
+
+        [Test]
+        public void MixedDamage_PresentsTwoCompleteNonInteractiveLabelsAndReservesTheirWidths()
+        {
+            var root = new GameObject("damage-layout-test", typeof(RectTransform), typeof(Canvas), typeof(CombatVisualFeedback));
+            try
+            {
+                var feedback = root.GetComponent<CombatVisualFeedback>();
+                typeof(CombatVisualFeedback).GetField("canvas", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(feedback, root.GetComponent<Canvas>());
+                var show = typeof(CombatVisualFeedback).GetMethod("ShowDamagePopup", BindingFlags.Instance | BindingFlags.NonPublic);
+                var cell = new GridPosition(2, 4);
+                show.Invoke(feedback, new object[] { new CombatFeedbackEvent(CombatFeedbackKind.ShieldAbsorb, cell, 4444) });
+                show.Invoke(feedback, new object[] { new CombatFeedbackEvent(CombatFeedbackKind.Damage, cell, 4444) });
+                var labels = root.GetComponentsInChildren<Text>().Where(t => t.name == "实际伤害跳字").ToArray();
+                Assert.That(labels.Select(t => t.text), Is.EquivalentTo(new[] { "盾 -4444", "-4444" }));
+                foreach (Text label in labels)
+                {
+                    Assert.That(label.rectTransform.sizeDelta.x, Is.GreaterThanOrEqualTo(label.preferredWidth));
+                    Assert.That(label.horizontalOverflow, Is.EqualTo(HorizontalWrapMode.Overflow));
+                    Assert.That(label.resizeTextForBestFit, Is.False);
+                    Assert.That(label.raycastTarget, Is.False);
+                    Assert.That(label.GetComponent<CanvasGroup>().blocksRaycasts, Is.False);
+                    Assert.That(label.transform.localScale, Is.EqualTo(Vector3.one));
+                }
+                feedback.ResetBattleFeedback();
+                Assert.That(root.GetComponentsInChildren<Text>().Count(t => t.name == "实际伤害跳字"), Is.Zero);
+            }
+            finally { Object.DestroyImmediate(root); }
         }
 
         [Test]
@@ -184,35 +212,20 @@ namespace OCC.Combat.Tests
 
         [TestCase(true)]
         [TestCase(false)]
-        public void OutcomeFeedback_HasVisibleGlyphsDuringItsHoldWithoutScaling(bool victory)
+        public void OutcomeFeedback_DoesNotDuplicateTheSettlementNotification(bool victory)
         {
             GameObject root = new GameObject("outcome-feedback-test", typeof(Canvas), typeof(CombatVisualFeedback));
-            GameObject card = null;
-            System.Type tween = System.AppDomain.CurrentDomain.GetAssemblies()
-                .Select(assembly => assembly.GetType("DG.Tweening.DOTween")).FirstOrDefault(type => type != null);
             try
             {
                 CombatVisualFeedback feedback = root.GetComponent<CombatVisualFeedback>();
-                typeof(CombatVisualFeedback).GetField("canvas", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .SetValue(feedback, root.GetComponent<Canvas>());
                 feedback.PlayOutcome(victory);
-                card = root.transform.Find("战斗结果反馈").gameObject;
-                Assert.That(tween, Is.Not.Null);
-                tween.GetMethod("Goto", new[] { typeof(object), typeof(float), typeof(bool) })
-                    .Invoke(null, new object[] { card, .3f, false });
-                Text label = card.GetComponent<Text>();
-                Assert.That(label.text, Is.EqualTo(victory ? "战斗胜利" : "战斗失败"));
-                Assert.That(label.color.a * card.GetComponent<CanvasGroup>().alpha, Is.GreaterThan(.9f));
-                Assert.That(card.transform.localScale, Is.EqualTo(Vector3.one));
-                Assert.That(label.resizeTextForBestFit, Is.False);
-                Assert.That(label.raycastTarget, Is.False);
+                feedback.PlayOutcome(victory);
+                // Settlement owns victory/defeat. A.11 permits only the turn banner at the top.
+                Assert.That(root.transform.childCount, Is.Zero);
+                Assert.That(Object.FindObjectsByType<Text>(FindObjectsSortMode.None)
+                    .Any(label => label.name == "战斗结果反馈"), Is.False);
             }
-            finally
-            {
-                if (card != null && tween != null)
-                    tween.GetMethod("Kill", new[] { typeof(object), typeof(bool) }).Invoke(null, new object[] { card, false });
-                Object.DestroyImmediate(root);
-            }
+            finally { Object.DestroyImmediate(root); }
         }
     }
 }

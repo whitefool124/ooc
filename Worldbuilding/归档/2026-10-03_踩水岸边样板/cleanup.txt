@@ -1,0 +1,1 @@
+PASS: injected pending visual cleared on animation=0 and feedback disable/re-enable. Preferences changed only in memory and restored; no SaveUiPreferences call.

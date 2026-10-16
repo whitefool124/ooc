@@ -1,0 +1,516 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "c6e069ff0f1f014e37e0dddf207f6b9dc3b1dd137a4d3a77ff25ba9de70ba1c7",
+  "scene_kind": "desk",
+  "baseline_id": "desk-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Lighting.cs"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "72a78ddf11b8a002f1ce8b979c348fcd54f15d179f26da00e329ec78359df08c"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "75c2acbf1878900a00f77d93cdaa165b753f9a2ae35e43eafbdda0037467c7d4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/MainMenuHd2DStage.cs",
+      "sha256": "cc14c25431840009bd15a534a7ae7d7e74196c347d5c5964bfee829dd6da35d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+      "sha256": "59de62f8131eb82c59cb7bdb828e9bb56a72656f58296d4549b345187fb61987"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DAtmosphere.asset",
+      "sha256": "adf26689a7e80b22ef256d4a7c516929d51aea7f3af97bbe91cb136db3a685f0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Lighting.cs",
+      "sha256": "170ae60a296ec9184ccbe504cc90a2834dd8526538029397f85e19e7e0f3d790"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 35,
+    "yaw": 0,
+    "field_of_view": 24
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": null
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Full visual gate cases and pixel-density review incomplete",
+    "Human aesthetic approval pending",
+    "Player performance measurement pending"
+  ],
+  "additional_evidence": [
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC日光层次/evidence/occ_daylight_final_1080.png",
+      "sha256": "686bf5ccab0b67884e4eeb71041d848987749e16ead84b74d74cbe2a94e1a3b1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC日光层次/evidence/occ_daylight_final_540.png",
+      "sha256": "5df54d75481e6c32d15cc75af0037d5f99c6dd5dff645ce74296933e06d10049"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC日光层次/evidence/occ_daylight_spell_540.png",
+      "sha256": "d6c9e5b1d08fad031580c862247017a3ba73c2774267205d5bf6019550eccbe3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC日光层次/evidence/occ_daylight_lamp100_540.png",
+      "sha256": "d9be5ef21adb60f58020743581c6369ed978ec7d5a6e68cc555a5a4649403ea8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC日光层次/evidence/occ_daylight_lamp0_540.png",
+      "sha256": "6d2078b3a9e1e620a8bd0eaa41cc6b949c49d9f137ec0185bf0dee5627daea2b"
+    }
+  ],
+  "runtime_observations": {
+    "desk1080": {
+      "path": "E:/数据库/OCC_Codex/UnityProject/Assets",
+      "stageLayer": 29,
+      "status": "PASS:click:背包",
+      "output": [
+        1920,
+        1080
+      ],
+      "exposure": 0.85,
+      "contrast": 4.0,
+      "lights": [
+        {
+          "name": "以太灯真实局部光",
+          "type": "Point",
+          "intensity": 2.40945315,
+          "color": [
+            0.55,
+            0.8,
+            1.0
+          ],
+          "shadow": "Soft"
+        },
+        {
+          "name": "窗外统一日光",
+          "type": "Directional",
+          "intensity": 3.15,
+          "color": [
+            1.0,
+            0.88,
+            0.72
+          ],
+          "shadow": "Soft"
+        },
+        {
+          "name": "窗边柔和补光",
+          "type": "Point",
+          "intensity": 1.6,
+          "color": [
+            0.65,
+            0.79,
+            1.0
+          ],
+          "shadow": "None"
+        },
+        {
+          "name": "室内暖补光",
+          "type": "Directional",
+          "intensity": 0.65,
+          "color": [
+            0.72,
+            0.82,
+            1.0
+          ],
+          "shadow": "None"
+        },
+        {
+          "name": "整备陈列柔光",
+          "type": "Point",
+          "intensity": 4.0,
+          "color": [
+            1.0,
+            0.94,
+            0.84
+          ],
+          "shadow": "None"
+        },
+        {
+          "name": "整备台灯暖光",
+          "type": "Spot",
+          "intensity": 2.4,
+          "color": [
+            0.38,
+            0.82,
+            1.0
+          ],
+          "shadow": "Soft"
+        }
+      ]
+    },
+    "spell540": {
+      "path": "E:/数据库/OCC_Codex/UnityProject/Assets",
+      "stageLayer": 29,
+      "status": "PASS:click:术式编组",
+      "output": [
+        960,
+        540
+      ],
+      "exposure": 0.85,
+      "contrast": 4.0,
+      "lights": [
+        {
+          "name": "以太灯真实局部光",
+          "type": "Point",
+          "intensity": 2.38000035,
+          "color": [
+            0.55,
+            0.8,
+            1.0
+          ],
+          "shadow": "Soft"
+        },
+        {
+          "name": "窗外统一日光",
+          "type": "Directional",
+          "intensity": 3.15,
+          "color": [
+            1.0,
+            0.88,
+            0.72
+          ],
+          "shadow": "Soft"
+        },
+        {
+          "name": "窗边柔和补光",
+          "type": "Point",
+          "intensity": 1.6,
+          "color": [
+            0.65,
+            0.79,
+            1.0
+          ],
+          "shadow": "None"
+        },
+        {
+          "name": "室内暖补光",
+          "type": "Directional",
+          "intensity": 0.65,
+          "color": [
+            0.72,
+            0.82,
+            1.0
+          ],
+          "shadow": "None"
+        },
+        {
+          "name": "整备陈列柔光",
+          "type": "Point",
+          "intensity": 4.0,
+          "color": [
+            1.0,
+            0.94,
+            0.84
+          ],
+          "shadow": "None"
+        },
+        {
+          "name": "整备台灯暖光",
+          "type": "Spot",
+          "intensity": 6.0,
+          "color": [
+            0.38,
+            0.82,
+            1.0
+          ],
+          "shadow": "Soft"
+        }
+      ]
+    },
+    "close_readback": {
+      "path": "E:/数据库/OCC_Codex/UnityProject/Assets",
+      "status": "PASS:click:返回地图",
+      "pipeline": "UniversalRP",
+      "ao": false,
+      "aoActive": false,
+      "aoRadius": null,
+      "aoIntensity": null,
+      "aoSource": null,
+      "aoDirect": null,
+      "woodSmoothness": 0.28,
+      "woodFiber": 0.1,
+      "woodFinish": 0.05,
+      "output": [
+        960,
+        540
+      ],
+      "ambient": "Flat",
+      "deskRootCount": 0,
+      "lampPrefPresent": true,
+      "lampPref": 0.4
+    },
+    "note": "Light readback includes the disabled template ether light; do not interpret every listed light as enabled. Final Console query: no error entries. Final edit state: correct project, clean CombatPrototype scene, original UniversalRP restored, lamp preference absent, Play exited."
+  }
+}

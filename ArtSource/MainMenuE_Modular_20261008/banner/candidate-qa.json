@@ -1,0 +1,19 @@
+{
+  "cols": 42,
+  "rows": 84,
+  "step_x": 21.0,
+  "step_y": 21.0,
+  "consensus": "forced",
+  "confidence": "medium",
+  "detect_s": 0.0,
+  "recon_s": 1.364,
+  "route": "COMMUNITY_RECONSTRUCTION_REVIEW_ONLY",
+  "lossless_pass": false,
+  "grid_basis": "Observed coarse contour/material step; finer half-step reconstruction retains broad pixel clusters. Not a numerical confidence pass.",
+  "native_size": [
+    34,
+    69
+  ],
+  "arbitrary_target_resizing": false,
+  "human_acceptance": false
+}

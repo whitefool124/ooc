@@ -1,0 +1,13 @@
+ENTRY:O seed=279160751 saved=True
+COMBAT:B1 phase=Victory actions=14 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+COMBAT:B2 phase=Victory actions=15 hp=46 mana=0
+REWARD:PASS B2 F-P-U04 gold=17 contribution=2
+COMBAT:B3 phase=Victory actions=11 hp=34 mana=0
+REWARD:PASS B3 F-P-M12 gold=20 contribution=4
+COMBAT:X phase=Victory actions=17 hp=44 mana=0
+REWARD:PASS X PASSIVE-ELITE-01 gold=26 contribution=4
+HANDOFF:PASS {"Seed":279160751,"Gold":26,"StageContribution":4,"CurrentHealth":44,"CurrentMana":0,"spells":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","F-P-R19","F-P-U04","F-P-M12","PASSIVE-ELITE-01"],"equipped":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","","","",""],"equipment":[{"InstanceId":"starter-chest","DefinitionId":"ACA-EQ-CH01"},{"InstanceId":"starter-backpack","DefinitionId":"ACA-EQ-BP01"},{"InstanceId":"eq-first-event-279160751-0","DefinitionId":"ACA-EQ-CH04"},{"InstanceId":"eq-content-279160751-2","DefinitionId":"ACA-EQ-HD02"}],"tactical":[{"InstanceId":"item-first-event-279160751-1","DefinitionId":"G-T09","ChargesCurrent":3},{"InstanceId":"item-content-279160751-3","DefinitionId":"G-T13","ChargesCurrent":3}]} mapNodes=20
+PASS:full-tutorial-reward-journey
+
+正式六个存档键未变：True

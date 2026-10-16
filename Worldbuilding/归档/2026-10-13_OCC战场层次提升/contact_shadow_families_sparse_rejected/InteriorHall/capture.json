@@ -1,0 +1,24 @@
+{
+  "status": "CAPTURED_FOR_MANUAL_REVIEW",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "level": "calibration_lockdown",
+  "environment": "InteriorHall",
+  "source": "Unity Editor Play Mode runtime battlefield/full HUD; isolated preview, not standalone Player or full journey acceptance",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "focusRequested": false,
+  "suitesRun": false,
+  "humanReview": "PENDING",
+  "diffuseUpdates": 1,
+  "diffuseSurfaces": 69,
+  "shaders": [
+    "OCC/HD2D/BakedArchitecture",
+    "Universal Render Pipeline/Lit",
+    "OCC/HD2D/GroundedSprite",
+    "OCC/HD2D/CourtyardWater"
+  ],
+  "peripheralSurfaceVariants": 8,
+  "foliageMaterials": 0
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "status": "PASS_LOSSLESS_TARGET",
+    "inferred_subject_pixel_pitch": 24,
+    "subject_lattice_confidence": 1.2549,
+    "subject_logical_size": [
+      16,
+      8
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      16,
+      8
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 12,
+    "subject_lattice_confidence": 1.0843,
+    "subject_logical_size": [
+      30,
+      24
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      30,
+      24
+    ]
+  },
+  {
+    "status": "PASS_LOSSLESS_TARGET",
+    "inferred_subject_pixel_pitch": 31,
+    "subject_lattice_confidence": 1.6205,
+    "subject_logical_size": [
+      12,
+      11
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      12,
+      11
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 34,
+    "subject_lattice_confidence": 1.029,
+    "subject_logical_size": [
+      13,
+      8
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      13,
+      8
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 34,
+    "subject_lattice_confidence": 1.1164,
+    "subject_logical_size": [
+      14,
+      6
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      14,
+      6
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 40,
+    "subject_lattice_confidence": 1.0177,
+    "subject_logical_size": [
+      13,
+      5
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      13,
+      5
+    ]
+  }
+]

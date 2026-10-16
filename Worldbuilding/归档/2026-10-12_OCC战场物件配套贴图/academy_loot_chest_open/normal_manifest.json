@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_loot_chest_open_normal",
+  "role": "hd2d_material_data_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/normal_panel.png",
+    "source_sha256": "3445f456d71d86da17e1c1331167f90f0978119d4d7f1286a808f9a28bf66a5a",
+    "independent_raw": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/paired_raw_r1.png",
+      "sha256": "ade3884da5c451e567aaf2a5b719d1a0892d19bb714e19c961e142f5f1d2d838"
+    },
+    "registration": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/normal_registration.json",
+      "sha256": "f940172a7a56dd80bda22c847aa1cc0539973692838406cf6999b4e575adacff"
+    }
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/normal.png",
+    "output_sha256": "08feded352c71426a3570e64229ac94066e0107024108c886efa722bc2a0b84b",
+    "native_ppu": 32,
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "unity_import": {
+    "guid": "3c2822593730fbb47b46ecf98a7cb20e",
+    "filter_mode": "Point",
+    "colour_space": "linear",
+    "mipmaps": false,
+    "compression": "Uncompressed",
+    "wrap_mode": "Clamp"
+  },
+  "application": {
+    "albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_loot_chest_open.png",
+      "sha256": "d4bf3edb5826d448d4755de94d831e20e6b21f75dd77eb011fb27c67d0768369"
+    },
+    "shared_uv": true,
+    "world_pixel_pitch": 0.03125,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_open_dry/result.json",
+      "sha256": "7abcf0faf42c4eb1c4dd78a009ba74f0568f5180a67f30c974d7f31e4dd3a187"
+    }
+  },
+  "human_review": {
+    "overall": "PENDING"
+  },
+  "admission_blockers": [
+    "Numeric material-data role not registered in Sprite formal admission; no FORMAL promotion",
+    "Source registration, complete scene density and genuine human material review pending"
+  ]
+}

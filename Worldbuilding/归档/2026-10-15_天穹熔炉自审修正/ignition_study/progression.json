@@ -1,0 +1,214 @@
+[
+  {
+    "time": 1.6,
+    "ignition": {
+      "schema": "occ-native-texel-ignition-v1",
+      "route": "Opaque-texel geodesic propagation, independent HDR emission; two pooled real lights follow the front",
+      "items": [
+        {
+          "name": "参考稿裁切 · 完整外环",
+          "nativeTexels": 5468,
+          "connectedInkComponents": 1,
+          "currentProgress": 0.336076826,
+          "currentLitTexels": 1643,
+          "quarterLit": 1177,
+          "halfLit": 2671,
+          "allLit": 5468,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 独立六符印",
+          "nativeTexels": 3587,
+          "connectedInkComponents": 1,
+          "currentProgress": 0.0,
+          "currentLitTexels": 1,
+          "quarterLit": 665,
+          "halfLit": 1777,
+          "allLit": 3587,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 中心交织术式",
+          "nativeTexels": 2450,
+          "connectedInkComponents": 1,
+          "currentProgress": 0.0,
+          "currentLitTexels": 1,
+          "quarterLit": 151,
+          "halfLit": 868,
+          "allLit": 2450,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 施法中心术印",
+          "nativeTexels": 560,
+          "connectedInkComponents": 1,
+          "currentProgress": 1.0,
+          "currentLitTexels": 560,
+          "quarterLit": 68,
+          "halfLit": 226,
+          "allLit": 560,
+          "mapSampling": "Point"
+        }
+      ]
+    }
+  },
+  {
+    "time": 3.4,
+    "ignition": {
+      "schema": "occ-native-texel-ignition-v1",
+      "route": "Opaque-texel geodesic propagation, independent HDR emission; two pooled real lights follow the front",
+      "items": [
+        {
+          "name": "参考稿裁切 · 完整外环",
+          "nativeTexels": 5468,
+          "connectedInkComponents": 1,
+          "currentProgress": 1.0,
+          "currentLitTexels": 5468,
+          "quarterLit": 1177,
+          "halfLit": 2671,
+          "allLit": 5468,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 独立六符印",
+          "nativeTexels": 3587,
+          "connectedInkComponents": 1,
+          "currentProgress": 0.410432041,
+          "currentLitTexels": 1536,
+          "quarterLit": 665,
+          "halfLit": 1777,
+          "allLit": 3587,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 中心交织术式",
+          "nativeTexels": 2450,
+          "connectedInkComponents": 1,
+          "currentProgress": 0.0,
+          "currentLitTexels": 1,
+          "quarterLit": 151,
+          "halfLit": 868,
+          "allLit": 2450,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 施法中心术印",
+          "nativeTexels": 560,
+          "connectedInkComponents": 1,
+          "currentProgress": 1.0,
+          "currentLitTexels": 560,
+          "quarterLit": 68,
+          "halfLit": 226,
+          "allLit": 560,
+          "mapSampling": "Point"
+        }
+      ]
+    }
+  },
+  {
+    "time": 5.5,
+    "ignition": {
+      "schema": "occ-native-texel-ignition-v1",
+      "route": "Opaque-texel geodesic propagation, independent HDR emission; two pooled real lights follow the front",
+      "items": [
+        {
+          "name": "参考稿裁切 · 完整外环",
+          "nativeTexels": 5468,
+          "connectedInkComponents": 1,
+          "currentProgress": 1.0,
+          "currentLitTexels": 5468,
+          "quarterLit": 1177,
+          "halfLit": 2671,
+          "allLit": 5468,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 独立六符印",
+          "nativeTexels": 3587,
+          "connectedInkComponents": 1,
+          "currentProgress": 1.0,
+          "currentLitTexels": 3587,
+          "quarterLit": 665,
+          "halfLit": 1777,
+          "allLit": 3587,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 中心交织术式",
+          "nativeTexels": 2450,
+          "connectedInkComponents": 1,
+          "currentProgress": 0.4424214,
+          "currentLitTexels": 601,
+          "quarterLit": 151,
+          "halfLit": 868,
+          "allLit": 2450,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 施法中心术印",
+          "nativeTexels": 560,
+          "connectedInkComponents": 1,
+          "currentProgress": 1.0,
+          "currentLitTexels": 560,
+          "quarterLit": 68,
+          "halfLit": 226,
+          "allLit": 560,
+          "mapSampling": "Point"
+        }
+      ]
+    }
+  },
+  {
+    "time": 6.9,
+    "ignition": {
+      "schema": "occ-native-texel-ignition-v1",
+      "route": "Opaque-texel geodesic propagation, independent HDR emission; two pooled real lights follow the front",
+      "items": [
+        {
+          "name": "参考稿裁切 · 完整外环",
+          "nativeTexels": 5468,
+          "connectedInkComponents": 1,
+          "currentProgress": 1.0,
+          "currentLitTexels": 5468,
+          "quarterLit": 1177,
+          "halfLit": 2671,
+          "allLit": 5468,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 独立六符印",
+          "nativeTexels": 3587,
+          "connectedInkComponents": 1,
+          "currentProgress": 1.0,
+          "currentLitTexels": 3587,
+          "quarterLit": 665,
+          "halfLit": 1777,
+          "allLit": 3587,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 中心交织术式",
+          "nativeTexels": 2450,
+          "connectedInkComponents": 1,
+          "currentProgress": 1.0,
+          "currentLitTexels": 2450,
+          "quarterLit": 151,
+          "halfLit": 868,
+          "allLit": 2450,
+          "mapSampling": "Point"
+        },
+        {
+          "name": "参考稿裁切 · 施法中心术印",
+          "nativeTexels": 560,
+          "connectedInkComponents": 1,
+          "currentProgress": 1.0,
+          "currentLitTexels": 560,
+          "quarterLit": 68,
+          "halfLit": 226,
+          "allLit": 560,
+          "mapSampling": "Point"
+        }
+      ]
+    }
+  }
+]

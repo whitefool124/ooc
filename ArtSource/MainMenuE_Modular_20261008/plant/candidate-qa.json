@@ -1,0 +1,26 @@
+{
+  "pitch": 35,
+  "phase": [
+    11,
+    17
+  ],
+  "confidence": 1.67573967230961,
+  "threshold": 1.2,
+  "bounds": [
+    0,
+    19,
+    1101,
+    1427
+  ],
+  "size": [
+    23,
+    34
+  ],
+  "route": "PASS_SUBJECT_LATTICE",
+  "native_size": [
+    25,
+    36
+  ],
+  "arbitrary_target_resizing": false,
+  "human_acceptance": false
+}

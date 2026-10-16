@@ -1,0 +1,12 @@
+{
+  "schema": "occ-art-brief-v1",
+  "asset_id": "hd2d_medical_text_folio",
+  "status": "QA_PENDING",
+  "role": "ui_detail_adaptive",
+  "source_channel": "codex_builtin_imagegen",
+  "prompt": "Create one isolated ORIGINAL game art object, an open near-modern magical academy medical dossier folio to carry live text in an HD2D game. Transparent background. A broad open book with two LARGE completely blank paper writing areas, restrained cream ivory paper, thin walnut brown leather cover visibly extending around the lower edge, a narrow dark binding down the middle with small brass ring hardware, subtle gently curved page tops and a few clean layered page edges. The whole writing surface faces the player camera squarely, no yaw, nearly no foreshortening; the slight volume is visible only in paper thickness and outer cover. Wide horizontal silhouette, intact complete folio with safety margin. Open page shapes and a central binding make it unmistakably a physical book, NOT a rectangle UI panel or frame. Keep every blank page calm and mostly one solid pale cream fill; no ruled lines, labels, letters, stamps, illustration or pseudo-text. Precise clean PIXEL ART on ONE UNIFORM square macro-pixel lattice throughout outline, cover, binding and page thickness. Visibly square contour steps, flat solid color clusters, limited sixteen-color palette. No antialiasing, subpixels, noisy texture, grain, dithering, gradients, painted shading or glow. Simple restrained upper-left form shading only. Absolutely NO floor, room, aura, haze or external cast shadow; outside the complete book is hard transparency. Designed for scene lighting and live readable Chinese text layered over the two blank pages.",
+  "palette_max": 16,
+  "confidence_min": 1.2,
+  "human_review": "PENDING",
+  "application": "Blank physical folio supports live identity and service text; camera parallel with physical desk contact"
+}

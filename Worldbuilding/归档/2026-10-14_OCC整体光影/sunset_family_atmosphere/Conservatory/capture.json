@@ -1,0 +1,48 @@
+{
+  "status": "CAPTURED_FOR_MANUAL_REVIEW",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "level": "first_battle_greenhouse_collection_room",
+  "environment": "Conservatory",
+  "timeOfDay": "Sunset",
+  "weather": "Clear",
+  "source": "Unity Editor Play Mode runtime battlefield/full HUD; isolated preview, not standalone Player or full journey acceptance",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "focusRequested": false,
+  "suitesRun": false,
+  "humanReview": "PENDING",
+  "diffuseUpdates": 1,
+  "diffuseSurfaces": 81,
+  "lights": [
+    {
+      "name": "战场统一日光",
+      "intensity": 2.582609
+    },
+    {
+      "name": "战场柔和补光",
+      "intensity": 0.298666656
+    },
+    {
+      "name": "战场水平轮廓补光",
+      "intensity": 0.65
+    },
+    {
+      "name": "蓄能晶簇局部光_(5, 1)",
+      "intensity": 1.8
+    },
+    {
+      "name": "蓄能晶簇局部光_(5, 4)",
+      "intensity": 1.8
+    }
+  ],
+  "shaders": [
+    "OCC/HD2D/BakedArchitecture",
+    "Universal Render Pipeline/Lit",
+    "OCC/HD2D/GroundedSprite"
+  ],
+  "gardenSurfaceVariants": 4,
+  "peripheralSurfaceVariants": 8,
+  "foliageMaterials": 7
+}

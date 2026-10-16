@@ -6,6 +6,21 @@ namespace OCC.Combat.Tests
 {
     public sealed class CombatBattlefieldCellPresenterTests
     {
+        [TestCase(1)] [TestCase(2)] [TestCase(3)] [TestCase(4)]
+        public void BlockingDevicesAndUnboundChestsRemainVisibleOutsideTraining(int kind)
+        {
+            var assets = new CombatFormalVisualAssets(); assets.LoadRuntime();
+            var state = new CombatState(new GridMap(3, 2), new[] { new UnitState("hero", true, new GridPosition(0, 0)) });
+            var position = new GridPosition(1, 1);
+            state.Map.SetTile(position, new TileState { Durability = 24, IsOverloadDevice = kind == 1,
+                IsWardGenerator = kind == 2, IsTowerMechanism = kind == 3, IsLootChest = kind == 4 });
+            var presenter = new CombatBattlefieldCellPresenter(new BattlefieldPresentationAdapter(), assets);
+            var cell = presenter.Build(state, null, new FireBattleState(state), new CombatSelectionController(),
+                false, null, position, _ => null, (_, __) => null, _ => null, _ => null);
+            Assert.That(state.Map.IsBlocked(position), Is.True);
+            Assert.That(cell.ObjectTexture, Is.Not.Null);
+        }
+
         [Test]
         public void Build_CombinesFormalAssetsAndReadOnlyHeroState()
         {
@@ -327,7 +342,7 @@ namespace OCC.Combat.Tests
 
             Assert.That(result.Forecast, Is.Not.Null);
             Assert.That(result.Forecast.TotalDamage, Is.GreaterThan(0));
-            Assert.That(result.Forecast.WillDefeat, Is.True);
+            Assert.That(result.Forecast.WillDefeat, Is.False);
             Assert.That(enemy.Health, Is.EqualTo(health));
         }
 
@@ -654,4 +669,56 @@ namespace OCC.Combat.Tests
             FireTargetKind.Enemy, FireSelectionShape.Single, 1, true, false,
             new[] { new FireSpellRule(FireRuleKind.Damage, 20) });
     }
+    public sealed class CombatRangeTransitionTests
+    {
+        private UnityEngine.GameObject root;
+        private CombatBattlefieldRangeGraphic graphic;
+        private const System.Reflection.BindingFlags Hidden = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+
+        [SetUp] public void SetUp()
+        {
+            root = new UnityEngine.GameObject("range test", typeof(UnityEngine.RectTransform), typeof(UnityEngine.CanvasRenderer));
+            graphic = root.AddComponent<CombatBattlefieldRangeGraphic>();
+        }
+        [TearDown] public void TearDown() => UnityEngine.Object.DestroyImmediate(root);
+        private void SetAge(float age) => typeof(CombatBattlefieldRangeGraphic).GetField("appearedAt", Hidden)
+            .SetValue(graphic, UnityEngine.Time.unscaledTime - age);
+        private void Refresh(bool shown, float intensity = 1f) => graphic.Refresh(
+            shown ? BattlefieldCellMarker.MovementRange : BattlefieldCellMarker.None,
+            BattlefieldCellMarker.None, BattlefieldCellMarker.None, false, false, 0, false, 0, false, false,
+            false, intensity);
+        private int MaxAlpha()
+        {
+            using (var mesh = new UnityEngine.UI.VertexHelper())
+            {
+                typeof(CombatBattlefieldRangeGraphic).GetMethod("OnPopulateMesh", Hidden | System.Reflection.BindingFlags.DeclaredOnly).Invoke(graphic, new object[] { mesh });
+                int alpha = 0; var vertex = new UnityEngine.UIVertex();
+                for (int i = 0; i < mesh.currentVertCount; i++) { mesh.PopulateUIVertex(ref vertex, i); alpha = System.Math.Max(alpha, vertex.color.a); }
+                return alpha;
+            }
+        }
+        [Test] public void PreviewFadesInThenRetainsGeometryDuringExitAndFinallyClears()
+        {
+            Refresh(true); SetAge(.08f); Assert.That(MaxAlpha(), Is.InRange(80, 88));
+            SetAge(1f); Assert.That(MaxAlpha(), Is.EqualTo(168));
+            Refresh(false); SetAge(.06f); Assert.That(MaxAlpha(), Is.InRange(80, 88));
+            SetAge(.20f); Assert.That(MaxAlpha(), Is.Zero);
+            typeof(CombatBattlefieldRangeGraphic).GetMethod("Update", Hidden).Invoke(graphic, null);
+            Assert.That(typeof(CombatBattlefieldRangeGraphic).GetField("transitionPending", Hidden).GetValue(graphic), Is.EqualTo(false));
+        }
+        [Test] public void AnimationDisabledRemovesImmediatelyIncludingAnInProgressExit()
+        {
+            Refresh(true); SetAge(1f); Refresh(false); SetAge(.06f); Assert.That(MaxAlpha(), Is.GreaterThan(0));
+            Refresh(false, 0f); Assert.That(MaxAlpha(), Is.Zero);
+            Refresh(true, 0f); Assert.That(MaxAlpha(), Is.EqualTo(168));
+        }
+        [Test] public void RejectionFeedbackRemainsVisibleAtStartOfPreviewAndDisableClearsDepartingGeometry()
+        {
+            Refresh(true); graphic.ShowResult(false); Assert.That(MaxAlpha(), Is.GreaterThan(168));
+            SetAge(1f); Refresh(false); root.SetActive(false); root.SetActive(true);
+            Assert.That(MaxAlpha(), Is.Zero);
+            Assert.That(graphic.raycastTarget, Is.False);
+        }
+    }
+
 }

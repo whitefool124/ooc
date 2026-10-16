@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sky_furnace_ash_puff_20261014",
+  "role": "hd2d_environment_module",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in source; noninteractive stage spatial-effect module, inferred grid decode without geometric resizing",
+    "source_path": "ArtSource/SkyFurnace_20261014/raw/ash_puff_r3.png",
+    "source_sha256": "2a1d1d164ea066bd66e912426f34d02a87818be63753d012e6bbc0be962c6b2d"
+  },
+  "delivery": {
+    "output_path": "ArtSource/SkyFurnace_20261014/delivery/ash_puff.png",
+    "output_sha256": "58636ee0c699fd4f368a78cdcc0945ed108eb8578d10062d3c4ed7c7124b7aae",
+    "native_output_path": "ArtSource/SkyFurnace_20261014/delivery/ash_puff.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 12,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "battlefield_hd2d_environment",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "1.0 by 1.0 metres at fixed32PPU; independent noninteractive cinematic",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User authorized all required stage assets and requested32px source art on2026-10-14"
+  },
+  "evidence": {
+    "one_x": "ArtSource/SkyFurnace_20261014/qa/ash_puff/1x.png",
+    "four_x": "ArtSource/SkyFurnace_20261014/qa/ash_puff/4x.png",
+    "six_x": "ArtSource/SkyFurnace_20261014/qa/ash_puff/6x.png",
+    "grayscale": "ArtSource/SkyFurnace_20261014/qa/ash_puff/grayscale.png",
+    "checker": "ArtSource/SkyFurnace_20261014/qa/ash_puff/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-14_天穹熔炉演出方案/fixed_frames/frame_12.50.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Technical candidate only; actual scene density and aesthetic review pending"
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/SkyFurnace/ash_puff.png",
+    "formal_promotion": false
+  }
+}

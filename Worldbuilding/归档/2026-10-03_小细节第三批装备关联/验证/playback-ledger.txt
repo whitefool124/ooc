@@ -1,0 +1,22 @@
+Successful AudioSource.PlayOneShot dispatches; not an acoustic recording.
+7.330 Audio/OCC/SFX/Foley/room_shop
+7.758 Audio/SFX/Processed/Kenney/interface-sounds/click_001
+7.775 Audio/OCC/SFX/Foley/coins
+8.175 Audio/SFX/Processed/Kenney/interface-sounds/click_001
+8.191 Audio/OCC/SFX/Foley/coins
+9.009 Audio/OCC/SFX/Foley/cloth_pick
+9.098 Audio/OCC/SFX/Foley/cloth_drop
+12.256 Audio/OCC/SFX/Foley/cloth_pick
+12.343 Audio/OCC/SFX/Foley/cloth_drop
+15.582 Audio/OCC/SFX/Foley/glass_pick
+15.670 Audio/OCC/SFX/Foley/reject
+16.045 Audio/OCC/SFX/Foley/glass_pick
+16.127 Audio/OCC/SFX/Foley/return_soft
+16.388 Audio/OCC/SFX/Foley/latch
+16.472 Audio/OCC/SFX/Foley/latch
+19.633 Audio/OCC/SFX/Foley/latch
+19.716 Audio/OCC/SFX/Foley/latch
+19.983 Audio/OCC/SFX/Foley/latch
+20.067 Audio/OCC/SFX/Foley/latch
+20.363 Audio/OCC/SFX/Foley/glass_pick
+20.451 Audio/OCC/SFX/Foley/glass_drop

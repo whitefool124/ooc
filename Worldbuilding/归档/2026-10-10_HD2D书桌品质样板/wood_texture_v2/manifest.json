@@ -1,0 +1,52 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "desk_wood_material_v2",
+  "status": "QA_PENDING",
+  "role": "hd2d_environment_module",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in image generation, retry 2: correct mixed grid only. Source is neutral top-down wood albedo, not a desk illustration.",
+    "source_path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_texture_v2/source_r2.png",
+    "source_sha256": "e16489378adc2b809221aad7607f3971e149b2d2aee5c084bd019b7d96246d08"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_texture_v2/delivery_r2.png",
+    "output_sha256": "a9a8dd7a1f984bff1f8d2ec91a166ad9b2db79f0446676e1760b3d55d9192bee",
+    "logical_cells": null,
+    "palette_max": 16
+  },
+  "processing": {
+    "grid_report": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_texture_v2/decode_r2.json",
+    "source_lattice_confidence": 1.9052,
+    "geometric_resize": false,
+    "new_colors": false,
+    "native_patch": [
+      15,
+      1,
+      98,
+      98
+    ]
+  },
+  "application": {
+    "rendering_mode": "main_menu_hd2d",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "Existing desk model UVs; 98 x 98 native patch repeated at 32 PPU; desktop 9.6 x 2.8 world units. Runtime preview only.",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "world_pixel_pitch": 0.03125,
+    "scale_note": "1 logical texel per authored native pixel; final perspective screen projection is not an integer display scale."
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_texture_v2/one_x.png",
+    "four_x": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_texture_v2/four_x.png",
+    "grayscale": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_texture_v2/grayscale.png",
+    "checker": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/wood_texture_v2/checkerboard.png",
+    "application_contact": "UnityProject/ReviewEvidence/20261010_hd2d_desk/wood_v2_after_1920.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "scene_pixel_size_consistency": "PENDING"
+  },
+  "unity_import": null
+}

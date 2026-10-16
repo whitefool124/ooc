@@ -1,0 +1,23 @@
+{
+  "aca_eq_ch03": {
+    "side_light_changed_pixels": 152,
+    "hover_changed_pixels": 152,
+    "changed_outside_alpha": 0,
+    "changed_black_outline_pixels": 0,
+    "frames": 22
+  },
+  "aca_eq_ch01": {
+    "side_light_changed_pixels": 396,
+    "hover_changed_pixels": 0,
+    "changed_outside_alpha": 0,
+    "changed_black_outline_pixels": 0,
+    "frames": 22
+  },
+  "aca_eq_hd01": {
+    "side_light_changed_pixels": 264,
+    "hover_changed_pixels": 90,
+    "changed_outside_alpha": 0,
+    "changed_black_outline_pixels": 0,
+    "frames": 22
+  }
+}

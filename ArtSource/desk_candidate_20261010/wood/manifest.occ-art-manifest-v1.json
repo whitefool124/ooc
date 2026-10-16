@@ -1,0 +1,55 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "desk_candidate_20261010_wood",
+  "role": "hd2d_library_display",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in generation; noncombat desk texture/card",
+    "source_path": "ArtSource/desk_candidate_20261010/wood/raw/source.png",
+    "source_sha256": "cfddacc3e10ff8d201c94e4fd37c8800009616de62e42fb5ec8a196563d60a75"
+  },
+  "delivery": {
+    "output_path": "ArtSource/desk_candidate_20261010/wood/delivery/wood.png",
+    "output_sha256": "6ad8ff0b91dbe42778099124e8eb9d301902e51d8d3c76f53c18399234f87d2e",
+    "native_ppu": null,
+    "logical_cells": null,
+    "palette_max": 1000000,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "real desk polygon material UV inset excluding safety border"
+  },
+  "processing": {
+    "operations": [
+      "nearest delivery resize under noncombat library exception",
+      "transparent safety border"
+    ],
+    "pixel_repainting": false,
+    "original_size": [
+      1254,
+      1254
+    ],
+    "delivery_size": [
+      258,
+      258
+    ],
+    "modeling_policy": "2026-10-10 final user correction"
+  },
+  "evidence": {
+    "one_x": "ArtSource/desk_candidate_20261010/wood/qa/one_x.png",
+    "four_x": "ArtSource/desk_candidate_20261010/wood/qa/four_x.png",
+    "grayscale": "ArtSource/desk_candidate_20261010/wood/qa/grayscale.png",
+    "checker": "ArtSource/desk_candidate_20261010/wood/qa/checker.png",
+    "application_contact": null
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Application and human approval pending; not FORMAL."
+  }
+}

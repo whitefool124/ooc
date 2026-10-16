@@ -1,0 +1,122 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "contract_sha256": "38625900f0f7a2c9c8c48eddc0291138ddbf9d5238cf65825426f6b91cb5f4d6",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePixelDisassembly.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs"
+  ],
+  "inputs": [
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+      "sha256": "85e47f7176c40fa341eda4ac462018c2277327684622a7dbe1b9e9fab2e06616"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePixelDisassembly.cs",
+      "sha256": "f653a39e0fff807bbbcdc878b806b0069e39854b9b9e3101fbeeb473475405c6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+      "sha256": "0bd6d7f55a58b4def486d64ea1fa265e7aebca8c83c2b69585dda560bf5423b7"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+      "sha256": "724eab6f8f15fb160a8aabc6590c673dc7aabdaa04b7442340d92566dac5fc85"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs",
+      "sha256": "092265bf3551d4c174e480bf4b4f168a1f372da45a84de6af9903d0a7d7d5663"
+    },
+    {
+      "path": "UnityProject/Assets/Scenes/SkyFurnace.unity",
+      "sha256": "d27f7982036d600b9faea8e6834115d3a0d9c6d014a99992da02b3b961ad20a6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceSolidPixel.shader",
+      "sha256": "d0b16a574e0581571ae5b8f3cce17e4fa2285a64297d8d9ec63499ccca2812ca"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePixelDisassembly.cs.meta",
+      "sha256": "3f3d725396bfea5b4809229240f78cf53268f65c2635235b65eeceac78089ef1"
+    }
+  ],
+  "configuration": {
+    "scope": "Dedicated SkyFurnace final departure only",
+    "duration": 16,
+    "audio": "none",
+    "disassembly": {
+      "status": "PASS",
+      "scope": "Local source-texel disassembly only",
+      "normalPlayback": "PASS",
+      "pauseResumeReset": "PASS",
+      "primitiveContract": "PASS",
+      "auxiliaryTextureFree": true,
+      "sourceTexels": 19703,
+      "peakParticles": 10648,
+      "cubeMetres": 0.03125,
+      "maximumTravelMetres": 0.8970907,
+      "wholeMotionSpanMetres": [
+        5.073064,
+        2.52240658,
+        5.278102
+      ],
+      "fragmentAlpha": 1,
+      "emission": 3.2,
+      "humanAestheticReview": "PENDING",
+      "performanceBenchmark": false
+    }
+  },
+  "local_evidence": {
+    "runtime": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉发光像素解体/fixed_runtime_checks.json",
+      "sha256": "f7ed4e3b7ef91b617ce59b76cfac7439429f94efb8b2d8e5e9a03daab325fd25"
+    },
+    "geometry": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉发光像素解体/burst_study/geometry_checks.json",
+      "sha256": "75f440aeec879850fea89a210f87280496249a401d9f6553a26de026919fe880"
+    },
+    "disassembly": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉发光像素解体/burst_study/burst_checks.json",
+      "sha256": "404a42286ae9b088128f165ddcdebde919ee6b9a99a5b786aa05c075f29f572b"
+    },
+    "film_capture": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉发光像素解体/fixed_film_capture.json",
+      "sha256": "9313b806dac03d527763a4bf37ab723cce42124b88b9129980c8ad3a66c992d0"
+    },
+    "movie": {
+      "path": "Artifacts/SkyFurnaceDisassembly_20261016/天穹熔炉_发光像素解体.mp4",
+      "sha256": "a7c7c663b4496850036b279686a9cb68f72bd2988ce679ca68e8daf1641d00e1"
+    },
+    "clip": {
+      "path": "Artifacts/SkyFurnaceDisassembly_20261016/退场段_正常速度.mp4",
+      "sha256": "1198aa0fce9c625009ce0c46bac8d6431dd003e2654a638ae1c12280c39a883d"
+    },
+    "console": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉发光像素解体/console.json",
+      "sha256": "571fae43c4f739984e8b796966baa92006ce26fd31ba2ac4c4461d5e2777ed60"
+    },
+    "build": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉发光像素解体/build_status.json",
+      "sha256": "7a5b6bbc03ae37326b4c629ddb0f22499fe5abeb57b4e3e864444773dbc0fbd1"
+    },
+    "standalone": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉发光像素解体/PlayerCheck/player_checks.json",
+      "sha256": "c823499c1d8de17f2e74be691c472aa2b50aa4d9d518a02e57e3843804e8c235"
+    },
+    "local_validation": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉发光像素解体/local_validation.json",
+      "sha256": "5669171ba3f095cf58439230f3dce5609f338eabc8ee0ff831cf6f0245302156"
+    }
+  },
+  "limitations": [
+    "Candidate only: new visual result awaits human aesthetic review.",
+    "Dedicated scene checks are not formal combat integration or target-device performance validation.",
+    "Full HD-2D baseline source-density and human review gates remain pending."
+  ],
+  "policy_version": "2026-10-10.4"
+}

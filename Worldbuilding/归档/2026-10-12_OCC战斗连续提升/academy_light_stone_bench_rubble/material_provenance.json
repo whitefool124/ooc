@@ -1,0 +1,40 @@
+{
+  "schema": "occ-registered-prop-material-data-v1",
+  "id": "academy_light_stone_bench_rubble",
+  "status": "QA_PENDING",
+  "source": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_stone_bench_rubble/paired_raw.png",
+    "sha256": "297c84247443bf853ae1d25a23483d9fbf779421f37c97c8edeeb3708116ae17"
+  },
+  "panel": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_stone_bench_rubble/normal_panel.png",
+    "sha256": "4e1aea5559030c154bba03345a79e79ba60a8711c22bb5a00fbf1cda3e806863"
+  },
+  "source_albedo": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_stone_bench_rubble.png",
+    "sha256": "7915413952e02156aefbc4ca967547f29134801ff07863c99b3c2837f32edcba",
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "normal": {
+    "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_stone_bench_rubble/normal.png",
+    "sha256": "00f1a0d32346dd6c4fef90d6094e80100684b70ba3208179d535ad94720cb119"
+  },
+  "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+  "native_grid": [
+    32,
+    32
+  ],
+  "world_pixel_pitch": 0.03125,
+  "normal_convention": "OpenGL +Y, no green flip",
+  "uniform_surface": {
+    "roughness": 0.88,
+    "metallic": 0,
+    "coat": 0,
+    "reason": "Explicit semantic material role, not grayscale conversion"
+  },
+  "human_registration_review": "PENDING",
+  "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+}

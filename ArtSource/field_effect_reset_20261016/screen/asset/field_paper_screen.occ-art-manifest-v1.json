@@ -1,0 +1,98 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "field_paper_screen_candidate_20261016",
+  "role": "single_cell_prop_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "New independent Codex built-in image generation; regular sheet crops if applicable; subject-inferred grid; no geometric resize",
+    "source_path": "ArtSource/field_effect_reset_20261016/screen/raw/r4_source.png",
+    "source_sha256": "11f9e9058e1f1f8af91d3795080c1a31f1af27f4246c966f3cd931f889b0159f"
+  },
+  "delivery": {
+    "output_path": "ArtSource/field_effect_reset_20261016/screen/asset/field_paper_screen.png",
+    "output_sha256": "68cbc6cf0f78767d8eabc11b2b9ff807f664b0dd48f53763bde84aef6dcb467b",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "One cell; 32 PPU, source pixel pitch 0.03125m. Upright one-metre canvas with common bottom-centre anchor."
+  },
+  "application": {
+    "runtime_draw_rect": "1x1 metre, bottom centre at cell centre",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1,
+    "review_scope": "Adopted existing source; default runtime local evidence in2026-10-16 stage-one closure archive. Whole scene aesthetics/performance remain separate."
+  },
+  "evidence": {
+    "one_x": "ArtSource/field_effect_reset_20261016/screen/qa/field_paper_screen/1x.png",
+    "four_x": "ArtSource/field_effect_reset_20261016/screen/qa/field_paper_screen/4x.png",
+    "grayscale": "ArtSource/field_effect_reset_20261016/screen/qa/field_paper_screen/grayscale.png",
+    "checker": "ArtSource/field_effect_reset_20261016/screen/qa/field_paper_screen/checker.png",
+    "application_contact": "ArtSource/field_effect_reset_20261016/screen/qa/field_paper_screen/contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "PENDING. Source contact composition is not a game screenshot."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_paper_screen.png",
+    "stable_guid": "f0a935bfd8e9ba84489aa35b703687f0",
+    "native_ppu": 32,
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "review_scope": "Default player lookup and representative local capture; sequence frames all loaded, no whole-scene motion approval"
+  },
+  "processing": {
+    "decode_report": "ArtSource/field_effect_reset_20261016/screen/qa/r4_decode.json",
+    "geometric_resize": false,
+    "new_colours": "black one-native-pixel external contour for prop roles only",
+    "source_subject_preserved": true,
+    "placement": "bottom centre y30",
+    "upright": true,
+    "native_ppu": 32,
+    "world_pixel_pitch": 0.03125,
+    "visible_bounds": [
+      2,
+      11,
+      29,
+      30
+    ]
+  },
+  "production_binding": {
+    "status": "USER_AUTHORIZED",
+    "default_enabled": true,
+    "authorization": "2026-10-16 user: 自己把待办清空",
+    "delivery_sha256": "68cbc6cf0f78767d8eabc11b2b9ff807f664b0dd48f53763bde84aef6dcb467b",
+    "guid_preserved": true
+  }
+}

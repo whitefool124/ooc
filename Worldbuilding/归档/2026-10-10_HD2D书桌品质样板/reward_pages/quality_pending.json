@@ -1,0 +1,823 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.3",
+  "contract_sha256": "5f1b45719f50c7544ba5c901dd3eefbbc0a0181eeb86f039e5553c2a805d109b",
+  "scene_kind": "desk",
+  "baseline_id": "desk-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DRewardGallery.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DRewardObject.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/RogueliteSettlementPresentation.cs"
+  ],
+  "inputs": [
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "296d00399e90e469d9f84bf3e44cee5d7074748a3243a1da9dc2412d5812ef42"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p37.png",
+      "sha256": "9c57dba7ca5b830c6d49434510ef9070cd845457fae5ff6b582cae3d7a95c6ba"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p46.png",
+      "sha256": "d5fc762a3766e209445bcfb153654badb43503f3d955ce369a2a7045ae5bafaa"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalSkillIcons32/Fire/f-p48.png",
+      "sha256": "8a7263cd73335d960fc770a232e190097e5179096da0d50bc093377ae461155f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/Hd2DContentFrames/简洁纸边.asset",
+      "sha256": "c6edccb3948336c31e2528a569c03cb59b89b2379faf5c6fe2b9656afad8a16c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DAtmosphere.asset",
+      "sha256": "adf26689a7e80b22ef256d4a7c516929d51aea7f3af97bbe91cb136db3a685f0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/desk.png",
+      "sha256": "6151936c18cfde721a5590bcc7d5939a4c68c508d2c672387587a75f53c744ef"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+      "sha256": "6f707400ca083ba404e678ef5dc5f4c21fda1065d78354d02f502bdca24025d7"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DRewardGallery.cs",
+      "sha256": "ddfd0b13ce012781fe10c8b574c418e2259372a6203893b0dc1ca89bfdfa0702"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DRewardObject.cs",
+      "sha256": "67da67ce07e84b40fac4f71500ec2083f3f1047e6e632f1801985939ab483103"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/MainMenuHd2DStage.cs",
+      "sha256": "cc14c25431840009bd15a534a7ae7d7e74196c347d5c5964bfee829dd6da35d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "a3e19c8ccdf3e897e9c6c09cd508915afcbb56165e027180320f8796f812e396"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/RogueliteSettlementPresentation.cs",
+      "sha256": "8dc99ef652a30af08feca13b1d3f8c48d4bf3e6f1679be77ee333ad98896d5a4"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/reward_before.png",
+      "sha256": "8c45b4ad0ad7437dd690ec6a44f91966b2baccc03e57da07ec99cb549ba6eaa8"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/reward_flat_1920.png",
+      "sha256": "db91f65a68038b5a5f94ae692b2b9370d30ab2fb1f4db4bd7bffe92b45bffe1d"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/reward_flat_960.png",
+      "sha256": "ca1851c59a1fc0513665e0ae00e59cae6fedca9124428e6ebe885467280d6910"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_after_capture.json",
+      "sha256": "117b81587d0b3b5f6cfdb0dab13f1f5810fc01b7b45fdb1bdac248da09f84049"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_before_capture.json",
+      "sha256": "cedbf53ce94a1bf5898638901269336c4edf5ee434bd0ca2d368f0d3af3e063e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_buttons_after.json",
+      "sha256": "83e65443df17d9ba21c736480e142187755886c01dbbda8645a4a8b2c672f8c2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_buttons_b1.json",
+      "sha256": "a970171469a038d703e94a4ef16f629911c40cc5339be5e839736f4d5185b327"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_buttons_before.json",
+      "sha256": "2cbcb7211c337c30dbff707da7762889551c1ce640db9b62162a05d1d689ddf8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_centre_compile.json",
+      "sha256": "99ca02102b76a9ad122a40bc9a42bad1a522b80c23f454928689d2cdf5f4c5d8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_centre_edit_state.json",
+      "sha256": "3a39ef9ffc888b1a75a895fe25e83a063fcd5ba40787de31a4dba51131a04633"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_centre_recompile.json",
+      "sha256": "b02bd20762c4b55d2b1afc1aea34e64e2d8566081104126280b95afd9c507a78"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_centre_reload.json",
+      "sha256": "1e5a1ac4b96e201f31f7949736b21354d4896efe8006b381348b88bf92cc17a1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_choices_buttons.json",
+      "sha256": "8b17521e3c79d7f349fbe8aa255d0556301b1e176d4ddf81f2270fd5fecad13d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_claim_960.json",
+      "sha256": "3e0c2bbb9bc33f0a18854271a7baf9d8cdf553dcb5fea56344689d16b4cec281"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_claim_buttons.json",
+      "sha256": "49d8f484bb91a3e5fe926d76857bfe8e8f79b29e6b82a7f1ef84a96ae6afee8a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_claimed_state.json",
+      "sha256": "4b0ba9155a0a3567ede3b48d5b5e32715a294f565e3138631b1137eb20e01f35"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_cleanup_preflight.json",
+      "sha256": "d1384d3be7643defa43ee8edde8643a0faaee32799d38b7739ba8d5888f30068"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_cleared_state.json",
+      "sha256": "4b0ba9155a0a3567ede3b48d5b5e32715a294f565e3138631b1137eb20e01f35"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_compile.json",
+      "sha256": "1dfcdb9292687a3e8a0f3260597ea45fbd9e846ea2c0a2470768928726daaa79"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_compile_ready.json",
+      "sha256": "94d443203eecca47436a25430d06e21d0c4080dd9388a19bbebf4c1b8832ef6a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_compile_status.json",
+      "sha256": "bd4738a38937397b02b4a1e85503378b38202f273d4d51a0a8bb20b9ea541c0b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_contribution_960.json",
+      "sha256": "0557b72d619a527c91868ed1e5f4e8e6faed7cdaa17e6e4a65f210c8b31d3f7b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_deliver_play.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_delivery_1920.json",
+      "sha256": "f65eec0a4bca6a21225898fb1ce1e55af762fe0979de210e460d7435fcfa4a49"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_delivery_960.json",
+      "sha256": "f5ef680e533a7e2c5cda64f8ead67d99d4128b2f33634a38b06d0e879ea63373"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_delivery_density_1920.json",
+      "sha256": "9b5da8dc52a8bd9915233b4df9f356e0c5aa6a50055cf69751a82a98399a9090"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_delivery_density_960.json",
+      "sha256": "9b5da8dc52a8bd9915233b4df9f356e0c5aa6a50055cf69751a82a98399a9090"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_delivery_local.json",
+      "sha256": "d2afd590fc038ced4f023ef006d3093160598c17ebd56ffb03bf2e3bf6eeb420"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_delivery_open.json",
+      "sha256": "e7dc0273b6c311ab9ab3df60067adc9c357b2537a1d409a373795be0308f4531"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_delivery_scope.json",
+      "sha256": "6d4e871ae85abca616eb540a4ef3a4defa4cb5a68dca7d5477252d08d765d37d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_density_after.json",
+      "sha256": "d4fa813108ec3e641ba477d141bdb78ac3fb35254747bbc32a73f074fd200273"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_density_settled.json",
+      "sha256": "af6e8f5621faa812c05ec60a91ff947e56517b488fe15453f2cd7069592859cd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_edit_ready.json",
+      "sha256": "25a7a5867f55bbeb3e59377ced0e2e9f212c538f08b2a9dc0599025e44db4219"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_enter_after.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_entry_after.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_entry_after_completed.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_entry_after_status.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_entry_completed.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_final_1920.json",
+      "sha256": "80bdc1265cb83b1d5a8d44b7a2dd8ec33da47485adacdd8c14c3a71ed3bd29f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_final_check.json",
+      "sha256": "9b5da8dc52a8bd9915233b4df9f356e0c5aa6a50055cf69751a82a98399a9090"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_final_local.json",
+      "sha256": "d2afd590fc038ced4f023ef006d3093160598c17ebd56ffb03bf2e3bf6eeb420"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_final_open.json",
+      "sha256": "3c17992ee3e8d53400b27faa01262397a12878e799ef31e2cc584dc81e954a9a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_final_play.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_final_preflight.json",
+      "sha256": "81069f32ffa5c7df2d991725afde5a67a1d9c662ae7df604b34c3cf1590245c3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_final_scope.json",
+      "sha256": "37a44d36a90404557d08ab1a502050b105b9be65a771d8f3c14fb4fee587d42c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_1920.json",
+      "sha256": "7d19b142f6d13fd3505d8ec4844650c8c86895ce8b6ec12c32d88c527fa99ca9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_960.json",
+      "sha256": "b23324dfcfc734e4aca0335173d568220915e2376f2aba53d1b725f9976685af"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_buttons.json",
+      "sha256": "6e3463a74b82fab01b5300cac132c87b3b2954669eb51e0394e5d38d29a0e326"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_claim.json",
+      "sha256": "4e40f165dea6cef9b89ca44b6be04c9c81fe55c9320f9c11062002c6952cb664"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_claim_buttons.json",
+      "sha256": "e5644e2a3e354e3d5bf3d401ebfa65e218d4889dc22238d183fdfd2e10f3669f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_claim_state.json",
+      "sha256": "4b0ba9155a0a3567ede3b48d5b5e32715a294f565e3138631b1137eb20e01f35"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_compile.json",
+      "sha256": "b02bd20762c4b55d2b1afc1aea34e64e2d8566081104126280b95afd9c507a78"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_console.json",
+      "sha256": "128c6d0adf5a2339730cdb1f323e34f53b0e93d4743fd8eef58f4525403b09d0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_contribution.json",
+      "sha256": "ed65880694ffc285075535c19b3814484e355e319d508b0647818c5d101018ca"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_density1920.json",
+      "sha256": "0e6e0045c90b3b5eae4439583d4bb6d04a8915e82237347d318b23bdb94ba199"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_density960.json",
+      "sha256": "0e6e0045c90b3b5eae4439583d4bb6d04a8915e82237347d318b23bdb94ba199"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_edit.json",
+      "sha256": "a7e670e783a16b8e8f87b038d0a65043cfae07b93f3d13fefd9470b74022d8ab"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_fixed_buttons.json",
+      "sha256": "c944d172fbc4733c1a719c99545282fd8219e1d3ecb8569b31f9ecdd8258943a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_gold.json",
+      "sha256": "8b8cc97a4adfd38f5aad575b608ea0b5f449760676a5b24028c17639e108b2d4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_leave.json",
+      "sha256": "bc66cabe798469179a20bcefbcb8ab8a75369ed5000c8f68be553fbf1ea1e39f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_local.json",
+      "sha256": "d2afd590fc038ced4f023ef006d3093160598c17ebd56ffb03bf2e3bf6eeb420"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_map.json",
+      "sha256": "ddd16905290c169105ff916a0b2948de6a65a5a754413361b18e80c3458160d5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_open.json",
+      "sha256": "8d6ffdfc62ff7967ae3c8390c3af59bbf6e1f947bd4b162e8aa9cb800e4b84c7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_play.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_reload.json",
+      "sha256": "13036a01a208b62a29734a938e3102657279cd86e40e8e2e78fd47be9db1c175"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_restore.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_scope.json",
+      "sha256": "8645a4202e0f584cdda8eb9545ce66e90cd9dcc0daa364bb35975233ada2ca5c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_select.json",
+      "sha256": "38da9728d06fdc5eaab7d31aee66dfdc55e46486a20747e9147c1edfeb4b11fb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_flat_size960.json",
+      "sha256": "95b6c75aba1d7f87047f60437567c7dfed727437ae3cca244a4e8f012febf834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_gold_960.json",
+      "sha256": "5d26d2d54962963abbf7d595c172660c3aafa80b1c6fc210364e1f21be49dc40"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_last_compile.json",
+      "sha256": "b02bd20762c4b55d2b1afc1aea34e64e2d8566081104126280b95afd9c507a78"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_last_padding_edit.json",
+      "sha256": "2f17a178c72ddc22ff1b988da57e7b10365c5d7d44da92c197c46e79ba40951d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_last_padding_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_last_reload.json",
+      "sha256": "9175273c3925601281d5018b5e26f26cd7d283df55d717911cd1be6a35495a95"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_leave_960.json",
+      "sha256": "7e6b42cf1e20dc37932dec70c41214988e7c072721308a767ff5f94646af147d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_local_after.json",
+      "sha256": "d2afd590fc038ced4f023ef006d3093160598c17ebd56ffb03bf2e3bf6eeb420"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_local_b1.json",
+      "sha256": "d2afd590fc038ced4f023ef006d3093160598c17ebd56ffb03bf2e3bf6eeb420"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_local_before.json",
+      "sha256": "b34b9e81d3a938b811e5bc850713bdca790a95bf6e2e8aeb909d0c0b7e06841a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_mesh_edit.json",
+      "sha256": "99ca02102b76a9ad122a40bc9a42bad1a522b80c23f454928689d2cdf5f4c5d8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_mesh_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_mesh_state.json",
+      "sha256": "7ab1b3bca8f75cb47af79b760f9bcb9ff110b2af2930c341a631b710b088df52"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_open.json",
+      "sha256": "72f80dcfe8bac63c6b02c70eba24e9a4cc05b094ec7be12436fafdd4e5e79d58"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_open_envelope_before.json",
+      "sha256": "d3c273c3fd350a1993c5cd76a8057cefdff8f2684fa312d2d498c92613a3b259"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_padding_compile.json",
+      "sha256": "b02bd20762c4b55d2b1afc1aea34e64e2d8566081104126280b95afd9c507a78"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_padding_edit.json",
+      "sha256": "c8c4b41f03a226d17ef9f0c6df6166aab9ab96902354279878027447b75ac9c9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_padding_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_padding_reload.json",
+      "sha256": "76a6d8fbced45c2df6a1043e9a554e8ffa7d8e4d8be8bed5357edb62a457029c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_play.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_play_after.json",
+      "sha256": "ebfd8bfb9378d9346482f13b980d95fbb5764280b5d4eafbb38f26991d41f496"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_preflight.json",
+      "sha256": "81069f32ffa5c7df2d991725afde5a67a1d9c662ae7df604b34c3cf1590245c3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_prepare_edit.json",
+      "sha256": "c1d5bec3ac75da63696cb136e52ceedccd9e7fd85ee701fe2339a2862d669e63"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_restore_resolution.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_restore_scene.json",
+      "sha256": "21b89f082079496f11647493945e1ccc7928291f62cad9cc4d7776fc12a0c0a6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_returned_buttons.json",
+      "sha256": "72841cede79af9d0502414c456c645b3f2d8a57ff42f00d9b8bed197f7c30b14"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_reveal_after.json",
+      "sha256": "4084e1951d0827a6536ee7c64c2590f06532dc4a90aa24d81325f95c8166af1c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_1920.json",
+      "sha256": "4116e192626cda97c638cdcb9dbf2ed02db03e310066f859b8d1b7fe70b01802"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_960.json",
+      "sha256": "8ee806a30c9cb3183a453f5350b17f508b84b146e76effdd541e08965d84dbbd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_buttons.json",
+      "sha256": "a4706abfc603640e57a263f15726cb40676654876a66c7ce7734efd9a2cf953e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_density_1920.json",
+      "sha256": "a0f0584fe9bd903ed4004376bbf341c1b7d28941330c514253e5172bfb039e6d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_density_960.json",
+      "sha256": "a0f0584fe9bd903ed4004376bbf341c1b7d28941330c514253e5172bfb039e6d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_local.json",
+      "sha256": "d2afd590fc038ced4f023ef006d3093160598c17ebd56ffb03bf2e3bf6eeb420"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_open.json",
+      "sha256": "9a713d75f39104307622315476aa0e6b3b3905546c5a1ace67abb3020a5e5764"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_open_settled.json",
+      "sha256": "1bb91e2f5cf9b0532b2a681a538d7969bacfdb883d665cfedaa846e827c676c1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_play.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_restore.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_scope.json",
+      "sha256": "80975c03b899e8aa502e97f3dee069ae9eef4dbda6eb88ee00e7cf7dc37a71b3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_review_size960.json",
+      "sha256": "95b6c75aba1d7f87047f60437567c7dfed727437ae3cca244a4e8f012febf834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_scope_after.json",
+      "sha256": "c389a9b4edb87964da80a003b475c381b1fd5219408bc1c1b02b9acb81b9f62a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_scope_begin.json",
+      "sha256": "884b2d627c49c810d925e54cb1d97989e4bbd15678ab0e6c9f89f4a86ea2a9fa"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_second_ready.json",
+      "sha256": "76669518d1e686472001e33aa856afcd1af6733144c08e40c676a162fc25e8b3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_select_960.json",
+      "sha256": "b8a3f4a126155db8d2ab24ee59d0969ab6f02460540d32efa51c6cb0304229da"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/reward_selected_state.json",
+      "sha256": "1407bb8b0fc9a85c25727f7d3d22e5eaa2786f8ab56b3a3fc83e61dd2a5e6469"
+    },
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "e3d411ed5c97764ebfd06659ab7dc4b12303319622a6401e6d59ee39b1fbf371"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": false,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 35,
+    "yaw": 0,
+    "field_of_view": 24
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": null
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": 60,
+        "p95_budget_ms": 16.7,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": 60,
+        "p95_budget_ms": 16.7,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Complete visible-scene pixel inventory, motion and human aesthetic approval remain pending.",
+    "Full normal combat journey, save/reload and backpack-full branch not verified this turn.",
+    "No standalone Player performance sample; target 60 FPS / P95 <=16.7 ms at both approved resolutions remains unmeasured."
+  ],
+  "local_implementation": {
+    "scope": "Existing reward reveal page; shared systems and reward/save rules unchanged",
+    "world_pitch": 0.03125,
+    "changes": "Use existing textured dielectric desk; remove untextured display cubes; shared lit image geometry with native sprite dimensions and forced canvas mesh refresh; one paper rim with readable Chinese text"
+  },
+  "validation_scope": {
+    "normal_entry": "PASS:entry before final text-only adjustments, reward_entry_after_completed.json; no full combat-to-reward journey claim",
+    "local_reward": "Disposable B1 in-memory preview; final actual 960x540 UI clicks open/select/claim/gold/contribution/leave all hit; map restored. Player save routing isolated and original slots restored on Play exit.",
+    "density": "Three 32x32 reward icon rectangles and refreshed mesh dimensions at 1/32 world units per texel, actual 1920x1080 and 960x540. Not complete same-scene inventory or human approval.",
+    "compile": "Final request_recompile recovery Success, reward_flat_reload.json",
+    "console": "No cached errors in sampled final 180 seconds, reward_flat_console.json; prior QuickInstaller exception not resolved by this task.",
+    "cleanup": "Original Game View index 3 restored; temporary index 7 removed; original EpicToonVfxShowcase clean, Edit Mode; no scene save."
+  },
+  "current_screenshots": [
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/reward_flat_1920.png",
+      "sha256": "db91f65a68038b5a5f94ae692b2b9370d30ab2fb1f4db4bd7bffe92b45bffe1d"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/reward_flat_960.png",
+      "sha256": "ca1851c59a1fc0513665e0ae00e59cae6fedca9124428e6ebe885467280d6910"
+    }
+  ]
+}

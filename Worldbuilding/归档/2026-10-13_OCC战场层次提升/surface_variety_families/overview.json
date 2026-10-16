@@ -1,0 +1,48 @@
+{
+  "status": "QA_PENDING",
+  "source": "Unchanged runtime PNGs arranged as presentation thumbnails; inspect originals for pixel/art review",
+  "families": [
+    {
+      "family": "AcademyCourt",
+      "level": "first_b3_rain_prism_court",
+      "capture": "surface_variety_families\\AcademyCourt\\day.png",
+      "peripheral_variants": 4,
+      "foliage_materials": 7
+    },
+    {
+      "family": "Conservatory",
+      "level": "first_battle_greenhouse_collection_room",
+      "capture": "surface_variety_families\\Conservatory\\day.png",
+      "peripheral_variants": 4,
+      "foliage_materials": 7
+    },
+    {
+      "family": "StoneRoad",
+      "level": "rail_patrol",
+      "capture": "surface_variety_families\\StoneRoad\\day.png",
+      "peripheral_variants": 4,
+      "foliage_materials": 7
+    },
+    {
+      "family": "RuinSite",
+      "level": "depot_wreck",
+      "capture": "surface_variety_families\\RuinSite\\day.png",
+      "peripheral_variants": 4,
+      "foliage_materials": 0
+    },
+    {
+      "family": "InteriorHall",
+      "level": "calibration_lockdown",
+      "capture": "surface_variety_families\\InteriorHall\\day.png",
+      "peripheral_variants": 4,
+      "foliage_materials": 0
+    },
+    {
+      "family": "AetherTower",
+      "level": "transmission_tower",
+      "capture": "surface_variety_families\\AetherTower\\day.png",
+      "peripheral_variants": 4,
+      "foliage_materials": 0
+    }
+  ]
+}

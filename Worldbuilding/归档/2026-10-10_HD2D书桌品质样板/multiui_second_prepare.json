@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":false,\"code\":\"OPERATION_JOURNAL_UNAVAILABLE\",\"error\":\"OPERATION_JOURNAL_UNAVAILABLE\",\"data\":{\"detail\":\"无法删除要被替换的文件。\"}}"
+      }
+    ]
+  }
+}

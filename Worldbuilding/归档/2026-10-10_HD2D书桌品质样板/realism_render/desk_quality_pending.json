@@ -1,0 +1,360 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.3",
+  "contract_sha256": "5f1b45719f50c7544ba5c901dd3eefbbc0a0181eeb86f039e5553c2a805d109b",
+  "scene_kind": "desk",
+  "baseline_id": "desk-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Settings/UniversalRP.asset",
+    "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DRenderer.asset",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Lighting.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "e3d411ed5c97764ebfd06659ab7dc4b12303319622a6401e6d59ee39b1fbf371"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "296d00399e90e469d9f84bf3e44cee5d7074748a3243a1da9dc2412d5812ef42"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/MainMenuHd2DStage.cs",
+      "sha256": "cc14c25431840009bd15a534a7ae7d7e74196c347d5c5964bfee829dd6da35d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+      "sha256": "d554abc3d31f648d29a3ed225f1d2dd8bbd159c1912e6fdc15bf36c1e3ab3096"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DAtmosphere.asset",
+      "sha256": "adf26689a7e80b22ef256d4a7c516929d51aea7f3af97bbe91cb136db3a685f0"
+    },
+    {
+      "path": "UnityProject/Assets/Settings/UniversalRP.asset",
+      "sha256": "fcd4e0ce787c224dbe51cfdbccbcded6afbca29c97057bc4d144ba6795dfdd24"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DRenderer.asset",
+      "sha256": "c683556b77b6e0b3fec4a313ba90161b27da8fb441d8bf9dc84d67d48bb6089f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Lighting.cs",
+      "sha256": "95c4ab07834a3b14dccc44974d901882af9d4a91120e1acdb71fb14d4f99ab6c"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": false,
+    "output_policy": "renderScale=1, actual GameView 1920x1080 and 960x540",
+    "tone_mapping": "ACES",
+    "exposure": 0.35,
+    "bloom": {
+      "intensity": 0.06,
+      "threshold": 1.5
+    },
+    "depth_of_field": "disabled on loadout working plane",
+    "shadows": {
+      "soft": true,
+      "resolution": 4096,
+      "cascades": 2
+    },
+    "main_light": {
+      "intensity": 1.65,
+      "shadow_strength": 0.72
+    },
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": {
+      "wood_smoothness": 0.32,
+      "reflection_probe": {
+        "resolution": 128,
+        "one_shot": true,
+        "intensity": 0.7,
+        "texture_observed": true
+      }
+    },
+    "source_sampling": "Point textures unchanged; native world pitch unchanged",
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 35,
+    "yaw": 0,
+    "field_of_view": 24
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": true,
+    "console_clear": false,
+    "interaction_pass": true,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/realism_entry_a4.json"
+  },
+  "performance": {
+    "device": "Ryzen 7 5800H / RTX 3060 Laptop GPU",
+    "quality_tier": "Editor Very Low, shared URP renderScale 1, soft shadows enabled",
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Human artistic approval pending",
+    "Standalone Player performance and memory samples pending; 60 FPS / P95 <=16.7ms not certified",
+    "Full motion and lighting sweeps pending",
+    "Battlefield still contains existing untextured architectural blockouts"
+  ],
+  "captures": [
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/realism_bag_final_1920.png",
+      "sha256": "2950f1f7088bb58a226cb0dd6c433ba86dc65debd87dfe499037f70dc0b37fa0"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/realism_bag_960.png",
+      "sha256": "dc719270b41525c3c6001eb3ab2127f1ce3b7934f19697bea672ad47744143de"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/realism_spell_1920.png",
+      "sha256": "90d8689af775c7c1d5f913f5d2953e077444311832198296c0f831fc40ce1f8e"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/realism_spell_960.png",
+      "sha256": "5a23ef50575ae51131c1381b3142af1f474999d958882675d80cd6094ca1037b"
+    }
+  ],
+  "notes": "Shared pipeline repair; per-loadout grade and owned probe only. No scene saved or formal artwork replaced. Quality settings Editor API experiment did not persist; startup display policy enables realtime probes in source."
+}

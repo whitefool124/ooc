@@ -26,7 +26,7 @@ namespace OCC.Combat.Tests
             string[] expected = new[] { "M", "U", "R" }.SelectMany(prefix =>
                 Enumerable.Range(1, 20).Select(index => $"F-P-{prefix}{index:00}").Concat(prefix == "M"
                     ? new[] { "F-P-M21", "F-P-M22", "F-P-M23", "F-P-M24", "F-P-M25", "F-P-M26" } : prefix == "U" ? new[] { "F-P-U21", "F-P-U22", "F-P-U23", "F-P-U24", "F-P-U25", "F-P-U26", "F-P-U27", "F-P-U28" } : new[] { "F-P-R21", "F-P-R22", "F-P-R23", "F-P-R24", "F-P-R25", "F-P-R26" })).ToArray();
-            Assert.That(FireSpellCatalog.Version, Is.EqualTo("fire-personal-spells-v0.5-three-builds"));
+            Assert.That(FireSpellCatalog.Version, Is.EqualTo("fire-personal-spells-v0.6-full-balance"));
             Assert.That(FireSpellCatalog.All.Count, Is.EqualTo(80));
             Assert.That(FireSpellCatalog.All.Select(spell => spell.Id), Is.EqualTo(expected));
             Assert.That(FireSpellCatalog.All.Select(spell => spell.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(80));
@@ -146,7 +146,7 @@ namespace OCC.Combat.Tests
             Assert.That(FireSpellCatalog.Get("F-P-M20").ActionPointCost, Is.EqualTo(2));
             Assert.That(FireSpellCatalog.Get("F-P-M20").Rules.Any(rule => rule.Kind == FireRuleKind.ConsumeBurning), Is.False);
             Assert.That(FireSpellCatalog.Get("F-P-U20").Rules.Any(rule => rule.Kind == FireRuleKind.ConsumeBurning), Is.False);
-            Assert.That(FireSpellCatalog.Get("F-P-R01").ManaCost, Is.EqualTo(1));
+            Assert.That(FireSpellCatalog.Get("F-P-R01").ManaCost, Is.EqualTo(2));
         }
 
         [Test]
@@ -2019,7 +2019,7 @@ namespace OCC.Combat.Tests
                 FireSpellTarget.At(landing, CardinalDirection.South));
 
             Assert.That(hero.Position, Is.EqualTo(landing));
-            Assert.That(map.GetTile(objectCell).Durability, Is.Zero);
+            Assert.That(map.GetTile(objectCell).Durability, Is.EqualTo(4));
             Assert.That(enemy.Position, Is.EqualTo(new GridPosition(5, 2)));
             Assert.That(enemy.Health + enemy.Shield, Is.LessThan(22));
         }

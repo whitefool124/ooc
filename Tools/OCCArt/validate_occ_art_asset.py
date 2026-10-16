@@ -87,7 +87,7 @@ def expected_size(role: dict[str, Any], logical_cells: Any) -> tuple[int, int] |
         return logical_cells[0] * cell_pixels, logical_cells[1] * cell_pixels
     if role.get("delivery_canvas") == "smallest_width_and_height_multiples_of_32_that_fit_the_decoded_subject":
         return None
-    if role.get("delivery_canvas") == "tight_subject_plus_one_pixel_border":
+    if role.get("delivery_canvas") in {"tight_subject_plus_one_pixel_border", "nonbattlefield_adaptive"}:
         return None
     raise ValueError("role has no delivery size rule")
 
@@ -109,7 +109,7 @@ def validate_image(
             bounds = image.getchannel("A").getbbox()
             if bounds and bounds != (1, 1, image.width - 1, image.height - 1):
                 errors.append(f"tight delivery bounds {bounds} must have exactly 1px transparent border")
-        elif image.width % 32 or image.height % 32:
+        elif role.get("delivery_canvas") != "nonbattlefield_adaptive" and (image.width % 32 or image.height % 32):
             errors.append(f"adaptive delivery size {image.size} must use 32px axis multiples")
     maximum = role.get("maximum_canvas")
     if isinstance(maximum, list) and len(maximum) == 2:
@@ -187,6 +187,10 @@ def audit_contract(contract: dict[str, Any], root: Path) -> list[str]:
         for forbidden in check.get("forbidden", []):
             if forbidden in text:
                 errors.append(f"{check['path']} retains forbidden conflicting text: {forbidden}")
+    # The same art audit also catches broken HD2D quality routing/references.
+    if "hd2d_quality_policy" in contract:
+        from validate_hd2d_quality import audit as audit_hd2d
+        errors.extend(audit_hd2d(contract, root))
     return errors
 
 
@@ -207,6 +211,14 @@ def validate_manifest(manifest: dict[str, Any], contract: dict[str, Any], root: 
         return errors, {}
     if role.get("new_production_forbidden") and status != "FORMAL":
         errors.append(f"role is retained for historical FORMAL assets only: {role_name}")
+    hd2d = (
+        manifest.get("application", {}).get("rendering_mode") == "main_menu_hd2d"
+        and role.get("application_scope") == "E_main_menu_only"
+        and contract.get("screen_layouts", {}).get("main_menu", {}).get("rendering_mode") == "main_menu_hd2d"
+    )
+
+    hd2d = hd2d or (role.get("perspective_application") is True and role.get("application_scope") == "noninteractive_hd2d_environment" and manifest.get("application", {}).get("rendering_mode") == "battlefield_hd2d_environment")
+    hd2d = hd2d or (role.get("perspective_application") is True and role.get("application_scope") == "noncombat_content_display" and manifest.get("application", {}).get("rendering_mode") == "noncombat_hd2d_layered_sprite")
 
     provenance = manifest.get("provenance", {})
     channel = provenance.get("source_channel")
@@ -289,10 +301,14 @@ def validate_manifest(manifest: dict[str, Any], contract: dict[str, Any], root: 
     application = manifest.get("application", {})
     if not str(application.get("runtime_draw_rect", "")).strip():
         errors.append("application.runtime_draw_rect is required")
-    for key in ("default_integer_scale", "minimum_integer_scale"):
-        value = application.get(key)
-        if not isinstance(value, int) or value <= 0:
-            errors.append(f"application.{key} must be a positive integer")
+    if hd2d:
+        if application.get("camera_projection") != "perspective":
+            errors.append("HD2D main menu requires a perspective camera")
+    else:
+        for key in ("default_integer_scale", "minimum_integer_scale"):
+            value = application.get(key)
+            if not isinstance(value, int) or value <= 0:
+                errors.append(f"application.{key} must be a positive integer")
 
     # Placement semantics are mandatory for the new scene-assembly contract,
     # but remain opt-in for historical manifests so existing formal assets do
@@ -358,6 +374,9 @@ def validate_manifest(manifest: dict[str, Any], contract: dict[str, Any], root: 
 
     review = manifest.get("human_review", {})
     if status in {"FORMAL_CANDIDATE", "FORMAL"}:
+        if contract.get("hd2d_quality_policy", {}).get("pixel_density_policy"):
+            from validate_hd2d_quality import validate_asset_pixel_density
+            validate_asset_pixel_density(manifest, contract, root, errors)
         if review.get("overall") != "PASS":
             errors.append("formal candidate requires human_review.overall PASS")
         if not str(review.get("reviewer", "")).strip() or not str(review.get("date", "")).strip():
@@ -386,7 +405,15 @@ def validate_manifest(manifest: dict[str, Any], contract: dict[str, Any], root: 
                 if importer.get(field) != expected:
                     errors.append(f"FORMAL unity_import.{field} must be {expected!r}, got {importer.get(field)!r}")
             lattice = importer.get("runtime_lattice")
-            if not isinstance(lattice, dict):
+            if hd2d:
+                runtime = importer.get("hd2d_runtime", {})
+                for field in ("pass", "native_source_preserved", "contact", "occlusion", "lighting", "clarity"):
+                    if runtime.get(field) is not True:
+                        errors.append(f"FORMAL HD2D runtime.{field} must pass")
+                capture = repo_path(root, runtime.get("capture"))
+                if capture is None or not capture.is_file():
+                    errors.append("FORMAL HD2D runtime capture file is missing")
+            elif not isinstance(lattice, dict):
                 errors.append("FORMAL requires unity_import.runtime_lattice from the pixel-grid check")
             else:
                 if lattice.get("pass") is not True:

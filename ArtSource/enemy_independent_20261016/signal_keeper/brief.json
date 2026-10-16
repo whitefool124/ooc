@@ -1,0 +1,22 @@
+{
+  "asset_id": "signal_keeper_battle_candidate_20261016",
+  "content_id": "signal_keeper",
+  "role": "tactical_unit_32x64",
+  "player_reading": "通过工作外套与铜框灯镜，将灯台值守与提灯巡查区分。",
+  "identity_source": "Worldbuilding/OC世界观/04_教育与组织/学院敌人设定.md：灯台值守",
+  "identity_reference": "ArtSource/unit_refresh_20261002/portraits/signal_keeper/qa/4x.png",
+  "grain_reference": "UnityProject/Assets/Game/Resources/Art/UnitStatic32x64/stone_snare.png",
+  "native_ppu": 32,
+  "world_pixel_pitch": 0.03125,
+  "canvas": [32, 64],
+  "logical_cells": [1, 1],
+  "native_anchor": [16, 62],
+  "subject_height_range": [46, 58],
+  "view": "strict side profile facing right",
+  "palette_max": 32,
+  "source_channel": "codex_builtin_imagegen",
+  "processing": "Infer subject square lattice, confidence >=1.2; decode without resize; observed medoid palette; intact bottom-center placement; replace outermost opaque ring with black without alpha expansion.",
+  "material_story": "棕色实用外套、象牙内衫、深色裤靴、铜框浅色灯镜；无火焰或光柱烘焙。",
+  "application": "Opt-in Editor candidate review; original runtime registry remains unchanged.",
+  "status": "QA_PENDING"
+}

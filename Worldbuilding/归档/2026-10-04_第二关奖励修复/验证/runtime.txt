@@ -1,0 +1,1 @@
+PASS: actual Input System reveal/select/collect/fixed resource/leave clicks for B1, B2 and B3 in one disposable memory run. All three groups start unopened, grant selected spells and clean up. Battles/events prepared by model, not end-to-end played; no player slot or disk-save writes. Legacy serialization repair and valid selection preservation tested separately.

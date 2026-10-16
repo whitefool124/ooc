@@ -1,0 +1,91 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "hd2d_library_plaque",
+  "role": "hd2d_library_display",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "ArtLibrary/HD2D/20261009/plaque/source-01.png",
+    "source_sha256": "5c67c0141686e5b12a8253295bfa2a421099cf0564fdcf414bb340e81158aea2",
+    "generation_attempt": 1,
+    "style_reference": "ArtLibrary/HD2D/20261009/dossier/source-01.png",
+    "source_descriptor": "Independent Codex builtin imagegen; dossier is material/style reference only."
+  },
+  "delivery": {
+    "output_path": "ArtLibrary/HD2D/20261009/plaque/delivery.png",
+    "output_sha256": "3ea6bc346ad0653bd277b56fd5d4ae3705237465b9ede696891518bc43b58e4a",
+    "logical_cells": null,
+    "palette_max": 1000000,
+    "size": [
+      1667,
+      716
+    ],
+    "alpha_policy": "transparent_soft_alpha",
+    "native_anchor": [
+      833,
+      700
+    ],
+    "processing": {
+      "alpha_zero_at_or_below": 8,
+      "alpha_opaque_at_or_above": 248,
+      "zero_hidden_rgb": true,
+      "crop_source_bbox": [
+        71,
+        86,
+        1706,
+        770
+      ],
+      "transparent_padding_px": 16,
+      "delivery_resized": false,
+      "palette_quantized": false,
+      "art_redrawn": false
+    }
+  },
+  "human_review": {
+    "overall": "FAIL",
+    "style": "FAIL",
+    "reason": "User rejected smooth painted style; retain basic 32-bit-era pixel art."
+  },
+  "prompt": "OCC reusable HD2D scene asset, original near-modern magical academy visual language. Clean Japanese game illustration with tactile painted sprite materials and restrained pixel-inspired edges; BEAUTY AND COHESIVE STYLE FIRST, no strict pixel grid or pixel quantization. Paper ivory/cream rather than white, walnut brown and desaturated dark teal covers, small aged brass fittings, muted cyan glass. Calm broad value shapes, crisp readable silhouette, restrained fine detail, no gritty noise, no grunge, no ornate medieval fantasy or excessive steampunk gears. Front facing, zero yaw, camera-parallel main face, subtle shallow overhead reveal, no dramatic perspective. Soft neutral upper-left form shading, low contrast, NO warm orange lighting, NO glow, NO atmospheric haze, NO external cast shadow, no floor or scene. ONE complete isolated object on genuine transparent alpha background with generous transparent padding. Blank surfaces for dynamic Chinese text, no letters, numbers, symbols pretending to be text, decorative pseudo-writing, labels or UI mockup. Same material family and lighting throughout. SUBJECT: A small wide horizontal ivory enamel sign suspended from a short walnut bracket by two curved brass loops; subtly scalloped clipped ends and a narrow dark teal edge. Broad completely blank inscription area. Tactile enamel, believable small mounting hardware, restrained depth. No ornamental frame.\nThe provided open dossier is STYLE REFERENCE ONLY: match its cream/walnut/desaturated teal/brass materials, lighting softness, edge treatment and finish. Produce only the new described object, not another book.",
+  "application": {
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "Pending Unity application; camera-parallel sprite, preserve aspect ratio; catalog uses proportional display.",
+    "current_evidence_scope": "library display and live-text prototype only; no Unity runtime verification",
+    "recommended_importer": {
+      "filterMode": "Bilinear",
+      "mipmaps": false,
+      "compression": "None",
+      "meshType": "FullRect"
+    },
+    "external_lighting": "Scene-owned; do not bake floor shadow into asset"
+  },
+  "placement_semantics": {
+    "application_scope": "concept_display",
+    "mount_type": "wall_mounted",
+    "logical_cell": null,
+    "native_anchor": [
+      833,
+      16
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 16
+    },
+    "depth_sort_baseline": 16,
+    "allowed_occlusion_direction": "front_to_back_by_contact_baseline",
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": "academy wall bracket",
+    "combined_room_shell": false,
+    "contact_verification": "Pending physical scene placement; isolated display only"
+  },
+  "evidence": {
+    "one_x": "ArtLibrary/HD2D/20261009/plaque/delivery.png",
+    "four_x": "ArtLibrary/HD2D/20261009/plaque/qa/four-x.png",
+    "grayscale": "ArtLibrary/HD2D/20261009/plaque/qa/grayscale.png",
+    "checker": "ArtLibrary/HD2D/20261009/plaque/qa/checker.png",
+    "application_contact": "ArtLibrary/HD2D/20261009/index.html"
+  },
+  "candidate_withdrawn": true
+}

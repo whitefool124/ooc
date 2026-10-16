@@ -572,6 +572,7 @@ namespace OCC.Combat
                 TileState smoke = combat.Map.GetTile(cell).Clone(); smoke.SmokeExpiresAt = 4; combat.Map.SetTile(cell, smoke);
             }
             if (artifact.Id == "G-T05") hero.SpendMana(4);
+            if (artifact.Id == "G-T12") hero.SpendActionPoint(1);
             if (artifact.Id == "G-T16") hero.GrantShield(12);
             TrainingRangeAbilityEntry entry = Abilities.Single(ability => ability.Id == abilityId);
             return new ArtifactTrainingRangeCase(entry, battle, target, cell, unitId);

@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"ready:hd2d-realism-20261010-a3\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

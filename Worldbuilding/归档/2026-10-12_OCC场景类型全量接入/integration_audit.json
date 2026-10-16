@@ -1,0 +1,175 @@
+{
+  "scope": "profile routing/import/shader checks only; no Play Mode or journey",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "scene": "Assets/Scenes/CombatPrototype.unity",
+  "dirty": false,
+  "candidate": {
+    "asset": "Assets/Game/Resources/Art/HD2DAcademyCandidates/greenhouse_facade.png",
+    "guid": "a31b2f1c2fe0fda4c99c818901c000fd",
+    "width": 256,
+    "height": 96,
+    "filter": "Point",
+    "status": "QA_PENDING"
+  },
+  "levels": [
+    {
+      "Id": "rail_patrol",
+      "DisplayName": "普通战斗 04 · 石路巡哨",
+      "environment": "StoneRoad",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_road_b",
+      "WaterGarden": false,
+      "Trees": true
+    },
+    {
+      "Id": "depot_wreck",
+      "DisplayName": "普通战斗 05 · 废弃驿站",
+      "environment": "RuinSite",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_ruin_b",
+      "WaterGarden": false,
+      "Trees": false
+    },
+    {
+      "Id": "relay_raid",
+      "DisplayName": "普通战斗 06 · 野外导能柱",
+      "environment": "AcademyCourt",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": true,
+      "Trees": true
+    },
+    {
+      "Id": "signal_hub",
+      "DisplayName": "普通战斗 07 · 传讯石庭",
+      "environment": "AcademyCourt",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": true,
+      "Trees": true
+    },
+    {
+      "Id": "gatehouse",
+      "DisplayName": "普通战斗 08 · 石闸关口",
+      "environment": "AcademyCourt",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": true,
+      "Trees": true
+    },
+    {
+      "Id": "transmission_tower",
+      "DisplayName": "普通战斗 09 · 传讯塔楼",
+      "environment": "AetherTower",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": false,
+      "Trees": false
+    },
+    {
+      "Id": "elite_foundry",
+      "DisplayName": "精英战斗 02 · 刻阵工坊",
+      "environment": "RuinSite",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_ruin_b",
+      "WaterGarden": false,
+      "Trees": false
+    },
+    {
+      "Id": "core_approach",
+      "DisplayName": "精英战斗 03 · 塔前石庭",
+      "environment": "AcademyCourt",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": true,
+      "Trees": true
+    },
+    {
+      "Id": "core_finale",
+      "DisplayName": "Boss战斗 01 · 古塔核心",
+      "environment": "AetherTower",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": false,
+      "Trees": false
+    },
+    {
+      "Id": "rain_lantern_court",
+      "DisplayName": "普通战斗 01 · 雨后灯庭",
+      "environment": "AcademyCourt",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": true,
+      "Trees": true
+    },
+    {
+      "Id": "first_battle_greenhouse_collection_room",
+      "DisplayName": "普通战斗 02 · 温室藏品间",
+      "environment": "Conservatory",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": false,
+      "Trees": true
+    },
+    {
+      "Id": "first_b3_rain_prism_court",
+      "DisplayName": "普通战斗 03 · 雨痕晶庭",
+      "environment": "AcademyCourt",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": true,
+      "Trees": true
+    },
+    {
+      "Id": "first_elite_three_material_pressure",
+      "DisplayName": "精英战斗 01 · 三材承压场",
+      "environment": "AcademyCourt",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": true,
+      "Trees": true
+    },
+    {
+      "Id": "calibration_lockdown",
+      "DisplayName": "精英战斗 04 · 失控校准室封锁",
+      "environment": "InteriorHall",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": false,
+      "Trees": false
+    },
+    {
+      "Id": "cliff_relay_survey",
+      "DisplayName": "精英战斗 05 · 断崖导能柱考察",
+      "environment": "RuinSite",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_ruin_b",
+      "WaterGarden": false,
+      "Trees": false
+    },
+    {
+      "Id": "sealed_vault_certification",
+      "DisplayName": "精英战斗 06 · 封存库权限核验",
+      "environment": "InteriorHall",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": false,
+      "Trees": false
+    },
+    {
+      "Id": "library_discipline",
+      "DisplayName": "精英战斗 07 · 图书馆纠察",
+      "environment": "InteriorHall",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": false,
+      "Trees": false
+    },
+    {
+      "Id": "outer_ring_clearance",
+      "DisplayName": "精英战斗 08 · 高塔外环清障",
+      "environment": "AetherTower",
+      "MasonryResource": "Art/FormalAcademyIndependentFloors32/academy_block_court_b",
+      "WaterGarden": false,
+      "Trees": false
+    }
+  ],
+  "shaders": [
+    {
+      "name": "OCC/HD2D/BakedArchitecture",
+      "messages": []
+    },
+    {
+      "name": "OCC/HD2D/WetCourtyard",
+      "messages": []
+    },
+    {
+      "name": "OCC/HD2D/GroundedSprite",
+      "messages": []
+    }
+  ],
+  "reviewDisabled": true
+}

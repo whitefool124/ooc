@@ -16,7 +16,8 @@ namespace OCC.Combat
         CombatCommandSubmitted,
         CombatCommandRejected,
         SettlementOpened,
-        RewardClaimed
+        RewardClaimed,
+        ServiceCommitted
     }
 
     // Read-only presentation signal. Consumers may animate or annotate it, but never use it to mutate game state.
@@ -26,14 +27,16 @@ namespace OCC.Combat
         public string Subject { get; }
         public int Delta { get; }
         public string Message { get; }
+        public string Origin { get; }
 
-        public UiVisualEvent(UiVisualEventKind kind, string subject, int delta = 0, string message = "")
+        public UiVisualEvent(UiVisualEventKind kind, string subject, int delta = 0, string message = "", string origin = "")
         {
             if (string.IsNullOrWhiteSpace(subject)) throw new ArgumentException("A visual event subject is required.", nameof(subject));
             Kind = kind;
             Subject = subject;
             Delta = delta;
             Message = message ?? string.Empty;
+            Origin = origin ?? string.Empty;
         }
     }
 

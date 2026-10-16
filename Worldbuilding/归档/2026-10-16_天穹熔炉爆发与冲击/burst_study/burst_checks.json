@@ -1,0 +1,302 @@
+[
+  {
+    "time": 6.6,
+    "burst": {
+      "age": 6.6,
+      "coreCards": 0,
+      "radialColumns": 0,
+      "shockAndSparkParticles": 0,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 0,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 7.15,
+    "burst": {
+      "age": 7.15,
+      "coreCards": 0,
+      "radialColumns": 0,
+      "shockAndSparkParticles": 0,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 0,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 7.3,
+    "burst": {
+      "age": 7.3,
+      "coreCards": 0,
+      "radialColumns": 0,
+      "shockAndSparkParticles": 0,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 0,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 7.4,
+    "burst": {
+      "age": 7.4,
+      "coreCards": 3,
+      "radialColumns": 4,
+      "shockAndSparkParticles": 0,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 0,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 7.46,
+    "burst": {
+      "age": 7.46,
+      "coreCards": 3,
+      "radialColumns": 12,
+      "shockAndSparkParticles": 240,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 0,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 7.52,
+    "burst": {
+      "age": 7.52,
+      "coreCards": 3,
+      "radialColumns": 12,
+      "shockAndSparkParticles": 240,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 56,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 7.6,
+    "burst": {
+      "age": 7.6,
+      "coreCards": 3,
+      "radialColumns": 12,
+      "shockAndSparkParticles": 240,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 56,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 7.75,
+    "burst": {
+      "age": 7.75,
+      "coreCards": 3,
+      "radialColumns": 12,
+      "shockAndSparkParticles": 240,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 80,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 7.9,
+    "burst": {
+      "age": 7.9,
+      "coreCards": 3,
+      "radialColumns": 0,
+      "shockAndSparkParticles": 48,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 108,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 8.1,
+    "burst": {
+      "age": 8.1,
+      "coreCards": 3,
+      "radialColumns": 0,
+      "shockAndSparkParticles": 43,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 108,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 8.45,
+    "burst": {
+      "age": 8.45,
+      "coreCards": 0,
+      "radialColumns": 0,
+      "shockAndSparkParticles": 4,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 102,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 9.0,
+    "burst": {
+      "age": 9.0,
+      "coreCards": 0,
+      "radialColumns": 0,
+      "shockAndSparkParticles": 0,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 42,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 9.8,
+    "burst": {
+      "age": 9.8,
+      "coreCards": 0,
+      "radialColumns": 0,
+      "shockAndSparkParticles": 0,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 11,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 11.0,
+    "burst": {
+      "age": 11.0,
+      "coreCards": 0,
+      "radialColumns": 0,
+      "shockAndSparkParticles": 0,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 0,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  },
+  {
+    "time": 15.8,
+    "burst": {
+      "age": 15.8,
+      "coreCards": 0,
+      "radialColumns": 0,
+      "shockAndSparkParticles": 0,
+      "peakBurstParticles": 240,
+      "burstDiameter": 5.790537,
+      "burstTop": 1.47098064,
+      "smokeParticles": 0,
+      "peakSmokeParticles": 122,
+      "smokeDiameter": 2.592498,
+      "smokeTop": 1.28944218,
+      "auxiliaryTextureFree": true,
+      "cubeEdgeMetres": 0.03125,
+      "coreCanvasMetres": 3,
+      "corePaperThickness": 0.03125
+    }
+  }
+]

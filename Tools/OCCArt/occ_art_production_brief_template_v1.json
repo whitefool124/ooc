@@ -4,7 +4,10 @@
   "player_reading": "what the player must understand in one second",
   "asset_role": "replace_with_occ_art_contract_role",
   "application_scope": "runtime_layout",
-  "logical_cells": [1, 1],
+  "logical_cells": [
+    1,
+    1
+  ],
   "real_dimensions_m": {
     "width": 1.0,
     "depth": 1.0,
@@ -13,14 +16,22 @@
   },
   "placement_semantics": {
     "mount_type": "floor_standing",
-    "logical_cell": [0, 0],
-    "native_anchor": [16, 31],
+    "logical_cell": [
+      0,
+      0
+    ],
+    "native_anchor": [
+      16,
+      31
+    ],
     "visible_contact_line": {
       "axis": "y",
       "native_px": 31
     },
     "depth_sort_baseline": 31,
-    "allowed_occlusion_direction": ["front"],
+    "allowed_occlusion_direction": [
+      "front"
+    ],
     "screen_axis": "horizontal_vertical_locked",
     "support_asset": null
   },
@@ -37,10 +48,11 @@
     "source_channel": "codex_builtin_imagegen",
     "independent_source_per_asset_and_retry": true,
     "uniform_square_macro_pixel_lattice": true,
-    "maximum_rounds": 3,
+    "maximum_rounds": null,
     "retry_policy": "change_only_the_diagnosed_failed_dimension",
     "geometric_resize_or_interpolation_forbidden": true,
-    "new_colours_in_postprocess_forbidden": true
+    "new_colours_in_postprocess_forbidden": true,
+    "retry_round_limit_policy": "No fixed cap; user confirmed2026-10-12; quality thresholds unchanged"
   },
   "assembly_acceptance": {
     "walkability_collision_click_occlusion_checked": false,

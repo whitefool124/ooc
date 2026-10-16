@@ -1,0 +1,12 @@
+{
+  "schema": "occ-art-brief-v1",
+  "asset_id": "hd2d_market_balance",
+  "status": "QA_PENDING",
+  "role": "ui_detail_adaptive",
+  "source_channel": "codex_builtin_imagegen",
+  "prompt": "One isolated original pixel-art shop object for OCC magical-industrial academy HD2D: a small elegant brass merchant's balance scale, curved central stem, broad round ivory pans on each side, and a short dark walnut foot. Front facing with shallow overhead view, no yaw. Entire complete subject on transparent background, generous transparent safety margin. Coarse old-console sprite with large clean visibly square macro pixels, ONE strictly uniform square grid across ALL outline steps, gaps, supports, highlights and details. Simple chunky shapes, sparse details, flat solid untextured clusters, about sixteen colors: cream enamel, walnut, charcoal outline, aged brass, subdued cyan aether inset. Subtle fixed upper-left volume shading only, no external cast shadow, no glow, no noise, gradients, dithering, lettering, rectangle panel, border, scene or floor. Practical near-modern magical technology, not steampunk. Distinctive curved branching silhouette with open air between pans and stem.",
+  "palette_max": 16,
+  "confidence_min": 1.2,
+  "view": "camera-parallel shallow overhead front",
+  "human_review": "PENDING"
+}

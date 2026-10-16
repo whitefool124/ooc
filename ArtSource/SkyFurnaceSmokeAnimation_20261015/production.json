@@ -1,0 +1,166 @@
+{
+  "route": "User-authorized reference-derived paper production; NOT lossless source-grid decode",
+  "raw": "ArtSource/SkyFurnaceSmokeAnimation_20261015/raw/smoke_sheet_r2.png",
+  "raw_sha256": "71186a61b770700fbefa9747e6be951ee1f3761e8e482d7c1da50af19cb23bbb",
+  "grid_confidence_pass_claimed": false,
+  "geometric_resampling_performed": true,
+  "resampling": "Fixed equal source cells -> native32x32, nearest neighbor; no independent bounding-box scaling",
+  "background": "Magenta key removal, hard alpha",
+  "palette": "Four observed source medoids, no new colours",
+  "frames": [
+    {
+      "frame": 0,
+      "source_cell": [
+        0,
+        0,
+        444,
+        444
+      ],
+      "native_frame": [
+        32,
+        32
+      ],
+      "visible_bounds": [
+        11,
+        19,
+        22,
+        30
+      ]
+    },
+    {
+      "frame": 1,
+      "source_cell": [
+        444,
+        0,
+        887,
+        444
+      ],
+      "native_frame": [
+        32,
+        32
+      ],
+      "visible_bounds": [
+        8,
+        12,
+        23,
+        30
+      ]
+    },
+    {
+      "frame": 2,
+      "source_cell": [
+        887,
+        0,
+        1330,
+        444
+      ],
+      "native_frame": [
+        32,
+        32
+      ],
+      "visible_bounds": [
+        6,
+        8,
+        26,
+        30
+      ]
+    },
+    {
+      "frame": 3,
+      "source_cell": [
+        1330,
+        0,
+        1774,
+        444
+      ],
+      "native_frame": [
+        32,
+        32
+      ],
+      "visible_bounds": [
+        5,
+        3,
+        29,
+        30
+      ]
+    },
+    {
+      "frame": 4,
+      "source_cell": [
+        0,
+        444,
+        444,
+        887
+      ],
+      "native_frame": [
+        32,
+        32
+      ],
+      "visible_bounds": [
+        5,
+        8,
+        26,
+        29
+      ]
+    },
+    {
+      "frame": 5,
+      "source_cell": [
+        444,
+        444,
+        887,
+        887
+      ],
+      "native_frame": [
+        32,
+        32
+      ],
+      "visible_bounds": [
+        6,
+        11,
+        27,
+        29
+      ]
+    },
+    {
+      "frame": 6,
+      "source_cell": [
+        887,
+        444,
+        1330,
+        887
+      ],
+      "native_frame": [
+        32,
+        32
+      ],
+      "visible_bounds": [
+        10,
+        16,
+        24,
+        28
+      ]
+    },
+    {
+      "frame": 7,
+      "source_cell": [
+        1330,
+        444,
+        1774,
+        887
+      ],
+      "native_frame": [
+        32,
+        32
+      ],
+      "visible_bounds": null
+    }
+  ],
+  "world_canvas_metres": [
+    0.75,
+    0.75
+  ],
+  "effect_pixel_pitch_metres": 0.0234375,
+  "reference_scope": "User2026-10-15 permits VFX pixel-size variation but requires coherent world scale",
+  "human_aesthetic_review": "PENDING"
+}

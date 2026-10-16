@@ -1,0 +1,40 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "courtyard_stone_normal_32",
+  "role": "hd2d_material_data_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent paired numeric material field; not inferred from albedo brightness",
+    "source_path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/stone_normal_raw_r1.png",
+    "source_sha256": "473f7aa35e304ea5493128669c0ca90c7f90060b40421a325e6ae1afeca92bfd"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone/normal.png",
+    "output_sha256": "2820d9b0e8bfa7ce9cb31b71dd930d43f2de2fb5a0aca5a57b4dff952eafc911",
+    "native_ppu": 32,
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "application": {
+    "albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+    },
+    "shared_uv": true,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/result.json",
+      "sha256": "a29a8ca40ae28fc282d5d1e6ad5e883a7258d74d64a17d644114c6fecd56d2db"
+    }
+  },
+  "human_review": {
+    "overall": "PENDING"
+  },
+  "admission_blockers": [
+    "Numeric material-data role is not registered in the sprite admission contract; this provenance manifest does not authorize FORMAL admission",
+    "Full scene pixel density, normal-entry game view and genuine human review pending"
+  ]
+}

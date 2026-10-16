@@ -414,10 +414,23 @@ namespace OCC.Combat.Tests
                         .Where(position => state.Map.IsInside(position) && !state.Map.IsBlocked(position) &&
                             !state.IsOccupied(position, unit.Id))
                         .OrderBy(position => position.ManhattanDistance(unit.Position))
-                        .Select(position => CombatMovementQuery.FindPath(state, unit, position))
+                        .Select(position => state.Map.FindLowestCostPath(unit.Position, position,
+                            state.Map.Width * state.Map.Height * 4,
+                            cell => CombatMovementQuery.EntryCost(state, unit, cell),
+                            cell => state.IsOccupied(cell, unit.Id)))
                         .FirstOrDefault(candidate => candidate.Count > 1);
-                    command = path == null ? CombatCommand.EndTurn(unit.Id) :
-                        CombatCommand.Move(unit.Id, path[path.Count - 1]);
+                    int remaining = CombatMovementQuery.Budget(state, unit);
+                    GridPosition destination = unit.Position;
+                    foreach (GridPosition position in path ?? Array.Empty<GridPosition>())
+                    {
+                        if (position == unit.Position) continue;
+                        remaining -= CombatMovementQuery.EntryCost(state, unit, position);
+                        if (remaining < 0) break;
+                        destination = position;
+                        if (state.Map.GetTile(position).IsBindingMark) break;
+                    }
+                    command = destination == unit.Position ? CombatCommand.EndTurn(unit.Id) :
+                        CombatCommand.Move(unit.Id, destination);
                 }
                 if (command.Type == CombatCommandType.EndTurn) CombatResolver.EndTurn(state, unit);
                 else CombatResolver.Resolve(state, command);

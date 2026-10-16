@@ -1,0 +1,201 @@
+{
+  "schema": "occ-hd2d-construction-v1",
+  "status": "QA_PENDING",
+  "visible_models": [
+    {
+      "id": "InteriorHall_000_真实地台厚度",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+        "sha256": "0c2279554ce91db114bcdae35d58fc0ede2befa6490ebaad97fa23e6d8342587"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/InteriorHall/local_density_configuration.json",
+        "sha256": "f5ed2854e1a3e1274c77ab563436f7c021c0dfc345060c4e65fca9fa8b868335"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "InteriorHall_001_外围连续铺地",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+        "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/InteriorHall/local_density_configuration.json",
+        "sha256": "f5ed2854e1a3e1274c77ab563436f7c021c0dfc345060c4e65fca9fa8b868335"
+      },
+      "vertices": 4452,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "InteriorHall_003_合批_庭院暖灰石",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/InteriorHall/local_density_configuration.json",
+        "sha256": "f5ed2854e1a3e1274c77ab563436f7c021c0dfc345060c4e65fca9fa8b868335"
+      },
+      "vertices": 3336,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "InteriorHall_004_合批_学院象牙石",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/InteriorHall/local_density_configuration.json",
+        "sha256": "f5ed2854e1a3e1274c77ab563436f7c021c0dfc345060c4e65fca9fa8b868335"
+      },
+      "vertices": 720,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "InteriorHall_012_立体墙_(3, 0)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/InteriorHall/local_density_configuration.json",
+        "sha256": "f5ed2854e1a3e1274c77ab563436f7c021c0dfc345060c4e65fca9fa8b868335"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "InteriorHall_014_立体墙_(4, 0)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/InteriorHall/local_density_configuration.json",
+        "sha256": "f5ed2854e1a3e1274c77ab563436f7c021c0dfc345060c4e65fca9fa8b868335"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "InteriorHall_065_立体墙_(3, 5)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/InteriorHall/local_density_configuration.json",
+        "sha256": "f5ed2854e1a3e1274c77ab563436f7c021c0dfc345060c4e65fca9fa8b868335"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "InteriorHall_067_立体墙_(4, 5)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/InteriorHall/local_density_configuration.json",
+        "sha256": "f5ed2854e1a3e1274c77ab563436f7c021c0dfc345060c4e65fca9fa8b868335"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    }
+  ],
+  "coverage": "Current visible source-textured non-quad meshes; structural source and actual readback bound",
+  "inventory_completeness_human_review": "PENDING",
+  "human_model_card_consistency": "PENDING"
+}

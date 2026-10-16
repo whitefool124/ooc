@@ -504,7 +504,9 @@ namespace OCC.Combat.Presentation
                     if (!walkable.Contains(new GridPosition(x, y))) blocked.Add(new GridPosition(x, y));
             LevelEnemyPlacement[] placedEnemies = enemies.ToArray();
             LevelTerrainPlacement[] authoredTerrain = terrain.ToArray();
-            LevelTerrainPlacement[] permanentWalls = PermanentWalls(id, walkable, width, height);
+            var authoredPositions = new HashSet<GridPosition>(authoredTerrain.Select(value => value.Position));
+            LevelTerrainPlacement[] permanentWalls = PermanentWalls(id, walkable, width, height)
+                .Where(value => !authoredPositions.Contains(value.Position)).ToArray();
             return new FirstRegionLevelDefinition(id, name, objective, CombatObjectiveType.Elimination, 1, hero,
                 FirstRegionFloorTheme.Courtyard, elite, boss, Array.Empty<string>(), placedEnemies, authoredTerrain.Concat(permanentWalls),
                 new LevelSpaceContract(grammar, risk, "始终保留一条不依赖场地效果的推进路线。"),
@@ -513,66 +515,15 @@ namespace OCC.Combat.Presentation
 
         private static LevelTerrainPlacement[] PermanentWalls(string id, HashSet<GridPosition> walkable, int width, int height)
         {
-            // Place indestructible wall tiles on every blocked cell adjacent to the
-            // walkable bounding box, creating a solid visual wall around the arena.
-            if (walkable.Count == 0) return System.Array.Empty<LevelTerrainPlacement>();
-
-            int minX = width, maxX = 0, minY = height, maxY = 0;
-            foreach (GridPosition pos in walkable)
-            {
-                if (pos.X < minX) minX = pos.X;
-                if (pos.X > maxX) maxX = pos.X;
-                if (pos.Y < minY) minY = pos.Y;
-                if (pos.Y > maxY) maxY = pos.Y;
-            }
-
-            HashSet<GridPosition> walls = new HashSet<GridPosition>();
-
-            // Left column (x = minX - 1): wall every non-walkable cell
-            if (minX > 0)
-            {
-                int x = minX - 1;
-                for (int y = 0; y < height; y++)
-                {
-                    GridPosition p = new GridPosition(x, y);
-                    if (!walkable.Contains(p)) walls.Add(p);
-                }
-            }
-
-            // Right column (x = maxX + 1): wall every non-walkable cell
-            if (maxX < width - 1)
-            {
-                int x = maxX + 1;
-                for (int y = 0; y < height; y++)
-                {
-                    GridPosition p = new GridPosition(x, y);
-                    if (!walkable.Contains(p)) walls.Add(p);
-                }
-            }
-
-            // Top row (y = minY - 1): wall blocks spanning the full walkable width
-            if (minY > 0)
-            {
-                int y = minY - 1;
-                for (int x = minX; x <= maxX; x++)
-                {
-                    GridPosition p = new GridPosition(x, y);
-                    if (!walkable.Contains(p)) walls.Add(p);
-                }
-            }
-
-            // Bottom row (y = maxY + 1): wall blocks spanning the full walkable width
-            if (maxY < height - 1)
-            {
-                int y = maxY + 1;
-                for (int x = minX; x <= maxX; x++)
-                {
-                    GridPosition p = new GridPosition(x, y);
-                    if (!walkable.Contains(p)) walls.Add(p);
-                }
-            }
-
-            return walls.Select(p => new LevelTerrainPlacement(p.X, p.Y, LevelTerrainKind.PermanentWall)).ToArray();
+            // The collision mask describes the full shape, including concave corners.
+            // Every blocked cell must carry a visible wall; bounding-box edges miss
+            // interior cut-outs and leave ordinary floor that cannot be entered.
+            var walls = new List<LevelTerrainPlacement>();
+            for (int y = 0; y < height; y++)
+                for (int x = 0; x < width; x++)
+                    if (!walkable.Contains(new GridPosition(x, y)))
+                        walls.Add(new LevelTerrainPlacement(x, y, LevelTerrainKind.PermanentWall));
+            return walls.ToArray();
         }
 
         private static int StableSeed(string value)

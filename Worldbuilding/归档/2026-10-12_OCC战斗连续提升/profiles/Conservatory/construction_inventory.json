@@ -1,0 +1,489 @@
+{
+  "schema": "occ-hd2d-construction-v1",
+  "status": "QA_PENDING",
+  "visible_models": [
+    {
+      "id": "Conservatory_000_真实地台厚度",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+        "sha256": "0c2279554ce91db114bcdae35d58fc0ede2befa6490ebaad97fa23e6d8342587"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_001_外围连续铺地",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+        "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 4452,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_006_合批_庭院暖灰石",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 2994,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_007_合批_学院象牙石",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 712,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_008_合批_花圃泥土",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_earth_b.png",
+        "sha256": "7fa862b75ec253aa9e0aecf783895cbb7c548cb6ee394a1be9f03c79c8c4b7c4"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 216,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_013_立体墙_(0, 0)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_015_立体墙_(1, 0)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_017_立体墙_(2, 0)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_019_立体墙_(3, 0)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_021_立体墙_(4, 0)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_023_立体墙_(5, 0)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_025_立体墙_(6, 0)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_028_立体墙_(1, 1)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_070_立体墙_(0, 5)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_072_立体墙_(1, 5)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_074_立体墙_(2, 5)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_076_立体墙_(3, 5)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_078_立体墙_(4, 5)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_080_立体墙_(5, 5)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    },
+    {
+      "id": "Conservatory_082_立体墙_(6, 5)",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Runtime foundation, courtyard paving or combined structure; simple scene support with native pixel texture, not substitute for sprite detail",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+        "sha256": "22f2cfc5f797156725c0aa00367fe62adda5a61f2232a8db7e9dd17513491b02"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+        "sha256": "e287aedc346ba5c784a43eab8b011c39226a474c29924577c60baf65f7e4fec5"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+        "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+      },
+      "runtime_inventory": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/profiles/Conservatory/local_density_configuration.json",
+        "sha256": "61a6a177da41e4ae570b97e42ca7a76e8bfb72ffeaaaa6975da2ab48e817d188"
+      },
+      "vertices": 24,
+      "human_model_card_consistency": "PENDING"
+    }
+  ],
+  "coverage": "Current visible source-textured non-quad meshes; structural source and actual readback bound",
+  "inventory_completeness_human_review": "PENDING",
+  "human_model_card_consistency": "PENDING"
+}

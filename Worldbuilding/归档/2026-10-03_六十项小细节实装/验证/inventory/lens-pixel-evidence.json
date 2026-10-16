@@ -1,0 +1,20 @@
+{
+  "crop": [
+    1240,
+    292,
+    64,
+    64
+  ],
+  "frames": 18,
+  "changed_screen_pixels": 94,
+  "changed_outside_lens_pixels": 0,
+  "change_bounds": [
+    18,
+    32,
+    45,
+    50
+  ],
+  "frame_and_alpha_contour_unchanged": true,
+  "visible_lens_effect": true,
+  "note": "Actual buffered runtime screenshots. Content inset 4px; compare inactive final frame. Original 32px sprite shown at 2x."
+}

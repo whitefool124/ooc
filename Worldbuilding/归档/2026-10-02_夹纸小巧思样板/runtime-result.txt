@@ -1,0 +1,2 @@
+Application.dataPath=E:/数据库/OCC_Codex/UnityProject/Assets
+Pointer enter: fully pulled; pointer exit: progress=0; instances=1; raycast=False

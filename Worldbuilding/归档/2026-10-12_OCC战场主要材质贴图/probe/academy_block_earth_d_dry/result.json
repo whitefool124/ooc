@@ -1,0 +1,40 @@
+{
+  "scope": "single native32 material probe, actual URP offscreen rendering; not normal-entry game/UI or performance",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "activeScenePreserved": true,
+  "dirty": false,
+  "play": false,
+  "normalStrength": 0.22,
+  "normalGreenFlip": false,
+  "Id": "academy_block_earth_d",
+  "shaderName": "OCC/HD2D/BakedArchitecture",
+  "maps": [
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_d/normal.png",
+      "guid": "7586eb4cdbd0ae94a97dabeb59af39b9",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "type": "NormalMap",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    },
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_d/roughness.png",
+      "guid": "c0e651a5fd440bb4195b03dee221bb0a",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "type": "Default",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    }
+  ],
+  "captures": [
+    "baseline_540.png",
+    "full_540.png"
+  ],
+  "messages": []
+}

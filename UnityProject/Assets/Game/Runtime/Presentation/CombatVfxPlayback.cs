@@ -152,17 +152,22 @@ namespace OCC.Combat.Presentation
         private static void AddUnique(List<(string Effect, int Stage)> effects, string effect, int stage)
         { if (!effects.Any(value => value.Effect == effect)) effects.Add((effect, stage)); }
 
-        private static bool HasVisualResult(FireSpellResultStep step, FireSpellDefinition spell)
+        public static bool HasVisualResult(FireSpellResultStep step, FireSpellDefinition spell)
         {
+            if (step.Kind == FireRuleKind.SpendActionPoints || step.Kind == FireRuleKind.SpendMana ||
+                step.Kind == FireRuleKind.ConsumeTrigger || step.Kind == FireRuleKind.BreakBarrier) return false;
+            if (step.Kind == FireRuleKind.RestoreShield || step.Kind == FireRuleKind.GrantShieldBeforeRanged) return false;
+            if (step.Kind == FireRuleKind.ChangeActionValue) return step.Applied != 0;
             if (step.Applied > 0 || step.Kind == FireRuleKind.ApplyBreakStance) return true;
             // Status steps store strength in Applied. A duration-only status can have zero strength;
             // its emitted result step and positive rule duration still describe a real application.
             return (step.Kind == FireRuleKind.ApplyBurning || step.Kind == FireRuleKind.ExtendBurning ||
-                step.Kind == FireRuleKind.ApplyArmorBreak) &&
+                step.Kind == FireRuleKind.ApplyArmorBreak || step.Kind == FireRuleKind.ApplyStatus ||
+                step.Kind == FireRuleKind.ApplyFiregroundBoost || step.Kind == FireRuleKind.ApplyFiregroundVulnerability) &&
                 spell.Rules.Any(rule => rule.Kind == step.Kind && rule.Duration > 0);
         }
 
-        private static string ResultEffect(FireRuleKind kind, bool damageAtCell)
+        public static string ResultEffect(FireRuleKind kind, bool damageAtCell)
         {
             switch (kind)
             {
@@ -180,6 +185,20 @@ namespace OCC.Combat.Presentation
                 case FireRuleKind.MoveSource: case FireRuleKind.MoveAfterAttack: case FireRuleKind.SwapUnits: case FireRuleKind.Push: return "path";
                 case FireRuleKind.ArmTrigger: case FireRuleKind.RestoreMovement: case FireRuleKind.AddMovement:
                 case FireRuleKind.RepairWeapon: case FireRuleKind.ReduceIncomingDamage: return "fire_attachment";
+                case FireRuleKind.ApplyMeltBarrierMark: case FireRuleKind.ArmFractureShield:
+                case FireRuleKind.ReserveNextTurnAction: case FireRuleKind.ReduceForcedMove:
+                case FireRuleKind.ArmAllyNextAttack: case FireRuleKind.OfferRetreat: case FireRuleKind.OfferBreachMove:
+                case FireRuleKind.ApplyStatus: case FireRuleKind.ChangeActionValue:
+                case FireRuleKind.ApplyFiregroundBoost: case FireRuleKind.ApplyFiregroundVulnerability:
+                case FireRuleKind.CreateLightCover: return "fire_attachment";
+                case FireRuleKind.ApplyFracture: return "armor_break";
+                case FireRuleKind.Pull: case FireRuleKind.PushAllUnits: case FireRuleKind.PushFromDestroyedObjects:
+                case FireRuleKind.AdvanceIntoBreach: case FireRuleKind.ReturnAlongCharge: case FireRuleKind.MoveToBreach:
+                case FireRuleKind.PushAtBreach: case FireRuleKind.MoveBeyondTarget: return "path";
+                case FireRuleKind.ClearBoundOrSlow: return "cleanse";
+                case FireRuleKind.MoveFireground: case FireRuleKind.ExpandFireground: return "fire_burning_ground";
+                case FireRuleKind.TransferBurning: return "burning";
+                case FireRuleKind.DamageChargeAdjacent: return "fire_impact";
                 default: return null;
             }
         }

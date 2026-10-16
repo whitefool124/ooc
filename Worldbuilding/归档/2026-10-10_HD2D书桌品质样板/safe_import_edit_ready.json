@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"c64a0880d31b485aa1cd18f8131e9058\",\"request_key\":\"desk-candidate-import-safety-readback\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"edit\",\"status\":\"ready\",\"phase\":\"ready\",\"created_at\":\"2026-10-10T10:48:40.89+08:00\",\"updated_at\":\"2026-10-10T10:48:43.479+08:00\",\"finished_at\":\"2026-10-10T10:48:43.479+08:00\",\"error_code\":null,\"message\":\"Requested mode verified; imports and compilation are idle.\",\"refresh_assets\":false,\"timeout_seconds\":120,\"step\":3,\"created_seconds\":1791600520.89,\"deadline_seconds\":1791600640.89,\"settle_since\":1791600522.657,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T10:48:40.89+08:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"},{\"timestamp\":\"2026-10-10T10:48:41.144+08:00\",\"phase\":\"exiting_play\",\"message\":\"Exit requested; waiting for Edit Mode readback.\"},{\"timestamp\":\"2026-10-10T10:48:41.82+08:00\",\"phase\":\"verifying\",\"message\":null},{\"timestamp\":\"2026-10-10T10:48:43.479+08:00\",\"phase\":\"ready\",\"message\":\"Requested mode verified; imports and compilation are idle.\"}]},\"current_editor\":{\"is_compiling\":false,\"is_updating\":false,\"is_playing\":false,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":true},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":0,\"journal_error\":null,\"task\":{\"task_id\":\"editor:c64a0880d31b485aa1cd18f8131e9058\",\"kind\":\"editor\",\"id\":\"c64a0880d31b485aa1cd18f8131e9058\",\"status\":\"ready\",\"phase\":\"ready\",\"revision\":\"7d9579eed6f150135f46cea3c2280241fa4c8a30607dcb3cd378acc8f97732b8\",\"changed\":true,\"wait_complete\":true,\"poll_after_ms\":0,\"wait_reason\":\"completed\",\"waited_ms\":0,\"snapshot_at\":\"2026-10-10T02:49:25.2523774Z\"}}}"
+      }
+    ]
+  }
+}

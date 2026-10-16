@@ -1,0 +1,1167 @@
+{
+  "schema": "occ-cinematic-local-checks-v1",
+  "status": "PASS",
+  "duration": 16.0,
+  "stageCells": [
+    7,
+    7
+  ],
+  "actor": "pyromancer",
+  "normalCompletePlayback": true,
+  "fixedCamera": true,
+  "terrainDestruction": false,
+  "auxiliaryTextureFree": true,
+  "disassemblyPause": true,
+  "disassemblyReset": true,
+  "nativeParticleReset": true,
+  "pauseResume": true,
+  "replayThreeTimes": true,
+  "skipEnd": true,
+  "reset": true,
+  "disableReenable": true,
+  "pipelineRestored": true,
+  "ownedResources": 81,
+  "resourceGrowth": 0,
+  "evidence": [
+    {
+      "age": 0.8003166,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "burst": {
+        "disassemblySourcePixels": 19703,
+        "disassemblyPeakSpan": [
+          5.43125,
+          3.109375,
+          6.125
+        ],
+        "disassemblyPixels": 0,
+        "peakDisassemblyPixels": 19703,
+        "maximumFragmentTravel": 1.29941392,
+        "fragmentReadback": {
+          "nativeReadbackCount": 0,
+          "minAlpha": -1.0,
+          "maxAlpha": -1.0,
+          "minSize": -1.0,
+          "colourOverLifetime": false,
+          "sizeOverLifetime": false,
+          "materialEnergy": 3.2,
+          "materialAlpha": 1.0,
+          "tracks": [
+            {
+              "name": "magic_card_outer",
+              "start": 9.0,
+              "sourceTexels": 5468,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 2735,
+              "original": [
+                -1.703125,
+                0.03125,
+                0.315625072
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_sigils",
+              "start": 8.5,
+              "sourceTexels": 3587,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 7262,
+              "original": [
+                1.265625,
+                0.5,
+                0.284375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_core",
+              "start": 7.56,
+              "sourceTexels": 2450,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 10281,
+              "original": [
+                -0.163787082,
+                1.65743124,
+                0.3543833
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_caster",
+              "start": 7.5,
+              "sourceTexels": 560,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 11786,
+              "original": [
+                -3.040625,
+                0.06125,
+                -2.434375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 13339,
+              "original": [
+                0.918818951,
+                0.921875,
+                0.224997476
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 15885,
+              "original": [
+                0.5243635,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 18431,
+              "original": [
+                -0.5243634,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            }
+          ]
+        },
+        "age": 0.8003166,
+        "coreCards": 0,
+        "radialColumns": 0,
+        "shockAndSparkParticles": 0,
+        "peakBurstParticles": 240,
+        "burstDiameter": 3.09943223,
+        "burstTop": 1.44591749,
+        "smokeParticles": 0,
+        "peakSmokeParticles": 108,
+        "smokeDiameter": 1.5358237,
+        "smokeTop": 1.18906629,
+        "auxiliaryTextureFree": true,
+        "cubeEdgeMetres": 0.03125,
+        "coreCanvasMetres": 3,
+        "corePaperThickness": 0.03125
+      },
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-16_天穹熔炉退场纠正\\fixed_live_0.png"
+    },
+    {
+      "age": 4.50021362,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "burst": {
+        "disassemblySourcePixels": 19703,
+        "disassemblyPeakSpan": [
+          5.43125,
+          3.109375,
+          6.125
+        ],
+        "disassemblyPixels": 0,
+        "peakDisassemblyPixels": 19703,
+        "maximumFragmentTravel": 1.29941392,
+        "fragmentReadback": {
+          "nativeReadbackCount": 0,
+          "minAlpha": -1.0,
+          "maxAlpha": -1.0,
+          "minSize": -1.0,
+          "colourOverLifetime": false,
+          "sizeOverLifetime": false,
+          "materialEnergy": 3.2,
+          "materialAlpha": 1.0,
+          "tracks": [
+            {
+              "name": "magic_card_outer",
+              "start": 9.0,
+              "sourceTexels": 5468,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 2735,
+              "original": [
+                -1.703125,
+                0.03125,
+                0.315625072
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_sigils",
+              "start": 8.5,
+              "sourceTexels": 3587,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 7262,
+              "original": [
+                1.265625,
+                0.5,
+                0.284375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_core",
+              "start": 7.56,
+              "sourceTexels": 2450,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 10281,
+              "original": [
+                -0.163787082,
+                1.65743124,
+                0.3543833
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_caster",
+              "start": 7.5,
+              "sourceTexels": 560,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 11786,
+              "original": [
+                -3.040625,
+                0.06125,
+                -2.434375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 13339,
+              "original": [
+                0.918818951,
+                0.921875,
+                0.224997476
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 15885,
+              "original": [
+                0.5243635,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 18431,
+              "original": [
+                -0.5243634,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            }
+          ]
+        },
+        "age": 4.50021362,
+        "coreCards": 0,
+        "radialColumns": 0,
+        "shockAndSparkParticles": 0,
+        "peakBurstParticles": 240,
+        "burstDiameter": 3.09943223,
+        "burstTop": 1.44591749,
+        "smokeParticles": 0,
+        "peakSmokeParticles": 108,
+        "smokeDiameter": 1.5358237,
+        "smokeTop": 1.18906629,
+        "auxiliaryTextureFree": true,
+        "cubeEdgeMetres": 0.03125,
+        "coreCanvasMetres": 3,
+        "corePaperThickness": 0.03125
+      },
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-16_天穹熔炉退场纠正\\fixed_live_1.png"
+    },
+    {
+      "age": 6.50018024,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "burst": {
+        "disassemblySourcePixels": 19703,
+        "disassemblyPeakSpan": [
+          5.43125,
+          3.109375,
+          6.125
+        ],
+        "disassemblyPixels": 0,
+        "peakDisassemblyPixels": 19703,
+        "maximumFragmentTravel": 1.29941392,
+        "fragmentReadback": {
+          "nativeReadbackCount": 0,
+          "minAlpha": -1.0,
+          "maxAlpha": -1.0,
+          "minSize": -1.0,
+          "colourOverLifetime": false,
+          "sizeOverLifetime": false,
+          "materialEnergy": 3.2,
+          "materialAlpha": 1.0,
+          "tracks": [
+            {
+              "name": "magic_card_outer",
+              "start": 9.0,
+              "sourceTexels": 5468,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 2735,
+              "original": [
+                -1.703125,
+                0.03125,
+                0.315625072
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_sigils",
+              "start": 8.5,
+              "sourceTexels": 3587,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 7262,
+              "original": [
+                1.265625,
+                0.5,
+                0.284375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_core",
+              "start": 7.56,
+              "sourceTexels": 2450,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 10281,
+              "original": [
+                -0.163787082,
+                1.65743124,
+                0.3543833
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_caster",
+              "start": 7.5,
+              "sourceTexels": 560,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 11786,
+              "original": [
+                -3.040625,
+                0.06125,
+                -2.434375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 13339,
+              "original": [
+                0.918818951,
+                0.921875,
+                0.224997476
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 15885,
+              "original": [
+                0.5243635,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 18431,
+              "original": [
+                -0.5243634,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            }
+          ]
+        },
+        "age": 6.50018024,
+        "coreCards": 0,
+        "radialColumns": 0,
+        "shockAndSparkParticles": 0,
+        "peakBurstParticles": 240,
+        "burstDiameter": 3.09943223,
+        "burstTop": 1.44591749,
+        "smokeParticles": 0,
+        "peakSmokeParticles": 108,
+        "smokeDiameter": 1.5358237,
+        "smokeTop": 1.18906629,
+        "auxiliaryTextureFree": true,
+        "cubeEdgeMetres": 0.03125,
+        "coreCanvasMetres": 3,
+        "corePaperThickness": 0.03125
+      },
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-16_天穹熔炉退场纠正\\fixed_live_2.png"
+    },
+    {
+      "age": 7.350172,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "burst": {
+        "disassemblySourcePixels": 19703,
+        "disassemblyPeakSpan": [
+          5.43125,
+          3.109375,
+          6.125
+        ],
+        "disassemblyPixels": 0,
+        "peakDisassemblyPixels": 19703,
+        "maximumFragmentTravel": 1.29941392,
+        "fragmentReadback": {
+          "nativeReadbackCount": 0,
+          "minAlpha": -1.0,
+          "maxAlpha": -1.0,
+          "minSize": -1.0,
+          "colourOverLifetime": false,
+          "sizeOverLifetime": false,
+          "materialEnergy": 3.2,
+          "materialAlpha": 1.0,
+          "tracks": [
+            {
+              "name": "magic_card_outer",
+              "start": 9.0,
+              "sourceTexels": 5468,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 2735,
+              "original": [
+                -1.703125,
+                0.03125,
+                0.315625072
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_sigils",
+              "start": 8.5,
+              "sourceTexels": 3587,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 7262,
+              "original": [
+                1.265625,
+                0.5,
+                0.284375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_core",
+              "start": 7.56,
+              "sourceTexels": 2450,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 10281,
+              "original": [
+                -0.163787082,
+                1.65743124,
+                0.3543833
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_caster",
+              "start": 7.5,
+              "sourceTexels": 560,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 11786,
+              "original": [
+                -3.040625,
+                0.06125,
+                -2.434375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 13339,
+              "original": [
+                0.918818951,
+                0.921875,
+                0.224997476
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 15885,
+              "original": [
+                0.5243635,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 18431,
+              "original": [
+                -0.5243634,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            }
+          ]
+        },
+        "age": 7.350172,
+        "coreCards": 0,
+        "radialColumns": 0,
+        "shockAndSparkParticles": 0,
+        "peakBurstParticles": 240,
+        "burstDiameter": 3.09943223,
+        "burstTop": 1.44591749,
+        "smokeParticles": 0,
+        "peakSmokeParticles": 108,
+        "smokeDiameter": 1.5358237,
+        "smokeTop": 1.18906629,
+        "auxiliaryTextureFree": true,
+        "cubeEdgeMetres": 0.03125,
+        "coreCanvasMetres": 3,
+        "corePaperThickness": 0.03125
+      },
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-16_天穹熔炉退场纠正\\fixed_live_3.png"
+    },
+    {
+      "age": 8.102168,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "burst": {
+        "disassemblySourcePixels": 19703,
+        "disassemblyPeakSpan": [
+          5.43125,
+          3.109375,
+          6.125
+        ],
+        "disassemblyPixels": 10648,
+        "peakDisassemblyPixels": 19703,
+        "maximumFragmentTravel": 1.29941392,
+        "fragmentReadback": {
+          "nativeReadbackCount": 10648,
+          "minAlpha": 1.0,
+          "maxAlpha": 1.0,
+          "minSize": 1.0,
+          "colourOverLifetime": false,
+          "sizeOverLifetime": false,
+          "materialEnergy": 3.2,
+          "materialAlpha": 1.0,
+          "tracks": [
+            {
+              "name": "magic_card_outer",
+              "start": 9.0,
+              "sourceTexels": 5468,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 2735,
+              "original": [
+                -1.703125,
+                0.03125,
+                0.315625072
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_sigils",
+              "start": 8.5,
+              "sourceTexels": 3587,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 7262,
+              "original": [
+                1.265625,
+                0.5,
+                0.284375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_core",
+              "start": 7.56,
+              "sourceTexels": 2450,
+              "liveTexels": 2450,
+              "movedTexels": 2450,
+              "maximumMove": 0.229639664,
+              "trackedPixel": 10281,
+              "original": [
+                -0.163787082,
+                1.65743124,
+                0.3543833
+              ],
+              "position": [
+                -0.226287082,
+                1.78243124,
+                0.3856333
+              ],
+              "rgba": [
+                107,
+                31,
+                4,
+                255
+              ]
+            },
+            {
+              "name": "magic_card_caster",
+              "start": 7.5,
+              "sourceTexels": 560,
+              "liveTexels": 560,
+              "movedTexels": 560,
+              "maximumMove": 0.200097635,
+              "trackedPixel": 11786,
+              "original": [
+                -3.040625,
+                0.06125,
+                -2.434375
+              ],
+              "position": [
+                -2.946875,
+                0.18625,
+                -2.528125
+              ],
+              "rgba": [
+                224,
+                42,
+                4,
+                255
+              ]
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 2546,
+              "movedTexels": 2546,
+              "maximumMove": 0.176776692,
+              "trackedPixel": 13339,
+              "original": [
+                0.918818951,
+                0.921875,
+                0.224997476
+              ],
+              "position": [
+                0.918818951,
+                0.984375,
+                0.193747476
+              ],
+              "rgba": [
+                107,
+                31,
+                4,
+                255
+              ]
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 2546,
+              "movedTexels": 2546,
+              "maximumMove": 0.176776692,
+              "trackedPixel": 15885,
+              "original": [
+                0.5243635,
+                0.921875,
+                -0.4582193
+              ],
+              "position": [
+                0.5243635,
+                0.984375,
+                -0.4894693
+              ],
+              "rgba": [
+                107,
+                31,
+                4,
+                255
+              ]
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 2546,
+              "movedTexels": 2546,
+              "maximumMove": 0.176776692,
+              "trackedPixel": 18431,
+              "original": [
+                -0.5243634,
+                0.921875,
+                -0.4582193
+              ],
+              "position": [
+                -0.5243634,
+                0.984375,
+                -0.4894693
+              ],
+              "rgba": [
+                107,
+                31,
+                4,
+                255
+              ]
+            }
+          ]
+        },
+        "age": 8.102168,
+        "coreCards": 0,
+        "radialColumns": 0,
+        "shockAndSparkParticles": 42,
+        "peakBurstParticles": 240,
+        "burstDiameter": 5.71824932,
+        "burstTop": 1.45425582,
+        "smokeParticles": 108,
+        "peakSmokeParticles": 108,
+        "smokeDiameter": 1.539547,
+        "smokeTop": 1.18906629,
+        "auxiliaryTextureFree": true,
+        "cubeEdgeMetres": 0.03125,
+        "coreCanvasMetres": 3,
+        "corePaperThickness": 0.03125
+      },
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-16_天穹熔炉退场纠正\\fixed_live_4.png"
+    },
+    {
+      "age": 12.500391,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "burst": {
+        "disassemblySourcePixels": 19703,
+        "disassemblyPeakSpan": [
+          5.65,
+          3.171875,
+          6.40625
+        ],
+        "disassemblyPixels": 0,
+        "peakDisassemblyPixels": 19703,
+        "maximumFragmentTravel": 1.39369392,
+        "fragmentReadback": {
+          "nativeReadbackCount": 0,
+          "minAlpha": -1.0,
+          "maxAlpha": -1.0,
+          "minSize": -1.0,
+          "colourOverLifetime": false,
+          "sizeOverLifetime": false,
+          "materialEnergy": 3.2,
+          "materialAlpha": 1.0,
+          "tracks": [
+            {
+              "name": "magic_card_outer",
+              "start": 9.0,
+              "sourceTexels": 5468,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 2735,
+              "original": [
+                -1.703125,
+                0.03125,
+                0.315625072
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_sigils",
+              "start": 8.5,
+              "sourceTexels": 3587,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 7262,
+              "original": [
+                1.265625,
+                0.5,
+                0.284375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_core",
+              "start": 7.56,
+              "sourceTexels": 2450,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 10281,
+              "original": [
+                -0.163787082,
+                1.65743124,
+                0.3543833
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_caster",
+              "start": 7.5,
+              "sourceTexels": 560,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 11786,
+              "original": [
+                -3.040625,
+                0.06125,
+                -2.434375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 13339,
+              "original": [
+                0.918818951,
+                0.921875,
+                0.224997476
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 15885,
+              "original": [
+                0.5243635,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 18431,
+              "original": [
+                -0.5243634,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            }
+          ]
+        },
+        "age": 12.500391,
+        "coreCards": 0,
+        "radialColumns": 0,
+        "shockAndSparkParticles": 0,
+        "peakBurstParticles": 240,
+        "burstDiameter": 5.71824932,
+        "burstTop": 1.45425582,
+        "smokeParticles": 0,
+        "peakSmokeParticles": 122,
+        "smokeDiameter": 2.58268762,
+        "smokeTop": 1.28548443,
+        "auxiliaryTextureFree": true,
+        "cubeEdgeMetres": 0.03125,
+        "coreCanvasMetres": 3,
+        "corePaperThickness": 0.03125
+      },
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-16_天穹熔炉退场纠正\\fixed_live_5.png"
+    },
+    {
+      "age": 15.8004313,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "burst": {
+        "disassemblySourcePixels": 19703,
+        "disassemblyPeakSpan": [
+          5.65,
+          3.171875,
+          6.40625
+        ],
+        "disassemblyPixels": 0,
+        "peakDisassemblyPixels": 19703,
+        "maximumFragmentTravel": 1.39369392,
+        "fragmentReadback": {
+          "nativeReadbackCount": 0,
+          "minAlpha": -1.0,
+          "maxAlpha": -1.0,
+          "minSize": -1.0,
+          "colourOverLifetime": false,
+          "sizeOverLifetime": false,
+          "materialEnergy": 3.2,
+          "materialAlpha": 1.0,
+          "tracks": [
+            {
+              "name": "magic_card_outer",
+              "start": 9.0,
+              "sourceTexels": 5468,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 2735,
+              "original": [
+                -1.703125,
+                0.03125,
+                0.315625072
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_sigils",
+              "start": 8.5,
+              "sourceTexels": 3587,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 7262,
+              "original": [
+                1.265625,
+                0.5,
+                0.284375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_core",
+              "start": 7.56,
+              "sourceTexels": 2450,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 10281,
+              "original": [
+                -0.163787082,
+                1.65743124,
+                0.3543833
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "magic_card_caster",
+              "start": 7.5,
+              "sourceTexels": 560,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 11786,
+              "original": [
+                -3.040625,
+                0.06125,
+                -2.434375
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 13339,
+              "original": [
+                0.918818951,
+                0.921875,
+                0.224997476
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 15885,
+              "original": [
+                0.5243635,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            },
+            {
+              "name": "fire_crown",
+              "start": 7.6,
+              "sourceTexels": 2546,
+              "liveTexels": 0,
+              "movedTexels": 0,
+              "maximumMove": 0.0,
+              "trackedPixel": 18431,
+              "original": [
+                -0.5243634,
+                0.921875,
+                -0.4582193
+              ],
+              "position": null,
+              "rgba": null
+            }
+          ]
+        },
+        "age": 15.8004313,
+        "coreCards": 0,
+        "radialColumns": 0,
+        "shockAndSparkParticles": 0,
+        "peakBurstParticles": 240,
+        "burstDiameter": 5.71824932,
+        "burstTop": 1.45425582,
+        "smokeParticles": 0,
+        "peakSmokeParticles": 122,
+        "smokeDiameter": 2.58268762,
+        "smokeTop": 1.28548443,
+        "auxiliaryTextureFree": true,
+        "cubeEdgeMetres": 0.03125,
+        "coreCanvasMetres": 3,
+        "corePaperThickness": 0.03125
+      },
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-16_天穹熔炉退场纠正\\fixed_live_6.png"
+    }
+  ],
+  "scope": "One dedicated cinematic, normal scene initialization plus public playback controls; no full game journey or performance audit",
+  "humanAestheticReview": "PENDING",
+  "focusRequested": false
+}

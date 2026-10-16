@@ -1,0 +1,26 @@
+{
+  "purpose": "Continuous desk book opening sample; reduced six-key-pose experiment after rejected prior eight-frame run",
+  "provider": "Codex built-in image_gen",
+  "layout": "3 columns x 2 rows, row major",
+  "frames": 6,
+  "beats": [
+    "closed",
+    "front cover lifts 35 degrees",
+    "cover upright 90 degrees",
+    "cover moves left 135 degrees",
+    "left cover settles 170 degrees",
+    "open at 180 degrees"
+  ],
+  "anchor": "stationary right page block and spine; oblique frontal desk view",
+  "invariants": [
+    "navy cloth, brass corner fittings, small central diamond",
+    "cream blank paper",
+    "one source square macro-pixel lattice",
+    "fixed camera and scale",
+    "no cast shadow or baked window light"
+  ],
+  "canvas": "closed book 64x64; open poses horizontal extension allowed without subject resizing",
+  "max_independent_attempts": 3,
+  "known_cost": null,
+  "status": "REJECTED after 3 independent rounds; no generated frame imported"
+}

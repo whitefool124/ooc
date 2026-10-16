@@ -1,0 +1,29 @@
+{
+  "schema": "occ-authored-sprite-material-v1",
+  "status": "QA_PENDING",
+  "id": "academy_facade",
+  "source": {
+    "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png",
+    "sha256": "f1705cf02ff32e1b1bc4d1161b4b659fb34a7c084f13ab74a9cee93fbca5b5ed"
+  },
+  "recipe_sha256": "556fb68fa933edd277fb4f4cfb0596639774ed80fe38e9e9db48972223617fe0",
+  "native_canvas": [
+    224,
+    128
+  ],
+  "world_pixel_pitch": 0.03125,
+  "height_basis": "explicit_authored_geometry",
+  "albedo_brightness_used_for_height": false,
+  "source_art_changed": false,
+  "region_basis": "Explicit manually authored spatial material regions",
+  "fields": {
+    "normal.png": "ba8b6b7589d6986524207621b5f4965df7430970a67b0c489f203493d9ed412e",
+    "metallic_gloss.png": "441b325d337a49f53cdd71fefce1e7d6d71e1916ef0784c50312854f69b943ec"
+  },
+  "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+  "limitations": [
+    "Shallow-relief approximation; no physical transmission"
+  ],
+  "runtime_review": "PENDING",
+  "human_registration_review": "PENDING"
+}

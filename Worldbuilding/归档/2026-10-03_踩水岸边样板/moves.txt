@@ -1,0 +1,6 @@
+from=(1, 4) target=(2, 3) water=True hit=格子_2_3
+final=(2, 3) peakRipples=1 shaders=0 raycast enabled
+from=(1, 4) target=(2, 3) water=True hit=战斗入场演出
+final=(1, 4) peakRipples=0 shaders=0 raycast enabled
+from=(1, 4) target=(2, 3) water=True hit=格子_2_3
+final=(2, 3) peakRipples=1 shaders=0 raycast enabled

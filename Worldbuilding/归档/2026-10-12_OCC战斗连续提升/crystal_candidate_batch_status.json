@@ -1,0 +1,14 @@
+{
+  "schema": "occ-crystal-batch-status-v1",
+  "status": "QA_PENDING",
+  "candidate_albedos": 4,
+  "new_authored_material_sets": 3,
+  "normal_method": "Explicit five-prism shallow geometry templates at32PPU; no albedo luminance-to-height",
+  "surface_regions": "Per-asset authored material palette labels bound to source identity; dielectric stone/crystal, no runtime hue-to-emission inference",
+  "technical_probe": "4 crystal entries completed,2 actual output resolutions and lighting/maps-off comparisons",
+  "formal_replacement": false,
+  "player_albedo_routes": "Original formal assets retained",
+  "application": "PrismCandidate intact aether actual scene completed; ConservatoryCandidate actual pressure scene pending this round",
+  "human_review": "PENDING",
+  "limitations": ["No physical crystal transmission", "Crystal uses key/environment/emission, additional lights excluded to avoid its own near-zero-distance point-light blowout", "Damaged variants have local material probe evidence; full action-to-damage gameplay not verified by this batch"]
+}

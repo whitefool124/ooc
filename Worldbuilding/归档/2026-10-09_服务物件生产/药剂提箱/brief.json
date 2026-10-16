@@ -1,0 +1,15 @@
+{
+  "schema": "occ-art-brief-v1",
+  "asset_id": "hd2d_apothecary_satchel",
+  "role": "ui_detail_adaptive",
+  "status": "QA_PENDING",
+  "source_channel": "codex_builtin_imagegen",
+  "source": "source-01.png",
+  "delivery": "delivery.png",
+  "human_review": "PENDING",
+  "scope": "Editor scene review only; independent scene-specific cutout replaces generic rectangular decoration",
+  "view": "parallel to player camera, shallow overhead front view",
+  "palette_max": 16,
+  "confidence_min": 1.2,
+  "prompt": "Create ONE isolated game-ready object cutout for OCC, a Japanese-inspired magical academy HD-2D tactical roguelite. Visibly coarse, beautifully controlled native pixel art, a SINGLE uniform square macro-pixel lattice across the ENTIRE object, every contour and internal boundary snapped to that same visibly chunky grid. Large clean connected flat color clusters, limited roughly sixteen-color palette, hard alpha outline, no smaller detailed pixels, no antialiasing, no dither, no gradients, no grain, no painted checkerboard. Entire complete object with generous transparent safety margin. Original art, not copying any game. Restrained ivory enamel and paper cream, warm walnut, charcoal outline, a few aged brass fittings and muted cyan aether material. Simple fixed upper-left volume shading only, no glow and NO external cast shadow, floor, room, text, label, UI rectangle, frame or scene lighting baked into the image. Front facing silhouette, shallow overhead view revealing a little top surface; zero yaw, symmetrical stable contact edge, designed as a cutout mounted parallel to a game camera pitched 35 degrees. It must read as a distinct scene-specific tangible object, not a rectangular interface panel. Subject: a magical-academy physician's open portable apothecary satchel, rounded ivory fabric body with walnut/brass clasp, arched carry handle, and clearly readable broad glass medicine bottles and folded cream cloth held inside. Broad round bottle silhouettes, tidy magical medical equipment, gentle blue glass accents and a small geometric brass medical seal without text. Rounded soft silhouette, not a rectangular crate or a UI panel. A cohesive connected object with a stable flat bottom."
+}

@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"blocking\\\":false,\\\"captures\\\":1,\\\"texture\\\":\\\"RenderTexture\\\",\\\"resolution\\\":256,\\\"projection\\\":30,\\\"shaderMessages\\\":[]}\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

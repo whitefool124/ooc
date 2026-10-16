@@ -1,0 +1,21 @@
+{
+  "cols": 121,
+  "rows": 40,
+  "step_x": 18.0,
+  "step_y": 18.0,
+  "consensus": "forced",
+  "confidence": "medium",
+  "detect_s": 0.0,
+  "recon_s": 1.611,
+  "manual_grid_review": true,
+  "lossless_decode": false,
+  "original_decoder_accepted": false,
+  "subject_bounds": [
+    1,
+    2,
+    120,
+    38
+  ],
+  "grid_basis": "visually observed square blocks in independent source; review candidate only",
+  "source": "source-r2.png"
+}

@@ -1,0 +1,2157 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using DG.Tweening;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
+namespace OCC.Combat.Presentation
+{
+    public sealed class FormalBattlefieldView : MonoBehaviour
+    {
+        private const float ReferenceWidth = 1920f;
+        private const float ReferenceHeight = 1080f;
+        private const float DoubleClickWindowSeconds = .32f;
+        private const string AcademyPerimeterPath =
+            "Art/CombatAcademyPerimeterPrototype/academy_warm_courtyard_perimeter_v2";
+        private const int SurroundPaddingCells = 6;
+        public const float CellHoverRevealDelaySeconds = .35f;
+        public const float CellHoverWarmRevealDelaySeconds = .10f;
+        private const float CellHoverWarmWindowSeconds = .65f;
+        private const float ContextMenuWidth = 560f;
+        private const float ContextMenuHeaderHeight = 84f;
+        private const float ContextMenuRowHeight = 112f;
+        private const float ContextMenuButtonHeight = 104f;
+        private const float ContextMenuPadding = 12f;
+        private const float ContextMenuMaximumHeight = ReferenceHeight - 96f;
+        private const float ContextMenuScrollbarWidth = 16f;
+        private const float ContextMenuScrollbarGap = 8f;
+        private const int ContextMenuTitleFontSize = FormalUiTheme.BodyFontSize;
+        private const int ContextMenuActionFontSize = FormalUiTheme.BodyFontSize;
+        private const int ContextMenuDetailFontSize = FormalUiTheme.BodyFontSize;
+        private readonly Dictionary<GridPosition, CellView> cells = new Dictionary<GridPosition, CellView>();
+        private readonly List<CellView> visibleUnits = new List<CellView>();
+        private readonly List<DepthLayer> depthLayers = new List<DepthLayer>();
+        private readonly List<CombatOcclusionLayer> occlusionForeground = new List<CombatOcclusionLayer>();
+        private readonly CombatTextureAlphaMaskCache unitHitMasks = new CombatTextureAlphaMaskCache();
+        private CombatEnemyMoveRouteGraphic enemyMoveRoutes;
+        private readonly List<Rect> annotationObstacles = new List<Rect>();
+        private readonly List<Rect> annotationInformation = new List<Rect>();
+        private readonly Dictionary<string, Rect> annotationBodies = new Dictionary<string, Rect>();
+        private readonly List<Rect> placedIntents = new List<Rect>();
+        private readonly List<CellView> intentUnits = new List<CellView>();
+        private RectTransform activeTurnMarker;
+        private readonly List<Image> activeTurnMarkerParts = new List<Image>();
+        private string activeTurnMarkerUnitId;
+        private Vector2 activeTurnMarkerTarget;
+        private bool hasActiveTurnMarkerTarget;
+        private RectTransform timelineHoverMarker;
+        private Image timelineHoverArrow;
+        private string timelineHoveredUnitId;
+        public int CrowdedIntentCount { get; private set; }
+        public int OccludedUnitCount { get; private set; }
+        public int OcclusionPixelCount { get; private set; }
+        private IBattlefieldViewHost host;
+        private Canvas canvas;
+        private GameObject root;
+        private RectTransform viewportRect;
+        private RectTransform previewBoardRect;
+        private RectTransform boardRect;
+        private RectTransform objectLayerRect;
+        private RectTransform structureLayerRect;
+        private RectTransform unitLayerRect;
+        private RectTransform overlayLayerRect;
+        private RectTransform surroundLayerRect;
+        private RawImage academyPerimeter;
+        private readonly List<RawImage> structures = new List<RawImage>();
+        private string structureLevelId;
+        private BattlefieldHoverCardView hoverCard;
+        private BarView objectDurability;
+        private BattlefieldEnemyDetailView enemyDetail;
+        private BattlefieldCellPresentation lastEnemyDetailModel;
+        private int lastEnemyDetailVersion=-1;
+        private GridPosition hoverPosition;
+        private bool hasHoverPosition;
+        private bool hoverPointerInside;
+        private bool hoverRevealed;
+        private float hoverStartedAt;
+        private float hoverRevealDelaySeconds = CellHoverRevealDelaySeconds;
+        private float lastHoverRevealAt = float.NegativeInfinity;
+
+        private GameObject contextMenuRoot;
+        private RectTransform contextMenuPanel;
+        private RectTransform contextMenuViewport;
+        private RectTransform contextMenuContent;
+        private ScrollRect contextMenuScrollRect;
+        private Scrollbar contextMenuScrollbar;
+        private Text contextMenuTitle;
+        private Text contextMenuHint;
+        private readonly List<Button> contextMenuButtons = new List<Button>();
+        private readonly List<Text> contextMenuButtonLabels = new List<Text>();
+        private readonly List<Text> contextMenuButtonDetails = new List<Text>();
+        private GridPosition pendingPrimaryPosition;
+        private bool hasPendingPrimaryPosition;
+        private string pendingPrimaryAction;
+        private int pendingPrimaryTurn;
+        private float pendingPrimaryAt;
+        private CombatState observedState;
+        private readonly CombatIntentChangeTracker intentChanges = new CombatIntentChangeTracker();
+        private readonly Dictionary<GridPosition, float> intentCellChanges = new Dictionary<GridPosition, float>();
+        private int contextMenuOpenedFrame = -1;
+        private GridPosition contextMenuAnchor;
+        private string contextMenuHoverActionId = string.Empty;
+        private int mapWidth;
+        private int mapHeight;
+        private bool combatEntryQueued;
+        private Hd2DBattlefieldSample hd2dSample;
+        public Hd2DBattlefieldSample Hd2DPreview => hd2dSample;
+        public void DisableHd2DPreview()
+        {
+            if (hd2dSample == null) return;
+            hd2dSample.gameObject.SetActive(false);
+            Destroy(hd2dSample.gameObject); hd2dSample = null;
+            if (boardRect != null) boardRect.gameObject.SetActive(true);
+            if (previewBoardRect != null) previewBoardRect.parent.gameObject.SetActive(true);
+        }
+
+        // Also retained for existing review tools; normal entry uses this same renderer.
+        public Hd2DBattlefieldSample EnableHd2DPreview()
+        {
+            EnsureUi();
+            if (hd2dSample != null) return hd2dSample;
+            if (!(host is CombatPrototypeBootstrap bootstrap) || host.CurrentState == null)
+                throw new InvalidOperationException("HD2D preview requires a live combat host");
+            hd2dSample = Hd2DBattlefieldSample.Create(bootstrap, viewportRect);
+            hd2dSample.ConfigureInput(SubmitPrimaryCell, SubmitContextCell);
+            annotationObstacles.Clear(); annotationInformation.Clear(); annotationBodies.Clear(); placedIntents.Clear();
+            return hd2dSample;
+        }
+
+        private static void ConfigureInformationLayer(GameObject overlay, int sortingOrder)
+        {
+            var layer = overlay.GetComponent<Canvas>();
+            if (layer == null) layer = overlay.AddComponent<Canvas>();
+            layer.overrideSorting = true;
+            layer.sortingOrder = sortingOrder;
+            if (overlay.GetComponent<GraphicRaycaster>() == null) overlay.AddComponent<GraphicRaycaster>();
+        }
+
+        public bool IsVisible => root != null && root.activeSelf;
+        public bool IsObjectDurabilityVisible => hd2dSample != null ? hd2dSample.GetComponent<Hd2DBattlefieldTactics>().IsObjectDurabilityVisible : objectDurability != null && objectDurability.Root.activeSelf;
+        // The entry focus frame belongs behind every unit, but above the battlefield cells.
+        public RectTransform EntryFocusUnderlay => hd2dSample != null ? (RectTransform)hd2dSample.transform : unitLayerRect;
+        // Reuse the regions of the currently drawn frame, rather than final simulation positions.
+        public void AppendFeedbackObstacles(List<Rect> destination, bool protectBodies = true, string damageOwnerId = null)
+        {
+            if(hd2dSample!=null)
+            {
+                hd2dSample.GetComponent<Hd2DBattlefieldTactics>()?.AppendFeedbackObstacles(destination,protectBodies,damageOwnerId);
+                return;
+            }
+            if (!IsVisible || canvas == null || boardRect == null || viewportRect == null) return;
+            Transform content = FormalUiKit.ContentParent(canvas.transform);
+            Vector2 origin = content.InverseTransformPoint(boardRect.TransformPoint(Vector3.zero));
+            Vector2 bottomLeft = content.InverseTransformPoint(viewportRect.TransformPoint(viewportRect.rect.min));
+            Vector2 topRight = content.InverseTransformPoint(viewportRect.TransformPoint(viewportRect.rect.max));
+            Rect visible = Rect.MinMaxRect(bottomLeft.x, bottomLeft.y, topRight.x, topRight.y);
+            foreach (Rect region in protectBodies ? annotationObstacles : annotationInformation) Append(region);
+            if (!protectBodies)
+                foreach (var body in annotationBodies) if (body.Key != damageOwnerId) Append(body.Value);
+            foreach (Rect region in placedIntents) Append(region);
+
+            void Append(Rect region)
+            {
+                Rect converted = new Rect(origin.x + region.x, origin.y - region.yMax, region.width, region.height);
+                if (!converted.Overlaps(visible)) return;
+                destination.Add(Rect.MinMaxRect(Mathf.Max(converted.xMin, visible.xMin), Mathf.Max(converted.yMin, visible.yMin),
+                    Mathf.Min(converted.xMax, visible.xMax), Mathf.Min(converted.yMax, visible.yMax)));
+            }
+        }
+
+        public int CellCount => hd2dSample != null ? host.CurrentState.Map.Width * host.CurrentState.Map.Height : cells.Count;
+        public string TimelineHoveredUnitId => timelineHoveredUnitId;
+        public static bool ShouldInspectOnPointerDown(PointerEventData.InputButton button) =>
+            button == PointerEventData.InputButton.Right;
+
+        public void Initialize(IBattlefieldViewHost source)
+        {
+            host = source ?? throw new ArgumentNullException(nameof(source));
+        }
+
+        public void QueueCombatEntry() => combatEntryQueued = true;
+        public void SetTimelineHoveredUnit(string unitId)
+        {
+            if (timelineHoveredUnitId == unitId) return;
+            timelineHoveredUnitId = unitId;
+        }
+
+        private void Update()
+        {
+            if (host == null || !Application.isPlaying) return;
+            EnsureUi();
+            CombatState state = host.CurrentState;
+            bool visible = host.IsBattlefieldVisible && state != null;
+            root.SetActive(visible);
+            if (!visible)
+            {
+                if(hd2dSample!=null)DisableHd2DPreview();
+                host.WaterRipples?.Clear();
+                host.StopDust?.Clear();
+                intentChanges.Clear(); intentCellChanges.Clear(); observedState = null;
+                HideTooltip();
+                enemyDetail?.Hide();
+                HideContextMenu();
+                CancelPendingPrimaryClick();
+                return;
+            }
+
+            if (combatEntryQueued)
+            {
+                combatEntryQueued = false;
+                PlayCombatEntry();
+            }
+
+            if (contextMenuRoot != null && contextMenuRoot.activeSelf)
+            {
+                if (Keyboard.current?.escapeKey.wasPressedThisFrame == true) HideContextMenu();
+                else DismissContextMenuFromOutsideClick();
+            }
+
+            if (hd2dSample != null && !hd2dSample.Matches(state)) DisableHd2DPreview();
+            if (hd2dSample == null && host is CombatPrototypeBootstrap) EnableHd2DPreview();
+            if (hd2dSample != null)
+            {
+                if (observedState != state)
+                { observedState = state; CancelPendingPrimaryClick(); }
+                if (hasPendingPrimaryPosition && (pendingPrimaryAction != host.SelectedAction || pendingPrimaryTurn != state.TurnSequence || host.IsInteractionModalOpen)) CancelPendingPrimaryClick();
+                BattlefieldRect view = host.BattlefieldViewport.ViewportRect;
+                SetTopLeft(viewportRect, view.X, view.Y, view.Width, view.Height);
+                boardRect.gameObject.SetActive(false);
+                if (previewBoardRect != null) previewBoardRect.parent.gameObject.SetActive(false);
+                if (hd2dSample.HoveredCell.HasValue) BeginCellHover(hd2dSample.HoveredCell.Value);
+                else if (hoverPointerInside) EndCellHover();
+                UpdateInput();
+                UpdateHoverReveal();
+                RefreshEnemyDetail(state, hd2dSample.FrameModels);
+                return;
+            }
+            if (observedState != state)
+            {
+                observedState = state; intentChanges.Clear(); intentCellChanges.Clear(); CancelPendingPrimaryClick();
+            }
+            if (hasPendingPrimaryPosition && (pendingPrimaryAction != host.SelectedAction || pendingPrimaryTurn != state.TurnSequence || host.IsInteractionModalOpen)) CancelPendingPrimaryClick();
+            EnsureCells(state.Map.Width, state.Map.Height);
+            UpdateInput();
+            RefreshGeometry(host.BattlefieldViewport);
+            RefreshStructures(host.CurrentLevelId, host.BattlefieldViewport);
+            var presented = cells.Keys.ToDictionary(position => position, host.PresentBattlefieldCell);
+            EnemyIntentPresentation[] intents = state.Units.Values.Where(unit => unit.IsAlive && !unit.IsHero)
+                .Select(unit => presented.TryGetValue(unit.Position, out BattlefieldCellPresentation cell)
+                    ? cell?.Intent : null).Where(intent => intent != null).ToArray();
+            foreach (var model in presented.Values)
+                if (model?.Unit != null && !model.Unit.IsHero && intentChanges.Observe(model.Unit.Id, model.Intent, Time.unscaledTime))
+                {
+                    foreach (var position in model.Intent.AffectedCells.Concat(model.Intent.Route)) intentCellChanges[position] = Time.unscaledTime;
+                    if (model.Intent.HasDestination) intentCellChanges[model.Intent.Destination] = Time.unscaledTime;
+                }
+            HashSet<GridPosition> intentDestinations = CollectIntentDestinations(intents);
+            HashSet<GridPosition> intentRoute = CollectIntentRoute(intents);
+            RefreshMoveRoutes(intents, host.BattlefieldViewport);
+            UnitState inspectedEnemy = hasHoverPosition && hoverPointerInside
+                ? state.Units.Values.FirstOrDefault(unit => unit.IsAlive && !unit.IsHero && unit.Position == hoverPosition)
+                : null;
+            if (inspectedEnemy == null) inspectedEnemy = state.GetUnit(host.SelectedTargetId);
+            EnemyIntentPresentation inspectedIntent = inspectedEnemy != null && !inspectedEnemy.IsHero &&
+                presented.TryGetValue(inspectedEnemy.Position, out BattlefieldCellPresentation inspected)
+                ? inspected?.Intent : null;
+            bool movementMode = host.SelectedAction == "移动" || presented.Values.Any(cell =>
+                cell?.MoveMarker == BattlefieldCellMarker.MovementRange ||
+                cell?.MoveMarker == BattlefieldCellMarker.MovementRisk);
+            HashSet<GridPosition> attackRange = new HashSet<GridPosition>(movementMode
+                ? intents.SelectMany(intent => intent.AttackRange)
+                : inspectedIntent?.AttackRange ?? Array.Empty<GridPosition>());
+            var enemyEdges = new Dictionary<GridPosition, byte>();
+            var affectedCells = new HashSet<GridPosition>();
+            foreach (EnemyIntentPresentation intent in intents)
+            {
+                var sourceCells = new HashSet<GridPosition>(intent.AffectedCells);
+                foreach (GridPosition position in sourceCells)
+                {
+                    if (!cells.ContainsKey(position)) continue;
+                    affectedCells.Add(position);
+                    byte edges = BoundaryEdges(sourceCells, position);
+                    enemyEdges[position] = (byte)((enemyEdges.TryGetValue(position, out byte current) ? current : 0) | edges);
+                }
+            }
+            var playerEffectCells = new HashSet<GridPosition>(presented.Where(pair => pair.Value?.IsPlayerEffectCell == true)
+                .Select(pair => pair.Key));
+            foreach (KeyValuePair<GridPosition, CellView> pair in cells)
+                RefreshCell(pair.Value, presented[pair.Key], host.BattlefieldViewport,
+                    intentDestinations.Contains(pair.Key), intentRoute.Contains(pair.Key),
+                    attackRange.Contains(pair.Key), affectedCells.Contains(pair.Key),
+                    enemyEdges.TryGetValue(pair.Key, out byte redEdges) ? redEdges : (byte)0,
+                    playerEffectCells.Contains(pair.Key) ? BoundaryEdges(playerEffectCells, pair.Key) : (byte)0);
+            RefreshUnitOrder();
+            RefreshHoveredObjectDurability(state, presented);
+            UpdateHoverReveal();
+            RefreshEnemyDetail(state, presented);
+        }
+
+        private void EnsureUi()
+        {
+            if (root != null) return;
+            canvas = FormalUiKit.CanvasRoot("正式UGUI战场", UiLayoutContract.BattlefieldSortingOrder);
+            // HD-2D renders at the viewport resolution; reference-resolution HUD remains readable.
+            FormalBattlefieldShellView shell = FormalBattlefieldShellView.Create(FormalUiKit.ContentParent(canvas.transform));
+            root = shell.gameObject;
+            viewportRect = shell.Viewport;
+            boardRect = shell.Board;
+            surroundLayerRect = shell.SurroundLayer;
+            shell.InputSurface.Initialize(this);
+
+            Button home = shell.HomeButton;
+            home.GetComponent<RectTransform>().anchoredPosition =
+                new Vector2(688f, -8f);
+            home.onClick.AddListener(() => { if(hd2dSample != null) hd2dSample.ResetOverview(); else host.BattlefieldViewport.ResetOverview(); });
+            FormalUiKit.ConfigureButtonFeedback(home,
+                FormalUiTheme.ButtonPalette(FormalUiButtonTone.Neutral),
+                () => UiMotionProfile.FromIntensity(1f), null);
+            home.transform.SetAsLastSibling();
+
+            BattlefieldHoverCardView prefab = Resources.Load<BattlefieldHoverCardView>(BattlefieldHoverCardView.ResourcePath);
+            if (prefab == null)
+                throw new InvalidOperationException("Missing battlefield hover card prefab at Resources/" +
+                    BattlefieldHoverCardView.ResourcePath + ".prefab");
+            hoverCard = Instantiate(prefab, root.transform, false);
+            hoverCard.name = "地块悬浮信息组合窗";
+            hoverCard.Hide();
+
+            BattlefieldEnemyDetailView detailPrefab = Resources.Load<BattlefieldEnemyDetailView>(
+                BattlefieldEnemyDetailView.ResourcePath);
+            if (detailPrefab == null)
+                throw new InvalidOperationException("Missing enemy detail prefab at Resources/" +
+                    BattlefieldEnemyDetailView.ResourcePath + ".prefab");
+            enemyDetail = Instantiate(detailPrefab, root.transform, false);
+            enemyDetail.name = "选中敌人详情";
+            enemyDetail.Initialize(() => host?.ClearSelectedEnemyInspection(), canvas);
+            CanvasGroup hoverGroup = hoverCard.GetComponent<CanvasGroup>();
+            if (hoverGroup == null) hoverGroup = hoverCard.gameObject.AddComponent<CanvasGroup>();
+            hoverGroup.interactable = false;
+            hoverGroup.blocksRaycasts = false;
+        }
+
+        private void RefreshEnemyDetail(CombatState state,
+            IReadOnlyDictionary<GridPosition, BattlefieldCellPresentation> presented)
+        {
+            if (enemyDetail == null) return;
+            UnitState enemy = string.IsNullOrEmpty(host.SelectedTargetId) ? null : state.GetUnit(host.SelectedTargetId);
+            if (enemy == null || enemy.IsHero || !enemy.IsAlive)
+            {
+                enemyDetail.Hide();
+                return;
+            }
+            presented.TryGetValue(enemy.Position, out BattlefieldCellPresentation cell);
+            if(hd2dSample!=null)
+            {
+                // A selected target needs a second battlefield click to commit. Keep
+                // the interactive inspection panel on the opposite side of that target.
+                var panel=(RectTransform)enemyDetail.transform;
+                var parent=(RectTransform)panel.parent;
+                Vector2 point=parent.InverseTransformPoint(canvas.rootCanvas.transform.TransformPoint(hd2dSample.GridToFeedbackPosition(enemy.Position)));
+                float w=panel.rect.width,h=panel.rect.height;
+                float left=point.x>parent.rect.center.x?12f:Mathf.Max(12f,parent.rect.width-w-12f);
+                panel.anchoredPosition=new Vector2(left+w*panel.pivot.x,-Mathf.Clamp(192f,64f,Mathf.Max(64f,parent.rect.height-h-12f)));
+            }
+            int version=host is CombatPrototypeBootstrap bootstrap?bootstrap.UiPresentationVersions.Version(UiPresentationArea.Combat):-1;
+            if(hd2dSample!=null&&enemyDetail.gameObject.activeSelf&&ReferenceEquals(lastEnemyDetailModel,cell)&&lastEnemyDetailVersion==version)return;
+            lastEnemyDetailModel=cell;lastEnemyDetailVersion=version;
+            enemyDetail.Bind(state, enemy, cell);
+            ConfigureInformationLayer(enemyDetail.gameObject, UiLayoutContract.BattlefieldDetailSortingOrder);
+            enemyDetail.transform.SetAsLastSibling();
+            enemyDetail.RaiseTooltip();
+        }
+
+        private void EnsureCells(int width, int height)
+        {
+            if (mapWidth == width && mapHeight == height && cells.Count == width * height) return;
+            foreach (CellView cell in cells.Values)
+            {
+                Destroy(cell.Root);
+                if (cell.RangeGraphic != null) Destroy(cell.RangeGraphic.gameObject);
+            }
+
+            if (unitLayerRect != null) Destroy(unitLayerRect.gameObject);
+            if (overlayLayerRect != null) Destroy(overlayLayerRect.gameObject);
+            if (structureLayerRect != null) Destroy(structureLayerRect.gameObject);
+            if (objectLayerRect != null) Destroy(objectLayerRect.gameObject);
+            cells.Clear();
+            structures.Clear();
+            structureLevelId = null;
+            unitLayerRect = null;
+            overlayLayerRect = null;
+            structureLayerRect = null;
+            objectLayerRect = null;
+            mapWidth = width;
+            mapHeight = height;
+            EnsureGroundSurround(width, height);
+            EnsureObjectLayer();
+            EnsureUnitLayer();
+            EnsureOverlayLayer();
+            for (int y = 0; y < height; y++)
+            for (int x = 0; x < width; x++)
+            {
+                GridPosition position = new GridPosition(x, y);
+                CellView cell = CreateCell(position);
+                cells.Add(position, cell);
+            }
+            foreach (CellView cell in cells.OrderByDescending(pair => pair.Key.Y).ThenBy(pair => pair.Key.X).Select(pair => pair.Value))
+                cell.Unit.transform.SetAsLastSibling();
+            EnsureStructureLayer();
+            objectLayerRect.SetAsLastSibling();
+            structureLayerRect.SetAsLastSibling();
+            unitLayerRect.SetAsLastSibling();
+            overlayLayerRect.SetAsLastSibling();
+        }
+
+        private void EnsureStructureLayer()
+        {
+            if (structureLayerRect != null) return;
+            GameObject layer = FormalUiKit.Create("学院多格结构层", boardRect);
+            structureLayerRect = layer.AddComponent<RectTransform>();
+            Stretch(structureLayerRect);
+        }
+
+        private void EnsureObjectLayer()
+        {
+            if (objectLayerRect != null) return;
+            GameObject layer = FormalUiKit.Create("玩法物件独立层", boardRect);
+            objectLayerRect = layer.AddComponent<RectTransform>();
+            Stretch(objectLayerRect);
+        }
+
+        private void RefreshStructures(string levelId, BattlefieldViewport viewport)
+        {
+            EnsureStructureLayer();
+            if (!string.Equals(levelId, structureLevelId, StringComparison.Ordinal))
+            {
+                foreach (RawImage structure in structures)
+                    if (structure != null) Destroy(structure.gameObject);
+                structures.Clear();
+                structureLevelId = levelId;
+                foreach (AcademyStructurePlacement placement in AcademyBattlefieldLayoutCatalog.VisualModules(levelId))
+                {
+                    CellView groundCell = null;
+                    bool ground = placement.IsGroundAttachment && cells.TryGetValue(new GridPosition(placement.X, placement.TopY), out groundCell);
+                    GameObject root = FormalUiKit.Create("结构_" + placement.AssetId, ground ? groundCell.Rect : structureLayerRect);
+                    RawImage image = root.AddComponent<RawImage>();
+                    image.texture = Resources.Load<Texture2D>("Art/FormalAcademyStructures32/" + placement.AssetId);
+                    image.raycastTarget = false;
+                    image.color = Color.white;
+                    if (ground) image.transform.SetSiblingIndex(groundCell.Floor.transform.GetSiblingIndex() + 1);
+                    structures.Add(image);
+                }
+            }
+
+            AcademyStructurePlacement[] placements = AcademyBattlefieldLayoutCatalog.VisualModules(levelId);
+            float cellSize = viewport.CellSize;
+            for (int index = 0; index < structures.Count && index < placements.Length; index++)
+            {
+                AcademyStructurePlacement placement = placements[index];
+                float top = (mapHeight - 1 - placement.TopY) * cellSize;
+                bool ground = placement.IsGroundAttachment && cells.ContainsKey(new GridPosition(placement.X, placement.TopY));
+                SetStructureVisual(structures[index].rectTransform, structures[index].texture,
+                    ground ? 0 : placement.X * cellSize, ground ? 0 : top,
+                    placement.WidthCells * cellSize, placement.HeightCells * cellSize, cellSize);
+                structures[index].rectTransform.localEulerAngles = new Vector3(0f, 0f, -90f * placement.QuarterTurns);
+            }
+        }
+
+        private CellView CreateCell(GridPosition position)
+        {
+            EnsureObjectLayer();
+            EnsureUnitLayer();
+            EnsureOverlayLayer();
+            EnsurePreviewLayer();
+            GameObject rootObject = FormalUiKit.Create("格子_" + position.X + "_" + position.Y, boardRect);
+            RectTransform rect = rootObject.AddComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0f, 1f);
+            RawImage hitSurface = rootObject.AddComponent<RawImage>();
+            hitSurface.color = Color.clear;
+            hitSurface.raycastTarget = true;
+            BattlefieldCellPointer pointer = rootObject.AddComponent<BattlefieldCellPointer>();
+            pointer.Initialize(position, SubmitPrimaryCell, SubmitContextCell, BeginCellHover, EndCellHover);
+
+            GameObject overlayObject = FormalUiKit.Create("格子信息_" + position.X + "_" + position.Y, overlayLayerRect);
+            RectTransform overlayRect = overlayObject.AddComponent<RectTransform>();
+            overlayRect.anchorMin = overlayRect.anchorMax = overlayRect.pivot = new Vector2(0f, 1f);
+
+            var cell = new CellView
+            {
+                Root = rootObject,
+                Rect = rect,
+                OverlayRect = overlayRect,
+                Floor = Layer("地面", rect),
+                TerrainBoundary = Layer("地台压边", rect),
+                Environment = Layer("环境效果", rect),
+                WaterRipples = FormalUiKit.Create("水面脚步余波", rect).AddComponent<CombatWaterRippleGraphic>(),
+                StopDust = FormalUiKit.Create("石路停步细尘", rect).AddComponent<CombatStopDustGraphic>(),
+                Move = Layer("可达步数", rect),
+                Attack = Layer("攻击范围", rect),
+                Skill = Layer("技能范围", rect),
+                EnemyAttackRange = Layer("敌方可攻击范围", rect),
+                EnemyAffectedArea = Layer("敌方本次生效范围", rect),
+                IntentRoute = Layer("敌方移动路线", rect),
+                IntentDestination = Layer("移动意图目标", rect),
+                IntentDot = CenteredLayer("移动意图强调点", rect),
+                RangeGraphic = FormalUiKit.Create("统一方格范围_" + position.X + "_" + position.Y, previewBoardRect).AddComponent<CombatBattlefieldRangeGraphic>(),
+                // Native prop canvases may overhang one cell. A board-wide layer keeps later
+                // sibling floors from covering the prop's top and right edges.
+                Object = Layer("地形物件", objectLayerRect),
+                Loot = Layer("战利品", rect),
+                Unit = Layer("单位", unitLayerRect),
+                Selection = Layer("选中覆盖", overlayRect),
+                ObjectLabel = Label("地形标签", rect),
+                FieldEffectLabel = Label("场地效果占位",overlayRect),
+                Health = Bar("生命", overlayRect, "unit_bar_health_16"),
+                Mana = ColoredBar("个人魔力", overlayRect, null, FormalUiTheme.ResourceMagicFill),
+                Shield = ShieldBadge("护盾", overlayRect),
+                IntentRoot = FormalUiKit.Create("敌人意图", overlayRect)
+            };
+            float rangePhase = position.X * .47f + position.Y * .29f;
+            cell.MoveMotion = cell.Move.gameObject.AddComponent<CombatRangeOverlayMotion>();
+            cell.MoveMotion.Initialize(cell.Move, rangePhase);
+            cell.AttackMotion = cell.Attack.gameObject.AddComponent<CombatRangeOverlayMotion>();
+            cell.AttackMotion.Initialize(cell.Attack, rangePhase + .7f);
+            cell.SkillMotion = cell.Skill.gameObject.AddComponent<CombatRangeOverlayMotion>();
+            cell.SkillMotion.Initialize(cell.Skill, rangePhase + 1.4f);
+            cell.IntentRect = cell.IntentRoot.AddComponent<RectTransform>();
+            Stretch(cell.WaterRipples.rectTransform);
+            Stretch(cell.StopDust.rectTransform);
+            cell.IntentRect.anchorMin = cell.IntentRect.anchorMax = cell.IntentRect.pivot = new Vector2(0f, 1f);
+            Image intentBackground = cell.IntentRoot.AddComponent<Image>();
+            // Intent is presentation only. Even displaced badges leave the
+            // logical cell under the pointer as the sole battlefield input surface.
+            intentBackground.color = Color.clear;
+            intentBackground.raycastTarget = false;
+            cell.IntentIcon = Layer("意图图标", cell.IntentRect);
+            cell.IntentDamage = Label("意图伤害", cell.IntentRect);
+            cell.IntentDamage.alignment = TextAnchor.MiddleCenter;
+            cell.IntentDamage.fontSize = FormalUiTheme.BodyFontSize;
+            cell.IntentDamage.fontStyle = FontStyle.Normal;
+            cell.IntentDamage.color = new Color(1f, .87f, .72f);
+            cell.IntentChange = Label("意图变化", cell.IntentRect);
+            SetTopLeft(cell.IntentChange.rectTransform, 0f, 40f, 32f, 24f);
+            cell.IntentChange.fontSize = 24;
+            cell.IntentChange.alignment = TextAnchor.MiddleCenter;
+            cell.IntentChange.color = new Color(1f, .77f, .37f);
+            Outline changeOutline = cell.IntentChange.gameObject.AddComponent<Outline>();
+            changeOutline.effectColor = Color.black;
+            changeOutline.effectDistance = new Vector2(1f, -1f);
+            cell.IntentChange.raycastTarget = false;
+            cell.StatusRoots = new GameObject[6];
+            cell.StatusIcons = new RawImage[6];
+            cell.StatusValues = new Text[6];
+            for (int i = 0; i < 6; i++)
+            {
+                GameObject status = FormalUiKit.Create("状态_" + i, overlayRect);
+                RectTransform statusRect = status.AddComponent<RectTransform>();
+                statusRect.anchorMin = statusRect.anchorMax = statusRect.pivot = new Vector2(0f, 1f);
+                cell.StatusRoots[i] = status;
+                cell.StatusIcons[i] = status.AddComponent<RawImage>();
+                cell.StatusIcons[i].raycastTarget = false;
+                status.AddComponent<FormalHoverTooltipTrigger>();
+                cell.StatusValues[i] = Label("数值", statusRect);
+                cell.StatusValues[i].fontSize = FormalUiTheme.BodyFontSize;
+                cell.StatusValues[i].fontStyle = FontStyle.Normal;
+                cell.StatusValues[i].alignment = TextAnchor.LowerRight;
+            }
+            return cell;
+        }
+
+        private void EnsureUnitLayer()
+        {
+            if (unitLayerRect != null) return;
+            GameObject unitLayer = FormalUiKit.Create("单位独立层", boardRect);
+            unitLayerRect = unitLayer.AddComponent<RectTransform>();
+            Stretch(unitLayerRect);
+        }
+
+        private void EnsurePreviewLayer()
+        {
+            if (previewBoardRect != null) return;
+            // Own mask inside the sorted canvas preserves viewport clipping;
+            // ancestor masks cannot clip across an override-sorting boundary.
+            GameObject root = FormalUiKit.Create("战场预览顶层", viewportRect);
+            RectTransform clip = root.AddComponent<RectTransform>();
+            Stretch(clip);
+            Canvas previewCanvas = root.AddComponent<Canvas>();
+            previewCanvas.overrideSorting = true;
+            previewCanvas.sortingOrder = UiLayoutContract.CombatPreviewSortingOrder;
+            root.AddComponent<RectMask2D>();
+            GameObject board = FormalUiKit.Create("预览棋盘", clip);
+            previewBoardRect = board.AddComponent<RectTransform>();
+        }
+
+        private void EnsureOverlayLayer()
+        {
+            if (overlayLayerRect != null) return;
+            GameObject overlayLayer = FormalUiKit.Create("单位信息顶层", boardRect);
+            overlayLayerRect = overlayLayer.AddComponent<RectTransform>();
+            Stretch(overlayLayerRect);
+        }
+
+        private void RefreshGeometry(BattlefieldViewport viewport)
+        {
+            if (viewport == null) return;
+            BattlefieldRect view = viewport.ViewportRect;
+            BattlefieldRect board = viewport.BoardRect;
+            SetTopLeft(viewportRect, view.X, view.Y, view.Width, view.Height);
+            SetTopLeft(boardRect, board.X - view.X, board.Y - view.Y, board.Width, board.Height);
+            EnsurePreviewLayer();
+            SetTopLeft(previewBoardRect, board.X - view.X, board.Y - view.Y, board.Width, board.Height);
+            float cellSize = viewport.CellSize;
+            RefreshGroundSurround(cellSize);
+            foreach (KeyValuePair<GridPosition, CellView> pair in cells)
+            {
+                SetTopLeft(pair.Value.Rect, pair.Key.X * cellSize, (mapHeight - 1 - pair.Key.Y) * cellSize, cellSize, cellSize);
+                SetTopLeft(pair.Value.OverlayRect, pair.Key.X * cellSize, (mapHeight - 1 - pair.Key.Y) * cellSize, cellSize, cellSize);
+                SetTopLeft(pair.Value.RangeGraphic.rectTransform, pair.Key.X * cellSize, (mapHeight - 1 - pair.Key.Y) * cellSize, cellSize, cellSize);
+                float dot = cellSize * BattlefieldMarkerLadder.EnemyIntentDotFraction;
+                pair.Value.IntentDot.rectTransform.sizeDelta = new Vector2(dot, dot);
+            }
+        }
+
+        private void RefreshCell(CellView cell, BattlefieldCellPresentation model, BattlefieldViewport viewport,
+            bool isIntentDestination, bool isIntentRoute, bool isEnemyAttackRange, bool isEnemyAffected,
+            byte enemyEdges, byte playerEdges)
+        {
+            if (model == null || viewport == null)
+            { cell.Root.SetActive(false); cell.OverlayRect.gameObject.SetActive(false); cell.Unit.gameObject.SetActive(false);
+                cell.RangeGraphic.gameObject.SetActive(false);
+                cell.Object.gameObject.SetActive(false);
+                if (cell.ObjectFront != null) cell.ObjectFront.gameObject.SetActive(false); return; }
+            cell.Root.SetActive(true);
+            cell.RangeGraphic.gameObject.SetActive(true);
+            cell.OverlayRect.gameObject.SetActive(true);
+            float physicalCellSize = viewport.CellSize * (canvas != null && canvas.scaleFactor > 0f
+                ? canvas.scaleFactor : 1f);
+            Texture2D floorTexture = physicalCellSize <= 32.01f && model.FloorTextureLow != null
+                ? model.FloorTextureLow : model.FloorTexture;
+            Set(cell.Floor, floorTexture, Color.white);
+            float cellSize = viewport.CellSize;
+            if (CombatTestArenaEntry.IsDedicatedTestArena && floorTexture != null && floorTexture.height > floorTexture.width)
+                SetTopLeft(cell.Floor.rectTransform, 0f, 0f, cellSize,
+                    cellSize * floorTexture.height / floorTexture.width);
+            else
+                Stretch(cell.Floor.rectTransform);
+            cell.Floor.uvRect = model.FloorUv;
+            CombatState rippleState = host?.CurrentState;
+            bool wetSurface = rippleState != null && rippleState.Map.GetTile(model.Position).IsWater &&
+                model.EnvironmentTexture != null && model.EnvironmentTexture.name.Contains("water");
+            cell.WaterRipples.Refresh(host?.WaterRipples, model.Position, wetSurface, Time.unscaledTime);
+            bool dryStone = floorTexture != null && (floorTexture.name.StartsWith("academy_block_road_") ||
+                floorTexture.name.StartsWith("academy_block_court_")) &&
+                rippleState != null && !rippleState.Map.GetTile(model.Position).IsWater &&
+                model.EnvironmentTexture == null && model.ObjectTexture == null && model.LootTexture == null;
+            cell.StopDust.Refresh(host?.StopDust, model.Position, dryStone, Time.unscaledTime);
+            cell.Floor.rectTransform.localEulerAngles = new Vector3(0f, 0f, model.FloorRotationDegrees);
+            Set(cell.TerrainBoundary, model.TerrainBoundaryTexture, Color.white);
+            cell.TerrainBoundary.rectTransform.localEulerAngles = new Vector3(0f, 0f,
+                model.TerrainBoundaryRotationDegrees);
+            if (model.TerrainBoundaryTexture != null && model.TerrainBoundaryTexture.height > model.TerrainBoundaryTexture.width)
+            {
+                // The lower quarter of the edge module is the vertical stone face.
+                // Place it just beyond the cell's top plane instead of scaling the
+                // complete module into the logical hit area.
+                cell.TerrainBoundary.uvRect = new Rect(0f, 0f, 1f, .25f);
+                SetTopLeft(cell.TerrainBoundary.rectTransform, 0f, cellSize, cellSize, cellSize * .25f);
+            }
+            else
+            {
+                cell.TerrainBoundary.uvRect = new Rect(0f, 0f, 1f, 1f);
+                Stretch(cell.TerrainBoundary.rectTransform);
+            }
+            Set(cell.Environment, model.EnvironmentTexture, Color.white);
+            cell.MoveMotion.Refresh(null, 0f);
+            cell.AttackMotion.Refresh(null, 0f);
+            cell.SkillMotion.Refresh(null, 0f);
+            Set(cell.EnemyAttackRange, null, Color.clear);
+            Set(cell.EnemyAffectedArea, null, Color.clear);
+            Set(cell.IntentRoute, null, Color.clear);
+            Set(cell.IntentDestination, null, Color.clear);
+            Set(cell.IntentDot, null, Color.clear);
+            cell.RangeGraphic.Refresh(model.MoveMarker, model.AttackMarker, model.SkillMarker,
+                isEnemyAttackRange, isEnemyAffected, enemyEdges, model.IsPlayerEffectCell,
+                playerEdges, false, isIntentDestination, model.SelectionOverlayTexture != null,
+                host?.UiPreferences.AnimationIntensity ?? 1f,
+                intentCellChanges.TryGetValue(model.Position, out float at) ? Time.unscaledTime - at : CombatIntentChangeTracker.Duration);
+            // Focus corners share the range mesh's enter/exit timing. The legacy
+            // texture would otherwise leave an instant, duplicate square behind.
+            Set(cell.Selection, null, Color.clear);
+            Texture2D objectTexture = physicalCellSize <= 32.01f && model.ObjectTextureLow != null
+                ? model.ObjectTextureLow : model.ObjectTexture;
+            Set(cell.Object, objectTexture, Color.white);
+            Set(cell.Loot, model.LootTexture, Color.white);
+            Vector2 travel = model.UnitTravelOffset * (cellSize / 64f);
+            cell.OverlayRect.anchoredPosition = cell.Rect.anchoredPosition + new Vector2(travel.x, -travel.y);
+            cell.VisualFoot = new Vector2(cell.Rect.anchoredPosition.x + travel.x,
+                -cell.Rect.anchoredPosition.y + cellSize + travel.y);
+            // 32x32 battlefield assets render across the complete logical cell. Their authored
+            // transparent margins determine visual footprint at approved integer pixel scales.
+            RefreshObjectLayers(cell, model, cellSize, objectTexture);
+            SetInset(cell.Loot.rectTransform, 0f);
+
+            cell.ObjectLabel.gameObject.SetActive(!string.IsNullOrEmpty(model.ObjectLabel));
+            cell.ObjectLabel.text = model.ObjectLabel;
+            cell.ObjectLabel.color = model.ObjectLabelColor;
+            SetTopLeft(cell.ObjectLabel.rectTransform, 2f, 12f * cellSize / 128f, cellSize - 4f, 40f);
+            cell.FieldEffectLabel.gameObject.SetActive(!string.IsNullOrEmpty(model.FieldEffectLabel));
+            cell.FieldEffectLabel.text=model.FieldEffectLabel;
+            SetTopLeft(cell.FieldEffectLabel.rectTransform,2f,cellSize-40f,cellSize-4f,36f);
+
+            cell.Unit.gameObject.SetActive(model.UnitTexture != null);
+            cell.PreviewedUnit = model.IsPreviewedUnit;
+            cell.PreviewedObject = model.IsPreviewedObject;
+            if (model.UnitTexture != null)
+            {
+                BattlefieldRect contract = viewport.CellRect(model.Position);
+                Rect unit = CombatUnitHudLayout.UnitVisibleContentRect(contract, model.UnitTexture);
+                float localX = cell.Rect.anchoredPosition.x + unit.x - contract.X + model.UnitOffset.x + travel.x;
+                float localY = -cell.Rect.anchoredPosition.y + unit.y - contract.Y + model.UnitOffset.y + travel.y;
+                SetTopLeft(cell.Unit.rectTransform, Mathf.Round(localX / 2f) * 2f, Mathf.Round(localY / 2f) * 2f, unit.width, unit.height);
+                cell.Unit.texture = model.UnitTexture;
+                cell.Unit.uvRect = model.UnitUv;
+                cell.Unit.color = model.UnitTint;
+                cell.Unit.raycastTarget = false;
+            }
+
+            bool isHero = model.Unit?.IsHero != false;
+            cell.PresentedIsHero = isHero;
+            if (cell.PresentedUnitId != model.Unit?.Id)
+            {
+            cell.PresentedUnitId = model.Unit?.Id;
+                // A grid-cell UI can be reused by another actor. Do not inherit the previous actor's damage trail.
+                foreach (BarView bar in new[] { cell.Health, cell.Mana })
+                {
+                    bar.LastCurrent = -1;
+                    bar.DisplayedRatio = -1f;
+                    bar.FlashUntil = bar.MarkerUntil = 0f;
+                }
+            }
+            bool hasShield = model.Vitals?.Shield != null && model.Vitals.Shield.Current > 0;
+            RefreshVital(cell.Health, model.Vitals?.Health, viewport.CellRect(model.Position), hasShield,
+                CombatUnitHudLayout.HealthForecastColor(isHero));
+            RefreshMana(cell.Mana, model.Vitals?.Mana, viewport.CellRect(model.Position));
+            RefreshShieldBadge(cell.Shield, model.Vitals?.Shield, viewport.CellRect(model.Position));
+            RefreshStatuses(cell, model.Statuses, viewport.CellRect(model.Position));
+            RefreshIntent(cell, model.Intent, model.IntentTexture, viewport.CellRect(model.Position));
+        }
+
+        private void EnsureGroundSurround(int width, int height)
+        {
+            if (surroundLayerRect == null) return;
+            if (academyPerimeter == null)
+            {
+                GameObject root = FormalUiKit.Create("暖色学院庭院外围", surroundLayerRect);
+                academyPerimeter = root.AddComponent<RawImage>();
+                academyPerimeter.raycastTarget = false;
+                academyPerimeter.color = Color.white;
+            }
+            academyPerimeter.texture = Resources.Load<Texture2D>(AcademyPerimeterPath);
+        }
+
+        private void RefreshGroundSurround(float cellSize)
+        {
+            if (academyPerimeter == null || academyPerimeter.texture == null) return;
+            float height = (mapHeight + SurroundPaddingCells * 2) * cellSize;
+            float width = height * academyPerimeter.texture.width / academyPerimeter.texture.height;
+            float mapAndPaddingWidth = (mapWidth + SurroundPaddingCells * 2) * cellSize;
+            if (width < mapAndPaddingWidth)
+            {
+                width = mapAndPaddingWidth;
+                height = width * academyPerimeter.texture.height / academyPerimeter.texture.width;
+            }
+            SetTopLeft(academyPerimeter.rectTransform,
+                (mapWidth * cellSize - width) * .5f,
+                -SurroundPaddingCells * cellSize, width, height);
+        }
+
+        private void RefreshUnitOrder()
+        {
+            visibleUnits.Clear();
+            depthLayers.Clear();
+            foreach (CellView cell in cells.Values.Where(value => value.Object.gameObject.activeSelf)
+                .OrderBy(value => value.ObjectFoot.y).ThenBy(value => value.ObjectFoot.x))
+                cell.Object.transform.SetAsLastSibling();
+            foreach (CellView cell in cells.Values)
+            {
+                if (cell.Unit.gameObject.activeSelf)
+                { visibleUnits.Add(cell); depthLayers.Add(new DepthLayer(cell.Unit, cell.VisualFoot, false)); }
+                if (cell.ObjectFront != null && cell.ObjectFront.gameObject.activeSelf)
+                    depthLayers.Add(new DepthLayer(cell.ObjectFront, cell.ObjectFoot, true));
+            }
+            visibleUnits.Sort(CompareVisualFoot);
+            depthLayers.Sort((a, b) => CombatObjectLayerLayout.CompareDepth(a.Foot, a.IsFront, b.Foot, b.IsFront));
+            foreach (DepthLayer layer in depthLayers) layer.Image.transform.SetAsLastSibling();
+            RefreshOcclusionContours();
+            RefreshPreviewObjectContours();
+            RefreshAnnotations();
+        }
+
+        private static Rect BoardImageRect(RawImage image)
+        {
+            RectTransform rect = image.rectTransform;
+            return new Rect(rect.anchoredPosition.x, -rect.anchoredPosition.y, rect.rect.width, rect.rect.height);
+        }
+
+        private void RefreshOcclusionContours()
+        {
+            OccludedUnitCount = OcclusionPixelCount = 0;
+            foreach (CellView cell in cells.Values)
+                if (!cell.Unit.gameObject.activeSelf && cell.Contour != null) cell.Contour.gameObject.SetActive(false);
+            foreach (CellView cell in visibleUnits)
+            {
+                occlusionForeground.Clear();
+                bool afterSubject = false;
+                Rect subject = BoardImageRect(cell.Unit);
+                foreach (DepthLayer layer in depthLayers)
+                {
+                    if (ReferenceEquals(layer.Image, cell.Unit)) { afterSubject = true; continue; }
+                    if (!afterSubject || layer.Image.color.a < .5f || !subject.Overlaps(BoardImageRect(layer.Image))) continue;
+                    var texture = layer.Image.texture as Texture2D;
+                    if (texture != null)
+                        occlusionForeground.Add(new CombatOcclusionLayer(BoardImageRect(layer.Image), layer.Image.uvRect,
+                            unitHitMasks.Get(texture)));
+                }
+                if ((!cell.PreviewedUnit && occlusionForeground.Count == 0) || cell.Unit.color.a < .5f)
+                { if (cell.Contour != null) cell.Contour.gameObject.SetActive(false); continue; }
+                if (cell.Contour == null)
+                {
+                    GameObject contour = FormalUiKit.Create("遮挡轮廓_" + cell.PresentedUnitId, unitLayerRect);
+                    cell.Contour = contour.AddComponent<CombatUnitContourGraphic>();
+                }
+                SetTopLeft(cell.Contour.rectTransform, subject.x, subject.y, subject.width, subject.height);
+                Color tint = cell.PreviewedUnit ? Color.white :
+                    cell.PresentedIsHero ? FormalUiTheme.Cyan : FormalUiTheme.Danger;
+                cell.Contour.Refresh(unitHitMasks.Get(cell.Unit.texture as Texture2D), cell.Unit.uvRect, subject,
+                    occlusionForeground, FormalUiTheme.WithAlpha(tint, cell.PreviewedUnit ? 1f : .90f),
+                    cell.PreviewedUnit);
+                cell.Contour.transform.SetAsLastSibling();
+                if (!cell.PreviewedUnit && cell.Contour.HiddenPixelCount > 0)
+                { OccludedUnitCount++; OcclusionPixelCount += cell.Contour.HiddenPixelCount; }
+            }
+        }
+
+        private void RefreshPreviewObjectContours()
+        {
+            foreach (CellView cell in cells.Values)
+            {
+                var texture = cell.Object.texture as Texture2D;
+                if (!cell.PreviewedObject || !cell.Object.gameObject.activeSelf || texture == null)
+                { if (cell.ObjectContour != null) cell.ObjectContour.gameObject.SetActive(false); continue; }
+                if (cell.ObjectContour == null)
+                {
+                    GameObject contour = FormalUiKit.Create("命中物块白色轮廓_" + cell.Root.name, overlayLayerRect);
+                    cell.ObjectContour = contour.AddComponent<CombatUnitContourGraphic>();
+                }
+                float cellSize = cell.Rect.rect.width;
+                var layout = new CombatObjectLayerLayout(cellSize, texture.width, texture.height, 0);
+                Rect local = layout.BackRect;
+                Rect subject = new Rect(cell.Rect.anchoredPosition.x + local.x,
+                    -cell.Rect.anchoredPosition.y + local.y, local.width, local.height);
+                SetTopLeft(cell.ObjectContour.rectTransform, subject.x, subject.y, subject.width, subject.height);
+                cell.ObjectContour.Refresh(unitHitMasks.Get(texture), new Rect(0f, 0f, 1f, 1f),
+                    subject, Array.Empty<CombatOcclusionLayer>(), Color.white, true);
+                cell.ObjectContour.transform.SetAsLastSibling();
+            }
+        }
+
+        private void RefreshObjectLayers(CellView cell, BattlefieldCellPresentation model, float cellSize,
+            Texture2D objectTexture)
+        {
+            var layout = new CombatObjectLayerLayout(cellSize, objectTexture == null ? 0 : objectTexture.width,
+                objectTexture == null ? 0 : objectTexture.height,
+                model.ObjectForegroundRows);
+            cell.Object.uvRect = layout.BackUv;
+            SetTopLeft(cell.Object.rectTransform, cell.Rect.anchoredPosition.x + layout.BackRect.x,
+                -cell.Rect.anchoredPosition.y + layout.BackRect.y,
+                layout.BackRect.width, layout.BackRect.height);
+            // Fixed terrain never inherits an actor's travel or attack offset.
+            cell.ObjectFoot = new Vector2(cell.Rect.anchoredPosition.x, -cell.Rect.anchoredPosition.y + cellSize);
+            if (!layout.HasFront || objectTexture == null)
+            { if (cell.ObjectFront != null) cell.ObjectFront.gameObject.SetActive(false); return; }
+            if (cell.ObjectFront == null)
+                cell.ObjectFront = Layer("地形前沿_" + model.Position.X + "_" + model.Position.Y, unitLayerRect);
+            Set(cell.ObjectFront, objectTexture, Color.white);
+            cell.ObjectFront.uvRect = layout.FrontUv;
+            SetTopLeft(cell.ObjectFront.rectTransform, cell.Rect.anchoredPosition.x + layout.FrontRect.x,
+                -cell.Rect.anchoredPosition.y + layout.FrontRect.y, layout.FrontRect.width, layout.FrontRect.height);
+        }
+
+        private readonly struct DepthLayer
+        {
+            public RawImage Image { get; }
+            public Vector2 Foot { get; }
+            public bool IsFront { get; }
+            public DepthLayer(RawImage image, Vector2 foot, bool isFront)
+            { Image = image; Foot = foot; IsFront = isFront; }
+        }
+
+        private void RefreshAnnotations()
+        {
+            if (host?.BattlefieldViewport == null || boardRect == null) return;
+            annotationObstacles.Clear(); placedIntents.Clear(); intentUnits.Clear();
+            annotationInformation.Clear();
+            annotationBodies.Clear();
+            CrowdedIntentCount = 0;
+            Rect safe = new Rect(-boardRect.anchoredPosition.x, boardRect.anchoredPosition.y,
+                viewportRect.rect.width, viewportRect.rect.height);
+            foreach (CellView cell in visibleUnits)
+            {
+                RectTransform unit = cell.Unit.rectTransform;
+                float unitScale = unit.sizeDelta.x / 128f;
+                // The head clearance follows the drawn height. Narrow 32x64 units are rendered
+                // taller than they are wide; using their width pushed the intent a full step up.
+                float unitHeightScale = unit.sizeDelta.y / 128f;
+                Rect body = new Rect(unit.anchoredPosition.x + 8 * unitScale, -unit.anchoredPosition.y + 24 * unitHeightScale,
+                    unit.sizeDelta.x - 16 * unitScale, unit.sizeDelta.y - 32 * unitScale);
+                annotationObstacles.Add(body);
+                if (!string.IsNullOrEmpty(cell.PresentedUnitId)) annotationBodies[cell.PresentedUnitId] = body;
+                if (cell.Health.Root.activeSelf)
+                {
+                    Rect bounds = BoardChildRect(cell, cell.Health.Rect);
+                    annotationObstacles.Add(bounds); annotationInformation.Add(bounds);
+                }
+                if (cell.Mana.Root.activeSelf)
+                {
+                    Rect bounds = BoardChildRect(cell, cell.Mana.Rect);
+                    annotationObstacles.Add(bounds); annotationInformation.Add(bounds);
+                }
+                if (cell.Shield.Root.activeSelf)
+                {
+                    Rect bounds = BoardChildRect(cell, cell.Shield.Rect);
+                    annotationObstacles.Add(bounds); annotationInformation.Add(bounds);
+                }
+                foreach (GameObject status in cell.StatusRoots)
+                    if (status.activeSelf)
+                    {
+                        Rect bounds = BoardChildRect(cell, status.GetComponent<RectTransform>());
+                        annotationObstacles.Add(bounds); annotationInformation.Add(bounds);
+                    }
+                if (cell.IntentRoot.activeSelf)
+                {
+                    if (body.Overlaps(safe)) intentUnits.Add(cell);
+                    else cell.IntentRoot.SetActive(false);
+                }
+            }
+            intentUnits.Sort((a, b) => {
+                Rect first = BoardChildRect(a, a.IntentRect), second = BoardChildRect(b, b.IntentRect);
+                int row = first.y.CompareTo(second.y);
+                if (row != 0) return row;
+                int column = first.x.CompareTo(second.x);
+                return column != 0 ? column : string.Compare(a.PresentedUnitId, b.PresentedUnitId, StringComparison.Ordinal);
+            });
+            foreach (CellView cell in intentUnits)
+            {
+                Rect desired = BoardChildRect(cell, cell.IntentRect);
+                CombatIntentPlacement placement = CombatIntentLayout.Place(desired, safe, annotationObstacles, placedIntents);
+                if (placement.ObscuredArea > 0 || !placement.FitsViewport) CrowdedIntentCount++;
+                placedIntents.Add(placement.Bounds);
+                SetBoardChildRect(cell, cell.IntentRect, placement.Bounds);
+                RefreshIntentLink(cell, desired, placement.Bounds);
+            }
+            RefreshActiveTurnMarker(safe);
+            RefreshTimelineHoverMarker(safe);
+        }
+
+        private static Rect BoardChildRect(CellView cell, RectTransform child) => new Rect(
+            cell.OverlayRect.anchoredPosition.x + child.anchoredPosition.x,
+            -cell.OverlayRect.anchoredPosition.y - child.anchoredPosition.y, child.sizeDelta.x, child.sizeDelta.y);
+
+        private static void SetBoardChildRect(CellView cell, RectTransform child, Rect rect) =>
+            SetTopLeft(child, rect.x - cell.OverlayRect.anchoredPosition.x,
+                rect.y + cell.OverlayRect.anchoredPosition.y, rect.width, rect.height);
+
+        private static void RefreshIntentLink(CellView cell, Rect desired, Rect placed)
+        {
+            bool moved = (desired.position - placed.position).sqrMagnitude > 1;
+            if (moved && cell.IntentLinks.Length == 0)
+            {
+                // Empty board cells do not need four invisible line objects each.
+                cell.IntentLinks = new Image[4];
+                for (int i = 0; i < cell.IntentLinks.Length; i++)
+                {
+                    GameObject link = FormalUiKit.Create("敌情引线_" + i, cell.OverlayRect);
+                    cell.IntentLinks[i] = link.AddComponent<Image>();
+                    cell.IntentLinks[i].raycastTarget = false;
+                    link.transform.SetSiblingIndex(cell.IntentRoot.transform.GetSiblingIndex());
+                }
+            }
+            foreach (Image link in cell.IntentLinks) link.gameObject.SetActive(moved);
+            if (!moved) return;
+            Vector2 target = new Vector2(Mathf.Round(desired.center.x / 2) * 2, Mathf.Round(desired.yMax / 2) * 2);
+            Vector2 source = new Vector2(Mathf.Round(Mathf.Clamp(target.x, placed.xMin + 4, placed.xMax - 4) / 2) * 2,
+                target.y >= placed.center.y ? placed.yMax : placed.yMin);
+            for (int i = 0; i < 4; i++)
+            {
+                float thickness = i < 2 ? 4 : 2;
+                bool horizontal = i % 2 == 0;
+                Rect line = horizontal
+                    ? new Rect(Mathf.Min(source.x, target.x), source.y - 2, Mathf.Max(thickness, Mathf.Abs(source.x - target.x)), thickness)
+                    : new Rect(target.x - 2, Mathf.Min(source.y, target.y), thickness, Mathf.Max(thickness, Mathf.Abs(source.y - target.y)));
+                SetBoardChildRect(cell, cell.IntentLinks[i].rectTransform, line);
+                cell.IntentLinks[i].color = i < 2 ? FormalUiTheme.Ink : FormalUiTheme.OnInk;
+            }
+        }
+
+        private void RefreshActiveTurnMarker(Rect visibleArea)
+        {
+            if (activeTurnMarker == null)
+            {
+                activeTurnMarker = FormalUiKit.Create("当前行动者黑底白框", boardRect).AddComponent<RectTransform>();
+                BuildActiveTurnMarker();
+            }
+            CellView actor = visibleUnits.FirstOrDefault(cell => cell.PresentedUnitId == host.CurrentState?.ActiveUnitId);
+            activeTurnMarker.gameObject.SetActive(actor != null);
+            if (actor == null)
+            {
+                activeTurnMarkerUnitId = null;
+                hasActiveTurnMarkerTarget = false;
+                return;
+            }
+            float scale = host.BattlefieldViewport.CellSize / 64f;
+            Rect frame = CombatIntentLayout.ActiveTurnMarker(actor.VisualFoot, host.BattlefieldViewport.CellSize);
+            activeTurnMarker.gameObject.SetActive(frame.Overlaps(visibleArea));
+            activeTurnMarker.localScale = new Vector3(scale, scale, 1f);
+            activeTurnMarker.sizeDelta = new Vector2(72f, 86f);
+            // Place the marker just AFTER the unit layer, and only when it is not already there. Assigning
+            // the unit layer's own index every frame made the two swap draw order each frame, so the marker
+            // (whose black/cyan pointer sits over the actor's body) flickered in front of and behind the
+            // unit. +1 is a fixed point, so this settles after the first frame.
+            if (unitLayerRect != null)
+            {
+                int desired = unitLayerRect.GetSiblingIndex() + 1;
+                if (activeTurnMarker.GetSiblingIndex() != desired) activeTurnMarker.SetSiblingIndex(desired);
+            }
+            Vector2 target = new Vector2(frame.x, -frame.y);
+            bool actorChanged = !string.IsNullOrEmpty(activeTurnMarkerUnitId) && activeTurnMarkerUnitId != actor.PresentedUnitId;
+            bool targetChanged = !hasActiveTurnMarkerTarget || activeTurnMarkerTarget != target;
+            if (actorChanged && targetChanged && activeTurnMarker.gameObject.activeInHierarchy)
+            {
+                activeTurnMarker.DOKill();
+                DOTween.To(() => activeTurnMarker.anchoredPosition,
+                    value => activeTurnMarker.anchoredPosition = value, target, .32f)
+                    .SetEase(Ease.InOutCubic).SetUpdate(true).SetTarget(activeTurnMarker);
+            }
+            else if (targetChanged)
+            {
+                activeTurnMarker.DOKill();
+                activeTurnMarker.anchoredPosition = target;
+            }
+            activeTurnMarkerUnitId = actor.PresentedUnitId;
+            activeTurnMarkerTarget = target;
+            hasActiveTurnMarkerTarget = true;
+        }
+
+        private void BuildActiveTurnMarker()
+        {
+            activeTurnMarker.anchorMin = activeTurnMarker.anchorMax = activeTurnMarker.pivot = new Vector2(0f, 1f);
+            Color black = new Color(.015f, .018f, .018f, .94f);
+            Color signal = FormalUiTheme.Cyan;
+            AddCorner(0, 14, false, false, black, signal);
+            AddCorner(72, 14, true, false, black, signal);
+            AddCorner(0, 86, false, true, black, signal);
+            AddCorner(72, 86, true, true, black, signal);
+            AddMarkerPart("指针黑_0", new Rect(28, 0, 16, 4), black);
+            AddMarkerPart("指针黑_1", new Rect(30, 4, 12, 4), black);
+            AddMarkerPart("指针黑_2", new Rect(32, 8, 8, 4), black);
+            AddMarkerPart("指针黑_3", new Rect(34, 12, 4, 2), black);
+            AddMarkerPart("指针青_0", new Rect(30, 1, 12, 2), signal);
+            AddMarkerPart("指针青_1", new Rect(32, 5, 8, 2), signal);
+            AddMarkerPart("指针青_2", new Rect(34, 9, 4, 2), signal);
+        }
+
+        private void RefreshTimelineHoverMarker(Rect visibleArea)
+        {
+            if (timelineHoverMarker == null)
+            {
+                timelineHoverMarker = FormalUiKit.Create("行动条悬浮头顶箭头", boardRect).AddComponent<RectTransform>();
+                timelineHoverMarker.anchorMin = timelineHoverMarker.anchorMax = timelineHoverMarker.pivot = new Vector2(0f, 1f);
+                Sprite arrow = Resources.Load<Sprite>(BattlefieldMarkerLadder.TimelineHoverArrowPath);
+                if (arrow == null)
+                    throw new System.IO.FileNotFoundException("Missing timeline hover arrow: " +
+                        BattlefieldMarkerLadder.TimelineHoverArrowPath);
+                timelineHoverArrow = FormalUiKit.Create("头顶循环箭头", timelineHoverMarker).AddComponent<Image>();
+                timelineHoverArrow.sprite = arrow;
+                timelineHoverArrow.color = Color.white;
+                timelineHoverArrow.preserveAspect = true;
+                timelineHoverArrow.raycastTarget = false;
+                SetTopLeft(timelineHoverArrow.rectTransform, 0f, 0f,
+                    BattlefieldMarkerLadder.TimelineHoverArrowNativePixels,
+                    BattlefieldMarkerLadder.TimelineHoverArrowNativePixels);
+                DOTween.To(() => timelineHoverArrow.rectTransform.anchoredPosition.y,
+                        y => timelineHoverArrow.rectTransform.anchoredPosition = new Vector2(
+                            timelineHoverArrow.rectTransform.anchoredPosition.x, y), -2f, .42f)
+                    .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine).SetUpdate(true).SetTarget(timelineHoverMarker);
+            }
+
+            CellView target = string.IsNullOrEmpty(timelineHoveredUnitId) ? null :
+                visibleUnits.FirstOrDefault(cell => cell.PresentedUnitId == timelineHoveredUnitId);
+            if (target == null)
+            {
+                timelineHoverMarker.gameObject.SetActive(false);
+                return;
+            }
+
+            Rect unitBounds = annotationBodies.TryGetValue(target.PresentedUnitId, out Rect visibleBody)
+                ? visibleBody : BoardImageRect(target.Unit);
+            Rect intentBounds = target.IntentRoot.activeSelf ? BoardChildRect(target, target.IntentRect) : default;
+            Rect arrowBounds = CombatIntentLayout.TimelineHoverArrow(unitBounds, intentBounds,
+                target.IntentRoot.activeSelf, visibleArea, host.BattlefieldViewport.CellSize,
+                annotationObstacles, placedIntents);
+            timelineHoverMarker.gameObject.SetActive(arrowBounds.Overlaps(visibleArea));
+            float scale = host.BattlefieldViewport.CellSize / 64f;
+            timelineHoverMarker.localScale = new Vector3(scale, scale, 1f);
+            timelineHoverMarker.sizeDelta = Vector2.one * BattlefieldMarkerLadder.TimelineHoverArrowNativePixels;
+            // Same stable placement as the active-turn marker: assigning the unit layer's own index here
+            // would swap the two siblings every frame.
+            if (unitLayerRect != null)
+            {
+                int desired = unitLayerRect.GetSiblingIndex() + 1;
+                if (timelineHoverMarker.GetSiblingIndex() != desired) timelineHoverMarker.SetSiblingIndex(desired);
+            }
+            timelineHoverMarker.anchoredPosition = new Vector2(arrowBounds.x, -arrowBounds.y);
+        }
+
+        private void AddCorner(float x, float y, bool right, bool bottom, Color black, Color signal)
+        {
+            float horizontalX = right ? x - 24 : x;
+            float verticalX = right ? x - 8 : x;
+            float horizontalY = bottom ? y - 8 : y;
+            float verticalY = bottom ? y - 24 : y;
+            AddMarkerPart("角框黑横", new Rect(horizontalX, horizontalY, 24, 8), black);
+            AddMarkerPart("角框黑竖", new Rect(verticalX, verticalY, 8, 24), black);
+            AddMarkerPart("角框青横", new Rect(horizontalX + (right ? 0 : 4), horizontalY + 3, 20, 3), signal);
+            AddMarkerPart("角框青竖", new Rect(verticalX + 3, verticalY + (bottom ? 0 : 4), 3, 20), signal);
+        }
+
+        private void AddMarkerPart(string name, Rect bounds, Color color)
+        {
+            Image image = FormalUiKit.Create(name + "_" + activeTurnMarkerParts.Count, activeTurnMarker).AddComponent<Image>();
+            image.color = color;
+            image.raycastTarget = false;
+            SetTopLeft(image.rectTransform, bounds.x, bounds.y, bounds.width, bounds.height);
+            activeTurnMarkerParts.Add(image);
+        }
+
+        private static int CompareVisualFoot(CellView a, CellView b)
+        {
+            int row = a.VisualFoot.y.CompareTo(b.VisualFoot.y);
+            return row != 0 ? row : a.VisualFoot.x.CompareTo(b.VisualFoot.x);
+        }
+
+        private static void RefreshVital(BarView bar, CombatUnitVitalPresentation vital, BattlefieldRect cell,
+            bool shieldVisible, Color forecastColor)
+        {
+            RefreshVitalAt(bar, vital, cell, CombatUnitHudLayout.UnitHealthBarRect(cell, shieldVisible),
+                forecastColor, true);
+        }
+
+        private static void RefreshMana(BarView bar, CombatUnitVitalPresentation vital, BattlefieldRect cell)
+        {
+            RefreshVitalAt(bar, vital, cell, CombatUnitHudLayout.UnitManaBarRect(cell),
+                FormalUiTheme.ResourceMagicFill, false);
+        }
+
+        private static void RefreshVitalAt(BarView bar, CombatUnitVitalPresentation vital, BattlefieldRect cell,
+            Rect absolute, Color forecastColor, bool showValue)
+        {
+            bar.Root.SetActive(vital != null);
+            if (vital == null) return;
+            if (bar.LastCurrent >= 0 && bar.LastCurrent != vital.Current)
+            {
+                bar.FlashUntil = Time.unscaledTime + .28f;
+                bar.MarkerUntil = Time.unscaledTime + .42f;
+                bar.MarkerRatio = vital.RemainingRatio;
+                bar.MarkerColor = vital.Current < bar.LastCurrent ? FormalUiTheme.Danger : FormalUiTheme.Safe;
+            }
+            bar.LastCurrent = vital.Current;
+            float flash = bar.FlashUntil > Time.unscaledTime
+                ? Mathf.PingPong((bar.FlashUntil - Time.unscaledTime) * 12f, 1f)
+                : 0f;
+            // The semantic bar sprites carry their own approved colour and black contour.
+            // Keep the tint neutral so health red and shield steel/cyan are not multiplied away.
+            bar.Fill.color = Color.Lerp(bar.BaseColor, Color.white, flash * .42f);
+            bar.Forecast.color = FormalUiTheme.WithAlpha(forecastColor, .82f);
+            float markerFlash = bar.MarkerUntil > Time.unscaledTime
+                ? Mathf.PingPong((bar.MarkerUntil - Time.unscaledTime) * 10f, 1f)
+                : 0f;
+            bar.Marker.rectTransform.anchorMin = new Vector2(Mathf.Clamp(bar.MarkerRatio, .02f, .98f), 0f);
+            bar.Marker.rectTransform.anchorMax = new Vector2(Mathf.Clamp(bar.MarkerRatio, .02f, .98f), 1f);
+            bar.Marker.color = FormalUiTheme.WithAlpha(bar.MarkerColor, markerFlash * .95f);
+            SetTopLeft(bar.Rect, absolute.x - cell.X, absolute.y - cell.Y, absolute.width, absolute.height);
+            float inset = CombatUnitHudLayout.UnitBarBorder(cell);
+            bar.Fill.rectTransform.offsetMin = new Vector2(inset, inset);
+            bar.Fill.rectTransform.offsetMax = new Vector2(-inset, -inset);
+            bar.Forecast.rectTransform.offsetMin = new Vector2(inset, inset);
+            bar.Forecast.rectTransform.offsetMax = new Vector2(-inset, -inset);
+            if (bar.DisplayedRatio < 0f) bar.DisplayedRatio = vital.RemainingRatio;
+            bar.DisplayedRatio = Mathf.MoveTowards(bar.DisplayedRatio, vital.RemainingRatio,
+                Time.unscaledDeltaTime / .18f);
+            bar.Fill.fillAmount = bar.DisplayedRatio;
+            bar.Forecast.gameObject.SetActive(vital.ForecastLoss > 0);
+            bar.Forecast.rectTransform.anchorMin = new Vector2(vital.RemainingRatio, 0f);
+            bar.Forecast.rectTransform.anchorMax = new Vector2(vital.CurrentRatio, 1f);
+            string text = showValue ? CombatUnitHudLayout.VitalText(vital, cell.Width) : string.Empty;
+            bar.Value.gameObject.SetActive(!string.IsNullOrEmpty(text));
+            bar.Value.text = text;
+            bar.Value.fontSize = CombatUnitHudLayout.VitalFontSize(cell.Width, true);
+        }
+
+        private static void RefreshShieldBadge(ShieldBadgeView badge, CombatUnitVitalPresentation shield,
+            BattlefieldRect cell)
+        {
+            bool visible = shield != null && shield.Current > 0;
+            badge.Root.SetActive(visible);
+            if (!visible) return;
+            Rect absolute = CombatUnitHudLayout.UnitShieldBadgeRect(cell);
+            SetTopLeft(badge.Rect, absolute.x - cell.X, absolute.y - cell.Y, absolute.width, absolute.height);
+            float scale = absolute.height / 16f;
+            SetTopLeft(badge.Icon.rectTransform, 0f, 0f, 16f * scale, 16f * scale);
+            SetTopLeft(badge.Value.rectTransform, 16f * scale, 0f, 16f * scale, 16f * scale);
+            badge.Value.text = shield.Current.ToString();
+            badge.Value.fontSize = FormalUiTheme.PixelAlignedFontSize(Mathf.RoundToInt(12f * scale), false);
+        }
+
+        private void RefreshStatuses(CellView cell, IReadOnlyList<BattlefieldStatusVisual> statuses, BattlefieldRect contract)
+        {
+            for (int i = 0; i < cell.StatusRoots.Length; i++)
+            {
+                bool active = statuses != null && i < statuses.Count;
+                cell.StatusRoots[i].SetActive(active);
+                if (!active) continue;
+                Rect absolute = CombatUnitHudLayout.UnitStatusIconRect(contract, i);
+                RectTransform rect = (RectTransform)cell.StatusRoots[i].transform;
+                SetTopLeft(rect, absolute.x - contract.X, absolute.y - contract.Y, absolute.width, absolute.height);
+                cell.StatusIcons[i].texture = statuses[i].Texture;
+                cell.StatusValues[i].text = statuses[i].Presentation.ValueText;
+                Stretch(cell.StatusValues[i].rectTransform);
+                CombatStatusPresentation description = statuses[i].Presentation;
+                CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(
+                    CombatFeedbackCatalog.ForStatus(description.Status));
+                Color accent = ColorUtility.TryParseHtmlString(semantic.ColorHex, out Color parsed)
+                    ? parsed : FormalUiTheme.Amber;
+                cell.StatusRoots[i].GetComponent<FormalHoverTooltipTrigger>().Configure(enemyDetail.HoverTooltip,
+                    () => new FormalTooltipContent(description.DisplayName + " " + description.ValueText,
+                        description.HoverDescription, accent));
+            }
+        }
+
+        private void RefreshIntent(CellView cell, EnemyIntentPresentation intent, Texture2D texture, BattlefieldRect contract)
+        {
+            foreach (Image link in cell.IntentLinks) link.gameObject.SetActive(false);
+            bool active = intent != null && texture != null;
+            cell.IntentRoot.SetActive(active);
+            if (!active) return;
+            Rect absolute = CombatUnitHudLayout.EnemyIntentBadgeRect(contract, intent.ExpectedDamage);
+            SetTopLeft(cell.IntentRect, absolute.x - contract.X, absolute.y - contract.Y, absolute.width, absolute.height);
+            Rect icon = CombatUnitHudLayout.EnemyIntentTextureLocalRect(texture.width, texture.height);
+            SetTopLeft(cell.IntentIcon.rectTransform, icon.x, icon.y, icon.width, icon.height);
+            cell.IntentIcon.texture = texture;
+            float age = intentChanges.Age(cell.PresentedUnitId, Time.unscaledTime);
+            bool changing = age < CombatIntentChangeTracker.Duration;
+            bool animate = host.UiPreferences.AnimationIntensity > .01f;
+            float blink = changing && animate ? (Mathf.FloorToInt(age / .12f) % 2 == 0 ? 1f : .25f) : 0f;
+            cell.IntentIcon.color = Color.Lerp(Color.white, new Color(1f, .72f, .22f), blink * .7f);
+            if (changing && animate && age < .30f) cell.IntentIcon.rectTransform.anchoredPosition += Vector2.up * (Mathf.FloorToInt(age / .075f) % 2 == 0 ? 2f : 0f);
+            Image signal = cell.IntentRoot.GetComponent<Image>();
+            signal.color = changing ? new Color(1f, .69f, .2f, animate ? blink * .22f : .14f) : Color.clear;
+            Rect damage = CombatUnitHudLayout.EnemyIntentDamageLocalRect(absolute.width);
+            SetTopLeft(cell.IntentDamage.rectTransform, damage.x, damage.y, damage.width, damage.height);
+            cell.IntentDamage.text = intent.ExpectedDamage > 0 ? intent.ExpectedDamage.ToString() : string.Empty;
+            cell.IntentChange.text = changing ? "变" : string.Empty;
+            cell.IntentDamage.color = changing ? new Color(1f, .77f, .37f) : new Color(1f, .87f, .72f);
+        }
+
+        private void UpdateInput()
+        {
+            BattlefieldViewport viewport = host.BattlefieldViewport;
+            if (viewport == null) return;
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard?.homeKey.wasPressedThisFrame == true) { if(hd2dSample != null) hd2dSample.ResetOverview(); else host.FocusBattlefieldOnHero(); }
+        }
+
+        internal void BeginDrag(PointerEventData eventData)
+        {
+            if (eventData.button != PointerEventData.InputButton.Left || host.IsInteractionModalOpen) return;
+            // BeginDrag is dispatched only after Unity's drag threshold; cancel the matching click
+            // so panning across a cell cannot also submit a combat action.
+            eventData.eligibleForClick = false;
+            HideTooltip();
+            eventData.Use();
+        }
+
+        internal void Drag(PointerEventData eventData)
+        {
+            if (eventData.button != PointerEventData.InputButton.Left || host.IsInteractionModalOpen || host.BattlefieldViewport == null) return;
+            float scale = canvas != null && canvas.scaleFactor > 0f ? canvas.scaleFactor : 1f;
+            HideTooltip();
+            host.BattlefieldViewport.Pan(eventData.delta.x / scale, -eventData.delta.y / scale);
+            eventData.Use();
+        }
+
+        private void PlayCombatEntry()
+        {
+            if (root == null || viewportRect == null) return;
+            IUiPreferenceHost preferences = host as IUiPreferenceHost;
+            UiMotionProfile motion = UiMotionProfile.FromIntensity(preferences == null ? 1f : preferences.UiPreferences.AnimationIntensity);
+            CanvasGroup group = root.GetComponent<CanvasGroup>();
+            // Unity can retain a managed wrapper for a component destroyed during a UI rebuild;
+            // use Unity's null check rather than ?? so that wrapper is not reused.
+            if (group == null) group = root.AddComponent<CanvasGroup>();
+            if (group == null) return;
+            DOTween.Kill(this);
+            group.DOKill();
+            viewportRect.DOKill();
+            if (motion.IsImmediate)
+            {
+                group.alpha = 1f;
+                viewportRect.localScale = Vector3.one;
+                return;
+            }
+            group.alpha = 0f;
+            viewportRect.localScale = Vector3.one * .96f;
+            DOTween.Sequence().SetTarget(this).SetUpdate(true)
+                .Join(DOTween.To(() => group.alpha, value => group.alpha = value, 1f, motion.StandardDuration)
+                    .SetEase(FormalUiMotionTokens.StandardEase))
+                .Join(viewportRect.DOScale(1f, motion.StandardDuration).SetEase(FormalUiMotionTokens.StandardEase));
+        }
+
+        internal void Scroll(PointerEventData eventData)
+        {
+            if (host.IsInteractionModalOpen || host.BattlefieldViewport == null) return;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(viewportRect, eventData.position,
+                    eventData.pressEventCamera, out Vector2 local)) return;
+            BattlefieldRect bounds = host.BattlefieldViewport.ViewportRect;
+            int direction = eventData.scrollDelta.y > 0f ? 1 : -1;
+            HideTooltip();
+            host.BattlefieldViewport.ZoomAt(bounds.X + local.x, bounds.Y - local.y, direction);
+            eventData.Use();
+        }
+
+        private void SubmitPrimaryCell(GridPosition position, int _)
+        {
+            if (contextMenuRoot != null && contextMenuRoot.activeSelf)
+            {
+                HideContextMenu();
+                return;
+            }
+            if (host.IsInteractionModalOpen) return;
+
+            bool same = hasPendingPrimaryPosition && pendingPrimaryPosition == position &&
+                pendingPrimaryAction == host.SelectedAction && pendingPrimaryTurn == host.CurrentState.TurnSequence;
+            bool moving = host.SelectedAction == "移动";
+            if (same && (!moving || Time.unscaledTime - pendingPrimaryAt <= DoubleClickWindowSeconds))
+            {
+                CancelPendingPrimaryClick();
+                if (moving) host.SubmitBattlefieldQuickMove(position);
+                else host.SubmitBattlefieldCell(position, false);
+                return;
+            }
+            CancelPendingPrimaryClick();
+            host.PreviewBattlefieldCell(position);
+            pendingPrimaryPosition = position;
+            pendingPrimaryAction = host.SelectedAction;
+            pendingPrimaryTurn = host.CurrentState.TurnSequence;
+            pendingPrimaryAt = Time.unscaledTime;
+            hasPendingPrimaryPosition = true;
+        }
+
+        public void ReactToCommand(bool accepted)
+        {
+            GridPosition position = hasHoverPosition ? hoverPosition : pendingPrimaryPosition;
+            if(hd2dSample!=null&&hd2dSample.SelectedCell.HasValue)
+                hd2dSample.GetComponent<Hd2DBattlefieldTactics>()?.ShowResult(hd2dSample.SelectedCell.Value,accepted);
+            if (cells.TryGetValue(position, out CellView cell)) cell.RangeGraphic.ShowResult(accepted);
+            CancelPendingPrimaryClick();
+        }
+
+        public static bool IsConfirmedQuickMove(GridPosition position, GridPosition pendingPosition,
+            bool hasPendingPosition, bool canQuickMove) =>
+            hasPendingPosition && canQuickMove && position == pendingPosition;
+
+        private void CancelPendingPrimaryClick()
+        {
+            hasPendingPrimaryPosition = false;
+        }
+
+        public void CancelPointerConfirmation() => CancelPendingPrimaryClick();
+
+        private void SubmitContextCell(GridPosition position)
+        {
+            if (contextMenuRoot != null && contextMenuRoot.activeSelf)
+                HideContextMenu();
+            if (host.IsInteractionModalOpen) return;
+            CancelPendingPrimaryClick();
+            host.SubmitBattlefieldCell(position, true);
+            ShowContextMenu(position);
+        }
+
+        private void ShowContextMenu(GridPosition position)
+        {
+            HideTooltip();
+            IReadOnlyList<BattlefieldContextAction> actions = host.ContextActionsAt(position);
+            if (actions == null || actions.Count == 0)
+            {
+                host.NotifyBattlefieldContextUnavailable(position);
+                return;
+            }
+
+            EnsureContextMenu();
+            float contentHeight = actions.Count * ContextMenuRowHeight;
+            float height = ContextMenuHeightForActionCount(actions.Count);
+            float viewportHeight = height - ContextMenuHeaderHeight - ContextMenuPadding;
+            bool needsScrolling = ContextMenuNeedsScrolling(actions.Count);
+            Vector2 screen = Mouse.current == null ? Vector2.zero : Mouse.current.position.ReadValue();
+            Vector2 pointer = BattlefieldViewportInputController.ScreenToReferenceUi(screen,
+                Screen.width, Screen.height, ReferenceWidth, ReferenceHeight);
+            float x = Mathf.Clamp(pointer.x + 12f, 8f, ReferenceWidth - ContextMenuWidth - 8f);
+            float y = Mathf.Clamp(pointer.y + 12f, 64f, ReferenceHeight - height - 8f);
+            SetTopLeft(contextMenuPanel, x, y, ContextMenuWidth, height);
+            float viewportWidth = ContextMenuWidth - ContextMenuPadding * 2f -
+                (needsScrolling ? ContextMenuScrollbarWidth + ContextMenuScrollbarGap : 0f);
+            SetTopLeft(contextMenuViewport, ContextMenuPadding, ContextMenuHeaderHeight, viewportWidth, viewportHeight);
+            SetTopLeft(contextMenuContent, 0f, 0f, viewportWidth, Mathf.Max(contentHeight, viewportHeight));
+            SetTopLeft(contextMenuScrollbar.GetComponent<RectTransform>(), ContextMenuWidth - ContextMenuPadding - ContextMenuScrollbarWidth,
+                ContextMenuHeaderHeight, ContextMenuScrollbarWidth, viewportHeight);
+            contextMenuScrollbar.gameObject.SetActive(needsScrolling);
+            contextMenuTitle.text = "位置 " + position.X + "," + position.Y + " 的可执行行动";
+            contextMenuHint.text = "右键切换目标　Esc 或左键空白处关闭";
+
+            while (contextMenuButtons.Count < actions.Count)
+            {
+                CreateContextMenuButton();
+            }
+
+            for (int i = 0; i < contextMenuButtons.Count; i++)
+            {
+                Button button = contextMenuButtons[i];
+                bool active = i < actions.Count;
+                button.gameObject.SetActive(active);
+                if (!active) continue;
+                BattlefieldContextAction action = actions[i];
+                RectTransform rect = button.GetComponent<RectTransform>();
+                SetTopLeft(rect, 0f, i * ContextMenuRowHeight, viewportWidth, ContextMenuButtonHeight);
+                button.GetComponent<UiButtonFeedback>()?.RefreshLayoutPosition();
+                Text label = contextMenuButtonLabels[i];
+                SetTopLeft(label.rectTransform, 14f, 12f, viewportWidth - 28f, 40f);
+                label.text = action.Label;
+                Text detail = contextMenuButtonDetails[i];
+                SetTopLeft(detail.rectTransform, 14f, 52f, viewportWidth - 28f, 40f);
+                detail.text = action.Detail;
+                ContextMenuRowPreview preview = button.GetComponent<ContextMenuRowPreview>();
+                if (preview == null) preview = button.gameObject.AddComponent<ContextMenuRowPreview>();
+                preview.Configure(this, position, action.Id);
+                button.onClick.RemoveAllListeners();
+                string actionId = action.Id;
+                button.onClick.AddListener(() =>
+                {
+                    HideContextMenu();
+                    host.SubmitBattlefieldContextAction(position, actionId);
+                });
+            }
+
+            contextMenuRoot.SetActive(true);
+            Canvas.ForceUpdateCanvases();
+            contextMenuScrollRect.verticalNormalizedPosition = 1f;
+            contextMenuRoot.transform.SetAsLastSibling();
+            contextMenuOpenedFrame = Time.frameCount;
+            host.SetBattlefieldContextMenuOpen(true);
+            contextMenuAnchor = position;
+            contextMenuHoverActionId = string.Empty;
+            // Mark the anchor cell immediately; the row the pointer already rests on refines it on the
+            // next pointer event.
+            host.PreviewBattlefieldContextAction(position, string.Empty);
+        }
+
+        internal static float ContextMenuHeightForActionCount(int actionCount) => Mathf.Min(
+            ContextMenuHeaderHeight + Mathf.Max(0, actionCount) * ContextMenuRowHeight + ContextMenuPadding,
+            ContextMenuMaximumHeight);
+
+        internal static bool ContextMenuNeedsScrolling(int actionCount) =>
+            ContextMenuHeaderHeight + Mathf.Max(0, actionCount) * ContextMenuRowHeight + ContextMenuPadding >
+            ContextMenuMaximumHeight;
+
+        private void EnsureContextMenu()
+        {
+            if (contextMenuRoot != null) return;
+            contextMenuRoot = FormalUiKit.Create("战场右键菜单遮罩", root.transform);
+            RectTransform blockerRect = contextMenuRoot.AddComponent<RectTransform>();
+            Stretch(blockerRect);
+            Canvas contextCanvas = contextMenuRoot.AddComponent<Canvas>();
+            contextCanvas.overrideSorting = true;
+            contextCanvas.sortingOrder = UiLayoutContract.InteractionSortingOrder - 1;
+            contextMenuRoot.AddComponent<GraphicRaycaster>();
+            Image blocker = contextMenuRoot.AddComponent<Image>();
+            blocker.color = Color.clear;
+            blocker.raycastTarget = false;
+
+            GameObject panel = FormalUiKit.Panel("战场右键行动菜单", contextMenuRoot.transform,
+                new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, Vector2.zero,
+                FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .99f));
+            contextMenuPanel = panel.GetComponent<RectTransform>();
+            contextMenuTitle = FormalUiKit.Label("菜单标题", string.Empty, panel.transform,
+                new Vector2(16f, -4f), new Vector2(ContextMenuWidth - 32f, 40f),
+                ContextMenuTitleFontSize,
+                FormalUiTheme.Cyan, TextAnchor.MiddleLeft);
+            contextMenuTitle.fontStyle = FontStyle.Normal;
+            FormalUiKit.PreventAutomaticWrapping(contextMenuTitle);
+            contextMenuHint = FormalUiKit.Label("菜单提示", string.Empty, panel.transform,
+                new Vector2(16f, -40f), new Vector2(ContextMenuWidth - 32f, 40f),
+                ContextMenuDetailFontSize,
+                FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(contextMenuHint);
+
+            GameObject viewportObject = FormalUiKit.Create("行动滚动视口", panel.transform);
+            contextMenuViewport = viewportObject.AddComponent<RectTransform>();
+            Image viewportImage = viewportObject.AddComponent<Image>();
+            viewportImage.color = Color.clear;
+            viewportImage.raycastTarget = true;
+            viewportObject.AddComponent<RectMask2D>();
+            contextMenuScrollRect = viewportObject.AddComponent<ScrollRect>();
+            contextMenuScrollRect.horizontal = false;
+            contextMenuScrollRect.vertical = true;
+            contextMenuScrollRect.movementType = ScrollRect.MovementType.Clamped;
+            contextMenuScrollRect.scrollSensitivity = ContextMenuRowHeight * .65f;
+
+            GameObject contentObject = FormalUiKit.Create("行动滚动内容", viewportObject.transform);
+            contextMenuContent = contentObject.AddComponent<RectTransform>();
+            contextMenuScrollRect.viewport = contextMenuViewport;
+            contextMenuScrollRect.content = contextMenuContent;
+
+            GameObject scrollbarObject = FormalUiKit.Create("行动滚动条", panel.transform);
+            contextMenuScrollbar = scrollbarObject.AddComponent<Scrollbar>();
+            Image scrollbarTrack = scrollbarObject.AddComponent<Image>();
+            scrollbarTrack.color = FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .7f);
+            GameObject handleObject = FormalUiKit.Create("滑块", scrollbarObject.transform);
+            RectTransform handleRect = handleObject.AddComponent<RectTransform>();
+            Stretch(handleRect);
+            Image handle = handleObject.AddComponent<Image>();
+            handle.color = FormalUiTheme.Cyan;
+            contextMenuScrollbar.handleRect = handleRect;
+            contextMenuScrollbar.targetGraphic = handle;
+            contextMenuScrollbar.direction = Scrollbar.Direction.BottomToTop;
+            contextMenuScrollRect.verticalScrollbar = contextMenuScrollbar;
+            contextMenuRoot.SetActive(false);
+        }
+
+        private void CreateContextMenuButton()
+        {
+            Button button = FormalUiKit.Button("位置行动_" + contextMenuButtons.Count, string.Empty,
+                contextMenuContent, Vector2.zero,
+                new Vector2(ContextMenuWidth - ContextMenuPadding * 2f, ContextMenuButtonHeight),
+                FormalUiTheme.Interactive, ContextMenuActionFontSize);
+            Text label = button.GetComponentInChildren<Text>();
+            SetTopLeft(label.rectTransform, 14f, 12f,
+                ContextMenuWidth - ContextMenuPadding * 2f - 28f, 40f);
+            label.alignment = TextAnchor.MiddleLeft;
+            label.fontSize = FormalUiTheme.ResponsiveFontSize(ContextMenuActionFontSize);
+            label.fontStyle = FontStyle.Normal;
+            label.color = FormalUiTheme.Text;
+            Text detail = FormalUiKit.Label("行动资源", string.Empty, button.transform,
+                new Vector2(14f, -52f),
+                new Vector2(ContextMenuWidth - ContextMenuPadding * 2f - 28f, 40f),
+                ContextMenuDetailFontSize, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+            FormalUiKit.PreventAutomaticWrapping(detail);
+            FormalUiKit.ConfigureButtonFeedback(button,
+                FormalUiTheme.ButtonPalette(FormalUiButtonTone.Neutral),
+                () => UiMotionProfile.FromIntensity(1f), null);
+            contextMenuButtons.Add(button);
+            contextMenuButtonLabels.Add(label);
+            contextMenuButtonDetails.Add(detail);
+        }
+
+        private void DismissContextMenuFromOutsideClick()
+        {
+            if (Time.frameCount == contextMenuOpenedFrame || contextMenuPanel == null) return;
+            Mouse mouse = Mouse.current;
+            if (mouse == null || (!mouse.leftButton.wasPressedThisFrame && !mouse.rightButton.wasPressedThisFrame)) return;
+            Camera eventCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay
+                ? canvas.worldCamera : null;
+            if (!RectTransformUtility.RectangleContainsScreenPoint(contextMenuPanel,
+                    mouse.position.ReadValue(), eventCamera))
+                HideContextMenu();
+        }
+
+        internal void HideContextMenu()
+        {
+            if (contextMenuRoot == null || !contextMenuRoot.activeSelf) return;
+            contextMenuRoot.SetActive(false);
+            host?.SetBattlefieldContextMenuOpen(false);
+            host?.ClearBattlefieldContextPreview();
+            contextMenuHoverActionId = string.Empty;
+        }
+
+        /// <summary>
+        /// The view arbitrates which row owns the preview, because a pointer moving between rows can
+        /// deliver the old row's exit after the new row's enter; a naive clear-on-exit would wipe the
+        /// preview the player just moved onto.
+        /// </summary>
+        internal void SetContextRowHover(GridPosition position, string actionId)
+        {
+            contextMenuAnchor = position;
+            contextMenuHoverActionId = actionId ?? string.Empty;
+            host?.PreviewBattlefieldContextAction(contextMenuAnchor, contextMenuHoverActionId);
+        }
+
+        internal void ClearContextRowHover(GridPosition position, string actionId)
+        {
+            if (contextMenuAnchor != position ||
+                !string.Equals(contextMenuHoverActionId, actionId ?? string.Empty, StringComparison.Ordinal)) return;
+            contextMenuHoverActionId = string.Empty;
+            host?.PreviewBattlefieldContextAction(contextMenuAnchor, string.Empty);
+        }
+
+        private void BeginCellHover(GridPosition position)
+        {
+            if (hasHoverPosition && hoverPosition == position)
+            {
+                hoverPointerInside = true;
+                return;
+            }
+
+            bool warmSwitch = Time.unscaledTime - lastHoverRevealAt <= CellHoverWarmWindowSeconds;
+            HideTooltip();
+            hoverPosition = position;
+            hasHoverPosition = true;
+            hoverPointerInside = true;
+            hoverStartedAt = Time.unscaledTime;
+            hoverRevealDelaySeconds = warmSwitch ? CellHoverWarmRevealDelaySeconds : CellHoverRevealDelaySeconds;
+            host?.SetBattlefieldPreviewPosition(position, true);
+        }
+
+        private void EndCellHover()
+        {
+            if (!hasHoverPosition) return;
+            hoverPointerInside = false;
+            StartCoroutine(ClearHoverAfterPointerTransition(hoverPosition));
+        }
+
+        private IEnumerator ClearHoverAfterPointerTransition(GridPosition position)
+        {
+            yield return null;
+            if (hasHoverPosition && hoverPosition == position && !hoverPointerInside)
+            {
+                host?.SetBattlefieldPreviewPosition(position, false);
+                HideTooltip();
+            }
+        }
+
+        private void UpdateHoverReveal()
+        {
+            if (host.IsInteractionModalOpen || contextMenuRoot != null && contextMenuRoot.activeSelf)
+            {
+                HideTooltip();
+                lastHoverRevealAt = float.NegativeInfinity;
+                return;
+            }
+            if (!ShouldRevealCellHover(Time.unscaledTime - hoverStartedAt, hasHoverPosition,
+                    hoverPointerInside, hoverRevealed, hoverRevealDelaySeconds)) return;
+            cells.TryGetValue(hoverPosition, out CellView cell);
+            if (hd2dSample == null && cell == null) { HideTooltip(); return; }
+            BattlefieldCellPresentation model = host.PresentBattlefieldCell(hoverPosition);
+            CombatState state = host.CurrentState;
+            if (model == null || state == null || hoverCard == null) { HideTooltip(); return; }
+
+            hoverCard.Bind(model, state);
+            ConfigureInformationLayer(hoverCard.gameObject, UiLayoutContract.BattlefieldHoverSortingOrder);
+            Vector2 size = hoverCard.CurrentSize;
+            BattlefieldRect board = host.BattlefieldViewport.BoardRect;
+            float cellSize = host.BattlefieldViewport.CellSize;
+            Vector2 projected = hd2dSample != null ? (Vector2)root.transform.InverseTransformPoint(
+                canvas.rootCanvas.transform.TransformPoint(hd2dSample.GridToFeedbackPosition(hoverPosition))) : Vector2.zero;
+            if (hd2dSample != null)
+            {
+                // Projection uses the canvas pivot; popup anchors use its top-left corner.
+                Rect bounds = ((RectTransform)root.transform).rect;
+                projected = new Vector2(projected.x - bounds.xMin, projected.y - bounds.yMax);
+            }
+            float x = hd2dSample != null ? projected.x + 28f : cell.Rect.anchoredPosition.x + board.X + cellSize + 18f;
+            float y = hd2dSample != null ? -projected.y + 18f : -cell.Rect.anchoredPosition.y + board.Y + 18f;
+            x = Mathf.Clamp(x, 12f, BattlefieldPresentationAdapter.BattlefieldWidth - size.x - 12f);
+            y = Mathf.Clamp(y, 64f, BattlefieldPresentationAdapter.BattlefieldHeight - size.y - 12f);
+            if (hd2dSample != null && enemyDetail != null && enemyDetail.gameObject.activeInHierarchy)
+            {
+                var detailRect = (RectTransform)enemyDetail.transform;
+                Rect rootBounds = ((RectTransform)root.transform).rect;
+                Vector3 bottomLeft = root.transform.InverseTransformPoint(detailRect.TransformPoint(detailRect.rect.min));
+                Vector3 topRight = root.transform.InverseTransformPoint(detailRect.TransformPoint(detailRect.rect.max));
+                var occupied = new Rect(bottomLeft.x - rootBounds.xMin, rootBounds.yMax - topRight.y,
+                    topRight.x - bottomLeft.x, topRight.y - bottomLeft.y);
+                if (occupied.Overlaps(new Rect(x, y, size.x, size.y)))
+                    x = Mathf.Clamp(projected.x - size.x - 28f, 12f,
+                        BattlefieldPresentationAdapter.BattlefieldWidth - size.x - 12f);
+            }
+            hoverCard.SetTopLeft(new Vector2(x, -y));
+            hoverRevealed = true;
+            lastHoverRevealAt = Time.unscaledTime;
+        }
+
+        private void RefreshHoveredObjectDurability(CombatState state,
+            IReadOnlyDictionary<GridPosition, BattlefieldCellPresentation> presented)
+        {
+            CellView cell = null;
+            BattlefieldCellPresentation model = null;
+            bool canShow = hasHoverPosition && hoverPointerInside &&
+                !host.IsInteractionModalOpen && (contextMenuRoot == null || !contextMenuRoot.activeSelf) &&
+                cells.TryGetValue(hoverPosition, out cell) &&
+                presented.TryGetValue(hoverPosition, out model) &&
+                model != null && !string.IsNullOrWhiteSpace(model.ObjectHoverText);
+            TileState tile = canShow ? state.Map.GetTile(hoverPosition) : null;
+            if (tile == null || tile.Durability <= 0 || tile.MaxDurability <= 0)
+            {
+                if (objectDurability != null) objectDurability.Root.SetActive(false);
+                return;
+            }
+
+            if (objectDurability == null)
+            {
+                objectDurability = ColoredBar("物块耐久", overlayLayerRect, null, FormalUiTheme.Amber);
+                objectDurability.Value.color = Color.white;
+                Outline valueOutline = objectDurability.Value.gameObject.GetComponent<Outline>();
+                if (valueOutline == null)
+                    valueOutline = objectDurability.Value.gameObject.AddComponent<Outline>();
+                valueOutline.effectColor = Color.black;
+                valueOutline.effectDistance = new Vector2(1f, -1f);
+                valueOutline.useGraphicAlpha = false;
+            }
+            const float width = 128f;
+            const float height = 16f;
+            float cellSize = host.BattlefieldViewport.CellSize;
+            float x = cell.Rect.anchoredPosition.x + (cellSize - width) * .5f;
+            float y = -cell.Rect.anchoredPosition.y + cellSize - (model.Unit == null ? 8f : 32f);
+            SetTopLeft(objectDurability.Rect, x, y, width, height);
+            objectDurability.Fill.fillAmount = Mathf.Clamp01(tile.Durability / (float)tile.MaxDurability);
+            objectDurability.Value.text = tile.Durability + "/" + tile.MaxDurability;
+            objectDurability.Root.SetActive(true);
+            objectDurability.Root.transform.SetAsLastSibling();
+        }
+
+        public static bool ShouldRevealCellHover(float elapsedSeconds, bool hasPosition,
+            bool pointerInside, bool alreadyRevealed) =>
+            hasPosition && pointerInside && !alreadyRevealed && elapsedSeconds >= CellHoverRevealDelaySeconds;
+
+        public static bool ShouldRevealCellHover(float elapsedSeconds, bool hasPosition,
+            bool pointerInside, bool alreadyRevealed, float delaySeconds) =>
+            hasPosition && pointerInside && !alreadyRevealed && elapsedSeconds >= delaySeconds;
+
+        public static string CompactIntent(EnemyIntentPresentation intent)
+        {
+            if (intent == null) return string.Empty;
+            return intent.ExpectedDamage > 0 ? intent.ActionName + " -" + intent.ExpectedDamage : intent.ActionName;
+        }
+
+        private void RefreshMoveRoutes(IEnumerable<EnemyIntentPresentation> intents, BattlefieldViewport viewport)
+        {
+            EnsurePreviewLayer();
+            if (enemyMoveRoutes == null)
+            {
+                enemyMoveRoutes = FormalUiKit.Create("敌人移动方向流光", previewBoardRect).AddComponent<CombatEnemyMoveRouteGraphic>();
+                enemyMoveRoutes.rectTransform.pivot = boardRect.pivot;
+                Stretch(enemyMoveRoutes.rectTransform);
+                enemyMoveRoutes.transform.SetAsLastSibling();
+            }
+            var paths = new List<Vector2[]>();
+            foreach (var intent in intents)
+            {
+                if (!intent.HasDestination || intent.Route.Count < 2 || intent.Route.Any(p => !cells.ContainsKey(p))) continue;
+                // The shared foot anchor keeps every segment orthogonal and inside
+                // its real path cell, including the destination's existing frame.
+                paths.Add(intent.Route.Select(p => cells[p].Rect.anchoredPosition +
+                    new Vector2(viewport.CellSize * .5f, -viewport.CellSize * .875f)).ToArray());
+            }
+            enemyMoveRoutes.Refresh(paths, viewport.CellSize, host.UiPreferences.AnimationIntensity);
+        }
+
+        public static HashSet<GridPosition> CollectIntentDestinations(IEnumerable<EnemyIntentPresentation> intents)
+        {
+            var destinations = new HashSet<GridPosition>();
+            if (intents == null) return destinations;
+            foreach (EnemyIntentPresentation intent in intents)
+                if (intent?.HasDestination == true) destinations.Add(intent.Destination);
+            return destinations;
+        }
+
+        public static HashSet<GridPosition> CollectIntentRoute(IEnumerable<EnemyIntentPresentation> intents)
+        {
+            var route = new HashSet<GridPosition>();
+            if (intents == null) return route;
+            foreach (EnemyIntentPresentation intent in intents)
+                if (intent != null)
+                    foreach (GridPosition position in intent.Route.Skip(1).Take(Math.Max(0, intent.Route.Count - 2)))
+                        route.Add(position);
+            return route;
+        }
+
+        public static byte BoundaryEdges(IReadOnlyCollection<GridPosition> region, GridPosition position)
+        {
+            if (region == null || !region.Contains(position)) return 0;
+            byte result = 0;
+            if (!region.Contains(new GridPosition(position.X, position.Y + 1))) result |= CombatBattlefieldRangeGraphic.Top;
+            if (!region.Contains(new GridPosition(position.X + 1, position.Y))) result |= CombatBattlefieldRangeGraphic.Right;
+            if (!region.Contains(new GridPosition(position.X, position.Y - 1))) result |= CombatBattlefieldRangeGraphic.Bottom;
+            if (!region.Contains(new GridPosition(position.X - 1, position.Y))) result |= CombatBattlefieldRangeGraphic.Left;
+            return result;
+        }
+
+        private void HideTooltip()
+        {
+            hoverCard?.Hide();
+            if (objectDurability != null) objectDurability.Root.SetActive(false);
+            hasHoverPosition = false;
+            hoverPointerInside = false;
+            hoverRevealed = false;
+        }
+
+        private static RawImage Layer(string name, Transform parent)
+        {
+            GameObject value = FormalUiKit.Create(name, parent);
+            RectTransform rect = value.AddComponent<RectTransform>();
+            Stretch(rect);
+            RawImage image = value.AddComponent<RawImage>();
+            image.raycastTarget = false;
+            return image;
+        }
+
+        /// <summary>A centred, cell-fraction sized layer, used by the enemy-destination emphasis dot.</summary>
+        private static RawImage CenteredLayer(string name, Transform parent)
+        {
+            GameObject value = FormalUiKit.Create(name, parent);
+            RectTransform rect = value.AddComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, .5f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = Vector2.zero;
+            RawImage image = value.AddComponent<RawImage>();
+            image.raycastTarget = false;
+            return image;
+        }
+
+        private static Text Label(string name, Transform parent)
+        {
+            Text label = FormalUiKit.Label(name, string.Empty, parent, Vector2.zero, Vector2.zero, FormalUiTheme.BodyFontSize,
+                FormalUiTheme.Text, TextAnchor.MiddleCenter);
+            label.raycastTarget = false;
+            return label;
+        }
+
+        private static BarView Bar(string name, Transform parent, string fillSkinId)
+        {
+            return ColoredBar(name, parent, fillSkinId, Color.white);
+        }
+
+        private static BarView ColoredBar(string name, Transform parent, string fillSkinId, Color fillColor)
+        {
+            FormalResourceBarView prefab = FormalResourceBarView.InstantiateUnit(parent);
+            prefab.ConfigureCompact(name, fillSkinId, fillColor);
+            Text value = prefab.Value;
+            value.color = CombatUnitHudLayout.VitalTextColor();
+            value.fontStyle = FontStyle.Normal;
+            value.alignment = TextAnchor.MiddleCenter;
+            value.verticalOverflow = VerticalWrapMode.Overflow;
+            return new BarView
+            {
+                Root = prefab.gameObject, Rect = prefab.Root, Fill = prefab.Fill, Forecast = prefab.Forecast, Marker = prefab.Marker, Value = value,
+                LastCurrent = -1, DisplayedRatio = -1f, MarkerRatio = 1f, MarkerColor = FormalUiTheme.Safe,
+                BaseColor = fillColor
+            };
+        }
+
+        private static ShieldBadgeView ShieldBadge(string name, Transform parent)
+        {
+            GameObject root = FormalUiKit.Create(name, parent);
+            RectTransform rect = root.AddComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0f, 1f);
+            Image background = root.AddComponent<Image>();
+            background.color = Color.clear;
+            background.raycastTarget = false;
+            Image icon = ChildImage("盾牌图标", rect, Color.white);
+            icon.sprite = Resources.Load<Sprite>(FormalArtRegistry.ResourceMetricPath("shield"));
+            icon.type = Image.Type.Simple;
+            icon.preserveAspect = true;
+            Text value = Label("护盾数值", rect);
+            value.alignment = TextAnchor.MiddleCenter;
+            value.color = new Color(.92f, .94f, .95f, 1f);
+            value.fontStyle = FontStyle.Normal;
+            value.horizontalOverflow = HorizontalWrapMode.Overflow;
+            value.verticalOverflow = VerticalWrapMode.Overflow;
+            return new ShieldBadgeView { Root = root, Rect = rect, Background = background, Icon = icon, Value = value };
+        }
+
+        private static Image ChildImage(string name, Transform parent, Color color)
+        {
+            GameObject root = FormalUiKit.Create(name, parent);
+            RectTransform rect = root.AddComponent<RectTransform>();
+            Stretch(rect);
+            Image image = root.AddComponent<Image>();
+            image.color = color;
+            image.raycastTarget = false;
+            return image;
+        }
+
+        private static void Set(RawImage image, Texture texture, Color color)
+        {
+            image.gameObject.SetActive(texture != null);
+            if (texture == null) return;
+            image.texture = texture;
+            image.color = color;
+        }
+
+        private void OnDisable()
+        {
+            if (enemyMoveRoutes != null) enemyMoveRoutes.Clear();
+            host?.StopDust?.Clear();
+            intentChanges.Clear(); intentCellChanges.Clear(); observedState = null;
+            CancelPendingPrimaryClick();
+            if (contextMenuRoot != null && contextMenuRoot.activeSelf)
+            {
+                contextMenuRoot.SetActive(false);
+                host?.SetBattlefieldContextMenuOpen(false);
+            }
+            contextMenuHoverActionId = string.Empty;
+            host?.ClearBattlefieldContextPreview();
+        }
+
+        private void OnDestroy()
+        {
+            if (activeTurnMarker != null) activeTurnMarker.DOKill();
+            if (timelineHoverMarker != null) timelineHoverMarker.DOKill();
+        }
+
+        private static void SetInset(RectTransform rect, float inset) =>
+            SetTopLeft(rect, inset, inset, rect.parent is RectTransform parent ? parent.rect.width - inset * 2f : 0f,
+                rect.parent is RectTransform sameParent ? sameParent.rect.height - inset * 2f : 0f);
+
+        private static void SetTopLeft(RectTransform rect, float x, float y, float width, float height)
+        {
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0f, 1f);
+            rect.anchoredPosition = new Vector2(x, -y);
+            rect.sizeDelta = new Vector2(Mathf.Max(0f, width), Mathf.Max(0f, height));
+        }
+
+        private static void SetCenteredTopLeft(RectTransform rect, float x, float y, float width, float height)
+        {
+            rect.anchorMin = rect.anchorMax = new Vector2(0f, 1f);
+            rect.pivot = new Vector2(.5f, .5f);
+            rect.anchoredPosition = new Vector2(x + width * .5f, -y - height * .5f);
+            rect.sizeDelta = new Vector2(Mathf.Max(0f, width), Mathf.Max(0f, height));
+        }
+
+        private static void SetStructureVisual(RectTransform rect, Texture texture, float x, float y,
+            float footprintWidth, float footprintHeight, float cellSize)
+        {
+            if (texture == null || texture.width <= 0 || texture.height <= 0)
+            {
+                SetCenteredTopLeft(rect, x, y, footprintWidth, footprintHeight);
+                return;
+            }
+
+            // All battlefield structure canvases are authored at 32 PPU.  Preserve their
+            // full canvas and bottom-centre foot rather than stretching a 64px chest/rope
+            // into the placement footprint or clipping its authored overhang.
+            float scale = cellSize / 32f;
+            float width = texture.width * scale;
+            float height = texture.height * scale;
+            SetCenteredTopLeft(rect, x + (footprintWidth - width) * .5f,
+                y + footprintHeight - height, width, height);
+        }
+
+        private static void Stretch(RectTransform rect)
+        {
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+        }
+
+        private sealed class CellView
+        {
+            public GameObject Root;
+            public RectTransform Rect;
+            public RectTransform OverlayRect;
+            public RawImage Floor;
+            public RawImage TerrainBoundary;
+            public RawImage Environment;
+            public CombatWaterRippleGraphic WaterRipples;
+            public CombatStopDustGraphic StopDust;
+            public RawImage Move;
+            public RawImage Attack;
+            public RawImage Skill;
+            public CombatRangeOverlayMotion MoveMotion;
+            public CombatRangeOverlayMotion AttackMotion;
+            public CombatRangeOverlayMotion SkillMotion;
+            public RawImage IntentDestination;
+            public RawImage IntentRoute;
+            public RawImage EnemyAttackRange;
+            public RawImage EnemyAffectedArea;
+            public RawImage IntentDot;
+            public CombatBattlefieldRangeGraphic RangeGraphic;
+            public RawImage Selection;
+            public RawImage Object;
+            public RawImage ObjectFront;
+            public Vector2 ObjectFoot;
+            public RawImage Loot;
+            public RawImage Unit;
+            public Vector2 VisualFoot;
+            public string PresentedUnitId;
+            public bool PresentedIsHero;
+            public CombatUnitContourGraphic Contour;
+            public CombatUnitContourGraphic ObjectContour;
+            public bool PreviewedUnit;
+            public bool PreviewedObject;
+            public Text ObjectLabel;
+            public Text FieldEffectLabel;
+            public BarView Health;
+            public BarView Mana;
+            public ShieldBadgeView Shield;
+            public GameObject[] StatusRoots;
+            public RawImage[] StatusIcons;
+            public Text[] StatusValues;
+            public GameObject IntentRoot;
+            public RectTransform IntentRect;
+            public RawImage IntentIcon;
+            public Text IntentDamage;
+            public Text IntentChange;
+            public Image[] IntentLinks = Array.Empty<Image>();
+        }
+
+        private sealed class BarView
+        {
+            public GameObject Root;
+            public RectTransform Rect;
+            public Image Fill;
+            public Image Forecast;
+            public Image Marker;
+            public Text Value;
+            public int LastCurrent;
+            public float DisplayedRatio;
+            public float FlashUntil;
+            public float MarkerUntil;
+            public float MarkerRatio;
+            public Color MarkerColor;
+            public Color BaseColor;
+        }
+
+        private sealed class ShieldBadgeView
+        {
+            public GameObject Root;
+            public RectTransform Rect;
+            public Image Background;
+            public Image Icon;
+            public Text Value;
+        }
+    }
+
+    /// <summary>
+    /// Previews one right-click menu row on the board while the pointer rests on it, so the player can
+    /// compare actions before committing. The owning view arbitrates which row owns the preview.
+    /// </summary>
+    internal sealed class ContextMenuRowPreview : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
+        ISelectHandler, IDeselectHandler
+    {
+        private FormalBattlefieldView view;
+        private GridPosition position;
+        private string actionId = string.Empty;
+
+        public void Configure(FormalBattlefieldView source, GridPosition cell, string id)
+        {
+            view = source;
+            position = cell;
+            actionId = id ?? string.Empty;
+        }
+
+        public void OnPointerEnter(PointerEventData eventData) => view?.SetContextRowHover(position, actionId);
+        public void OnSelect(BaseEventData eventData) => view?.SetContextRowHover(position, actionId);
+        public void OnPointerExit(PointerEventData eventData) => view?.ClearContextRowHover(position, actionId);
+        public void OnDeselect(BaseEventData eventData) => view?.ClearContextRowHover(position, actionId);
+    }
+
+    internal sealed class CombatRangeOverlayMotion : MonoBehaviour
+    {
+        private RawImage image;
+        private Texture displayedTexture;
+        private float visibility;
+        private float phase;
+
+        public void Initialize(RawImage target, float pulsePhase)
+        {
+            image = target;
+            phase = pulsePhase;
+            visibility = 0f;
+            if (image != null) image.gameObject.SetActive(false);
+        }
+
+        public void Refresh(Texture target, float baseAlpha)
+        {
+            if (image == null) return;
+            if (target != null && displayedTexture != target)
+            {
+                displayedTexture = target;
+                image.texture = target;
+                visibility = 0f;
+            }
+
+            float targetVisibility = target != null ? 1f : 0f;
+            visibility = Mathf.MoveTowards(visibility, targetVisibility, Time.unscaledDeltaTime / .16f);
+            bool visible = displayedTexture != null && visibility > .001f;
+            image.gameObject.SetActive(visible);
+            if (!visible)
+            {
+                if (target == null) displayedTexture = null;
+                return;
+            }
+
+            float pulse = .91f + .09f * (.5f + .5f * Mathf.Sin(Time.unscaledTime * 4.2f + phase));
+            image.color = new Color(1f, 1f, 1f, Mathf.Clamp01(baseAlpha) * visibility * pulse);
+        }
+    }
+
+    internal sealed class BattlefieldCellPointer : MonoBehaviour, IPointerDownHandler, IPointerClickHandler,
+        IPointerEnterHandler, IPointerExitHandler
+    {
+        private GridPosition position;
+        private Action<GridPosition, int> primaryClick;
+        private Action<GridPosition> contextClick;
+        private Action<GridPosition> enter;
+        private Action exit;
+
+        public void Initialize(GridPosition value, Action<GridPosition, int> onPrimaryClick,
+            Action<GridPosition> onContextClick, Action<GridPosition> onEnter, Action onExit)
+        {
+            position = value;
+            primaryClick = onPrimaryClick;
+            contextClick = onContextClick;
+            enter = onEnter;
+            exit = onExit;
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (eventData.button == PointerEventData.InputButton.Left)
+                primaryClick?.Invoke(position, Math.Max(1, eventData.clickCount));
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            if (!FormalBattlefieldView.ShouldInspectOnPointerDown(eventData.button)) return;
+            contextClick?.Invoke(position);
+            eventData.Use();
+        }
+
+        public void OnPointerEnter(PointerEventData eventData) => enter?.Invoke(position);
+        public void OnPointerExit(PointerEventData eventData) => exit?.Invoke();
+    }
+
+}

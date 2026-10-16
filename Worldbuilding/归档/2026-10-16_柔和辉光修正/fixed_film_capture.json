@@ -1,0 +1,82 @@
+{
+  "schema": "occ-cinematic-capture-v1",
+  "status": "COMPLETE",
+  "frames": 481,
+  "fps": 30,
+  "resolution": [
+    1920,
+    1080
+  ],
+  "duration": 16.0,
+  "optics": {
+    "nightRain": true,
+    "enhancedGlow": true,
+    "haloModel": "continuous_gaussian",
+    "haloSigmaPixels": 1.4,
+    "haloPaddingPixels": 6,
+    "hardRimEnergy": 0,
+    "bloomThreshold": 0.9,
+    "bloomIntensity": 0.48,
+    "bloomScatter": 0.72,
+    "sunIntensity": 0.075,
+    "fillIntensity": 0.065,
+    "rainParticles": 361,
+    "wetFloorSmoothness": 0.74,
+    "fragmentMaterialEnergy": 4.8,
+    "layers": [
+      {
+        "name": "参考稿裁切 · 完整外环",
+        "sourceVisible": false,
+        "haloVisible": false,
+        "pixelEmission": 3.21749973,
+        "rimEmission": 0.0
+      },
+      {
+        "name": "参考稿裁切 · 独立六符印",
+        "sourceVisible": false,
+        "haloVisible": false,
+        "pixelEmission": 3.8775003,
+        "rimEmission": 0.0
+      },
+      {
+        "name": "参考稿裁切 · 中心交织术式",
+        "sourceVisible": false,
+        "haloVisible": false,
+        "pixelEmission": 4.70250034,
+        "rimEmission": 0.0
+      },
+      {
+        "name": "参考稿裁切 · 施法中心术印",
+        "sourceVisible": false,
+        "haloVisible": false,
+        "pixelEmission": 3.3825,
+        "rimEmission": 0.0
+      },
+      {
+        "name": "核心魔法火冠纸板 0",
+        "sourceVisible": false,
+        "haloVisible": false,
+        "pixelEmission": 2.475,
+        "rimEmission": 0.0
+      },
+      {
+        "name": "核心魔法火冠纸板 1",
+        "sourceVisible": false,
+        "haloVisible": false,
+        "pixelEmission": 2.475,
+        "rimEmission": 0.0
+      },
+      {
+        "name": "核心魔法火冠纸板 2",
+        "sourceVisible": false,
+        "haloVisible": false,
+        "pixelEmission": 2.475,
+        "rimEmission": 0.0
+      }
+    ]
+  },
+  "source": "Unity Play Mode camera rendered at every fixed timeline frame; offscreen engine film export",
+  "focusRequested": false,
+  "performanceBenchmark": false,
+  "audio": "none; silent visual study"
+}

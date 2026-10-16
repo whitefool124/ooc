@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sky_furnace_circuit_seal_20261014",
+  "role": "hd2d_environment_module",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in source; noninteractive stage spatial-effect module, inferred grid decode without geometric resizing",
+    "source_path": "ArtSource/SkyFurnace_20261014/raw/circuit_seal_r1.png",
+    "source_sha256": "c861afa899a894d1090f4bffb790ed756392aff065a06d23d2449955a08518e1"
+  },
+  "delivery": {
+    "output_path": "ArtSource/SkyFurnace_20261014/delivery/circuit_seal.png",
+    "output_sha256": "ef14ac57e980b2d9cf00b13a7d98af76fe21049dc082285c2cbbd6b92df48d6f",
+    "native_output_path": "ArtSource/SkyFurnace_20261014/delivery/circuit_seal.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "battlefield_hd2d_environment",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "2.0 by 2.0 metres at fixed32PPU; independent noninteractive cinematic",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User authorized all required stage assets and requested32px source art on2026-10-14"
+  },
+  "evidence": {
+    "one_x": "ArtSource/SkyFurnace_20261014/qa/circuit_seal/1x.png",
+    "four_x": "ArtSource/SkyFurnace_20261014/qa/circuit_seal/4x.png",
+    "six_x": "ArtSource/SkyFurnace_20261014/qa/circuit_seal/6x.png",
+    "grayscale": "ArtSource/SkyFurnace_20261014/qa/circuit_seal/grayscale.png",
+    "checker": "ArtSource/SkyFurnace_20261014/qa/circuit_seal/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-14_天穹熔炉演出方案/fixed_frames/frame_08.10.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Technical candidate only; actual scene density and aesthetic review pending"
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/SkyFurnace/circuit_seal.png",
+    "formal_promotion": false
+  }
+}

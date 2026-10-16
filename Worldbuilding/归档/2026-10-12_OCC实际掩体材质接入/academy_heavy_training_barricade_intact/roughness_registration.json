@@ -1,0 +1,35 @@
+{
+  "schema": "occ-registered-prop-material-data-v1",
+  "status": "REVIEW_READY",
+  "source": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_panel.png",
+    "sha256": "c151d6b6541717a288837eaf911634c6fcdb1d678e6025ae8528e40c61643343"
+  },
+  "original_raw": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/paired_raw.png",
+    "sha256": "3c588122015d67b07c143ea49ea39e8db23d6f60a14fee90aeca47bd37036ed9"
+  },
+  "reference": {
+    "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_intact.png",
+    "sha256": "d32717d12b028f9f34e714da4db1ee3f05659b6b0847273b5bdeeb3e314dd3c9"
+  },
+  "output": {
+    "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/roughness.png",
+    "sha256": "99590b476cf89538a50670e97fb1e58135d69adfe27fdb0663bc66d8ce7a1350"
+  },
+  "native_grid": [
+    32,
+    32
+  ],
+  "source_macro_pitch": 19.59375,
+  "method": "Known UV canvas central-cell observed RGB medoid; exact quadrant crop, no interpolation/new RGB",
+  "source_bbox": [
+    1,
+    8,
+    30,
+    31
+  ],
+  "max_cell_std": 53.63515638086646,
+  "human_registration_review": "PENDING",
+  "limitation": "Known-field registration is not automatic Sprite1.2 confidence PASS; region alignment and art remain pending"
+}

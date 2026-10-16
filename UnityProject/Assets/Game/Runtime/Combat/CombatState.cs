@@ -52,6 +52,9 @@ namespace OCC.Combat
         public int InventoryOpenCount { get; private set; }
 
         public CombatState(GridMap map, IEnumerable<UnitState> units, IEnumerable<CombatObjective> objectives = null)
+            : this(map, units, objectives, true) { }
+
+        private CombatState(GridMap map, IEnumerable<UnitState> units, IEnumerable<CombatObjective> objectives, bool validateDeployment)
         {
             Map = map ?? throw new ArgumentNullException(nameof(map));
             UnitState[] orderedUnits = (units ?? throw new ArgumentNullException(nameof(units))).ToArray();
@@ -66,13 +69,13 @@ namespace OCC.Combat
 
             foreach (UnitState unit in this.units.Values)
             {
-                if (!Map.IsInside(unit.Position) || Map.IsBlocked(unit.Position))
+                if (validateDeployment && (!Map.IsInside(unit.Position) || Map.IsBlocked(unit.Position)))
                 {
                     throw new ArgumentException($"Unit {unit.Id} has an invalid starting position.", nameof(units));
                 }
             }
 
-            if (this.units.Values.Select(unit => unit.Position).Distinct().Count() != this.units.Count)
+            if (validateDeployment && this.units.Values.Select(unit => unit.Position).Distinct().Count() != this.units.Count)
             {
                 throw new ArgumentException("Multiple units cannot occupy the same starting position.", nameof(units));
             }
@@ -179,6 +182,13 @@ namespace OCC.Combat
             if (unit == null) return;
             if (unit.HasStatus(StatusType.BreakStance)) rogueBreakStanceSeenThisTurn.Add(unit.Id);
             if (Ruleset != CombatRuleset.Roguelite) return;
+            if (unit.IsHero)
+                foreach (GridPosition position in Map.PositionsWith(tile => tile.SmokePublicRoundsRemaining > 0).ToArray())
+                {
+                    TileState smoke = Map.GetTile(position);
+                    if (smoke.SmokeExpiresAt <= CurrentTime) { smoke.SmokePublicRoundsRemaining = 0; continue; }
+                    if (--smoke.SmokePublicRoundsRemaining == 0) smoke.SmokeExpiresAt = 0;
+                }
             foreach (GridPosition position in Map.PositionsWith(tile => tile.SmokeExpiresAt > 0 && tile.SmokeExpiresAt <= CurrentTime).ToArray())
                 Map.GetTile(position).SmokeExpiresAt = 0;
             // 主角回合开始即公共回合开始：此时公开风况并让风搬动场地上的松散材料。
@@ -257,6 +267,7 @@ namespace OCC.Combat
                 {
                     TileState cleared = Map.GetTile(position).Clone();
                     cleared.SmokeExpiresAt = 0;
+                    cleared.SmokePublicRoundsRemaining = 0;
                     Map.SetTile(position, cleared);
                     AddLog("强风吹散了 (" + position.X + "," + position.Y + ") 的烟尘。");
                 }
@@ -275,7 +286,7 @@ namespace OCC.Combat
                 if (IsLooseMaterial(target) || target.HasEffectLayer) continue;
                 if (source.IsLoosePaper) { target.IsLoosePaper = true; source.IsLoosePaper = false; }
                 if (source.IsCrystalShard) { target.IsCrystalShard = true; source.IsCrystalShard = false; }
-                if (source.SmokeExpiresAt > 0) { target.SmokeExpiresAt = source.SmokeExpiresAt; source.SmokeExpiresAt = 0; }
+                if (source.SmokeExpiresAt > 0) { target.SmokeExpiresAt = source.SmokeExpiresAt; target.SmokePublicRoundsRemaining = source.SmokePublicRoundsRemaining; source.SmokeExpiresAt = 0; source.SmokePublicRoundsRemaining = 0; }
                 Map.SetTile(from, source);
                 Map.SetTile(to, target);
                 moved++;
@@ -404,7 +415,12 @@ namespace OCC.Combat
         public void AttachThreeMaterialPressure(ThreeMaterialPressureRuntime runtime)
         { ThreeMaterialPressure = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         public void AttachAcademyCoreBoss(AcademyCoreBossRuntime runtime)
-        { AcademyCoreBoss = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        {
+            AcademyCoreBoss = runtime ?? throw new ArgumentNullException(nameof(runtime));
+            // The player may act before the boss. Phase-zero protection starts at battle entry.
+            foreach (UnitState unit in Units.Values.Where(value => value.EnemyArchetypeId == "core_overseer"))
+                unit.IsSuperArmored = AcademyCoreBoss.HasSuperArmor(this, unit);
+        }
         public void AttachAcademyFieldEnemy(AcademyFieldEnemyRuntime runtime)
         { AcademyFieldEnemy = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         public void AttachAcademyEnemyGrowth(AcademyEnemyGrowthRuntime runtime)
@@ -544,7 +560,9 @@ namespace OCC.Combat
         }
         public CombatState Clone()
         {
-            CombatState clone = new CombatState(Map.Clone(), units.Values.OrderBy(unit => FixedTurnOrder(unit.Id)).Select(unit => unit.Clone()), Objectives.Select(objective => objective.Clone()));
+            // A live battle can contain corpses sharing a cell with a surviving unit.
+            // Deployment validation belongs to battle creation, not snapshotting.
+            CombatState clone = new CombatState(Map.Clone(), units.Values.OrderBy(unit => FixedTurnOrder(unit.Id)).Select(unit => unit.Clone()), Objectives.Select(objective => objective.Clone()), false);
             clone.ActiveUnitId = ActiveUnitId; clone.CurrentTime = CurrentTime; clone.TurnSequence = TurnSequence; clone.IsVictory = IsVictory; clone.IsDefeat = IsDefeat; clone.Ruleset = Ruleset; clone.InventoryOpenCount = InventoryOpenCount; clone.WindMechanicEnabled = WindMechanicEnabled;
             clone.Backpack = Backpack.Clone(); clone.ItemInventory = ItemInventory.Clone(); clone.Loot = Loot?.Clone(); clone.LootSource = LootSource?.Clone(); Array.Copy(ItemQuickbar, clone.ItemQuickbar, ItemQuickbar.Length);
             foreach (GridPosition position in investigated) clone.investigated.Add(position);
@@ -563,6 +581,7 @@ namespace OCC.Combat
             if (PressureTest != null) clone.PressureTest = PressureTest.Clone();
             if (RogueSpells != null) clone.RogueSpells = RogueSpells.Clone(clone);
             if (RogueEquipment != null) clone.RogueEquipment = RogueEquipment.Clone(clone);
+            if (ArtifactBattle != null) ArtifactBattle.Clone(clone);
             // Runtime constructors may register definitions; the source's passive state
             // (including per-turn limits and armed effects) remains authoritative.
             clone.PassiveEffects = PassiveEffects.Clone();

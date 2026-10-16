@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"3a7b05dce73c4f1182303ec9234235f4\",\"request_key\":\"response-v2-compile-20261010\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"edit\",\"status\":\"ready\",\"phase\":\"ready\",\"created_at\":\"2026-10-10T07:43:40.5860000+00:00\",\"updated_at\":\"2026-10-10T07:44:29.1010000+00:00\",\"finished_at\":\"2026-10-10T07:44:29.1010000+00:00\",\"error_code\":null,\"message\":\"Requested mode verified; imports and compilation are idle.\",\"refresh_assets\":true,\"timeout_seconds\":120,\"step\":3,\"created_seconds\":1791618220.586,\"deadline_seconds\":1791618340.586,\"settle_since\":1791618268.245,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T07:43:40.5860000+00:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"},{\"timestamp\":\"2026-10-10T07:43:40.9230000+00:00\",\"phase\":\"importing\",\"message\":null},{\"timestamp\":\"2026-10-10T07:43:53.9800000+00:00\",\"phase\":\"compiling\",\"message\":null},{\"timestamp\":\"2026-10-10T07:44:07.3420000+00:00\",\"phase\":\"reloading\",\"message\":\"Journal saved; poll the same operation_id after reconnection.\"},{\"timestamp\":\"2026-10-10T07:44:28.2450000+00:00\",\"phase\":\"verifying\",\"message\":\"Waiting for stable editor state.\"},{\"timestamp\":\"2026-10-10T07:44:29.1010000+00:00\",\"phase\":\"ready\",\"message\":\"Requested mode verified; imports and compilation are idle.\"}]},\"current_editor\":{\"is_compiling\":false,\"is_updating\":false,\"is_playing\":false,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":true},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":0,\"journal_error\":null,\"task\":{\"task_id\":\"editor:3a7b05dce73c4f1182303ec9234235f4\",\"kind\":\"editor\",\"id\":\"3a7b05dce73c4f1182303ec9234235f4\",\"status\":\"ready\",\"phase\":\"ready\",\"revision\":\"a93e54c422208e605ec2c2ef8943cb99b1c8d03ace47343ec8090187c08e0b78\",\"changed\":true,\"wait_complete\":true,\"poll_after_ms\":0,\"wait_reason\":\"completed\",\"waited_ms\":708,\"snapshot_at\":\"2026-10-10T07:44:29.1321997Z\"}}}"
+      }
+    ]
+  }
+}

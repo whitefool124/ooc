@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_decoy_lantern_active_normal",
+  "role": "hd2d_material_data_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/normal_panel.png",
+    "source_sha256": "3d2256a4494999c32de506562cc63d6a903cf42da572944d37c818f2e0e8c24a",
+    "independent_raw": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/paired_raw_r1.png",
+      "sha256": "97b24bd1bb7fcfdc47ad0f2b001c7d9c5b286ecc1210b1c386a95146b9541586"
+    },
+    "registration": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/normal_registration.json",
+      "sha256": "086b98469e2cb738643bd8ef591d0c18161a28def0a1b8c3ca0a7f848342d400"
+    }
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/normal.png",
+    "output_sha256": "ee752dea2bc448293d854df5bd9699b29f113040e2d9c552456c8b7d124cc1d8",
+    "native_ppu": 32,
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "unity_import": {
+    "guid": "b4fb581072e564f46a77ea463e892efc",
+    "filter_mode": "Point",
+    "colour_space": "linear",
+    "mipmaps": false,
+    "compression": "Uncompressed",
+    "wrap_mode": "Clamp"
+  },
+  "application": {
+    "albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_decoy_lantern_active.png",
+      "sha256": "0c2e6cf9cdc2d00c01218382ca2f0f264b30155900f869d34191f104d60d97d1"
+    },
+    "shared_uv": true,
+    "world_pixel_pitch": 0.03125,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_decoy_lantern_active_dry/result.json",
+      "sha256": "0135f5ea9b5ceb780738dc43207053c6ef28aea97828711e12a804553f6647f3"
+    }
+  },
+  "human_review": {
+    "overall": "PENDING"
+  },
+  "admission_blockers": [
+    "Numeric material-data role not registered in Sprite formal admission; no FORMAL promotion",
+    "Source registration, complete scene density and genuine human material review pending"
+  ]
+}

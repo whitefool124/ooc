@@ -1,0 +1,25 @@
+{
+  "asset_id": "elder_tracker_hound_battle_candidate_20261016",
+  "content_id": "elder_tracker_hound",
+  "identity": "灰毛老练寻迹兽；旧伤、补焊铜缚环、略僵的腿与下探鼻端。",
+  "identity_source": "Worldbuilding/OC世界观/04_教育与组织/学院敌人设定.md",
+  "role": "tactical_unit_adaptive_32ppu",
+  "canvas": [
+    64,
+    32
+  ],
+  "native_ppu": 32,
+  "world_pixel_pitch": 0.03125,
+  "logical_cells": [
+    1,
+    1
+  ],
+  "native_anchor": [
+    32,
+    30
+  ],
+  "grain_reference": "ArtSource/enemy_independent_20261016/signal_keeper/asset/signal_keeper_battle_candidate_32x64.png",
+  "view": "strict side profile facing right",
+  "source_channel": "codex_builtin_imagegen",
+  "status": "QA_PENDING"
+}

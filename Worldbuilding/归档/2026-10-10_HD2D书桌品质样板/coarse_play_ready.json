@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"e83393544c634b17b1ea30aa14165dab\",\"request_key\":\"desk-coarse-preview-normal-entry\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"play\",\"status\":\"ready\",\"phase\":\"ready\",\"created_at\":\"2026-10-10T10:51:58.03+08:00\",\"updated_at\":\"2026-10-10T10:52:05.503+08:00\",\"finished_at\":\"2026-10-10T10:52:05.503+08:00\",\"error_code\":null,\"message\":\"Requested mode verified; imports and compilation are idle.\",\"refresh_assets\":false,\"timeout_seconds\":120,\"step\":3,\"created_seconds\":1791600718.03,\"deadline_seconds\":1791600838.03,\"settle_since\":1791600724.75,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T10:51:58.03+08:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"},{\"timestamp\":\"2026-10-10T10:51:58.377+08:00\",\"phase\":\"verifying\",\"message\":null},{\"timestamp\":\"2026-10-10T10:51:59.179+08:00\",\"phase\":\"entering_play\",\"message\":\"Play requested; waiting for Play Mode readback.\"},{\"timestamp\":\"2026-10-10T10:52:04.75+08:00\",\"phase\":\"verifying\",\"message\":\"Waiting for stable editor state.\"},{\"timestamp\":\"2026-10-10T10:52:05.503+08:00\",\"phase\":\"ready\",\"message\":\"Requested mode verified; imports and compilation are idle.\"}]},\"current_editor\":{\"is_compiling\":false,\"is_updating\":false,\"is_playing\":true,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":true},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":0,\"journal_error\":null,\"task\":{\"task_id\":\"editor:e83393544c634b17b1ea30aa14165dab\",\"kind\":\"editor\",\"id\":\"e83393544c634b17b1ea30aa14165dab\",\"status\":\"ready\",\"phase\":\"ready\",\"revision\":\"38a852251ba9d5ac2312cdb065bc843b17da069a97ffb161c2a54c4de22426a9\",\"changed\":true,\"wait_complete\":true,\"poll_after_ms\":0,\"wait_reason\":\"completed\",\"waited_ms\":0,\"snapshot_at\":\"2026-10-10T02:52:26.5272671Z\"}}}"
+      }
+    ]
+  }
+}

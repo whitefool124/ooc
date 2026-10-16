@@ -1,0 +1,803 @@
+{
+    "schema": "occ-effect-three-primitives-v1",
+    "humanAestheticReview": "PENDING",
+    "worldPitch": 0.03125,
+    "skyFurnaceModels": 0,
+    "imageCards": 7,
+    "columns": 17,
+    "cubeParticles": 36,
+    "unclassifiedEffectRenderers": 0,
+    "smokeParticleSystems": 2,
+    "activeSmokeParticles": 0,
+    "peakSmokeParticles": 122,
+    "technicalPass": true,
+    "auxiliaryTextureFree": true,
+    "smokeFootprintDiameter": 2.593573570251465,
+    "smokeTopHeight": 1.28573739528656,
+    "smokeCanvasMetres": 0.03125,
+    "smokePixelMetres": 0.03125,
+    "smokeFramesSeenMask": 0,
+    "smokeAnimationFrames": 0,
+    "items": [
+        {
+            "name": "参考稿裁切 · 完整外环",
+            "kind": "one_pixel_thick_image",
+            "texture": "magic_card_outer",
+            "worldDimensions": [
+                5.0,
+                5.000000476837158,
+                0.0312500037252903
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "参考稿裁切 · 独立六符印",
+            "kind": "one_pixel_thick_image",
+            "texture": "magic_card_sigils",
+            "worldDimensions": [
+                4.0,
+                4.000000476837158,
+                0.0312500037252903
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "参考稿裁切 · 中心交织术式",
+            "kind": "one_pixel_thick_image",
+            "texture": "magic_card_core",
+            "worldDimensions": [
+                3.0,
+                3.000000238418579,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "参考稿裁切 · 施法中心术印",
+            "kind": "one_pixel_thick_image",
+            "texture": "magic_card_caster",
+            "worldDimensions": [
+                2.0,
+                2.000000238418579,
+                0.0312500037252903
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "一像素引导长柱 0",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                3.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "一像素引导长柱 1",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                3.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "一像素引导长柱 2",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                3.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "一像素引导长柱 3",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                3.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "一像素贯穿长柱",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                3.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 0",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 1",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 2",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 3",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 4",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 5",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 6",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 7",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 8",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 9",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 10",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "稀疏余烬 11",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 0",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 1",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 2",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 3",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 4",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 5",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 6",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 7",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 8",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 9",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 10",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 11",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 12",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 13",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 14",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 15",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 16",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 17",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 18",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 19",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 20",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 21",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 22",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "汇入生长点的火元素像素 23",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "核心魔法火冠纸板 0",
+            "kind": "one_pixel_thick_image",
+            "texture": "fire_crown",
+            "worldDimensions": [
+                3.0,
+                3.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "核心魔法火冠纸板 1",
+            "kind": "one_pixel_thick_image",
+            "texture": "fire_crown",
+            "worldDimensions": [
+                3.0,
+                3.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "核心魔法火冠纸板 2",
+            "kind": "one_pixel_thick_image",
+            "texture": "fire_crown",
+            "worldDimensions": [
+                3.000000238418579,
+                3.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 0",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.0312500037252903,
+                2.000000238418579,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 1",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                2.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 2",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                2.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 3",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                2.000000238418579,
+                0.0312500037252903
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 4",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                2.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 5",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                2.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 6",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.0312500037252903,
+                2.000000238418579,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 7",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                2.000000238418579,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 8",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                2.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 9",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                2.000000238418579,
+                0.0312500037252903
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 10",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                2.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向冲击一像素长柱 11",
+            "kind": "one_pixel_column",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                2.0,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "无贴图烟尘立方粒子",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "无贴图上升灰烬",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "贴地冲击环 · 无贴图立方粒子",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "径向爆发火星 · 无贴图立方粒子",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        },
+        {
+            "name": "完整法阵几何破碎 · 无遮罩消失",
+            "kind": "one_pixel_cube",
+            "texture": "",
+            "worldDimensions": [
+                0.03125,
+                0.03125,
+                0.03125
+            ],
+            "valid": true,
+            "particles": 0
+        }
+    ]
+}

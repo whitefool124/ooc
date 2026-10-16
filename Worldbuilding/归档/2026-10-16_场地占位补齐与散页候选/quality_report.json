@@ -1,0 +1,434 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "38625900f0f7a2c9c8c48eddc0291138ddbf9d5238cf65825426f6b91cb5f4d6",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/BattlefieldCellPresentation.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/CombatBattlefieldCellPresenter.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/CombatFormalVisualAssets.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DFieldEffectLabels.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/BattlefieldFieldArtCandidates.cs",
+    "UnityProject/Assets/Game/Editor/PixelArtImportGuard.cs",
+    "UnityProject/Assets/Game/Editor/BattlefieldFieldCandidateReview.cs",
+    "UnityProject/Assets/Game/Tests/EditMode/FieldEffectPresentationTests.cs",
+    "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_loose_paper.png",
+    "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_loose_paper.png.meta",
+    "Worldbuilding/数据表/OCC_学院第一阶段全流程内容清单_v1.0.csv"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "8026256376fcbbb14b48a072a79522cf0ed9278744c0507c97b848b89d29e531"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "a7adc0839a3ec063f4402a2c457586b125274e7e23d52a270c701252376c8b75"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "02db449a5dda7f4a8d22ba78df12388077c4d4ebc7d3e696540a7a45f87dda00"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "cb0d43a9604da681e1d28b56f540b3daf75394b36d949ec78bcf56796d00568b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/BattlefieldCellPresentation.cs",
+      "sha256": "2d876fd600516f84acfb274b3afd7c87765eb68297026eeff5acc249de394055"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/CombatBattlefieldCellPresenter.cs",
+      "sha256": "8efcdae27cd5088856e155a84c65fc23a2aa77cf4547584b32784a6c2a14ecd7"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/CombatFormalVisualAssets.cs",
+      "sha256": "1ed8573899c7140849c9c6989e092831a5d9534effbf2392ae11e07a2b4ac707"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs",
+      "sha256": "35c8cda13d3c608c4ba579bed1179347a7f0ec853d731f193b1034dabea2f9ea"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DFieldEffectLabels.cs",
+      "sha256": "94ccc57dcb8d90b1ccec928f3857682f3d19bc1510fbdba020ab735d9f054bb6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/BattlefieldFieldArtCandidates.cs",
+      "sha256": "9f8634b07762db870653f46819a46cc17267f4205e325828564699e0148ff7d5"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/PixelArtImportGuard.cs",
+      "sha256": "0a9f0fa4f1c0b919f350351155e21a925ad7d28f9425cedf227155eadb643e2c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/BattlefieldFieldCandidateReview.cs",
+      "sha256": "eb74bf938abf5b1acf4178dfbac5fe02b7ea9a85e79fe8905719f1a4a402f550"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Tests/EditMode/FieldEffectPresentationTests.cs",
+      "sha256": "0528cf3e09e5f4c724dbf3e7f9038510b6109fc10cc4cabac671e34a35443347"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_loose_paper.png",
+      "sha256": "caab948d3c04b08b5a7be3f042be68db9d06e152c254d9984b88d53302e8b02f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_loose_paper.png.meta",
+      "sha256": "7990bac35d435550ed6cdce04d0eca304ed7fd1f1bb5ef170949aec57ec8dab8"
+    },
+    {
+      "path": "Worldbuilding/数据表/OCC_学院第一阶段全流程内容清单_v1.0.csv",
+      "sha256": "685c61cfc8c1292099cdb8fe8b43bd25a88ab398b3586f5d55ebd70394a42eda"
+    },
+    {
+      "path": "ArtSource/field_effect_candidates_20261016/loose_paper/manifest.occ-art-manifest-v1.json",
+      "sha256": "a0fbea26721346b10ea8df0802ae29dd427a33b65bc6b363d3b048304e5c8a85"
+    },
+    {
+      "path": "ArtSource/field_effect_candidates_20261016/loose_paper/raw/r2_source.png",
+      "sha256": "aebb312a1c258efc7ace029806f74140f5abae715a2c2a9958e7c96da5918af7"
+    },
+    {
+      "path": "ArtSource/field_effect_candidates_20261016/loose_paper/asset/field_loose_paper_32.png",
+      "sha256": "caab948d3c04b08b5a7be3f042be68db9d06e152c254d9984b88d53302e8b02f"
+    },
+    {
+      "path": "ArtSource/field_effect_candidates_20261016/loose_paper/qa/selected_decode.json",
+      "sha256": "97b1cdcf44a5a841c821f6ba4c66f3be6bef593ec2efe044e01cb65870593e97"
+    },
+    {
+      "path": "ArtSource/field_effect_candidates_20261016/loose_paper/qa/asset_validation.json",
+      "sha256": "c3f5a707d2b2b15e4a5c872b3e076fa8259ae7b7f568ac20d8291d34afc0323a"
+    },
+    {
+      "path": "ArtSource/field_effect_candidates_20261016/loose_paper/qa/floor_contact_6x.png",
+      "sha256": "5ff1a0476575d24b94ee76c964b3c65a93c4912dbd24f563b802b4c5a8f1851b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_场地占位补齐与散页候选/tests.xml",
+      "sha256": "e5554774060ada0d923b51799730d07cf5162a6a0d35639aec0843801aaccfb0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_场地占位补齐与散页候选/editor.log",
+      "sha256": "330f36b17a77901aa3412df8109e21811ec7b83d7e11d9508eb3f16aedea6e7d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_场地占位补齐与散页候选/完成记录.md",
+      "sha256": "a945966cc5610aa89cb4548d3e388682d1bf52bc9c31897a9566a9b1306f0489"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 45,
+    "yaw": 0,
+    "wall_height": 0.65,
+    "unit_ground_angle": 45
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": null
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Runtime, performance and human sample approval are pending"
+  ],
+  "local_checks": {
+    "asset_validation": "PASS",
+    "editmode": "13/13 PASS",
+    "normal_entry": "NOT_RUN",
+    "human_review": "PENDING",
+    "placeholder_names": [
+      "散页",
+      "痕迹",
+      "约束纹",
+      "页幕"
+    ],
+    "formal_art_promotion": false
+  }
+}

@@ -1,0 +1,998 @@
+{
+  "schema": "occ-hd2d-paired-material-inventory-v1",
+  "status": "QA_PENDING",
+  "world_pixel_pitch": 0.03125,
+  "source_route": "Independent Codex built-in material fields; no albedo-derived numerical maps",
+  "assets": [
+    {
+      "id": "court_a",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+        "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_a/paired_raw_r1.png",
+        "sha256": "674a5825cafc09043a916b6a45a0d3e82eee107a56ccd179b66731d1b0380ba9"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_a/normal_panel.png",
+            "sha256": "5e926072dd160a4cbe2bf2d9a109d2e03368f8c8aa181c5ce8a927d7fb2ec9db"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_a/normal_registration.json",
+            "sha256": "20d1df2b1be810325d086d491f299bae3849911032c5017a4f3318bf5a142d26"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_court_a/normal.png",
+            "sha256": "cf044204776fe9793f112ca690447c3873917e151a3d9a5347e32f3ada2dbec2"
+          },
+          "rgb_min": [
+            86,
+            54,
+            233
+          ],
+          "rgb_max": [
+            197,
+            190,
+            253
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_a/roughness_panel_r1.png",
+            "sha256": "1eae4c051f6d21ed85490ff7e78ce196b7f1a6e6727cd20fceded41923756efe"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_a/roughness_registration.json",
+            "sha256": "6fee1dca61507304ea1728da60f1d66e6d8591791d300c447269cc39b124a543"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_court_a/roughness.png",
+            "sha256": "1d05813978e5d1e6ec0598d141778936b52cb3870fda205dc20fa81838ff628e"
+          },
+          "rgb_min": [
+            150,
+            149,
+            148
+          ],
+          "rgb_max": [
+            219,
+            218,
+            218
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "court_c",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_c.png",
+        "sha256": "26291a86a1b61f913fc70d0afdc147e723f9732121d10d482f66fc7c50555adf"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_c/paired_raw_r1.png",
+        "sha256": "7ff392d658ff5a4643561c2eaa1158c052c44158ce142fcbb9aeb75d2800dc84"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_c/normal_panel.png",
+            "sha256": "609f784a3e38e3873176cf7c2527549242df9472de610a5df8a304bb8bc61bdd"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_c/normal_registration.json",
+            "sha256": "408d7b57c72dd3a2434eb69481082021b92feaee0832cc13560659540d317201"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_court_c/normal.png",
+            "sha256": "3cdbb06f10cbfe138562dfe7df35da6cd9d254a7fcefb6c10293a4213a8a6338"
+          },
+          "rgb_min": [
+            104,
+            69,
+            232
+          ],
+          "rgb_max": [
+            146,
+            192,
+            255
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_c/roughness_panel_r1.png",
+            "sha256": "5a3cba66e07badc9635a015b1ee60d9bc61c95d13cfe11cd3382e5b9e3ab519e"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_c/roughness_registration.json",
+            "sha256": "471bcb22b7b2ee7961a6e5fafb62089706d1f959fa9e0951ecaab1325e9cb2c1"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_court_c/roughness.png",
+            "sha256": "4a604f5cb422dffa6a4e4fc58b754411d9944d2dd84165f772f053556cfcd898"
+          },
+          "rgb_min": [
+            154,
+            153,
+            151
+          ],
+          "rgb_max": [
+            218,
+            217,
+            216
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "court_d",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_d.png",
+        "sha256": "0485e21e98a0548b2a56a4515ea9dbfaeaf63339be3f1f91bee38904e97ea057"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_d/paired_raw_r1.png",
+        "sha256": "4a65829fc3ebc4243fcc15fc3afb16c2b1cb7de43fe91cbe56b4676d0d3190a0"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_d/normal_panel.png",
+            "sha256": "0a81030ebc37539fcd175a9751471b38e82d4b0225bfc15f17e7ab432e78a7a1"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_d/normal_registration.json",
+            "sha256": "1979b3c96654de174a5c87a2d396280102c31a2e4cc6bac000d4b730962c3824"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_court_d/normal.png",
+            "sha256": "d8b284db24422abc624176b05c5f893ed826a0656611ff9ec347e784e5db3b45"
+          },
+          "rgb_min": [
+            83,
+            90,
+            230
+          ],
+          "rgb_max": [
+            210,
+            197,
+            253
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_d/roughness_panel_r1.png",
+            "sha256": "e4f6d1a35739fc1d66f18735fb163ca8766305c73549585e5f48a514a034bbe9"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/court_d/roughness_registration.json",
+            "sha256": "7cee5c051f77205334698223754f7f55a0b6783e27be44f378a6d71f3721198e"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_court_d/roughness.png",
+            "sha256": "b64a9b57d9fc6f58075decb052d8877ed81dfad65fb2f354acee343a62b23e29"
+          },
+          "rgb_min": [
+            168,
+            167,
+            165
+          ],
+          "rgb_max": [
+            216,
+            215,
+            215
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "earth_a",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_earth_a.png",
+        "sha256": "1285d4b526309729275bb2ea40877e0bc7da16f33e04915a3a1936fc686cbfd7"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_a/paired_raw_r1.png",
+        "sha256": "375a73cd89dfe9b39ba016034caf15cc3169430f4b9c415f250f6454c5093567"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_a/normal_panel.png",
+            "sha256": "eb99e7bed0e04194ffdc755c0ca8c5c7daf63432f16df6f938e303cdb9fd7a80"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_a/normal_registration.json",
+            "sha256": "bfea7e1721db86e4c3b8dcb406c346c6893a609d1bfcb75ce1324c4cc1b97a27"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_a/normal.png",
+            "sha256": "76a4b7a78d4ccd53ac1558969ec2a3a5da468f578838840761a57d8dcda71b77"
+          },
+          "rgb_min": [
+            82,
+            68,
+            228
+          ],
+          "rgb_max": [
+            184,
+            218,
+            253
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_a/roughness_panel_r1.png",
+            "sha256": "6da1b0c1aa526789175d4f3ed93459dd6a58e24aeeb2de6ded125c86597f6060"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_a/roughness_registration.json",
+            "sha256": "f52599df185f5e4d446602dc00708c62b0fde704b2d3e0cc432c6ae475295fee"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_a/roughness.png",
+            "sha256": "6d8ad6d88914239ab10b38fe98bb86477a679509dcec4638459b74e2f828a327"
+          },
+          "rgb_min": [
+            179,
+            178,
+            177
+          ],
+          "rgb_max": [
+            223,
+            223,
+            223
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "earth_b",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_earth_b.png",
+        "sha256": "7fa862b75ec253aa9e0aecf783895cbb7c548cb6ee394a1be9f03c79c8c4b7c4"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_b/paired_raw_r1.png",
+        "sha256": "b3a730090da40fd52fa543a4af3d83ad4ec7123dfcd43748ac729fbf61b5c7b9"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_b/normal_panel.png",
+            "sha256": "72abb523de4ac8d8ad59ea2b2dcba97c63bc01ce905602020d5496b170689666"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_b/normal_registration.json",
+            "sha256": "9f4f210af90f07ad0af6e000506fb4d02c91701474e818619b8be736abefea07"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_b/normal.png",
+            "sha256": "ae220c8294fd91f31ec295e654178dead642970957b0fa19ccd5708af8e8aa9d"
+          },
+          "rgb_min": [
+            83,
+            65,
+            236
+          ],
+          "rgb_max": [
+            155,
+            190,
+            254
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_b/roughness_raw_r2.png",
+            "sha256": "8d710621d6bd1c9982e0d759ea13ddb126573a521266c798a60960390073982d"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_b/roughness_registration.json",
+            "sha256": "775dd9a74ade36c2ed297c3b74b4da3bd5ba118ec9c18de02708c1455cd13e3e"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_b/roughness.png",
+            "sha256": "93e10fe17c74bcbcb73eb56c1af3804a6a57fde31fd57786ca8df533833a8828"
+          },
+          "rgb_min": [
+            154,
+            154,
+            154
+          ],
+          "rgb_max": [
+            235,
+            235,
+            235
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "earth_c",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_earth_c.png",
+        "sha256": "8531085787faf46e266da7234faf58443e8831cc94d63f09bc5657ee624e1e7a"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_c/paired_raw_r1.png",
+        "sha256": "3309205529202ba96aa62b6973d60f3271d914708d2dd0938eb5a0c3f8f61da6"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_c/normal_panel.png",
+            "sha256": "03e1e28c41698fe2fac8dd9928d27f4d7b87bc4b985e16e7e2030d3d19acc800"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_c/normal_registration.json",
+            "sha256": "75f0d7a6eec3b9b5de3359859b370384941afd095c142f35376760827eed3867"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_c/normal.png",
+            "sha256": "0372b0ef76f4c22e226666c88708dcf9b0ce366ffe579d153c1378d9cfdda7fc"
+          },
+          "rgb_min": [
+            44,
+            60,
+            221
+          ],
+          "rgb_max": [
+            212,
+            198,
+            253
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_c/roughness_panel_r1.png",
+            "sha256": "683d78b438bd01017b39c88f406c970bad0dcca8bbc595290bf77b744d994eb8"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_c/roughness_registration.json",
+            "sha256": "a888c9661640859bb83062bb4aa7b0ea5eb07a1ffed0afbe5427ef47c49c1c05"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_c/roughness.png",
+            "sha256": "af631984c7088d4c92fdd2c139fbfbac39e6720e77cce736cab38ce17fe97455"
+          },
+          "rgb_min": [
+            170,
+            170,
+            170
+          ],
+          "rgb_max": [
+            217,
+            217,
+            216
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "earth_d",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_earth_d.png",
+        "sha256": "bffa9d38e1244c47810bf6dc539c42ade477d83d858e143e817c6e303cfce874"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_d/paired_raw_r1.png",
+        "sha256": "b8123666f0268f53a119433760d3f4a25249d958e34828580b24d19e922190e1"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_d/normal_panel.png",
+            "sha256": "9167f71381c7d9d648ec33890f99ab25f082942c78fa9441703fd7f819c4db3c"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_d/normal_registration.json",
+            "sha256": "5b78a5c8507b473995ad07d8d8aeed9268d97dc54615303709e4eec602d6a154"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_d/normal.png",
+            "sha256": "abe6fe0a02399cf3d862bd6bb8cd2ad60b01e5f45c32ef73eff9a6c4d7ece70f"
+          },
+          "rgb_min": [
+            90,
+            84,
+            249
+          ],
+          "rgb_max": [
+            185,
+            184,
+            253
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_d/roughness_panel_r1.png",
+            "sha256": "b1050250b750d9441d22c5c6a5c0b565b94f09fd3f34f593fc2eac40a0716561"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_d/roughness_registration.json",
+            "sha256": "d4950bc79939489d17a17c11a4ec87a4b00edd819e5b51d282ea6ba2193b3799"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_d/roughness.png",
+            "sha256": "844f945576ac30a92139692aa91ea578e0376594b8f927b5439b6374bc2d94c2"
+          },
+          "rgb_min": [
+            180,
+            179,
+            179
+          ],
+          "rgb_max": [
+            222,
+            221,
+            221
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "road_a",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_a.png",
+        "sha256": "e8fd05e2c091c94a90159b52085b8f10a9aadb09326296c035ff552bb8c1e680"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_a/paired_raw_r1.png",
+        "sha256": "745a93dc376100111bbdac8c099cefed3ee10f5e202a5ded15e9c2f82439c7a8"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_a/normal_panel.png",
+            "sha256": "94313939c27f3c7c1f62eb84cfe21813b67422bec13c64c3eee02ed059816dac"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_a/normal_registration.json",
+            "sha256": "ea99f356322bde0ce2dd7bc696444f8d7b57e852a5db29f067cd088d3c52bd75"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_road_a/normal.png",
+            "sha256": "753b217e6bc6dd7dddb32a11dec4da3601c858812f54b0f72f2f58f06321b7c8"
+          },
+          "rgb_min": [
+            51,
+            87,
+            233
+          ],
+          "rgb_max": [
+            192,
+            222,
+            253
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_a/roughness_panel_r1.png",
+            "sha256": "9aed806c3088543d94ed68795a300348fcd69435a7e979f3729f78458443b971"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_a/roughness_registration.json",
+            "sha256": "a027128dd520a0254db30ad41fa172590e1a8673f7d6cfd99e149d3f8a7d9cec"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_road_a/roughness.png",
+            "sha256": "eecfa78bdc01a330c10569acb3462ae7931b27c242de64651f156383811d6947"
+          },
+          "rgb_min": [
+            168,
+            167,
+            166
+          ],
+          "rgb_max": [
+            224,
+            224,
+            223
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "road_b",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_b.png",
+        "sha256": "87caaefb6c5858ff1ae5f389af7e10a273c0daa843db4df82761a67098a26b76"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_b/paired_raw_r1.png",
+        "sha256": "013ad4c8718fbb0cdd3faed28a4c2118f85f523718e5c21b9d410e08074448cc"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_b/normal_panel.png",
+            "sha256": "e21e3d311cf7ab0e9567289e80fc0adb7643b86a94389fa08647f29a9288af78"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_b/normal_registration.json",
+            "sha256": "b7a12cc7458e37ccf5b17061b5134bf9329fa3c0b029b71664a20a019a4c43ae"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_road_b/normal.png",
+            "sha256": "1dc92af5c6fcb1ddd2d48451b8925826a2e469079ffd105b2c7b5f80b54a0dfb"
+          },
+          "rgb_min": [
+            68,
+            58,
+            223
+          ],
+          "rgb_max": [
+            236,
+            214,
+            254
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_b/roughness_raw_r2.png",
+            "sha256": "88d5418e8ae2a359fa7b80a5555f381cfc1ce9987fc8230a14f332db87b9fe97"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_b/roughness_registration.json",
+            "sha256": "964cd61b76a98bf526d7705d2e83922e807fe6c1cf26cc610cc6a88eee05846e"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_road_b/roughness.png",
+            "sha256": "29072c24bbfd95f0fa1ba08b9e9db71aa03bd03d6568092b145933e500870ccb"
+          },
+          "rgb_min": [
+            154,
+            154,
+            153
+          ],
+          "rgb_max": [
+            240,
+            240,
+            240
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "road_c",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_c.png",
+        "sha256": "6d4f31fb77089be85b8b845c4df69fae72d2e2a2e11a8df4450bf8928829e3c9"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_c/paired_raw_r1.png",
+        "sha256": "3ad2fa4903b3cd3a814931b6de2acf5c0013acf51194f12aba711d8919a2fed1"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_c/normal_panel.png",
+            "sha256": "12c96eb4f71ad1167e933a322eadf3f4d412366fd29dbe5e31cfb9b16269b8ea"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_c/normal_registration.json",
+            "sha256": "337158422d3919ef2754efec2ccd56002acf3f713c9bc684b5bf5b1c0d2ec4a1"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_road_c/normal.png",
+            "sha256": "9077f03e7eb61245d9ab28e5b21640ad0f383865b5762e55f441083359a4a1f5"
+          },
+          "rgb_min": [
+            78,
+            92,
+            247
+          ],
+          "rgb_max": [
+            189,
+            202,
+            253
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_c/roughness_panel_r1.png",
+            "sha256": "6a0b03044bd6a8393c2239a49250b201fda4dd46c776a32e8a9a81851649753e"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_c/roughness_registration.json",
+            "sha256": "c4c8b390bb942ac1635299c15fec0ff0ef2626b5738dac1b7a0905cebd213552"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_road_c/roughness.png",
+            "sha256": "9285721fd5c7ad0d0972cfd88309e1ff3920adbe4572adff9b325856ce51f92d"
+          },
+          "rgb_min": [
+            153,
+            152,
+            151
+          ],
+          "rgb_max": [
+            219,
+            218,
+            218
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "road_d",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_road_d.png",
+        "sha256": "29f6296d2bbea4a6f1e21608f65fd0365749d46bae8a3ab639522c7dca2931a0"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_d/paired_raw_r1.png",
+        "sha256": "79f5fa0d3a68d10f52f5d42d132d176aa56371b69036149d60fe813e1c5c06b8"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_d/normal_panel.png",
+            "sha256": "15aa155e550edd7bb6c9be6e3599e72ebd36454a9061ce77b7dc524d2c7d10b2"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_d/normal_registration.json",
+            "sha256": "e8e4d4de94a7f10ce4799e2ef10e75e84f245f1deb1a107df5af3dc56d4ffc3e"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_road_d/normal.png",
+            "sha256": "fb1c6011ba6bf87f85614845c7b45c58a783d8b607ebdb742b7ab2fbeabe3a2d"
+          },
+          "rgb_min": [
+            92,
+            74,
+            243
+          ],
+          "rgb_max": [
+            152,
+            181,
+            253
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_d/roughness_panel_r1.png",
+            "sha256": "a4564f86183c235fbc401c99226a5510e3d9337c0c440b243b541567da893a1d"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/road_d/roughness_registration.json",
+            "sha256": "f05f1d86cb5f63559d589ef0e063b7dad46dc33958aee21e7977f6a169a667d0"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_road_d/roughness.png",
+            "sha256": "4c2850238a77ea070c3d7e6c9b48086c7afdbb04722f0811b45807002223be9f"
+          },
+          "rgb_min": [
+            151,
+            151,
+            150
+          ],
+          "rgb_max": [
+            215,
+            215,
+            213
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "ruin_a",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_a.png",
+        "sha256": "35412b1527a89310e6a23b74af8ab75a06b158a6c7eee03e120a5117f063f1c9"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_a/paired_raw_r1.png",
+        "sha256": "1c0fc7268dd3822a18b8668ae6eb69b2844156012b40898371b85e82d3185818"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_a/normal_panel.png",
+            "sha256": "b060eeb02d5b80553f8a4695eb41b7ff81741dc5ac39c12ee100701ae50a57ce"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_a/normal_registration.json",
+            "sha256": "f23fcb0ce0d20a34bddd3f6848e9158970d7da678cf17d19a6ea6748a6aeded3"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_a/normal.png",
+            "sha256": "37cfdbea09f5458f73406dbdff17dbd8188ea42843912ed98f2860a385923db6"
+          },
+          "rgb_min": [
+            67,
+            45,
+            217
+          ],
+          "rgb_max": [
+            211,
+            234,
+            254
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_a/roughness_panel_r1.png",
+            "sha256": "f603f10a1a88bdc182ee0b2a535e55b7d37993536ac67d20baf395c405ad27f8"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_a/roughness_registration.json",
+            "sha256": "18060f5c0034cff5b9b590dc7d505fd78b9d298ab2bbba37f48726429adc6215"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_a/roughness.png",
+            "sha256": "73a68b32c6d527ec57786354bccd14690cc23c91006e1efd4a70a9b507b5d189"
+          },
+          "rgb_min": [
+            169,
+            168,
+            167
+          ],
+          "rgb_max": [
+            226,
+            226,
+            224
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "ruin_b",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_b.png",
+        "sha256": "8dd4a3dcb33c1ddc24cd381d4dc11665357a0a16e1b4800abd21d5f0758dff17"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_b/paired_raw_r1.png",
+        "sha256": "d6361a9dbb179753d8708392a3cb3fdd2cdabd608120e88281c0e5f411b0acc4"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_b/normal_panel.png",
+            "sha256": "9b1b5c69496635fd8fdd5c7b0de889e7facf6041983c16e226a291e74aa58953"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_b/normal_registration.json",
+            "sha256": "e7972ef10ff134070494267796f5a5d44873f7c1b4c0dee90aa696cf58ea6564"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_b/normal.png",
+            "sha256": "d48eef85695c6baafe2420b22e8e3bca6e5f703e0a04af1bd78c7018d9cc83de"
+          },
+          "rgb_min": [
+            54,
+            52,
+            199
+          ],
+          "rgb_max": [
+            240,
+            219,
+            254
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_b/roughness_raw_r2.png",
+            "sha256": "4e2a727a46e1931117895862113a22113b374900cea489b7860fc61c2c04d1e3"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_b/roughness_registration.json",
+            "sha256": "8962cce74b24df45de2b501b21f3c7ca1a8a908fa8e13efca0a90b431e8bdc52"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_b/roughness.png",
+            "sha256": "a690d9674097faa063362e809073e2a6ed218a895a6f0bc0ece67df304b0c02b"
+          },
+          "rgb_min": [
+            163,
+            163,
+            162
+          ],
+          "rgb_max": [
+            230,
+            230,
+            229
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "ruin_c",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_c.png",
+        "sha256": "8b2a62fb569aa5ca94da8db4756ca2c04ef04da71fc2534bbe2f21ff93644632"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_c/paired_raw_r1.png",
+        "sha256": "99f50b3c9a82de0844151a6d720b7049c465b84a408ca8746525833c3ce3d05c"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_c/normal_panel.png",
+            "sha256": "3187c45909ffc6e15ef1800416d05d537aa53f4f72473175cc71465923551e7c"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_c/normal_registration.json",
+            "sha256": "ccc3d5e9a08ef0a2a89e3265152e8716649ce447618b2c83c83da91c1e9f35f5"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_c/normal.png",
+            "sha256": "b292190bab85715c3e0c677bbbaf05c722f69cf029f15959fcb96e18fa7353f2"
+          },
+          "rgb_min": [
+            49,
+            49,
+            213
+          ],
+          "rgb_max": [
+            215,
+            191,
+            253
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_c/roughness_panel_r1.png",
+            "sha256": "d846f488a3d159c713b72c64b3fd78a9fb9ab22bed878c2a7320d9c9e10884e7"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_c/roughness_registration.json",
+            "sha256": "cd14c2a0440d502e6989631054980c0d44b18fa50ea991d4e7d03d4c492c1020"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_c/roughness.png",
+            "sha256": "acbb564d314483233d23a663d43b9874c689db6bd304ab950c6d4926cf5b76fc"
+          },
+          "rgb_min": [
+            153,
+            152,
+            150
+          ],
+          "rgb_max": [
+            226,
+            226,
+            225
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    },
+    {
+      "id": "ruin_d",
+      "status": "QA_PENDING",
+      "albedo": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_ruin_d.png",
+        "sha256": "8fd06628aeaed8aca987699e86a2d1125b156ba6429e191cfef6fd2b6c29754d"
+      },
+      "raw_pair": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_d/paired_raw_r1.png",
+        "sha256": "a3470f29b8d6e4a0d02ae81ee05e6240e5b7579f0afb6e447e40fddb1ca65dda"
+      },
+      "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+      "maps": [
+        {
+          "kind": "normal",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_d/normal_panel.png",
+            "sha256": "eb92367078c06d7a50c217553cf4df1dfdb44661398a23d1bc0c5304466c5beb"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_d/normal_registration.json",
+            "sha256": "c89c8463d0d641322f379d6cdb58203fe508b2bc4b3dd8f6fb26443cf4b54e09"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_d/normal.png",
+            "sha256": "84961fd0cd67763aa5b4a8e13b8d733456619b9c27bde995f8c3ea4686c001f6"
+          },
+          "rgb_min": [
+            50,
+            48,
+            206
+          ],
+          "rgb_max": [
+            164,
+            204,
+            254
+          ]
+        },
+        {
+          "kind": "roughness",
+          "source": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_d/roughness_panel_r1.png",
+            "sha256": "26c87ab6556b83e83ebaec8865c33f5d66d40fe3ce60a47a181cf6c4b8008325"
+          },
+          "registration": {
+            "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/ruin_d/roughness_registration.json",
+            "sha256": "f4b825703889887d00e59d5dbdfb94ff5e4b2ddbdb82285cad5e103c630d0dc1"
+          },
+          "delivery": {
+            "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_d/roughness.png",
+            "sha256": "cc1cf44b68f0f77a2dbcdc2b81253a698061521e2a8f4d080ff6161d12056790"
+          },
+          "rgb_min": [
+            170,
+            169,
+            168
+          ],
+          "rgb_max": [
+            227,
+            226,
+            225
+          ]
+        }
+      ],
+      "human_registration_review": "PENDING"
+    }
+  ]
+}

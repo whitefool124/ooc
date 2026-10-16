@@ -1,0 +1,55 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "desk_candidate_20261010_plaster",
+  "role": "hd2d_library_display",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in generation; noncombat desk texture/card",
+    "source_path": "ArtSource/desk_candidate_20261010/plaster/raw/source.png",
+    "source_sha256": "99d4e464631be45923d4c0b786b8bac61bc846d72bfd7c13afb2ccc2b237fbd7"
+  },
+  "delivery": {
+    "output_path": "ArtSource/desk_candidate_20261010/plaster/delivery/plaster.png",
+    "output_sha256": "cc18e48a5434dd2c0a20269f73d58e41828b20cb9ca12bfa865c336a79e4199d",
+    "native_ppu": null,
+    "logical_cells": null,
+    "palette_max": 1000000,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "real desk polygon material UV inset excluding safety border"
+  },
+  "processing": {
+    "operations": [
+      "nearest delivery resize under noncombat library exception",
+      "transparent safety border"
+    ],
+    "pixel_repainting": false,
+    "original_size": [
+      1254,
+      1254
+    ],
+    "delivery_size": [
+      258,
+      258
+    ],
+    "modeling_policy": "2026-10-10 final user correction"
+  },
+  "evidence": {
+    "one_x": "ArtSource/desk_candidate_20261010/plaster/qa/one_x.png",
+    "four_x": "ArtSource/desk_candidate_20261010/plaster/qa/four_x.png",
+    "grayscale": "ArtSource/desk_candidate_20261010/plaster/qa/grayscale.png",
+    "checker": "ArtSource/desk_candidate_20261010/plaster/qa/checker.png",
+    "application_contact": null
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Application and human approval pending; not FORMAL."
+  }
+}

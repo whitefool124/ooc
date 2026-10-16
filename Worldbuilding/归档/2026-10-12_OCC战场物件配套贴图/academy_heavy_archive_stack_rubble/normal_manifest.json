@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_heavy_archive_stack_rubble_normal",
+  "role": "hd2d_material_data_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/normal_panel.png",
+    "source_sha256": "de85eaa75103136838d515d1ea479b47d0d56fa58e9f5af6773a32a922229e50",
+    "independent_raw": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/paired_raw_r1.png",
+      "sha256": "021a8b5e930e57db5ab5326100fccee6186284b10a51dc26d18bb56c3685b180"
+    },
+    "registration": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/normal_registration.json",
+      "sha256": "414efff5027d3d3b38d5dd3ed9dd211fbb2e79ac604bc3d0af9a4bcd94728f8e"
+    }
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble/normal.png",
+    "output_sha256": "43a14f6961b49068fb286901219a25dc15254a0a3f854f1e32c0379f05d86547",
+    "native_ppu": 32,
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "unity_import": {
+    "guid": "cbaf743d05af0654ea66c62446b06434",
+    "filter_mode": "Point",
+    "colour_space": "linear",
+    "mipmaps": false,
+    "compression": "Uncompressed",
+    "wrap_mode": "Clamp"
+  },
+  "application": {
+    "albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_heavy_archive_stack_rubble.png",
+      "sha256": "9e42109bded1640652262caa8ae12b45ffa3a878c2e14dc57107c6e73a06b473"
+    },
+    "shared_uv": true,
+    "world_pixel_pitch": 0.03125,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_rubble_dry/result.json",
+      "sha256": "e49eca89a8c63f06c49a800b990725b545181f54c37e7ab38fd752e8ba9f6cf1"
+    }
+  },
+  "human_review": {
+    "overall": "PENDING"
+  },
+  "admission_blockers": [
+    "Numeric material-data role not registered in Sprite formal admission; no FORMAL promotion",
+    "Source registration, complete scene density and genuine human material review pending"
+  ]
+}

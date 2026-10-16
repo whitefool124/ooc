@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"screen\\\":\\\"1920x1080\\\",\\\"host\\\":\\\"战斗管理器\\\",\\\"buttons\\\":[{\\\"name\\\":\\\"按钮_餐食_MEAL-GUARD\\\",\\\"text\\\":\\\"岩盐浓汤\\\",\\\"enabled\\\":false,\\\"point\\\":[1601.02344,368.5115]},{\\\"name\\\":\\\"按钮_餐食_MEAL-POWER\\\",\\\"text\\\":\\\"强攻炖肉\\\",\\\"enabled\\\":true,\\\"point\\\":[934.2496,368.5115]},{\\\"name\\\":\\\"按钮_返回地图\\\",\\\"text\\\":\\\"返回地图\\\",\\\"enabled\\\":true,\\\"point\\\":[1645.59351,245.405457]},{\\\"name\\\":\\\"按钮_餐食_MEAL-AETHER\\\",\\\"text\\\":\\\"导能热饮\\\",\\\"enabled\\\":false,\\\"point\\\":[1267.64722,368.5115]}],\\\"cameras\\\":[{\\\"name\\\":\\\"主摄像机\\\",\\\"allowHDR\\\":false,\\\"allowMSAA\\\":false,\\\"fieldOfView\\\":60.0,\\\"orthographic\\\":true,\\\"cullingMask\\\":-1,\\\"output\\\":\\\"screen\\\"},{\\\"name\\\":\\\"HD2D场景相机\\\",\\\"allowHDR\\\":true,\\\"allowMSAA\\\":false,\\\"fieldOfView\\\":24.0,\\\"orthographic\\\":false,\\\"cullingMask\\\":536870912,\\\"output\\\":\\\"1920x1080\\\"}]}\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

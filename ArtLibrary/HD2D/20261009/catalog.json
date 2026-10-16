@@ -1,0 +1,99 @@
+[
+  {
+    "id": "dossier",
+    "title": "展开档案册",
+    "width": 1526,
+    "height": 875,
+    "writing_areas_normalized_xywh": [
+      [
+        0.105,
+        0.13,
+        0.34,
+        0.7
+      ],
+      [
+        0.565,
+        0.13,
+        0.335,
+        0.7
+      ]
+    ]
+  },
+  {
+    "id": "notes",
+    "title": "装订便笺",
+    "width": 1467,
+    "height": 846,
+    "writing_areas_normalized_xywh": [
+      [
+        0.12,
+        0.22,
+        0.74,
+        0.6
+      ]
+    ]
+  },
+  {
+    "id": "plaque",
+    "title": "悬挂铭牌",
+    "width": 1667,
+    "height": 716,
+    "writing_areas_normalized_xywh": [
+      [
+        0.16,
+        0.39,
+        0.68,
+        0.44
+      ]
+    ]
+  },
+  {
+    "id": "price_tag",
+    "title": "商品吊牌",
+    "width": 1412,
+    "height": 964,
+    "writing_areas_normalized_xywh": [
+      [
+        0.2,
+        0.51,
+        0.6,
+        0.34
+      ]
+    ]
+  },
+  {
+    "id": "service_label",
+    "title": "桌面服务牌",
+    "width": 1507,
+    "height": 664,
+    "writing_areas_normalized_xywh": [
+      [
+        0.17,
+        0.24,
+        0.66,
+        0.4
+      ]
+    ]
+  },
+  {
+    "id": "cloth_display",
+    "title": "布垫陈列座",
+    "width": 1494,
+    "height": 607,
+    "writing_areas_normalized_xywh": []
+  },
+  {
+    "id": "tool_rack",
+    "title": "校准工具架",
+    "width": 1423,
+    "height": 973,
+    "writing_areas_normalized_xywh": []
+  },
+  {
+    "id": "apothecary",
+    "title": "药剂收纳提箱",
+    "width": 1451,
+    "height": 1002,
+    "writing_areas_normalized_xywh": []
+  }
+]

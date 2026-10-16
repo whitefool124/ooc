@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -51,6 +51,7 @@ namespace OCC.Combat
                 ally.IsHero == enemy.IsHero && ally.MaxShield > ally.Shield &&
                 (state.Ruleset != CombatRuleset.Roguelite || !ally.HasStatus(StatusType.BreakStance)) &&
                 enemy.Position.ManhattanDistance(ally.Position) <= enemy.EffectiveRange(skill.Range) &&
+                HasLineOfSight(state, enemy, ally, skill) &&
                 AcademyEnemyAreaRuntime.SharesStructure(state, enemy, ally);
         }
 
@@ -101,7 +102,8 @@ namespace OCC.Combat
                 .Where(path => path[path.Count - 1].ManhattanDistance(hero.Position) >= weapon.MinimumRange &&
                     path[path.Count - 1].ManhattanDistance(hero.Position) <= enemy.EffectiveRange(weapon.Range) &&
                     (weapon.Range <= 1 || state.HasLineOfSight(path[path.Count - 1], hero.Position)))
-                .OrderBy(path => path.Count)
+                .OrderBy(path => path.Skip(1).Sum(position => CombatMovementQuery.EntryCost(state, enemy, position)))
+                .ThenBy(path => path.Count)
                 .ThenBy(path => path[path.Count - 1].Y)
                 .ThenBy(path => path[path.Count - 1].X)
                 .FirstOrDefault();
@@ -111,7 +113,7 @@ namespace OCC.Combat
                     .ThenBy(path => path[path.Count - 1].Y)
                     .ThenBy(path => path[path.Count - 1].X)
                     .FirstOrDefault();
-            return route == null ? CombatCommand.EndTurn(enemy.Id) : CombatCommand.Move(enemy.Id, route[1]);
+            return MoveWithinBudget(state, enemy, route);
         }
 
         private static bool TryChooseDecoy(CombatState state, UnitState enemy, out CombatCommand command)
@@ -122,12 +124,29 @@ namespace OCC.Combat
             GridPosition[] offsets = { new GridPosition(0, 1), new GridPosition(1, 0), new GridPosition(0, -1), new GridPosition(-1, 0) };
             IReadOnlyList<GridPosition> path = offsets.Select(offset => decoy + offset)
                 .Where(position => state.Map.IsInside(position) && !state.Map.IsBlocked(position) && !state.IsOccupied(position, enemy.Id))
-                .Select(position => state.Map.FindShortestPath(enemy.Position, position, 12, cell => state.IsOccupied(cell, enemy.Id)))
+                .Select(position => state.Map.FindLowestCostPath(enemy.Position, position, state.Map.Width * state.Map.Height * 4,
+                    cell => CombatMovementQuery.EntryCost(state, enemy, cell), cell => state.IsOccupied(cell, enemy.Id)))
                 .Where(candidate => candidate.Count > 1)
-                .OrderBy(candidate => candidate.Count).ThenBy(candidate => candidate[candidate.Count - 1].Y).ThenBy(candidate => candidate[candidate.Count - 1].X)
+                .OrderBy(candidate => candidate.Skip(1).Sum(cell => CombatMovementQuery.EntryCost(state, enemy, cell)))
+                .ThenBy(candidate => candidate.Count).ThenBy(candidate => candidate[candidate.Count - 1].Y).ThenBy(candidate => candidate[candidate.Count - 1].X)
                 .FirstOrDefault();
             if (path == null) return false;
-            command = CombatCommand.Move(enemy.Id, path[1]); return true;
+            command = MoveWithinBudget(state, enemy, path); return true;
+        }
+
+        private static CombatCommand MoveWithinBudget(CombatState state, UnitState enemy, IReadOnlyList<GridPosition> route)
+        {
+            if (route == null || enemy.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(enemy.Id);
+            int spent = 0, budget = CombatMovementQuery.Budget(state, enemy);
+            GridPosition destination = enemy.Position;
+            for (int step = 1; step < route.Count; step++)
+            {
+                int cost = CombatMovementQuery.EntryCost(state, enemy, route[step]);
+                if (spent + cost > budget) break;
+                spent += cost; destination = route[step];
+                if (state.Map.GetTile(destination).IsBindingMark) break;
+            }
+            return destination == enemy.Position ? CombatCommand.EndTurn(enemy.Id) : CombatCommand.Move(enemy.Id, destination);
         }
 
         private static bool CanCast(UnitState source, SkillDefinition skill) => skill != null && source.Mana >= skill.ManaCost && source.IsSkillReady(skill);
@@ -202,8 +221,8 @@ namespace OCC.Combat
             new EnemyArchetype("shieldguard", "盾术生", 2, 2, 2, 7, EnemyAttackCatalog.ShieldRam, maxHealth: 16, artId: "shieldguard", primarySkill: EnemyAbilityCatalog.ShieldRam, resolutionKind: EnemyResolutionKind.Student),
             new EnemyArchetype("pyromancer", "火矢生", 0, 1, 0, 9, EnemyAttackCatalog.ArcaneShot, maxHealth: 16, artId: "pyromancer", primarySkill: EnemyAbilityCatalog.PyromancerFireArrow, resolutionKind: EnemyResolutionKind.Student),
             new EnemyArchetype("raider", "侧锋生", 0, 0, 1, 11, EnemyAttackCatalog.HeavyBlow, maxHealth: 16, artId: "raider", primarySkill: EnemyAbilityCatalog.HookingStrike, resolutionKind: EnemyResolutionKind.Student),
-            new EnemyArchetype("elite_vanguard", "划线教官", 2, 4, 2, 10, EnemyAttackCatalog.HeavyBlow, true, 24, "elite", primarySkill: EnemyAbilityCatalog.VanguardCrush, resolutionKind: EnemyResolutionKind.Staff),
-            new EnemyArchetype("core_overseer", "塔之守卫", 3, 4, 2, 8, EnemyAttackCatalog.HeavyBlow, true, 36, "elite",
+            new EnemyArchetype("elite_vanguard", "划线教官", 2, 4, 2, 10, EnemyAttackCatalog.HeavyBlow, true, 28, "elite", primarySkill: EnemyAbilityCatalog.VanguardCrush, resolutionKind: EnemyResolutionKind.Staff),
+            new EnemyArchetype("core_overseer", "塔之守卫", 3, 4, 2, 8, EnemyAttackCatalog.HeavyBlow, true, 48, "elite",
                 EnemyAbilityCatalog.BossSunderMaul, EnemyAbilityCatalog.BossTowerPress, EnemyResolutionKind.Witness, hasSecondarySkill: true),
             new EnemyArchetype("sigil_mauler", "替身偶", 1, 0, 0, 8, EnemyAttackCatalog.HeavyBlow, maxHealth: 16, artId: "sigil_mauler", primarySkill: EnemyAbilityCatalog.SunderingSigil, resolutionKind: EnemyResolutionKind.Construct),
             new EnemyArchetype("barrier_mender", "补盾助教", 0, 4, 0, 7, EnemyAttackCatalog.ArcaneShot, maxHealth: 16, artId: "barrier_mender", primarySkill: EnemyAbilityCatalog.WardMend, resolutionKind: EnemyResolutionKind.Staff),
@@ -211,16 +230,16 @@ namespace OCC.Combat
             new EnemyArchetype("stone_snare", "拴索助教", 0, 1, 0, 8, EnemyAttackCatalog.ArcaneShot, maxHealth: 16, artId: "stone_snare", primarySkill: EnemyAbilityCatalog.StoneSnare, resolutionKind: EnemyResolutionKind.Staff),
             new EnemyArchetype("lantern_revealer", "提灯巡查", 0, 2, 0, 9, EnemyAttackCatalog.ArcaneShot, maxHealth: 16, artId: "lantern_revealer", primarySkill: EnemyAbilityCatalog.RevealingLantern, resolutionKind: EnemyResolutionKind.Staff),
             new EnemyArchetype("rune_arbalist", "背弩生", 1, 0, 0, 6, EnemyAbilityCatalog.HeavyCrossbow, maxHealth: 16, artId: "rune_arbalist", primarySkill: EnemyAbilityCatalog.WindlassBolt, resolutionKind: EnemyResolutionKind.Student),
-            new EnemyArchetype("breach_ram", "楔角", 0, 8, 0, 9, EnemyAbilityCatalog.BreachRam, true, 36, "sigil_mauler", resolutionKind: EnemyResolutionKind.Construct),
-            new EnemyArchetype("elder_tracker_hound", "老寻", 0, 0, 0, 10, EnemyAbilityCatalog.TrackerBite, true, 14, "tether_hound",
+            new EnemyArchetype("breach_ram", "楔角", 0, 8, 0, 9, EnemyAbilityCatalog.BreachRam, true, 36, "breach_ram", resolutionKind: EnemyResolutionKind.Construct),
+            new EnemyArchetype("elder_tracker_hound", "老寻", 0, 0, 0, 10, EnemyAbilityCatalog.TrackerBite, true, 18, "elder_tracker_hound",
                 EnemyAbilityCatalog.TrackerSnap, EnemyAbilityCatalog.TrackerMaul, EnemyResolutionKind.Beast, hasSecondarySkill: true),
-            new EnemyArchetype("signal_keeper", "灯台值守", 0, 1, 0, 8, EnemyAbilityCatalog.KeeperMirror, maxHealth: 16, artId: "lantern_revealer",
+            new EnemyArchetype("signal_keeper", "灯台值守", 0, 1, 0, 8, EnemyAbilityCatalog.KeeperMirror, maxHealth: 11, artId: "signal_keeper",
                 primarySkill: EnemyAbilityCatalog.SpotlightMirror, resolutionKind: EnemyResolutionKind.Staff, hasSecondarySkill: false),
-            new EnemyArchetype("wind_librarian", "小铃", 1, 2, 0, 9, EnemyAbilityCatalog.LibrarianStaff, true, 16, "pyromancer",
+            new EnemyArchetype("wind_librarian", "小铃", 1, 2, 0, 9, EnemyAbilityCatalog.LibrarianStaff, true, 24, "wind_librarian",
                 primarySkill: EnemyAbilityCatalog.WindScrollEdge, resolutionKind: EnemyResolutionKind.Staff, hasSecondarySkill: false),
-            new EnemyArchetype("legacy_storekeeper", "老库管", 1, 2, 0, 7, EnemyAbilityCatalog.StorekeeperStand, true, 18, "barrier_mender",
+            new EnemyArchetype("legacy_storekeeper", "老库管", 1, 2, 0, 7, EnemyAbilityCatalog.StorekeeperStand, true, 24, "legacy_storekeeper",
                 primarySkill: EnemyAbilityCatalog.LegacyPulse, resolutionKind: EnemyResolutionKind.Staff, hasSecondarySkill: false),
-            new EnemyArchetype("prototype_hand", "试制员", 1, 2, 0, 8, EnemyAbilityCatalog.PrototypeTools, true, 16, "stone_snare",
+            new EnemyArchetype("prototype_hand", "试制员", 1, 2, 0, 8, EnemyAbilityCatalog.PrototypeTools, true, 24, "stone_snare",
                 primarySkill: EnemyAbilityCatalog.PrototypeDeploy, resolutionKind: EnemyResolutionKind.Staff, hasSecondarySkill: false)
         };
 

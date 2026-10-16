@@ -1,0 +1,5 @@
+{
+  "enabledMaterials": 27,
+  "shaderDependencies": "e724250a4d9a584e496cbf4f3f978904",
+  "kernel": "12 blocker + 25 weighted comparison samples; max4 atlas texels"
+}

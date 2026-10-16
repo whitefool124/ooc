@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Mouse left click at (679, 692) was blocked by '强化材料位' with no click handler\",\"data\":{\"hit\":false,\"geometry\":{\"schema_version\":1,\"capture_id\":null,\"captured_at\":\"2026-10-10T04:48:04.1646722Z\",\"surface\":\"game_view\",\"view_id\":\"568105584918845924\",\"editor_epoch\":\"d5f7a937457f425cbee34c532670fef9\",\"scene_signature\":\"Assets/Scenes/CombatPrototype.unity:568105589213547006:True\",\"camera_signature\":\"568105584918860516:(x:0.0000, y:0.0000, width:1.0000, height:1.0000):0\",\"units\":\"pixels\",\"image_origin\":\"top_left\",\"render_origin\":\"bottom_left\",\"render_width\":1920,\"render_height\":1080,\"output_width\":1920,\"output_height\":1080,\"viewport\":{\"x\":0.0,\"y\":0.0,\"width\":1920.0,\"height\":1080.0},\"output_to_render_x\":1.0,\"output_to_render_y\":1.0,\"interactive\":true,\"is_playing\":true,\"note\":\"Render framebuffer coordinates, not desktop/editor-window coordinates. Image viewport excludes editor chrome. Camera letterboxing remains part of the framebuffer. Geometry freshness does not prove that animated UI contents are unchanged.\"},\"strategy\":null,\"target\":null,\"blockedBy\":{\"name\":\"强化材料位\",\"instanceId\":\"568105589213444476\",\"path\":\"OCC 表现层锚点/正式肉鸽UI/参考分辨率内容区/内容/服务节点稳定骨架/服务内容区/强化台/强化材料位\"},\"requested\":{\"x\":679.0,\"y\":692.0,\"coordinate_space\":\"render_pixels\",\"origin\":\"bottom_left\",\"capture_id\":null,\"button\":\"left\"},\"attempted\":[{\"strategy\":\"ui-eventsystem\",\"hit\":false,\"blocked\":true,\"target\":null,\"blockedBy\":{\"name\":\"强化材料位\",\"instanceId\":\"568105589213444476\",\"path\":\"OCC 表现层锚点/正式肉鸽UI/参考分辨率内容区/内容/服务节点稳定骨架/服务内容区/强化台/强化材料位\"},\"detail\":\"top UI hit '强化材料位' has no IPointerClickHandler in its parent chain\"}],\"mapping\":{\"ui\":{\"x\":679.0,\"y\":692.0,\"detail\":\"Converted to bottom-left render pixels using the visual coordinate contract.\"},\"viewport\":{\"x\":0.353645831,\"y\":0.640740752,\"detail\":\"Normalized full-render coordinates; camera rect is applied by physics dispatch.\"}}}}"
+      }
+    ]
+  }
+}

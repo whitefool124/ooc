@@ -1,0 +1,22 @@
+{
+  "schema": "occ-hd2d-library-qa-v1",
+  "date": "2026-10-09",
+  "assets_generated": 8,
+  "manifest_validation_pass": 8,
+  "browser_images_loaded": 8,
+  "live_text_regions_checked": 6,
+  "live_text_regions_clipped": 0,
+  "review_url": "http://127.0.0.1:8879/index.html",
+  "status": "QA_PENDING",
+  "verification_scope": "provenance, alpha and delivery integrity, evidence files, library preview and short live Chinese text examples",
+  "unity_scene_contact_verified": false,
+  "unity_import_verified": false,
+  "human_aesthetic_approval": "PENDING",
+  "writing_areas_normalized_xywh": {
+    "dossier": [[0.105, 0.13, 0.34, 0.70], [0.565, 0.13, 0.335, 0.70]],
+    "notes": [[0.12, 0.22, 0.74, 0.60]],
+    "plaque": [[0.16, 0.39, 0.68, 0.44]],
+    "price_tag": [[0.20, 0.51, 0.60, 0.34]],
+    "service_label": [[0.17, 0.24, 0.66, 0.40]]
+  }
+}

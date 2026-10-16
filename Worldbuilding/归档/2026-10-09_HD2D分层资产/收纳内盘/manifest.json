@@ -1,0 +1,166 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "hd2d_tall_organiser_tray",
+  "role": "ui_detail_adaptive",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in imagegen source; rejected variants and diagnosis retained alongside selected source",
+    "source_path": "Worldbuilding/归档/2026-10-09_HD2D分层资产/收纳内盘/source-01.png",
+    "source_sha256": "3a7720a95e47a74193b421db18b7fc008a4952a509e6ec0befc5084474a068a4"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-10-09_HD2D分层资产/收纳内盘/delivery.png",
+    "output_sha256": "27cbb6f78219ad5d70b1679a863bc71aae4bd041f2c4cb9d574664f5d6aa7164",
+    "native_output_path": "Worldbuilding/归档/2026-10-09_HD2D分层资产/收纳内盘/delivery.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 1,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": null,
+    "integer_only": false,
+    "fractional_scale_forbidden": false,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Native raster is unchanged; perspective scene application is reviewed for support, depth, lighting and clarity."
+  },
+  "application": {
+    "runtime_draw_rect": "Independent scene sprite on the equipment tabletop, 32 PPU; full silhouette and bottom contact",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective"
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-10-09_HD2D分层资产/收纳内盘/delivery.png",
+    "four_x": "Worldbuilding/归档/2026-10-09_HD2D分层资产/收纳内盘/4x.png",
+    "six_x": "repo/relative/6x.png",
+    "grayscale": "Worldbuilding/归档/2026-10-09_HD2D分层资产/收纳内盘/gray.png",
+    "checker": "Worldbuilding/归档/2026-10-09_HD2D分层资产/收纳内盘/checker.png",
+    "application_contact": "UnityProject/ReviewEvidence/MainMenuE/hd2d-native-asset-contact-20261009.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "独立生图与无缩放解码已通过。仅Editor预览组合，未进入正式Resources。原生角点保持不变，中间内衬在场景内重复组合；运行与人工组合验收独立。"
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "guid": "",
+    "runtime_lattice": {
+      "tool": "Tools/OCCArt/verify_runtime_pixel_grid.py",
+      "capture": "repo/relative/runtime_capture.png",
+      "tier": 6,
+      "offset": [
+        0,
+        0
+      ],
+      "pass": false,
+      "uniform_with_siblings": false
+    }
+  },
+  "placement_semantics": {
+    "asset_role": "noncombat_content_object",
+    "application_scope": "runtime_layout",
+    "logical_cell": null,
+    "logical_cells": null,
+    "real_dimensions_m": [
+      0.71875,
+      1.34375
+    ],
+    "mount_type": "tabletop",
+    "native_anchor": [
+      11,
+      41
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 41
+    },
+    "depth_sort_baseline": 41,
+    "support_asset": "E shared desk tabletop",
+    "screen_axis": "horizontal_vertical_locked",
+    "allowed_occlusion_direction": "front_to_back_scene_depth",
+    "material_palette_family": "warm leather paper brass and desaturated teal",
+    "light_direction": "upper_left_form_shading_runtime_scene_illumination",
+    "combined_room_shell": false
+  },
+  "decoder": {
+    "status": "PASS_LOSSLESS_TARGET",
+    "source_size": [
+      1024,
+      1536
+    ],
+    "inferred_subject_pixel_pitch": 35,
+    "inferred_subject_grid_phase": [
+      26,
+      12
+    ],
+    "subject_lattice_confidence": 1.3782,
+    "subject_lattice_confidence_min": 1.2,
+    "subject_lattice_is_stable": true,
+    "ground_field_manual_pitch": null,
+    "ground_field_manual_pitch_review_required": false,
+    "background_checker_used_for_scale": false,
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      21,
+      41
+    ],
+    "subject_logical_size": [
+      21,
+      41
+    ],
+    "target_canvas": [
+      32,
+      64
+    ],
+    "normalization_mode": "intact_subject_canvas",
+    "ground_window_bounds_on_logical_grid": null,
+    "ground_window_selection": "deterministic_center",
+    "preview": null,
+    "safe_border": 1,
+    "decoded_visible_colours_before_cleanup": 221,
+    "decoded_visible_colours_after_cleanup": 16,
+    "palette_max": 16,
+    "all_decoded_colours_are_observed_source_samples": true,
+    "alpha_shape_preserved_pixel_for_pixel": true,
+    "output_subject_equals_cleaned_decoded_subject_pixel_for_pixel": true,
+    "ground_window_equals_decoded_source_pixels_pixel_for_pixel": null,
+    "macro_pixel_colour_selection": "observed_medoid_from_cell_center",
+    "macro_pixel_decoding_performed": true,
+    "geometric_resize_or_interpolation_performed": false,
+    "new_colours_introduced": false,
+    "logical_pixels_removed": 0,
+    "background_artifact_cells_removed": 0,
+    "alpha_components_before_cleanup": 1,
+    "alpha_components_after_cleanup": 1,
+    "dithering": false,
+    "structural_detail_loss_allowed": false,
+    "promotion_limit": null,
+    "colour_cleanup": "near-duplicate RGB variants are remapped only to observed source medoids; use --palette-max 0 for unconsolidated logical-cell decoding"
+  }
+}

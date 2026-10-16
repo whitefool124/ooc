@@ -1,0 +1,2 @@
+Normal encyclopedia entry: active AcademyDeskLamp count = 0
+Normal Return button: active AcademyDeskLamp count = 1

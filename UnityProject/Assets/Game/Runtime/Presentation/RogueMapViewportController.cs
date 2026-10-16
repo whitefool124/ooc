@@ -18,6 +18,10 @@ namespace OCC.Combat.Presentation
         private int zoomIndex;
         private Vector2 dragOrigin;
         private bool dragging;
+        private Vector2 elasticOffset;
+        private Vector2 clampPosition;
+        private Func<float> animationIntensity;
+        public void SetAnimationIntensity(Func<float> value) => animationIntensity=value;
 
         public bool IsDragging => dragging;
         public float Zoom => zoomLevels[zoomIndex];
@@ -37,6 +41,7 @@ namespace OCC.Combat.Presentation
         public void SetView(Vector2 pan, int requestedZoomIndex)
         {
             if (!Ready) return;
+            elasticOffset=Vector2.zero;
             zoomIndex = Mathf.Clamp(requestedZoomIndex, 0, zoomLevels.Length - 1);
             mapContent.localScale = Vector3.one * Zoom;
             mapContent.anchoredPosition = ClampPan(pan, viewport.rect.size, mapContent.rect.size, Zoom);
@@ -52,12 +57,25 @@ namespace OCC.Combat.Presentation
         public void OnDrag(PointerEventData eventData)
         {
             if (!Ready || eventData.button != PointerEventData.InputButton.Left && eventData.button != PointerEventData.InputButton.Middle) return;
+            var activeCanvas=viewport.GetComponentInParent<Canvas>();
+            bool world=activeCanvas!=null&&activeCanvas.renderMode==RenderMode.WorldSpace;
             float scale = canvas.scaleFactor <= 0 ? 1f : canvas.scaleFactor;
             if (!dragging && Vector2.Distance(dragOrigin, eventData.position) / scale < ReferenceDragThreshold) return;
             dragging = true;
             eventData.eligibleForClick = false;
-            mapContent.anchoredPosition = ClampPan(mapContent.anchoredPosition + eventData.delta / scale,
-                viewport.rect.size, mapContent.rect.size, Zoom);
+            Vector2 delta=eventData.delta/scale;
+            if(world)
+            {
+                var camera=activeCanvas.worldCamera;
+                Vector2 now=WorldPointer(eventData.position,camera),before=WorldPointer(eventData.position-eventData.delta,camera);
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(viewport,now,camera,out var a);
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(viewport,before,camera,out var b);
+                delta=a-b;
+            }
+            Vector2 desired=mapContent.anchoredPosition-elasticOffset+delta;
+            clampPosition=ClampPan(desired,viewport.rect.size,mapContent.rect.size,Zoom);
+            elasticOffset=animationIntensity!=null && animationIntensity()<=0?Vector2.zero:Vector2.ClampMagnitude((desired-clampPosition)*.18f,6);
+            mapContent.anchoredPosition=clampPosition+elasticOffset;
         }
 
         public void OnEndDrag(PointerEventData eventData)
@@ -71,7 +89,9 @@ namespace OCC.Combat.Presentation
             if (!Ready || Mathf.Approximately(eventData.scrollDelta.y, 0)) return;
             int next = Mathf.Clamp(zoomIndex + (eventData.scrollDelta.y > 0 ? 1 : -1), 0, zoomLevels.Length - 1);
             if (next == zoomIndex) return;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(viewport, eventData.position, eventData.pressEventCamera, out Vector2 pointer);
+            var activeCanvas=viewport.GetComponentInParent<Canvas>();
+            var camera=activeCanvas!=null&&activeCanvas.renderMode==RenderMode.WorldSpace?activeCanvas.worldCamera:eventData.pressEventCamera;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(viewport, WorldPointer(eventData.position,camera), camera, out Vector2 pointer);
             float previous = Zoom;
             zoomIndex = next;
             mapContent.localScale = Vector3.one * Zoom;
@@ -81,6 +101,8 @@ namespace OCC.Combat.Presentation
         }
 
         public void ZoomIn() => SetZoomIndex(zoomIndex + 1);
+        private static Vector2 WorldPointer(Vector2 point,Camera camera)
+            =>camera!=null&&camera.targetTexture!=null?new Vector2(point.x*camera.pixelWidth/Screen.width,point.y*camera.pixelHeight/Screen.height):point;
 
         public void ZoomOut() => SetZoomIndex(zoomIndex - 1);
 
@@ -99,6 +121,11 @@ namespace OCC.Combat.Presentation
         private void Update()
         {
             if (!Ready || dragging) return;
+            if(elasticOffset.sqrMagnitude>0f)
+            {
+                elasticOffset=animationIntensity!=null && animationIntensity()<=0?Vector2.zero:Vector2.MoveTowards(elasticOffset,Vector2.zero,Time.unscaledDeltaTime*32);
+                mapContent.anchoredPosition=clampPosition+elasticOffset;
+            }
             Vector2 direction = Vector2.zero;
             Keyboard keyboard = Keyboard.current;
             if (keyboard != null)
@@ -110,6 +137,7 @@ namespace OCC.Combat.Presentation
             }
             if (Gamepad.current != null) direction += Gamepad.current.leftStick.ReadValue();
             if (direction.sqrMagnitude <= .01f) return;
+            elasticOffset=Vector2.zero;
             mapContent.anchoredPosition = ClampPan(mapContent.anchoredPosition - Vector2.ClampMagnitude(direction, 1f) * KeyboardPanSpeed * Time.unscaledDeltaTime,
                 viewport.rect.size, mapContent.rect.size, Zoom);
         }
@@ -117,6 +145,7 @@ namespace OCC.Combat.Presentation
         public void CenterOnSourcePosition(Vector2 sourcePosition)
         {
             if (!Ready) return;
+            elasticOffset=Vector2.zero;
             Vector2 logical = AcademyMap3DLayout.ProjectMapToCanvas(sourcePosition);
             mapContent.anchoredPosition = ClampPan(-logical * Zoom, viewport.rect.size, mapContent.rect.size, Zoom);
         }
@@ -148,6 +177,7 @@ namespace OCC.Combat.Presentation
         private void ClampCurrentPosition()
         {
             if (!Ready) return;
+            elasticOffset=Vector2.zero;
             mapContent.anchoredPosition = ClampPan(mapContent.anchoredPosition, viewport.rect.size, mapContent.rect.size, Zoom);
         }
     }

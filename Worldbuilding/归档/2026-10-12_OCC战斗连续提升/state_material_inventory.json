@@ -1,0 +1,362 @@
+[
+  {
+    "schema": "occ-registered-prop-material-data-v1",
+    "id": "academy_light_stone_bench_damaged",
+    "status": "QA_PENDING",
+    "source": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_stone_bench_damaged/paired_raw.png",
+      "sha256": "974c322aff3edc0de382fe6d34d7e84af98962d7cdc902b934054cadeac962f2"
+    },
+    "panel": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_stone_bench_damaged/normal_panel.png",
+      "sha256": "9b0fe45634fe419c7e26aadc857aa5670625f53a76f3dff2a99d7a5847236880"
+    },
+    "source_albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_stone_bench_damaged.png",
+      "sha256": "13287614c5fe4dc9a917a2fa3ab2ee93e51b511fe6a8130b93084fe98649fbba",
+      "dimensions": [
+        32,
+        32
+      ]
+    },
+    "normal": {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_stone_bench_damaged/normal.png",
+      "sha256": "4199874f31ef5912998f37265c3f4e3bf3544579b489e87305f312f10df0230e"
+    },
+    "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+    "native_grid": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, no green flip",
+    "uniform_surface": {
+      "roughness": 0.88,
+      "metallic": 0,
+      "coat": 0,
+      "reason": "Explicit semantic material role, not grayscale conversion"
+    },
+    "human_registration_review": "PENDING",
+    "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+  },
+  {
+    "schema": "occ-registered-prop-material-data-v1",
+    "id": "academy_light_stone_bench_rubble",
+    "status": "QA_PENDING",
+    "source": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_stone_bench_rubble/paired_raw.png",
+      "sha256": "297c84247443bf853ae1d25a23483d9fbf779421f37c97c8edeeb3708116ae17"
+    },
+    "panel": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_stone_bench_rubble/normal_panel.png",
+      "sha256": "4e1aea5559030c154bba03345a79e79ba60a8711c22bb5a00fbf1cda3e806863"
+    },
+    "source_albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_stone_bench_rubble.png",
+      "sha256": "7915413952e02156aefbc4ca967547f29134801ff07863c99b3c2837f32edcba",
+      "dimensions": [
+        32,
+        32
+      ]
+    },
+    "normal": {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_stone_bench_rubble/normal.png",
+      "sha256": "00f1a0d32346dd6c4fef90d6094e80100684b70ba3208179d535ad94720cb119"
+    },
+    "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+    "native_grid": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, no green flip",
+    "uniform_surface": {
+      "roughness": 0.88,
+      "metallic": 0,
+      "coat": 0,
+      "reason": "Explicit semantic material role, not grayscale conversion"
+    },
+    "human_registration_review": "PENDING",
+    "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+  },
+  {
+    "schema": "occ-registered-prop-material-data-v1",
+    "id": "academy_light_planter_damaged",
+    "status": "QA_PENDING",
+    "source": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_planter_damaged/normal_raw.png",
+      "sha256": "34330ceee8e728580c7a914756c68805ed5c1cabcd4b05e177bbbf149495057b"
+    },
+    "panel": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_planter_damaged/normal_panel.png",
+      "sha256": "6ccb56be071fc6658f51e2ab6005a26beb0b07fe17ba4a1c197e4ee77af075bc"
+    },
+    "source_albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_planter_damaged.png",
+      "sha256": "7d3bb3a5034f1523c62f8f8081783af9b11bc92fe44c260e262e90ef86afada5",
+      "dimensions": [
+        32,
+        32
+      ]
+    },
+    "normal": {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_planter_damaged/normal.png",
+      "sha256": "7fb302dc12f3f1f0ac24138153d342c2fbc372ad5220fcaf21aa35ced4838418"
+    },
+    "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+    "native_grid": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, no green flip",
+    "uniform_surface": {
+      "roughness": 0.9,
+      "metallic": 0,
+      "coat": 0,
+      "reason": "Explicit semantic material role, not grayscale conversion"
+    },
+    "human_registration_review": "PENDING",
+    "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+  },
+  {
+    "schema": "occ-registered-prop-material-data-v1",
+    "id": "academy_aether_pillar_intact",
+    "status": "QA_PENDING",
+    "source": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_aether_pillar_intact/normal_raw.png",
+      "sha256": "82469eb18f01d34344b9f654f472d797d88e0b4f024ffd5da49f943cae97f3b8"
+    },
+    "panel": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_aether_pillar_intact/normal_panel.png",
+      "sha256": "ae60834e7987fc633ddb39a7ce59a32c50fe3e9b3a9b0924ba13598b4e89a494"
+    },
+    "source_albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_pillar_intact.png",
+      "sha256": "ae7431fac16244a7f20abee8d4aa045cb7a73f16b136a1b125cb223ed54ed6f0",
+      "dimensions": [
+        32,
+        32
+      ]
+    },
+    "normal": {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_aether_pillar_intact/normal.png",
+      "sha256": "e4357e575de723c709401749e61cd720227a8071f71055ba2b18215e1eae0087"
+    },
+    "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+    "native_grid": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, no green flip",
+    "uniform_surface": {
+      "roughness": 0.88,
+      "metallic": 0,
+      "coat": 0,
+      "reason": "Explicit semantic material role, not grayscale conversion"
+    },
+    "human_registration_review": "PENDING",
+    "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+  },
+  {
+    "schema": "occ-registered-prop-material-data-v1",
+    "id": "academy_aether_pillar_damaged",
+    "status": "QA_PENDING",
+    "source": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_aether_pillar_damaged/normal_raw.png",
+      "sha256": "90ef917c49a5ac9922aa6871c61cc9f668e3c267ce7ab52b0066e24b06efde97"
+    },
+    "panel": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_aether_pillar_damaged/normal_panel.png",
+      "sha256": "1de26f9f23be24c3e9fe1ed672a8d675c1876629878aff865215cd3f11338c62"
+    },
+    "source_albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_pillar_damaged.png",
+      "sha256": "c667e1cf0b47997269f8513b10f404d3822acbe39d50090af82b1b4ef0312c7c",
+      "dimensions": [
+        32,
+        32
+      ]
+    },
+    "normal": {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_aether_pillar_damaged/normal.png",
+      "sha256": "d41f2beac182202299fe6c7c1a08bbeeb581e5a67b4f98b5fcd6a91896b12264"
+    },
+    "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+    "native_grid": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, no green flip",
+    "uniform_surface": {
+      "roughness": 0.88,
+      "metallic": 0,
+      "coat": 0,
+      "reason": "Explicit semantic material role, not grayscale conversion"
+    },
+    "human_registration_review": "PENDING",
+    "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+  },
+  {
+    "schema": "occ-registered-prop-material-data-v1",
+    "id": "academy_aether_pillar_rubble",
+    "status": "QA_PENDING",
+    "source": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_aether_pillar_rubble/normal_raw.png",
+      "sha256": "cbb8ffd69533e1483fb4f544cdb5b934c7f37f447af2bbffe67905d2ab7d64e1"
+    },
+    "panel": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_aether_pillar_rubble/normal_panel.png",
+      "sha256": "e97f8b4378210558021757a2c0cdc69ec38ff78f8202077327b125de5733d6cb"
+    },
+    "source_albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_pillar_rubble.png",
+      "sha256": "fff168b7ba86e28ea40874aa7494145f8033080456ba5f4d5271598f26c1bc63",
+      "dimensions": [
+        32,
+        32
+      ]
+    },
+    "normal": {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_aether_pillar_rubble/normal.png",
+      "sha256": "89ab1a69afb18cbdf0829f6e030d0a85ee793abffba743a407ff75252d0669f0"
+    },
+    "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+    "native_grid": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, no green flip",
+    "uniform_surface": {
+      "roughness": 0.88,
+      "metallic": 0,
+      "coat": 0,
+      "reason": "Explicit semantic material role, not grayscale conversion"
+    },
+    "human_registration_review": "PENDING",
+    "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+  },
+  {
+    "schema": "occ-registered-prop-material-data-v1",
+    "id": "academy_light_planter_rubble",
+    "status": "QA_PENDING",
+    "source": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_planter_rubble/normal_raw.png",
+      "sha256": "22a18b221a46ecf11d5509952e95d98287628aa7e0ae2c92a8bf0d2e2f0078b3"
+    },
+    "panel": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_planter_rubble/normal_panel.png",
+      "sha256": "ac82bfefbf3ee5f676166a91611f26fa62fd492fe379b960a6aac92936bb77a7"
+    },
+    "source_albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_planter_rubble.png",
+      "sha256": "e9da2a3e6c5d50d52eac8cade506f1b4086192bf611000353f42bbfb420280f8",
+      "dimensions": [
+        32,
+        32
+      ]
+    },
+    "normal": {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_planter_rubble/normal.png",
+      "sha256": "d4f690b5dd853a5f7c7e806a92f27ebf6fe830949db0cf710ef55469d99a738c"
+    },
+    "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+    "native_grid": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, no green flip",
+    "uniform_surface": {
+      "roughness": 0.92,
+      "metallic": 0,
+      "coat": 0,
+      "reason": "Explicit semantic material role, not grayscale conversion"
+    },
+    "human_registration_review": "PENDING",
+    "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+  },
+  {
+    "schema": "occ-registered-prop-material-data-v1",
+    "id": "academy_heavy_masonry_screen_damaged",
+    "status": "QA_PENDING",
+    "source": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_heavy_masonry_screen_damaged/normal_raw.png",
+      "sha256": "f0cb3eeb5d0844d3048df56decaa74f8ffb8094794fb1bbc60fca9ceaa69f10f"
+    },
+    "panel": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_heavy_masonry_screen_damaged/normal_panel.png",
+      "sha256": "4a51b6cb2144069cc6a0e86fd963c225f00da154024348dee8fbd4abc78e7472"
+    },
+    "source_albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_heavy_masonry_screen_damaged.png",
+      "sha256": "95fab7cff0568a619dc9fd7ef7b7cb21a88e0f8adec963d02ad21fbdb6e1d69a",
+      "dimensions": [
+        32,
+        32
+      ]
+    },
+    "normal": {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_masonry_screen_damaged/normal.png",
+      "sha256": "b10d0ebf4b6518dbe09bad8d0726861717f9848d0d3a32929c2db83cda68b6d0"
+    },
+    "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+    "native_grid": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, no green flip",
+    "uniform_surface": {
+      "roughness": 0.88,
+      "metallic": 0,
+      "coat": 0,
+      "reason": "Explicit semantic material role, not grayscale conversion"
+    },
+    "human_registration_review": "PENDING",
+    "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+  },
+  {
+    "schema": "occ-registered-prop-material-data-v1",
+    "id": "academy_heavy_training_barricade_rubble",
+    "status": "QA_PENDING",
+    "source": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_heavy_training_barricade_rubble/normal_raw.png",
+      "sha256": "a18f96d4062a14e38ea91d4caa61b64e8f725b2bfd13c6ed67a7d057fd7d4de0"
+    },
+    "panel": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_heavy_training_barricade_rubble/normal_panel.png",
+      "sha256": "247ece0e5197dc4085abb7006d25b590515900a01e8587e5a3dffe80dee60ea6"
+    },
+    "source_albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_rubble.png",
+      "sha256": "fdc983a9a58b2bf15ba4963717e1898f7e7a6f7e7662f31703390ccce24894a8",
+      "dimensions": [
+        32,
+        32
+      ]
+    },
+    "normal": {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_rubble/normal.png",
+      "sha256": "ec6dc9fcf16a6263a501856065653bf3234a7d402b37786f7426f887863ede06"
+    },
+    "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+    "native_grid": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, no green flip",
+    "uniform_surface": {
+      "roughness": 0.9,
+      "metallic": 0,
+      "coat": 0,
+      "reason": "Explicit semantic material role, not grayscale conversion"
+    },
+    "human_registration_review": "PENDING",
+    "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+  }
+]

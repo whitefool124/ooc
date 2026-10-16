@@ -1,0 +1,4 @@
+label: PASS / REVIEW_READY
+left: PASS / REVIEW_READY
+right: PASS / REVIEW_READY
+Scoped HD2D / lighting failure / human approval / non-main-menu lattice gates: PASS

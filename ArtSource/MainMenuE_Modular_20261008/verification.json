@@ -1,0 +1,20 @@
+{
+  "scope": "main_menu_empty_room_modular_review",
+  "new_assets": 6,
+  "base": "room only, with alpha window holes",
+  "composition": "independent vista / desk / bookshelf / plant / banner / existing book cup lamp",
+  "runtime_lattice": "PASS six regions native6 screen pixels and zero offset",
+  "asset_validations": "6/6 PASS dimension/palette/alpha/evidence only",
+  "start": "Real button -> book opening -> Configuration",
+  "continue": "Normal isolated run creation -> production return -> real Continue -> Map nodeO, savedTrue",
+  "shader": "Final shader imported without errors; glints constrained to visible water",
+  "editor_final": "Edit Mode, active scene clean, stage objects0, original GameView restored",
+  "human_art_acceptance": "PENDING",
+  "limitations": [
+    "Most new asset lattices use explicitly recorded community reconstruction, not lossless confidence pass.",
+    "Technical surface normals and ground shadow footprints are review proxies.",
+    "Final human art acceptance not claimed."
+  ],
+  "source_channels": "Codex built-in imagegen only",
+  "formal_promotion": false
+}

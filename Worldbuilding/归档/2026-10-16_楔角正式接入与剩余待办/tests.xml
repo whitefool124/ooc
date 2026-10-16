@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-16 10:24:31Z" end-time="2026-10-16 10:24:32Z" duration="1.2293125">
+  <test-suite type="TestSuite" id="1000" name="My project" fullname="My project" runstate="Runnable" testcasecount="2819" result="Passed" start-time="2026-10-16 10:24:31Z" end-time="2026-10-16 10:24:32Z" duration="1.229313" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2741" name="OCC.Combat.EditModeTests.dll" fullname="E:/数据库/OCC_Codex/UnityProject/Library/ScriptAssemblies/OCC.Combat.EditModeTests.dll" runstate="Runnable" testcasecount="1509" result="Passed" start-time="2026-10-16 10:24:31Z" end-time="2026-10-16 10:24:32Z" duration="0.867952" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="44756" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2742" name="OCC" fullname="OCC" runstate="Runnable" testcasecount="1509" result="Passed" start-time="2026-10-16 10:24:31Z" end-time="2026-10-16 10:24:32Z" duration="0.783230" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2744" name="Combat" fullname="OCC.Combat" runstate="Runnable" testcasecount="1507" result="Passed" start-time="2026-10-16 10:24:31Z" end-time="2026-10-16 10:24:32Z" duration="0.704008" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2745" name="Tests" fullname="OCC.Combat.Tests" runstate="Runnable" testcasecount="1507" result="Passed" start-time="2026-10-16 10:24:31Z" end-time="2026-10-16 10:24:32Z" duration="0.635970" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2146" name="FormalArtRegistryTests" fullname="OCC.Combat.Tests.FormalArtRegistryTests" classname="OCC.Combat.Tests.FormalArtRegistryTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-16 10:24:32Z" end-time="2026-10-16 10:24:32Z" duration="0.436686" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2155" name="BreachRam_UsesUserAdoptedSpriteWithoutCandidateSwitch" fullname="OCC.Combat.Tests.FormalArtRegistryTests.BreachRam_UsesUserAdoptedSpriteWithoutCandidateSwitch" methodname="BreachRam_UsesUserAdoptedSpriteWithoutCandidateSwitch" classname="OCC.Combat.Tests.FormalArtRegistryTests" runstate="Runnable" seed="620565104" result="Passed" start-time="2026-10-16 10:24:32Z" end-time="2026-10-16 10:24:32Z" duration="0.403516" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2156" name="Registry_HasUniqueAssetIdsAndDomainRuntimeIds" fullname="OCC.Combat.Tests.FormalArtRegistryTests.Registry_HasUniqueAssetIdsAndDomainRuntimeIds" methodname="Registry_HasUniqueAssetIdsAndDomainRuntimeIds" classname="OCC.Combat.Tests.FormalArtRegistryTests" runstate="Runnable" seed="2147000493" result="Passed" start-time="2026-10-16 10:24:32Z" end-time="2026-10-16 10:24:32Z" duration="0.003114" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/FNHF/AppData/LocalLow/DefaultCompany/My project\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

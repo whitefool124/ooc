@@ -1,0 +1,26 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "desk_candidate_20261010_cup",
+  "role": "hd2d_library_display",
+  "status": "FAIL",
+  "metrics": {
+    "size": [
+      132,
+      113
+    ],
+    "bounds": [
+      2,
+      2,
+      130,
+      111
+    ],
+    "hard_alpha": false,
+    "fully_opaque": false,
+    "visible_colors": 3700,
+    "accent_pixels": {}
+  },
+  "errors": [
+    "HD2D main menu requires a perspective camera",
+    "required evidence missing: application_contact"
+  ]
+}

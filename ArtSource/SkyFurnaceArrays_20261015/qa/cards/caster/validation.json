@@ -1,0 +1,23 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "sky_furnace_cut_card_caster",
+  "role": "hd2d_environment_module",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      64,
+      64
+    ],
+    "bounds": [
+      8,
+      8,
+      56,
+      56
+    ],
+    "hard_alpha": true,
+    "fully_opaque": false,
+    "visible_colors": 12,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

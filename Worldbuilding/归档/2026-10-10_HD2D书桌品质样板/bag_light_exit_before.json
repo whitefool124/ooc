@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Exiting play mode\",\"data\":{\"wasPlaying\":true,\"transitionRequested\":true,\"domain_reload_expected\":false,\"next\":\"The MCP backend should remain connected; poll get_editor_state until isPlaying=false.\"}}"
+      }
+    ]
+  }
+}

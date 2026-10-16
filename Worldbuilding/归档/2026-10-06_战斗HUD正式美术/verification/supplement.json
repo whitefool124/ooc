@@ -1,0 +1,16 @@
+{
+  "verified_at": "2026-10-07",
+  "project": "E:/数据库/OCC_Codex/UnityProject",
+  "modal_pointer_probe": "PASS actual restart confirmation blocks portrait mouse action, clears locator, disables button; cancel restores the normal combat",
+  "nunit_reflection": {
+    "passed_methods": 5,
+    "classes": ["CombatActionOrderPresentationTests", "FormalCombatHudShellPrefabTests"],
+    "full_test_runner": false
+  },
+  "compilation": "completed / failed=false / errors=[]",
+  "console": "No error entries found",
+  "art_validation": {"hero": "PASS", "tether_hound": "PASS", "frame": "PASS", "pyromancer": "three source grid checks failed; not integrated"},
+  "human_aesthetic_review": "PENDING",
+  "scene_saved": false,
+  "test_save_scope": "isolated production disk namespace; original player save keys unchanged"
+}

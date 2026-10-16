@@ -1,0 +1,23 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "hd2d_library_service_label",
+  "role": "hd2d_library_display",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      1507,
+      664
+    ],
+    "bounds": [
+      16,
+      16,
+      1491,
+      648
+    ],
+    "hard_alpha": false,
+    "fully_opaque": false,
+    "visible_colors": 39954,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

@@ -1,0 +1,12 @@
+{
+  "success": false,
+  "command": "unity command",
+  "data": null,
+  "errors": [
+    {
+      "code": "COMMAND_FAILED",
+      "message": "无法列出命令：Failed to get available commands: Request timeout after 10000ms"
+    }
+  ],
+  "warnings": []
+}

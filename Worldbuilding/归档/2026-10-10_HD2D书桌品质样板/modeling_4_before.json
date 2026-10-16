@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"运行稳定与性能。\"><p id=\"doxcnET2gNq2R5NEvFkAaEqiyvh\">运行稳定与性能。 验证静止、平移/缩放、动作、切页与窗口变化，检查纹理爬动、边缘闪烁、重影、阴影跳变、曝光跳变、失焦和信息漂移。相机、灯和Volume影响层隔离，隐藏页面释放离屏资源。测量目标设备、分辨率、质量档、CPU/GPU帧时间、P95帧时间、内存及切换峰值；目标设备、帧率和P95预算先登记再判定，不凭平均帧率宣称稳定。性能预算未锁定时不得晋升批准配置。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2724
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

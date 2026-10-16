@@ -247,7 +247,7 @@ namespace OCC.Combat.Tests
 
             Assert.That(presentation.X, Is.EqualTo(3)); Assert.That(presentation.Y, Is.EqualTo(1));
             Assert.That(presentation.Rotated, Is.True); Assert.That(presentation.DisplayName, Is.EqualTo("折盾匣"));
-            Assert.That(presentation.ChargesMaximum, Is.EqualTo(3)); Assert.That(start.X, Is.Not.EqualTo(presentation.X));
+            Assert.That(presentation.ChargesMaximum, Is.EqualTo(2)); Assert.That(start.X, Is.Not.EqualTo(presentation.X));
         }
 
         [Test]

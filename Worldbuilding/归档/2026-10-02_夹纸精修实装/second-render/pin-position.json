@@ -1,0 +1,27 @@
+{
+  "region": [
+    841,
+    566,
+    870,
+    588
+  ],
+  "dark_brass_threshold": [
+    180,
+    150,
+    100
+  ],
+  "rest_bounds": [
+    841,
+    566,
+    862,
+    584
+  ],
+  "pulled_bounds": [
+    844,
+    568,
+    861,
+    584
+  ],
+  "same_bounds": false,
+  "note": "RGB values vary; check silhouette position, not exact pixel colours."
+}

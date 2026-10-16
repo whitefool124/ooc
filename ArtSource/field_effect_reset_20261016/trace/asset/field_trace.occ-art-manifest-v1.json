@@ -1,0 +1,98 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "field_trace_candidate_20261016",
+  "role": "single_cell_prop_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "New independent Codex built-in image generation; regular sheet crops if applicable; subject-inferred grid; no geometric resize",
+    "source_path": "ArtSource/field_effect_reset_20261016/trace/raw/r3_source.png",
+    "source_sha256": "5744b272cc448638a74a70cecd9dbabe6a9cea6cd204349f6e042f3387987cfc"
+  },
+  "delivery": {
+    "output_path": "ArtSource/field_effect_reset_20261016/trace/asset/field_trace.png",
+    "output_sha256": "4a76b7caaac992118b1acf144197b93248c641fcf195e05d3e4158ddab32adb9",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Horizontal one-cell decal, same 32 PPU as battlefield."
+  },
+  "application": {
+    "runtime_draw_rect": "1x1 metre, horizontal cell",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1,
+    "review_scope": "Adopted existing source; default runtime local evidence in2026-10-16 stage-one closure archive. Whole scene aesthetics/performance remain separate."
+  },
+  "evidence": {
+    "one_x": "ArtSource/field_effect_reset_20261016/trace/qa/field_trace/1x.png",
+    "four_x": "ArtSource/field_effect_reset_20261016/trace/qa/field_trace/4x.png",
+    "grayscale": "ArtSource/field_effect_reset_20261016/trace/qa/field_trace/grayscale.png",
+    "checker": "ArtSource/field_effect_reset_20261016/trace/qa/field_trace/checker.png",
+    "application_contact": "ArtSource/field_effect_reset_20261016/trace/qa/field_trace/contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "PENDING. Source contact composition is not a game screenshot."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_trace.png",
+    "stable_guid": "b6385461f4bcc4549ac47219d5f004b5",
+    "native_ppu": 32,
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "review_scope": "Default player lookup and representative local capture; sequence frames all loaded, no whole-scene motion approval"
+  },
+  "processing": {
+    "decode_report": "ArtSource/field_effect_reset_20261016/trace/qa/r3_decode.json",
+    "geometric_resize": false,
+    "new_colours": "black one-native-pixel external contour for prop roles only",
+    "source_subject_preserved": true,
+    "placement": "centre",
+    "upright": false,
+    "native_ppu": 32,
+    "world_pixel_pitch": 0.03125,
+    "visible_bounds": [
+      8,
+      6,
+      24,
+      25
+    ]
+  },
+  "production_binding": {
+    "status": "USER_AUTHORIZED",
+    "default_enabled": true,
+    "authorization": "2026-10-16 user: 自己把待办清空",
+    "delivery_sha256": "4a76b7caaac992118b1acf144197b93248c641fcf195e05d3e4158ddab32adb9",
+    "guid_preserved": true
+  }
+}

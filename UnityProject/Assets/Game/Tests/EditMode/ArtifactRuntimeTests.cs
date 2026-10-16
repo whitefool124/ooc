@@ -7,6 +7,54 @@ namespace OCC.Combat.Tests
     public sealed class ArtifactRuntimeTests
     {
         [Test]
+        public void ApprovedSupportArtifactsHaveNoAdditionalVitalCosts()
+        {
+            foreach(var artifact in new[]{ArtifactCatalog.FieldSiphon,ArtifactCatalog.MendingLattice,ArtifactCatalog.ShieldBalancer,ArtifactCatalog.FortuneSeal})
+                Assert.That(artifact.Effects.Any(e=>e.Kind==ArtifactEffectKind.LoseHealth || e.Kind==ArtifactEffectKind.ConsumeShield || e.Kind==ArtifactEffectKind.BacklashIfTargetSurvives),Is.False,artifact.Id);
+            Assert.That(ArtifactCatalog.FieldSiphon.Effects.Single().Amount,Is.EqualTo(2));
+            Assert.That(ArtifactCatalog.MendingLattice.Effects.Single().Amount,Is.EqualTo(12));
+            Assert.That(ArtifactCatalog.FortuneSeal.Effects.Single().Amount,Is.EqualTo(10));
+            Assert.That(ArtifactCatalog.TurnLedger.Effects.Single().Amount,Is.EqualTo(1));
+            Assert.That(ArtifactCatalog.PhaseSpindle.Effects.Single().Kind,Is.EqualTo(ArtifactEffectKind.MoveSource));
+        }
+
+        [Test]
+        public void NullVeilLastsFourPublicRoundsRatherThanInitiativeTicks()
+        {
+            var prepared=(ArtifactTrainingRangeCase)new ArtifactTrainingRangeProvider().Prepare("G-T18");
+            prepared.Combat.ConfigureRuleset(CombatRuleset.Roguelite);
+            prepared.Execute();
+            var tile=prepared.Combat.Map.GetTile(prepared.RecommendedCell);
+            Assert.That(tile.SmokePublicRoundsRemaining,Is.EqualTo(4));
+            for(int i=0;i<3;i++)
+            {
+                CombatResolver.BeginTurn(prepared.Combat,"range_normal");
+                Assert.That(tile.SmokePublicRoundsRemaining,Is.EqualTo(4-i));
+                CombatResolver.BeginTurn(prepared.Combat,"hero");
+                Assert.That(tile.SmokeExpiresAt,Is.GreaterThan(prepared.Combat.CurrentTime));
+            }
+            Assert.That(prepared.Combat.Clone().Map.GetTile(prepared.RecommendedCell).SmokePublicRoundsRemaining,Is.EqualTo(1));
+            CombatResolver.BeginTurn(prepared.Combat,"hero");
+            Assert.That(tile.SmokeExpiresAt,Is.Zero);
+        }
+
+        [Test]
+        public void CombatClone_PreservesArmedArtifactReactionWithoutConsumingTheOriginal()
+        {
+            var prepared=(ArtifactTrainingRangeCase)new ArtifactTrainingRangeProvider().Prepare("G-T10");
+            prepared.Execute();
+            var clone=prepared.Combat.Clone();
+            var battle=(ArtifactBattleState)typeof(CombatState).GetProperty("ArtifactBattle",
+                System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).GetValue(clone);
+            var enemy=clone.GetUnit("range_normal");
+            CombatEffectExecutor.Execute(clone,enemy.Id,CombatEffect.Move(prepared.RecommendedCell));
+            Assert.That(battle.ResolveEnemyEntered("hero",enemy.Id).Steps,Is.Not.Empty);
+            Assert.That(battle.ResolveEnemyEntered("hero",enemy.Id).Steps,Is.Empty);
+            var original=prepared.Combat.GetUnit("range_normal");
+            CombatEffectExecutor.Execute(prepared.Combat,original.Id,CombatEffect.Move(prepared.RecommendedCell));
+            Assert.That(prepared.Battle.ResolveEnemyEntered("hero",original.Id).Steps,Is.Not.Empty);
+        }
+        [Test]
         public void Catalog_HasTwentyUniqueCompleteArtifacts()
         {
             Assert.That(ArtifactCatalog.All.Count, Is.EqualTo(20));
@@ -131,7 +179,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void ShieldBalancer_TransfersPersonalShieldIntoAContestedCoverCell()
+        public void ShieldBalancer_CreatesCoverWithoutConsumingPersonalShield()
         {
             CombatState combat = TrainingRangeScenarioFactory.CreateStandard();
             combat.ConfigureRuleset(CombatRuleset.Roguelite);
@@ -142,17 +190,16 @@ namespace OCC.Combat.Tests
 
             ArtifactPreview withoutShield = ArtifactEngine.Preview(battle, hero.Id, ArtifactCatalog.ShieldBalancer,
                 ArtifactTarget.At(cell), ArtifactCatalog.ShieldBalancer.MaximumUses);
-            Assert.That(withoutShield.CanCommit, Is.False);
-            Assert.That(withoutShield.Failures, Does.Contain("自身护盾不足以承担公开代价"));
+            Assert.That(withoutShield.CanCommit, Is.True);
 
             Assert.That(combat.TryGrantRogueliteShield(hero.Id, "shield-balancer-test", 16), Is.True);
             ArtifactExecution execution = ArtifactEngine.Execute(battle, hero.Id, ArtifactCatalog.ShieldBalancer,
                 ArtifactTarget.At(cell), ArtifactCatalog.ShieldBalancer.MaximumUses);
 
-            Assert.That(hero.Shield, Is.EqualTo(4));
+            Assert.That(hero.Shield, Is.EqualTo(16));
             Assert.That(combat.Map.GetTile(cell).Cover, Is.EqualTo(CoverType.Light));
             Assert.That(combat.Map.GetTile(cell).Durability, Is.EqualTo(12));
-            Assert.That(execution.Steps.Any(step => step.Kind == ArtifactEffectKind.ConsumeShield), Is.True);
+            Assert.That(execution.Steps.Any(step => step.Kind == ArtifactEffectKind.ConsumeShield), Is.False);
             Assert.That(execution.Steps.Any(step => step.Kind == ArtifactEffectKind.CreateLightCover), Is.True);
         }
 
@@ -213,7 +260,8 @@ namespace OCC.Combat.Tests
             ArtifactExecution veil = ArtifactEngine.Execute(battle, hero.Id, ArtifactCatalog.NullVeil,
                 ArtifactTarget.At(smokeCell), ArtifactCatalog.NullVeil.MaximumUses);
 
-            Assert.That(combat.Map.GetTile(smokeCell).SmokeExpiresAt, Is.EqualTo(combat.CurrentTime + 8));
+            Assert.That(combat.Map.GetTile(smokeCell).SmokePublicRoundsRemaining, Is.EqualTo(4));
+            Assert.That(combat.Map.GetTile(smokeCell).SmokeExpiresAt, Is.GreaterThan(combat.CurrentTime));
             Assert.That(veil.Steps.Single().Kind, Is.EqualTo(ArtifactEffectKind.CreateSmoke));
             Assert.That(CombatResolver.PreviewAttack(combat, hero.Id, enemy.Id, false).HasLineOfSight, Is.False);
             Assert.That(CombatResolver.PreviewAttack(combat, enemy.Id, hero.Id, false).HasLineOfSight, Is.False);
@@ -252,7 +300,7 @@ namespace OCC.Combat.Tests
 
             CombatResolver.BeginTurn(combat, enemy.Id);
             CombatResolver.Resolve(combat, command);
-            Assert.That(combat.Map.GetTile(lantern).Durability, Is.EqualTo(9));
+            Assert.That(combat.Map.GetTile(lantern).Durability, Is.EqualTo(5));
 
             CombatResolver.BeginTurn(combat, hero.Id);
             battle.BeginUnitTurn(hero.Id);

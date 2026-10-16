@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"screen\\\":\\\"1920x1080\\\",\\\"host\\\":\\\"战斗管理器\\\",\\\"buttons\\\":[{\\\"name\\\":\\\"map.node.B1\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[413.267029,464.9254]},{\\\"name\\\":\\\"按钮_背包\\\",\\\"text\\\":\\\"背包\\\",\\\"enabled\\\":true,\\\"point\\\":[1548.49109,935.170044]},{\\\"name\\\":\\\"map.node.S\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[1066.44885,625.549561]},{\\\"name\\\":\\\"map.node.X\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[848.6932,625.549561]},{\\\"name\\\":\\\"map.node.W\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[630.9801,625.549561]},{\\\"name\\\":\\\"按钮_设置\\\",\\\"text\\\":\\\"设置\\\",\\\"enabled\\\":true,\\\"point\\\":[1737.48145,935.170044]},{\\\"name\\\":\\\"map.node.M\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[848.6932,304.3013]},{\\\"name\\\":\\\"map.node.EV2\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[413.267029,304.3013]},{\\\"name\\\":\\\"map.node.EV1\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[413.267029,625.549561]},{\\\"name\\\":\\\"map.node.B3\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[848.6932,464.9254]},{\\\"name\\\":\\\"map.node.O\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[195.596588,464.9254]},{\\\"name\\\":\\\"map.node.B2\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[630.9801,464.9254]},{\\\"name\\\":\\\"map.node.EV3\\\",\\\"text\\\":null,\\\"enabled\\\":true,\\\"point\\\":[630.9801,304.3013]}],\\\"cameras\\\":[{\\\"name\\\":\\\"HD2D场景相机\\\",\\\"allowHDR\\\":true,\\\"allowMSAA\\\":false,\\\"fieldOfView\\\":24.0,\\\"orthographic\\\":false,\\\"cullingMask\\\":268435456,\\\"output\\\":\\\"1920x1080\\\"},{\\\"name\\\":\\\"主摄像机\\\",\\\"allowHDR\\\":false,\\\"allowMSAA\\\":false,\\\"fieldOfView\\\":60.0,\\\"orthographic\\\":true,\\\"cullingMask\\\":-1,\\\"output\\\":\\\"screen\\\"}]}\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

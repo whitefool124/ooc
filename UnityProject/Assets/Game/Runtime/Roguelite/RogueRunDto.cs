@@ -94,6 +94,8 @@ namespace OCC.Combat.Roguelite
         public int PendingRewardContribution { get; set; }
         public List<string> MaterialPlacementRows { get; } = new List<string>();
         public List<string> LayerServiceRows { get; } = new List<string>();
+        public string ActiveMealId { get; set; } = string.Empty;
+        public int MealBattlesRemaining { get; set; }
         public List<string> SettledServiceNodeIds { get; } = new List<string>();
         public string RunProgramId { get; set; } = string.Empty;
         public string RunEndReason { get; set; } = string.Empty;
@@ -152,13 +154,13 @@ namespace OCC.Combat.Roguelite
                 "|" + dto.PendingRewardGold + "|" + dto.PendingRewardContribution +
                 "|" + B(JoinStrings(dto.MaterialPlacementRows)) + "|" + B(dto.SelectedRewardId) +
                 "|" + (dto.RewardChoicesOpened ? "1" : "0") +
-                "|" + (dto.LootPendingExit ? "1" : "0");
+                "|" + (dto.LootPendingExit ? "1" : "0") + "|" + B(dto.ActiveMealId) + "|" + dto.MealBattlesRemaining;
         }
 
         public static RogueRunDto Deserialize(string data)
         {
             string[] fields = (data ?? string.Empty).Split('|');
-            if ((fields.Length < 28 || fields.Length > 56) || fields[0] != RogueRuntimeConstants.SaveVersion) throw new InvalidOperationException("Unsupported or invalid rogue11 save.");
+            if ((fields.Length < 28 || fields.Length > 58) || fields[0] != RogueRuntimeConstants.SaveVersion) throw new InvalidOperationException("Unsupported or invalid rogue11 save.");
             RogueRunDto dto = new RogueRunDto
             {
                 RunId = U(fields[1]), Seed = I(fields[2]), StageId = U(fields[3]), StageTime = I(fields[4]), Gold = I(fields[5]),
@@ -213,6 +215,10 @@ namespace OCC.Combat.Roguelite
             if (fields.Length >= 54) dto.SelectedRewardId = U(fields[53]);
             if (fields.Length >= 55) dto.RewardChoicesOpened = fields[54] == "1";
             if (fields.Length >= 56) dto.LootPendingExit = fields[55] == "1";
+            if (fields.Length >= 57) dto.ActiveMealId = U(fields[56]);
+            if (fields.Length >= 58) dto.MealBattlesRemaining = I(fields[57]);
+            if(dto.MealBattlesRemaining<0||dto.MealBattlesRemaining>3||(dto.MealBattlesRemaining>0&&string.IsNullOrEmpty(dto.ActiveMealId)))throw new InvalidOperationException("Invalid meal duration.");
+            if(!string.IsNullOrEmpty(dto.ActiveMealId))OCC.Combat.AcademyMealCatalog.Get(dto.ActiveMealId);
             OCC.Combat.AcademyMapSaveMigration.Normalize(dto);
             ValidateShape(dto);
             return dto;

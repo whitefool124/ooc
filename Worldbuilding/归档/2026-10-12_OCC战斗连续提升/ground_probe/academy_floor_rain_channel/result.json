@@ -1,0 +1,9 @@
+{
+  "status": "rendered",
+  "Id": "academy_floor_rain_channel",
+  "nativeCanvas": "32x32",
+  "worldPixelPitch": 0.03125,
+  "noFocus": true,
+  "source": "Owned offscreen material preview, not runtime/human approval",
+  "messages": []
+}

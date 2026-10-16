@@ -1,0 +1,46 @@
+{
+  "scope": "single native32 material probe, actual URP offscreen rendering; not normal-entry game/UI or performance",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "activeScenePreserved": true,
+  "dirty": false,
+  "play": false,
+  "normalStrength": 0.32,
+  "normalGreenFlip": false,
+  "Id": "academy_block_ruin_b",
+  "shaderName": "OCC/HD2D/BakedArchitecture",
+  "maps": [
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_b/normal.png",
+      "guid": "3b3e69beb1bf27041916cbe6678ef935",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "type": "NormalMap",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    },
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_ruin_b/roughness.png",
+      "guid": "f7269b4054b706244b7a99ef817706e8",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "type": "Default",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    }
+  ],
+  "captures": [
+    "baseline_1080.png",
+    "baseline_540.png",
+    "full_1080.png",
+    "full_540.png",
+    "neutral_light_1080.png",
+    "normal_only_1080.png",
+    "rotated_light_1080.png",
+    "roughness_only_1080.png"
+  ],
+  "messages": []
+}

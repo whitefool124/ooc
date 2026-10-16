@@ -1,0 +1,25 @@
+{
+  "schema": "occ-registered-prop-material-data-v1",
+  "status": "REVIEW_READY",
+  "source": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_planter_cover_intact/roughness_raw.png",
+    "sha256": "744a05242103d1498ab0fdb1a9166831bb470a9d6e4d626f417d7853e734b9f3"
+  },
+  "reference": {
+    "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_light_planter_cover_intact.png",
+    "sha256": "57eea2fcac4d9bdfb00a24492e142b76be2c0cc0515cbf0cdce1aadda98c11f6"
+  },
+  "output": {
+    "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_planter_cover_intact/roughness.png",
+    "sha256": "a09f7a7d1018d6fd88827094509c6a29cb73c3f2ea6736427949639fc81b6670"
+  },
+  "native_grid": [
+    32,
+    32
+  ],
+  "source_macro_pitch": 39.1875,
+  "method": "Known UV central-cell observed RGB medoid, no geometric interpolation, new RGB, albedo inference or recolouring",
+  "max_cell_std": 10.97484658743476,
+  "human_registration_review": "PENDING",
+  "limitation": "Numeric-field registration is not Sprite grid-confidence PASS; exact region boundaries and material review remain pending"
+}

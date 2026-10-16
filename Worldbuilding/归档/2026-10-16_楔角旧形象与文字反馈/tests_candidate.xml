@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="10" result="Passed" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-16 10:12:03Z" end-time="2026-10-16 10:12:05Z" duration="1.4777467">
+  <test-suite type="TestSuite" id="1000" name="My project" fullname="My project" runstate="Runnable" testcasecount="2820" result="Passed" start-time="2026-10-16 10:12:03Z" end-time="2026-10-16 10:12:05Z" duration="1.477747" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2742" name="OCC.Combat.EditModeTests.dll" fullname="E:/数据库/OCC_Codex/UnityProject/Library/ScriptAssemblies/OCC.Combat.EditModeTests.dll" runstate="Runnable" testcasecount="1510" result="Passed" start-time="2026-10-16 10:12:04Z" end-time="2026-10-16 10:12:05Z" duration="1.108874" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="26436" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2743" name="OCC" fullname="OCC" runstate="Runnable" testcasecount="1510" result="Passed" start-time="2026-10-16 10:12:04Z" end-time="2026-10-16 10:12:05Z" duration="1.039805" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2745" name="Combat" fullname="OCC.Combat" runstate="Runnable" testcasecount="1508" result="Passed" start-time="2026-10-16 10:12:04Z" end-time="2026-10-16 10:12:05Z" duration="0.980709" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2746" name="Tests" fullname="OCC.Combat.Tests" runstate="Runnable" testcasecount="1508" result="Passed" start-time="2026-10-16 10:12:04Z" end-time="2026-10-16 10:12:05Z" duration="0.912584" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1897" name="EnemyUnitArtCandidateTests" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-16 10:12:04Z" end-time="2026-10-16 10:12:05Z" duration="0.782534" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="1903" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-16 10:12:04Z" end-time="2026-10-16 10:12:05Z" duration="0.719295" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1898" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;signal_keeper&quot;,32,64)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;signal_keeper&quot;,32,64)" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1242487234" result="Passed" start-time="2026-10-16 10:12:04Z" end-time="2026-10-16 10:12:05Z" duration="0.658954" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1899" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;elder_tracker_hound&quot;,64,32)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;elder_tracker_hound&quot;,64,32)" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="481080512" result="Passed" start-time="2026-10-16 10:12:05Z" end-time="2026-10-16 10:12:05Z" duration="0.006584" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1900" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;wind_librarian&quot;,32,64)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;wind_librarian&quot;,32,64)" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1684458228" result="Passed" start-time="2026-10-16 10:12:05Z" end-time="2026-10-16 10:12:05Z" duration="0.010290" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1901" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;legacy_storekeeper&quot;,32,64)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;legacy_storekeeper&quot;,32,64)" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="2064399680" result="Passed" start-time="2026-10-16 10:12:05Z" end-time="2026-10-16 10:12:05Z" duration="0.006470" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1902" name="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;breach_ram&quot;,64,64)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits(&quot;breach_ram&quot;,64,64)" methodname="Candidate_OnlyOverridesExplicitEditorReview_NotPortraitOrOtherUnits" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1582012018" result="Passed" start-time="2026-10-16 10:12:05Z" end-time="2026-10-16 10:12:05Z" duration="0.005467" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="1909" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-16 10:12:05Z" end-time="2026-10-16 10:12:05Z" duration="0.037456" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1904" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;signal_keeper&quot;)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;signal_keeper&quot;)" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1218345799" result="Passed" start-time="2026-10-16 10:12:05Z" end-time="2026-10-16 10:12:05Z" duration="0.026668" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1905" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;elder_tracker_hound&quot;)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;elder_tracker_hound&quot;)" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="153079261" result="Passed" start-time="2026-10-16 10:12:05Z" end-time="2026-10-16 10:12:05Z" duration="0.001206" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1906" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;wind_librarian&quot;)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;wind_librarian&quot;)" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="966568909" result="Passed" start-time="2026-10-16 10:12:05Z" end-time="2026-10-16 10:12:05Z" duration="0.000744" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1907" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;legacy_storekeeper&quot;)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;legacy_storekeeper&quot;)" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1997263367" result="Passed" start-time="2026-10-16 10:12:05Z" end-time="2026-10-16 10:12:05Z" duration="0.001017" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1908" name="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;breach_ram&quot;)" fullname="OCC.Combat.Tests.EnemyUnitArtCandidateTests.ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling(&quot;breach_ram&quot;)" methodname="ImportedCandidate_PreservesNativeWorldScaleAndPixelSampling" classname="OCC.Combat.Tests.EnemyUnitArtCandidateTests" runstate="Runnable" seed="1028036493" result="Passed" start-time="2026-10-16 10:12:05Z" end-time="2026-10-16 10:12:05Z" duration="0.001045" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Saving results to: C:/Users/FNHF/AppData/LocalLow/DefaultCompany/My project\TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

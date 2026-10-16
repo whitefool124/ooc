@@ -1,0 +1,167 @@
+{
+  "status": "completed",
+  "duration": 0.4,
+  "summary": {
+    "total": 22,
+    "passed": 22,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.Catalog_CoversEveryFeedbackKind_WithUniqueStableKeysAndReadableLabels",
+      "Status": "Passed",
+      "Duration": 0.0201355,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.DamagePopup_KeepsShieldAndHealthReadableAsSeparateActualNumbers",
+      "Status": "Passed",
+      "Duration": 0.0075638,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.DamagePopup_RejectsNonDamageFeedback",
+      "Status": "Passed",
+      "Duration": 0.0003527,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.FeedbackClip_ConvertsCanvasCoordinatesWithoutDoubleOffset",
+      "Status": "Passed",
+      "Duration": 0.0021543,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.FeedbackEvent_FormatsNumericMeaningDeterministically",
+      "Status": "Passed",
+      "Duration": 0.0006548,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.FeedbackPulse_UsesFourPixelAlignedEdgesInsideTheCurrentCell(64.0f)",
+      "Status": "Passed",
+      "Duration": 0.0289708,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.FeedbackPulse_UsesFourPixelAlignedEdgesInsideTheCurrentCell(128.0f)",
+      "Status": "Passed",
+      "Duration": 0.0013027,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.FeedbackText_StaysInsideViewportThroughoutItsRise(240.0f,48.0f,28.0f)",
+      "Status": "Passed",
+      "Duration": 0.0020401,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.FeedbackText_StaysInsideViewportThroughoutItsRise(168.0f,104.0f,52.0f)",
+      "Status": "Passed",
+      "Duration": 0.0005267,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.FeedbackText_StaysInsideViewportThroughoutItsRise(240.0f,48.0f,0.0f)",
+      "Status": "Passed",
+      "Duration": 0.0005106,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.FeedbackText_StaysInsideViewportThroughoutItsRise(168.0f,104.0f,0.0f)",
+      "Status": "Passed",
+      "Duration": 0.0004097,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.GridFeedbackPosition_TracksTheEnlargedBoardCellCenter",
+      "Status": "Passed",
+      "Duration": 0.0020117,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.MixedDamage_PresentsTwoCompleteNonInteractiveLabelsAndReservesTheirWidths",
+      "Status": "Passed",
+      "Duration": 0.053457,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.NumericStatusFeedback_UsesItsNameAndSignedStrength",
+      "Status": "Passed",
+      "Duration": 0.0010038,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.OutcomeFeedback_DoesNotDuplicateTheSettlementNotification(True)",
+      "Status": "Passed",
+      "Duration": 0.0010839,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.OutcomeFeedback_DoesNotDuplicateTheSettlementNotification(False)",
+      "Status": "Passed",
+      "Duration": 0.0002306,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.StatusDiff_ReportsRemovalOnceWithoutTreatingDurationDecayAsRemoval",
+      "Status": "Passed",
+      "Duration": 0.0031593,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.Statuses_MapToOneSemantic(Burning,Burning,\"燃烧 2　持续燃烧\")",
+      "Status": "Passed",
+      "Duration": 0.000402,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.Statuses_MapToOneSemantic(Bound,Bound,\"束缚 2　无法移动\")",
+      "Status": "Passed",
+      "Duration": 0.0001168,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.Statuses_MapToOneSemantic(BreakStance,BreakStance,\"破势 2　清盾禁盾\")",
+      "Status": "Passed",
+      "Duration": 0.000106,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.ValidationSkills_ResolveToApprovedReusablePresentationSemantics",
+      "Status": "Passed",
+      "Duration": 0.0128128,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatFeedbackEventTests.ZeroAnimationIntensity_DisablesMotionButKeepsFeedbackPolicyAvailable",
+      "Status": "Passed",
+      "Duration": 0.0002336,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

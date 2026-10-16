@@ -42,7 +42,10 @@ namespace OCC.Combat.Presentation
                         string.IsNullOrWhiteSpace(visualEvent.Message) ? "现在不能执行这个行动。请选择其他行动或目标。" : visualEvent.Message));
                     break;
                 case UiVisualEventKind.RewardClaimed:
-                    ShowFeedback(new UiActionFeedback(UiFeedbackKind.Success, "已经收好。道具放进了行囊，术式收进了术式册。"));
+                    ShowFeedbackWithVfx(new UiActionFeedback(UiFeedbackKind.Success, "已经收好。道具放进了行囊，术式收进了术式册。"), "receipt");
+                    break;
+                case UiVisualEventKind.ServiceCommitted:
+                    ShowFeedbackWithVfx(new UiActionFeedback(UiFeedbackKind.Success, visualEvent.Message), visualEvent.Subject);
                     break;
             }
         }
@@ -78,23 +81,46 @@ namespace OCC.Combat.Presentation
             RectTransform modalRect = modalRoot.GetComponent<RectTransform>();
             modalRect.offsetMin = modalRect.offsetMax = Vector2.zero;
             GameObject card = FormalUiKit.LayoutPanel("确认卡", modalRoot.transform, "modal.confirm", FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .99f));
-            FormalUiKit.ApplySkin(card.GetComponent<Image>(), "danger", Color.white);
+            ArchiveUiStyle.PaperPanel(card, ArchiveUiStyle.LightPaper, false);
+            AcademyPaperDepth.Apply(card.GetComponent<Image>(), false);
+            FormalUiKit.Line(card.transform, new Vector2(42, -132), new Vector2(636, 1), ArchiveUiStyle.Rule, "确认分隔");
             Label(card.transform, "确认类型", ConfirmationKindLabel(request.Kind), new Vector2(42, -34), new Vector2(636, 24), FormalUiTheme.CaptionFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
             Label(card.transform, "确认标题", request.Title, new Vector2(42, -70), new Vector2(636, 54), FormalUiTheme.TitleFontSize, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            Label(card.transform, "确认说明", request.Message, new Vector2(42, -138), new Vector2(636, 82), 19, FormalUiTheme.Muted, TextAnchor.UpperLeft);
+            Text message = Label(card.transform, "确认说明", request.Message, new Vector2(42, -138), new Vector2(636, 82), 24, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
+            FormalUiKit.ConfigureParagraph(message);
+            // Legacy pixel fonts can clip the final wrapped line at preferredHeight.
+            float messageHeight = Mathf.Max(82f, Mathf.Ceil(message.preferredHeight + message.fontSize * message.lineSpacing));
+            message.rectTransform.sizeDelta = new Vector2(636, messageHeight);
+            float extraHeight = messageHeight - 82f;
+            RectTransform cardRect = card.GetComponent<RectTransform>();
+            cardRect.sizeDelta = new Vector2(cardRect.sizeDelta.x, cardRect.sizeDelta.y + extraHeight);
             Button cancel = Button(card.transform, "取消", new Vector2(42, -264), new Vector2(292, 64), request.CancelLabel, FormalUiTheme.Interactive);
             Button confirm = Button(card.transform, "确认", new Vector2(386, -264), new Vector2(292, 64), request.ConfirmLabel, Color.Lerp(FormalUiTheme.Interactive, FormalUiTheme.Danger, .18f));
             cancel.onClick.AddListener(CancelConfirmation);
             confirm.onClick.AddListener(Confirm);
             ConfigureButton(cancel, FormalUiTheme.ButtonPalette(FormalUiButtonTone.Neutral));
             ConfigureButton(confirm, FormalUiTheme.ButtonPalette(FormalUiButtonTone.Dangerous));
+            cancel.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, -extraHeight);
+            confirm.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, -extraHeight);
+            ArchiveUiStyle.TabButton(cancel, false, Motion);
+            ArchiveUiStyle.TabButton(confirm, false, Motion);
+            confirm.GetComponentInChildren<Text>().color = FormalUiTheme.Danger;
+            Hd2DContainerStyle.Tray(card.GetComponent<Image>());
+            Hd2DContainerStyle.PrepareControls(card);
+            Hd2DPaperSkin.Apply(card);
+            confirm.GetComponentInChildren<Text>().color = FormalUiTheme.Danger;
             AnimateModal(card, modalRoot.GetComponent<Image>());
             RuntimeUiEventSystem.Select(cancel.gameObject);
         }
 
         public void ShowFeedback(UiActionFeedback feedback)
+            => ShowFeedbackWithVfx(feedback, feedback != null && feedback.Kind == UiFeedbackKind.Saved ? "check" :
+                feedback != null && feedback.Kind == UiFeedbackKind.Rejected ? "blocked" : null);
+
+        private void ShowFeedbackWithVfx(UiActionFeedback feedback, string motif)
         {
             if (feedback == null) return;
+            if (feedback.Kind == UiFeedbackKind.Rejected) OccSoundEffects.Rejected();
             EnsureCanvas();
             if (toastRoot != null)
             {
@@ -107,15 +133,28 @@ namespace OCC.Combat.Presentation
             toastRoot = FormalUiKit.LayoutPanel("短时提示条", canvas.transform, toastLayoutId, FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .98f));
             GameObject shownToast = toastRoot;
             Image image = toastRoot.GetComponent<Image>();
+            ArchiveUiStyle.PaperPanel(toastRoot, ArchiveUiStyle.LightPaper, false);
             GameObject edge = Panel("提示边线", toastRoot.transform, new Vector2(0, 0), new Vector2(0, 1), Vector2.zero, new Vector2(4, 0), accent);
             edge.GetComponent<RectTransform>().offsetMin = edge.GetComponent<RectTransform>().offsetMax = Vector2.zero;
             float textWidth = toastRoot.GetComponent<RectTransform>().sizeDelta.x - 70f;
-            Label(toastRoot.transform, "提示文字", feedback.Message, new Vector2(58, -6), new Vector2(textWidth, 46), FormalUiTheme.BodyFontSize, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            Text receiptText = Label(toastRoot.transform, "提示文字", feedback.Message, new Vector2(58, -12), new Vector2(textWidth, 46), FormalUiTheme.BodyFontSize, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            // Short framed toasts previously clipped a whole text line after the shared
+            // frame inset. Size to the actual wrapped message before showing feedback.
+            RectTransform toastRect = toastRoot.GetComponent<RectTransform>();
+            float textHeight = Mathf.Max(FormalUiTheme.MinimumTextSlotHeight(receiptText.fontSize), Mathf.Ceil(receiptText.preferredHeight + 4f));
+            float inset = FormalUiTheme.FramedContentInset;
+            toastRect.sizeDelta = new Vector2(toastRect.sizeDelta.x, Mathf.Max(72f, textHeight + inset * 2f));
+            receiptText.rectTransform.anchoredPosition = new Vector2(58f, -inset);
+            receiptText.rectTransform.sizeDelta = new Vector2(textWidth, textHeight);
             UiMotionProfile motion = Motion();
             string feedbackId = feedback.Kind == UiFeedbackKind.Rejected ? "rejected" :
                 feedback.Kind == UiFeedbackKind.Success || feedback.Kind == UiFeedbackKind.Saved ? "success" : "click";
             float iconX = -toastRoot.GetComponent<RectTransform>().sizeDelta.x * .5f + 36f;
-            FormalUiEffects.SpawnLocalFeedback(toastRoot.transform, feedbackId, motion.Intensity, new Vector2(iconX, 0f));
+            if (string.IsNullOrEmpty(motif))
+                FormalUiEffects.SpawnLocalFeedback(toastRoot.transform, feedbackId, motion.Intensity, new Vector2(iconX, 0f));
+            else
+                PeripheralPixelVfx.Spawn(toastRoot.transform, motif, motion.Intensity,
+                    new Vector2(64f, 64f), new Vector2(iconX, 0f), new Vector2(.5f, .5f));
             CanvasGroup group = toastRoot.AddComponent<CanvasGroup>();
             group.interactable = false;
             group.blocksRaycasts = false;

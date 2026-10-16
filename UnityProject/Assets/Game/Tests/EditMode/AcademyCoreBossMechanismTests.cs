@@ -33,6 +33,7 @@ namespace OCC.Combat.Tests
             state.AttachAcademyCoreBoss(new AcademyCoreBossRuntime());
             typeof(AcademyCoreBossRuntime).GetField("coreTurns", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(state.AcademyCoreBoss, 3);
+            typeof(UnitState).GetProperty("IsSuperArmored").SetValue(core, false);
             GridPosition mechanism = new GridPosition(5, 3);
             TileState tile = state.Map.GetTile(mechanism).Clone();
             tile.IsDevice = true;
@@ -67,6 +68,7 @@ namespace OCC.Combat.Tests
             state.AttachAcademyCoreBoss(new AcademyCoreBossRuntime());
             typeof(AcademyCoreBossRuntime).GetField("coreTurns", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(state.AcademyCoreBoss, 3);
+            typeof(UnitState).GetProperty("IsSuperArmored").SetValue(core, false);
             typeof(UnitState).GetMethod("TakeDamage", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
                 .Invoke(core, new object[] { core.Health - 8 });
             core.ApplyStatus(StatusType.SpellPower, int.MaxValue, 2, "phase-two-test");

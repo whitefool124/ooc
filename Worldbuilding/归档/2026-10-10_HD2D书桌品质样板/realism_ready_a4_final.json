@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"57ede873b4294b8c8eaa31dfc10d32f1\",\"request_key\":\"realism-render-a4\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"edit\",\"status\":\"ready\",\"phase\":\"ready\",\"created_at\":\"2026-10-10T14:52:35.009+08:00\",\"updated_at\":\"2026-10-10T14:53:09.109+08:00\",\"finished_at\":\"2026-10-10T14:53:09.109+08:00\",\"error_code\":null,\"message\":\"Requested mode verified; imports and compilation are idle.\",\"refresh_assets\":true,\"timeout_seconds\":120,\"step\":3,\"created_seconds\":1791615155.009,\"deadline_seconds\":1791615275.009,\"settle_since\":1791615188.31,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T14:52:35.009+08:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"},{\"timestamp\":\"2026-10-10T14:52:35.333+08:00\",\"phase\":\"importing\",\"message\":null},{\"timestamp\":\"2026-10-10T14:52:44.187+08:00\",\"phase\":\"compiling\",\"message\":null},{\"timestamp\":\"2026-10-10T14:52:48.254+08:00\",\"phase\":\"reloading\",\"message\":\"Journal saved; poll the same operation_id after reconnection.\"},{\"timestamp\":\"2026-10-10T14:53:08.31+08:00\",\"phase\":\"verifying\",\"message\":\"Waiting for stable editor state.\"},{\"timestamp\":\"2026-10-10T14:53:09.109+08:00\",\"phase\":\"ready\",\"message\":\"Requested mode verified; imports and compilation are idle.\"}]},\"current_editor\":{\"is_compiling\":false,\"is_updating\":false,\"is_playing\":false,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":true},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":0,\"journal_error\":null,\"task\":{\"task_id\":\"editor:57ede873b4294b8c8eaa31dfc10d32f1\",\"kind\":\"editor\",\"id\":\"57ede873b4294b8c8eaa31dfc10d32f1\",\"status\":\"ready\",\"phase\":\"ready\",\"revision\":\"135325c62cb85df1c9d3587960b6be0564b1227126bcecdf540c14c7315fa893\",\"changed\":true,\"wait_complete\":true,\"poll_after_ms\":0,\"wait_reason\":\"completed\",\"waited_ms\":1,\"snapshot_at\":\"2026-10-10T06:53:09.8443287Z\"}}}"
+      }
+    ]
+  }
+}

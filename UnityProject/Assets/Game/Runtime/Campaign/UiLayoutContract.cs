@@ -13,10 +13,18 @@ namespace OCC.Combat
         public const int RogueliteSortingOrder = 40;
         public const int BattlefieldSortingOrder = 42;
         public const int CombatSortingOrder = 45;
+        public const int CombatPreviewSortingOrder = 61;
+        public const int BattlefieldDetailSortingOrder = 70;
+        public const int BattlefieldHoverSortingOrder = 72;
+        public const int TooltipSortingOrder = 98;
         public const int SettlementSortingOrder = 80;
         public const int InteractionSortingOrder = 100;
 
-        public static bool HasValidLayerOrder => RogueliteSortingOrder < BattlefieldSortingOrder && BattlefieldSortingOrder < CombatSortingOrder && CombatSortingOrder < SettlementSortingOrder && SettlementSortingOrder < InteractionSortingOrder;
+        public static bool HasValidLayerOrder => RogueliteSortingOrder < BattlefieldSortingOrder &&
+            BattlefieldSortingOrder < CombatSortingOrder && CombatSortingOrder < CombatPreviewSortingOrder &&
+            CombatPreviewSortingOrder < BattlefieldDetailSortingOrder && BattlefieldDetailSortingOrder < BattlefieldHoverSortingOrder &&
+            BattlefieldHoverSortingOrder < SettlementSortingOrder && SettlementSortingOrder < TooltipSortingOrder &&
+            TooltipSortingOrder < InteractionSortingOrder;
 
     }
 }

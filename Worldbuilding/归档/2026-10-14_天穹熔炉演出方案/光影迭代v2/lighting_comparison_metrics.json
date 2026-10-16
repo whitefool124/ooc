@@ -1,0 +1,49 @@
+{
+  "schema": "occ-vfx-optical-comparison-v1",
+  "same_camera_time_assets": true,
+  "metrics": [
+    {
+      "age": 4.5,
+      "light_changed_pixels_above_2_255": 1723138,
+      "actor_shadow_changed_pixels_above_2_255": 22620,
+      "actor_region_mean_abs_rgb_delta": 0.05605267411624147,
+      "limit": "Screen-region delta includes background; not an isolated actor-surface measurement or aesthetic verdict."
+    },
+    {
+      "age": 6.5,
+      "light_changed_pixels_above_2_255": 1768831,
+      "actor_shadow_changed_pixels_above_2_255": 23153,
+      "actor_region_mean_abs_rgb_delta": 0.0675620212242603,
+      "limit": "Screen-region delta includes background; not an isolated actor-surface measurement or aesthetic verdict."
+    },
+    {
+      "age": 7.5,
+      "light_changed_pixels_above_2_255": 1455916,
+      "actor_shadow_changed_pixels_above_2_255": 15042,
+      "actor_region_mean_abs_rgb_delta": 0.04139988755358774,
+      "limit": "Screen-region delta includes background; not an isolated actor-surface measurement or aesthetic verdict."
+    },
+    {
+      "age": 8.1,
+      "light_changed_pixels_above_2_255": 1205222,
+      "actor_shadow_changed_pixels_above_2_255": 11934,
+      "actor_region_mean_abs_rgb_delta": 0.008550249490477195,
+      "limit": "Screen-region delta includes background; not an isolated actor-surface measurement or aesthetic verdict."
+    },
+    {
+      "age": 10.0,
+      "light_changed_pixels_above_2_255": 385753,
+      "actor_shadow_changed_pixels_above_2_255": 7364,
+      "actor_region_mean_abs_rgb_delta": 0.0070666596387659,
+      "limit": "Screen-region delta includes background; not an isolated actor-surface measurement or aesthetic verdict."
+    },
+    {
+      "age": 12.5,
+      "light_changed_pixels_above_2_255": 171734,
+      "actor_shadow_changed_pixels_above_2_255": 7206,
+      "actor_region_mean_abs_rgb_delta": 0.009598812284770539,
+      "limit": "Screen-region delta includes background; not an isolated actor-surface measurement or aesthetic verdict."
+    }
+  ],
+  "human_review": "PENDING"
+}

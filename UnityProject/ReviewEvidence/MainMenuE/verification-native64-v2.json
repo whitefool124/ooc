@@ -1,0 +1,12 @@
+{
+  "source_route": "independent_builtin_sources; genuine grid decode on lamp/closed book; explicitly marked community reconstruction on background/cup/open book",
+  "formal": false,
+  "aesthetic_acceptance": "PENDING",
+  "asset_validation": "7/7 PASS (dimensions, palette, hard alpha and provenance only)",
+  "runtime_grid": "background/book/cup/lamp all tier6 offset0 at1920x1080",
+  "transition_tests": "2/2 Passed",
+  "start": "real Start button opens book then Config; character creation normal flow reaches Map",
+  "continue": "real Continue button opens book then saved Map node O",
+  "save_isolation": "AcademyJourneyAudit verification scope; original player slots checked on exit",
+  "console": "no error logs during current runtime verification"
+}

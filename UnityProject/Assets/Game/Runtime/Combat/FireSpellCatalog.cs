@@ -156,7 +156,7 @@ namespace OCC.Combat
 
     public static class FireSpellCatalog
     {
-        public const string Version = "fire-personal-spells-v0.5-three-builds";
+        public const string Version = "fire-personal-spells-v0.6-full-balance";
 
         // IDs stay stable for saves. 总案 3.5.6.5：稀有度按三条主构筑分配（地块破坏回流／突进穿刺／燃烧火场
         // 各 10 普通／7 罕见／3 稀有，合计 30/21/9），因此不再按 M／U／R 分线均分。
@@ -195,12 +195,12 @@ namespace OCC.Combat
         private static readonly IReadOnlyDictionary<string, int[]> ApprovedCosts = new Dictionary<string, int[]>(StringComparer.Ordinal)
         {
                 { "F-P-M01", new[] { 1, 2, 1 } },
-                { "F-P-M02", new[] { 1, 2, 1 } },
+                { "F-P-M02", new[] { 1, 1, 1 } },
                 { "F-P-M03", new[] { 2, 3, 2 } },
                 { "F-P-M04", new[] { 1, 1, 1 } },
                 { "F-P-M05", new[] { 1, 2, 2 } },
                 { "F-P-M06", new[] { 1, 2, 1 } },
-                { "F-P-M07", new[] { 2, 5, 3 } },
+                { "F-P-M07", new[] { 2, 4, 3 } },
                 { "F-P-M08", new[] { 2, 3, 2 } },
                 { "F-P-M09", new[] { 2, 4, 2 } },
                 { "F-P-M10", new[] { 1, 2, 1 } },
@@ -213,29 +213,29 @@ namespace OCC.Combat
                 { "F-P-M17", new[] { 0, 0, 0 } },
                 { "F-P-M18", new[] { 1, 1, 1 } },
                 { "F-P-M19", new[] { 2, 5, 4 } },
-                { "F-P-M20", new[] { 2, 5, 4 } },
+                { "F-P-M20", new[] { 2, 4, 3 } },
                 { "F-P-M21", new[] { 1, 2, 2 } },
-                { "F-P-M22", new[] { 1, 4, 2 } },
-                { "F-P-M23", new[] { 2, 4, 2 } },
+                { "F-P-M22", new[] { 1, 3, 2 } },
+                { "F-P-M23", new[] { 2, 3, 2 } },
                 { "F-P-M24", new[] { 1, 1, 1 } },
                 { "F-P-M25", new[] { 1, 3, 2 } },
                 { "F-P-M26", new[] { 1, 3, 3 } },
-                { "F-P-R01", new[] { 1, 1, 0 } },
-                { "F-P-R02", new[] { 1, 1, 0 } },
+                { "F-P-R01", new[] { 1, 2, 0 } },
+                { "F-P-R02", new[] { 1, 2, 1 } },
                 { "F-P-R03", new[] { 1, 2, 0 } },
-                { "F-P-R04", new[] { 1, 1, 1 } },
+                { "F-P-R04", new[] { 1, 2, 1 } },
                 { "F-P-R05", new[] { 2, 3, 1 } },
                 { "F-P-R06", new[] { 2, 3, 2 } },
-                { "F-P-R07", new[] { 1, 2, 0 } },
-                { "F-P-R08", new[] { 2, 3, 2 } },
+                { "F-P-R07", new[] { 1, 2, 1 } },
+                { "F-P-R08", new[] { 2, 2, 2 } },
                 { "F-P-R09", new[] { 1, 3, 1 } },
                 { "F-P-R10", new[] { 1, 3, 3 } },
                 { "F-P-R11", new[] { 2, 4, 2 } },
                 { "F-P-R12", new[] { 1, 2, 1 } },
                 { "F-P-R13", new[] { 1, 4, 3 } },
                 { "F-P-R14", new[] { 2, 6, 4 } },
-                { "F-P-R15", new[] { 2, 4, 4 } },
-                { "F-P-R16", new[] { 2, 5, 2 } },
+                { "F-P-R15", new[] { 2, 4, 3 } },
+                { "F-P-R16", new[] { 2, 4, 2 } },
                 { "F-P-R17", new[] { 0, 0, 0 } },
                 { "F-P-R18", new[] { 2, 3, 2 } },
                 { "F-P-R19", new[] { 2, 4, 2 } },
@@ -243,17 +243,17 @@ namespace OCC.Combat
                 { "F-P-R21", new[] { 1, 3, 1 } },
                 { "F-P-R22", new[] { 2, 4, 2 } },
                 { "F-P-R23", new[] { 1, 2, 2 } },
-                { "F-P-R24", new[] { 1, 3, 2 } },
+                { "F-P-R24", new[] { 1, 1, 2 } },
                 { "F-P-R25", new[] { 1, 2, 1 } },
                 { "F-P-R26", new[] { 2, 5, 3 } },
                 { "F-P-U01", new[] { 1, 2, 2 } },
                 { "F-P-U02", new[] { 1, 2, 1 } },
-                { "F-P-U03", new[] { 1, 3, 2 } },
+                { "F-P-U03", new[] { 1, 2, 2 } },
                 { "F-P-U04", new[] { 1, 1, 2 } },
                 { "F-P-U05", new[] { 2, 3, 2 } },
                 { "F-P-U06", new[] { 1, 1, 1 } },
                 { "F-P-U07", new[] { 1, 2, 2 } },
-                { "F-P-U08", new[] { 2, 3, 2 } },
+                { "F-P-U08", new[] { 1, 3, 2 } },
                 { "F-P-U09", new[] { 1, 1, 1 } },
                 { "F-P-U10", new[] { 1, 2, 2 } },
                 { "F-P-U11", new[] { 0, 0, 0 } },
@@ -261,15 +261,15 @@ namespace OCC.Combat
                 { "F-P-U13", new[] { 1, 1, 2 } },
                 { "F-P-U14", new[] { 1, 1, 1 } },
                 { "F-P-U15", new[] { 1, 1, 1 } },
-                { "F-P-U16", new[] { 1, 3, 2 } },
+                { "F-P-U16", new[] { 1, 1, 2 } },
                 { "F-P-U17", new[] { 1, 3, 3 } },
-                { "F-P-U18", new[] { 1, 2, 2 } },
+                { "F-P-U18", new[] { 1, 3, 2 } },
                 { "F-P-U19", new[] { 1, 2, 2 } },
                 { "F-P-U20", new[] { 1, 3, 3 } },
                 { "F-P-U21", new[] { 1, 2, 2 } },
                 { "F-P-U22", new[] { 1, 2, 2 } },
                 { "F-P-U23", new[] { 2, 3, 2 } },
-                { "F-P-U24", new[] { 1, 2, 2 } },
+                { "F-P-U24", new[] { 1, 3, 2 } },
                 { "F-P-U25", new[] { 2, 4, 3 } },
                 { "F-P-U26", new[] { 1, 2, 2 } },
                 { "F-P-U27", new[] { 1, 3, 2 } },
@@ -352,8 +352,8 @@ namespace OCC.Combat
             S("F-P-M15","焰压退击",FireSpellRarity.Common,FireSpellGroup.Melee,M,FireDeliveryMode.ContactConduction,MW,Now,Cast,1,3,1,0,1,FireTargetKind.AdjacentEnemy,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.BreakBarrier),R(FireRuleKind.Damage,8),R(FireRuleKind.Push,1)},"fire_spray","path"),
 
             // M16-M20: burning conversion and finishers.
-            S("F-P-M16","燃势收割",FireSpellRarity.Common,FireSpellGroup.Melee,M,FireDeliveryMode.ContactConduction,MW,Now,Cast,1,3,1,0,1,FireTargetKind.AdjacentBurningEnemy,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.WeaponDamage,16),R(FireRuleKind.Damage,8)},"heavy_hit","burning"),
-            S("F-P-M17","焦甲吸热",FireSpellRarity.Uncommon,FireSpellGroup.Melee,M,FireDeliveryMode.ContactConduction,MW,Now,Cast,1,3,2,0,1,FireTargetKind.AdjacentBurningEnemy,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.Damage,12),R(FireRuleKind.ConsumeBurning,consume:FireSourceConsumption.BurningOnly),R(FireRuleKind.RestoreShield,12,scope:FireRuleScope.Source)},"fire_detonate","shield_restore"),
+            S("F-P-M16","燃势收割",FireSpellRarity.Common,FireSpellGroup.Melee,M,FireDeliveryMode.ContactConduction,MW,Now,Cast,1,3,1,0,1,FireTargetKind.AdjacentBurningEnemy,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.WeaponDamage,12),R(FireRuleKind.Damage,4)},"heavy_hit","burning"),
+            S("F-P-M17","焦甲吸热",FireSpellRarity.Uncommon,FireSpellGroup.Melee,M,FireDeliveryMode.ContactConduction,MW,Now,Cast,1,3,2,0,1,FireTargetKind.AdjacentBurningEnemy,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.Damage,6),R(FireRuleKind.ConsumeBurning,consume:FireSourceConsumption.BurningOnly),R(FireRuleKind.RestoreShield,6,scope:FireRuleScope.Source)},"fire_detonate","shield_restore"),
             S("F-P-M18","火场踏行",FireSpellRarity.Common,FireSpellGroup.Melee,M,FireDeliveryMode.FiregroundManipulation,MW,Now,Cast,1,2,1,0,3,FireTargetKind.BurningCell,FireSelectionShape.Path,3,false,true,new[]{R(FireRuleKind.MoveSource,3,scope:FireRuleScope.Destination)},"path","fire_burning_ground"),
             S("F-P-M19","炉心超限",FireSpellRarity.Uncommon,FireSpellGroup.Melee,M,FireDeliveryMode.ContactConduction,MW,Now,Cast,2,5,4,8,3,FireTargetKind.Enemy,FireSelectionShape.Path,3,false,true,new[]{R(FireRuleKind.MoveSource,3,scope:FireRuleScope.Destination),R(FireRuleKind.WeaponDamage,24),R(FireRuleKind.Damage,12),R(FireRuleKind.LoseHealth,8,scope:FireRuleScope.Source)},"path","heavy_hit","fire_detonate"),
             S("F-P-M20","终炉断击",FireSpellRarity.Rare,FireSpellGroup.Melee,M,FireDeliveryMode.ContactConduction,MW,Now,Cast,3,5,4,8,1,FireTargetKind.BurningOrArmorBrokenEnemy,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.WeaponDamage,28),R(FireRuleKind.Damage,12)},"heavy_hit","fire_detonate"),
@@ -361,7 +361,7 @@ namespace OCC.Combat
             // 已审核的新近战术式：折线路径、路径邻敌擦伤与落点推位。
             S("F-P-M21","折线突步",FireSpellRarity.Common,FireSpellGroup.Melee,M,FireDeliveryMode.Movement,MW,Now,Cast,1,3,2,0,3,FireTargetKind.EmptyCell,FireSelectionShape.FoldedPath,3,false,true,new[]{R(FireRuleKind.MoveSource,3,scope:FireRuleScope.Destination)},"path"),
             S("F-P-M22","越障跃步",FireSpellRarity.Uncommon,FireSpellGroup.Melee,M,FireDeliveryMode.Movement,MW,Now,Cast,1,5,2,0,2,FireTargetKind.EmptyCell,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.MoveSource,2,scope:FireRuleScope.Destination)},"path"),
-            S("F-P-M23","擦锋穿行",FireSpellRarity.Uncommon,FireSpellGroup.Melee,M,FireDeliveryMode.Movement,MW,Now,Cast,2,5,2,0,3,FireTargetKind.EmptyCell,FireSelectionShape.Path,3,false,true,new[]{R(FireRuleKind.MoveSource,3,scope:FireRuleScope.Destination),R(FireRuleKind.WeaponDamage,8,scope:FireRuleScope.PathAdjacentEnemies,objects:FireDestructibleMask.None)},"path","hit"),
+            S("F-P-M23","擦锋穿行",FireSpellRarity.Uncommon,FireSpellGroup.Melee,M,FireDeliveryMode.Movement,MW,Now,Cast,2,5,2,0,3,FireTargetKind.EmptyCell,FireSelectionShape.Path,3,false,true,new[]{R(FireRuleKind.MoveSource,3,scope:FireRuleScope.Destination),R(FireRuleKind.WeaponDamage,12,scope:FireRuleScope.PathAdjacentEnemies,objects:FireDestructibleMask.None)},"path","hit"),
             S("F-P-M24","余势回身",FireSpellRarity.Common,FireSpellGroup.Melee,M,FireDeliveryMode.SelfStance,MW,FireTriggerWindow.AfterNextCharge,FireConsumptionRule.OnTrigger,1,2,1,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.OfferRetreat,1,timing:FireRuleTiming.OnTrigger)},"path"),
             S("F-P-M25","侧压落步",FireSpellRarity.Common,FireSpellGroup.Melee,M,FireDeliveryMode.Movement,MW,Now,Cast,1,4,2,0,2,FireTargetKind.EmptyCell,FireSelectionShape.Path,2,false,true,new[]{R(FireRuleKind.MoveSource,2,scope:FireRuleScope.Destination),R(FireRuleKind.PushAllUnits,1,scope:FireRuleScope.OrthogonalNeighbors,allies:true)},"path","hit"),
             S("F-P-M26","迎锋架势",FireSpellRarity.Rare,FireSpellGroup.Melee,M,FireDeliveryMode.SelfStance,MW,FireTriggerWindow.AfterNextCharge,FireConsumptionRule.OnTrigger,1,3,3,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.WeaponDamage,12,timing:FireRuleTiming.OnTrigger)},"shield_restore","heavy_hit"),
@@ -375,7 +375,7 @@ namespace OCC.Combat
 
             // U06-U10: action, displacement and defense.
             S("F-P-U06","热压续步",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.WeaponAttachment,AW,FireTriggerWindow.AfterNextWeaponAttack,FireConsumptionRule.OnTrigger,1,2,1,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.Damage,4,timing:FireRuleTiming.OnTrigger),R(FireRuleKind.MoveAfterAttack,1,timing:FireRuleTiming.OnTrigger)},"path"),
-            S("F-P-U07","炉温护持",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,3,2,0,3,FireTargetKind.AllyOrSelf,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.RestoreShield,12)},"fire_projectile","shield_restore"),
+            S("F-P-U07","炉温护持",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,3,2,0,3,FireTargetKind.AllyOrSelf,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.RestoreShield,10)},"fire_projectile","shield_restore"),
             S("F-P-U08","余烬护幕",FireSpellRarity.Uncommon,FireSpellGroup.Universal,U,FireDeliveryMode.SelfStance,NW,Now,Cast,2,4,2,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.RestoreShield,12,scope:FireRuleScope.Source,condition:FireCondition.SourceNotBurning),R(FireRuleKind.RestoreShield,20,scope:FireRuleScope.Source,condition:FireCondition.SourceBurning),R(FireRuleKind.ClearStatus,scope:FireRuleScope.Source,condition:FireCondition.SourceBurning,status:StatusType.Burning)},"cleanse","shield_restore"),
             S("F-P-U09","温血苏醒",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.BodyEnhancement,NW,Now,Cast,1,2,1,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.ClearStatus,scope:FireRuleScope.Source,condition:FireCondition.SourceSlowed,status:StatusType.Slow),R(FireRuleKind.RestoreMovement,UnitState.HeroBaseMovementRange,scope:FireRuleScope.Source)},"cleanse","path"),
             S("F-P-U10","热障偏流",FireSpellRarity.Uncommon,FireSpellGroup.Universal,U,FireDeliveryMode.SelfStance,NW,FireTriggerWindow.UntilNextAction,FireConsumptionRule.OnWindowEnd,1,3,2,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.GrantShieldBeforeRanged,8,timing:FireRuleTiming.OnTrigger)},"shield_restore"),
@@ -390,7 +390,7 @@ namespace OCC.Combat
             // U16-U20: heavy attack, reaction, maintenance, cooperation and finisher.
             S("F-P-U16","炉压蓄势",FireSpellRarity.Uncommon,FireSpellGroup.Universal,U,FireDeliveryMode.WeaponAttachment,AW,FireTriggerWindow.NextLegalWeaponAttack,FireConsumptionRule.OnLegalAttackCommitted,1,4,2,4,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.WeaponDamage,12,timing:FireRuleTiming.OnTrigger)},"heavy_hit"),
             S("F-P-U17","焦土警戒",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.TargetMarking,AW,FireTriggerWindow.FirstEnemyEntry,FireConsumptionRule.OnTrigger,1,4,3,0,3,FireTargetKind.EmptyCell,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.CreateFireground,8,2,timing:FireRuleTiming.OnTrigger)},"fire_projectile","fire_burning_ground"),
-            S("F-P-U18","炉压震步",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.Movement,NW,Now,Cast,1,3,2,0,2,FireTargetKind.EmptyCell,FireSelectionShape.Path,2,false,true,new[]{R(FireRuleKind.MoveSource,2,scope:FireRuleScope.Destination),R(FireRuleKind.Damage,8,scope:FireRuleScope.OrthogonalNeighbors,allies:true),R(FireRuleKind.PushAllUnits,1,scope:FireRuleScope.OrthogonalNeighbors,allies:true)},"path","fire_cross_blast","object_damage"),
+            S("F-P-U18","炉压震步",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.Movement,NW,Now,Cast,1,3,2,0,2,FireTargetKind.EmptyCell,FireSelectionShape.Path,2,false,true,new[]{R(FireRuleKind.MoveSource,2,scope:FireRuleScope.Destination),R(FireRuleKind.Damage,4,scope:FireRuleScope.OrthogonalNeighbors,allies:true),R(FireRuleKind.PushAllUnits,1,scope:FireRuleScope.OrthogonalNeighbors,allies:true)},"path","fire_cross_blast","object_damage"),
             S("F-P-U19","火线协同",FireSpellRarity.Uncommon,FireSpellGroup.Universal,U,FireDeliveryMode.WeaponAttachment,AW,FireTriggerWindow.AfterNextWeaponAttack,FireConsumptionRule.OnTrigger,2,4,2,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.ArmAllyNextAttack,8,condition:FireCondition.TargetBurning,timing:FireRuleTiming.OnTrigger)},"burning","fire_projectile"),
             S("F-P-U20","炉心共振",FireSpellRarity.Rare,FireSpellGroup.Universal,U,FireDeliveryMode.WeaponAttachment,AW,FireTriggerWindow.NextLegalWeaponAttack,FireConsumptionRule.OnLegalAttackCommitted,2,5,4,8,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.Damage,20,condition:FireCondition.TargetBurningOrBreakStance,alternate:28,timing:FireRuleTiming.OnTrigger)},"heavy_hit","fire_detonate"),
 
@@ -398,20 +398,20 @@ namespace OCC.Combat
             S("F-P-U21","结构测绘",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,3,2,0,4,FireTargetKind.Cell,FireSelectionShape.Line,4,false,true,new[]{R(FireRuleKind.ApplyFracture,scope:FireRuleScope.Selection),R(FireRuleKind.ApplyBreakStance,scope:FireRuleScope.FirstUnitInSelection,allies:true)},"fire_projectile","object_damage"),
             S("F-P-U22","余料筑障",FireSpellRarity.Uncommon,FireSpellGroup.Universal,U,FireDeliveryMode.FiregroundManipulation,NW,Now,Cast,1,3,2,0,3,FireTargetKind.EmptyCell,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.CreateLightCover,8,scope:FireRuleScope.Destination)},"object_damage"),
             S("F-P-U23","破口突入",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.Movement,AW,Now,Cast,2,4,2,0,3,FireTargetKind.Cell,FireSelectionShape.FirstHitLine,3,false,true,new[]{R(FireRuleKind.MoveSource,3,scope:FireRuleScope.Destination),R(FireRuleKind.WeaponDamage,12,scope:FireRuleScope.Selection,allies:true),R(FireRuleKind.AdvanceIntoBreach,1,scope:FireRuleScope.Destination)},"path","hit","object_damage"),
-            S("F-P-U24","裂路穿刺",FireSpellRarity.Uncommon,FireSpellGroup.Universal,U,FireDeliveryMode.Movement,AW,Now,Cast,1,3,2,0,3,FireTargetKind.EmptyCell,FireSelectionShape.Path,3,false,true,new[]{R(FireRuleKind.MoveSource,3,scope:FireRuleScope.Destination),R(FireRuleKind.WeaponDamage,6,scope:FireRuleScope.PathAdjacentEnemies,objects:FireDestructibleMask.None)},"path","hit"),
+            S("F-P-U24","裂路穿刺",FireSpellRarity.Uncommon,FireSpellGroup.Universal,U,FireDeliveryMode.Movement,AW,Now,Cast,1,3,2,0,3,FireTargetKind.EmptyCell,FireSelectionShape.Path,3,false,true,new[]{R(FireRuleKind.MoveSource,3,scope:FireRuleScope.Destination),R(FireRuleKind.WeaponDamage,4,scope:FireRuleScope.PathAdjacentEnemies,objects:FireDestructibleMask.None)},"path","hit"),
             S("F-P-U25","震楔落步",FireSpellRarity.Rare,FireSpellGroup.Universal,U,FireDeliveryMode.Movement,NW,Now,Cast,2,4,3,0,2,FireTargetKind.EmptyCell,FireSelectionShape.Path,2,false,true,new[]{R(FireRuleKind.MoveSource,2,scope:FireRuleScope.Destination),R(FireRuleKind.BreakBarrier),R(FireRuleKind.Damage,8,scope:FireRuleScope.OrthogonalNeighbors,allies:true),R(FireRuleKind.PushAllUnits,1,scope:FireRuleScope.OrthogonalNeighbors,allies:true)},"path","fire_cross_blast","object_damage"),
             S("F-P-U26","碎障回身",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.SelfStance,NW,FireTriggerWindow.AfterNextObjectDestruction,FireConsumptionRule.OnTrigger,1,3,2,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.OfferBreachMove,3,timing:FireRuleTiming.OnTrigger)},"path","object_damage"),
             S("F-P-U27","缓冲护幕",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.SelfStance,NW,Now,Cast,1,4,2,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.RestoreShield,8,scope:FireRuleScope.Source),R(FireRuleKind.ReduceForcedMove,1,scope:FireRuleScope.Source)},"shield_restore"),
             S("F-P-U28","断势调息",FireSpellRarity.Common,FireSpellGroup.Universal,U,FireDeliveryMode.SelfStance,NW,Now,Cast,1,2,2,0,0,FireTargetKind.Self,FireSelectionShape.Single,1,false,false,new[]{R(FireRuleKind.ClearBoundOrSlow,scope:FireRuleScope.Source)},"shield_restore"),
 
             // R01-R10: direct ranged casting.
-            S("F-P-R01","火弹",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,2,0,0,3,FireTargetKind.Enemy,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.Damage,12)},"fire_projectile","hit"),
+            S("F-P-R01","火弹",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,2,0,0,3,FireTargetKind.Enemy,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.Damage,8)},"fire_projectile","hit"),
             S("F-P-R02","火矢",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,2,0,0,5,FireTargetKind.Enemy,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.Damage,8)},"fire_projectile","hit"),
             S("F-P-R03","烙印",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,3,0,0,3,FireTargetKind.Enemy,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.ApplyBurning,8,1)},"fire_projectile","burning"),
-            S("F-P-R04","火种",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,2,1,0,4,FireTargetKind.Enemy,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.ApplyBurning,8,2)},"fire_projectile","burning"),
+            S("F-P-R04","火种",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,2,1,0,4,FireTargetKind.Enemy,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.ApplyBurning,4,2)},"fire_projectile","burning"),
             S("F-P-R05","余烬火弹",FireSpellRarity.Uncommon,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,2,4,1,0,4,FireTargetKind.Enemy,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.Damage,16),R(FireRuleKind.ExtendBurning,duration:2,condition:FireCondition.TargetBurning)},"fire_projectile","burning"),
             S("F-P-R06","焰线",FireSpellRarity.Uncommon,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,2,4,2,0,4,FireTargetKind.Unit,FireSelectionShape.Line,4,true,true,new[]{R(FireRuleKind.BreakBarrier),R(FireRuleKind.Damage,8,scope:FireRuleScope.Selection,allies:true)},"fire_projectile","fire_cross_blast","hit"),
-            S("F-P-R07","火焰喷射",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,3,0,0,3,FireTargetKind.Unit,FireSelectionShape.Cone,3,true,true,new[]{R(FireRuleKind.BreakBarrier),R(FireRuleKind.Damage,8,scope:FireRuleScope.Selection,allies:true)},"fire_spray","hit"),
+            S("F-P-R07","火焰喷射",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,1,3,0,0,3,FireTargetKind.Unit,FireSelectionShape.Cone,3,true,true,new[]{R(FireRuleKind.BreakBarrier),R(FireRuleKind.Damage,6,scope:FireRuleScope.Selection,allies:true)},"fire_spray","hit"),
             S("F-P-R08","点燃喷射",FireSpellRarity.Uncommon,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,2,4,2,0,3,FireTargetKind.Unit,FireSelectionShape.Cone,3,true,true,new[]{R(FireRuleKind.ApplyBurning,8,1,FireRuleScope.EnemySelection)},"fire_spray","burning"),
             S("F-P-R09","焰击术",FireSpellRarity.Rare,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,2,3,1,4,3,FireTargetKind.Enemy,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.Damage,20)},"fire_projectile","heavy_hit"),
             S("F-P-R10","熔势射流",FireSpellRarity.Uncommon,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,2,5,3,4,3,FireTargetKind.Enemy,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.Damage,12),R(FireRuleKind.ApplyBreakStance)},"fire_projectile","armor_break"),
@@ -425,7 +425,7 @@ namespace OCC.Combat
 
             // R16-R20: detonation, breach and ranged finisher.
             S("F-P-R16","引爆",FireSpellRarity.Rare,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,2,5,2,0,3,FireTargetKind.BurningEnemy,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.Damage,20),R(FireRuleKind.ConsumeBurning,consume:FireSourceConsumption.BurningOnly)},"fire_detonate","hit"),
-            S("F-P-R17","地火抽爆",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.FiregroundManipulation,NW,Now,Cast,1,3,1,0,4,FireTargetKind.Unit,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.Damage,12,condition:FireCondition.TargetOnFireground),R(FireRuleKind.ConsumeFireground,condition:FireCondition.TargetOnFireground,consume:FireSourceConsumption.GroundOnly)},"fire_burning_ground","fire_detonate"),
+            S("F-P-R17","地火抽爆",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.FiregroundManipulation,NW,Now,Cast,1,3,1,0,4,FireTargetKind.Unit,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.Damage,8,condition:FireCondition.TargetOnFireground),R(FireRuleKind.ConsumeFireground,condition:FireCondition.TargetOnFireground,consume:FireSourceConsumption.GroundOnly)},"fire_burning_ground","fire_detonate"),
             S("F-P-R18","爆燃横扫",FireSpellRarity.Common,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,2,4,2,0,3,FireTargetKind.Unit,FireSelectionShape.Cone,3,true,true,new[]{R(FireRuleKind.Damage,12,scope:FireRuleScope.Selection,condition:FireCondition.TargetBurning,allies:true),R(FireRuleKind.ConsumeBurning,scope:FireRuleScope.Selection,condition:FireCondition.TargetBurning,allies:true,consume:FireSourceConsumption.BurningOnly)},"fire_spray","fire_detonate"),
             S("F-P-R19","熔障爆点",FireSpellRarity.Rare,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,2,4,2,0,4,FireTargetKind.Hittable,FireSelectionShape.Single,1,true,false,new[]{R(FireRuleKind.BreakBarrier),R(FireRuleKind.Damage,16),R(FireRuleKind.Damage,8,scope:FireRuleScope.OrthogonalNeighbors,allies:true)},"object_damage","fire_cross_blast"),
             S("F-P-R20","焚城界限",FireSpellRarity.Rare,FireSpellGroup.Ranged,X,FireDeliveryMode.DetachedProjection,NW,Now,Cast,3,6,4,8,4,FireTargetKind.Unit,FireSelectionShape.CenterAndOrthogonal,1,true,true,new[]{R(FireRuleKind.Damage,20,scope:FireRuleScope.Selection,allies:true),R(FireRuleKind.CreateFireground,8,3,FireRuleScope.EmptySelection,allies:true)},"fire_cross_blast","fire_detonate","fire_burning_ground"),
@@ -458,13 +458,13 @@ namespace OCC.Combat
                 case "F-P-M06": return Revised(old, new[] { R(FireRuleKind.Damage, 8, scope: FireRuleScope.Selection, allies: true), R(FireRuleKind.ApplyFracture, scope: FireRuleScope.Selection) }, target: FireTargetKind.Cell, shape: FireSelectionShape.Line, range: 2, length: 2, delivery: FireDeliveryMode.ContactConduction, weapon: NW);
                 case "F-P-M07": return Revised(old, new[] { R(FireRuleKind.MoveSource, 2, scope: FireRuleScope.Destination), R(FireRuleKind.WeaponDamage, 20) }, target: FireTargetKind.Enemy, shape: FireSelectionShape.Path, range: 3, length: 3);
                 case "F-P-M08": return Revised(old, old.Rules.ToArray(), target: FireTargetKind.Cell);
-                case "F-P-M09": return Revised(old, new[] { R(FireRuleKind.BreakBarrier), R(FireRuleKind.WeaponDamage, 16, scope: FireRuleScope.Selection, allies: true), R(FireRuleKind.Damage, 8, scope: FireRuleScope.Selection, allies: true) }, target: FireTargetKind.Cell);
-                case "F-P-M10": return Revised(old, new[] { R(FireRuleKind.WeaponDamage, 12), R(FireRuleKind.Push, 1) });
-                case "F-P-M11": return Revised(old, new[] { R(FireRuleKind.RestoreShield, 8, scope: FireRuleScope.Source), R(FireRuleKind.RestoreShield, 8, scope: FireRuleScope.OrthogonalNeighbors, allies: true) }, window: Now);
-                case "F-P-M12": return Revised(old, new[] { R(FireRuleKind.RestoreShield, 16, scope: FireRuleScope.Source) }, window: Now);
+                case "F-P-M09": return Revised(old, new[] { R(FireRuleKind.BreakBarrier), R(FireRuleKind.WeaponDamage, 12, scope: FireRuleScope.Selection, allies: true), R(FireRuleKind.Damage, 4, scope: FireRuleScope.Selection, allies: true) }, target: FireTargetKind.Cell);
+                case "F-P-M10": return Revised(old, new[] { R(FireRuleKind.WeaponDamage, 8), R(FireRuleKind.Push, 1) });
+                case "F-P-M11": return Revised(old, new[] { R(FireRuleKind.RestoreShield, 6, scope: FireRuleScope.Source), R(FireRuleKind.RestoreShield, 6, scope: FireRuleScope.OrthogonalNeighbors, allies: true) }, window: Now);
+                case "F-P-M12": return Revised(old, new[] { R(FireRuleKind.RestoreShield, 12, scope: FireRuleScope.Source) }, window: Now);
                 case "F-P-M13": return Revised(old, new[] { R(FireRuleKind.WeaponDamage, 12, timing: FireRuleTiming.OnTrigger) }, window: FireTriggerWindow.FirstAdjacentAttack);
                 case "F-P-M15": return Revised(old, new[] { R(FireRuleKind.Damage, 8), R(FireRuleKind.Push, 1) });
-                case "F-P-M19": return Revised(old, new[] { R(FireRuleKind.MoveSource, 3, scope: FireRuleScope.Destination), R(FireRuleKind.WeaponDamage, 28) });
+                case "F-P-M19": return Revised(old, new[] { R(FireRuleKind.MoveSource, 3, scope: FireRuleScope.Destination), R(FireRuleKind.WeaponDamage, 24) });
                 case "F-P-M20": return Revised(old, new[] { R(FireRuleKind.DamageChargeAdjacent, 20) }, target: FireTargetKind.Enemy);
                 case "F-P-M24": return Revised(old, new[] { R(FireRuleKind.ReturnAlongCharge, 2, scope: FireRuleScope.Source) }, target: FireTargetKind.Cell, range: 2, window: Now);
                 case "F-P-M26": return Revised(old, new[] { R(FireRuleKind.MoveSource, 2, scope: FireRuleScope.Destination), R(FireRuleKind.RestoreShield, 8, scope: FireRuleScope.Source) }, target: FireTargetKind.EmptyCell, shape: FireSelectionShape.Path, range: 2, length: 2, window: Now, delivery: FireDeliveryMode.Movement);
@@ -472,7 +472,7 @@ namespace OCC.Combat
                 case "F-P-U03": return Revised(old, new[] { R(FireRuleKind.Damage, 4, scope: FireRuleScope.Selection, allies: true), R(FireRuleKind.ApplyFracture, scope: FireRuleScope.Selection) }, target: FireTargetKind.Cell, shape: FireSelectionShape.Cone, range: 2, length: 2, window: Now, delivery: FireDeliveryMode.DetachedProjection, weapon: NW);
                 case "F-P-U04": return Revised(old, new[] { R(FireRuleKind.BreakBarrier), R(FireRuleKind.Damage, 8, scope: FireRuleScope.Selection, allies: true) }, target: FireTargetKind.Cell);
                 case "F-P-U05": return Revised(old, new[] { R(FireRuleKind.BreakBarrier), R(FireRuleKind.Damage, 4, scope: FireRuleScope.Selection, allies: true) }, target: FireTargetKind.Cell, shape: FireSelectionShape.Square3, range: 3, window: Now, delivery: FireDeliveryMode.DetachedProjection, weapon: NW);
-                case "F-P-U08": return Revised(old, new[] { R(FireRuleKind.ClearStatus, scope: FireRuleScope.Source, status: StatusType.Burning), R(FireRuleKind.RestoreShield, 12, scope: FireRuleScope.Source) });
+                case "F-P-U08": return Revised(old, new[] { R(FireRuleKind.ClearStatus, scope: FireRuleScope.Source, status: StatusType.Burning), R(FireRuleKind.RestoreShield, 8, scope: FireRuleScope.Source) });
                 case "F-P-U09": return Revised(old, new[] { R(FireRuleKind.ApplyStatus, 2, 2, FireRuleScope.Source, status: StatusType.Agility) });
                 case "F-P-U10": return Revised(old, new[] { R(FireRuleKind.ApplyStatus, 4, 2, FireRuleScope.Source, status: StatusType.ShieldEfficiency) }, window: Now);
                 case "F-P-U12": return Revised(old, new[] { R(FireRuleKind.ConsumeBurning, consume: FireSourceConsumption.BurningOnly), R(FireRuleKind.RestoreShield, 12, scope: FireRuleScope.Source) }, target: FireTargetKind.AdjacentBurningEnemy, range: 1, window: Now, delivery: FireDeliveryMode.ContactConduction, weapon: NW);
@@ -487,9 +487,9 @@ namespace OCC.Combat
                 case "F-P-U25": return Revised(old, new[] { R(FireRuleKind.MoveSource, 2, scope: FireRuleScope.Destination), R(FireRuleKind.BreakBarrier), R(FireRuleKind.Damage, 8, scope: FireRuleScope.LandingCross, allies: true) }, shape: FireSelectionShape.Path);
                 case "F-P-U26": return Revised(old, new[] { R(FireRuleKind.MoveToBreach, 1, scope: FireRuleScope.Source) }, target: FireTargetKind.Cell, range: 99, window: Now);
                 case "F-P-U27": return Revised(old, new[] { R(FireRuleKind.ApplyStatus, -4, 1, FireRuleScope.Source, status: StatusType.DamageTaken) });
-                case "F-P-R02": return Revised(old, new[] { R(FireRuleKind.Damage, 8), R(FireRuleKind.Pull, 1) });
+                case "F-P-R02": return Revised(old, new[] { R(FireRuleKind.Damage, 6), R(FireRuleKind.Pull, 1) });
                 case "F-P-R03": return Revised(old, new[] { R(FireRuleKind.ApplyStatus, 4, 2, status: StatusType.FiregroundVulnerable) });
-                case "F-P-R05": return Revised(old, new[] { R(FireRuleKind.Damage, 16), R(FireRuleKind.ApplyBurning, 8, 2) });
+                case "F-P-R05": return Revised(old, new[] { R(FireRuleKind.Damage, 12), R(FireRuleKind.ApplyBurning, 4, 2) });
                 case "F-P-R09": return Revised(old, new[] { R(FireRuleKind.Damage, 12), R(FireRuleKind.ChangeActionValue, -8) }, delay: 0);
                 case "F-P-R10": return Revised(old, new[] { R(FireRuleKind.Damage, 12), R(FireRuleKind.ApplyBreakStance) }, delay: 0);
                 case "F-P-R06": return Revised(old, old.Rules.ToArray(), target: FireTargetKind.Cell);

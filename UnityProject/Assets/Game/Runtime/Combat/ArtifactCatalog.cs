@@ -133,19 +133,19 @@ namespace OCC.Combat
             "F-T01", "炎脉封装筒", FireSpellRarity.Rare, FireSpellGroup.Breach, 0, 0, 0, 0, 4,
             FireTargetKind.EmptyCell, FireSelectionShape.CenterAndOrthogonal, 1, true, false, new[]
             {
-                new FireSpellRule(FireRuleKind.Damage, 16, scope: FireRuleScope.Selection, affectAllies: true),
+                new FireSpellRule(FireRuleKind.Damage, 10, scope: FireRuleScope.Selection, affectAllies: true),
                 new FireSpellRule(FireRuleKind.DestroyLightCover, scope: FireRuleScope.Selection,
                     destructibleMask: FireDestructibleMask.LightCover),
-                new FireSpellRule(FireRuleKind.CreateFireground, 8, 3, FireRuleScope.Selection, affectAllies: true)
+                new FireSpellRule(FireRuleKind.CreateFireground, 8, 2, FireRuleScope.Selection, affectAllies: true)
             }, "artifact_prime", "fire_cross_blast", "fire_burning_ground");
 
         public static readonly ArtifactDefinition DemolitionCanister = A("F-T01", "demolition_canister", "炎脉封装筒",
             ItemRarity.Rare, 2, 0, 4, ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Cross, "学院试制", "火",
-            "不消耗行动点；消耗 1 次", "4 格内空地；十字范围", "造成 16 点火焰伤害，摧毁轻掩体；生成火场 3 来源自身回合",
+            "不消耗行动点；消耗 1 次", "4 格内空地；十字范围", "造成 10 点火焰伤害，摧毁轻掩体；生成火场 2 来源自身回合",
             "伤及范围内所有单位；重掩体阻断投放", "破障、封路", "双手旋阀后投放", "火十字爆发与燃烧地格",
-            RarePools, new[] { E(ArtifactEffectKind.Damage, 16, scope: ArtifactEffectScope.Selection, damageType: DamageType.Fire, allies: true),
+            RarePools, new[] { E(ArtifactEffectKind.Damage, 10, scope: ArtifactEffectScope.Selection, damageType: DamageType.Fire, allies: true),
                 E(ArtifactEffectKind.DestroyLightCover, scope: ArtifactEffectScope.Selection),
-                E(ArtifactEffectKind.CreateFireground, 8, 3, ArtifactEffectScope.Selection) }, 2, 1, 2, spell: DemolitionCompatibilitySpell);
+                E(ArtifactEffectKind.CreateFireground, 8, 2, ArtifactEffectScope.Selection) }, 2, 1, 2, spell: DemolitionCompatibilitySpell);
 
         public static readonly ArtifactDefinition FirelineScroll = A("F-S01", "fire_scroll", "火线卷轴",
             ItemRarity.Uncommon, 1, 1, 4, ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Line,
@@ -156,38 +156,38 @@ namespace OCC.Combat
                 E(ArtifactEffectKind.CreateFireground, 8, 2, ArtifactEffectScope.Selection) }, 2, 1, 1,
             spell: ItemAbilityCatalog.FirelineScroll);
 
-        public static readonly ArtifactDefinition AegisFold = A("G-T01", "aegis_fold", "折盾匣", ItemRarity.Uncommon, 3, 0, 3,
+        public static readonly ArtifactDefinition AegisFold = A("G-T01", "aegis_fold", "折盾匣", ItemRarity.Uncommon, 2, 0, 3,
             ArtifactTargetRule.AllyOrSelf, ArtifactSelectionShape.Single, "持证护具工坊", "通用", "不消耗行动点，消耗 1 次",
-            "3 格内自身或友军", "目标获得 20 点护盾", "不能治疗或清除异常", "保护自己或救下同伴", "展开折片并压合回路", "青白折面护盾",
-            CommonPools | ArtifactContentSource.EliteReward, new[] { E(ArtifactEffectKind.RestoreShield, 20) }, 2, 2, 1);
+            "3 格内自身或友军", "目标获得 12 点护盾", "不能治疗或清除异常", "保护自己或救下同伴", "展开折片并压合回路", "青白折面护盾",
+            CommonPools | ArtifactContentSource.EliteReward, new[] { E(ArtifactEffectKind.RestoreShield, 12) }, 2, 2, 1);
         public static readonly ArtifactDefinition PhaseSpindle = A("G-T02", "phase_spindle", "移相线轴", ItemRarity.Rare, 2, 0, 3,
             ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Single, "学院定距器旧型", "通用", "不消耗行动点，消耗 1 次",
-            "3 格内可达空地；重掩体阻挡", "移至目标格，行动延后 4 点", "束缚时不能使用", "脱离包围、抢占位置", "拉出线轴并踏入闭环", "短程相位轨迹",
-            AdvancedPools, new[] { E(ArtifactEffectKind.MoveSource), E(ArtifactEffectKind.DelayInitiative, 4, scope: ArtifactEffectScope.Source) }, 1, 2, 1);
+            "3 格内可达空地；重掩体阻挡", "移至目标格", "束缚时不能使用", "脱离包围、抢占位置", "拉出线轴并踏入闭环", "短程相位轨迹",
+            AdvancedPools, new[] { E(ArtifactEffectKind.MoveSource) }, 1, 2, 1);
         public static readonly ArtifactDefinition BindingFrame = A("G-T03", "binding_frame", "缚位框", ItemRarity.Uncommon, 2, 0, 3,
             ArtifactTargetRule.Enemy, ArtifactSelectionShape.Single, "边境猎团", "通用", "不消耗行动点，消耗 1 次", "3 格内可见敌人",
             "目标束缚 1 回合", "束缚只限制移动；目标仍能攻击、施术和使用物品", "拦住对手、集中攻击", "对准四角并扣合", "四角束带收紧",
             AdvancedPools, new[] { E(ArtifactEffectKind.ApplyStatus, duration: 2, status: StatusType.Bound) }, 2, 2, 2);
-        public static readonly ArtifactDefinition SurveyLens = A("G-T04", "survey_lens", "显迹测镜", ItemRarity.Common, 4, 0, 4,
+        public static readonly ArtifactDefinition SurveyLens = A("G-T04", "survey_lens", "显迹测镜", ItemRarity.Common, 2, 0, 4,
             ArtifactTargetRule.Enemy, ArtifactSelectionShape.Single, "遗迹勘验行", "通用", "不消耗行动点，消耗 1 次", "4 格内可见敌人",
             "清空目标护盾，并使其在下次自身回合结束前无法获得护盾", "", "显露护盾接缝，截断持续套盾", "举镜调焦并锁定护盾接缝", "金色轮廓与破势刻度",
             CommonPools | ArtifactContentSource.Event, new[] { E(ArtifactEffectKind.ApplyStatus, duration: 1, status: StatusType.BreakStance) });
         public static readonly ArtifactDefinition FieldSiphon = A("G-T05", "field_siphon", "以太虹吸泵", ItemRarity.Uncommon, 3, 0, 0,
-            ArtifactTargetRule.Self, ArtifactSelectionShape.Single, "边境检修工坊", "通用", "不消耗行动点，消耗 1 次", "自身；魔力未满且生命大于 8",
-            "恢复 4 点个人魔力，再失去 8 点生命", "", "用生命换取魔力", "压泵抽取生命余量", "青色以太回流",
-            AdvancedPools, new[] { E(ArtifactEffectKind.RestoreMana, 4, scope: ArtifactEffectScope.Source), E(ArtifactEffectKind.LoseHealth, 8, scope: ArtifactEffectScope.Source) }, 3, 2, 2, los: false);
+            ArtifactTargetRule.Self, ArtifactSelectionShape.Single, "边境检修工坊", "通用", "不消耗行动点，消耗 1 次", "自身；魔力未满",
+            "恢复 2 点个人魔力", "", "补充个人魔力", "压泵抽取以太余量", "青色以太回流",
+            AdvancedPools, new[] { E(ArtifactEffectKind.RestoreMana, 2, scope: ArtifactEffectScope.Source) }, 3, 2, 2, los: false);
         public static readonly ArtifactDefinition MendingLattice = A("G-T06", "mending_lattice", "复元编架", ItemRarity.Rare, 2, 0, 3,
-            ArtifactTargetRule.AllyOrSelf, ArtifactSelectionShape.Single, "教会救护工坊", "通用", "不消耗行动点，消耗 1 次", "3 格内受伤且至少有 12 护盾的自身或友军",
-            "目标恢复 20 点生命，再失去 12 点护盾", "", "恢复与危急救援", "展开编架覆盖伤处", "柔白网格复元",
-            AdvancedPools, new[] { E(ArtifactEffectKind.RestoreHealth, 20), E(ArtifactEffectKind.ConsumeShield, 12) }, 3, 2, 3);
+            ArtifactTargetRule.AllyOrSelf, ArtifactSelectionShape.Single, "教会救护工坊", "通用", "不消耗行动点，消耗 1 次", "3 格内受伤的自身或友军",
+            "目标恢复 12 点生命", "", "恢复与危急救援", "展开编架覆盖伤处", "柔白网格复元",
+            AdvancedPools, new[] { E(ArtifactEffectKind.RestoreHealth, 12) }, 3, 2, 3);
         public static readonly ArtifactDefinition CoverStamp = A("G-T07", "cover_stamp", "掩体压模", ItemRarity.Uncommon, 2, 0, 2,
             ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Single, "城镇守备石工作坊", "通用", "不消耗行动点，消耗 1 次", "2 格内未占用、有承重表面的空格",
             "生成 24 耐久重掩体", "阻挡双方移动和攻击线", "临时封路、切断攻击线或建立防守角", "压下重型模具并抬起整块土石墙", "厚重土石墙压模成形",
             AdvancedPools, new[] { E(ArtifactEffectKind.CreateHeavyCover, 24) }, 3, 2, 4);
         public static readonly ArtifactDefinition BreachWedge = A("G-T08", "breach_wedge", "解构楔", ItemRarity.Common, 4, 0, 1,
             ArtifactTargetRule.Destructible, ArtifactSelectionShape.Single, "采石行会", "通用", "不消耗行动点，消耗 1 次", "相邻轻型、重型掩体或装置",
-            "对相邻物件造成 8 点伤害", "", "破障与设备处置", "嵌楔后敲击", "几何裂解纹",
-            CommonPools, new[] { E(ArtifactEffectKind.DamageObject, 8) }, 1, 2, 2);
+            "对相邻物件造成 12 点伤害", "", "破障与设备处置", "嵌楔后敲击", "几何裂解纹",
+            CommonPools, new[] { E(ArtifactEffectKind.DamageObject, 12) }, 1, 2, 2);
         public static readonly ArtifactDefinition RelayCompass = A("G-T09", "relay_compass", "导位罗盘", ItemRarity.Uncommon, 3, 0, 4,
             ArtifactTargetRule.AnyUnit, ArtifactSelectionShape.Single, "商路救援队", "通用", "不消耗行动点，消耗 1 次", "4 格内可见友军或敌人",
             "将目标拉近至多 2 格", "定锚、阻挡或占位会停止牵引", "友军救援、敌方位移", "拨针锁定落点", "牵引弧线",
@@ -200,11 +200,11 @@ namespace OCC.Combat
             ArtifactTargetRule.AnyCell, ArtifactSelectionShape.Cross, "消防与勘验人员共制", "通用", "不消耗行动点，消耗 1 次", "3 格内目标格及相邻格；至少含一格燃烧地格或烟尘",
             "移除范围内火场和烟幕", "会清除己方场地", "危险地形清理", "旋开冷凝阀", "水雾冷凝圈",
             CommonPools, new[] { E(ArtifactEffectKind.ClearFireground, scope: ArtifactEffectScope.Selection) }, 2, 2, 2, los: false);
-        public static readonly ArtifactDefinition TurnLedger = A("G-T12", "turn_ledger", "行程簿", ItemRarity.Rare, 2, 0, 0,
+        public static readonly ArtifactDefinition TurnLedger = A("G-T12", "turn_ledger", "行程簿", ItemRarity.Rare, 1, 0, 0,
             ArtifactTargetRule.Self, ArtifactSelectionShape.Single, "失落人类文明行旅遗物", "通用", "不消耗行动点，消耗 1 次", "自身",
-            "获得 2 点行动点，行动延后 8 点", "", "现在多做一件事，之后晚些行动", "盖印并合上账页", "蓝色刻度前移并延后行动条",
-            RarePools, new[] { E(ArtifactEffectKind.GrantActionPoints, 2, scope: ArtifactEffectScope.Source), E(ArtifactEffectKind.DelayInitiative, 8, scope: ArtifactEffectScope.Source) }, 2, 1, 1, los: false);
-        public static readonly ArtifactDefinition AnchorBrace = A("G-T13", "anchor_brace", "定锚支架", ItemRarity.Uncommon, 4, 0, 0,
+            "获得 1 点行动点", "", "有限次数的额外行动", "盖印并合上账页", "蓝色行动刻度亮起",
+            RarePools, new[] { E(ArtifactEffectKind.GrantActionPoints, 1, scope: ArtifactEffectScope.Source) }, 2, 1, 1, los: false);
+        public static readonly ArtifactDefinition AnchorBrace = A("G-T13", "anchor_brace", "定锚支架", ItemRarity.Uncommon, 3, 0, 0,
             ArtifactTargetRule.Self, ArtifactSelectionShape.Single, "驿站装卸工坊", "通用", "不消耗行动点；抵消强制位移时消耗 1 次", "装备于快捷栏的反应器",
             "自动抵消一次推或拉", "不阻止伤害、状态或主动移动", "站稳脚跟，防止被推拉", "三足锚爪自动咬合", "土黄色锚定环",
             CommonPools | ArtifactContentSource.EliteReward, new[] { E(ArtifactEffectKind.ArmAnchor, duration: 1, scope: ArtifactEffectScope.Source) }, 2, 2, 2, los: false);
@@ -214,24 +214,24 @@ namespace OCC.Combat
             RarePools, new[] { E(ArtifactEffectKind.ArmReaction, 8, 8, ArtifactEffectScope.Source, trigger: ArtifactReactionTrigger.IncomingRangedDamage) }, 2, 1, 1, los: false);
         public static readonly ArtifactDefinition DecoyLantern = A("G-T15", "decoy_lantern", "诱导灯", ItemRarity.Uncommon, 2, 0, 3,
             ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Single, "商队驱兽灯改型", "通用", "不消耗行动点，消耗 1 次", "3 格内可见空格",
-            "部署 12 耐久诱导灯；5 格内敌人改为接近它", "灯占格且可被摧毁", "引开敌人、拆开夹击并制造友伤角度", "置灯并翻开遮光片", "暖金诱导脉冲与公开牵引线",
-            AdvancedPools, new[] { E(ArtifactEffectKind.DeployDecoy, 12, 1) }, 1, 2, 2);
+            "部署 8 耐久诱导灯；5 格内敌人改为接近它", "灯占格且可被摧毁", "引开敌人、拆开夹击并制造友伤角度", "置灯并翻开遮光片", "暖金诱导脉冲与公开牵引线",
+            AdvancedPools, new[] { E(ArtifactEffectKind.DeployDecoy, 8, 1) }, 1, 2, 2);
         public static readonly ArtifactDefinition ShieldBalancer = A("G-T16", "shield_balancer", "护盾均衡阀", ItemRarity.Uncommon, 3, 0, 3,
-            ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Single, "医护护具工坊", "通用", "不消耗行动点，另消耗 12 护盾与 1 次", "3 格内未占用、无物件的空格；自身至少有 12 护盾",
-            "失去 12 点护盾；生成 12 耐久轻掩体", "掩体双方都能利用或摧毁", "把临时护盾转移到关键站位", "接管护盾流并展开折叠屏", "青白护盾流转入地面屏障",
-            AdvancedPools, new[] { E(ArtifactEffectKind.ConsumeShield, 12, scope: ArtifactEffectScope.Source), E(ArtifactEffectKind.CreateLightCover, 12) }, 2, 2, 2);
+            ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Single, "医护护具工坊", "通用", "不消耗行动点，消耗 1 次", "3 格内未占用、无物件的空格",
+            "生成 12 耐久轻掩体", "掩体双方都能利用或摧毁", "建立临时屏障", "展开折叠屏", "青白护盾流转入地面屏障",
+            AdvancedPools, new[] { E(ArtifactEffectKind.CreateLightCover, 12) }, 2, 2, 2);
         public static readonly ArtifactDefinition SeismicPlumb = A("G-T17", "seismic_plumb", "震测铅锤", ItemRarity.Rare, 2, 0, 3,
             ArtifactTargetRule.AnyCell, ArtifactSelectionShape.Cross, "失落人类文明测绘遗物", "通用", "不消耗行动点，消耗 1 次", "3 格内可见地格及相邻格；范围至少有一个单位",
             "将相邻格单位向外推开 1 格", "敌我都会受影响", "拆开夹击、推出有效射程、制造友伤角度", "垂直落锤，把地面震波沿四个方向推出", "十字地裂波与逐单位落点",
             RarePools, new[] { E(ArtifactEffectKind.ForceMoveFromCell, 1, scope: ArtifactEffectScope.Selection, allies: true) }, 1, 3, 3);
         public static readonly ArtifactDefinition NullVeil = A("G-T18", "null_veil", "静默幕", ItemRarity.Uncommon, 2, 0, 3,
-            ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Single, "失落人类文明封存布", "通用", "不消耗行动点，消耗 1 次；持续 8 行动刻度", "3 格内可见、未占用且无物件的空格",
+            ArtifactTargetRule.EmptyCell, ArtifactSelectionShape.Single, "失落人类文明封存布", "通用", "不消耗行动点，消耗 1 次；持续 4 个公共回合", "3 格内可见、未占用且无物件的空格",
             "在目标格生成烟幕，阻断远程攻击线", "敌我双方都会被遮线", "切断夹击火线、制造短时转位窗口", "抛出封存布并展开遮光微粒", "暗紫烟幕与公开消散刻度",
-            AdvancedPools, new[] { E(ArtifactEffectKind.CreateSmoke, duration: 8) }, 3, 2, 2);
+            AdvancedPools, new[] { E(ArtifactEffectKind.CreateSmoke, duration: 4) }, 3, 2, 2);
         public static readonly ArtifactDefinition FortuneSeal = A("G-T19", "fortune_seal", "冒险封签", ItemRarity.Rare, 2, 0, 4,
-            ArtifactTargetRule.Enemy, ArtifactSelectionShape.Single, "黑市回收的远古封签", "通用", "不消耗行动点，消耗 1 次", "4 格内可见敌人；使用者生命大于 12",
-            "对敌人造成 28 点伤害；若目标存活，自身失去 12 点生命", "", "孤注一掷地结束战斗", "撕开封签并按向目标", "黑金封印断裂",
-            RarePools | ArtifactContentSource.Event, new[] { E(ArtifactEffectKind.Damage, 28), E(ArtifactEffectKind.BacklashIfTargetSurvives, 12, scope: ArtifactEffectScope.Source, condition: ArtifactEffectCondition.TargetSurvives) }, weight: 1);
+            ArtifactTargetRule.Enemy, ArtifactSelectionShape.Single, "黑市回收的远古封签", "通用", "不消耗行动点，消耗 1 次", "4 格内可见敌人",
+            "对敌人造成 10 点伤害；每件 2 次使用", "", "有限次数的远程补伤", "撕开封签并按向目标", "黑金封印断裂",
+            ArtifactContentSource.Event, new[] { E(ArtifactEffectKind.Damage, 10) }, weight: 1);
 
         public static readonly IReadOnlyList<ArtifactDefinition> All = new[]
         {

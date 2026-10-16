@@ -1,0 +1,297 @@
+{
+  "schema": "occ-hd2d-pixel-density-v1",
+  "scene": "SkyFurnace standalone cinematic",
+  "world_pixel_pitch": 0.03125,
+  "reference_asset_id": "pyromancer_idle",
+  "all_visible_pixel_assets_reviewed": false,
+  "assets": [
+    {
+      "id": "courtyard_floor",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+        "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "density_basis": "32x32 texture repeats once per metre on floor; mesh UVs measured in metres.",
+      "source_uniformity": "PENDING",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Existing native source reused; current scene human review pending."
+    },
+    {
+      "id": "courtyard_masonry",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png",
+        "sha256": "600006205fbf16204a98afcf272a2a420b618042e4f2d4cc18cef65d675f3d24"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "density_basis": "Lossless GPU source region x0..31,y4..24;21 source rows span21/32m; UV y scale32/21.",
+      "source_uniformity": "PENDING",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Existing native source reused; current scene human review pending."
+    },
+    {
+      "id": "academy_facade",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png",
+        "sha256": "f1705cf02ff32e1b1bc4d1161b4b659fb34a7c084f13ab74a9cee93fbca5b5ed"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "density_basis": "224x128 source,7x4m card,32PPU, no image enlargement.",
+      "source_uniformity": "PENDING",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Existing native source reused; current scene human review pending."
+    },
+    {
+      "id": "academy_tree",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_tree.png",
+        "sha256": "9978c0b532855042c823e461be21c7c5c6947aa693af3625aabcd063e531bf51"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "density_basis": "96x96 source,3x3m card,32PPU, fixed world size.",
+      "source_uniformity": "PENDING",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Existing native source reused; current scene human review pending."
+    },
+    {
+      "id": "planter",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_planter_intact.png",
+        "sha256": "093279eea84c12bb7e1ebeb81c84ccd0fdf22d06404339640536140106b8b2c2"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "density_basis": "Card width/height = texture dimensions/32 metres; foot anchored.",
+      "source_uniformity": "PENDING",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Existing native source reused; current scene human review pending."
+    },
+    {
+      "id": "lantern",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_decoy_lantern_active.png",
+        "sha256": "0c2e6cf9cdc2d00c01218382ca2f0f264b30155900f869d34191f104d60d97d1"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "density_basis": "Card width/height = texture dimensions/32 metres; foot anchored.",
+      "source_uniformity": "PENDING",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Existing native source reused; current scene human review pending."
+    },
+    {
+      "id": "pyromancer_idle",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png",
+        "sha256": "d826c048290a40dc80336df73f74d5c11a30cc0414ca38b7528dc776088a860a"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "density_basis": "Actual source32x64;1x2m canvas, bottom foot pivot;32PPU.",
+      "source_uniformity": "PENDING",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Existing native source reused; current scene human review pending."
+    },
+    {
+      "id": "pyromancer_cast",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/pyromancer_cast.png",
+        "sha256": "91c04b17c1019469e60a6d07b12e4b687d009162a186322b4d5688a2e2e9cfb4"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "density_basis": "32x64 source; same1x2m canvas/pivot as idle, fixed32PPU.",
+      "source_uniformity": "PASS",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Decoded source lattice machine PASS only; no genuine human scene review."
+    },
+    {
+      "id": "ring_band",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/ring_band.png",
+        "sha256": "59e551684e084fc197f9cc29cb821c89aefec2dc4383a2e2d68660e3b4dff9e7"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceVoxelStage.cs",
+        "sha256": "8ac6a9fbca183421072d63449bb98720615ae6946f33619895d4fdf5292583b6"
+      },
+      "density_basis": "Voxel ring faces use native32texels/m; fully opaque source window x18,y4,width90,height14 in Unity UV origin. No texture stretching.",
+      "source_uniformity": "PASS",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Decoded source lattice machine PASS only; no genuine human scene review."
+    },
+    {
+      "id": "smoke_wisp_v2",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/smoke_wisp_v2.png",
+        "sha256": "8227b9a93970c55e005e51b58ef79b19978bfe5739a00e2fedc1752c3787d515"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "density_basis": "Independent source decoded to32x32; fixed1x1m cards. Six upper wisps plus16low dust; no size animation; continuous optical fade only.",
+      "source_uniformity": "PASS",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Decoded source lattice machine PASS only; no genuine human scene review."
+    },
+    {
+      "id": "procedural_spell_support",
+      "source": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnaceEnergy.shader",
+        "sha256": "fb9db69e2c71aef68b534679d8afc3a9b3960fec97180188620176fc4bb79cf0"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "density_basis": "Runtime-only ground outlines/conductors and small flow/ember geometry; support widths and vertices quantized in1/32m units. Not claimed as generated image artwork.",
+      "source_uniformity": "PASS",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ]
+    },
+    {
+      "id": "voxel_fire_material",
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_material_voxel.png",
+        "sha256": "2585d30e51057990321fc8f74738f98c63b36dd13bc2ab3822f0acddd93858a3"
+      },
+      "placement": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceVoxelStage.cs",
+        "sha256": "8ac6a9fbca183421072d63449bb98720615ae6946f33619895d4fdf5292583b6"
+      },
+      "density_basis": "Model lattice1/32m, face UV in metres, one native texel per1/32m. Explicit opaque source window x9,y20,width108,height106; full delivery128x160 retained.",
+      "source_uniformity": "PASS",
+      "effective_world_pitch_xy": [
+        0.03125,
+        0.03125
+      ],
+      "review_limit": "Machine source lattice PASS1.2178; geometry/UV PASS is separate from human scene/style review."
+    }
+  ],
+  "comparisons": [
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "capture": {
+        "path": "Worldbuilding/归档/2026-10-15_天穹熔炉体素重构/fixed_comparison_1920x1080.png",
+        "sha256": "c428f04cf63b472a076dfc90ea3a4117793ff4e78c884d5dd39419ef0d4e1320"
+      },
+      "motion_record": {
+        "path": "Artifacts/SkyFurnaceVoxel_20261015/天穹熔炉_体素重构版.mp4",
+        "sha256": "4b20fe9d96e7cfc80c655e26f1e648032c67c42c2a8ca35ed8cb57c52e15c7dc"
+      },
+      "sampled_asset_ids": [
+        "courtyard_floor",
+        "courtyard_masonry",
+        "academy_facade",
+        "academy_tree",
+        "planter",
+        "lantern",
+        "pyromancer_idle",
+        "pyromancer_cast",
+        "ring_band",
+        "smoke_wisp_v2",
+        "procedural_spell_support",
+        "voxel_fire_material"
+      ],
+      "same_frame_verdict": "PENDING",
+      "projection_verdict": "PENDING",
+      "motion_verdict": "PENDING"
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "capture": {
+        "path": "Worldbuilding/归档/2026-10-15_天穹熔炉体素重构/fixed_comparison_960x540.png",
+        "sha256": "66194fb1e00ae9f5aadacca4df459c29a73b717e95ed473531460aa3429dfc09"
+      },
+      "motion_record": {
+        "path": "Artifacts/SkyFurnaceVoxel_20261015/天穹熔炉_体素重构版.mp4",
+        "sha256": "4b20fe9d96e7cfc80c655e26f1e648032c67c42c2a8ca35ed8cb57c52e15c7dc"
+      },
+      "sampled_asset_ids": [
+        "courtyard_floor",
+        "courtyard_masonry",
+        "academy_facade",
+        "academy_tree",
+        "planter",
+        "lantern",
+        "pyromancer_idle",
+        "pyromancer_cast",
+        "ring_band",
+        "smoke_wisp_v2",
+        "procedural_spell_support",
+        "voxel_fire_material"
+      ],
+      "same_frame_verdict": "PENDING",
+      "projection_verdict": "PENDING",
+      "motion_verdict": "PENDING"
+    }
+  ],
+  "human_review": {
+    "status": "PENDING",
+    "scene_pixel_size_consistency": "PENDING"
+  },
+  "limitations": [
+    "Source and geometry grid metrics do not replace human scene pixel-density review.",
+    "Four auxiliary static views inspect effect structures only. Actor/environment paper cards remain authored for the fixed primary camera.",
+    "Continuous object rotation projects one unchanged native lattice; no per-object density adjustment or full-frame pixelation."
+  ]
+}

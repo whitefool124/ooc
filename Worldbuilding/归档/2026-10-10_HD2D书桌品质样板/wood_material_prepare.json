@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"0f901119ec644fc1801ab1fcba941f89\",\"request_key\":\"occ-desk-wood-material-20261010\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"edit\",\"status\":\"running\",\"phase\":\"queued\",\"created_at\":\"2026-10-10T11:53:13.074+08:00\",\"updated_at\":\"2026-10-10T11:53:13.074+08:00\",\"finished_at\":null,\"error_code\":null,\"message\":\"Preparation accepted; not yet ready.\",\"refresh_assets\":true,\"timeout_seconds\":120,\"step\":0,\"created_seconds\":1791604393.074,\"deadline_seconds\":1791604513.074,\"settle_since\":0.0,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T11:53:13.074+08:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"}]},\"current_editor\":{\"is_compiling\":false,\"is_updating\":false,\"is_playing\":false,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":true},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":5000,\"journal_error\":null,\"task\":{\"task_id\":\"editor:0f901119ec644fc1801ab1fcba941f89\",\"kind\":\"editor\",\"id\":\"0f901119ec644fc1801ab1fcba941f89\",\"status\":\"running\",\"phase\":\"queued\",\"revision\":\"b61f6d7df06e2050d54336cc64d3f07f2b44109717b35354c41f5286e34fce92\",\"changed\":true,\"wait_complete\":false,\"poll_after_ms\":5000,\"wait_reason\":\"read_timeout\",\"waited_ms\":2008,\"snapshot_at\":\"2026-10-10T03:53:13.1317397Z\"}}}"
+      }
+    ]
+  }
+}

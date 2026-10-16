@@ -1,0 +1,231 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "38625900f0f7a2c9c8c48eddc0291138ddbf9d5238cf65825426f6b91cb5f4d6",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceSmokeParticles.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceBurstParticles.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePlayerProbe.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+    "UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceSolidPixel.shader",
+    "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_crown.png.meta",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs"
+  ],
+  "inputs": [
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+      "sha256": "a19c001bb31e3416e0e97237261af2c819e610336a5b3dd4bc433a235b747e34"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceSmokeParticles.cs",
+      "sha256": "d649a7ecbe79a4e9187fd8971eedf2e4fa19651bbe041e03cdcb75f0a88c2a54"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceBurstParticles.cs",
+      "sha256": "e9a9cd083979ffe9053cb19a1dac9e281d6b26b2c8015d11f2fb57c295cb8c97"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnacePlayerProbe.cs",
+      "sha256": "e5fab999793fd650c9d92412380f9effdc8a4ae27d9d09d70605134790258e17"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+      "sha256": "0d1f28630b21390865bacb60b29f0c8a87d7031338e1b37c52c9bd33ace17022"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceSolidPixel.shader",
+      "sha256": "d0b16a574e0581571ae5b8f3cce17e4fa2285a64297d8d9ec63499ccca2812ca"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_crown.png.meta",
+      "sha256": "79d713f47365c290968b602f71d6ccb06cf8599550e9d2d87ea90d9c6195add2"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+      "sha256": "52b07b009c142c56324413d811312bd01d9b53f2c0083e77e90d567b7a45b398"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs",
+      "sha256": "9b38a8e71c61093f6800479062719f5457311205b8038a266898773c829bd8ae"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_crown.png",
+      "sha256": "f1d909b1ab2393ba03efcd518c0cf55d7cbf74b5f73aa6e900ca36dabaa7418c"
+    },
+    {
+      "path": "ArtSource/SkyFurnace_20261014/fire_crown.occ-art-manifest-v1.json",
+      "sha256": "9c768ca6d15cfd2aaaa73f86051f858248c5fdb001ef621a761d2819f48b7f87"
+    }
+  ],
+  "configuration": {
+    "scope": "Local SkyFurnace climax and texture-free auxiliary VFX; earlier seal growth and spatial glow preserved",
+    "reveal": "Two primary roots per main seal,1caster root; neighbour-attached20-texel buds and up to4rooted branches; no extra seeds in reachable ink",
+    "release_boost_seconds": 7.4,
+    "audio": "none",
+    "scene_saved": false,
+    "absorption": {
+      "pool": 24,
+      "cube_edge_metres": 0.03125,
+      "lifetime_seconds": 0.28,
+      "cycle_seconds": 0.43,
+      "maximum_observed_single_path_metres": 0.418688416,
+      "scale_basis": "Particle size/path unchanged; endpoints now follow raised paper. Individual cube1/32m and maximum path0.41869m. Complete emitting domain follows5/4/3/2m seal canvases and raised core, not a0.42m total effect.",
+      "material": "Untextured SkyFurnaceSolidPixel shader; gold to pale material Tint and emission, no texture or SourceRect.",
+      "birth_point": "Exact native ink pixel on active growth history; no full-circle random emitter",
+      "audio": "none"
+    },
+    "bloom": {
+      "threshold": 1.15,
+      "intensity": 0.3,
+      "scatter": 0.6
+    },
+    "base_emission": [
+      1.8,
+      2.2,
+      2.7,
+      1.9
+    ],
+    "paper_world_base_heights": [
+      0.03125,
+      0.5,
+      1
+    ],
+    "paper_height_at6_6": [
+      0.03125,
+      0.5625,
+      1.125
+    ],
+    "tilt_after_own_growth_degrees": [
+      0,
+      3,
+      -5
+    ],
+    "source_light": "Tracks visible core height +0.2m before release, returns to contact afterwards; multipliers0.52/0.65",
+    "auxiliary_texture_policy": "2026-10-16 user: Only magic seals and core magic body may use texture paper; rays, columns, embers, inward fire pixels, shock, smoke and ash have zero texture material properties. Scene/actor excluded.",
+    "core_burst": {
+      "source": {
+        "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_crown.png",
+        "sha256": "f1d909b1ab2393ba03efcd518c0cf55d7cbf74b5f73aa6e900ca36dabaa7418c"
+      },
+      "provenance_manifest": {
+        "path": "ArtSource/SkyFurnace_20261014/fire_crown.occ-art-manifest-v1.json",
+        "sha256": "9c768ca6d15cfd2aaaa73f86051f858248c5fdb001ef621a761d2819f48b7f87"
+      },
+      "new_art_generated": false,
+      "paper_instances": 3,
+      "canvas_metres": [
+        3,
+        3
+      ],
+      "thickness": 0.03125,
+      "rise_seconds": 0.12,
+      "burnout_window": [
+        0.2,
+        0.78
+      ],
+      "lift_metres": 0.35,
+      "role": "core_magic_body"
+    },
+    "auxiliary": {
+      "shader": {
+        "path": "UnityProject/Assets/Game/Resources/Shaders/SkyFurnaceSolidPixel.shader",
+        "sha256": "d0b16a574e0581571ae5b8f3cce17e4fa2285a64297d8d9ec63499ccca2812ca"
+      },
+      "texture_properties": 0,
+      "radial_columns": 12,
+      "native_burst_systems": 2,
+      "native_smoke_systems": 2,
+      "shock_particles": 192,
+      "spark_particles": 48,
+      "cube_metres": 0.03125,
+      "shock_life_seconds": 0.4,
+      "shock_radial_speed": 6.75,
+      "actual_bounds": {
+        "status": "PASS",
+        "normalPlayerEntry": true,
+        "player": {
+          "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/PlayerCheck/player_checks.json",
+          "sha256": "d42e61f0cd8b160af4168c711dfb61163fe9de81cb741c40e3e51560360bf5f6"
+        },
+        "editorPlayback": {
+          "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/fixed_runtime_checks.json",
+          "sha256": "c63cc381a477081a9e82d8339813a615c5b29557cbe2da72bfb0b7ea95a78151"
+        },
+        "geometry": {
+          "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/burst_study/geometry_checks.json",
+          "sha256": "d61df543fefc84b60eeefa4708dfac5886a1960e506b7b9844596a59be2280bb"
+        },
+        "nativeBurstPeak": 240,
+        "burstDiameter": 5.790537,
+        "burstTop": 1.47098064,
+        "smokeDiameter": 2.5936665534973145,
+        "smokeTop": 1.289736032485962,
+        "auxiliaryTextureProperties": 0,
+        "texturePaperInstances": 7,
+        "texturePaperRoles": [
+          "four magic seals",
+          "three crossing core flame cards"
+        ],
+        "wholeMotionBoundsSeparateFromCubeSize": true,
+        "cubeMetres": 0.03125,
+        "humanAestheticReview": "PENDING"
+      }
+    }
+  },
+  "local_evidence": {
+    "validation": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/local_validation.json",
+      "sha256": "3bccb4bff7bca679576b934bf587ce90707bff5b905f35baec4fa5a8d415bcee"
+    },
+    "normal_playback": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/fixed_runtime_checks.json",
+      "sha256": "c63cc381a477081a9e82d8339813a615c5b29557cbe2da72bfb0b7ea95a78151"
+    },
+    "native_burst": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/burst_study/burst_checks.json",
+      "sha256": "58e869910204f14e0d032229614c8e524a41d335aa35de326edf0acc4efd7bc5"
+    },
+    "geometry": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/burst_study/geometry_checks.json",
+      "sha256": "d61df543fefc84b60eeefa4708dfac5886a1960e506b7b9844596a59be2280bb"
+    },
+    "console": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/console.json",
+      "sha256": "855b775e3065273a1ee74038a38802d116468d7405cd663ce3902abfc6df0fd1"
+    },
+    "film": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/fixed_film_capture.json",
+      "sha256": "9313b806dac03d527763a4bf37ab723cce42124b88b9129980c8ad3a66c992d0"
+    },
+    "normal_speed_sequence": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/爆发正常时序复核.png",
+      "sha256": "7bd0a612609b966b5ff53ca5cd568ec469354e76cf78bd7e36e38a6f1ce696f8"
+    },
+    "standalone": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/PlayerCheck/player_checks.json",
+      "sha256": "d42e61f0cd8b160af4168c711dfb61163fe9de81cb741c40e3e51560360bf5f6"
+    },
+    "build": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉爆发与冲击/build_status.json",
+      "sha256": "5c3bd5c2554ba0162a4da0cb26a2e06cc31bf5df46b3a1099c5f09043123968e"
+    },
+    "movie": {
+      "path": "Artifacts/SkyFurnaceBurst_20261016/天穹熔炉_爆发与冲击.mp4",
+      "sha256": "1c5d8d2949b078b453cac6af1895dd1c075862bab6beb86c27a10e2ccd789bd0"
+    },
+    "release_clip": {
+      "path": "Artifacts/SkyFurnaceBurst_20261016/释放段_正常速度.mp4",
+      "sha256": "6aa44b01f4451c9398ce7e8d6ff46516b21e8b0ec2919cf30b2761dd5e30ba81"
+    }
+  },
+  "limitations": [
+    "QA_PENDING; new climax aesthetic review pending.",
+    "Dedicated cinematic normal-entry checks passed; not formal combat integration or performance validation.",
+    "Complete formal baseline and scene source-density approval requirements remain pending."
+  ]
+}

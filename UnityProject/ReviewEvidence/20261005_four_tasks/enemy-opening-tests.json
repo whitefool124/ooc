@@ -1,0 +1,41 @@
+{
+  "status": "completed",
+  "duration": 1.97,
+  "summary": {
+    "total": 4,
+    "passed": 3,
+    "failed": 1,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.CombatTestArenaPlaythroughTests.EveryAuthoredBattleHasABoundedRealCommandVictoryRoute",
+      "Status": "Failed",
+      "Duration": 0.9462822,
+      "Message": "  arena_n07_maintenance did not reach victory through real combat commands; hero turns 95, actor turns 161, commands 350, living enemies 1\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at OCC.Combat.Tests.CombatTestArenaPlaythroughTests.EveryAuthoredBattleHasABoundedRealCommandVictoryRoute () [0x0008c] in E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Tests\\EditMode\\CombatTestArenaPlaythroughTests.cs:155\r\n"
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatTestArenaScenarioTests.EveryAuthoredBattleStartsWithMoreThanOneReachableMovementLane",
+      "Status": "Passed",
+      "Duration": 0.1262152,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatTestArenaScenarioTests.EveryAuthoredBattleSurvivesThreeEnemyReplanCyclesWithoutIllegalOccupancy",
+      "Status": "Passed",
+      "Duration": 0.3136377,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatTestArenaScenarioTests.EveryAuthoredEnemyCanExecuteItsOpeningPublicIntent",
+      "Status": "Passed",
+      "Duration": 0.4129468,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

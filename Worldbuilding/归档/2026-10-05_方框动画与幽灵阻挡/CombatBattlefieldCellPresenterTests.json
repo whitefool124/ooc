@@ -1,0 +1,279 @@
+{
+  "status": "completed",
+  "duration": 0.76,
+  "summary": {
+    "total": 38,
+    "passed": 38,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.ArtifactForecast_UsesRealResolverWithoutMutatingTarget",
+      "Status": "Passed",
+      "Duration": 0.1143378,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.AttackDeadZone_IsMarkedUndeliverableInsteadOfLeftBlank",
+      "Status": "Passed",
+      "Duration": 0.2020237,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.AttackOverlay_KeepsTheWholeReachVisibleButOnlyAMarkedTargetAtFullStrength",
+      "Status": "Passed",
+      "Duration": 0.0122656,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.AttackOverlay_RecedesWhenTheHeroCannotActAtAll",
+      "Status": "Passed",
+      "Duration": 0.0082619,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BlockingDevicesAndUnboundChestsRemainVisibleOutsideTraining(1)",
+      "Status": "Passed",
+      "Duration": 0.0085551,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BlockingDevicesAndUnboundChestsRemainVisibleOutsideTraining(2)",
+      "Status": "Passed",
+      "Duration": 0.003772,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BlockingDevicesAndUnboundChestsRemainVisibleOutsideTraining(3)",
+      "Status": "Passed",
+      "Duration": 0.0028036,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BlockingDevicesAndUnboundChestsRemainVisibleOutsideTraining(4)",
+      "Status": "Passed",
+      "Duration": 0.0033649,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BoundaryOverlay_IsDisabledForSelfContainedFloorTiles",
+      "Status": "Passed",
+      "Duration": 0.0106443,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BoundaryOverlay_SelectsReusableAdjacencyAssetAndRotation(1,\"academy_curb_edge\",0)",
+      "Status": "Passed",
+      "Duration": 0.0008134,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BoundaryOverlay_SelectsReusableAdjacencyAssetAndRotation(2,\"academy_curb_edge\",1)",
+      "Status": "Passed",
+      "Duration": 0.0004213,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BoundaryOverlay_SelectsReusableAdjacencyAssetAndRotation(3,\"academy_curb_corner\",0)",
+      "Status": "Passed",
+      "Duration": 0.0010361,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BoundaryOverlay_SelectsReusableAdjacencyAssetAndRotation(6,\"academy_curb_corner\",1)",
+      "Status": "Passed",
+      "Duration": 0.0004602,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BoundaryOverlay_SelectsReusableAdjacencyAssetAndRotation(5,\"academy_curb_opposite\",0)",
+      "Status": "Passed",
+      "Duration": 0.0002772,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BoundaryOverlay_SelectsReusableAdjacencyAssetAndRotation(10,\"academy_curb_opposite\",1)",
+      "Status": "Passed",
+      "Duration": 0.0003199,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BoundaryOverlay_SelectsReusableAdjacencyAssetAndRotation(7,\"academy_curb_three\",0)",
+      "Status": "Passed",
+      "Duration": 0.0001972,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BoundaryOverlay_SelectsReusableAdjacencyAssetAndRotation(14,\"academy_curb_three\",1)",
+      "Status": "Passed",
+      "Duration": 0.000211,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.BoundaryOverlay_SelectsReusableAdjacencyAssetAndRotation(15,\"academy_curb_enclosed\",0)",
+      "Status": "Passed",
+      "Duration": 0.000308,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.Build_CombinesFormalAssetsAndReadOnlyHeroState",
+      "Status": "Passed",
+      "Duration": 0.0083321,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.CoverVariant_OnlySelectsVisualAssetForExistingCoverKind",
+      "Status": "Passed",
+      "Duration": 0.0020667,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.EighthSpell_ShowsItsInvalidInnerRangeAndValidOuterBand",
+      "Status": "Passed",
+      "Duration": 0.0320981,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.ExpandedModules_ReuseExistingVisualSlotsWithoutRotation",
+      "Status": "Passed",
+      "Duration": 0.0098445,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.FloorKey_UsesIndependentNativeTileAndFullUv",
+      "Status": "Passed",
+      "Duration": 0.0004153,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.HoveredAreaSpell_ShowsEveryAffectedCellBeforeCasting",
+      "Status": "Passed",
+      "Duration": 0.0078265,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.IndependentGroundTiles_KeepMaterialFamiliesAndNeverRotate",
+      "Status": "Passed",
+      "Duration": 0.001304,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.MarkerLadder_ResolvesEverySemanticToExactlyOneTextureAndOneOrderedTier",
+      "Status": "Passed",
+      "Duration": 0.0051412,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.MinimumRangeSpell_MarksTheDeadZoneButNeverTheCasterCell",
+      "Status": "Passed",
+      "Duration": 0.0067012,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.ModularFloor_UsesReusableRoadCopingAndMaterialFamilies",
+      "Status": "Passed",
+      "Duration": 0.0010591,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.NineMaps_HaveDistinctReusableFloorSignatures",
+      "Status": "Passed",
+      "Duration": 0.0045837,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.ObjectHover_ExplainsCoverInOneSentenceAndOmitsEmptyCategory",
+      "Status": "Passed",
+      "Duration": 0.0013092,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.SelectingSpark_KeepsItsRangeWithoutPreviewingAnInspectedEnemy",
+      "Status": "Passed",
+      "Duration": 0.0308281,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.SelectingSpell_DoesNotForecastAnInspectedEnemyUntilItsEffectIsPreviewed",
+      "Status": "Passed",
+      "Duration": 0.0283715,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.SingleTargetSpell_ShowsItsDeclaredReachOnEmptyCellsBeforeAnyLegalTargetExists",
+      "Status": "Passed",
+      "Duration": 0.003087,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.Structures_RecomposeSharedWallEndCornerAndStairModules",
+      "Status": "Passed",
+      "Duration": 0.0009706,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.TileDurability_KeepsOriginalMaximumThroughDamageAndClone",
+      "Status": "Passed",
+      "Duration": 0.0013501,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.VisualModules_AddReusableDecorationWithoutChangingLogicalLevelDefinitions",
+      "Status": "Passed",
+      "Duration": 0.0006929,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.VisualModules_StayInsideCurrentMapsAndKeepGameplayCellsReadable",
+      "Status": "Passed",
+      "Duration": 0.0066612,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatBattlefieldCellPresenterTests.WeaponForecast_ReturnsInitializedFireContextWithoutMutatingTarget",
+      "Status": "Passed",
+      "Duration": 0.0183441,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

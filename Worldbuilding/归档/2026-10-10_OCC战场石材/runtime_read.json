@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"status\\\":\\\"PASS:click:进入战斗\\\",\\\"output\\\":[1920,1080],\\\"projection\\\":30,\\\"exposure\\\":0.08,\\\"contrast\\\":9.0,\\\"saturation\\\":2.0,\\\"lights\\\":[{\\\"name\\\":\\\"战场统一日光\\\",\\\"intensity\\\":2.6,\\\"color\\\":[1.0,0.94,0.84]},{\\\"name\\\":\\\"战场柔和补光\\\",\\\"intensity\\\":0.6,\\\"color\\\":[0.7,0.82,1.0]}]}\",\"compiler\":\"Roslyn\"}}"
+    }
+  ]
+}

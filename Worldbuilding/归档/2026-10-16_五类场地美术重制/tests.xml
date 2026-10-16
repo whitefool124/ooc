@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="18" result="Passed" total="18" passed="18" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-16 08:55:30Z" end-time="2026-10-16 08:55:32Z" duration="1.4104892">
+  <test-suite type="TestSuite" id="1000" name="My project" fullname="My project" runstate="Runnable" testcasecount="2797" result="Passed" start-time="2026-10-16 08:55:30Z" end-time="2026-10-16 08:55:32Z" duration="1.410489" total="18" passed="18" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2712" name="OCC.Combat.EditModeTests.dll" fullname="E:/数据库/OCC_Codex/UnityProject/Library/ScriptAssemblies/OCC.Combat.EditModeTests.dll" runstate="Runnable" testcasecount="1487" result="Passed" start-time="2026-10-16 08:55:31Z" end-time="2026-10-16 08:55:32Z" duration="1.297164" total="18" passed="18" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="49624" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2713" name="OCC" fullname="OCC" runstate="Runnable" testcasecount="1487" result="Passed" start-time="2026-10-16 08:55:31Z" end-time="2026-10-16 08:55:32Z" duration="1.234997" total="18" passed="18" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2715" name="Combat" fullname="OCC.Combat" runstate="Runnable" testcasecount="1485" result="Passed" start-time="2026-10-16 08:55:31Z" end-time="2026-10-16 08:55:32Z" duration="1.162035" total="18" passed="18" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2716" name="Tests" fullname="OCC.Combat.Tests" runstate="Runnable" testcasecount="1485" result="Passed" start-time="2026-10-16 08:55:31Z" end-time="2026-10-16 08:55:32Z" duration="1.096517" total="18" passed="18" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1891" name="FieldEffectPresentationTests" fullname="OCC.Combat.Tests.FieldEffectPresentationTests" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" testcasecount="18" result="Passed" start-time="2026-10-16 08:55:31Z" end-time="2026-10-16 08:55:32Z" duration="0.984346" total="18" passed="18" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="1912" name="AnimatedCandidates_KeepFixedCanvasFootAnchorAndAllSixExposures" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.AnimatedCandidates_KeepFixedCanvasFootAnchorAndAllSixExposures" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-16 08:55:31Z" end-time="2026-10-16 08:55:32Z" duration="0.691825" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1910" name="AnimatedCandidates_KeepFixedCanvasFootAnchorAndAllSixExposures(&quot;field_smoke&quot;)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.AnimatedCandidates_KeepFixedCanvasFootAnchorAndAllSixExposures(&quot;field_smoke&quot;)" methodname="AnimatedCandidates_KeepFixedCanvasFootAnchorAndAllSixExposures" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1543061443" result="Passed" start-time="2026-10-16 08:55:31Z" end-time="2026-10-16 08:55:32Z" duration="0.660558" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1911" name="AnimatedCandidates_KeepFixedCanvasFootAnchorAndAllSixExposures(&quot;field_burning&quot;)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.AnimatedCandidates_KeepFixedCanvasFootAnchorAndAllSixExposures(&quot;field_burning&quot;)" methodname="AnimatedCandidates_KeepFixedCanvasFootAnchorAndAllSixExposures" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="262499913" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.011443" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1902" name="EffectLabel_DoesNotReplaceDeviceIdentity_AndClearsWithTheEffect" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.EffectLabel_DoesNotReplaceDeviceIdentity_AndClearsWithTheEffect" methodname="EffectLabel_DoesNotReplaceDeviceIdentity_AndClearsWithTheEffect" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="17571708" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.065678" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1909" name="NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.034097" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1906" name="NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview(1,&quot;field_trace&quot;,False)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview(1,&quot;field_trace&quot;,False)" methodname="NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1437377570" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.007714" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1907" name="NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview(2,&quot;field_binding_mark&quot;,False)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview(2,&quot;field_binding_mark&quot;,False)" methodname="NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1138917926" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.004953" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1908" name="NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview(3,&quot;field_paper_screen&quot;,True)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview(3,&quot;field_paper_screen&quot;,True)" methodname="NewFields_UseTheirOwnArtAndCorrectOrientation_OnlyDuringReview" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1477323849" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.005257" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1903" name="PaperCandidate_IsReversible_AndDoesNotOverrideWaterSmokeOrFire" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.PaperCandidate_IsReversible_AndDoesNotOverrideWaterSmokeOrFire" methodname="PaperCandidate_IsReversible_AndDoesNotOverrideWaterSmokeOrFire" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1871646755" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.011433" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1905" name="PaperImporter_PreservesTheNativeCellAndTransparentSampling" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.PaperImporter_PreservesTheNativeCellAndTransparentSampling" methodname="PaperImporter_PreservesTheNativeCellAndTransparentSampling" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="2147010388" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.006117" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1904" name="ProjectedLabels_FollowCameraChanges_ClearAndReuse_WithoutInterceptingInput" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.ProjectedLabels_FollowCameraChanges_ClearAndReuse_WithoutInterceptingInput" methodname="ProjectedLabels_FollowCameraChanges_ClearAndReuse_WithoutInterceptingInput" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="959762774" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.099599" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1901" name="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.032292" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1892" name="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(0,&quot;散页&quot;,False)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(0,&quot;散页&quot;,False)" methodname="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="781835772" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.004101" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1893" name="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(0,&quot;散页&quot;,True)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(0,&quot;散页&quot;,True)" methodname="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1290740838" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.001787" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1894" name="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(1,&quot;痕迹&quot;,False)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(1,&quot;痕迹&quot;,False)" methodname="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1580526382" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.003124" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1895" name="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(1,&quot;痕迹&quot;,True)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(1,&quot;痕迹&quot;,True)" methodname="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="601298889" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.002090" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1896" name="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(2,&quot;约束纹&quot;,False)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(2,&quot;约束纹&quot;,False)" methodname="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1982783170" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.002101" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1897" name="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(2,&quot;约束纹&quot;,True)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(2,&quot;约束纹&quot;,True)" methodname="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1131697574" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.002049" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1898" name="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(3,&quot;页幕&quot;,False)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(3,&quot;页幕&quot;,False)" methodname="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1598879824" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.002184" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1899" name="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(3,&quot;页幕&quot;,True)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(3,&quot;页幕&quot;,True)" methodname="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="1598112388" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.002518" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1900" name="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(4,&quot;痕迹&quot;,False)" fullname="OCC.Combat.Tests.FieldEffectPresentationTests.UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits(4,&quot;痕迹&quot;,False)" methodname="UnillustratedEffects_KeepTheirExactNamesEvenUnderUnits" classname="OCC.Combat.Tests.FieldEffectPresentationTests" runstate="Runnable" seed="929600213" result="Passed" start-time="2026-10-16 08:55:32Z" end-time="2026-10-16 08:55:32Z" duration="0.002323" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[Saving results to: C:/Users/FNHF/AppData/LocalLow/DefaultCompany/My project\TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

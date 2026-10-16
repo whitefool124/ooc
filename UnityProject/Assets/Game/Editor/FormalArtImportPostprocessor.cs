@@ -79,7 +79,15 @@ namespace OCC.Combat.Editor
             else if (assetPath.Contains("FormalUnits64/") || assetPath.Contains("FormalEnemyAnimations64/"))
             {
                 settings.spriteAlignment = (int)SpriteAlignment.Custom;
-                settings.spritePivot = new Vector2(.5f, .90625f); // logical X=32, Y=58 on a 64px cell
+                bool adopted=assetPath.EndsWith("FormalUnits64/breach_ram.png", StringComparison.Ordinal)||
+                    assetPath.EndsWith("FormalUnits64/signal_keeper.png", StringComparison.Ordinal)||
+                    assetPath.EndsWith("FormalUnits64/elder_tracker_hound.png", StringComparison.Ordinal)||
+                    assetPath.EndsWith("FormalUnits64/wind_librarian.png", StringComparison.Ordinal)||
+                    assetPath.EndsWith("FormalUnits64/legacy_storekeeper.png", StringComparison.Ordinal);
+                importer.GetSourceTextureWidthAndHeight(out int nativeWidth,out int nativeHeight);
+                settings.spritePivot = adopted
+                    ? new Vector2(.5f, 2f / nativeHeight)
+                    : new Vector2(.5f, .90625f); // Preserve existing unit anchors; adopted ram feet at native Y62.
             }
             else
             {

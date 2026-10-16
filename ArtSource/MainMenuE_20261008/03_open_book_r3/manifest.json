@@ -1,0 +1,85 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.main_menu_e.03_open_book_r3",
+  "role": "ui_detail_adaptive",
+  "status": "REJECTED",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in image generation, approved E scene direction; trial 03_open_book_r3",
+    "source_path": "ArtSource/MainMenuE_20261008/03_open_book_r3/source.png",
+    "source_sha256": "2c0ad6f5f6dfa20b40bccf01ccd2b790b355a03c194c3f2a7d09f801bf1d41d8"
+  },
+  "delivery": {
+    "output_path": "ArtSource/MainMenuE_20261008/03_open_book_r3/native.png",
+    "output_sha256": "REJECTED",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 4,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 4,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "ground tiles, directional edges, props, structures and units in one battle view must share one pixel size; a 16 px tile occupies 96 screen units and a 32 px prop or unit occupies 192"
+  },
+  "application": {
+    "scope": "nonbattlefield_display_only",
+    "placement": "tabletop",
+    "support": "window-side desktop",
+    "logical_cells": null,
+    "default_integer_scale": 4,
+    "minimum_integer_scale": 2
+  },
+  "evidence": {
+    "one_x": "ArtSource/MainMenuE_20261008/03_open_book_r3/one_x.png",
+    "four_x": "ArtSource/MainMenuE_20261008/03_open_book_r3/four_x.png",
+    "six_x": "repo/relative/6x.png",
+    "grayscale": "ArtSource/MainMenuE_20261008/03_open_book_r3/grayscale.png",
+    "checker": "ArtSource/MainMenuE_20261008/03_open_book_r3/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-08_主界面E动态场景/application_1920.png"
+  },
+  "human_review": {
+    "overall": "REJECTED",
+    "reviewer": "user",
+    "date": "2026-10-08",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "REJECTED",
+    "application": "REJECTED",
+    "illumination": "PENDING",
+    "notes": "Rejected as assembled E scene: source assets have incompatible logical density at natural display sizes. Individual lattice PASS is not scene approval. Do not promote or import."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "guid": "",
+    "runtime_lattice": {
+      "tool": "Tools/OCCArt/verify_runtime_pixel_grid.py",
+      "capture": "repo/relative/runtime_capture.png",
+      "tier": 6,
+      "offset": [
+        0,
+        0
+      ],
+      "pass": false,
+      "uniform_with_siblings": false
+    }
+  }
+}

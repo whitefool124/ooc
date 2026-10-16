@@ -1,0 +1,23 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "ui.main_menu_e.modular.banner",
+  "role": "ui_detail_adaptive",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      34,
+      69
+    ],
+    "bounds": [
+      1,
+      1,
+      33,
+      68
+    ],
+    "hard_alpha": true,
+    "fully_opaque": false,
+    "visible_colors": 16,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

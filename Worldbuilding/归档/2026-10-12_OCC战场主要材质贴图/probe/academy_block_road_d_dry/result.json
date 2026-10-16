@@ -1,0 +1,40 @@
+{
+  "scope": "single native32 material probe, actual URP offscreen rendering; not normal-entry game/UI or performance",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "activeScenePreserved": true,
+  "dirty": false,
+  "play": false,
+  "normalStrength": 0.3,
+  "normalGreenFlip": false,
+  "Id": "academy_block_road_d",
+  "shaderName": "OCC/HD2D/BakedArchitecture",
+  "maps": [
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_road_d/normal.png",
+      "guid": "127caed37e588ba42b37e568a4dcfaaa",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "type": "NormalMap",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    },
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_road_d/roughness.png",
+      "guid": "a83586049e07b1444909ba565488e06f",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "type": "Default",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    }
+  ],
+  "captures": [
+    "baseline_540.png",
+    "full_540.png"
+  ],
+  "messages": []
+}

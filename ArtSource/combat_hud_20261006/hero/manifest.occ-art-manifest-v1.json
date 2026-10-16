@@ -1,0 +1,69 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "combat_hud_hero",
+  "role": "combat_hud_portrait_64",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in generation; selected r2; uniform inferred subject grid, no geometric resize",
+    "source_path": "ArtSource/combat_hud_20261006/hero/raw/r2.png",
+    "source_sha256": "b470d37605ed8864bfef5fa566c3c1f4b81aa38b0f0142acd6763f656faf9338"
+  },
+  "delivery": {
+    "output_path": "ArtSource/combat_hud_20261006/hero/asset/hero.png",
+    "native_output_path": "ArtSource/combat_hud_20261006/hero/asset/hero.png",
+    "output_sha256": "abaf25b8b759d84f0d1d5071df33baa7d0b62689d598cb15d92e42d3e8e497c1",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 32,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 2,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 2,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Battle HUD identity artwork, no tactical substitution"
+  },
+  "application": {
+    "runtime_draw_rect": "128x128 reference units",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User requested formal battle HUD redesign and supporting art on 2026-10-06; reversible review integration only"
+  },
+  "evidence": {
+    "one_x": "ArtSource/combat_hud_20261006/hero/qa/1x.png",
+    "four_x": "ArtSource/combat_hud_20261006/hero/qa/4x.png",
+    "grayscale": "ArtSource/combat_hud_20261006/hero/qa/grayscale.png",
+    "checker": "ArtSource/combat_hud_20261006/hero/qa/checker.png",
+    "application_contact": "ArtSource/combat_hud_20261006/hero/qa/application.png",
+    "actual_application_1920": "Worldbuilding/归档/2026-10-06_战斗HUD正式美术/verification/collapsed-1920x1080.png",
+    "actual_application_960": "Worldbuilding/归档/2026-10-06_战斗HUD正式美术/verification/collapsed-960x540.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Await user aesthetic review of concrete in-game sample; no FORMAL promotion"
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/CombatHudPortraits64/hero.png",
+    "stable_guid": "9ef7352daaaac9c4dac672c3d202b9ff",
+    "filter_mode": "Point",
+    "wrap_mode": "Clamp",
+    "mipmaps": false,
+    "compression": "Uncompressed",
+    "pixels_per_unit": 32,
+    "alpha_is_transparency": true,
+    "readable": true,
+    "importer_verified": true,
+    "runtime_verified": true,
+    "verification_scope": "Normal B1 entry, 1920x1080 and 960x540; exact gameplay flow evidence in archive; not a full cast or full-mode certification"
+  }
+}

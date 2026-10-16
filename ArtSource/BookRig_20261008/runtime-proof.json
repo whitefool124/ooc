@@ -1,0 +1,61 @@
+{
+  "date": "2026-10-08",
+  "project": "E:/数据库/OCC_Codex/UnityProject",
+  "geometry": {
+    "poses": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "fixed_hinge": true,
+    "closed_cover_height_native": 2.996253,
+    "open_cover_height_native": -3.054738e-07,
+    "pass": true
+  },
+  "runtime_lattice": {
+    "tier": 6,
+    "crop": [
+      780,
+      480,
+      372,
+      192
+    ],
+    "blocks": 1984,
+    "mixed_blocks": 0,
+    "pass": true
+  },
+  "render_texture": {
+    "size": [
+      320,
+      180
+    ],
+    "filter": "Point"
+  },
+  "ui": {
+    "start": "PASS:click:开始游戏",
+    "destination": "角色档案",
+    "continue": "PASS:click:继续游戏",
+    "continue_destination": "已保存学院地图",
+    "setup": "实际按钮创建本轮存档，主菜单使用 EnterMainMenuFromOpening 初始化；从主菜单点击继续游戏。",
+    "isolated_save_scope": true
+  },
+  "videos": {
+    "loop": {
+      "seconds": 10,
+      "frames": 248,
+      "purpose": "LateUpdate review driver; no document overlay, not an entry flow"
+    },
+    "start": {
+      "seconds": 8,
+      "frames": 152,
+      "purpose": "actual button path"
+    },
+    "continue": {
+      "seconds": 8,
+      "frames": 143,
+      "purpose": "actual button path"
+    }
+  }
+}

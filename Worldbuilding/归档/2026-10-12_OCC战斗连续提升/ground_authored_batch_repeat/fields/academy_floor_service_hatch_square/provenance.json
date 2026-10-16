@@ -1,0 +1,26 @@
+{
+  "schema": "occ-authored-normal-field-v1",
+  "status": "QA_PENDING",
+  "asset_id": "academy_floor_service_hatch_square",
+  "source_type": "deterministic_numeric_bake_from_explicit_physical_heights",
+  "source_height_record": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_repeat\\authored_heights.json",
+  "source_height_sha256": "3ddb5e654e03c4758787f77e6a9269997a87d66a0b5414db51b468a94b831eb9",
+  "albedo_reference": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_service_hatch_square.png",
+    "sha256": "4f0cdaa4c325f343943909b8ccade42b80e023e8d55874cf0bd2e3b11e6c232b"
+  },
+  "native_canvas": [
+    32,
+    32
+  ],
+  "world_pixel_pitch": 0.03125,
+  "normal_convention": "OpenGL +Y, image rows top-down",
+  "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+  "normal_sha256": "867a19012bf68869ccee5ef0cf0082699171c1e1e26cf856e7f13ebdbfc00ae6",
+  "normal_path": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_repeat\\fields\\academy_floor_service_hatch_square\\normal.png",
+  "albedo_pixels_read": false,
+  "interpolation": false,
+  "source_art_changed": false,
+  "human_registration_review": "PENDING",
+  "runtime_review": "PENDING"
+}

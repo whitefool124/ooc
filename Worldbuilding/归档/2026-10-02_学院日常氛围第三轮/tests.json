@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "duration": 0.24,
+  "summary": {
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.AcademyDeskLampTests.ReducedMotion_TakesEffectOnExistingLamp",
+      "Status": "Passed",
+      "Duration": 0.0602415,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.AcademyDeskLampTests.ZeroMotion_KeepsSteadyLight_AndDoesNotBlockInput",
+      "Status": "Passed",
+      "Duration": 0.0092536,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

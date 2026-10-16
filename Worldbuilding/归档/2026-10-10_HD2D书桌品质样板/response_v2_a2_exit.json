@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"b01dacea5e064c30a71e39a8f5317d72\",\"request_key\":\"response-v2-a2-exit-20261010\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"edit\",\"status\":\"ready\",\"phase\":\"ready\",\"created_at\":\"2026-10-10T07:49:06.3710000+00:00\",\"updated_at\":\"2026-10-10T07:49:09.1510000+00:00\",\"finished_at\":\"2026-10-10T07:49:09.1510000+00:00\",\"error_code\":null,\"message\":\"Requested mode verified; imports and compilation are idle.\",\"refresh_assets\":false,\"timeout_seconds\":120,\"step\":3,\"created_seconds\":1791618546.371,\"deadline_seconds\":1791618666.371,\"settle_since\":1791618548.325,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T07:49:06.3710000+00:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"},{\"timestamp\":\"2026-10-10T07:49:06.6210000+00:00\",\"phase\":\"exiting_play\",\"message\":\"Exit requested; waiting for Edit Mode readback.\"},{\"timestamp\":\"2026-10-10T07:49:07.5730000+00:00\",\"phase\":\"verifying\",\"message\":null},{\"timestamp\":\"2026-10-10T07:49:09.1510000+00:00\",\"phase\":\"ready\",\"message\":\"Requested mode verified; imports and compilation are idle.\"}]},\"current_editor\":{\"is_compiling\":false,\"is_updating\":false,\"is_playing\":false,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":true},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":0,\"journal_error\":null,\"task\":{\"task_id\":\"editor:b01dacea5e064c30a71e39a8f5317d72\",\"kind\":\"editor\",\"id\":\"b01dacea5e064c30a71e39a8f5317d72\",\"status\":\"ready\",\"phase\":\"ready\",\"revision\":\"c4460fd51e3a79dbfe0da13fa617ac44f3222fd2ea0c0daf0bf38e23b0bdaa0f\",\"changed\":true,\"wait_complete\":true,\"poll_after_ms\":0,\"wait_reason\":\"completed\",\"waited_ms\":2775,\"snapshot_at\":\"2026-10-10T07:49:09.1717353Z\"}}}"
+      }
+    ]
+  }
+}

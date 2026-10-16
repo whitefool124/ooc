@@ -1,0 +1,46 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sky_furnace_quiet_energy_20261015",
+  "role": "hd2d_environment_module",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent flat pixel energy material swatch for user-authorized voxel spell models; no programmatic painting or recolouring",
+    "source_path": "ArtSource/SkyFurnacePixel_20261015/raw/quiet_energy_r1.png",
+    "source_sha256": "3e82fab9e965b3aff9dd0a1253e196d9768123b9b76d6850c9a299029732ffb6"
+  },
+  "delivery": {
+    "output_path": "ArtSource/SkyFurnacePixel_20261015/delivery/quiet_energy.png",
+    "native_output_path": "ArtSource/SkyFurnacePixel_20261015/delivery/quiet_energy.png",
+    "output_sha256": "a79f3482fa9d71c3fdb77dd2321c1fce30cd435a7df9cf0249937a56c28aea1e",
+    "native_ppu": 32,
+    "palette_max": 4,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "battlefield_hd2d_environment",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "Native face UV measured in metres. Opaque source window x8,y1,width16,height15 in Unity UV origin; one source texel per1/32metre. Full32x32delivery retained.",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User approved voxel effect geometry plus materials/textures on2026-10-15; scoped independent cinematic, no formal gameplay change"
+  },
+  "evidence": {
+    "one_x": "ArtSource/SkyFurnacePixel_20261015/qa/material/1x.png",
+    "four_x": "ArtSource/SkyFurnacePixel_20261015/qa/material/4x.png",
+    "grayscale": "ArtSource/SkyFurnacePixel_20261015/qa/material/grayscale.png",
+    "checker": "ArtSource/SkyFurnacePixel_20261015/qa/material/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-15_天穹熔炉像素疏化/fixed_frames/frame_04.50.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Machine lattice PASS1.5452; real source/grid/style and current application review pending"
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/SkyFurnace/quiet_energy_pixel.png",
+    "formal_promotion": false
+  }
+}

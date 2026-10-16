@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"敌人移动意图保留橙色落点框\"><p id=\"doxcnipWTgIVWTC2eIYm7MMM1Vb\">敌人移动意图保留橙色落点框与中心方向标记；从敌人脚下沿公开的真实移动路径连线至目标格，拐角按实际逐格路线转折，不穿墙、不绘制不可达线路。连线使用暗橙底线与琥珀色细芯，连续亮色能量节段沿敌人到落点的方向涌动，转弯时沿整条路径的累计距离接续；关闭动画时保留稳定连线与方向箭头。图形由原生32格整数像素几何绘制，保持在地形物件和单位之下，不拦截点击；意图改动即更新线路，死亡、重开、离开战斗和停用视图时清理。公开意图的行动、目标、路径、落点或作用区改变时，对所属意图图标和新路径／作用格反馈850ms：图标暖色闪烁、前300ms轻微整数像素上提，并在原徽记范围内显示短暂“变”字；格子以琥珀色边线闪烁。初次显示及重复读取同一计划不反馈；关闭动画时保留短暂稳定颜色与“变”字。离开、重开或更换战斗时清除记录，不改变AI选择和结算。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2653
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"房间、桌面等场景结构与大型物件按简洁\"><p id=\"doxcnVt02GWnZa1EYmyDzfLo1Ke\">房间、桌面等场景结构与大型物件按简洁多边形模型加配套像素贴图制作，书本与小物件优先采用像素纸板、厚纸板及分层组合；厚度、投影与统一3D光源服务于2D像素感觉，不以实体建模细节代替贴图；像素物件保留独立原料、原生像素、Point采样和现行资产画布，不重采样原料。高清场景输出允许克制景深、发光和环境动态，主要可交互内容保持清晰。景深和光照与场景相机绑定；同时打开的页面必须隔离渲染层、光源影响层和Volume层，隐藏页面释放离屏场景。源资产网格、Alpha、调色板、Importer、原生主体和人工审美门槛不降低。已迁移的场景不再要求整帧等距像素或固定六倍网格，以实际相机中的清晰度、接触、遮挡、一致光照及操作命中验证取代；未迁移场景保留原有检查，不用新口径绕过旧实现的失败。此口径优先于旧有整场景整数显示及仅主菜单例外的表述。主菜单和共用战斗外书桌先建立可玩样板；学院地图与战斗的资产、输入和反馈迁移未完成前，不报告全项目转换完成。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2723
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

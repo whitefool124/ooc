@@ -1,0 +1,12 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>以太 · 分层书本动画</title>
+<style>body{margin:0;background:#211a14;color:#eee3cb;font:16px/1.7 system-ui}main{max-width:1440px;margin:auto;padding:24px}h1{font-size:26px}p{color:#c8bda7}video,img{display:block;width:100%;image-rendering:pixelated}a{color:#e8d8b5}details{margin:24px 0}.poses{display:grid;grid-template-columns:1fr 1fr;gap:16px}.material{width:256px;max-width:100%}button{background:#efe3c7;color:#302619;padding:10px 18px;border:0;margin-right:10px;cursor:pointer}</style>
+<main><h1>以太 · 分层书本动画样板</h1><p>静态封面材质＋固定书脊＋左右页块。以下为真实 Unity 低分辨率渲染录像，先看无遮挡的开合动作。</p>
+<video controls autoplay muted loop playsinline preload="metadata" src="rig-loop.mp4" poster="rig-open.png"></video>
+<p>这段循环仅驱动书本和镜头，未盖转场纸页。五个姿态检查通过：铰链位置固定，封面闭合高度为3原生像素，展开后落回桌面；共同输出320×180，Point采样。</p>
+<h2>实际开始与继续入口</h2><p>开始进入角色档案，继续回到已保存学院地图。按钮流程单独录制；界面接管仍沿用纸页转场。</p>
+<div><button onclick="document.querySelector('#entry').src='rig-start.mp4'">开始游戏</button><button onclick="document.querySelector('#entry').src='rig-continue.mp4'">继续游戏</button></div>
+<video id="entry" controls preload="metadata" src="rig-start.mp4" poster="rig-closed.png"></video>
+<details><summary>开合姿态</summary><div class="poses"><img src="rig-closed.png" alt="闭合菜单"><img src="rig-mid.png" alt="72度"><img src="rig-late.png" alt="126度"><img src="rig-open.png" alt="完全展开"></div></details>
+<details><summary>静态材质与生产状态</summary><p>静态封面独立生图三次：第一版网格不稳定，第二版通过，第三版主体超出64画布。第二版置信度1.3685，64×64透明画布内保留21×26原生主体，16色、硬Alpha。状态为REVIEW_READY，等待人工审美；未晋升正式资产。</p><img class="material" src="rig-four_x.png" alt="封面四倍近邻证据"><p>当前封面主体较小、装饰偏简，页面尚为空白。纸色取自既有展开书原料中的纸张像素，由立体页块承载，未宣称是新生成的纸页资产。后续页内纹理、书签和翻页层可继续独立生产。</p></details>
+<details><summary>界面落点</summary><img src="rig-dossier.png" alt="角色档案"><img src="rig-continue.png" alt="继续游戏后的学院地图"></details>
+<p><a href="opening-review.html">上一版开局样板</a> · <a href="paper-review.html">战斗外界面</a></p></main></html>

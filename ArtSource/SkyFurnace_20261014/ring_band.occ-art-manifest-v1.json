@@ -1,0 +1,48 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sky_furnace_ring_band_20261014",
+  "role": "hd2d_environment_module",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in source; noninteractive stage spatial-effect module, inferred grid decode without geometric resizing",
+    "source_path": "ArtSource/SkyFurnace_20261014/raw/ring_band_r1.png",
+    "source_sha256": "86120f6383ab6ec125dca82b7951f14f351e793bc93916d6461bfda548ba1a9e"
+  },
+  "delivery": {
+    "output_path": "ArtSource/SkyFurnace_20261014/delivery/ring_band.png",
+    "output_sha256": "59e551684e084fc197f9cc29cb821c89aefec2dc4383a2e2d68660e3b4dff9e7",
+    "native_output_path": "ArtSource/SkyFurnace_20261014/delivery/ring_band.png",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "battlefield_hd2d_environment",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "4.0 by 1.0 metres at fixed32PPU; independent noninteractive cinematic",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User authorized all required stage assets and requested32px source art on2026-10-14"
+  },
+  "evidence": {
+    "one_x": "ArtSource/SkyFurnace_20261014/qa/ring_band/1x.png",
+    "four_x": "ArtSource/SkyFurnace_20261014/qa/ring_band/4x.png",
+    "six_x": "ArtSource/SkyFurnace_20261014/qa/ring_band/6x.png",
+    "grayscale": "ArtSource/SkyFurnace_20261014/qa/ring_band/grayscale.png",
+    "checker": "ArtSource/SkyFurnace_20261014/qa/ring_band/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-14_天穹熔炉演出方案/fixed_frames/frame_04.50.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Technical candidate only; actual scene density and aesthetic review pending"
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/SkyFurnace/ring_band.png",
+    "formal_promotion": false
+  }
+}

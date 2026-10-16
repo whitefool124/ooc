@@ -98,6 +98,17 @@ namespace OCC.Combat
             Combat = combat ?? throw new ArgumentNullException(nameof(combat));
             Combat.AttachArtifactBattle(this);
         }
+        public ArtifactBattleState Clone(CombatState combat)
+        {
+            var clone=new ArtifactBattleState(combat);
+            foreach(var pair in ReservedAp)clone.ReservedAp.Add(pair.Key,pair.Value);
+            foreach(var pair in ReservedMana)clone.ReservedMana.Add(pair.Key,pair.Value);
+            foreach(var id in Anchored)clone.Anchored.Add(id);
+            foreach(var pair in Reactions)clone.Reactions.Add(pair.Key,pair.Value);
+            foreach(var pair in Firegrounds)clone.Firegrounds.Add(pair.Key,pair.Value);
+            foreach(var pair in Decoys)clone.Decoys.Add(pair.Key,pair.Value);
+            return clone;
+        }
         public void BeginUnitTurn(string unitId)
         {
             UnitState beginning = Combat.GetUnit(unitId);
@@ -187,11 +198,19 @@ namespace OCC.Combat
         }
         public ArtifactExecution ResolveIncomingRangedHit(string ownerId, string attackerId, int incomingDamage)
         {
+            if (incomingDamage <= 0) return new ArtifactExecution(Array.Empty<ArtifactStep>());
             if (!Reactions.TryGetValue(ownerId, out ArtifactReaction reaction) || reaction.Trigger != ArtifactReactionTrigger.IncomingRangedDamage) return new ArtifactExecution(Array.Empty<ArtifactStep>());
             UnitState owner = Combat.GetUnit(ownerId), attacker = Combat.GetUnit(attackerId); if (owner == null || attacker == null) return new ArtifactExecution(Array.Empty<ArtifactStep>());
             var feedback = new ArtifactFeedbackCapture(owner, owner, attacker); GridPosition source = owner.Position;
-            Reactions.Remove(ownerId); int prevented = Math.Min(incomingDamage, reaction.Amount); owner.GrantShield(prevented); Damage(attacker, reaction.Duration);
-            Combat.AddLog("棱返调节器抵消 " + prevented + " 远程伤害，并向攻击者返还 " + reaction.Duration + " 伤害。");
+            Reactions.Remove(ownerId);
+            int shieldBefore = owner.Shield;
+            if (Combat.Ruleset == CombatRuleset.Roguelite)
+                Combat.TryGrantRogueliteShield(owner.Id, "artifact-G-T14", reaction.Amount);
+            else owner.GrantShield(reaction.Amount);
+            int granted = owner.Shield - shieldBefore;
+            int prevented = Math.Min(incomingDamage, granted);
+            Damage(attacker, reaction.Duration);
+            Combat.AddLog("棱返调节器获得 " + granted + " 护盾，并向攻击者返还 " + reaction.Duration + " 伤害。");
             var execution = new ArtifactExecution(new[] { new ArtifactStep(0, ArtifactEffectKind.ArmReaction, attacker.Id, attacker.Position,
                 prevented, "ranged_reflect", feedback.Finish(ArtifactEffectKind.ArmReaction)) }, owner.Id, source, true);
             resolvedReactions.Add(execution); return execution;
@@ -434,14 +453,16 @@ namespace OCC.Combat
                 else if (effect.Kind == ArtifactEffectKind.CreateSmoke)
                 {
                     tile = tile.Clone();
-                    tile.SmokeExpiresAt = Math.Max(tile.SmokeExpiresAt, battle.Combat.CurrentTime + effect.Duration);
+                    tile.ClearEffectLayers();
+                    tile.SmokeExpiresAt = int.MaxValue;
+                    tile.SmokePublicRoundsRemaining = effect.Duration;
                     battle.Combat.Map.SetTile(position, tile);
                     applied = effect.Duration;
                 }
                 else if (effect.Kind == ArtifactEffectKind.ClearFireground)
                 {
                     bool removed = battle.RemoveFireground(position);
-                    if (tile.SmokeExpiresAt > 0) { tile.SmokeExpiresAt = 0; removed = true; }
+                    if (tile.SmokeExpiresAt > 0) { tile.SmokeExpiresAt = 0; tile.SmokePublicRoundsRemaining = 0; removed = true; }
                     applied = removed ? 1 : 0;
                 }
                 else if (effect.Kind == ArtifactEffectKind.DeployDecoy)

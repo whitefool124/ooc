@@ -1,0 +1,9 @@
+页签_装备锻造 hit=页签_装备锻造
+工坊卡_ACA-EQ-CH01 hit=工坊卡_ACA-EQ-CH01
+工坊卡_ACA-EQ-CH03 hit=工坊卡_ACA-EQ-CH03
+页签_术式专精 hit=页签_术式专精
+页签_装备锻造 hit=页签_装备锻造
+工坊卡_ACA-EQ-CH01 hit=工坊卡_ACA-EQ-CH01
+工坊卡_ACA-EQ-CH03 hit=工坊卡_ACA-EQ-CH03
+按钮_确认安装 hit=按钮_确认安装
+按钮_返回地图 hit=按钮_返回地图

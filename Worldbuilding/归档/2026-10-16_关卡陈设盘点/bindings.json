@@ -1,0 +1,1401 @@
+{
+  "source": "Current compiled catalog and actual resource lookup; binding inventory only, not gameplay or aesthetic approval",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "levels": [
+    {
+      "id": "rail_patrol",
+      "name": "普通战斗 04 · 石路巡哨",
+      "Width": 6,
+      "Height": 5,
+      "environment": "StoneRoad",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 3,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 4,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_stairs_2x1",
+          "X": 5,
+          "TopY": 8,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 7,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 8,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_drain_grate",
+          "X": 3,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_grate.png"
+        },
+        {
+          "id": "academy_floor_service_hatch_round",
+          "X": 2,
+          "TopY": 3,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_service_hatch_round.png"
+        },
+        {
+          "id": "academy_floor_pipe_socket",
+          "X": 0,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_pipe_socket.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "depot_wreck",
+      "name": "普通战斗 05 · 废弃驿站",
+      "Width": 6,
+      "Height": 5,
+      "environment": "RuinSite",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_low_bookcase_2x1",
+          "X": 3,
+          "TopY": 2,
+          "WidthCells": 2,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_conduit_blank",
+          "X": 3,
+          "TopY": 0,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_conduit_blank.png"
+        },
+        {
+          "id": "academy_floor_drain_round",
+          "X": 4,
+          "TopY": 4,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_round.png"
+        },
+        {
+          "id": "academy_floor_repair_iron",
+          "X": 1,
+          "TopY": 4,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_iron.png"
+        }
+      ],
+      "peripheralFixtures": [
+        {
+          "id": "academy_low_bookcase_2x1",
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_low_bookcase_2x1.png"
+        }
+      ]
+    },
+    {
+      "id": "relay_raid",
+      "name": "普通战斗 06 · 野外导能柱",
+      "Width": 6,
+      "Height": 6,
+      "environment": "AcademyCourt",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_stairs_2x1",
+          "X": 5,
+          "TopY": 8,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_safety_marker",
+          "X": 2,
+          "TopY": 3,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_safety_marker.png"
+        },
+        {
+          "id": "academy_floor_drain_grate",
+          "X": 3,
+          "TopY": 2,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_grate.png"
+        },
+        {
+          "id": "academy_floor_service_hatch_round",
+          "X": 1,
+          "TopY": 0,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_service_hatch_round.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "signal_hub",
+      "name": "普通战斗 07 · 传讯石庭",
+      "Width": 6,
+      "Height": 6,
+      "environment": "AcademyCourt",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_aether_pump_2x2",
+          "X": 3,
+          "TopY": 8,
+          "WidthCells": 2,
+          "HeightCells": 2
+        },
+        {
+          "AssetId": "academy_wall_end_n",
+          "X": 7,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_s",
+          "X": 7,
+          "TopY": 7,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_n",
+          "X": 8,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_s",
+          "X": 8,
+          "TopY": 7,
+          "WidthCells": 1,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_safety_marker",
+          "X": 2,
+          "TopY": 3,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_safety_marker.png"
+        },
+        {
+          "id": "academy_floor_drain_grate",
+          "X": 0,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_grate.png"
+        },
+        {
+          "id": "academy_floor_service_hatch_round",
+          "X": 1,
+          "TopY": 5,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_service_hatch_round.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "gatehouse",
+      "name": "普通战斗 08 · 石闸关口",
+      "Width": 6,
+      "Height": 6,
+      "environment": "AcademyCourt",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_north_dais_6x2",
+          "X": 3,
+          "TopY": 8,
+          "WidthCells": 6,
+          "HeightCells": 2
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_repair_iron",
+          "X": 5,
+          "TopY": 3,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_iron.png"
+        },
+        {
+          "id": "academy_floor_mortar_inlay",
+          "X": 3,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_mortar_inlay.png"
+        },
+        {
+          "id": "academy_floor_conduit_blank",
+          "X": 2,
+          "TopY": 3,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_conduit_blank.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "transmission_tower",
+      "name": "普通战斗 09 · 传讯塔楼",
+      "Width": 6,
+      "Height": 6,
+      "environment": "AetherTower",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 3,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 4,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_stairs_2x1",
+          "X": 5,
+          "TopY": 8,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 7,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 8,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_maintenance_hatch",
+          "X": 4,
+          "TopY": 2,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_maintenance_hatch.png"
+        },
+        {
+          "id": "academy_floor_service_hatch_square",
+          "X": 2,
+          "TopY": 0,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_service_hatch_square.png"
+        },
+        {
+          "id": "academy_floor_anchor_plate",
+          "X": 3,
+          "TopY": 4,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_anchor_plate.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "elite_foundry",
+      "name": "精英战斗 02 · 刻阵工坊",
+      "Width": 6,
+      "Height": 6,
+      "environment": "RuinSite",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_smithing_table_2x1",
+          "X": 2,
+          "TopY": 4,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_tool_cabinet_2x1",
+          "X": 7,
+          "TopY": 4,
+          "WidthCells": 2,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_drain_slot",
+          "X": 4,
+          "TopY": 2,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_slot.png"
+        },
+        {
+          "id": "academy_floor_cable_cap",
+          "X": 3,
+          "TopY": 4,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_cable_cap.png"
+        },
+        {
+          "id": "academy_floor_threshold_studs",
+          "X": 1,
+          "TopY": 2,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_threshold_studs.png"
+        }
+      ],
+      "peripheralFixtures": [
+        {
+          "id": "academy_smithing_table_2x1",
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_smithing_table_2x1.png"
+        },
+        {
+          "id": "academy_tool_cabinet_2x1",
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_tool_cabinet_2x1.png"
+        }
+      ]
+    },
+    {
+      "id": "core_approach",
+      "name": "精英战斗 03 · 塔前石庭",
+      "Width": 6,
+      "Height": 6,
+      "environment": "AcademyCourt",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_stairs_2x1",
+          "X": 5,
+          "TopY": 8,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_cable_cap",
+          "X": 5,
+          "TopY": 2,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_cable_cap.png"
+        },
+        {
+          "id": "academy_floor_threshold_studs",
+          "X": 0,
+          "TopY": 0,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_threshold_studs.png"
+        },
+        {
+          "id": "academy_floor_convergence_scribe",
+          "X": 1,
+          "TopY": 4,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_convergence_scribe.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "core_finale",
+      "name": "Boss战斗 01 · 古塔核心",
+      "Width": 8,
+      "Height": 6,
+      "environment": "AetherTower",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 3,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 4,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_stairs_2x1",
+          "X": 5,
+          "TopY": 8,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 7,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 8,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_service_hatch_square",
+          "X": 6,
+          "TopY": 2,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_service_hatch_square.png"
+        },
+        {
+          "id": "academy_floor_anchor_plate",
+          "X": 4,
+          "TopY": 0,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_anchor_plate.png"
+        },
+        {
+          "id": "academy_floor_herb_drain",
+          "X": 1,
+          "TopY": 0,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_herb_drain.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "rain_lantern_court",
+      "name": "普通战斗 01 · 雨后灯庭",
+      "Width": 6,
+      "Height": 5,
+      "environment": "AcademyCourt",
+      "legacyStructures": [],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_inspection_window",
+          "X": 5,
+          "TopY": 3,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_inspection_window.png"
+        },
+        {
+          "id": "academy_floor_rain_channel",
+          "X": 1,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_rain_channel.png"
+        },
+        {
+          "id": "academy_floor_repair_plate",
+          "X": 5,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_plate.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "first_battle_greenhouse_collection_room",
+      "name": "普通战斗 02 · 温室藏品间",
+      "Width": 7,
+      "Height": 6,
+      "environment": "Conservatory",
+      "legacyStructures": [],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_maintenance_hatch",
+          "X": 3,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_maintenance_hatch.png"
+        },
+        {
+          "id": "academy_floor_service_hatch_square",
+          "X": 0,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_service_hatch_square.png"
+        },
+        {
+          "id": "academy_floor_anchor_plate",
+          "X": 6,
+          "TopY": 2,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_anchor_plate.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "first_b3_rain_prism_court",
+      "name": "普通战斗 03 · 雨痕晶庭",
+      "Width": 8,
+      "Height": 5,
+      "environment": "AcademyCourt",
+      "legacyStructures": [],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_repair_plate",
+          "X": 5,
+          "TopY": 3,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_plate.png"
+        },
+        {
+          "id": "academy_floor_repair_stone",
+          "X": 3,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_stone.png"
+        },
+        {
+          "id": "academy_floor_inspection_window",
+          "X": 3,
+          "TopY": 3,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_inspection_window.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "first_elite_three_material_pressure",
+      "name": "精英战斗 01 · 三材承压场",
+      "Width": 8,
+      "Height": 6,
+      "environment": "AcademyCourt",
+      "legacyStructures": [],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_conduit_blank",
+          "X": 1,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_conduit_blank.png"
+        },
+        {
+          "id": "academy_floor_drain_round",
+          "X": 2,
+          "TopY": 5,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_round.png"
+        },
+        {
+          "id": "academy_floor_repair_iron",
+          "X": 0,
+          "TopY": 3,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_iron.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "calibration_lockdown",
+      "name": "精英战斗 04 · 失控校准室封锁",
+      "Width": 7,
+      "Height": 6,
+      "environment": "InteriorHall",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_smithing_table_2x1",
+          "X": 4,
+          "TopY": 3,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_tool_cabinet_2x1",
+          "X": 5,
+          "TopY": 6,
+          "WidthCells": 2,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_drain_round",
+          "X": 0,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_round.png"
+        },
+        {
+          "id": "academy_floor_repair_iron",
+          "X": 1,
+          "TopY": 5,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_iron.png"
+        },
+        {
+          "id": "academy_floor_mortar_inlay",
+          "X": 6,
+          "TopY": 2,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_mortar_inlay.png"
+        }
+      ],
+      "peripheralFixtures": [
+        {
+          "id": "academy_smithing_table_2x1",
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_smithing_table_2x1.png"
+        },
+        {
+          "id": "academy_tool_cabinet_2x1",
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_tool_cabinet_2x1.png"
+        }
+      ]
+    },
+    {
+      "id": "cliff_relay_survey",
+      "name": "精英战斗 05 · 断崖导能柱考察",
+      "Width": 7,
+      "Height": 6,
+      "environment": "RuinSite",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_stairs_2x1",
+          "X": 5,
+          "TopY": 8,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_herb_drain",
+          "X": 4,
+          "TopY": 5,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_herb_drain.png"
+        },
+        {
+          "id": "academy_floor_maintenance_hatch",
+          "X": 0,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_maintenance_hatch.png"
+        },
+        {
+          "id": "academy_floor_service_hatch_square",
+          "X": 1,
+          "TopY": 5,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_service_hatch_square.png"
+        }
+      ],
+      "peripheralFixtures": []
+    },
+    {
+      "id": "sealed_vault_certification",
+      "name": "精英战斗 06 · 封存库权限核验",
+      "Width": 7,
+      "Height": 6,
+      "environment": "InteriorHall",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_low_bookcase_2x1",
+          "X": 4,
+          "TopY": 4,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_tool_cabinet_2x1",
+          "X": 6,
+          "TopY": 2,
+          "WidthCells": 2,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_anchor_plate",
+          "X": 5,
+          "TopY": 1,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_anchor_plate.png"
+        },
+        {
+          "id": "academy_floor_herb_drain",
+          "X": 6,
+          "TopY": 5,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_herb_drain.png"
+        },
+        {
+          "id": "academy_floor_maintenance_hatch",
+          "X": 0,
+          "TopY": 5,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_maintenance_hatch.png"
+        }
+      ],
+      "peripheralFixtures": [
+        {
+          "id": "academy_low_bookcase_2x1",
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_low_bookcase_2x1.png"
+        },
+        {
+          "id": "academy_tool_cabinet_2x1",
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_tool_cabinet_2x1.png"
+        }
+      ]
+    },
+    {
+      "id": "library_discipline",
+      "name": "精英战斗 07 · 图书馆纠察",
+      "Width": 7,
+      "Height": 6,
+      "environment": "InteriorHall",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_low_bookcase_2x1",
+          "X": 1,
+          "TopY": 4,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_low_bookcase_2x1",
+          "X": 7,
+          "TopY": 4,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_tool_cabinet_2x1",
+          "X": 5,
+          "TopY": 2,
+          "WidthCells": 2,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_safety_marker",
+          "X": 1,
+          "TopY": 0,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_safety_marker.png"
+        },
+        {
+          "id": "academy_floor_drain_grate",
+          "X": 0,
+          "TopY": 2,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_grate.png"
+        },
+        {
+          "id": "academy_floor_service_hatch_round",
+          "X": 5,
+          "TopY": 5,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_service_hatch_round.png"
+        }
+      ],
+      "peripheralFixtures": [
+        {
+          "id": "academy_low_bookcase_2x1",
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_low_bookcase_2x1.png"
+        },
+        {
+          "id": "academy_tool_cabinet_2x1",
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_tool_cabinet_2x1.png"
+        }
+      ]
+    },
+    {
+      "id": "outer_ring_clearance",
+      "name": "精英战斗 08 · 高塔外环清障",
+      "Width": 7,
+      "Height": 6,
+      "environment": "AetherTower",
+      "legacyStructures": [
+        {
+          "AssetId": "academy_wall_end_w",
+          "X": 0,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 1,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 2,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 3,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 4,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_stairs_2x1",
+          "X": 5,
+          "TopY": 8,
+          "WidthCells": 2,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 7,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 8,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 9,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_straight",
+          "X": 10,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        },
+        {
+          "AssetId": "academy_wall_end_e",
+          "X": 11,
+          "TopY": 8,
+          "WidthCells": 1,
+          "HeightCells": 1
+        }
+      ],
+      "acceptedStructures": [],
+      "groundAttachments": [
+        {
+          "id": "academy_floor_pipe_socket",
+          "X": 4,
+          "TopY": 0,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_pipe_socket.png"
+        },
+        {
+          "id": "academy_floor_safety_marker",
+          "X": 5,
+          "TopY": 4,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_safety_marker.png"
+        },
+        {
+          "id": "academy_floor_drain_grate",
+          "X": 3,
+          "TopY": 2,
+          "asset": "Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_grate.png"
+        }
+      ],
+      "peripheralFixtures": []
+    }
+  ],
+  "totals": {
+    "levels": 18,
+    "environmentFamilies": 6,
+    "legacyPlacements": 111,
+    "acceptedRaisedModules": 0,
+    "groundPlacements": 54,
+    "groundAssetTypes": 20,
+    "levelsWithRestoredFurniture": 5,
+    "restoredFixturePlacements": 9
+  },
+  "runtimeRegistry": {
+    "unitBindings": 17,
+    "unitResourceFiles": 13,
+    "runtimeSkillBindings": 27,
+    "fireSpellBindings": 80,
+    "equipmentBindings": 33
+  },
+  "fileCounts": {
+    "structures": 97,
+    "enemyAnimationPngs": 24,
+    "skillIconPngs": 77
+  },
+  "missingResources": []
+}

@@ -1,0 +1,540 @@
+FAIL:entry:System.InvalidOperationException: Missing button 开始新游戏
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__20.MoveNext () [0x00073] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:87 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:64 
+FAIL:entry:System.InvalidOperationException: Missing button 开始新游戏
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__20.MoveNext () [0x00073] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:87 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:64 
+PASS:click:按钮_开始新游戏
+PASS:click:按钮_选择档案2
+PASS:click:按钮_确认
+PASS:click:按钮_以此角色开始
+PASS:click:按钮_进入首次地图
+PASS:click:按钮_不需要教程
+PASS:click:map.node.B1
+PASS:click:按钮_进入战斗
+PASS:click:技能2
+PASS:click:暂离并保存
+PASS:click:按钮_继续游戏
+PASS:click:按钮_选择档案2
+PASS:click:技能2
+PASS:click:继续游戏
+PASS:click:选择档案2
+PASS:resume
+PASS:click:继续游戏
+PASS:click:选择档案2
+FAIL:combat:System.InvalidOperationException: Input blocked: 格子_5_0 hit=none
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Tap>d__21.MoveNext () [0x003aa] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:110 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:65 
+FAIL:combat:System.InvalidOperationException: Missing button 技能1
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__20.MoveNext () [0x00073] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:88 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:65 
+COMBAT:B1 phase=Victory actions=3 hp=49 mana=5
+PASS:combat
+PASS:click:固定战利品_0
+PASS:click:固定战利品_0
+FAIL:click:固定战利品_1:System.InvalidOperationException: Missing button 固定战利品_1
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__20.MoveNext () [0x00073] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:88 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:65 
+FAIL:click:固定战利品_1:System.InvalidOperationException: Missing button 固定战利品_1
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__20.MoveNext () [0x00073] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:88 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:65 
+PASS:click:战后奖励封套
+PASS:click:揭晓卡牌_1
+PASS:click:战后奖励封套
+PASS:click:离开战利品
+PASS:click:map.node.EV1
+PASS:click:前往这里
+PASS:click:接下温室传令
+PASS:click:回到地图
+PASS:click:map.node.EV2
+PASS:click:前往这里
+PASS:click:领取金币
+PASS:click:回到地图
+PASS:click:map.node.B2
+PASS:click:进入战斗
+FAIL:combat:System.InvalidOperationException: Missing button 技能1
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__20.MoveNext () [0x00073] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:88 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:65 
+FAIL:combat:System.InvalidOperationException: Missing button 技能1
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__20.MoveNext () [0x00073] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:88 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:65 
+PASS:click:暂离并保存
+FAIL:click:选择档案2:System.InvalidOperationException: Missing button 选择档案2
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__20.MoveNext () [0x000d8] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:90 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:65 
+PASS:click:继续游戏
+FAIL:combat:System.NullReferenceException: Object reference not set to an instance of an object
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Fight>d__22.MoveNext () [0x003b2] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:150 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:65 
+PASS:click:选择档案2
+FAIL:combat:System.InvalidOperationException: Inactive input surface
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Tap>d__21.MoveNext () [0x0006b] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:96 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__17.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:65 
+ENTRY:O seed=1879665748 saved=True
+COMBAT:B1 phase=Victory actions=14 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+COMBAT:B2 phase=Active actions=400 hp=47 mana=0
+FAIL:full-tutorial-reward-journey:System.InvalidOperationException: Combat time/action limit
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Fight>d__23.MoveNext () [0x0047d] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:152 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__18.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:66 
+PASS:click:继续游戏
+PASS:click:选择档案2
+COMBAT:B2 phase=Victory actions=7 hp=46 mana=0
+REWARD:PASS B2 F-P-U04 gold=17 contribution=2
+COMBAT:B3 phase=Victory actions=11 hp=34 mana=0
+REWARD:PASS B3 F-P-M12 gold=20 contribution=4
+COMBAT:X phase=Victory actions=17 hp=44 mana=0
+REWARD:PASS X PASSIVE-ELITE-01 gold=26 contribution=4
+HANDOFF:PASS {"Seed":1879665748,"Gold":26,"StageContribution":4,"CurrentHealth":44,"CurrentMana":0,"spells":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","F-P-R19","F-P-U04","F-P-M12","PASSIVE-ELITE-01"],"equipped":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","","","",""],"equipment":[{"InstanceId":"starter-chest","DefinitionId":"ACA-EQ-CH01"},{"InstanceId":"starter-backpack","DefinitionId":"ACA-EQ-BP01"},{"InstanceId":"eq-first-event-1879665748-0","DefinitionId":"ACA-EQ-CH04"},{"InstanceId":"eq-content-1879665748-2","DefinitionId":"ACA-EQ-HD02"}],"tactical":[{"InstanceId":"item-first-event-1879665748-1","DefinitionId":"G-T09","ChargesCurrent":3},{"InstanceId":"item-content-1879665748-3","DefinitionId":"G-T13","ChargesCurrent":4}]} mapNodes=20
+PASS:remaining-tutorial-reward-journey
+PASS:click:map.node.dorm_drill
+PASS:click:进入战斗
+PASS:resume
+ENTRY:O seed=279160751 saved=True
+COMBAT:B1 phase=Victory actions=14 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+COMBAT:B2 phase=Victory actions=15 hp=46 mana=0
+REWARD:PASS B2 F-P-U04 gold=17 contribution=2
+COMBAT:B3 phase=Victory actions=11 hp=34 mana=0
+REWARD:PASS B3 F-P-M12 gold=20 contribution=4
+COMBAT:X phase=Victory actions=17 hp=44 mana=0
+REWARD:PASS X PASSIVE-ELITE-01 gold=26 contribution=4
+HANDOFF:PASS {"Seed":279160751,"Gold":26,"StageContribution":4,"CurrentHealth":44,"CurrentMana":0,"spells":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","F-P-R19","F-P-U04","F-P-M12","PASSIVE-ELITE-01"],"equipped":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","","","",""],"equipment":[{"InstanceId":"starter-chest","DefinitionId":"ACA-EQ-CH01"},{"InstanceId":"starter-backpack","DefinitionId":"ACA-EQ-BP01"},{"InstanceId":"eq-first-event-279160751-0","DefinitionId":"ACA-EQ-CH04"},{"InstanceId":"eq-content-279160751-2","DefinitionId":"ACA-EQ-HD02"}],"tactical":[{"InstanceId":"item-first-event-279160751-1","DefinitionId":"G-T09","ChargesCurrent":3},{"InstanceId":"item-content-279160751-3","DefinitionId":"G-T13","ChargesCurrent":3}]} mapNodes=20
+PASS:full-tutorial-reward-journey
+ENTRY:O seed=775449743 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+FAIL:click:暂离并保存:System.InvalidOperationException: Missing button 暂离并保存
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__22.MoveNext () [0x000d8] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:92 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:67 
+PASS:click:设置
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:背包
+PASS:click:返回地图
+PASS:click:设置
+PASS:click:返回
+PASS:click:设置
+PASS:click:先不去
+PASS:click:固定战利品_0
+PASS:click:固定战利品_0
+PASS:click:战后奖励封套
+FAIL:click:map.node.B1:System.InvalidOperationException: Input blocked: map.node.B1 hit=节点地图视口
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Tap>d__23.MoveNext () [0x00398] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:114 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:67 
+FAIL:click:学院整备:System.InvalidOperationException: Missing button 学院整备
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__22.MoveNext () [0x000d8] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:92 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:67 
+PASS:click:map.node.B1
+PASS:click:学院整备
+PASS:click:返回地图
+PASS:click:固定战利品_0
+PASS:click:固定战利品_0
+PASS:click:map.node.B1
+PASS:click:固定战利品_0
+PASS:click:固定战利品_0
+PASS:click:战后奖励封套
+PASS:click:揭晓卡牌_0
+PASS:click:战后奖励封套
+PASS:click:离开战利品
+PASS:click:固定战利品_0
+PASS:click:固定战利品_0
+PASS:click:战后奖励封套
+PASS:click:开始游戏
+PASS:click:返回角色选择
+PASS:click:开始游戏
+PASS:click:开始游戏
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:设置
+PASS:click:返回
+PASS:click:继续游戏
+PASS:click:开始游戏
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:继续游戏
+PASS:click:开始游戏
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:继续游戏
+PASS:click:开始游戏
+PASS:click:开始游戏
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:设置
+PASS:click:开始游戏
+FAIL:click:以此角色开始:System.InvalidOperationException: Input blocked: 按钮_以此角色开始 hit=none
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Tap>d__23.MoveNext () [0x00398] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:114 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:67 
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:map.node.B1
+PASS:click:进入战斗
+PASS:click:开始游戏
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:map.node.B1
+PASS:click:进入战斗
+PASS:click:开始游戏
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:不需要教程
+PASS:click:map.node.B1
+PASS:click:进入战斗
+PASS:click:战后奖励封套
+PASS:click:揭晓卡牌_1
+PASS:click:战后奖励封套
+PASS:click:离开战利品
+PASS:click:map.node.EV1
+PASS:click:前往这里
+PASS:click:接下温室传令
+PASS:click:回到地图
+PASS:click:map.node.EV2
+PASS:click:前往这里
+PASS:click:领取金币
+PASS:click:回到地图
+COMBAT:B2 phase=Victory actions=17 hp=46 mana=0
+REWARD:PASS B2 F-P-U04 gold=14 contribution=1
+COMBAT:B3 phase=Victory actions=11 hp=34 mana=0
+REWARD:PASS B3 F-P-M12 gold=17 contribution=3
+COMBAT:X phase=Victory actions=17 hp=44 mana=0
+REWARD:PASS X PASSIVE-ELITE-01 gold=23 contribution=3
+HANDOFF:PASS {"Seed":1283397480,"Gold":23,"StageContribution":3,"CurrentHealth":44,"CurrentMana":0,"spells":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","F-P-R19","F-P-U04","F-P-M12","PASSIVE-ELITE-01"],"equipped":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","","","",""],"equipment":[{"InstanceId":"starter-chest","DefinitionId":"ACA-EQ-CH01"},{"InstanceId":"starter-backpack","DefinitionId":"ACA-EQ-BP01"},{"InstanceId":"eq-first-event-1283397480-0","DefinitionId":"ACA-EQ-CH04"},{"InstanceId":"eq-content-1283397480-2","DefinitionId":"ACA-EQ-HD02"}],"tactical":[{"InstanceId":"item-first-event-1283397480-1","DefinitionId":"G-T09","ChargesCurrent":3},{"InstanceId":"item-content-1283397480-3","DefinitionId":"G-T13","ChargesCurrent":3}]} mapNodes=20
+PASS:remaining-tutorial-reward-journey
+PASS:resume
+ENTRY:O seed=1923745513 saved=True
+COMBAT:B1 phase=Victory actions=15 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+COMBAT:B2 phase=Victory actions=15 hp=46 mana=0
+REWARD:PASS B2 F-P-U04 gold=17 contribution=2
+COMBAT:B3 phase=Victory actions=11 hp=34 mana=0
+REWARD:PASS B3 F-P-M12 gold=20 contribution=4
+COMBAT:X phase=Victory actions=17 hp=44 mana=0
+REWARD:PASS X PASSIVE-ELITE-01 gold=26 contribution=4
+HANDOFF:PASS {"Seed":1923745513,"Gold":26,"StageContribution":4,"CurrentHealth":44,"CurrentMana":0,"spells":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","F-P-R19","F-P-U04","F-P-M12","PASSIVE-ELITE-01"],"equipped":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","","","",""],"equipment":[{"InstanceId":"starter-chest","DefinitionId":"ACA-EQ-CH01"},{"InstanceId":"starter-backpack","DefinitionId":"ACA-EQ-BP01"},{"InstanceId":"eq-first-event-1923745513-0","DefinitionId":"ACA-EQ-CH04"},{"InstanceId":"eq-content-1923745513-2","DefinitionId":"ACA-EQ-HD02"}],"tactical":[{"InstanceId":"item-first-event-1923745513-1","DefinitionId":"G-T09","ChargesCurrent":3},{"InstanceId":"item-content-1923745513-3","DefinitionId":"G-T13","ChargesCurrent":3}]} mapNodes=20
+PASS:full-tutorial-reward-journey
+FAIL:entry:System.InvalidOperationException: Verification slot is occupied
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<NewEntry>d__20.MoveNext () [0x00117] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:80 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:67 
+FAIL:click:map.node.B1:System.InvalidOperationException: Missing button map.node.B1
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__22.MoveNext () [0x000d8] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:92 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:67 
+ENTRY:O seed=1180365800 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=1007337647 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=188788020 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=704608246 saved=True
+PASS:entry
+PASS:click:继续游戏
+PASS:click:map.node.B1
+PASS:click:进入战斗
+PASS:click:打开背包
+PASS:click:战术重开
+PASS:click:打开百科
+ENTRY:O seed=1389286640 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+PASS:click:打开背包
+PASS:click:开始游戏
+PASS:click:以此角色开始
+PASS:click:进入首次地图
+PASS:click:开启教程
+ENTRY:O seed=242963974 saved=True
+PASS:entry
+ENTRY:O seed=1842632547 saved=True
+PASS:entry
+ENTRY:O seed=1226416012 saved=True
+PASS:entry
+ENTRY:O seed=1542957147 saved=True
+PASS:entry
+ENTRY:O seed=266864222 saved=True
+PASS:entry
+ENTRY:O seed=1086865304 saved=True
+PASS:entry
+ENTRY:O seed=1168643525 saved=True
+PASS:entry
+ENTRY:O seed=595316810 saved=True
+PASS:entry
+ENTRY:O seed=1827598494 saved=True
+PASS:entry
+FAIL:entry:System.InvalidOperationException: Input blocked: 按钮_开始游戏 hit=菜单纸页
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Tap>d__23.MoveNext () [0x00398] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:113 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:66 
+FAIL:entry:System.InvalidOperationException: Input blocked: 按钮_开始游戏 hit=none
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Tap>d__23.MoveNext () [0x00398] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:113 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:66 
+ENTRY:O seed=1098954022 saved=True
+PASS:entry
+ENTRY:O seed=1264503687 saved=True
+PASS:entry
+ENTRY:O seed=995451390 saved=True
+PASS:entry
+ENTRY:O seed=2013552773 saved=True
+PASS:entry
+ENTRY:O seed=1013566269 saved=True
+PASS:entry
+ENTRY:O seed=22427099 saved=True
+PASS:entry
+FAIL:entry:System.InvalidOperationException: Verification slot is occupied
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<NewEntry>d__20.MoveNext () [0x00117] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:79 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:66 
+ENTRY:O seed=287098547 saved=True
+PASS:entry
+ENTRY:O seed=1254597730 saved=True
+PASS:entry
+ENTRY:O seed=939886107 saved=True
+PASS:entry
+ENTRY:O seed=147692600 saved=True
+PASS:entry
+ENTRY:O seed=2140398301 saved=True
+PASS:entry
+ENTRY:O seed=134264296 saved=True
+PASS:entry
+ENTRY:O seed=480368572 saved=True
+PASS:entry
+ENTRY:O seed=2020199473 saved=True
+PASS:entry
+ENTRY:O seed=411854030 saved=True
+PASS:entry
+ENTRY:O seed=363742627 saved=True
+PASS:entry
+ENTRY:O seed=127947940 saved=True
+PASS:entry
+ENTRY:O seed=824107208 saved=True
+PASS:entry
+ENTRY:O seed=1246715922 saved=True
+PASS:entry
+ENTRY:O seed=766230448 saved=True
+PASS:entry
+ENTRY:O seed=682357750 saved=True
+PASS:entry
+ENTRY:O seed=1861560046 saved=True
+PASS:entry
+ENTRY:O seed=1602981067 saved=True
+PASS:entry
+ENTRY:O seed=799872596 saved=True
+PASS:entry
+ENTRY:O seed=1492024329 saved=True
+PASS:entry
+ENTRY:O seed=535559097 saved=True
+PASS:entry
+PASS:click:返回地图
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=470145376 saved=True
+PASS:entry
+ENTRY:O seed=1532844803 saved=True
+PASS:entry
+ENTRY:O seed=1886941794 saved=True
+PASS:entry
+PASS:click:返回地图
+ENTRY:O seed=814617006 saved=True
+PASS:entry
+FAIL:entry:System.InvalidOperationException: Verification slot is occupied
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<NewEntry>d__20.MoveNext () [0x00117] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:79 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:66 
+ENTRY:O seed=49539539 saved=True
+PASS:entry
+ENTRY:O seed=860301272 saved=True
+PASS:entry
+ENTRY:O seed=10375531 saved=True
+PASS:entry
+ENTRY:O seed=1088240562 saved=True
+PASS:entry
+ENTRY:O seed=1568536336 saved=True
+PASS:entry
+ENTRY:O seed=1468930809 saved=True
+PASS:entry
+ENTRY:O seed=636032113 saved=True
+PASS:entry
+PASS:click:背包
+ENTRY:O seed=213930786 saved=True
+PASS:entry
+PASS:click:背包
+ENTRY:O seed=1043793964 saved=True
+PASS:entry
+PASS:click:背包
+ENTRY:O seed=424250576 saved=True
+PASS:entry
+PASS:click:背包
+PASS:click:术式编组
+PASS:click:装备、背包与战术栏
+PASS:click:返回地图
+ENTRY:O seed=1953386755 saved=True
+PASS:entry
+PASS:click:背包
+PASS:click:术式编组
+ENTRY:O seed=2050579958 saved=True
+PASS:entry
+PASS:click:背包
+PASS:click:术式编组
+PASS:click:返回地图
+ENTRY:O seed=2093577420 saved=True
+PASS:entry
+PASS:click:背包
+ENTRY:O seed=699641966 saved=True
+PASS:entry
+PASS:click:背包
+PASS:click:术式编组
+PASS:click:返回地图
+ENTRY:O seed=793969185 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=523580661 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+PASS:click:关闭
+ENTRY:O seed=686646506 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+FAIL:entry:System.InvalidOperationException: Verification slot is occupied
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<NewEntry>d__20.MoveNext () [0x00117] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:79 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:66 
+FAIL:click:map.node.B1:System.InvalidOperationException: Missing button map.node.B1
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Click>d__22.MoveNext () [0x000d8] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:91 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__19.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:66 
+ENTRY:O seed=485075324 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=731712267 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=498669596 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=1588628762 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=264459738 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=1279646307 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=434727476 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=1131123761 saved=True
+PASS:entry
+PASS:click:map.node.B1
+PASS:click:进入战斗
+ENTRY:O seed=1444117514 saved=True
+COMBAT:B1 phase=Victory actions=15 hp=47 mana=2
+FAIL:second-battle-normal-entry:System.InvalidOperationException: Input blocked: 揭晓卡牌_1 hit=战斗结果
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Tap>d__24.MoveNext () [0x003e2] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:116 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__20.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:67 
+ENTRY:O seed=887569008 saved=True
+COMBAT:B1 phase=Victory actions=15 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+PASS:second-battle-normal-entry
+ENTRY:O seed=1720546851 saved=True
+COMBAT:B1 phase=Victory actions=15 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+PASS:second-battle-normal-entry
+PASS:click:战后奖励封套
+PASS:click:揭晓卡牌_0
+PASS:click:战后奖励封套
+PASS:click:离开战利品
+ENTRY:O seed=404298165 saved=True
+COMBAT:B1 phase=Victory actions=14 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+COMBAT:B2 phase=Victory actions=15 hp=46 mana=0
+REWARD:PASS B2 F-P-U04 gold=17 contribution=2
+FAIL:full-tutorial-reward-journey:System.InvalidOperationException: Input blocked: 按钮_领取学院贡献 hit=按钮_领取截击铃
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Tap>d__24.MoveNext () [0x003e2] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:116 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__20.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:67 
+FAIL:full-tutorial-reward-journey:System.InvalidOperationException: Verification slot is occupied
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<NewEntry>d__21.MoveNext () [0x00117] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:80 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__20.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:67 
+ENTRY:O seed=1878666375 saved=True
+COMBAT:B1 phase=Victory actions=14 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+COMBAT:B2 phase=Victory actions=15 hp=46 mana=0
+REWARD:PASS B2 F-P-U04 gold=17 contribution=2
+COMBAT:B3 phase=Victory actions=11 hp=34 mana=0
+REWARD:PASS B3 F-P-M12 gold=20 contribution=4
+COMBAT:X phase=Victory actions=17 hp=44 mana=0
+REWARD:PASS X PASSIVE-ELITE-01 gold=26 contribution=4
+HANDOFF:PASS {"Seed":1878666375,"Gold":26,"StageContribution":4,"CurrentHealth":44,"CurrentMana":0,"spells":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","F-P-R19","F-P-U04","F-P-M12","PASSIVE-ELITE-01"],"equipped":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","","","",""],"equipment":[{"InstanceId":"starter-chest","DefinitionId":"ACA-EQ-CH01"},{"InstanceId":"starter-backpack","DefinitionId":"ACA-EQ-BP01"},{"InstanceId":"eq-first-event-1878666375-0","DefinitionId":"ACA-EQ-CH04"},{"InstanceId":"eq-content-1878666375-2","DefinitionId":"ACA-EQ-HD02"}],"tactical":[{"InstanceId":"item-first-event-1878666375-1","DefinitionId":"G-T09","ChargesCurrent":3},{"InstanceId":"item-content-1878666375-3","DefinitionId":"G-T13","ChargesCurrent":3}]} mapNodes=20
+PASS:full-tutorial-reward-journey
+FAIL:full-tutorial-reward-journey:System.InvalidOperationException: Input blocked: 按钮_开始游戏 hit=none
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Tap>d__24.MoveNext () [0x003e2] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:116 
+  at OCC.Combat.EditorTools.AcademyJourneyAudit+<Guard>d__20.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\AcademyJourneyAudit.cs:67 
+ENTRY:O seed=1909127863 saved=True
+COMBAT:B1 phase=Victory actions=14 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+COMBAT:B2 phase=Victory actions=15 hp=46 mana=0
+REWARD:PASS B2 F-P-U04 gold=17 contribution=2
+COMBAT:B3 phase=Victory actions=11 hp=34 mana=0
+REWARD:PASS B3 F-P-M12 gold=20 contribution=4
+COMBAT:X phase=Victory actions=17 hp=44 mana=0
+REWARD:PASS X PASSIVE-ELITE-01 gold=26 contribution=4
+HANDOFF:PASS {"Seed":1909127863,"Gold":26,"StageContribution":4,"CurrentHealth":44,"CurrentMana":0,"spells":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","F-P-R19","F-P-U04","F-P-M12","PASSIVE-ELITE-01"],"equipped":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","","","",""],"equipment":[{"InstanceId":"starter-chest","DefinitionId":"ACA-EQ-CH01"},{"InstanceId":"starter-backpack","DefinitionId":"ACA-EQ-BP01"},{"InstanceId":"eq-first-event-1909127863-0","DefinitionId":"ACA-EQ-CH04"},{"InstanceId":"eq-content-1909127863-2","DefinitionId":"ACA-EQ-HD02"}],"tactical":[{"InstanceId":"item-first-event-1909127863-1","DefinitionId":"G-T09","ChargesCurrent":3},{"InstanceId":"item-content-1909127863-3","DefinitionId":"G-T13","ChargesCurrent":3}]} mapNodes=20
+PASS:full-tutorial-reward-journey
+ENTRY:O seed=1699212668 saved=True
+COMBAT:B1 phase=Victory actions=14 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+COMBAT:B2 phase=Victory actions=16 hp=46 mana=0
+REWARD:PASS B2 F-P-U04 gold=17 contribution=2
+COMBAT:B3 phase=Victory actions=11 hp=34 mana=0
+REWARD:PASS B3 F-P-M12 gold=20 contribution=4
+COMBAT:X phase=Victory actions=17 hp=44 mana=0
+REWARD:PASS X PASSIVE-ELITE-01 gold=26 contribution=4
+HANDOFF:PASS {"Seed":1699212668,"Gold":26,"StageContribution":4,"CurrentHealth":44,"CurrentMana":0,"spells":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","F-P-R19","F-P-U04","F-P-M12","PASSIVE-ELITE-01"],"equipped":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","","","",""],"equipment":[{"InstanceId":"starter-chest","DefinitionId":"ACA-EQ-CH01"},{"InstanceId":"starter-backpack","DefinitionId":"ACA-EQ-BP01"},{"InstanceId":"eq-first-event-1699212668-0","DefinitionId":"ACA-EQ-CH04"},{"InstanceId":"eq-content-1699212668-2","DefinitionId":"ACA-EQ-HD02"}],"tactical":[{"InstanceId":"item-first-event-1699212668-1","DefinitionId":"G-T09","ChargesCurrent":3},{"InstanceId":"item-content-1699212668-3","DefinitionId":"G-T13","ChargesCurrent":3}]} mapNodes=20
+PASS:full-tutorial-reward-journey
+ENTRY:O seed=268706072 saved=True
+COMBAT:B1 phase=Victory actions=14 hp=47 mana=2
+REWARD:PASS B1 F-P-R19 gold=11 contribution=1
+COMBAT:B2 phase=Victory actions=16 hp=46 mana=0
+REWARD:PASS B2 F-P-U04 gold=17 contribution=2
+COMBAT:B3 phase=Victory actions=11 hp=34 mana=0
+REWARD:PASS B3 F-P-M12 gold=20 contribution=4
+COMBAT:X phase=Victory actions=17 hp=44 mana=0
+REWARD:PASS X PASSIVE-ELITE-01 gold=26 contribution=4
+HANDOFF:PASS {"Seed":268706072,"Gold":26,"StageContribution":4,"CurrentHealth":44,"CurrentMana":0,"spells":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","F-P-R19","F-P-U04","F-P-M12","PASSIVE-ELITE-01"],"equipped":["BASE-FIRE-MELEE","BASE-FIRE-RANGED","BASE-AETHER-SHIELD","BASE-MANA-RECOVER","","","",""],"equipment":[{"InstanceId":"starter-chest","DefinitionId":"ACA-EQ-CH01"},{"InstanceId":"starter-backpack","DefinitionId":"ACA-EQ-BP01"},{"InstanceId":"eq-first-event-268706072-0","DefinitionId":"ACA-EQ-CH04"},{"InstanceId":"eq-content-268706072-2","DefinitionId":"ACA-EQ-HD02"}],"tactical":[{"InstanceId":"item-first-event-268706072-1","DefinitionId":"G-T09","ChargesCurrent":3},{"InstanceId":"item-content-268706072-3","DefinitionId":"G-T13","ChargesCurrent":3}]} mapNodes=20
+PASS:full-tutorial-reward-journey

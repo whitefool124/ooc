@@ -1,0 +1,1 @@
+PASS: real Input System clicks + top raycast on target card and confirm; success event consumed once in disposable memory journey; completion settles, exit removes graphic, reopen has no completion replay. Formal bench reused, no asset replacement/player-slot write. Not a full battle journey, disk-save acceptance or runtime disk-failure test.

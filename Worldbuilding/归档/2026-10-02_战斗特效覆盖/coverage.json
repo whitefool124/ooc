@@ -1,0 +1,1068 @@
+{
+    "total": 127,
+    "covered": 115,
+    "eventTotal": 20,
+    "eventWithVfx": 15,
+    "shieldEventsExcluded": 5,
+    "percent": 90.55117797851563,
+    "rows": [
+        {
+            "id": "F-P-M01",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_attachment"
+            ]
+        },
+        {
+            "id": "F-P-M02",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M03",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_burning_ground",
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M04",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M05",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M06",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_melee_arc",
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-P-M07",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path",
+                "fire_melee_arc"
+            ]
+        },
+        {
+            "id": "F-P-M08",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_melee_arc",
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-P-M09",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-P-M10",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_melee_arc",
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M11",
+            "category": "fire",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "F-P-M12",
+            "category": "fire",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "F-P-M13",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_attachment"
+            ]
+        },
+        {
+            "id": "F-P-M14",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "cleanse",
+                "fire_melee_arc"
+            ]
+        },
+        {
+            "id": "F-P-M15",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_melee_arc",
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M16",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_melee_arc"
+            ]
+        },
+        {
+            "id": "F-P-M17",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_melee_arc",
+                "fire_detonate"
+            ]
+        },
+        {
+            "id": "F-P-M18",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M19",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_melee_arc"
+            ]
+        },
+        {
+            "id": "F-P-M20",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_melee_arc"
+            ]
+        },
+        {
+            "id": "F-P-M21",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M22",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M23",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path",
+                "fire_impact"
+            ]
+        },
+        {
+            "id": "F-P-M24",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M25",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-M26",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-U01",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-U02",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "burning"
+            ]
+        },
+        {
+            "id": "F-P-U03",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_spray",
+                "fire_impact",
+                "object_damage",
+                "armor_break"
+            ]
+        },
+        {
+            "id": "F-P-U04",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-P-U05",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_cross_blast",
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-P-U06",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-U07",
+            "category": "fire",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "F-P-U08",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "cleanse"
+            ]
+        },
+        {
+            "id": "F-P-U09",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_attachment"
+            ]
+        },
+        {
+            "id": "F-P-U10",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_attachment"
+            ]
+        },
+        {
+            "id": "F-P-U11",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_absorb"
+            ]
+        },
+        {
+            "id": "F-P-U12",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_absorb"
+            ]
+        },
+        {
+            "id": "F-P-U13",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_absorb",
+                "fire_projectile"
+            ]
+        },
+        {
+            "id": "F-P-U14",
+            "category": "fire",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "F-P-U15",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "burning"
+            ]
+        },
+        {
+            "id": "F-P-U16",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_attachment"
+            ]
+        },
+        {
+            "id": "F-P-U17",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_attachment"
+            ]
+        },
+        {
+            "id": "F-P-U18",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-U19",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_attachment"
+            ]
+        },
+        {
+            "id": "F-P-U20",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_impact"
+            ]
+        },
+        {
+            "id": "F-P-U21",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_line",
+                "fire_impact",
+                "object_damage",
+                "armor_break"
+            ]
+        },
+        {
+            "id": "F-P-U22",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_attachment"
+            ]
+        },
+        {
+            "id": "F-P-U23",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path",
+                "fire_impact",
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-P-U24",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path",
+                "fire_impact"
+            ]
+        },
+        {
+            "id": "F-P-U25",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path",
+                "fire_impact"
+            ]
+        },
+        {
+            "id": "F-P-U26",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "F-P-U27",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_attachment"
+            ]
+        },
+        {
+            "id": "F-P-U28",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "cleanse"
+            ]
+        },
+        {
+            "id": "F-P-R01",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_impact"
+            ]
+        },
+        {
+            "id": "F-P-R02",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_impact"
+            ]
+        },
+        {
+            "id": "F-P-R03",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_attachment"
+            ]
+        },
+        {
+            "id": "F-P-R04",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "burning"
+            ]
+        },
+        {
+            "id": "F-P-R05",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_impact",
+                "burning"
+            ]
+        },
+        {
+            "id": "F-P-R06",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_line",
+                "fire_impact",
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-P-R07",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_spray",
+                "fire_impact",
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-P-R08",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_spray",
+                "burning"
+            ]
+        },
+        {
+            "id": "F-P-R09",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_impact"
+            ]
+        },
+        {
+            "id": "F-P-R10",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_impact",
+                "fire_break_stance"
+            ]
+        },
+        {
+            "id": "F-P-R11",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_line",
+                "fire_wall"
+            ]
+        },
+        {
+            "id": "F-P-R12",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_burning_ground"
+            ]
+        },
+        {
+            "id": "F-P-R13",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_burning_ground"
+            ]
+        },
+        {
+            "id": "F-P-R14",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_line",
+                "fire_wall"
+            ]
+        },
+        {
+            "id": "F-P-R15",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_absorb"
+            ]
+        },
+        {
+            "id": "F-P-R16",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_cross_blast",
+                "fire_projectile",
+                "fire_detonate"
+            ]
+        },
+        {
+            "id": "F-P-R17",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_impact",
+                "fire_detonate"
+            ]
+        },
+        {
+            "id": "F-P-R18",
+            "category": "fire",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "F-P-R19",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "object_damage",
+                "fire_impact"
+            ]
+        },
+        {
+            "id": "F-P-R20",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_burning_ground",
+                "fire_cross_blast",
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-P-R21",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_impact"
+            ]
+        },
+        {
+            "id": "F-P-R22",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_spray",
+                "fire_impact",
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-P-R23",
+            "category": "fire",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "F-P-R24",
+            "category": "fire",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "F-P-R25",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_projectile",
+                "fire_impact"
+            ]
+        },
+        {
+            "id": "F-P-R26",
+            "category": "fire",
+            "covered": true,
+            "effects": [
+                "fire_cross_blast",
+                "object_damage"
+            ]
+        },
+        {
+            "id": "fire_bolt",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "burning",
+                "hit"
+            ]
+        },
+        {
+            "id": "frost_bind",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "bound"
+            ]
+        },
+        {
+            "id": "ember_lance",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "burning",
+                "hit"
+            ]
+        },
+        {
+            "id": "breach_shot",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "hit"
+            ]
+        },
+        {
+            "id": "hammer_pulse",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "hit"
+            ]
+        },
+        {
+            "id": "searing_mark",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "armor_break"
+            ]
+        },
+        {
+            "id": "rail_burst",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "ether_attribute"
+            ]
+        },
+        {
+            "id": "cinder_sweep",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "burning",
+                "hit"
+            ]
+        },
+        {
+            "id": "tether_arc",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "bound"
+            ]
+        },
+        {
+            "id": "damping_field",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "ether_attribute"
+            ]
+        },
+        {
+            "id": "armor_solvent",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "armor_break"
+            ]
+        },
+        {
+            "id": "cryo_pulse",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "bound"
+            ]
+        },
+        {
+            "id": "anchor_seal",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "bound"
+            ]
+        },
+        {
+            "id": "arc_bolt",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "hit"
+            ]
+        },
+        {
+            "id": "mana_siphon",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "mana_restore"
+            ]
+        },
+        {
+            "id": "shield_converter",
+            "category": "generic",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "aether_surge",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "mana_restore"
+            ]
+        },
+        {
+            "id": "prism_arc",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "hit"
+            ]
+        },
+        {
+            "id": "phase_step",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "overload_needle",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "armor_break",
+                "hit"
+            ]
+        },
+        {
+            "id": "field_repair",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "health_repair"
+            ]
+        },
+        {
+            "id": "barrier_charge",
+            "category": "generic",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "thermal_purge",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "cleanse"
+            ]
+        },
+        {
+            "id": "regenerative_seal",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "health_repair"
+            ]
+        },
+        {
+            "id": "rescue_beam",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "health_repair"
+            ]
+        },
+        {
+            "id": "bastion_pulse",
+            "category": "generic",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "demolition_charge",
+            "category": "generic",
+            "covered": true,
+            "effects": [
+                "object_damage"
+            ]
+        },
+        {
+            "id": "F-T01",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "ether_utility"
+            ]
+        },
+        {
+            "id": "G-T01",
+            "category": "artifact",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "G-T02",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "G-T03",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "bound"
+            ]
+        },
+        {
+            "id": "G-T04",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "armor_break"
+            ]
+        },
+        {
+            "id": "G-T05",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "mana_restore"
+            ]
+        },
+        {
+            "id": "G-T06",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "health_repair"
+            ]
+        },
+        {
+            "id": "G-T07",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "ether_utility"
+            ]
+        },
+        {
+            "id": "G-T08",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "object_damage"
+            ]
+        },
+        {
+            "id": "G-T09",
+            "category": "artifact",
+            "covered": false,
+            "effects": []
+        },
+        {
+            "id": "G-T10",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "ether_utility"
+            ]
+        },
+        {
+            "id": "G-T11",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "ether_utility"
+            ]
+        },
+        {
+            "id": "G-T12",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "ether_utility"
+            ]
+        },
+        {
+            "id": "G-T13",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "ether_utility"
+            ]
+        },
+        {
+            "id": "G-T14",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "ether_utility"
+            ]
+        },
+        {
+            "id": "G-T15",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "ether_utility"
+            ]
+        },
+        {
+            "id": "G-T16",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "ether_utility"
+            ]
+        },
+        {
+            "id": "G-T17",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "path"
+            ]
+        },
+        {
+            "id": "G-T18",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "ether_utility"
+            ]
+        },
+        {
+            "id": "G-T19",
+            "category": "artifact",
+            "covered": true,
+            "effects": [
+                "hit"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "occ-registered-prop-material-data-v1",
+  "id": "academy_light_planter_rubble",
+  "status": "QA_PENDING",
+  "source": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_planter_rubble/normal_raw.png",
+    "sha256": "22a18b221a46ecf11d5509952e95d98287628aa7e0ae2c92a8bf0d2e2f0078b3"
+  },
+  "panel": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_planter_rubble/normal_panel.png",
+    "sha256": "ac82bfefbf3ee5f676166a91611f26fa62fd492fe379b960a6aac92936bb77a7"
+  },
+  "source_albedo": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_light_planter_rubble.png",
+    "sha256": "e9da2a3e6c5d50d52eac8cade506f1b4086192bf611000353f42bbfb420280f8",
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "normal": {
+    "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_planter_rubble/normal.png",
+    "sha256": "d4f690b5dd853a5f7c7e806a92f27ebf6fe830949db0cf710ef55469d99a738c"
+  },
+  "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+  "native_grid": [
+    32,
+    32
+  ],
+  "world_pixel_pitch": 0.03125,
+  "normal_convention": "OpenGL +Y, no green flip",
+  "uniform_surface": {
+    "roughness": 0.92,
+    "metallic": 0,
+    "coat": 0,
+    "reason": "Explicit semantic material role, not grayscale conversion"
+  },
+  "human_registration_review": "PENDING",
+  "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+}

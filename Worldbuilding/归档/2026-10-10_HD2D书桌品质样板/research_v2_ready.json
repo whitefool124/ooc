@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"e050671281bd41228bc2c8d804d54571\",\"request_key\":\"octopath-functions-v2-20261010\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"play\",\"status\":\"failed\",\"phase\":\"failed\",\"created_at\":\"2026-10-10T17:35:05.234+08:00\",\"updated_at\":\"2026-10-10T17:35:43.949+08:00\",\"finished_at\":\"2026-10-10T17:35:43.949+08:00\",\"error_code\":\"EDITOR_OPERATION_FAILED\",\"message\":\"无法删除要被替换的文件。\",\"refresh_assets\":true,\"timeout_seconds\":120,\"step\":3,\"created_seconds\":1791624905.234,\"deadline_seconds\":1791625025.234,\"settle_since\":0.0,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T17:35:05.234+08:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"},{\"timestamp\":\"2026-10-10T17:35:05.571+08:00\",\"phase\":\"importing\",\"message\":null},{\"timestamp\":\"2026-10-10T17:35:14.042+08:00\",\"phase\":\"compiling\",\"message\":null},{\"timestamp\":\"2026-10-10T17:35:23.256+08:00\",\"phase\":\"reloading\",\"message\":\"Journal saved; poll the same operation_id after reconnection.\"},{\"timestamp\":\"2026-10-10T17:35:43.902+08:00\",\"phase\":\"entering_play\",\"message\":\"Play requested; waiting for Play Mode readback.\"},{\"timestamp\":\"2026-10-10T17:35:43.949+08:00\",\"phase\":\"failed\",\"message\":\"无法删除要被替换的文件。\"}]},\"current_editor\":{\"is_compiling\":false,\"is_updating\":false,\"is_playing\":false,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":true},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":0,\"journal_error\":\"无法删除要被替换的文件。\",\"task\":{\"task_id\":\"editor:e050671281bd41228bc2c8d804d54571\",\"kind\":\"editor\",\"id\":\"e050671281bd41228bc2c8d804d54571\",\"status\":\"failed\",\"phase\":\"failed\",\"revision\":\"32d432365f968221aa0de5e7cbfad3c9e8ee7fdbf4106ab5ebd1c084254d4d25\",\"changed\":true,\"wait_complete\":true,\"poll_after_ms\":0,\"wait_reason\":\"completed\",\"waited_ms\":1,\"snapshot_at\":\"2026-10-10T09:35:44.040362Z\"}}}"
+      }
+    ]
+  }
+}

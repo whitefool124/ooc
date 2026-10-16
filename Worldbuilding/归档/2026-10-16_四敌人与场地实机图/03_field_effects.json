@@ -1,0 +1,65 @@
+{
+  "source": "Actual Unity Editor Play Mode battlefield and runtime HUD; isolated in-memory artwork staging, not natural encounter or full journey",
+  "enemies": [
+    {
+      "id": "wind_librarian",
+      "name": "小铃",
+      "position": "(2, 3)",
+      "texture": "wind_librarian"
+    },
+    {
+      "id": "legacy_storekeeper",
+      "name": "老库管",
+      "position": "(4, 3)",
+      "texture": "legacy_storekeeper"
+    }
+  ],
+  "fields": [
+    {
+      "position": "(0, 0)",
+      "label": "",
+      "texture": "rain_court_water"
+    },
+    {
+      "position": "(1, 0)",
+      "label": "",
+      "texture": "rain_court_water"
+    },
+    {
+      "position": "(3, 0)",
+      "label": "",
+      "texture": "frame_00"
+    },
+    {
+      "position": "(4, 0)",
+      "label": "",
+      "texture": "frame_00"
+    },
+    {
+      "position": "(0, 1)",
+      "label": "散页",
+      "texture": "field_loose_paper"
+    },
+    {
+      "position": "(1, 1)",
+      "label": "痕迹",
+      "texture": null
+    },
+    {
+      "position": "(3, 1)",
+      "label": "约束纹",
+      "texture": null
+    },
+    {
+      "position": "(4, 1)",
+      "label": "页幕",
+      "texture": null
+    }
+  ],
+  "resolution": [
+    1920,
+    1080
+  ],
+  "focusRequested": false,
+  "candidates": "QA_PENDING"
+}

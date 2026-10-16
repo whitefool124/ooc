@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":false,\"code\":\"RUNTIME_ERROR\",\"error\":\"RUNTIME_ERROR\",\"data\":{\"message\":\"Audit missing\",\"stack\":\"  at OCC.Combat.EditorTools.AcademyJourneyAudit.Start (System.Collections.IEnumerator routine, System.String label) [0x00024] in E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Assets\\\\Game\\\\Editor\\\\AcademyJourneyAudit.cs:56 \\r\\n  at OCC.Combat.EditorTools.AcademyJourneyAudit.RunEntry () [0x00000] in E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Assets\\\\Game\\\\Editor\\\\AcademyJourneyAudit.cs:48 \\r\\n  at RunInstalledEntry.Run () [0x00001] in <347f20fc89b74cb194586db395a77c4d>:0 \\r\\n  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)\\r\\n  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <816f70bc2a9c4332b0bd119906a8d40e>:0 \",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

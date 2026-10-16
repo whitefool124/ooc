@@ -15,6 +15,29 @@ namespace OCC.Combat.Tests
         private static GridPosition P(int x, int y) => new GridPosition(x, y);
 
         [Test]
+        public void GroundStop_UsesLastSegmentAndActualArrivalOnlyOnce()
+        {
+            var playback=new CombatMovementPlayback(); int calls=0; Vector2 direction=default; float at=0,length=0;
+            playback.GroundStop+=(p,d,l,t)=>{calls++;direction=d;at=t;length=l;Assert.That(p,Is.EqualTo(new Vector2(1,1)));};
+            playback.Play("hero",P(0,0),P(1,1),new[]{P(0,0),P(1,0),P(1,1)},2f);
+            playback.Sample("hero",P(1,1),2.1f); Assert.That(calls,Is.Zero);
+            playback.Sample("hero",P(1,1),2.4f); playback.Sample("hero",P(1,1),3f);
+            Assert.That(calls,Is.EqualTo(1)); Assert.That(direction,Is.EqualTo(Vector2.up));
+            Assert.That(length,Is.EqualTo(2)); Assert.That(at,Is.EqualTo(2.16f).Within(.001f));
+        }
+
+        [Test]
+        public void CancelledAndDisplacedMovement_DoNotPublishStops()
+        {
+            var playback=new CombatMovementPlayback();int calls=0;
+            playback.GroundStop+=(p,d,l,t)=>calls++;
+            var path=new[]{P(0,0),P(1,0),P(2,0)};
+            playback.Play("hero",P(0,0),P(2,0),path,0); playback.Cancel("hero"); playback.Sample("hero",P(2,0),1);
+            playback.Play("hero",P(0,0),P(2,0),path,0); playback.Sample("hero",P(2,1),1);
+            Assert.That(calls,Is.Zero);
+        }
+
+        [Test]
         public void ResolvedDetour_VisitsEveryActualSegmentAndNeverCrossesTheObstacle()
         {
             var hero = new UnitState("hero", true, P(0, 0));
@@ -27,13 +50,18 @@ namespace OCC.Combat.Tests
             int ap = hero.ActionPoints, health = hero.Health;
             var playback = new CombatMovementPlayback();
             Assert.That(playback.Play(hero.Id, P(0, 0), hero.Position, result.MovementPath, 0f), Is.True);
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 24; i++)
             {
-                var sample = playback.Sample(hero.Id, hero.Position, (i + .5f) * .08f);
-                Vector2 expected = new Vector2(result.MovementPath[i].X + result.MovementPath[i + 1].X,
-                    result.MovementPath[i].Y + result.MovementPath[i + 1].Y) * .5f;
-                Assert.That(Vector2.Distance(sample.Position, expected), Is.LessThan(.001f));
-                Assert.That(sample.Position, Is.Not.EqualTo(new Vector2(1f, 0f)));
+                Vector2 sample = playback.Sample(hero.Id, hero.Position, i * .01f).Position;
+                bool onRoute = false;
+                for (int segment = 1; segment < result.MovementPath.Count; segment++)
+                {
+                    var a = result.MovementPath[segment - 1]; var b = result.MovementPath[segment];
+                    onRoute |= sample.x >= Mathf.Min(a.X,b.X)-.001f && sample.x <= Mathf.Max(a.X,b.X)+.001f &&
+                        sample.y >= Mathf.Min(a.Y,b.Y)-.001f && sample.y <= Mathf.Max(a.Y,b.Y)+.001f;
+                }
+                Assert.That(onRoute, Is.True);
+                Assert.That(sample, Is.Not.EqualTo(new Vector2(1f, 0f)));
             }
             Assert.That(playback.Sample(hero.Id, hero.Position, .32f).Position, Is.EqualTo(new Vector2(2, 1)));
             Assert.That(hero.Position, Is.EqualTo(P(2, 1))); Assert.That(hero.ActionPoints, Is.EqualTo(ap));
@@ -48,8 +76,14 @@ namespace OCC.Combat.Tests
             Vector2 before = playback.Sample("hero", P(1, 1), .04f).Position;
             playback.Play("hero", P(1, 1), P(2, 1), new[] { P(1, 1), P(2, 1) }, .04f);
             Assert.That(playback.Sample("hero", P(2, 1), .04f).Position, Is.EqualTo(before));
-            Assert.That(Vector2.Distance(playback.Sample("hero", P(2, 1), .08f).Position, new Vector2(1, 0)), Is.LessThan(.001f));
-            Assert.That(Vector2.Distance(playback.Sample("hero", P(2, 1), .16f).Position, new Vector2(1, 1)), Is.LessThan(.001f));
+            bool firstCorner = false, secondCorner = false;
+            for (float t=.04f;t<.4f;t+=.002f)
+            {
+                Vector2 sample=playback.Sample("hero",P(2,1),t).Position;
+                firstCorner |= Vector2.Distance(sample,new Vector2(1,0)) < .04f;
+                secondCorner |= Vector2.Distance(sample,new Vector2(1,1)) < .04f;
+            }
+            Assert.That(firstCorner && secondCorner, Is.True);
             Assert.That(playback.Sample("hero", P(2, 1), .4f).Position, Is.EqualTo(new Vector2(2, 1)));
         }
 
@@ -61,7 +95,7 @@ namespace OCC.Combat.Tests
             var path = new[] { P(0, 0), P(1, 0), P(1, 1) };
             playback.Play("hero", P(0, 0), P(1, 1), path, 0);
             path[1] = P(99, 99); // A caller cannot alter the captured route afterwards.
-            Assert.That(playback.Sample("hero", P(1, 1), .04f).Position, Is.EqualTo(new Vector2(.5f, 0)));
+            Assert.That(playback.Sample("hero", P(1, 1), .08f).Position, Is.EqualTo(new Vector2(1f, 0)));
             Assert.That(playback.Sample("hero", P(0, 1), .06f).Position, Is.EqualTo(new Vector2(0, 1)));
             Assert.That(playback.Count, Is.Zero);
         }

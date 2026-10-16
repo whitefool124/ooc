@@ -1,0 +1,99 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "38625900f0f7a2c9c8c48eddc0291138ddbf9d5238cf65825426f6b91cb5f4d6",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/PixelIgnitionMap.cs"
+  ],
+  "inputs": [
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+      "sha256": "c099cc6088233397a5d1eff46642cd26d976213b4a635564c55c37ebe9193861"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+      "sha256": "8f16493c563336b630e22fd50e937ba455190493594d47acbbae3fb40a884283"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+      "sha256": "f404ee710c2b4c92b269a683509dba4d3a87fe29718183c2b573a4ae9ef39025"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs",
+      "sha256": "52767d4a2333b2d513fc7f70ebff652faaf449efd5319544ac58427451f020a1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelIgnitionMap.cs",
+      "sha256": "c4bfec5deb4ed17086bda7f9f0637ad655ff582297ab5a8824896746ca0baba3"
+    }
+  ],
+  "configuration": {
+    "scope": "Local SkyFurnace seal visibility and release brightness only",
+    "reveal": "Two primary roots per main seal,1caster root; neighbour-attached20-texel buds and up to4rooted branches; no extra seeds in reachable ink",
+    "release_boost_seconds": 7.4,
+    "audio": "none",
+    "scene_saved": false,
+    "absorption": {
+      "pool": 24,
+      "cube_edge_metres": 0.03125,
+      "lifetime_seconds": 0.28,
+      "cycle_seconds": 0.43,
+      "maximum_observed_single_path_metres": 0.418688416,
+      "scale_basis": "Individual cube1/32m; nearby inbound path under0.5m. Whole emission domain moves along5/4/3/2m seal canvases, not a0.42m total effect. Each source starts within its local growth region; source extent is bounded by seal dimensions plus.32m horizontal,.35m vertical.",
+      "material": "Existing quiet_energy_pixel source gold(8,15) -> pale(10,14); per-renderer SourceRect, no replacement artwork",
+      "birth_point": "Exact native ink pixel on active growth history; no full-circle random emitter",
+      "audio": "none"
+    }
+  },
+  "local_evidence": {
+    "checks": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉分枝与吸收/branch_absorption_checks.json",
+      "sha256": "ba038a5ee4fbbff8ec22cbf4f4696a2d10882ca6d20ffe021c9f7b7f77b44581"
+    },
+    "runtime_before_particle_brightness_only": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉分枝与吸收/fixed_runtime_checks.json",
+      "sha256": "26f121c3708240f1c80d8f2c22b8b789e4b903a084f7d20ac569742e79b54075"
+    },
+    "progression": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉分枝与吸收/ignition_study/progression.json",
+      "sha256": "df29afafc12d07cbe0bc77053c7bab0bc0d5fe101d4306d61a0e97c5d27b6bad"
+    },
+    "console": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉分枝与吸收/console.json",
+      "sha256": "8e13827bea5c17ad1ea07a6daf7db3b1e8b6045ca370ac64e4fe8f48f5e34c68"
+    },
+    "film": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉分枝与吸收/fixed_film_capture.json",
+      "sha256": "9313b806dac03d527763a4bf37ab723cce42124b88b9129980c8ad3a66c992d0"
+    },
+    "normal_speed_review": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉分枝与吸收/正常速度时序检查.png",
+      "sha256": "a59d8ec0b168a57c9458786491e0c49cd2d5e55cf7fed4325b984842731522cf"
+    },
+    "absorption_sequence_review": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉分枝与吸收/吸收局部连续帧.png",
+      "sha256": "6cec084407dd308e869f7e571b6ad385d4512cba5c558b7b961c6f560872a5e4"
+    },
+    "movie": {
+      "path": "Artifacts/SkyFurnaceBranches_20261016/天穹熔炉_分枝生长与火元素汇入.mp4",
+      "sha256": "0a9b8c0144a41d72f2aac6d24ff302ef839f61f29d0090ea0da9c1aa8eaf1698"
+    },
+    "normal_speed_closeup": {
+      "path": "Artifacts/SkyFurnaceBranches_20261016/生长与吸收局部_正常速度.mp4",
+      "sha256": "83e40a439ec98a0d1d562ca25b26a12ff24aad75ec237fa112863e34f92b19fc"
+    }
+  },
+  "limitations": [
+    "QA_PENDING; user aesthetic approval pending.",
+    "Local cinematic only, no formal combat integration/performance baseline.",
+    "Normal playback/control checks captured before the final source-texel brightness adjustment; final visuals and Console checked after adjustment.",
+    "Inbound particles intentionally sparse; subtler in full view than normal-speed closeup."
+  ]
+}

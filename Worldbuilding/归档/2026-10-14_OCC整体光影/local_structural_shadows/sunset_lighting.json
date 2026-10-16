@@ -1,0 +1,74 @@
+{
+  "lights": [
+    {
+      "name": "战场统一日光",
+      "type": "Directional",
+      "intensity": 2.7,
+      "range": 10.0,
+      "shadows": "Soft",
+      "shadowResolution": -1,
+      "localEuler": [
+        21.9999981,
+        65.0,
+        -9.208246E-07
+      ]
+    },
+    {
+      "name": "战场柔和补光",
+      "type": "Directional",
+      "intensity": 0.32,
+      "range": 10.0,
+      "shadows": "None",
+      "shadowResolution": -1,
+      "localEuler": [
+        20.0000019,
+        345.0,
+        0.0
+      ]
+    },
+    {
+      "name": "战场水平轮廓补光",
+      "type": "Directional",
+      "intensity": 0.65,
+      "range": 10.0,
+      "shadows": "None",
+      "shadowResolution": -1,
+      "localEuler": [
+        0.0,
+        20.0000019,
+        0.0
+      ]
+    },
+    {
+      "name": "Pixel emission light group",
+      "type": "Point",
+      "intensity": 1.2,
+      "range": 1.9,
+      "shadows": "Soft",
+      "shadowResolution": 256,
+      "localEuler": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "蓄能晶簇局部光_(5, 2)",
+      "type": "Point",
+      "intensity": 1.8,
+      "range": 2.3,
+      "shadows": "Soft",
+      "shadowResolution": 256,
+      "localEuler": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "diffuseUpdates": 2,
+  "diffuseStatus": "local_scene_irradiance_applied",
+  "diffuseSurfaces": 86,
+  "reflectionCaptures": 2,
+  "sourceRadianceRange": 3.460617
+}

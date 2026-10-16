@@ -1,0 +1,1 @@
+PASS: normal Landing; no added paper or lamp; label offsets zero; actual raycast and Input System mouse press/release open SaveSelection and return Landing; no slot selected or saved.

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="14" result="Failed(Child)" total="14" passed="12" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-16 11:12:16Z" end-time="2026-10-16 11:12:19Z" duration="3.3477092">
+  <test-suite type="TestSuite" id="1000" name="My project" fullname="My project" runstate="Runnable" testcasecount="2833" result="Failed" site="Child" start-time="2026-10-16 11:12:16Z" end-time="2026-10-16 11:12:19Z" duration="3.347709" total="14" passed="12" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2758" name="OCC.Combat.EditModeTests.dll" fullname="E:/数据库/OCC_Codex/UnityProject/Library/ScriptAssemblies/OCC.Combat.EditModeTests.dll" runstate="Runnable" testcasecount="1523" result="Failed" site="Child" start-time="2026-10-16 11:12:16Z" end-time="2026-10-16 11:12:19Z" duration="3.233057" total="14" passed="12" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="48056" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2759" name="OCC" fullname="OCC" runstate="Runnable" testcasecount="1523" result="Failed" site="Child" start-time="2026-10-16 11:12:16Z" end-time="2026-10-16 11:12:19Z" duration="3.191105" total="14" passed="12" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2761" name="Combat" fullname="OCC.Combat" runstate="Runnable" testcasecount="1521" result="Failed" site="Child" start-time="2026-10-16 11:12:16Z" end-time="2026-10-16 11:12:19Z" duration="3.147219" total="14" passed="12" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2762" name="Tests" fullname="OCC.Combat.Tests" runstate="Runnable" testcasecount="1521" result="Failed" site="Child" start-time="2026-10-16 11:12:16Z" end-time="2026-10-16 11:12:19Z" duration="3.105791" total="14" passed="12" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1200" name="AcademyMealCompletionTests" fullname="OCC.Combat.Tests.AcademyMealCompletionTests" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" testcasecount="14" result="Failed" site="Child" start-time="2026-10-16 11:12:16Z" end-time="2026-10-16 11:12:19Z" duration="2.943435" total="14" passed="12" failed="2" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-suite type="ParameterizedMethod" id="1209" name="LegalOffer_PaysExactCurrency_PersistsAndCannotStack" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.LegalOffer_PaysExactCurrency_PersistsAndCannotStack" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-16 11:12:16Z" end-time="2026-10-16 11:12:18Z" duration="1.889181" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1201" name="LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-POWER&quot;)" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-POWER&quot;)" methodname="LegalOffer_PaysExactCurrency_PersistsAndCannotStack" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="942997367" result="Passed" start-time="2026-10-16 11:12:16Z" end-time="2026-10-16 11:12:17Z" duration="0.394276" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1202" name="LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-AETHER&quot;)" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-AETHER&quot;)" methodname="LegalOffer_PaysExactCurrency_PersistsAndCannotStack" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="390786077" result="Passed" start-time="2026-10-16 11:12:17Z" end-time="2026-10-16 11:12:17Z" duration="0.074248" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1203" name="LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-GUARD&quot;)" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-GUARD&quot;)" methodname="LegalOffer_PaysExactCurrency_PersistsAndCannotStack" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="1565326439" result="Passed" start-time="2026-10-16 11:12:17Z" end-time="2026-10-16 11:12:17Z" duration="0.324426" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1204" name="LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-MOVE&quot;)" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-MOVE&quot;)" methodname="LegalOffer_PaysExactCurrency_PersistsAndCannotStack" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="1307516903" result="Passed" start-time="2026-10-16 11:12:17Z" end-time="2026-10-16 11:12:18Z" duration="0.667860" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1205" name="LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-SPELL&quot;)" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-SPELL&quot;)" methodname="LegalOffer_PaysExactCurrency_PersistsAndCannotStack" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="1509118130" result="Passed" start-time="2026-10-16 11:12:18Z" end-time="2026-10-16 11:12:18Z" duration="0.065145" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1206" name="LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-VITAL&quot;)" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-VITAL&quot;)" methodname="LegalOffer_PaysExactCurrency_PersistsAndCannotStack" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="1033441223" result="Passed" start-time="2026-10-16 11:12:18Z" end-time="2026-10-16 11:12:18Z" duration="0.211037" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1207" name="LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-HUNTER&quot;)" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-HUNTER&quot;)" methodname="LegalOffer_PaysExactCurrency_PersistsAndCannotStack" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="1213696749" result="Passed" start-time="2026-10-16 11:12:18Z" end-time="2026-10-16 11:12:18Z" duration="0.025237" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1208" name="LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-CLEAR&quot;)" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.LegalOffer_PaysExactCurrency_PersistsAndCannotStack(&quot;MEAL-CLEAR&quot;)" methodname="LegalOffer_PaysExactCurrency_PersistsAndCannotStack" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="731531873" result="Passed" start-time="2026-10-16 11:12:18Z" end-time="2026-10-16 11:12:18Z" duration="0.100249" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1211" name="Meals_ApplyRealBattleBonusesAndOneShotLimits" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.Meals_ApplyRealBattleBonusesAndOneShotLimits" methodname="Meals_ApplyRealBattleBonusesAndOneShotLimits" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="796732116" result="Passed" start-time="2026-10-16 11:12:18Z" end-time="2026-10-16 11:12:19Z" duration="0.691316" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1210" name="SeededOptions_AreThreeDistinctAndCoverAllEight_AndLegacyRowsStillRead" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.SeededOptions_AreThreeDistinctAndCoverAllEight_AndLegacyRowsStillRead" methodname="SeededOptions_AreThreeDistinctAndCoverAllEight_AndLegacyRowsStillRead" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="846014115" result="Passed" start-time="2026-10-16 11:12:19Z" end-time="2026-10-16 11:12:19Z" duration="0.030806" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1215" name="Tea_DiscountsTheActualFirstCast_ThenRestoresItsNormalCost" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.Tea_DiscountsTheActualFirstCast_ThenRestoresItsNormalCost" methodname="Tea_DiscountsTheActualFirstCast_ThenRestoresItsNormalCost" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="324360573" result="Passed" start-time="2026-10-16 11:12:19Z" end-time="2026-10-16 11:12:19Z" duration="0.095071" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1216" name="ThreeCompletedBattles_ExpireTheMeal_AndNodeRevisitKeepsOffers" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.ThreeCompletedBattles_ExpireTheMeal_AndNodeRevisitKeepsOffers" methodname="ThreeCompletedBattles_ExpireTheMeal_AndNodeRevisitKeepsOffers" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="33930202" result="Passed" start-time="2026-10-16 11:12:19Z" end-time="2026-10-16 11:12:19Z" duration="0.101765" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1214" name="WeaponMeals_ApplyToWeaponSpellPackets_AndConsumeOnlyTheFirstHitBonus" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.WeaponMeals_ApplyToWeaponSpellPackets_AndConsumeOnlyTheFirstHitBonus" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-16 11:12:19Z" end-time="2026-10-16 11:12:19Z" duration="0.112348" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="1212" name="WeaponMeals_ApplyToWeaponSpellPackets_AndConsumeOnlyTheFirstHitBonus(&quot;MEAL-POWER&quot;,2)" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.WeaponMeals_ApplyToWeaponSpellPackets_AndConsumeOnlyTheFirstHitBonus(&quot;MEAL-POWER&quot;,2)" methodname="WeaponMeals_ApplyToWeaponSpellPackets_AndConsumeOnlyTheFirstHitBonus" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="1414232044" result="Failed" label="Error" start-time="2026-10-16 11:12:19Z" end-time="2026-10-16 11:12:19Z" duration="0.070041" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[System.InvalidOperationException : 只能选择自身]]></message>
+                    <stack-trace><![CDATA[  at OCC.Combat.FireSpellEngine.Execute (OCC.Combat.FireBattleState battle, System.String sourceUnitId, OCC.Combat.FireSpellDefinition spell, OCC.Combat.FireSpellTarget target) [0x00020] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Runtime\Combat\FireSpellRuntime.cs:755 
+  at OCC.Combat.Tests.AcademyMealCompletionTests.WeaponMeals_ApplyToWeaponSpellPackets_AndConsumeOnlyTheFirstHitBonus (System.String id, System.Int32 bonus) [0x000bc] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Tests\EditMode\AcademyMealCompletionTests.cs:78 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <816f70bc2a9c4332b0bd119906a8d40e>:0 ]]></stack-trace>
+                  </failure>
+                </test-case>
+                <test-case id="1213" name="WeaponMeals_ApplyToWeaponSpellPackets_AndConsumeOnlyTheFirstHitBonus(&quot;MEAL-HUNTER&quot;,4)" fullname="OCC.Combat.Tests.AcademyMealCompletionTests.WeaponMeals_ApplyToWeaponSpellPackets_AndConsumeOnlyTheFirstHitBonus(&quot;MEAL-HUNTER&quot;,4)" methodname="WeaponMeals_ApplyToWeaponSpellPackets_AndConsumeOnlyTheFirstHitBonus" classname="OCC.Combat.Tests.AcademyMealCompletionTests" runstate="Runnable" seed="1203678707" result="Failed" label="Error" start-time="2026-10-16 11:12:19Z" end-time="2026-10-16 11:12:19Z" duration="0.036830" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <failure>
+                    <message><![CDATA[System.InvalidOperationException : 只能选择自身]]></message>
+                    <stack-trace><![CDATA[  at OCC.Combat.FireSpellEngine.Execute (OCC.Combat.FireBattleState battle, System.String sourceUnitId, OCC.Combat.FireSpellDefinition spell, OCC.Combat.FireSpellTarget target) [0x00020] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Runtime\Combat\FireSpellRuntime.cs:755 
+  at OCC.Combat.Tests.AcademyMealCompletionTests.WeaponMeals_ApplyToWeaponSpellPackets_AndConsumeOnlyTheFirstHitBonus (System.String id, System.Int32 bonus) [0x000bc] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Tests\EditMode\AcademyMealCompletionTests.cs:78 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <816f70bc2a9c4332b0bd119906a8d40e>:0 ]]></stack-trace>
+                  </failure>
+                  <output><![CDATA[Saving results to: C:/Users/FNHF/AppData/LocalLow/DefaultCompany/My project\TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

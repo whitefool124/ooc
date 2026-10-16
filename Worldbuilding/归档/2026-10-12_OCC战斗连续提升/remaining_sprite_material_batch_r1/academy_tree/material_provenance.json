@@ -1,0 +1,29 @@
+{
+  "schema": "occ-authored-sprite-material-v1",
+  "status": "QA_PENDING",
+  "id": "academy_tree",
+  "source": {
+    "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_tree.png",
+    "sha256": "9978c0b532855042c823e461be21c7c5c6947aa693af3625aabcd063e531bf51"
+  },
+  "recipe_sha256": "4001c3807bc30df7fc083df6c67d2edb6e8e368cc9762342cb6f28a24d9b0991",
+  "native_canvas": [
+    96,
+    96
+  ],
+  "world_pixel_pitch": 0.03125,
+  "height_basis": "explicit_authored_geometry",
+  "albedo_brightness_used_for_height": false,
+  "source_art_changed": false,
+  "region_basis": "Explicit manually authored spatial material regions",
+  "fields": {
+    "normal.png": "fb7cefb646c8bb644cfcdcddf1cbf02014e0bfa0021a7ae0040c4354f99ceb9a",
+    "metallic_gloss.png": "137b3d356b6b8ded087be8ff2265b902a0ef8ceb5d1882cb71748c8dbcef92c6"
+  },
+  "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+  "limitations": [
+    "Leaf canopy volume proxy only; no individual-leaf geometry or transmission"
+  ],
+  "runtime_review": "PENDING",
+  "human_registration_review": "PENDING"
+}

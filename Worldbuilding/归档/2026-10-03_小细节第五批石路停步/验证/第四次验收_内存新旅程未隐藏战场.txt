@@ -1,0 +1,3 @@
+FAIL: System.InvalidOperationException: Memory journey reset did not hide battlefield
+  at OCC.Combat.EditorTools.StoneStopVerification+<Routine>d__14.MoveNext () [0x00ecf] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\StoneStopVerification.cs:127 
+  at OCC.Combat.EditorTools.StoneStopVerification+<Guard>d__9.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\StoneStopVerification.cs:43 

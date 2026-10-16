@@ -12,6 +12,9 @@ namespace OCC.Combat.Presentation
         private Image image;
         private Image skinOverlay;
         private Image focusFrame;
+        private UiSelectionBookmark bookmark;
+        private PeripheralPixelVfx focusTrace;
+        private bool focused;
         private Func<UiMotionProfile> motionProfile;
         private Action<UiActionFeedback> feedback;
         private Color normal;
@@ -25,6 +28,22 @@ namespace OCC.Combat.Presentation
         private bool pressing;
         private bool selectedState;
         private bool usesFormalButtonSkin;
+        private bool sceneSpace;
+
+        internal void UseSceneSpaceFeedback()
+        {
+            var rect=transform as RectTransform;
+            rect?.DOKill();
+            if(rect!=null)basePosition=rect.anchoredPosition;
+            sceneSpace=true;usesFormalButtonSkin=false;
+            if(skinOverlay!=null)skinOverlay.color=Color.clear;
+            if(image!=null)
+            {
+                normal=image.color;hover=Color.Lerp(normal,Color.white,.12f);
+                pressed=new Color(normal.r*.85f,normal.g*.85f,normal.b*.85f,normal.a);
+                selected=hover;disabled=new Color(normal.r*.5f,normal.g*.5f,normal.b*.5f,normal.a);
+            }
+        }
 
         public void Configure(Button target, Color normalColor, Color hoverColor, Color pressedColor, Color selectedColor, Color disabledColor,
             Func<UiMotionProfile> profile, Action<UiActionFeedback> feedbackSink, string reason = null)
@@ -56,12 +75,26 @@ namespace OCC.Combat.Presentation
             if (button == null) return;
             button.interactable = interactable;
             disabledReason = reason ?? string.Empty;
+            if (!interactable) CancelFocusTrace();
             Apply(false);
         }
 
         public void SetSelectedState(bool value)
         {
             selectedState = value;
+            if (value && bookmark == null)
+            {
+                var mark = new GameObject("选中像素书签", typeof(RectTransform), typeof(CanvasRenderer));
+                mark.transform.SetParent(transform, false);
+                var rect = (RectTransform)mark.transform;
+                rect.anchorMin = rect.anchorMax = new Vector2(0f, .5f);
+                rect.sizeDelta = new Vector2(6f, 12f);
+                rect.anchoredPosition = new Vector2(6f, 0f);
+                bookmark = mark.AddComponent<UiSelectionBookmark>();
+                bookmark.color = FormalUiTheme.Cyan;
+                bookmark.raycastTarget = false;
+            }
+            if (bookmark != null) bookmark.gameObject.SetActive(value);
             Apply(false);
         }
 
@@ -74,12 +107,22 @@ namespace OCC.Combat.Presentation
             ApplyImmediate();
         }
 
-        public void OnPointerEnter(PointerEventData eventData) { hovering = true; Apply(false); }
-        public void OnPointerExit(PointerEventData eventData) { hovering = false; pressing = false; Apply(false); }
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (!hovering) PlayFocusTrace();
+            hovering = true;
+            Apply(false);
+        }
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            hovering = false; pressing = false;
+            if (!focused) CancelFocusTrace();
+            Apply(false);
+        }
         public void OnPointerDown(PointerEventData eventData)
         {
             if (!IsPrimaryPointer(eventData)) return;
-            if (button != null && button.interactable) OccSoundEffects.UiButton(SoundLabel());
+            if (button != null && button.interactable && GetComponent<RogueLoadoutDragHandler>()==null) OccSoundEffects.UiButton(SoundLabel());
             pressing = true;
             Apply(false);
         }
@@ -90,8 +133,39 @@ namespace OCC.Combat.Presentation
             pressing = false;
             Apply(false);
         }
-        public void OnSelect(BaseEventData eventData) { if (focusFrame != null) focusFrame.gameObject.SetActive(true); Apply(false); }
-        public void OnDeselect(BaseEventData eventData) { if (focusFrame != null) focusFrame.gameObject.SetActive(false); pressing = false; Apply(false); }
+        public void OnSelect(BaseEventData eventData)
+        {
+            if (!focused) PlayFocusTrace();
+            focused = true;
+            if (focusFrame != null) focusFrame.gameObject.SetActive(true);
+            Apply(false);
+        }
+        public void OnDeselect(BaseEventData eventData)
+        {
+            focused = false;
+            if (focusFrame != null) focusFrame.gameObject.SetActive(false);
+            pressing = false;
+            if (!hovering) CancelFocusTrace();
+            Apply(false);
+        }
+
+        private void PlayFocusTrace()
+        {
+            if (!isActiveAndEnabled || button == null || !button.IsInteractable() || focusTrace != null) return;
+            UiMotionProfile profile = motionProfile == null ? UiMotionProfile.FromIntensity(1f) : motionProfile();
+            var rect = transform as RectTransform;
+            if (rect != null) focusTrace = PeripheralPixelVfx.Spawn(transform, "focus", profile.Intensity,
+                rect.rect.size, Vector2.zero, new Vector2(.5f, .5f));
+        }
+
+        private void CancelFocusTrace()
+        {
+            if (focusTrace == null) return;
+            GameObject trace = focusTrace.gameObject;
+            focusTrace = null;
+            trace.SetActive(false);
+            if (!Application.isPlaying) DestroyImmediate(trace);
+        }
 
         public void OnPointerClick(PointerEventData eventData)
         {
@@ -171,19 +245,28 @@ namespace OCC.Combat.Presentation
             if (immediate || profile.IsImmediate)
             {
                 image.color = target;
-                if (rect != null) rect.anchoredPosition = position;
+                if (rect != null && !sceneSpace) rect.anchoredPosition = position;
                 return;
             }
             DOTween.To(() => image != null ? image.color : target,
                     value => { if (image != null) image.color = value; }, target, profile.QuickDuration)
                 .SetTarget(image).SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true);
-            if (rect != null)
+            if (rect != null && !sceneSpace)
                 DOTween.To(() => rect != null ? rect.anchoredPosition : position,
                         value => { if (rect != null) rect.anchoredPosition = basePosition + PixelPresentationMotion.Snap(value - basePosition); }, position, profile.QuickDuration)
                     .SetTarget(rect).SetEase(FormalUiMotionTokens.FeedbackEase).SetUpdate(true);
         }
 
         private void ApplyImmediate() => Apply(true);
+
+        private void OnDisable()
+        {
+            DOTween.Kill(this);
+            CancelFocusTrace();
+            hovering = false; pressing = false; focused = false;
+            if (focusFrame != null) focusFrame.gameObject.SetActive(false);
+            ApplyImmediate();
+        }
 
         private void OnDestroy()
         {

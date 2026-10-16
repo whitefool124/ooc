@@ -1,0 +1,68 @@
+{
+  "schema": "occ-cinematic-local-checks-v1",
+  "status": "PASS",
+  "duration": 16.0,
+  "stageCells": [
+    7,
+    7
+  ],
+  "actor": "pyromancer",
+  "normalCompletePlayback": true,
+  "fixedCamera": true,
+  "terrainDestruction": false,
+  "pauseResume": true,
+  "replayThreeTimes": true,
+  "skipEnd": true,
+  "reset": true,
+  "disableReenable": true,
+  "pipelineRestored": true,
+  "ownedResources": 142,
+  "resourceGrowth": 0,
+  "evidence": [
+    {
+      "age": 0.8001431,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-15_天穹熔炉纸板拆层\\fixed_live_0.png"
+    },
+    {
+      "age": 4.502412,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-15_天穹熔炉纸板拆层\\fixed_live_1.png"
+    },
+    {
+      "age": 6.502484,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-15_天穹熔炉纸板拆层\\fixed_live_2.png"
+    },
+    {
+      "age": 7.35005474,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-15_天穹熔炉纸板拆层\\fixed_live_3.png"
+    },
+    {
+      "age": 8.101604,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-15_天穹熔炉纸板拆层\\fixed_live_4.png"
+    },
+    {
+      "age": 12.50097,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-15_天穹熔炉纸板拆层\\fixed_live_5.png"
+    },
+    {
+      "age": 15.8003817,
+      "BrokenPieces": 0,
+      "PlayingAudioCount": 0,
+      "path": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-15_天穹熔炉纸板拆层\\fixed_live_6.png"
+    }
+  ],
+  "scope": "One dedicated cinematic, normal scene initialization plus public playback controls; no full game journey or performance audit",
+  "humanAestheticReview": "PENDING",
+  "focusRequested": false
+}

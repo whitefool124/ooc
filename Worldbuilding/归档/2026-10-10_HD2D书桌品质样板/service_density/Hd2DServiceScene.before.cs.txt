@@ -1,0 +1,559 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
+
+namespace OCC.Combat.Presentation
+{
+    // Service pages use authored desk poses, rather than projecting an old screen panel.
+    // Independent native sprites provide the silhouettes; geometry only carries light/shadow.
+    internal sealed class Hd2DServiceScene : MonoBehaviour
+    {
+        private sealed class Pose
+        {
+            internal RectTransform Rect; internal Transform Parent;
+            internal Vector2 Min,Max,Pivot,Size; internal Vector3 Position,Scale; internal Quaternion Rotation;
+        }
+        private sealed class Face
+        {
+            internal Image Source; internal MeshRenderer Renderer; internal Mesh Mesh; internal Material Material;
+            internal CanvasGroup Group; internal MeshRenderer Shadow,Edge;
+        }
+        private readonly List<Pose> poses=new List<Pose>();
+        private readonly List<Face> faces=new List<Face>();
+        private readonly List<Object> owned=new List<Object>();
+        private GameObject world;
+        private MainMenuHd2DStage stage;
+        private bool built;
+        private float readyAt;
+        private string kind;
+        private Sprite tray,clipboard;
+        internal static bool TryAttach(GameObject page)
+        {
+            if(!Application.isPlaying)return false;
+            string type=page.GetComponentsInChildren<RectTransform>(true).Any(x=>x.name=="强化台")?"workshop":
+                page.GetComponentsInChildren<RectTransform>(true).Any(x=>x.name=="医务室身份卡")?"medical":
+                page.GetComponentsInChildren<RectTransform>(true).Any(x=>x.name=="商店页眉")?"shop":
+                page.GetComponentsInChildren<RectTransform>(true).Any(x=>x.name=="全屏节点房间")?"event":null;
+            if(type==null)return false;
+            var scene=page.AddComponent<Hd2DServiceScene>();scene.kind=type;return true;
+        }
+        private void OnEnable(){readyAt=Time.unscaledTime+.48f;}
+        private void LateUpdate()
+        {
+            if(!built)
+            {
+                if(Time.unscaledTime<readyAt)return;
+                var backdrop=GetComponent<AcademyDeskBackdrop>();if(backdrop==null||backdrop.Stage==null)return;
+                stage=backdrop.Stage;Canvas.ForceUpdateCanvases();Build(backdrop);built=true;
+            }
+            foreach(var face in faces)
+            {
+                var image=face.Source;if(image==null)continue;
+                bool visible=image.isActiveAndEnabled&&(face.Group==null||face.Group.alpha>.01f);
+                face.Renderer.enabled=visible;if(face.Shadow!=null)face.Shadow.enabled=visible;
+                if(face.Edge!=null)face.Edge.enabled=visible;
+                if(!visible)continue;
+                image.canvasRenderer.SetAlpha(0);if(face.Material.color!=image.color)face.Material.color=image.color;
+            }
+        }
+        private RectTransform Find(string name)=>GetComponentsInChildren<RectTransform>(true).FirstOrDefault(x=>x.name==name)??
+            (world==null?null:world.GetComponentsInChildren<RectTransform>(true).FirstOrDefault(x=>x.name==name));
+        private void Build(AcademyDeskBackdrop backdrop)
+        {
+            backdrop.SetDocumentFraming(.15f,.28f);
+            foreach(var item in stage.GetComponentsInChildren<Transform>(true))
+                if(item.name=="桌面实体"||item.name.StartsWith("桌面木板"))
+                    item.localScale=new Vector3(item.name=="桌面实体"?7.8f:7.75f,item.localScale.y,item.localScale.z);
+            stage.GetComponent<Hd2DDeskArtCandidate>()?.RefreshModelUvs();
+            world=new GameObject("独立物件服务桌面 "+kind);world.transform.SetParent(stage.transform,false);
+            tray=Hd2DPaperSkin.Load();
+            clipboard=LoadArtwork("记录夹",new Vector4(3,3,4,6));
+            Hd2DContainerStyle.PrepareControls(gameObject);
+            foreach(var image in GetComponentsInChildren<Image>(true))
+            {
+                if(image.gameObject==gameObject)continue;
+                if(image.name.StartsWith("细边_")||image.rectTransform.rect.width<=3){Clear(image);continue;}
+                if(image.color.a>=.85f&&image.rectTransform.rect.width>100&&image.rectTransform.rect.height>60&&
+                    (image.sprite==null||image.type==Image.Type.Sliced||image.GetComponent<Hd2DContainerStyle>()!=null))
+                    Hd2DContainerStyle.Tray(image);
+                foreach(var shadow in image.GetComponents<Shadow>())shadow.enabled=false;
+            }
+            Hd2DPaperSkin.Apply(gameObject);
+            var shell=GetComponentInChildren<FormalRogueliteServiceShellView>();
+            if(shell!=null)
+            {
+                Clear(shell.GetComponent<Image>());
+                var header=shell.TopBar.GetComponent<Image>();if(header!=null)header.color=Color.white;
+                Clear(shell.Body.GetComponent<Image>());Clear(shell.Footer.GetComponent<Image>());
+                // Header stays a small readable paper sign, not a wall-sized backdrop.
+                Place(shell.TopBar,new Vector3(0,4.15f,.40f),1.05f);
+            }
+            if(kind=="workshop")Workshop();else if(kind=="medical")Medical();else if(kind=="shop")Shop();else Event();
+            BuildLighting();
+            // All interface faces share the player's camera orientation. Depth
+            // comes from separate scene positions, rims and receiving shadows.
+            foreach(var text in world.GetComponentsInChildren<Text>(true))
+            {
+                Remember(text.rectTransform);
+                text.transform.rotation=stage.sceneCamera.transform.rotation;
+                var p=text.rectTransform.anchoredPosition3D;
+                p.z-=32;
+                text.rectTransform.anchoredPosition3D=p;
+            }
+            foreach(var image in world.GetComponentsInChildren<Image>(true))
+            {
+                if(image.GetComponent<Button>()==null && (image.sprite==null||image.sprite==Hd2DPaperSkin.Load()))continue;
+                Remember(image.rectTransform);
+                var p=image.rectTransform.anchoredPosition3D;p.z-=image.name=="材料图标"?42:14;
+                image.rectTransform.anchoredPosition3D=p;
+            }
+            foreach(var image in world.GetComponentsInChildren<Image>(true))
+                if(image.sprite==Hd2DPaperSkin.Load())
+                {
+                    var canvas=image.GetComponentInParent<Canvas>();
+                    image.pixelsPerUnitMultiplier=canvas.referencePixelsPerUnit*Mathf.Abs(image.transform.lossyScale.x)*
+                        Hd2DDeskArtCandidate.ScenePixelsPerUnit/image.sprite.pixelsPerUnit;
+                    if(image.rectTransform.rect.height*Mathf.Abs(image.transform.lossyScale.y)<
+                        (image.sprite.border.y+image.sprite.border.w+4)/Hd2DDeskArtCandidate.ScenePixelsPerUnit)
+                    {image.sprite=null;image.type=Image.Type.Simple;image.color=ArchiveUiStyle.Paper;}
+                    else
+                    {
+                        float inset=image.sprite.border.x/(Hd2DDeskArtCandidate.ScenePixelsPerUnit*
+                            Mathf.Abs(image.transform.lossyScale.x))+8;
+                        foreach(var label in image.GetComponentsInChildren<Text>(true))
+                        {
+                            var rect=label.rectTransform;
+                            if(rect.parent!=image.transform||rect.anchorMin!=new Vector2(0,1)||
+                                rect.anchorMax!=rect.anchorMin||rect.pivot.x!=0)continue;
+                            float delta=Mathf.Max(0,inset-rect.anchoredPosition.x);
+                            rect.anchoredPosition+=Vector2.right*delta;
+                            rect.sizeDelta=new Vector2(Mathf.Max(16,rect.sizeDelta.x-delta),rect.sizeDelta.y);
+                        }
+                    }
+                }
+            Canvas.ForceUpdateCanvases();
+            foreach(var text in world.GetComponentsInChildren<Text>(true))
+            {
+                bool onPaper=false;
+                for(var p=text.transform.parent;p!=null&&p!=world.transform;p=p.parent)
+                    if(p.TryGetComponent<Image>(out var paper)&&paper.color.a>.85f){onPaper=true;break;}
+                text.color=onPaper?ArchiveUiStyle.Ink:new Color(.98f,.92f,.78f);
+            }
+            foreach(var image in world.GetComponentsInChildren<Image>(true))
+            {
+                if(image.color.a<.85f||image.rectTransform.rect.width<24||image.rectTransform.rect.height<16)continue;
+                var generated=image.canvasRenderer.GetMesh();if(generated==null||generated.vertexCount==0)continue;
+                var mesh=Instantiate(generated);owned.Add(mesh);mesh.RecalculateNormals();
+                var colors=new Color32[mesh.vertexCount];for(int i=0;i<colors.Length;i++)colors[i]=new Color32(255,255,255,255);mesh.colors32=colors;
+                var node=new GameObject(image.name+" 原生受光面",typeof(MeshFilter),typeof(MeshRenderer));
+                node.layer=stage.gameObject.layer;node.transform.SetParent(image.transform,false);
+                // Distinct nested surfaces need a real depth interval. Tiny
+                // global offsets fight at the isolated stage's world position.
+                int depth=0;
+                for(var p=image.transform.parent;p!=null&&p.GetComponent<Canvas>()==null;p=p.parent)depth++;
+                node.transform.localPosition=new Vector3(0,0,-2-depth*4);
+                node.GetComponent<MeshFilter>().sharedMesh=mesh;
+                var material=new Material(stage.bookLitMaterial){mainTexture=image.mainTexture,color=image.color};
+                material.SetFloat("_Smoothness",.04f);owned.Add(material);
+                var renderer=node.GetComponent<MeshRenderer>();renderer.sharedMaterial=material;
+                renderer.shadowCastingMode=ShadowCastingMode.On;renderer.receiveShadows=true;
+                var face=new Face{Source=image,Renderer=renderer,Material=material,Mesh=mesh,Group=image.GetComponentInParent<CanvasGroup>()};
+                faces.Add(face);image.canvasRenderer.SetAlpha(0);
+                bool carrier=image.transform.parent!=null&&image.transform.parent.GetComponent<Canvas>()!=null;
+                if(carrier)AddDeskContact(face);
+                else if(image.GetComponent<Hd2DContainerStyle>()!=null||image.GetComponent<Button>()!=null)AddContact(face);
+            }
+        }
+        private static void Clear(Image image){if(image!=null){image.color=Color.clear;image.raycastTarget=false;}}
+        private static void ClearCarrier(Image image)
+        {
+            if(image==null)return;
+            image.color=Color.clear;
+            var button=image.GetComponent<Button>();
+            image.raycastTarget=button!=null&&button.targetGraphic==image;
+        }
+        private void FitPaperHeight(RectTransform region,float minimum)
+        {
+            if(region==null)return;
+            float bottom=0;
+            foreach(var child in region.Cast<Transform>().OfType<RectTransform>())
+            {
+                if(!child.gameObject.activeSelf||child.name=="正式皮肤"||child.name.StartsWith("细边_")||
+                    child.anchorMin!=child.anchorMax)continue;
+                bottom=Mathf.Max(bottom,-child.anchoredPosition.y+child.pivot.y*child.rect.height);
+            }
+            if(bottom<=0)return;
+            Remember(region);
+            region.sizeDelta=new Vector2(region.sizeDelta.x,Mathf.Min(region.rect.height,Mathf.Max(minimum,bottom+24)));
+        }
+        private void Surface(RectTransform region,Sprite artwork)
+        {
+            if(region==null||artwork==null)return;
+            var image=region.GetComponent<Image>();if(image==null)return;
+            image.sprite=artwork;image.type=Image.Type.Tiled;image.color=Color.white;
+            image.raycastTarget=image.GetComponent<Selectable>()!=null;
+            image.pixelsPerUnitMultiplier=.90f;
+        }
+        private void IntactTray(RectTransform region)
+        {
+            if(region==null||tray==null)return;
+            ClearCarrier(region.GetComponent<Image>());
+            var go=new GameObject("独立原生工作托盘",typeof(RectTransform),typeof(Image));owned.Add(go);go.transform.SetParent(region,false);
+            var r=(RectTransform)go.transform;r.anchorMin=r.anchorMax=new Vector2(.5f,1);r.pivot=new Vector2(.5f,1);
+            r.anchoredPosition=new Vector2(0,6);r.sizeDelta=new Vector2(region.rect.width,110);
+            var image=go.GetComponent<Image>();image.sprite=tray;image.type=Image.Type.Tiled;
+            image.raycastTarget=false;image.color=Color.white;go.AddComponent<Hd2DContainerStyle>();go.transform.SetAsFirstSibling();
+        }
+        private void Workshop()
+        {
+            Clear(Find("强化台")?.GetComponent<Image>());Clear(Find("库存")?.GetComponent<Image>());
+            Place(Find("页签_装备锻造"),new Vector3(-2.62f,3.08f,.35f),1.05f);
+            Place(Find("页签_术式专精"),new Vector3(-1.30f,3.08f,.35f),1.05f);
+            // The two work positions have their own support and world depth.
+            var target=Find("强化目标位");Surface(target,Hd2DPaperSkin.Load());Place(target,new Vector3(-2.85f,2.53f,.05f),1.38f);
+            var material=Find("强化材料位");Surface(material,Hd2DPaperSkin.Load());Place(material,new Vector3(-1.20f,2.53f,-.02f),1.38f);
+            Find("强化台标题")?.gameObject.SetActive(false);
+            var preview=Find("强化预览");Surface(preview,Hd2DPaperSkin.Load());Place(preview,new Vector3(1.65f,2.62f,.12f),1.08f);
+            // Inventory cards are separate papers on the desk, not inside another panel.
+            var inventory=Find("库存");
+            if(inventory!=null)
+            {
+                int i=0;
+                foreach(var card in inventory.Cast<Transform>().Where(x=>x.name.StartsWith("工坊卡_")).ToArray())
+                    Place(card as RectTransform,new Vector3(-2.53f+i++*1.78f,1.68f,-.85f),1.23f);
+                foreach(var child in inventory.Cast<Transform>().ToArray())
+                    if(child.name=="库存页签"||child.name=="库存提示")child.gameObject.SetActive(false);
+                Place(inventory,new Vector3(0,1.68f,-.85f),1.13f);
+            }
+            Place(Find("操作提示"),new Vector3(-.5f,1.24f,-1.25f),.90f);
+            Find("页签说明")?.gameObject.SetActive(false);
+            MoveReturns();
+        }
+        private void Medical()
+        {
+            var dossier=Find("医务室身份卡");Surface(dossier,Hd2DPaperSkin.Load());FitPaperHeight(dossier,520);
+            Place(dossier,new Vector3(-2.75f,1.95f,-.4f),.94f);
+            // Keep the service operations in their original reading order.
+            var heading=Find("医务室页眉");var title=Find("页面标题");
+            if(heading!=null&&title!=null)
+            {
+                Remember(title);title.SetParent(heading,false);title.anchorMin=title.anchorMax=title.pivot=new Vector2(0,1);
+                title.anchoredPosition=new Vector2(20,-4);
+            }
+            Place(heading,new Vector3(1.35f,2.15f,1.05f),1.08f);
+            Surface(heading,Hd2DPaperSkin.Load());
+            var treatment=Find("服务_接受治疗");Surface(treatment,Hd2DPaperSkin.Load());Place(treatment,new Vector3(1.32f,2.67f,.05f),1.12f);
+            var meals=Find("服务_餐食选择");
+            SeparateMeals(meals);
+            foreach(var row in dossier.GetComponentsInChildren<Image>(true))if(row.name.StartsWith("读数_"))Clear(row);
+            MoveReturns();
+        }
+        private void SeparateMeals(RectTransform meals)
+        {
+            if(meals==null)return;
+            Clear(meals.GetComponent<Image>());
+            foreach(var line in meals.GetComponentsInChildren<Image>(true))
+                if(line.rectTransform.rect.width<=5)Clear(line);
+            // The description is a small note. Each original action and price
+            // has a separate desk position, keeping hover and callbacks intact.
+            var note=new GameObject("餐食说明纸签",typeof(RectTransform),typeof(Image));owned.Add(note);
+            note.transform.SetParent(meals,false);
+            var r=(RectTransform)note.transform;r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);
+            r.sizeDelta=new Vector2(840,124);r.anchoredPosition=Vector2.zero;
+            Surface(r,Hd2DPaperSkin.Load());
+            foreach(var child in meals.Cast<Transform>().OfType<RectTransform>().ToArray())
+            {
+                if(child==r||child.GetComponent<Button>()!=null||child.name.StartsWith("餐食价格_"))continue;
+                if(child.name.StartsWith("餐食"))
+                {
+                    Remember(child);child.SetParent(r,false);
+                    if(child.name=="餐食标题"||child.name=="餐食说明")child.sizeDelta=new Vector2(600,child.sizeDelta.y);
+                    if(child.name=="餐食状态"){child.anchoredPosition=new Vector2(600,-20);child.sizeDelta=new Vector2(220,40);}
+                }
+            }
+            Place(r,new Vector3(1.32f,2.20f,.12f),1.12f);
+            var buttons=meals.GetComponentsInChildren<Button>(true).Where(x=>x.transform.parent==meals).OrderBy(x=>((RectTransform)x.transform).anchoredPosition.x).ToArray();
+            for(int i=0;i<buttons.Length;i++)
+            {
+                var button=(RectTransform)buttons[i].transform;
+                var price=meals.Cast<Transform>().OfType<RectTransform>().FirstOrDefault(x=>x.name.StartsWith("餐食价格_")&&Mathf.Abs(x.anchoredPosition.x-button.anchoredPosition.x)<2);
+                var offer=new GameObject("独立餐食位_"+i,typeof(RectTransform));owned.Add(offer);offer.transform.SetParent(meals,false);
+                var offerRect=(RectTransform)offer.transform;offerRect.sizeDelta=new Vector2(400,110);
+                if(price!=null){Remember(price);price.SetParent(offerRect,false);price.anchorMin=price.anchorMax=price.pivot=new Vector2(0,1);price.anchoredPosition=new Vector2(0,0);}
+                Remember(button);button.SetParent(offerRect,false);button.anchorMin=button.anchorMax=button.pivot=new Vector2(0,1);button.anchoredPosition=new Vector2(0,-40);
+                Place(offerRect,new Vector3(-.13f+i*1.45f,1.90f,-.65f),1.12f);
+            }
+        }
+        private void Shop()
+        {
+            Find("商店页眉")?.gameObject.SetActive(false);
+            var shell=GetComponentInChildren<FormalRogueliteServiceShellView>();
+            // Each offer, price and action remains together on an independent display pad.
+            // Grouping by authored X preserves existing order and all original callbacks.
+            var candidates=shell.Body.Cast<Transform>().OfType<RectTransform>().Where(x=>x.name!="商店页眉").ToArray();
+            var groups=new List<RectTransform>();
+            for(int i=0;i<3;i++)
+            {
+                var go=new GameObject("商品陈列台_"+i,typeof(RectTransform));owned.Add(go);go.transform.SetParent(shell.Body,false);
+                var r=(RectTransform)go.transform;r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);
+                r.sizeDelta=new Vector2(460,640);r.anchoredPosition=new Vector2(236+i*492,-228);groups.Add(r);
+                var pad=go.AddComponent<Image>();pad.sprite=Hd2DPaperSkin.Load();pad.type=Image.Type.Tiled;
+                pad.pixelsPerUnitMultiplier=.6f;pad.color=Color.white;pad.raycastTarget=false;
+            }
+            foreach(var item in candidates)
+            {
+                Remember(item);
+                var bodyPosition=shell.Body.InverseTransformPoint(item.position);
+                int i=Mathf.Clamp(Mathf.RoundToInt((bodyPosition.x-shell.Body.rect.xMin-236)/492),0,2);
+                var p=groups[i].InverseTransformPoint(item.position);
+                item.SetParent(groups[i],false);item.anchorMin=item.anchorMax=new Vector2(0,1);item.anchoredPosition3D=p;
+                // The shared pinned-card contents remain intact; only the
+                // duplicate outer sheet yields to the scene's display paper.
+                if(item.rect.width>400&&item.rect.height>250&&item.GetComponent<Button>()==null)
+                {
+                    Clear(item.GetComponent<Image>());
+                    foreach(var frame in item.GetComponentsInChildren<Image>(true))
+                        if(frame.name=="悬浮详情")ClearCarrier(frame);
+                }
+            }
+            foreach(var group in groups)
+                foreach(var support in group.GetComponentsInChildren<Image>(true))
+                    if(support.name.StartsWith("商品托盘_")&&tray!=null)
+                    {
+                        support.sprite=tray;support.type=Image.Type.Tiled;support.preserveAspect=false;support.color=Color.white;
+                        support.rectTransform.sizeDelta=new Vector2(340,140);
+                        support.rectTransform.anchoredPosition+=new Vector2(-74,-28);
+                        var product=support.GetComponentsInChildren<Image>(true).FirstOrDefault(x=>x.name.StartsWith("托盘商品_"));
+                        if(product!=null){product.rectTransform.sizeDelta=new Vector2(96,96);product.rectTransform.anchoredPosition=new Vector2(122,22);}
+                        foreach(var shadow in support.GetComponentsInChildren<Image>(true))if(shadow.name.StartsWith("商品接触影_"))Clear(shadow);
+                    }
+            for(int i=0;i<groups.Count;i++)
+            {
+                FitPaperHeight(groups[i],420);
+                Surface(groups[i],Hd2DPaperSkin.Load());
+                foreach(var image in groups[i].GetComponentsInChildren<Image>(true))
+                    if(image.name.StartsWith("内容指标格")||image.name=="图标画框"||image.name=="商品价格纸签")ClearCarrier(image);
+                Place(groups[i],new Vector3(-1.85f+i*2.15f,1.95f,-.15f+i*.06f),1.20f);
+            }
+            int index=0;
+            foreach(var button in shell.Footer.GetComponentsInChildren<Button>().ToArray())
+                Place((RectTransform)button.transform,new Vector3(-.3f+index++*2.45f,1.30f,-1.55f),1.05f);
+            Place(Find("市集零钱柜台"),new Vector3(-3.40f,2.98f,.3f),1.15f);
+            Place(Find("柜台零钱托盘"),new Vector3(-3.40f,3.03f,.3f),1.15f);
+        }
+        private void Event()
+        {
+            Clear(Find("全屏节点房间")?.GetComponent<Image>());
+            var identity=Find("节点身份页");Surface(identity,Hd2DPaperSkin.Load());FitPaperHeight(identity,440);
+            Place(identity,new Vector3(-2.55f,2.48f,0),1.18f);
+            var decisions=Find("节点交互页");Clear(decisions?.GetComponent<Image>());
+            RectTransform noteRect=null;
+            if(decisions!=null)
+            {
+                // A note, individual choices and the return plaque replace the
+                // old wall-sized blank decision sheet. Keep all existing actions.
+                var note=new GameObject("节点说明便笺",typeof(RectTransform),typeof(Image));owned.Add(note);
+                note.transform.SetParent(decisions,false);note.transform.SetAsFirstSibling();
+                var rect=(RectTransform)note.transform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(0,1);
+                rect.anchoredPosition=new Vector2(24,-20);rect.sizeDelta=new Vector2(1080,180);
+                noteRect=rect;
+                var image=note.GetComponent<Image>();image.sprite=Hd2DPaperSkin.Load();image.type=Image.Type.Tiled;
+                image.color=Color.white;image.raycastTarget=false;note.AddComponent<Hd2DContainerStyle>();
+            }
+            Place(decisions,new Vector3(1.14f,2.43f,-.02f),1.10f);
+            if(noteRect!=null)
+            {
+                foreach(var child in decisions.Cast<Transform>().OfType<RectTransform>().ToArray())
+                {
+                    if(child==noteRect||child.GetComponent<Button>()!=null)continue;
+                    if(child.name!="页面标题"&&child.name!="页面说明"&&child.GetComponent<Image>()==null)continue;
+                    Remember(child);var p=child.anchoredPosition-noteRect.anchoredPosition;
+                    child.SetParent(noteRect,false);child.anchoredPosition=p;
+                }
+                Place(noteRect,new Vector3(1.14f,2.82f,.4f),1.10f);
+                foreach(var button in decisions.GetComponentsInChildren<Button>(true).Where(x=>x.transform.parent==decisions).ToArray())
+                {
+                    var rect=(RectTransform)button.transform;var p=rect.anchoredPosition;
+                    float x=1.14f+(p.x+rect.rect.width*.5f-582)*.003344f;
+                    Place(rect,new Vector3(x,2.60f+p.y*.001f,.1f),1.10f);
+                }
+            }
+            Place(Find("页眉"),new Vector3(0,4.15f,.4f),1.05f);
+            var outer=Find("全屏节点房间");if(outer!=null)
+                foreach(var graphic in outer.GetComponentsInChildren<Image>(true))
+                    if(graphic.rectTransform.rect.width<=2)Clear(graphic);
+        }
+        private void MoveReturns()
+        {
+            var returns=GetComponentsInChildren<Button>(true).Concat(world.GetComponentsInChildren<Button>(true))
+                .Where(x=>x.name=="按钮_返回地图").Distinct().ToArray();
+            for(int i=0;i<returns.Length;i++)
+            {
+                if(i>0){returns[i].gameObject.SetActive(false);continue;}
+                Place((RectTransform)returns[i].transform,new Vector3(2.75f,1.28f,-1.58f),1.30f);
+            }
+        }
+        private Sprite LoadArtwork(string name,Vector4 border)
+        {
+            var formal=Resources.Load<Sprite>("Art/Hd2DServiceObjects/"+name);if(formal!=null)return formal;
+            // Production screens must use imported resources in both Editor and Player.
+            // Archive-only candidates remain outside the running interface.
+            string resource=name=="记录夹"?"Art/Hd2DContent20261009/student_dossier":
+                name=="药剂提箱"?"Art/FormalAcademyStructures32/academy_prop_potion_case":null;
+            return resource==null?null:Resources.Load<Sprite>(resource);
+        }
+        private void Place(RectTransform region,Vector3 position,float scale)
+        {
+            if(region==null)return;
+            Remember(region);
+            Vector2 size=region.rect.size;
+            var go=new GameObject(region.name+" 独立场景层",typeof(RectTransform),typeof(Canvas),typeof(Hd2DSceneGraphicRaycaster));
+            go.transform.SetParent(world.transform,false);go.layer=stage.gameObject.layer;
+            var r=(RectTransform)go.transform;r.sizeDelta=size;
+            bool heading=region.name=="页眉"||region.name=="页面标题"||region.name=="医务室页眉"||(size.x>1500&&size.y<120);
+            if(!heading)
+            {
+                // Anchor the near edge on the desk. Authoring Y selects the back/
+                // front row; it must not leave the carrier suspended over the table.
+                float height=size.y*.0032f*scale*.95f;
+                position.z=Mathf.Clamp((position.y-2.3f)*1.3f+position.z*.15f,-.85f,1.2f);
+                float pitch=Vector3.Angle(stage.transform.up,stage.sceneCamera.transform.up)*Mathf.Deg2Rad;
+                position.y=1.44f+height*.5f*Mathf.Cos(pitch);
+                if(region.name.StartsWith("页签_")){position.y=2.42f;position.z=.60f;}
+                if(region.name=="按钮_返回地图"||region.name=="按钮_离开商店"||region.name=="按钮_打开行囊")
+                {position.y=1.63f;position.z=-1.55f;}
+            }
+            r.position=stage.transform.TransformPoint(position);
+            r.rotation=stage.sceneCamera.transform.rotation;
+            r.localScale=Vector3.one*(.0032f*scale*.95f/r.parent.lossyScale.x);
+            var canvas=go.GetComponent<Canvas>();canvas.renderMode=RenderMode.WorldSpace;canvas.worldCamera=stage.sceneCamera;
+            canvas.overrideSorting=true;canvas.sortingOrder=GetComponentInParent<Canvas>().sortingOrder;
+            region.SetParent(r,false);region.anchorMin=region.anchorMax=region.pivot=new Vector2(.5f,.5f);
+            region.sizeDelta=size;region.anchoredPosition3D=Vector3.zero;region.localScale=Vector3.one;region.localRotation=Quaternion.identity;
+            foreach(var t in region.GetComponentsInChildren<Transform>(true))t.gameObject.layer=stage.gameObject.layer;
+            foreach(var button in region.GetComponentsInChildren<Button>(true))
+            {
+                button.GetComponent<UiButtonFeedback>()?.UseSceneSpaceFeedback();
+                if(button.GetComponent<Hd2DSceneControl>()==null)button.gameObject.AddComponent<Hd2DSceneControl>();
+            }
+        }
+        private void Remember(RectTransform region)
+        {
+            if(poses.Any(x=>x.Rect==region))return;
+            poses.Add(new Pose{Rect=region,Parent=region.parent,Min=region.anchorMin,Max=region.anchorMax,Pivot=region.pivot,
+                Size=region.sizeDelta,Position=region.anchoredPosition3D,Scale=region.localScale,Rotation=region.localRotation});
+        }
+        private void AddContact(Face face)
+        {
+            var shader=Shader.Find("OCC/HD2D/ContactShadow");if(shader==null)return;
+            var source=face.Source;
+            var go=new GameObject(source.name+" 接触影",typeof(MeshFilter),typeof(MeshRenderer));
+            go.layer=stage.gameObject.layer;go.transform.SetParent(source.transform.parent,false);
+            go.transform.localPosition=source.transform.localPosition+new Vector3(5,-9,18);
+            go.transform.localRotation=source.transform.localRotation;go.transform.localScale=source.transform.localScale;
+            go.GetComponent<MeshFilter>().sharedMesh=face.Mesh;
+            var material=new Material(shader){mainTexture=source.mainTexture,color=new Color(.045f,.04f,.035f,.24f)};owned.Add(material);
+            face.Shadow=go.GetComponent<MeshRenderer>();face.Shadow.sharedMaterial=material;
+            face.Shadow.shadowCastingMode=ShadowCastingMode.Off;face.Shadow.receiveShadows=false;
+            source.GetComponent<Hd2DSceneControl>()?.SetShadow(face.Shadow);
+        }
+        private void AddDeskContact(Face face)
+        {
+            var shader=Shader.Find("OCC/HD2D/ContactShadow");if(shader==null)return;
+            // Freeze a silhouette onto the receiving desk, rather than offsetting
+            // it on the UI plane. No per-frame raycasts or shadow-map light needed.
+            var mesh=Instantiate(face.Mesh);owned.Add(mesh);var vertices=mesh.vertices;
+            for(int i=0;i<vertices.Length;i++)
+            {
+                var p=stage.transform.InverseTransformPoint(face.Renderer.transform.TransformPoint(vertices[i]));
+                float height=Mathf.Max(0,p.y-1.426f);
+                p.x+=height*.16f;p.z+=height*.08f;p.y=1.426f;
+                vertices[i]=p;
+            }
+            mesh.vertices=vertices;mesh.RecalculateBounds();
+            var go=new GameObject(face.Source.name+" 桌面承接投影",typeof(MeshFilter),typeof(MeshRenderer));
+            go.layer=stage.gameObject.layer;go.transform.SetParent(world.transform,false);go.GetComponent<MeshFilter>().sharedMesh=mesh;
+            var material=new Material(shader){mainTexture=face.Source.mainTexture,color=new Color(.04f,.05f,.06f,.22f)};owned.Add(material);
+            face.Shadow=go.GetComponent<MeshRenderer>();face.Shadow.sharedMaterial=material;
+            face.Shadow.shadowCastingMode=ShadowCastingMode.Off;face.Shadow.receiveShadows=false;
+            if(face.Source.sprite!=Hd2DPaperSkin.Load())return;
+            // A second native paper silhouette exposes the physical page edge.
+            var edge=new GameObject(face.Source.name+" 纸页厚度",typeof(MeshFilter),typeof(MeshRenderer));
+            edge.layer=stage.gameObject.layer;edge.transform.SetParent(face.Source.transform,false);
+            edge.transform.localPosition=new Vector3(0,-5,10);edge.GetComponent<MeshFilter>().sharedMesh=face.Mesh;
+            var edgeMaterial=new Material(face.Material){color=new Color(.72f,.73f,.70f,1)};owned.Add(edgeMaterial);
+            face.Edge=edge.GetComponent<MeshRenderer>();face.Edge.sharedMaterial=edgeMaterial;
+        }
+        private void BuildLighting()
+        {
+            stage.lampLight.enabled=false;
+            foreach(string name in new[]{"独立桌边植物","独立以太灯","灯内晶体","实体茶碟","实体杯身","杯中茶面","杯把外侧","杯把接头","桌上固定书脊","独立像素杯碟候选"})
+            {var prop=stage.transform.Find(name);if(prop!=null)prop.gameObject.SetActive(false);}
+            var go=new GameObject("服务桌面中性窗光",typeof(Light));go.transform.SetParent(world.transform,false);
+            go.transform.position=stage.transform.TransformPoint(new Vector3(0,5,-1));
+            var light=go.GetComponent<Light>();light.type=LightType.Point;light.intensity=10;light.range=10;
+            light.intensity=14;light.range=12;
+            light.color=new Color(.96f,.98f,1);light.cullingMask=1<<stage.gameObject.layer;light.shadows=LightShadows.None;
+            if(kind=="medical")
+                PlaceArtwork("医务室药剂提箱",LoadArtwork("药剂提箱",Vector4.zero),new Vector3(-3.6f,3.2f,1),.95f);
+            if(kind=="shop")
+                PlaceArtwork("学院市集计价天平",LoadArtwork("市集天平",Vector4.zero),new Vector3(-3.35f,1.85f,-.6f),.36f);
+            if(kind=="workshop")
+                PlaceArtwork("工坊随身工具包",Resources.Load<Sprite>("Art/FormalAcademyStructures32/academy_prop_tool_satchel"),new Vector3(-3.6f,3.2f,1),.95f);
+            if(clipboard!=null&&kind=="event")
+            {
+                // Adaptive objects retain their natural pixel density. A small
+                // native clipboard accompanies the larger readable dossier.
+                var note=new GameObject("原生记录夹桌面物件",typeof(SpriteRenderer));note.layer=stage.gameObject.layer;
+                note.transform.SetParent(world.transform,false);note.transform.position=stage.transform.TransformPoint(new Vector3(-2.75f,1.63f,-1.0f));
+                note.transform.rotation=stage.transform.rotation*Quaternion.Euler(58,0,0);
+                note.transform.localScale=Vector3.one*(clipboard.pixelsPerUnit/Hd2DDeskArtCandidate.ScenePixelsPerUnit);
+                var renderer=note.GetComponent<SpriteRenderer>();renderer.sprite=clipboard;
+                var material=new Material(stage.bookLitMaterial){mainTexture=clipboard.texture};owned.Add(material);renderer.sharedMaterial=material;
+                renderer.shadowCastingMode=ShadowCastingMode.On;renderer.receiveShadows=true;
+            }
+            // Existing approved native book adds a physical foreground anchor without a new model.
+            var sprite=Resources.Load<Sprite>("Art/Hd2DContent20261009/student_dossier");
+            if(sprite!=null&&kind=="event"&&clipboard==null)
+            {
+                var prop=new GameObject("服务记录册前景",typeof(SpriteRenderer));prop.transform.SetParent(world.transform,false);prop.layer=stage.gameObject.layer;
+                prop.transform.position=stage.transform.TransformPoint(new Vector3(-3.1f,1.63f,-.98f));
+                prop.transform.rotation=stage.transform.rotation*Quaternion.Euler(58,0,0);
+                prop.transform.localScale=Vector3.one*(sprite.pixelsPerUnit/Hd2DDeskArtCandidate.ScenePixelsPerUnit);
+                var renderer=prop.GetComponent<SpriteRenderer>();renderer.sprite=sprite;
+                var material=new Material(stage.bookLitMaterial){mainTexture=sprite.texture};owned.Add(material);renderer.sharedMaterial=material;
+                renderer.shadowCastingMode=ShadowCastingMode.On;renderer.receiveShadows=true;
+            }
+        }
+        private void PlaceArtwork(string name,Sprite sprite,Vector3 position,float scale)
+        {
+            if(sprite==null)return;
+            var go=new GameObject(name,typeof(RectTransform),typeof(Image));owned.Add(go);go.transform.SetParent(world.transform,false);
+            var rect=(RectTransform)go.transform;
+            rect.sizeDelta=sprite.rect.size/(Hd2DDeskArtCandidate.ScenePixelsPerUnit*.0032f*scale*.95f);
+            var image=go.GetComponent<Image>();image.sprite=sprite;image.type=Image.Type.Simple;
+            image.preserveAspect=true;image.raycastTarget=false;image.color=Color.white;
+            Place(rect,position,scale);
+        }
+        internal void RestoreLayout()
+        {
+            bool restore=true;
+#if UNITY_EDITOR
+            restore=UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode;
+#endif
+            if(restore)foreach(var pose in poses)
+            {
+                var rect=pose.Rect;if(rect==null)continue;
+                if(pose.Parent==null){Destroy(rect.gameObject);continue;}
+                rect.SetParent(pose.Parent,false);rect.anchorMin=pose.Min;rect.anchorMax=pose.Max;rect.pivot=pose.Pivot;
+                rect.sizeDelta=pose.Size;rect.anchoredPosition3D=pose.Position;rect.localScale=pose.Scale;rect.localRotation=pose.Rotation;
+            }
+            foreach(var face in faces)if(face.Source!=null)face.Source.canvasRenderer.SetAlpha(1);
+            if(world!=null){world.SetActive(false);Destroy(world);}world=null;
+            foreach(var item in owned)if(item!=null)Destroy(item);owned.Clear();faces.Clear();poses.Clear();built=false;readyAt=Time.unscaledTime+.48f;
+        }
+        private void OnDestroy()=>RestoreLayout();
+    }
+}

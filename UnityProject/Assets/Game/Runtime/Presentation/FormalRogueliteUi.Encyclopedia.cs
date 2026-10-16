@@ -24,6 +24,8 @@ namespace OCC.Combat.Presentation
         private static readonly string[] EncyclopediaSections =
             { "术式", "装备", "法宝", "战斗规则", "状态与地形", "敌人与机关" };
         private string encyclopediaSection = "术式";
+        private readonly Dictionary<string,float> rememberedGalleryPositions=new Dictionary<string,float>();
+        private string displayedGalleryKey;
         private string encyclopediaBuildFilter = "全部";
         private string encyclopediaQuery = string.Empty;
         private Transform encyclopediaGallery;
@@ -32,7 +34,7 @@ namespace OCC.Combat.Presentation
 
         private void DrawEncyclopedia()
         {
-            Header("战斗百科", "术式 · 装备 · 法宝 · 战斗档案");
+            Header("战斗百科", "术式　装备　法宝　战斗档案");
             GameObject heading = content.transform.Find("页眉")?.gameObject;
             if (heading != null)
             {
@@ -111,6 +113,8 @@ namespace OCC.Combat.Presentation
 
             GameObject scrollObject = Panel("百科卡牌区", content.transform, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(280, -156), new Vector2(1596, 860), FormalUiTheme.Surface);
+            ArchiveUiStyle.PaperContent(scrollObject);
+            displayedGalleryKey=null;
             encyclopediaScroll = scrollObject.AddComponent<ScrollRect>();
             encyclopediaScroll.horizontal = false;
             encyclopediaScroll.vertical = true;
@@ -135,6 +139,9 @@ namespace OCC.Combat.Presentation
         private void RefreshEncyclopediaGallery()
         {
             if (encyclopediaGallery == null) return;
+            if(encyclopediaScroll!=null && !string.IsNullOrEmpty(displayedGalleryKey))
+                rememberedGalleryPositions[displayedGalleryKey]=encyclopediaScroll.verticalNormalizedPosition;
+            displayedGalleryKey=encyclopediaSection+"|"+encyclopediaBuildFilter+"|"+encyclopediaQuery;
             foreach (Transform child in encyclopediaGallery)
             {
                 child.gameObject.SetActive(false);
@@ -163,7 +170,11 @@ namespace OCC.Combat.Presentation
             }
             RectTransform rect = encyclopediaGallery as RectTransform;
             if (rect != null) rect.sizeDelta = new Vector2(1552, Math.Max(860f, 48f + (float)Math.Ceiling(entries.Count / (double)columns) * stepY));
-            if (encyclopediaScroll != null) encyclopediaScroll.verticalNormalizedPosition = 1f;
+            if (encyclopediaScroll != null)
+            {
+                Canvas.ForceUpdateCanvases();
+                encyclopediaScroll.verticalNormalizedPosition=rememberedGalleryPositions.TryGetValue(displayedGalleryKey,out float remembered)?remembered:1;
+            }
         }
 
         private void DrawEncyclopediaContentCard(EncyclopediaEntry entry, Vector2 position)
@@ -181,6 +192,7 @@ namespace OCC.Combat.Presentation
             Sprite sprite = Resources.Load<Sprite>(info.IconPath);
             Image icon = FormalUiKit.TopLeftIconSlot("内容图标", card.transform, sprite, new Vector2(24, -54));
             icon.rectTransform.sizeDelta = new Vector2(64, 64);
+            OccItemSurface.AttachByIcon(card,icon,()=>bootstrap.UiPreferences.AnimationIntensity);
             Label("名称", info.Title, card.transform, new Vector2(104, -50), new Vector2(350, 40), 24, text, TextAnchor.MiddleLeft);
             if (!isSpell)
                 Label("身份", info.Identity, card.transform, new Vector2(104, -92), new Vector2(350, 36), 16, muted, TextAnchor.MiddleLeft);
@@ -210,6 +222,7 @@ namespace OCC.Combat.Presentation
             FormalTooltipContent info = entry.Card;
             GameObject card = Panel("百科条目_" + entry.Name, encyclopediaGallery, new Vector2(0, 1), new Vector2(0, 1),
                 position, new Vector2(480, 132), FormalUiTheme.SurfaceRaised);
+            ArchiveUiStyle.PaperPanel(card, ArchiveUiStyle.LightPaper, false);
             Line(card.transform, Vector2.zero, new Vector2(4, 132), info.Accent);
             Label("名称", info.Title, card.transform, new Vector2(20, -14), new Vector2(440, 32), 22, info.Accent, TextAnchor.MiddleLeft);
             Text body = Label("正文", info.Effect, card.transform, new Vector2(20, -54),

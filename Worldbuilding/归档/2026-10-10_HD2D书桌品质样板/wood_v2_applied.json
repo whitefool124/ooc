@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":false,\"code\":\"COMPILATION_FAILED\",\"error\":\"COMPILATION_FAILED\",\"data\":{\"compiler\":\"Roslyn\",\"errors\":[{\"line\":23,\"column\":32,\"text\":\"'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'\",\"code\":\"CS0619\"},{\"line\":23,\"column\":311,\"text\":\"'Object.GetInstanceID()' is obsolete: 'GetInstanceID is deprecated. Use GetEntityId instead. This will be removed in a future version.'\",\"code\":\"CS0619\"}],\"compiler_attempts\":[{\"compiler\":\"Roslyn\",\"status\":\"CompilationFailed\",\"message\":\"Roslyn csc reported compilation errors.\"}],\"hint\":\"Roslyn is tried first for modern C# syntax while preserving execute_code's in-memory compilation/execution flow.\"}}"
+      }
+    ]
+  }
+}

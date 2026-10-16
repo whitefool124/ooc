@@ -1,0 +1,53 @@
+{
+  "status": "DIAGNOSTIC_ONLY",
+  "device": "NVIDIA GeForce RTX 3060 Laptop GPU",
+  "cpu": "AMD Ryzen 7 5800H with Radeon Graphics ",
+  "quality": "Very Low",
+  "noFocus": true,
+  "samples": [
+    {
+      "resolution": [
+        1920,
+        1080
+      ],
+      "offscreenBattleResolution": [
+        1888,
+        768
+      ],
+      "sampleCount": 20,
+      "cameraRenderCpuSubmissionMedianMs": 5.6091000000000006,
+      "cameraRenderCpuSubmissionP95Ms": 7.2425000000000006,
+      "fov": 16.0,
+      "cameraPosition": [
+        402.850342,
+        512.546936,
+        391.382477
+      ],
+      "scope": "Synchronous Editor Camera.Render submission only; excludes full UI/game frame, GPU frame timing and Player performance",
+      "budgetPass": null
+    },
+    {
+      "resolution": [
+        960,
+        540
+      ],
+      "offscreenBattleResolution": [
+        944,
+        384
+      ],
+      "sampleCount": 20,
+      "cameraRenderCpuSubmissionMedianMs": 5.5354,
+      "cameraRenderCpuSubmissionP95Ms": 6.9391000000000007,
+      "fov": 16.0,
+      "cameraPosition": [
+        402.850342,
+        512.546936,
+        391.382477
+      ],
+      "scope": "Synchronous Editor Camera.Render submission only; excludes full UI/game frame, GPU frame timing and Player performance",
+      "budgetPass": null
+    }
+  ],
+  "fullFramePerformance": "NOT_MEASURED",
+  "motionHumanReview": "PENDING"
+}

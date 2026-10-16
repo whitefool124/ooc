@@ -1,0 +1,49 @@
+{
+  "scope": "single native32 material probe, actual URP offscreen rendering; not normal-entry game/UI or performance",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "activeScenePreserved": true,
+  "dirty": false,
+  "play": false,
+  "normalStrength": 0.55,
+  "normalGreenFlip": false,
+  "Id": "academy_aether_crystal_intact",
+  "shaderName": "OCC/HD2D/GroundedSprite",
+  "maps": [
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/RemainingSprites/academy_aether_crystal_intact/normal.png",
+      "guid": "b3dbcffdbdd5b2f4d95645027144a7c5",
+      "width": 96,
+      "height": 64,
+      "filter": "Point",
+      "type": "NormalMap",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    },
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/RemainingSprites/academy_aether_crystal_intact/regions.png",
+      "guid": "4320555de2ba5f94580c44ee854a901f",
+      "width": 96,
+      "height": 64,
+      "filter": "Point",
+      "type": "Default",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    }
+  ],
+  "uniformSurface": 0.3,
+  "metallic": 0.0,
+  "coat": 0.0,
+  "captures": [
+    "baseline_1080.png",
+    "baseline_540.png",
+    "full_1080.png",
+    "full_540.png",
+    "neutral_light_1080.png",
+    "normal_only_1080.png",
+    "rotated_light_1080.png",
+    "surface_only_1080.png"
+  ],
+  "messages": []
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "manifest": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/normal_manifest.json",
+    "status": "FAIL",
+    "errors": [
+      "unknown role: hd2d_material_data_32"
+    ],
+    "validator_result": {}
+  },
+  {
+    "manifest": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_manifest.json",
+    "status": "FAIL",
+    "errors": [
+      "unknown role: hd2d_material_data_32"
+    ],
+    "validator_result": {}
+  },
+  {
+    "manifest": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_manifest.json",
+    "status": "FAIL",
+    "errors": [
+      "unknown role: hd2d_material_data_32"
+    ],
+    "validator_result": {}
+  },
+  {
+    "manifest": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/roughness_manifest.json",
+    "status": "FAIL",
+    "errors": [
+      "unknown role: hd2d_material_data_32"
+    ],
+    "validator_result": {}
+  }
+]

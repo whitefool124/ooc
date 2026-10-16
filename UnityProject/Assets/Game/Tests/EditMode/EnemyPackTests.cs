@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -10,6 +10,22 @@ namespace OCC.Combat.Tests
 {
     public sealed class EnemyPackTests
     {
+        [Test]
+        public void SlowedEnemyPreTurnMovementPreview_UsesItsNextTurnBudget()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(7, 0));
+            var enemy = new UnitState("enemy", false, new GridPosition(0, 0));
+            EnemyArchetypes.Get("raider").Apply(enemy);
+            var state = new CombatState(new GridMap(8, 2), new[] { hero, enemy });
+            CombatEffectExecutor.Execute(state, enemy.Id, CombatEffect.ApplyStatus(enemy.Id, StatusType.Slow, 2));
+            var plans = new EnemyTurnPlanBook();
+            var command = plans.GetExecutionCommand(state, enemy, hero);
+            Assert.That(command.Type, Is.EqualTo(CombatCommandType.Move));
+            Assert.That(command.Destination.ManhattanDistance(enemy.Position), Is.LessThanOrEqualTo(3));
+            CombatResolver.BeginTurn(state, enemy.Id);
+            Assert.DoesNotThrow(() => CombatResolver.Resolve(state, command));
+        }
+
         [Test]
         public void EnemyAttack_IsIntrinsicAndUsesTheSamePreviewAsResolution()
         {
@@ -132,7 +148,7 @@ namespace OCC.Combat.Tests
                     .And.Contain(EnemyAbilityCatalog.TrackerSnap.Id).And.Contain(EnemyAbilityCatalog.TrackerMaul.Id)
                     .And.Contain(EnemyAbilityCatalog.SpotlightMirror.Id).And.Contain(EnemyAbilityCatalog.WindScrollEdge.Id)
                     .And.Contain(EnemyAbilityCatalog.LegacyPulse.Id).And.Contain(EnemyAbilityCatalog.PrototypeDeploy.Id));
-            Assert.That(pack.All(enemy => enemy.MaxHealth >= 10 && enemy.MaxHealth <= 24), Is.True);
+            Assert.That(pack.All(enemy => enemy.MaxHealth >= 10 && enemy.MaxHealth <= 28), Is.True);
         }
 
         [Test]
@@ -185,6 +201,8 @@ namespace OCC.Combat.Tests
         public void BarrierMender_SelectsLargestShieldGapWithStableIdTieBreakAndRestoresShield()
         {
             GridMap map = new GridMap(7, 3);
+            for (int x = 0; x <= 2; x++)
+                map.SetTile(new GridPosition(x, 0), new TileState { Cover = CoverType.Heavy, Durability = TileState.HeavyDurability });
             UnitState hero = new UnitState("hero", true, new GridPosition(6, 1));
             UnitState mender = new UnitState("mender", false, new GridPosition(0, 1));
             UnitState allyA = new UnitState("ally_a", false, new GridPosition(1, 1));
@@ -208,6 +226,8 @@ namespace OCC.Combat.Tests
         public void BarrierMender_SkipsABreakStanceRecipientInRogueliteCombat()
         {
             GridMap map = new GridMap(7, 3);
+            for (int x = 0; x <= 2; x++)
+                map.SetTile(new GridPosition(x, 0), new TileState { Cover = CoverType.Heavy, Durability = TileState.HeavyDurability });
             UnitState hero = new UnitState("hero", true, new GridPosition(6, 1));
             UnitState mender = new UnitState("mender", false, new GridPosition(0, 1));
             UnitState frontline = new UnitState("frontline", false, new GridPosition(2, 1));
@@ -364,4 +384,79 @@ namespace OCC.Combat.Tests
             return new CombatState(map, new[] { hero, enemy });
         }
     }
+    public sealed class EnemyMovementBudgetTests
+    {
+        private static CombatState Lane(out UnitState enemy)
+        {
+            var hero = new UnitState("hero", true, new GridPosition(11, 0));
+            enemy = new UnitState("enemy", false, new GridPosition(0, 0));
+            EnemyArchetypes.Get("shieldguard").Apply(enemy);
+            var state = new CombatState(new GridMap(12, 1), new[] { hero, enemy });
+            state.ConfigureRuleset(CombatRuleset.Roguelite); CombatResolver.BeginTurn(state, enemy.Id);
+            return state;
+        }
+        [Test] public void PursuitSpendsFiveStepsAndEndsWithoutAttacking()
+        {
+            var state = Lane(out var enemy); var hero = state.GetUnit("hero");
+            var command = EnemyTactics.Choose(state, enemy, hero);
+            Assert.That(command.Type, Is.EqualTo(CombatCommandType.Move));
+            Assert.That(command.Destination, Is.EqualTo(new GridPosition(5, 0)));
+            var intent = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command).WithMovementPreview(state, enemy, command);
+            Assert.That(intent.Route.Count, Is.EqualTo(6));
+            int health = hero.Health; CombatResolver.Resolve(state, command);
+            Assert.That(enemy.Position, Is.EqualTo(intent.Destination));
+            Assert.That(enemy.ActionPoints, Is.Zero); Assert.That(hero.Health, Is.EqualTo(health));
+        }
+        [Test] public void WaterConsumesBudgetRatherThanCountingOnlyPathCells()
+        {
+            var state = Lane(out var enemy);
+            state.Map.SetTile(new GridPosition(1, 0), new TileState { IsWater = true });
+            state.Map.SetTile(new GridPosition(2, 0), new TileState { IsWater = true });
+            var command = EnemyTactics.Choose(state, enemy, state.GetUnit("hero"));
+            Assert.That(command.Destination, Is.EqualTo(new GridPosition(3, 0)));
+            Assert.DoesNotThrow(() => CombatResolver.Resolve(state, command));
+        }
+        [Test] public void BindingMarkStopsThePublishedDestination()
+        {
+            var state = Lane(out var enemy);
+            state.Map.SetTile(new GridPosition(2, 0), new TileState { IsBindingMark = true });
+            var command = EnemyTactics.Choose(state, enemy, state.GetUnit("hero"));
+            Assert.That(command.Destination, Is.EqualTo(new GridPosition(2, 0)));
+            CombatResolver.Resolve(state, command); Assert.That(enemy.Position, Is.EqualTo(command.Destination));
+        }
+        [Test] public void SlowCapsPursuitAtThreeAndBindingPreventsMovement()
+        {
+            var state = Lane(out var enemy); enemy.ApplyStatus(StatusType.Slow, 2); CombatResolver.BeginTurn(state, enemy.Id);
+            Assert.That(EnemyTactics.Choose(state, enemy, state.GetUnit("hero")).Destination, Is.EqualTo(new GridPosition(3, 0)));
+            enemy.ApplyStatus(StatusType.Bound, 2);
+            Assert.That(EnemyTactics.Choose(state, enemy, state.GetUnit("hero")).Type, Is.EqualTo(CombatCommandType.EndTurn));
+        }
+    }
+
+    public sealed class EnemyMoveRouteGraphicTests
+    {
+        [Test] public void BentRouteUsesPathLengthAndClearsWhenDisabled()
+        {
+            var root = new GameObject("route mesh");
+            try
+            {
+                var graphic = root.AddComponent<CombatEnemyMoveRouteGraphic>();
+                Assert.That(root.GetComponent<CanvasRenderer>(), Is.Not.Null);
+                Assert.That(graphic.rectTransform, Is.Not.Null);
+                var path = new[] { Vector2.zero, new Vector2(32, 0), new Vector2(32, -32) };
+                Assert.That(CombatEnemyMoveRouteGraphic.Length(path), Is.EqualTo(64));
+                graphic.Refresh(new[] { path }, 32, 0);
+                Assert.That(graphic.raycastTarget, Is.False);
+                using (var vh = new UnityEngine.UI.VertexHelper())
+                {
+                    var populate = typeof(CombatEnemyMoveRouteGraphic).GetMethod("OnPopulateMesh", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.DeclaredOnly);
+                    populate.Invoke(graphic, new object[] { vh }); Assert.That(vh.currentVertCount, Is.GreaterThan(0));
+                    root.SetActive(false); root.SetActive(true);
+                    populate.Invoke(graphic, new object[] { vh }); Assert.That(vh.currentVertCount, Is.Zero);
+                }
+            }
+            finally { UnityEngine.Object.DestroyImmediate(root); }
+        }
+    }
+
 }

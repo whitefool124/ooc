@@ -1,0 +1,29 @@
+{
+  "schema": "occ-registered-prop-material-data-v1",
+  "status": "REVIEW_READY",
+  "source": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/normal_panel.png",
+    "sha256": "a321f704121986ede4d652197c000d5886de8edf8588cc869adac2e9d58f0bde"
+  },
+  "reference": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_heavy_archive_stack_damaged.png",
+    "sha256": "aba5021919ce808b51848d877ea650ac50cdd2a7525e49024cce25fe23e6e39e"
+  },
+  "output": {
+    "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged/normal.png",
+    "sha256": "65ecc6308c39005ba0bf713bedfbfff428f26c527f89df44e5fd2ba9090c2aa2"
+  },
+  "native_grid": [
+    32,
+    32
+  ],
+  "source_macro_pitch_xy": [
+    19.59375,
+    19.59375
+  ],
+  "method": "Observed central-cell medoid on known original UV canvas; opaque numeric background retained",
+  "geometric_resize_or_interpolation": false,
+  "new_rgb_colours": false,
+  "max_cell_std": 105.03304241999277,
+  "human_registration_review": "PENDING"
+}

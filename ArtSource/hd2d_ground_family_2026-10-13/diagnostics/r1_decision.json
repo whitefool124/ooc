@@ -1,0 +1,13 @@
+{
+  "status": "REJECTED_NOT_ADMITTED",
+  "reason": "A failed 1.2 lattice confidence. B/C source contains mixed small marks and half-size edge units; whole subject decode exceeds 32px. No resizing or missing-edge crop accepted.",
+  "retry_dimension": "uniform subject pixel size and full native-cell edge thickness",
+  "unchanged": [
+    "material direction",
+    "independent source per variant",
+    "confidence>=1.2",
+    "32PPU",
+    "32x32 delivery",
+    "no source recolour/redraw"
+  ]
+}

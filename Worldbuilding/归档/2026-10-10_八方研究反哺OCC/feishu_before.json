@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"材质与照明|HDR与后处理职责|像素资产分类\"><p id=\"doxcnYsmtrPyKgTQJw2bUnYwO4e\">像素资产分类。 战场单位、地块、战场物件及功能图标保留现行原生规格与审核；战斗外HD2D文字载体和场景陈设按2026-10-09素材库例外制作，不强制固定宏像素格、1.2置信度、16色、硬Alpha或无缩放。每项保留独立内置生图原料、处理记录和来源。禁止烘焙外部窗影、光束、光晕或场景投影；资产自身柔和体积明暗允许保留，但实际主光不得形成相反的第二套方向性照明。</p><p id=\"doxcngeaa99sXF3CAR8KmhJQmCb\">材质与照明。 同类场景共用主光、填充、局部灯、受光材质与投影配置；差异登记到场景覆盖项。纸、木、石、金属、植被和水在中性光及默认光下分别可辨；不得靠统一色罩掩盖资产不一致。局部灯必须对应可见光源，阴影方向与场景光一致；阴影代理不渲染重复颜色。检查脚底、墙脚、桌面和物件接触，不允许漂浮、重复阴影、漏光或面片边缘黑条。</p><p id=\"doxcnn37TTg3Gsm3ip8RszxhDCd\">HDR与后处理职责。 已迁移HD-2D相机由表现配置统一声明HDR、曝光、色调映射、Bloom、景深、阴影和抗锯齿策略；旧像素守卫不得覆盖这些相机。屏幕正文、状态数字和关键提示不受场景模糊或调色干扰。曝光保持可预测；页间采用批准配置及登记的差异，不复制一套后处理后逐页任意调参。参数数值必须来自样板验证，不能用他作参数或未经测量的统一光强代替。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2726
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

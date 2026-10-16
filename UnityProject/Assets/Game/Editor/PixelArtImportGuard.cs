@@ -19,6 +19,16 @@ namespace OCC.Combat.Editor
             importer.textureCompression = TextureImporterCompression.Uncompressed;
             importer.npotScale = TextureImporterNPOTScale.None;
             importer.alphaIsTransparency = true;
+            if(assetPath.StartsWith(ArtRoot+"FieldEffectCandidates32/",StringComparison.Ordinal))
+            {
+                importer.textureType=TextureImporterType.Sprite;
+                importer.spriteImportMode=SpriteImportMode.Single;
+                importer.spritePixelsPerUnit=32;
+                var settings=new TextureImporterSettings();importer.ReadTextureSettings(settings);
+                settings.spriteMeshType=SpriteMeshType.FullRect;
+                settings.spriteAlignment=(int)SpriteAlignment.Center;
+                settings.spritePivot=new Vector2(.5f,.5f);importer.SetTextureSettings(settings);
+            }
         }
     }
 }

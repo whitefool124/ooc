@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"相机与真实空间。\"><p id=\"doxcnreNGdR7AF09nTzqBIeKCGg\">相机与真实空间。 书桌沿用俯角35°、水平偏角0°、纵向视野24°；战斗沿用俯角45°、水平偏角0°及永久墙0.65世界单位。上述是OCC已批准样板参数，不是参考游戏公布参数。相机距离、目标、裁剪与合法缩放范围随配置记录。单位、独立战场物件和树木沿用同相机朝向面片、底部锚点及独立直立深度/投影代理；地面、地表效果和范围位于实际水平面。可见颜色和深度必须一致，不能横切角色、浮地或让点击与格位错位。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2723
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

@@ -65,7 +65,7 @@ namespace OCC.Combat
         private readonly CombatMovementRangeCache movementRange = new CombatMovementRangeCache();
         // 定案（2026-09-16 风格定案 v1 / occ-art-contract-v1.battlefield_display_policy）：
         // 战场默认按 6 倍档开场——原生 32 像素 × 6 = 192 画布单位，1 个原生像素 = 6 屏幕像素，
-        // 与主要参考《赛菲莉亚》同级。盘面大于一屏（1408×768 下可见 7×4 格）时靠移动视口查看。
+        // 与主要参考《赛菲莉亚》同级。盘面大于一屏（1888×768 下可见 9×4 格）时靠移动视口查看。
         // 所有档位都落在原生 32 像素网格上（Step = 32），因此任何档位都不重采样。
         public const float CellSize = 192f;
         public const float OverviewCellSize = 96f;
@@ -73,7 +73,7 @@ namespace OCC.Combat
         public const float MaximumCellSize = 384f;
         // Multiples of the native 32 px grid only, so no zoom tier ever resamples the tiles.
         public const float CellSizeStep = 32f;
-        public const float BattlefieldWidth = 1440f;
+        public const float BattlefieldWidth = 1920f;
         public const float BattlefieldHeight = 848f;
         public const float BoardTop = 80f;
         public const int DefaultWidth = 12;
@@ -428,7 +428,8 @@ namespace OCC.Combat
         private static bool HasInteractionTarget(CombatState state, GridPosition position)
         {
             TileState tile = state.Map.GetTile(position);
-            return tile.IsObjective || tile.Cover != CoverType.None || state.Objectives.OfType<InvestigationObjective>().Any(objective => objective.Positions.Contains(position));
+            return (tile.Durability > 0 && (tile.IsObjective || tile.IsDevice || tile.IsLampVine || tile.Cover != CoverType.None)) ||
+                state.Objectives.OfType<InvestigationObjective>().Any(objective => objective.Positions.Contains(position));
         }
 
         private static string SkillInvalidReason(CombatState state, UnitState hero, SkillDefinition skill, GridPosition position, UnitState target)
@@ -547,8 +548,11 @@ namespace OCC.Combat
 
         public void ResetOverview()
         {
-            // Restores this board's own opening scale, not a global constant.
-            cellSize = defaultCellSize;
+            // Overview is an integer native-pixel scale and includes the complete logical board.
+            float fit = Math.Min(viewport.Width / mapWidth, viewport.Height / mapHeight);
+            cellSize = Math.Max(32f, Math.Min(defaultCellSize, (float)Math.Floor(fit / 32f) * 32f));
+            boardX = viewport.X + (viewport.Width - BoardWidth) * .5f;
+            boardY = viewport.Y + (viewport.Height - BoardHeight) * .5f;
             ClampToViewport();
         }
 

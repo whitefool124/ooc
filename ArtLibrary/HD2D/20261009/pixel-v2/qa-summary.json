@@ -1,0 +1,18 @@
+{
+  "schema": "occ-hd2d-library-qa-v1",
+  "date": "2026-10-09",
+  "version": "pixel-v2",
+  "assets_generated": 8,
+  "manifest_validation_pass": 8,
+  "browser_images_loaded": 8,
+  "live_text_regions_checked": 6,
+  "live_text_regions_clipped": 0,
+  "review_url": "http://127.0.0.1:8879/pixel-v2/index.html",
+  "status": "QA_PENDING",
+  "style_requirement": "Retain established basic 32-bit-era pixel game art; flexible canvas is not permission for smooth hand-painted illustrations.",
+  "verification_scope": "provenance, alpha and delivery integrity, 1x/4x/grayscale/checker files, actual browser preview and short Chinese text examples",
+  "unity_scene_contact_verified": false,
+  "unity_import_verified": false,
+  "human_aesthetic_approval": "PENDING",
+  "previous_painted_batch": "WITHDRAWN_AFTER_USER_STYLE_REJECTION"
+}

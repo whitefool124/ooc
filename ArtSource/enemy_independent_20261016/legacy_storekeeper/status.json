@@ -1,0 +1,18 @@
+{
+  "status": "QA_PENDING",
+  "selected_round": 4,
+  "rejections": {
+    "1": "27x67超过固定人形画布，登记簿辨识不足。",
+    "2": "38x90超出固定画布，细部次级网格仍过密。",
+    "3": "21x53机器合格，但登记簿仍不清楚；新原料强化该既有身份物。"
+  },
+  "subject_lattice_confidence": 2.7119,
+  "source_logical_size": [
+    25,
+    56
+  ],
+  "independent_source_each_round": true,
+  "geometric_resize": false,
+  "human_review": "PENDING",
+  "formal_registry_replaced": false
+}

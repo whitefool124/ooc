@@ -1,0 +1,68 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_court_limestone_b",
+  "role": "floor_tile_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in image edit; enlarged current tile is lattice reference only",
+    "source_path": "ArtSource/hd2d_ground_family_2026-10-13/raw/academy_court_limestone_b_r5.png",
+    "source_sha256": "333414482e93c0a2b9e282f4a70dfdec987f1a4a53825fd4a82a90606c75cce2"
+  },
+  "delivery": {
+    "output_path": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/delivery/academy_court_limestone_b.png",
+    "output_sha256": "2ef0877948b758a6691c2f878f3854b0d7b8a587f3dfae71de7e5815bf50b92a",
+    "native_ppu": 32,
+    "logical_cells": [
+      1,
+      1
+    ],
+    "palette_max": 5,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Native source audit zoom; migrated HDR scene output follows A.2.4"
+  },
+  "application": {
+    "runtime_draw_rect": "one 1m square per existing logical cell; peripheral crop keeps 1/32m texel pitch",
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/evidence/academy_court_limestone_b/one_x.png",
+    "four_x": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/evidence/academy_court_limestone_b/four_x.png",
+    "six_x": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/evidence/academy_court_limestone_b/six_x.png",
+    "checker": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/evidence/academy_court_limestone_b/checker.png",
+    "grayscale": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/evidence/academy_court_limestone_b/grayscale.png",
+    "application_contact": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/evidence/academy_court_limestone_b/application_contact.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "Candidate only. Registered-grid support is distinct from ambiguous generic confidence. Contacts are technical repeat previews, not runtime acceptance."
+  },
+  "material_data": {
+    "normal": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/material_data/normal.png",
+    "roughness": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/material_data/roughness.png",
+    "recipe": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/material_data/recipe.json",
+    "source": "explicit shallow slab geometry; no diffuse inference"
+  },
+  "registration": "ArtSource/hd2d_ground_family_2026-10-13/sets/quiet/diagnostics/academy_court_limestone_b_registration.json"
+}

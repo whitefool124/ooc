@@ -117,6 +117,10 @@ namespace OCC.Combat.Tests
                 Image projectile = root.GetComponentsInChildren<Image>().Single(view => view.name == "正式VFX_fire_projectile");
                 Assert.That(projectile.sprite, Is.SameAs(Resources.Load<Sprite>(FormalArtRegistry.VfxPath("fire_projectile") + "/frame_03")));
                 Assert.That(projectile.rectTransform.sizeDelta, Is.EqualTo(new Vector2(64f, 64f)));
+                CombatPixelVfxGraphic tech = root.GetComponentsInChildren<CombatPixelVfxGraphic>().Single();
+                Assert.That(tech.GetComponent<CanvasRenderer>(), Is.Not.Null);
+                Assert.That(tech.raycastTarget, Is.False);
+                Canvas.ForceUpdateCanvases();
                 Image[] trails = projectile.GetComponentsInChildren<Image>().Where(image => image != projectile).ToArray();
                 Assert.That(trails.Length, Is.EqualTo(2));
                 Assert.That(trails.All(image => image.enabled && !image.raycastTarget && image.sprite != null), Is.True);
@@ -139,6 +143,28 @@ namespace OCC.Combat.Tests
                 host.UiPreferences.Configure(1f, 1f, true, true, false, false, true);
                 refresh.Invoke(feedback, new object[] { 10f });
                 Assert.That(root.GetComponentsInChildren<Image>(), Is.Empty);
+            });
+        }
+
+        [TestCase("ether_utility")]
+        [TestCase("ether_attribute")]
+        [TestCase("ether_projectile")]
+        [TestCase("metal_projectile")]
+        public void TechnicalFeedback_DoesNotSubstituteDamageOrRecoverySprites(string effect)
+        {
+            WithView((root, feedback, host, playback, refresh) =>
+            {
+                string before = StateSignature(host.CurrentState);
+                playback.ReplaceAbility(new[] { new CombatVfxCue(Target, effect, 0f, .18f, Source, effect.EndsWith("_projectile")) }, 0f);
+                refresh.Invoke(feedback, new object[] { .09f });
+                Canvas.ForceUpdateCanvases();
+                Assert.That(root.GetComponentsInChildren<Image>().All(i => !i.enabled), Is.True);
+                var tech = root.GetComponentsInChildren<CombatPixelVfxGraphic>().Single();
+                Assert.That(tech.material.shader.name, Is.EqualTo("OCC/Combat Pixel Light"));
+                Assert.That(tech.NormalizedAge, Is.EqualTo(.5f).Within(.001f));
+                Assert.That(StateSignature(host.CurrentState), Is.EqualTo(before));
+                feedback.ResetBattleFeedback();
+                Assert.That(root.GetComponentsInChildren<CombatPixelVfxGraphic>(), Is.Empty);
             });
         }
 

@@ -1,0 +1,10 @@
+{
+  "cols": 222,
+  "rows": 128,
+  "step_x": 7.5171,
+  "step_y": 7.3605,
+  "consensus": "arbitrated",
+  "confidence": "medium",
+  "detect_s": 10.298,
+  "recon_s": 0.981
+}

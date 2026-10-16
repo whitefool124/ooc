@@ -1,0 +1,230 @@
+{
+  "status": "completed",
+  "duration": 0.65,
+  "summary": {
+    "total": 31,
+    "passed": 29,
+    "failed": 2,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.AcademyIdentities_KeepStableIdsAndUseNonLethalResolutionSemantics",
+      "Status": "Passed",
+      "Duration": 0.0638217,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.BarrierMender_SelectsLargestShieldGapWithStableIdTieBreakAndRestoresShield",
+      "Status": "Failed",
+      "Duration": 0.0407971,
+      "Message": "  Expected: UseSkill\r\n  But was:  Move\r\n",
+      "StackTrace": "at OCC.Combat.Tests.EnemyPackTests.BarrierMender_SelectsLargestShieldGapWithStableIdTieBreakAndRestoresShield () [0x000f1] in E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Tests\\EditMode\\EnemyPackTests.cs:199\r\n"
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.BarrierMender_SkipsABreakStanceRecipientInRogueliteCombat",
+      "Status": "Failed",
+      "Duration": 0.0150649,
+      "Message": "  Expected: UseSkill\r\n  But was:  Move\r\n",
+      "StackTrace": "at OCC.Combat.Tests.EnemyPackTests.BarrierMender_SkipsABreakStanceRecipientInRogueliteCombat () [0x000a3] in E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Tests\\EditMode\\EnemyPackTests.cs:222\r\n"
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.BoundEnemy_AttacksWhenLegalButOtherwisePublishesAStationaryIntent",
+      "Status": "Passed",
+      "Duration": 0.0116648,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.EnemyAttack_IsIntrinsicAndUsesTheSamePreviewAsResolution",
+      "Status": "Passed",
+      "Duration": 0.0202368,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.EveryActiveEncounter_ResolvesAndContainsNoRetiredModernRole",
+      "Status": "Passed",
+      "Duration": 0.0292644,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.ExpansionPack_HasTenDistinctClosedLoopContracts",
+      "Status": "Passed",
+      "Duration": 0.0051028,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalArchetypes_HaveStableEraCorrectContracts",
+      "Status": "Passed",
+      "Duration": 0.0042926,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalUnitArt_LoadsWithRequiredPixelImporter(\"shieldguard\")",
+      "Status": "Passed",
+      "Duration": 0.0532827,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalUnitArt_LoadsWithRequiredPixelImporter(\"pyromancer\")",
+      "Status": "Passed",
+      "Duration": 0.001624,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalUnitArt_LoadsWithRequiredPixelImporter(\"raider\")",
+      "Status": "Passed",
+      "Duration": 0.0012764,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalUnitArt_LoadsWithRequiredPixelImporter(\"elite_vanguard\")",
+      "Status": "Passed",
+      "Duration": 0.0011856,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalUnitArt_LoadsWithRequiredPixelImporter(\"sigil_mauler\")",
+      "Status": "Passed",
+      "Duration": 0.0011877,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalUnitArt_LoadsWithRequiredPixelImporter(\"barrier_mender\")",
+      "Status": "Passed",
+      "Duration": 0.0012569,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalUnitArt_LoadsWithRequiredPixelImporter(\"tether_hound\")",
+      "Status": "Passed",
+      "Duration": 0.0014651,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalUnitArt_LoadsWithRequiredPixelImporter(\"stone_snare\")",
+      "Status": "Passed",
+      "Duration": 0.0013594,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalUnitArt_LoadsWithRequiredPixelImporter(\"lantern_revealer\")",
+      "Status": "Passed",
+      "Duration": 0.0010546,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FinalUnitArt_LoadsWithRequiredPixelImporter(\"rune_arbalist\")",
+      "Status": "Passed",
+      "Duration": 0.0011754,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.FormalVisualLoader_RequiresEveryResolvedUnitTextureAndSixFrameAction",
+      "Status": "Passed",
+      "Duration": 0.1532037,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.RetiredDraftAndModernFirearmArchetypes_AreNotRuntimeReachable",
+      "Status": "Passed",
+      "Duration": 0.0038183,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.RuneArbalist_ExposesAdjacentDeadzoneAndRetreatsBeforeFiringAgain",
+      "Status": "Passed",
+      "Duration": 0.0159384,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.RuneArbalist_UsesHeavyBoltAtFiveCellsThenFallsBackDuringCooldown",
+      "Status": "Passed",
+      "Duration": 0.0098658,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.Shieldguard_BracesForTwoShieldAtRogueliteTurnStartAndBreakStanceBlocksIt",
+      "Status": "Passed",
+      "Duration": 0.0026337,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.SigilMauler_UsesSunderingSigilOnceThenFallsBackToWeapon",
+      "Status": "Passed",
+      "Duration": 0.0022574,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.StatusSpecialists_UseSkillOnlyWhenStatusWindowIsOpen(\"shieldguard\",Agility,1)",
+      "Status": "Passed",
+      "Duration": 0.0015564,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.StatusSpecialists_UseSkillOnlyWhenStatusWindowIsOpen(\"pyromancer\",Burning,4)",
+      "Status": "Passed",
+      "Duration": 0.0049928,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.StatusSpecialists_UseSkillOnlyWhenStatusWindowIsOpen(\"raider\",Bound,1)",
+      "Status": "Passed",
+      "Duration": 0.0005772,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.StatusSpecialists_UseSkillOnlyWhenStatusWindowIsOpen(\"elite_vanguard\",BreakStance,1)",
+      "Status": "Passed",
+      "Duration": 0.0003928,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.StatusSpecialists_UseSkillOnlyWhenStatusWindowIsOpen(\"stone_snare\",Bound,3)",
+      "Status": "Passed",
+      "Duration": 0.0003273,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.StatusSpecialists_UseSkillOnlyWhenStatusWindowIsOpen(\"lantern_revealer\",BreakStance,3)",
+      "Status": "Passed",
+      "Duration": 0.0005441,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyPackTests.TetherHound_BindsOnlyWhenHeroIsNotAlreadyBound",
+      "Status": "Passed",
+      "Duration": 0.0011133,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

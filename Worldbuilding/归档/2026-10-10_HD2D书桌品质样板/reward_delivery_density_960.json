@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"CurrentNodeId\\\":\\\"B1\\\",\\\"SelectedRewardId\\\":\\\"\\\",\\\"RewardChoicesOpened\\\":true,\\\"LootPendingExit\\\":false,\\\"PendingRewardStepId\\\":\\\"main\\\",\\\"icons\\\":[{\\\"name\\\":\\\"奖励大图标_F-P-M03\\\",\\\"native\\\":[32.0,32.0],\\\"pitch\\\":[0.03125,0.03125],\\\"mesh\\\":\\\"Center: (0.00, 0.00, 0.00), Extents: (243.11, 243.11, 0.00)\\\"},{\\\"name\\\":\\\"奖励大图标_F-P-R19\\\",\\\"native\\\":[32.0,32.0],\\\"pitch\\\":[0.03125,0.03125],\\\"mesh\\\":\\\"Center: (0.00, 0.00, 0.00), Extents: (243.11, 243.11, 0.00)\\\"},{\\\"name\\\":\\\"奖励大图标_F-P-U07\\\",\\\"native\\\":[32.0,32.0],\\\"pitch\\\":[0.03125,0.03125],\\\"mesh\\\":\\\"Center: (0.00, 0.00, 0.00), Extents: (243.11, 243.11, 0.00)\\\"}],\\\"localPreview\\\":true}\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

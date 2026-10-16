@@ -1,0 +1,51 @@
+{
+  "scope": "single native32 material probe, actual URP offscreen rendering; not normal-entry game/UI or performance",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "activeScenePreserved": true,
+  "dirty": false,
+  "play": false,
+  "normalStrength": 0.28,
+  "normalGreenFlip": false,
+  "Id": "academy_loot_chest_open",
+  "shaderName": "OCC/HD2D/GroundedSprite",
+  "maps": [
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/normal.png",
+      "guid": "3c2822593730fbb47b46ecf98a7cb20e",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "type": "NormalMap",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    },
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/roughness.png",
+      "guid": "72b83199a900b0f41b598e5edf3769c2",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "type": "Default",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    },
+    {
+      "path": "Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/regions.png",
+      "guid": "b8115f1143360824bb82972164bb17f3",
+      "width": 32,
+      "height": 32,
+      "filter": "Point",
+      "type": "Default",
+      "sRGBTexture": false,
+      "mipmapEnabled": false,
+      "compression": "Uncompressed"
+    }
+  ],
+  "captures": [
+    "baseline_540.png",
+    "full_540.png"
+  ],
+  "messages": []
+}

@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"9353dfd7b6a244ebbe3396e6c4336d5d\",\"request_key\":\"occ-scene-texture-v1\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"edit\",\"status\":\"ready\",\"phase\":\"ready\",\"created_at\":\"2026-10-10T10:21:17.2060000+00:00\",\"updated_at\":\"2026-10-10T10:22:06.8270000+00:00\",\"finished_at\":\"2026-10-10T10:22:06.8270000+00:00\",\"error_code\":null,\"message\":\"Requested mode verified; imports and compilation are idle.\",\"refresh_assets\":true,\"timeout_seconds\":120,\"step\":3,\"created_seconds\":1791627677.206,\"deadline_seconds\":1791627797.206,\"settle_since\":1791627725.989,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T10:21:17.2060000+00:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"},{\"timestamp\":\"2026-10-10T10:21:17.5590000+00:00\",\"phase\":\"importing\",\"message\":null},{\"timestamp\":\"2026-10-10T10:21:29.1600000+00:00\",\"phase\":\"compiling\",\"message\":null},{\"timestamp\":\"2026-10-10T10:21:39.6380000+00:00\",\"phase\":\"reloading\",\"message\":\"Journal saved; poll the same operation_id after reconnection.\"},{\"timestamp\":\"2026-10-10T10:22:05.9890000+00:00\",\"phase\":\"verifying\",\"message\":\"Waiting for stable editor state.\"},{\"timestamp\":\"2026-10-10T10:22:06.8270000+00:00\",\"phase\":\"ready\",\"message\":\"Requested mode verified; imports and compilation are idle.\"}]},\"current_editor\":{\"is_compiling\":false,\"is_updating\":false,\"is_playing\":false,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":true},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":0,\"journal_error\":null,\"task\":{\"task_id\":\"editor:9353dfd7b6a244ebbe3396e6c4336d5d\",\"kind\":\"editor\",\"id\":\"9353dfd7b6a244ebbe3396e6c4336d5d\",\"status\":\"ready\",\"phase\":\"ready\",\"revision\":\"6c4a858ac8a855092d5497227550d1f166c0f12c67330950d897fbc860a4410f\",\"changed\":true,\"wait_complete\":true,\"poll_after_ms\":0,\"wait_reason\":\"completed\",\"waited_ms\":687,\"snapshot_at\":\"2026-10-10T10:22:06.8506610Z\"}}}"
+      }
+    ]
+  }
+}

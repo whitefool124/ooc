@@ -1,0 +1,51 @@
+{
+  "success": true,
+  "command": "command console",
+  "data": {
+    "command": "console",
+    "parameters": {
+      "level": "log",
+      "tail": "1"
+    },
+    "result": {
+      "entries": [
+        {
+          "seq": 401,
+          "timestampUtc": "2026-10-05T04:55:37.983593Z",
+          "level": "log",
+          "logType": "Log",
+          "message": "OCC_RANGE_CANCEL_WITNESS\n0.000 vertices=20 alpha=240\r\n0.028 vertices=20 alpha=240\r\n0.055 vertices=20 alpha=240\r\n0.077 vertices=20 alpha=240\r\n0.101 vertices=20 alpha=240\r\n0.127 vertices=20 alpha=93\r\n0.150 vertices=20 alpha=93\r\n0.174 vertices=20 alpha=93\r\n0.196 vertices=0 alpha=0\r\n0.228 vertices=0 alpha=0\r\n0.253 vertices=0 alpha=0\r\n0.276 vertices=0 alpha=0\r\n0.298 vertices=0 alpha=0\r\n0.353 vertices=0 alpha=0\r\nenter\r\n0.000 vertices=0 alpha=0\r\n0.023 vertices=0 alpha=0\r\n0.047 vertices=0 alpha=0\r\n0.069 vertices=0 alpha=0\r\n0.089 vertices=0 alpha=0\r\n0.113 vertices=20 alpha=99\r\n0.136 vertices=20 alpha=99\r\n0.158 vertices=20 alpha=99\r\n0.180 vertices=20 alpha=202\r\n0.205 vertices=20 alpha=202\r\n0.230 vertices=20 alpha=202\r\n0.253 vertices=20 alpha=240\r\n0.281 vertices=20 alpha=240\r\n0.303 vertices=20 alpha=240\r\n0.326 vertices=20 alpha=240\r\n0.350 vertices=20 alpha=240\r\n0.375 vertices=20 alpha=240\r\n0.396 vertices=20 alpha=240\r\n",
+          "stackTrace": "UnityEngine.Debug:Log (object)\nCheck/<Watch>d__1:MoveNext ()\nUnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)\n",
+          "seeded": false
+        }
+      ],
+      "cursor": 401,
+      "session": "71f6c7d3ecf04f7c80e50d5ed86ed0b3",
+      "returned": 1,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 0,
+        "warn": 340,
+        "log": 61
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-10-05T04:55:37.9003555Z",
+        "ageMs": 189,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 3,
+        "consoleLogs": 1,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "E:\\数据库\\OCC_Codex\\UnityProject"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

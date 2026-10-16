@@ -1,0 +1,104 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "38625900f0f7a2c9c8c48eddc0291138ddbf9d5238cf65825426f6b91cb5f4d6",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+    "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+    "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs"
+  ],
+  "inputs": [
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/SkyFurnacePixelLayer.shader",
+      "sha256": "3063f1fe5846179f83970bf5324f6c45dc2cf83aee05ba4b5e22cfff09ad1eb1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+      "sha256": "fa42b87e1bffe76ea128459f992d19fdee38cb364f369baacba4cefba0b0a089"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceAuthoring.cs",
+      "sha256": "8a80c182991aca544f9070779632bb5926f54da67e5bffb0e35bf1e7c8f79f92"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/SkyFurnaceVerification.cs",
+      "sha256": "a3eedafb61b1183697d73ee8e02f477630af7962d5651dbc9530b4be66b0c963"
+    }
+  ],
+  "configuration": {
+    "scope": "Local SkyFurnace seal visibility and release brightness only",
+    "reveal": "Unactivated source texels transparent; lit texels hold; complete at progress1",
+    "release_boost_seconds": 7.4,
+    "audio": "none",
+    "scene_saved": false
+  },
+  "local_evidence": {
+    "progression": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉从无点亮/ignition_study/progression.json",
+      "sha256": "38ef74e8bd7bac3aeba03a5cec9fc389f0190c3c106168cd56d705c46089c38c"
+    },
+    "boundary_check": {
+      "path": "Worldbuilding/归档/2026-10-16_天穹熔炉从无点亮/reveal_boundary_checks.json",
+      "sha256": "9749832b7cdac81492980bdc86004da0c8e6bbd0f72d68aaa74b5c0858a026c2"
+    },
+    "captures": [
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉从无点亮/ignition_study/00.00.png",
+        "sha256": "790547e36a4bbd7dcf5e78971148d5666b6063b3ba496f26accfcfb75f3a13f5"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉从无点亮/ignition_study/00.30.png",
+        "sha256": "d8ac0744abeaabb8554bb39fd78ec76d830b2391cb720568148ea90f89e37dc6"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉从无点亮/ignition_study/01.60.png",
+        "sha256": "b8e2d0706ac8601e21fa764858f129f2715f671b3e513301794860cd9f7a450a"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉从无点亮/ignition_study/03.40.png",
+        "sha256": "ff90fd71f56f3b38aeaa59711cc5e119e15f361608a2a063d98a4a91a38e0d02"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉从无点亮/ignition_study/05.50.png",
+        "sha256": "0811e632202d9ccae472a902983f6f5bc4a7e02bed8f437bdc64c01bba656fa4"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉从无点亮/ignition_study/06.60.png",
+        "sha256": "66cfdb4842068f147527bec17472d3f3a8f49bf1d56508d301edf2f340543f84"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉从无点亮/ignition_study/07.25.png",
+        "sha256": "84198d747cadc65ec41a638bee907e477e72dd926bb9adfe293410a2461327d2"
+      },
+      {
+        "path": "Worldbuilding/归档/2026-10-16_天穹熔炉从无点亮/ignition_study/07.40.png",
+        "sha256": "d1ef3824d8dcd10d3f37453719cd76803a4309abcae26d5d49018f42183294ce"
+      }
+    ],
+    "compile": "completed, no compilation failure",
+    "console_errors": 0,
+    "agent_visual_review": "Partial seal shows ground with no uncharged silhouette; complete seal and higher release peak visually checked at1.6,6.6,7.4s.",
+    "movie": {
+      "path": "Artifacts/SkyFurnaceIgnition_20261016/天穹熔炉_从无点亮.mp4",
+      "sha256": "8d59710ff83b6ee8ec878dc378788614ea877df6b09e925efdbd34311e964ab6"
+    },
+    "film": {
+      "frames": 481,
+      "duration": 16,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "audio_streams": 0
+    }
+  },
+  "limitations": [
+    "Local correction report only; no formal baseline promotion.",
+    "Human aesthetic approval pending; no new performance or full game journey evidence.",
+    "Previous candidate environment/source density remains pending; historical evidence is not rebound as current approval."
+  ]
+}

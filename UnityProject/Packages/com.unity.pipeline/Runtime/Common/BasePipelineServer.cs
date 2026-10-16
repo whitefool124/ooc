@@ -276,6 +276,8 @@ namespace Unity.Pipeline
             if (m_IsRunning)
                 return;
 
+            if (port != 0 && !IsPortAvailable(port))
+                throw new InvalidOperationException($"Pipeline port {port} is already occupied; use automatic port assignment.");
             m_Port = port == 0 ? FindAvailablePort() : port;
             PortAutoAssigned = port == 0;
 
@@ -329,18 +331,13 @@ namespace Unity.Pipeline
         }
 
         /// <summary>
-        /// Bind a wildcard-host prefix so the listener accepts any Host header ("127.0.0.1",
-        /// "localhost", "::1") no matter how a client — or its DNS resolver — resolves the name.
-        /// This is required because Mono's HttpListener binds a hostname prefix to a single resolved
-        /// address family and then matches the request's Host <em>literally</em> per prefix: an
-        /// explicit "http://127.0.0.1/" prefix rejects "Host: localhost" (and vice-versa) with a
-        /// 400. A wildcard sidesteps that. The wildcard binds all interfaces at the socket level, so
-        /// access is confined to the local machine by the loopback check in
-        /// <see cref="ProcessRequest"/> (plus bearer-token auth).
+        /// Use the CLI's canonical IPv4 loopback address. A wildcard socket can coexist with
+        /// another Editor's specific loopback socket on Mono/Windows; requests then reach the
+        /// other project and fail authentication. Keep the existing Origin and token checks.
         /// </summary>
         private static void AddLoopbackPrefixes(HttpListener listener, int port)
         {
-            listener.Prefixes.Add($"http://+:{port}/");
+            listener.Prefixes.Add($"http://127.0.0.1:{port}/");
         }
 
         /// <summary>
@@ -2696,13 +2693,19 @@ namespace Unity.Pipeline
         {
             try
             {
-                using (var listener = new HttpListener())
+                // An HttpListener wildcard probe is insufficient on Mono: it can report success
+                // while another process owns a more specific address on the same port.
+                if (System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties()
+                    .GetActiveTcpListeners().Any(endpoint => endpoint.Port == port))
+                    return false;
+                var listener = new System.Net.Sockets.TcpListener(IPAddress.Loopback, port);
+                try
                 {
-                    AddLoopbackPrefixes(listener, port);
+                    listener.Server.ExclusiveAddressUse = true;
                     listener.Start();
-                    listener.Stop();
                     return true;
                 }
+                finally { listener.Stop(); }
             }
             catch
             {

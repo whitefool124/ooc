@@ -1,0 +1,12 @@
+{
+  "status": "QA_PENDING",
+  "selected_round": 3,
+  "rounds": [
+    {"round": 1, "decision": "REJECT", "reason": "Decoded subject 43x106: oversized for adult battlefield unit; do not resize.", "next_change": "Double macro-pixel coarseness across whole subject."},
+    {"round": 2, "decision": "REJECT", "reason": "Correct size 22x51, but subject lattice confidence 1.1635 below unchanged 1.2 threshold.", "next_change": "Fix global square lattice regularity; retain coarse information density."},
+    {"round": 3, "decision": "TECHNICAL_CANDIDATE", "reason": "24x54 intact subject, grid confidence 1.2361; final 32x64, 32 colours, baseline Y62, hard alpha. Independent human review remains pending."}
+  ],
+  "formal_registry_replaced": false,
+  "source_images_retained": true,
+  "human_review": "PENDING"
+}

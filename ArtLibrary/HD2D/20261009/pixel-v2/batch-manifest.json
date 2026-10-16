@@ -1,0 +1,161 @@
+{
+  "schema": "occ-hd2d-library-batch-v1",
+  "date": "2026-10-09",
+  "scope": "noncombat text carriers and display props",
+  "pixel_alignment_required": false,
+  "style": "32-bit-era coarse pixel game art; camera-parallel reading face",
+  "priority": [
+    "pixel style continuity",
+    "beauty",
+    "cohesive style",
+    "readability",
+    "complete silhouette",
+    "alpha usability"
+  ],
+  "reuse": [
+    "student_dossier",
+    "equipment_case",
+    "action_plaque",
+    "hot_drink"
+  ],
+  "items": [
+    {
+      "id": "dossier",
+      "title": "展开档案册",
+      "prompt": "OCC noncombat HD2D prop library. TRUE 32-bit-era low-resolution PIXEL ART GAME SPRITE, NOT painted illustration. Every contour visibly stair-stepped with coarse square pixel blocks. Broad flat pixel clusters, sparse clean internal details, narrow dark pixel contour, hard abrupt shade steps using a restrained cohesive palette. No smooth curves, no brush texture, no realistic wood grain, no canvas grain, no antialiasing, no soft gradients, no photorealistic metal reflection. Ivory paper, dark walnut, desaturated teal and sparse muted brass. Neutral upper-left simple 3-tone form shading. Camera-parallel main writing face, front facing zero yaw; thin visible perimeter thickness. Single isolated complete object on genuine transparent background. No glow, no haze, no cast shadow, no floor. Generous clean blank area for live Chinese text; no letters, no pseudo-writing. Use the provided approved sprites as style references for their actual coarse pixel art and simple material clusters; create an independent new asset, not a redraw of the same small sprite. Larger display object may have more pixels, but must retain the same deliberately low-resolution pixel-art language.\nSUBJECT: A broad open student dossier, two wide blank ivory writing pages with softly bowed top contours and layered lower page edges, a narrow central walnut binding with restrained brass rings, small desaturated teal cloth cover protruding around edges. Very generous clean writing space. Physically believable thin paper stack, elegant restrained hardware. The two pages are flat toward camera for live text; book volume shown in spine and perimeter.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/pixel-v2/dossier/source-03.png",
+      "style_policy": "32-bit-era coarse pixel art; no forced 32x32 canvas",
+      "delivery_path": "ArtLibrary/HD2D/20261009/pixel-v2/dossier/delivery.png",
+      "source_sha256": "4d1eb213994fd0f0d0bc5b4ace454991e621989aa2049563714379efc7f1d6d6",
+      "delivery_sha256": "3c6c2720e73d9e8bc0fcf0a852e7a337615bd11fd1a513b2cb606c84c145044a",
+      "delivery_size": [
+        1166,
+        683
+      ]
+    },
+    {
+      "id": "notes",
+      "title": "装订便笺",
+      "prompt": "OCC noncombat HD2D prop library. TRUE 32-bit-era low-resolution PIXEL ART GAME SPRITE, NOT painted illustration. Every contour visibly stair-stepped with coarse square pixel blocks. Broad flat pixel clusters, sparse clean internal details, narrow dark pixel contour, hard abrupt shade steps using a restrained cohesive palette. No smooth curves, no brush texture, no realistic wood grain, no canvas grain, no antialiasing, no soft gradients, no photorealistic metal reflection. Ivory paper, dark walnut, desaturated teal and sparse muted brass. Neutral upper-left simple 3-tone form shading. Camera-parallel main writing face, front facing zero yaw; thin visible perimeter thickness. Single isolated complete object on genuine transparent background. No glow, no haze, no cast shadow, no floor. Generous clean blank area for live Chinese text; no letters, no pseudo-writing. Use the provided approved sprites as style references for their actual coarse pixel art and simple material clusters; create an independent new asset, not a redraw of the same small sprite. Larger display object may have more pixels, but must retain the same deliberately low-resolution pixel-art language.\nSUBJECT: A compact wide ivory memo pad with softly rounded paper corners, a walnut top binding strip and small brass clip, a few staggered blank pages underneath. Large clean blank writing surface. An asymmetrical small muted teal cloth tab protrudes from the side. Physical stationery, not a generic rectangular UI frame.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/pixel-v2/notes/source-01.png",
+      "style_policy": "32-bit-era coarse pixel art; no forced 32x32 canvas",
+      "delivery_path": "ArtLibrary/HD2D/20261009/pixel-v2/notes/delivery.png",
+      "source_sha256": "23977acb22aa2d28b9a0485a7aa03f32b731724f420fa43a3e699be82febc75d",
+      "delivery_sha256": "8458cb581b411f073b9e2ae3b5946399a0e8138ec3ad9a6963bfb6d48c9cf7f2",
+      "delivery_size": [
+        1580,
+        825
+      ]
+    },
+    {
+      "id": "plaque",
+      "title": "悬挂铭牌",
+      "prompt": "OCC noncombat HD2D prop library. TRUE 32-bit-era low-resolution PIXEL ART GAME SPRITE, NOT painted illustration. Every contour visibly stair-stepped with coarse square pixel blocks. Broad flat pixel clusters, sparse clean internal details, narrow dark pixel contour, hard abrupt shade steps using a restrained cohesive palette. No smooth curves, no brush texture, no realistic wood grain, no canvas grain, no antialiasing, no soft gradients, no photorealistic metal reflection. Ivory paper, dark walnut, desaturated teal and sparse muted brass. Neutral upper-left simple 3-tone form shading. Camera-parallel main writing face, front facing zero yaw; thin visible perimeter thickness. Single isolated complete object on genuine transparent background. No glow, no haze, no cast shadow, no floor. Generous clean blank area for live Chinese text; no letters, no pseudo-writing. Use the provided approved sprites as style references for their actual coarse pixel art and simple material clusters; create an independent new asset, not a redraw of the same small sprite. Larger display object may have more pixels, but must retain the same deliberately low-resolution pixel-art language.\nSUBJECT: A small wide horizontal ivory enamel sign suspended from a short walnut bracket by two curved brass loops; subtly scalloped clipped ends and a narrow dark teal edge. Broad completely blank inscription area. Tactile enamel, believable small mounting hardware, restrained depth. No ornamental frame.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/pixel-v2/plaque/source-01.png",
+      "style_policy": "32-bit-era coarse pixel art; no forced 32x32 canvas",
+      "delivery_path": "ArtLibrary/HD2D/20261009/pixel-v2/plaque/delivery.png",
+      "source_sha256": "6971fd5d56cf9075cb6e35c1c283b9cd69b0d65029dea4b615d95389e876f1b9",
+      "delivery_sha256": "f2065296d4b664ebfa863c963374a781f69153817feaf135a19180fdbdabc3c9",
+      "delivery_size": [
+        1570,
+        746
+      ]
+    },
+    {
+      "id": "price_tag",
+      "title": "商品吊牌",
+      "prompt": "OCC noncombat HD2D prop library. TRUE 32-bit-era low-resolution PIXEL ART GAME SPRITE, NOT painted illustration. Every contour visibly stair-stepped with coarse square pixel blocks. Broad flat pixel clusters, sparse clean internal details, narrow dark pixel contour, hard abrupt shade steps using a restrained cohesive palette. No smooth curves, no brush texture, no realistic wood grain, no canvas grain, no antialiasing, no soft gradients, no photorealistic metal reflection. Ivory paper, dark walnut, desaturated teal and sparse muted brass. Neutral upper-left simple 3-tone form shading. Camera-parallel main writing face, front facing zero yaw; thin visible perimeter thickness. Single isolated complete object on genuine transparent background. No glow, no haze, no cast shadow, no floor. Generous clean blank area for live Chinese text; no letters, no pseudo-writing. Use the provided approved sprites as style references for their actual coarse pixel art and simple material clusters; create an independent new asset, not a redraw of the same small sprite. Larger display object may have more pixels, but must retain the same deliberately low-resolution pixel-art language.\nSUBJECT: An ivory thick paper price tag with softly clipped upper corners, a little brass eyelet and a short neatly looped muted teal cord. Front facing wide enough for two lines of live text. Blank cream writing area, restrained stacked-paper thickness and clean intact cord silhouette. No text.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/pixel-v2/price_tag/source-01.png",
+      "style_policy": "32-bit-era coarse pixel art; no forced 32x32 canvas",
+      "delivery_path": "ArtLibrary/HD2D/20261009/pixel-v2/price_tag/delivery.png",
+      "source_sha256": "ff2698498cec1893c9e4e0e12459094713db9a6c14e2771597b7d6946a9007a3",
+      "delivery_sha256": "63bff821eef1e5a5d532a7180762af637b8ca994ebbee377e890d65ee08f306b",
+      "delivery_size": [
+        1565,
+        606
+      ]
+    },
+    {
+      "id": "service_label",
+      "title": "桌面服务牌",
+      "prompt": "OCC noncombat HD2D prop library. TRUE 32-bit-era low-resolution PIXEL ART GAME SPRITE, NOT painted illustration. Every contour visibly stair-stepped with coarse square pixel blocks. Broad flat pixel clusters, sparse clean internal details, narrow dark pixel contour, hard abrupt shade steps using a restrained cohesive palette. No smooth curves, no brush texture, no realistic wood grain, no canvas grain, no antialiasing, no soft gradients, no photorealistic metal reflection. Ivory paper, dark walnut, desaturated teal and sparse muted brass. Neutral upper-left simple 3-tone form shading. Camera-parallel main writing face, front facing zero yaw; thin visible perimeter thickness. Single isolated complete object on genuine transparent background. No glow, no haze, no cast shadow, no floor. Generous clean blank area for live Chinese text; no letters, no pseudo-writing. Use the provided approved sprites as style references for their actual coarse pixel art and simple material clusters; create an independent new asset, not a redraw of the same small sprite. Larger display object may have more pixels, but must retain the same deliberately low-resolution pixel-art language.\nSUBJECT: A small tabletop standing service sign: broad rounded ivory enamel inscription face in a dark walnut lower support with short brass feet. Camera-parallel blank writing surface. A compact connected object with a stable support edge, no box-like UI panel, no elaborate frame.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/pixel-v2/service_label/source-01.png",
+      "style_policy": "32-bit-era coarse pixel art; no forced 32x32 canvas",
+      "delivery_path": "ArtLibrary/HD2D/20261009/pixel-v2/service_label/delivery.png",
+      "source_sha256": "b951443016fd44b26ea2543367057b73bd6f60fff0df90f5c0603cbeab914f55",
+      "delivery_sha256": "0419870fc5a58a75f83ad5badcee2273279012eaa52d58f02d848d617f860e1f",
+      "delivery_size": [
+        1588,
+        668
+      ]
+    },
+    {
+      "id": "cloth_display",
+      "title": "布垫陈列座",
+      "prompt": "OCC noncombat HD2D prop library. TRUE 32-bit-era low-resolution PIXEL ART GAME SPRITE, NOT painted illustration. Every contour visibly stair-stepped with coarse square pixel blocks. Broad flat pixel clusters, sparse clean internal details, narrow dark pixel contour, hard abrupt shade steps using a restrained cohesive palette. No smooth curves, no brush texture, no realistic wood grain, no canvas grain, no antialiasing, no soft gradients, no photorealistic metal reflection. Ivory paper, dark walnut, desaturated teal and sparse muted brass. Neutral upper-left simple 3-tone form shading. Camera-parallel main writing face, front facing zero yaw; thin visible perimeter thickness. Single isolated complete object on genuine transparent background. No glow, no haze, no cast shadow, no floor. Generous clean blank area for live Chinese text; no letters, no pseudo-writing. Use the provided approved sprites as style references for their actual coarse pixel art and simple material clusters; create an independent new asset, not a redraw of the same small sprite. Larger display object may have more pixels, but must retain the same deliberately low-resolution pixel-art language.\nSUBJECT: A shallow walnut display cradle with a soft folded ivory cloth laid over its center, cloth corners gently draping over the rim, subtle desaturated teal sewn trim. Complete low wide silhouette, empty central presentation area for interchangeable product sprites. No goods, no text. Camera-parallel shallow overhead reveal.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/pixel-v2/cloth_display/source-01.png",
+      "style_policy": "32-bit-era coarse pixel art; no forced 32x32 canvas",
+      "delivery_path": "ArtLibrary/HD2D/20261009/pixel-v2/cloth_display/delivery.png",
+      "source_sha256": "fe59c666caa7d022ae314d40f82d290e2cbf79e67cd47b413520ebc25344f3b1",
+      "delivery_sha256": "4b80d3e9db1e55dd49d7f43f47c8590eae39c545ba7a5afd3525e0696b0c2496",
+      "delivery_size": [
+        1587,
+        583
+      ]
+    },
+    {
+      "id": "tool_rack",
+      "title": "校准工具架",
+      "prompt": "OCC noncombat HD2D prop library. TRUE 32-bit-era low-resolution PIXEL ART GAME SPRITE, NOT painted illustration. Every contour visibly stair-stepped with coarse square pixel blocks. Broad flat pixel clusters, sparse clean internal details, narrow dark pixel contour, hard abrupt shade steps using a restrained cohesive palette. No smooth curves, no brush texture, no realistic wood grain, no canvas grain, no antialiasing, no soft gradients, no photorealistic metal reflection. Ivory paper, dark walnut, desaturated teal and sparse muted brass. Neutral upper-left simple 3-tone form shading. Camera-parallel main writing face, front facing zero yaw; thin visible perimeter thickness. Single isolated complete object on genuine transparent background. No glow, no haze, no cast shadow, no floor. Generous clean blank area for live Chinese text; no letters, no pseudo-writing. Use the provided approved sprites as style references for their actual coarse pixel art and simple material clusters; create an independent new asset, not a redraw of the same small sprite. Larger display object may have more pixels, but must retain the same deliberately low-resolution pixel-art language.\nSUBJECT: A compact arched walnut calibration rack with broad recognizable hand tools hanging from brass loops and an ivory ceramic conductor cradle on the base. Muted cyan conductor coil. Open gaps, curved silhouette, clean practical magical engineering. Complete stable base. Not a UI rectangle.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/pixel-v2/tool_rack/source-01.png",
+      "style_policy": "32-bit-era coarse pixel art; no forced 32x32 canvas",
+      "delivery_path": "ArtLibrary/HD2D/20261009/pixel-v2/tool_rack/delivery.png",
+      "source_sha256": "b0444cbba4b99acbf49878f84d6237adb74d16cabd89324770516e1ee99b685c",
+      "delivery_sha256": "eaa008bb1e3eba3bada6e7ae17285a3c02d07a15b85ff89d12aea9e716442f83",
+      "delivery_size": [
+        1361,
+        1066
+      ]
+    },
+    {
+      "id": "apothecary",
+      "title": "药剂收纳提箱",
+      "prompt": "OCC noncombat HD2D prop library. TRUE 32-bit-era low-resolution PIXEL ART GAME SPRITE, NOT painted illustration. Every contour visibly stair-stepped with coarse square pixel blocks. Broad flat pixel clusters, sparse clean internal details, narrow dark pixel contour, hard abrupt shade steps using a restrained cohesive palette. No smooth curves, no brush texture, no realistic wood grain, no canvas grain, no antialiasing, no soft gradients, no photorealistic metal reflection. Ivory paper, dark walnut, desaturated teal and sparse muted brass. Neutral upper-left simple 3-tone form shading. Camera-parallel main writing face, front facing zero yaw; thin visible perimeter thickness. Single isolated complete object on genuine transparent background. No glow, no haze, no cast shadow, no floor. Generous clean blank area for live Chinese text; no letters, no pseudo-writing. Use the provided approved sprites as style references for their actual coarse pixel art and simple material clusters; create an independent new asset, not a redraw of the same small sprite. Larger display object may have more pixels, but must retain the same deliberately low-resolution pixel-art language.\nSUBJECT: A physician's open rounded ivory fabric apothecary satchel, arched walnut carry handle, brass latch and tidy broad muted blue glass bottles with folded cloth inside. A complete elegant soft silhouette with a stable contact edge, clean practical academy medical equipment. No writing or medical text.",
+      "status": "QA_PENDING",
+      "role": "hd2d_library_display",
+      "source_channel": "codex_builtin_imagegen",
+      "source_path": "ArtLibrary/HD2D/20261009/pixel-v2/apothecary/source-01.png",
+      "style_policy": "32-bit-era coarse pixel art; no forced 32x32 canvas",
+      "delivery_path": "ArtLibrary/HD2D/20261009/pixel-v2/apothecary/delivery.png",
+      "source_sha256": "355409424ec003e2bc2a828b5bc9b8e6a41152b75d631288c3a0fa1083c94049",
+      "delivery_sha256": "f324cd43bf9dfeffa8df64c006ee2a88f4018e6575a1b5b5ef9e21520e5bdc8a",
+      "delivery_size": [
+        1490,
+        1031
+      ]
+    }
+  ],
+  "status": "QA_PENDING",
+  "application_status": "NOT_IMPORTED; no Unity runtime or contact proof"
+}

@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "scope": "Local runtime birth timing and full silhouette checks; visual outcome reviewed separately",
+  "absentAtZero": true,
+  "no12FpsHoldGate": true,
+  "completeFourSealsAt6_6": true,
+  "monotonicPixelCount": true,
+  "colonies": [
+    {
+      "name": "参考稿裁切 · 完整外环",
+      "count": 193,
+      "pixels": 5468
+    },
+    {
+      "name": "参考稿裁切 · 独立六符印",
+      "count": 130,
+      "pixels": 3587
+    },
+    {
+      "name": "参考稿裁切 · 中心交织术式",
+      "count": 87,
+      "pixels": 2450
+    },
+    {
+      "name": "参考稿裁切 · 施法中心术印",
+      "count": 23,
+      "pixels": 560
+    }
+  ],
+  "examples": {
+    "0.76": [
+      41,
+      0,
+      0,
+      560
+    ],
+    "0.78": [
+      61,
+      0,
+      0,
+      560
+    ],
+    "0.84": [
+      140,
+      0,
+      0,
+      560
+    ],
+    "0.86": [
+      176,
+      0,
+      0,
+      560
+    ]
+  },
+  "console": {
+    "sampledUtc": "2026-10-16T02:37:46.7489569Z",
+    "ageMs": 131,
+    "compilationFailed": false,
+    "compiling": false,
+    "consoleErrors": 0,
+    "consoleWarnings": 0,
+    "consoleLogs": 5,
+    "seeded": true
+  }
+}

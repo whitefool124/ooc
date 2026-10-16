@@ -9,8 +9,15 @@ namespace OCC.Combat
     {
         public static int Budget(CombatState state, UnitState unit) =>
             state.RainLanternCourt == null
-                ? unit.MovementRangeThisTurn + (state.RogueEquipment?.MovementBonus(unit.Id) ?? 0) + (state.AcademyFieldEnemy?.MovementBonus(state, unit) ?? 0)
+                ? MovementRange(state, unit) + (state.RogueEquipment?.MovementBonus(unit.Id) ?? 0) + (state.AcademyFieldEnemy?.MovementBonus(state, unit) ?? 0)
                 : state.RainLanternCourt.MovementBudget(unit);
+
+        private static int MovementRange(CombatState state, UnitState unit)
+        {
+            if (state.ActiveUnitId == unit.Id) return unit.MovementRangeThisTurn;
+            int range = Math.Max(0, unit.NaturalMovementRange + unit.StatusStrength(StatusType.Agility));
+            return unit.HasStatus(StatusType.Slow) ? Math.Min(range, unit.SlowedNaturalMovementRange) : range;
+        }
 
         public static IReadOnlyList<GridPosition> FindPath(CombatState state, UnitState unit, GridPosition destination) =>
             state.RainLanternCourt == null

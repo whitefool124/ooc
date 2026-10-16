@@ -1,0 +1,980 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.3",
+  "contract_sha256": "5f1b45719f50c7544ba5c901dd3eefbbc0a0181eeb86f039e5553c2a805d109b",
+  "scene_kind": "desk",
+  "baseline_id": "desk-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DServiceScene.cs"
+  ],
+  "inputs": [
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "296d00399e90e469d9f84bf3e44cee5d7074748a3243a1da9dc2412d5812ef42"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_prop_potion_case.png",
+      "sha256": "7f0e034e2e78b0e53d4707f3e94e818d0956f93f12e09633adb13d9defa7a8e6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_prop_tool_satchel.png",
+      "sha256": "13f333f511fe4835ee1c7d99353d470e164c815c951864be57e71f8ea1d9727d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/Hd2DContent20261009/student_dossier.png",
+      "sha256": "7e7f529c83edc248a9f2baed25c426c8016a18a460d3514f428742634984adb5"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DAtmosphere.asset",
+      "sha256": "adf26689a7e80b22ef256d4a7c516929d51aea7f3af97bbe91cb136db3a685f0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/desk.png",
+      "sha256": "6151936c18cfde721a5590bcc7d5939a4c68c508d2c672387587a75f53c744ef"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/FormalRogueliteUi.cs",
+      "sha256": "224975c514defaf0c86d76282cd12c4b4392e51151a4e85e43334425418232dc"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DDeskArtCandidate.cs",
+      "sha256": "c655dea9e36242269ae724a15cf6777c9063a48669008cd80ee4518742c8bc5e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+      "sha256": "6f707400ca083ba404e678ef5dc5f4c21fda1065d78354d02f502bdca24025d7"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DNativeMaterialMesh.cs",
+      "sha256": "408393e02cc2a706010804019e5f2af6f94ac5f0683af349f7661dfeb442a7e6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DPaperSkin.cs",
+      "sha256": "02a42e1c8530eebbf90f269fb61e5889ab55b47769057738c5e92878e9c3128c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DServiceScene.cs",
+      "sha256": "4ab4406446e1c71566ffa96484e7b7ca2b85f780b1296cdf1ce329f93d2dcdb0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/MainMenuHd2DStage.cs",
+      "sha256": "cc14c25431840009bd15a534a7ae7d7e74196c347d5c5964bfee829dd6da35d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "a3e19c8ccdf3e897e9c6c09cd508915afcbb56165e027180320f8796f812e396"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_event_1920.png",
+      "sha256": "30b2cb38f6cf828f97cb1b173c7deb61cdae116b9dced3d6644f29d0e145f7f6"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_event_actual_960.png",
+      "sha256": "72f35c74de61a474691b25ee299ef957639739291daa9a7c8bb2475580c31a1e"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_medical_1920.png",
+      "sha256": "f851bc38b2b9cc92d7eb0162e0a46785cded3e25aceb398f4cf8023dc0e47f98"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_medical_actual_960.png",
+      "sha256": "ff3c29992aeb42bc39025261784e960e141d75fcd884d4488c9f75dd0b7c01bc"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_shop_1920.png",
+      "sha256": "788cd98df0c67d5df3a93610023d54f592d8e3d79ce53d154ff3ceae44c0b51f"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_shop_actual_960.png",
+      "sha256": "695fc1648e4268da70e48960a6992867ebefb5f30808718436f6a2e898e6bb45"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_workshop_1920.png",
+      "sha256": "1e7319262c2bfbb48f128a67d78c95d083be15b1af919ef8f5a5df2365e8e87e"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_workshop_spells_actual_960.png",
+      "sha256": "177126d6321a0ce7789ea02eb281286788d5b39d82a0fb6d254d3b84f9c0eac5"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_event_after_1920.png",
+      "sha256": "cfad76123ca3b41c2d4f179d543242af03b0a5a11aec027464840a1ea8a5421c"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_event_after_actual_960.png",
+      "sha256": "31e8f67e63b0e3470a98381192bcf6a767744f433804dd59bd63938fc909f697"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_event_before_1920.png",
+      "sha256": "8f99b323106a70fa26392707dbac4af514e4fc2f9535e8e476c76c702981190e"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_medical_local_1920.png",
+      "sha256": "625cd14509433d9f0ddd25c8685427e7c63a7547e1785a5768ccbd350dbc4a7e"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_medical_reading_1920.png",
+      "sha256": "f5c2d775093c8460fe706d8dd4999c8b90d3f0534dc8c2de4734ce2d35ee6459"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_medical_stable_1920.png",
+      "sha256": "58257e5d6296fa60333fba72c2c2dc2b6134f4dd9bf22566d3812acde82b869e"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_shop_local_1920.png",
+      "sha256": "b171d2c7da0a8240431465b606e9345e7fc02d734f5aef2a9580186ffb0ed420"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_shop_reading_1920.png",
+      "sha256": "32af0585ee1ce377988c397bfdd93f69cd4b3910c64464068cb011cf8cf7e3f2"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_workshop_final_1920.png",
+      "sha256": "9dab97d8dc0165d5d58885d225fb3e47d68c8876c01ce8e74eaec92d346a9823"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_workshop_local_1920.png",
+      "sha256": "be3768d4569ab55cc4f36bf55ff6483b383a4e9b6a2b4bc7d0751d5e8e1c9363"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_workshop_reading_1920.png",
+      "sha256": "f5ed69130aba7bb10bb2b19184308a4129c44755ba92f091b2971448c9f0202b"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_workshop_spells_1920.png",
+      "sha256": "7b297d39089d737c5c37c692945493c5dde456a2a6fed387237629f437db5b3c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_after_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_after_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_after_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_after_scope.json",
+      "sha256": "121dc2868a35f312140951192758b76c07c3f4991eaae645076c0735ebcc5d76"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_before_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_compile_status.json",
+      "sha256": "c3bcdd2389819391365bc0fc116d3f5f3c7df97911b4544ef4a552acf80c5def"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_before_restore.json",
+      "sha256": "d1384d3be7643defa43ee8edde8643a0faaee32799d38b7739ba8d5888f30068"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_console_errors.json",
+      "sha256": "300983571bbe73598a7a370d1e589888f51987a8c9dacb45f0ba50f0eaadaf70"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_current.json",
+      "sha256": "a99c5cb3829ea569cda61efa2792493a7f9016e8e44322a16b46e01b6b655983"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_edit_state.json",
+      "sha256": "6eb5a5b864c240bc2ed9ed200d3a24d487dd2faf8157b1b82fe5b86742c845c2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_entry_status.json",
+      "sha256": "08a97f15903190b3019741e0655ad60cc9c4a0de1466d79588a63997a08f28b3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_event960_capture.json",
+      "sha256": "2b8b6f5de4d8981f00d2020bbcc0e7077c566f24a366591ad142d26ccf7a7de7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_event_buttons.json",
+      "sha256": "f1cecd0c7c94336a385e428d34ba3ddcbb090da99e8d0f687d908d1217619935"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_event_capture.json",
+      "sha256": "a7d4b0e9db79bf527521505045b67b4b26c85396ce1bb3983a49195079b2b9d5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_event_hit.json",
+      "sha256": "f0a0f41e40a67d8c289368f2294ff5f546aa75c2ee91c9befdee9c59dc0c7a1b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_event_return960_hit.json",
+      "sha256": "32e3ec03e7080aa8a0cb28e1c1f14632fc4ce5a95ed06fed37fc64f175c0a17a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_medical960_capture.json",
+      "sha256": "15484003e82c72cf4e86f417b469481ad321b14523118655cb45978d0226d730"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_medical_after_meal.json",
+      "sha256": "979cc9a10a86afb1f15381d86dbd37f14a3f94a416d8b0882b4b1424d6e32cf4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_medical_buttons.json",
+      "sha256": "45225740bbfd1e1c626a60cfc7d86e031b7cc21a8e48f51d0260b1211b158963"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_medical_capture.json",
+      "sha256": "0c931c43d523f53dbefc6a3777f4dccfd5813ca39d4118ff7859eda357a1b2a4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_medical_meal960_hit.json",
+      "sha256": "b886f787f97112b111a4511886488a81833cd9d77cb0a8775d19947024862a54"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_medical_open.json",
+      "sha256": "e9e249a39be014016585236879850c17423051503ef23e1e33d6acd85ba06740"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_medical_return960_hit.json",
+      "sha256": "b000da32c658d671e41c5a957de64c957881ed4fea907185f51167dea4bdbbcb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_medical_route.json",
+      "sha256": "866c3b74decc6dfb2d68e31935ba081ae1069c548cc41a8ec6cb07ddf9d0acfb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_medical_select960.json",
+      "sha256": "95b6c75aba1d7f87047f60437567c7dfed727437ae3cca244a4e8f012febf834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_restore960.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_restore_medical_size.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_restore_scene.json",
+      "sha256": "21b89f082079496f11647493945e1ccc7928291f62cad9cc4d7776fc12a0c0a6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_restore_shop_size.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_restored_state.json",
+      "sha256": "81069f32ffa5c7df2d991725afde5a67a1d9c662ae7df604b34c3cf1590245c3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_scope.json",
+      "sha256": "34f0ad10959f574bce660fc904e43fc077e21a568bab6355c48e6d598ab4588c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_select960.json",
+      "sha256": "95b6c75aba1d7f87047f60437567c7dfed727437ae3cca244a4e8f012febf834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_shop_after_buttons.json",
+      "sha256": "a4ffedc60120d717bbc4d8f30b1e1d17ed70ac648b45b80bb26d2c0ee7f5078d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_shop_after_buy.json",
+      "sha256": "86e1c1bca1fd4beb208dc5759e46dfd4cacf5d392e9c1a54ffb45c9008cfe50c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_shop_buttons.json",
+      "sha256": "2a5104e2f783be992e5bb37813766578f6be35e76f6e5ae3b66f9364a77a35c5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_shop_buy960_hit.json",
+      "sha256": "004be289131486a6f91eebe5119ca9134b9a5964128cc4fe0366e299d9fec600"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_shop_capture1920.json",
+      "sha256": "c1e804aef9343c8f26d6c103dfa5a2b0dade7802c86dbf2096733e3710540cc4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_shop_capture960.json",
+      "sha256": "c56dcdb921f8f18ea4fc92dd5951ce1f8915686cae00b67b94b7e8c08a6879fd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_shop_open.json",
+      "sha256": "e9e249a39be014016585236879850c17423051503ef23e1e33d6acd85ba06740"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_shop_return960_hit.json",
+      "sha256": "d79d40ee6ffaeeb62afebed1733ae583f376ef41105639ca02ace6d25cd48c69"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_shop_route.json",
+      "sha256": "461d6659125641238d7df0c669ea2a7cae3965051dc7e13e0e5fee0c904bb438"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_shop_size960.json",
+      "sha256": "95b6c75aba1d7f87047f60437567c7dfed727437ae3cca244a4e8f012febf834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_workshop960_capture.json",
+      "sha256": "8cec1a178938fdcbe71dcf5abbaf33f201f4915b33c72d82d57f766f2d4092f0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_workshop_buttons.json",
+      "sha256": "9f4b15ffaae5bb4e267ce4f13b3cf52c28027e4c8b36d6ffcd16054acb6ad83f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_workshop_capture.json",
+      "sha256": "ca5121fb8c03be25040f7a57d9bd27e4642a2140985f0f90fa62b51b5072fee3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_workshop_open.json",
+      "sha256": "e9e249a39be014016585236879850c17423051503ef23e1e33d6acd85ba06740"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_workshop_restore960.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_workshop_return960_hit.json",
+      "sha256": "c110f9b1d833c549203511bc2bcf6739a9966d27bf8964e71d48a7f397a82f76"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_workshop_route.json",
+      "sha256": "45038c13e7b4df7208e563e348c3be0b3a485160968750997fd13a7bc99e6473"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_workshop_select960.json",
+      "sha256": "95b6c75aba1d7f87047f60437567c7dfed727437ae3cca244a4e8f012febf834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_delivery_workshop_tab_hit.json",
+      "sha256": "bf8880899a08acec1a5b60f36a48ce49565569134230d2b511856f3d6509c829"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_edit_state.json",
+      "sha256": "9843713a495b98b6b58117c9bbe9a1d16eea5a47e0a7292a0b1940b0c259b320"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_event_960_capture.json",
+      "sha256": "1ebde31991fd4bc4431c0120786eb26390472c115a87740851261f3b1147bc37"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_event_after_buttons.json",
+      "sha256": "287a78e3fc52e2404f4b36015ecc7770822470df248a657dbb037c94a1ce46a2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_event_after_capture.json",
+      "sha256": "26ef906227534c13fb4690991c4d3ba6bda0e3a23a129794ee718579810afc50"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_event_after_hit.json",
+      "sha256": "eff135d0009ff5dcb335d6a05a55cdb1abf72a8032afe7bdc81ff6ba97a46bfd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_event_before.json",
+      "sha256": "87a475a976b44e9d46c6290667201a111b43c99cd08ef18bdbb55848ae7d7b54"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_event_before_buttons.json",
+      "sha256": "f70cde9c81d92dd00ef06c525342b4f32b3679d97729ec50ee0db6c1b649b62c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_event_density.json",
+      "sha256": "491a1a481209fd431235ef94468c436c0d7e6a6ea60a85c63eb354ef522d37ba"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_event_return960_hit.json",
+      "sha256": "a66a636461b263e447c7b67cc6ff7cc068822d18bffdc68e45f1fc82839070eb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_event_select960.json",
+      "sha256": "95b6c75aba1d7f87047f60437567c7dfed727437ae3cca244a4e8f012febf834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_compile_recovery.json",
+      "sha256": "d09911cd0e304ba588ee66abcf661d23ba58f500b30a1dd37c73bea05730095a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_medical_buttons.json",
+      "sha256": "d428b0855d3f51551b003c6d828ae32d4cb021c933cd0f33e575faa70b8b4e5d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_medical_route.json",
+      "sha256": "866c3b74decc6dfb2d68e31935ba081ae1069c548cc41a8ec6cb07ddf9d0acfb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_medical_settled.json",
+      "sha256": "e9e249a39be014016585236879850c17423051503ef23e1e33d6acd85ba06740"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_shop_buttons.json",
+      "sha256": "de1c948081acff19abd14af061d83b6dd329e10b5b9747e85afb55a3e2fbe259"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_shop_route.json",
+      "sha256": "461d6659125641238d7df0c669ea2a7cae3965051dc7e13e0e5fee0c904bb438"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_shop_settled.json",
+      "sha256": "e9e249a39be014016585236879850c17423051503ef23e1e33d6acd85ba06740"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_workshop_capture.json",
+      "sha256": "8493430b8093cb073520cb0b2afe664a72889b917883adf51c3aef11358a0e52"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_workshop_open_settled.json",
+      "sha256": "e9e249a39be014016585236879850c17423051503ef23e1e33d6acd85ba06740"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_workshop_route.json",
+      "sha256": "45038c13e7b4df7208e563e348c3be0b3a485160968750997fd13a7bc99e6473"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_workshop_select_hit.json",
+      "sha256": "e4a798eda18b528bb499712111c0729e5743d325f286259c70212affb52b5376"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_final_workshop_selected_buttons.json",
+      "sha256": "08da8515e87a4eb0a795eb267540f34455e98e6c0fbc5ee7e69fe202d951c882"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_layout_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_medical_after_meal.json",
+      "sha256": "979cc9a10a86afb1f15381d86dbd37f14a3f94a416d8b0882b4b1424d6e32cf4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_medical_before_meal.json",
+      "sha256": "582a488e6eef3dd7a8a32ae9abc4fd74f61cd0952d60b2c5eceac1910bb59340"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_medical_buttons.json",
+      "sha256": "4790d79c80715d0514baccc30b0c44e6439f6bbf534016f998ff92d6227e5631"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_medical_capture.json",
+      "sha256": "94b8bb5e5899316c5216d817be40802862926c31ec75dfd2e7082e0027036d4d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_medical_local.json",
+      "sha256": "866c3b74decc6dfb2d68e31935ba081ae1069c548cc41a8ec6cb07ddf9d0acfb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_medical_meal_hit.json",
+      "sha256": "2408cc4899efeb2764909b3d64ab001f99cc1b49e6dbb72574cff5b150d11a39"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_medical_reading_capture.json",
+      "sha256": "b234721d7a0db1efa2acee2a9e175504b539e631b7e1bdb8f3e1838b7d0f63a2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_medical_stable_capture.json",
+      "sha256": "0a86eaac682ff6c3f1d6fbd07fd625b14b80ecd31953e26c6af06430eabe993b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_nodeev_hit.json",
+      "sha256": "10adcd0a557c297776afe614d65c056c2a0d01bcb5be32ccfc31e59b67c3c29b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_open.json",
+      "sha256": "72f80dcfe8bac63c6b02c70eba24e9a4cc05b094ec7be12436fafdd4e5e79d58"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_padding_edit_state.json",
+      "sha256": "a621b8c3a18382cdf643e2aab393b9288dc3c42036dc478935ae77b04d2fe2ab"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_padding_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_padding_recompile.json",
+      "sha256": "b02bd20762c4b55d2b1afc1aea34e64e2d8566081104126280b95afd9c507a78"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_preflight.json",
+      "sha256": "81069f32ffa5c7df2d991725afde5a67a1d9c662ae7df604b34c3cf1590245c3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_prepare.json",
+      "sha256": "8fe3f5d2870b81bf685aa1329a79c654472aaf4d40f5f8b23a92171b71a5faf4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_reading_compile_recovery.json",
+      "sha256": "5a6e2a394a424473bc3deae1290f4f9c72d07f8bd49095183abcf2933ff0b27f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_reading_recompile.json",
+      "sha256": "b02bd20762c4b55d2b1afc1aea34e64e2d8566081104126280b95afd9c507a78"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_restore960.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_return_before_hit.json",
+      "sha256": "aeabe99a20434a03ff2485e735706ac09897ca9eabd9c9ec4cc089cdadc35688"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_scope.json",
+      "sha256": "a3974b709bdbac87d59b4d6239c87b75524f38cc60dc12d90b71225f6858e794"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_second_edit_state.json",
+      "sha256": "649ad63e95e504e25b224b2e7a1a7836c65507f2ee935c3ebe85207715d66859"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_second_prepare.json",
+      "sha256": "5d82ffdfa0fbf75d16b17e99108e84cf214d19d826ff83c8b6690833a79758be"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_shop_after_purchase.json",
+      "sha256": "86e1c1bca1fd4beb208dc5759e46dfd4cacf5d392e9c1a54ffb45c9008cfe50c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_shop_before_purchase.json",
+      "sha256": "fb78e03efd90771e922a33dc75c0ab4d815ffb4fb3d17127584bb690123539d4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_shop_buttons.json",
+      "sha256": "644e1160c0d3e5021ccc80e0c1355106eca9c4c5119861523c170e653ee530e8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_shop_capture.json",
+      "sha256": "6da57870d09e368f9fc0cc93f461c3f065dff76c004b79861d85d22a71316a1c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_shop_local.json",
+      "sha256": "461d6659125641238d7df0c669ea2a7cae3965051dc7e13e0e5fee0c904bb438"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_shop_purchase_hit.json",
+      "sha256": "adceb217a344b135cd009e15cc6037b4d268a4aa4c514c3a1d670176ced27788"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_shop_reading_capture.json",
+      "sha256": "6c1dd15201423f95e2967e80bc86522a05cfc42bbf7593d7bbb0ddc81b69c93a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_shop_stable_buttons.json",
+      "sha256": "587a007ed45f9becfe10768bd63a16140b30074ace2d4a515663db6a585d917b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_before_buttons.json",
+      "sha256": "5d53739fc5645ab823adfabe4d6f48916557adc30defba8d0589bd5628a74c4c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_before_hit.json",
+      "sha256": "534e2e956b4688be2971fc089682c5fa4efdfe094f155bd49b3a924afb1c95d7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_buttons.json",
+      "sha256": "c4b39762e2040ee1c8fd317b75c24f635dc337f97450f2cadee7f8cb13912e80"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_capture.json",
+      "sha256": "420ff6f9915b175c0b075be447133ac4d743e29fb36fd60c1fe6e957146ae37c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_final_tab_hit.json",
+      "sha256": "845e59f5bf6b636d97f4d253564f155ab21eb52bcf5bd2c2a1247bba5df455bb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_final_target_hit.json",
+      "sha256": "0786a109b2aa2be76f0c94ae0423cbaea5aa16377a7cbf8654977b507ff02955"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_local.json",
+      "sha256": "45038c13e7b4df7208e563e348c3be0b3a485160968750997fd13a7bc99e6473"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_reading_buttons.json",
+      "sha256": "15c6b8c5a59f431bade1ac1120004f45aa2f78aa1a0514eda59e9f7836fda694"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_reading_capture.json",
+      "sha256": "b3ca6f33698aba277a4508b9d1022822b2cc355e59501d72ec4513f75d148011"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_selected_settled.json",
+      "sha256": "7928b90f77b5a067958473279c02fc78551660f5814c620ef42e35d271bb6efa"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_settled_tab_hit.json",
+      "sha256": "58bf10afc53afac099b84659316251d6af54c4f93860370303d9ffa8e89c44cc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_spell_tab_hit.json",
+      "sha256": "3d782c5fa52828fc2283417048f12430c12fb5edbd30d242ec416fcb59a32ea1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/multiui_workshop_spells_capture.json",
+      "sha256": "4d697b6ca0b21d42a3cfb803ba3bd463f528cec928ffd47f69f8f45aec6c8008"
+    },
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "e3d411ed5c97764ebfd06659ab7dc4b12303319622a6401e6d59ee39b1fbf371"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": false,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 35,
+    "yaw": 0,
+    "field_of_view": 24
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": null
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "整备人物、装备、商店内容图和部分图标的源像素密度仍需逐资产复核，未宣称同场景全部一致。",
+    "工坊安装成功、非满血治疗、商店完整随机学院路线、保存恢复和独立Player包尚未完成本次验收。",
+    "本次没有性能测量、运动记录、全资产密度清单或人工样板批准。",
+    "旧service截图含中间版本或局部临时状态；不作为当前样板批准，不继承旧输入SHA的通过结论。"
+  ],
+  "local_implementation": {
+    "screens": [
+      "event/node preview",
+      "workshop",
+      "medical",
+      "shop"
+    ],
+    "scope": "existing service-page presentation only; prices, consequences, saved state rules unchanged",
+    "density": "32 PPU table UV recalculated after 7.8-unit widening; paper border sampling compensates each world canvas scale; decorative props use imported native source density",
+    "material": "inherits current dielectric wood desktop .32 and edge/legs .24 smoothness; lighting unchanged",
+    "runtime_assets": "archive file loading removed from service presentation; reuse imported Resources in Editor and Player; no new bitmap import, source repaint or formal promotion",
+    "readability": "cup hidden on service desk; optional props moved behind reading areas; identity, treatment, workshop target/material/preview, and shop offers use paper support; narrow strips omit rims rather than shrinking pixels"
+  },
+  "validation_scope": {
+    "normal": "normal entry, locked EV1 preview, and map return via actual EventSystem; final delivery records distinguished from earlier iterations",
+    "local": "W/M/S use existing disposable PreviewUiCaptureRun (no player map save writes). Final revision actual EventSystem tab, meal, purchase and return clicks checked at 960x540; both actual resolutions captured. This is local UI evidence, not complete journey acceptance",
+    "final_local_transactions": "multiui_delivery_medical_after_meal: gold 8→5. multiui_delivery_shop_after_buy: gold 8→5 and G-T08 4/4 charges added; multiui_delivery_shop_after_buttons confirms sold-out button disabled",
+    "prior_local_transactions": "meal 8→5 gold; shop 8→5 gold and G-T08 full-charge item added, before final padding-only revision",
+    "failed_attempts": "premature clicks during delayed scene rebuild preserved; later stable clicks recorded separately, no silent conversion of failures to passes",
+    "compile": "multiui_final_compile_recovery.json Success, 2026-10-10T12:51:54.7757319+08:00",
+    "console": "multiui_delivery_console_errors: no cached errors in last 1800 seconds; not an all-time Console claim",
+    "cleanup": "multiui_delivery_restored_state: Edit Mode, correct main project, EpicToonVfxShowcase clean; verified temporary Game View size removed and original selection restored"
+  },
+  "current_screenshots": [
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_event_1920.png",
+      "scope": "normal locked node preview",
+      "aesthetic_approval": false
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_event_actual_960.png",
+      "scope": "normal locked node preview",
+      "aesthetic_approval": false
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_workshop_1920.png",
+      "scope": "disposable local service UI",
+      "aesthetic_approval": false
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_workshop_spells_actual_960.png",
+      "scope": "disposable local service UI",
+      "aesthetic_approval": false
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_medical_1920.png",
+      "scope": "disposable local service UI",
+      "aesthetic_approval": false
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_medical_actual_960.png",
+      "scope": "disposable local service UI",
+      "aesthetic_approval": false
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_shop_1920.png",
+      "scope": "disposable local service UI",
+      "aesthetic_approval": false
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/service_delivery_shop_actual_960.png",
+      "scope": "disposable local service UI",
+      "aesthetic_approval": false
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"level\\\":0,\\\"names\\\":[\\\"Very Low\\\",\\\"Low\\\",\\\"Medium\\\",\\\"High\\\",\\\"Very High\\\",\\\"Ultra\\\"],\\\"realtime\\\":false}\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

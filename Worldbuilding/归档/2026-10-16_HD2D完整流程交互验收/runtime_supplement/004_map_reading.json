@@ -1,0 +1,40 @@
+{
+  "screen": [
+    640,
+    480
+  ],
+  "node": "S",
+  "flow": "DeveloperMenu",
+  "buttons": [
+    "按钮_背包",
+    "map.node.B2",
+    "map.node.EV3",
+    "map.node.X",
+    "map.node.B1",
+    "map.node.O",
+    "map.node.S",
+    "map.node.EV2",
+    "map.node.W",
+    "map.node.M",
+    "按钮_设置",
+    "map.node.B3",
+    "map.node.EV1"
+  ],
+  "uiText": [
+    "角色  维克多",
+    "学院贡献  0",
+    "背包",
+    "生命  50/50",
+    "教学区",
+    "设置",
+    "学院时序  0/24",
+    "学院地图",
+    "工坊区",
+    "中庭宿舍区",
+    "学院",
+    "封存高塔区",
+    "市集医务区",
+    "校园荒野区",
+    "金币  2"
+  ]
+}

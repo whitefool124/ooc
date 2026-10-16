@@ -27,7 +27,7 @@ namespace OCC.Combat.Tests
         [TestCase(128f, .5f)]
         [TestCase(256f, 1f)]
         [TestCase(256f, .5f)]
-        public void GraphicSpaceHitsOpaquePixelsAndLetsTransparentPixelsThrough(float size, float scale)
+        public void UnitArtPassesAllPixelsThroughAtEveryDisplayScale(float size, float scale)
         {
             GameObject root = null;
             try
@@ -38,9 +38,9 @@ namespace OCC.Combat.Tests
                 image.rectTransform.position = new Vector3(200, 150, 0);
                 image.rectTransform.localScale = new Vector3(scale, scale, 1);
                 filter.Bind(image, new CombatTextureAlphaMask(2, 2, Diagonal()));
-                Assert.That(image.raycastTarget, Is.True);
-                Assert.That(Hit(image, filter, .25f, .25f), Is.True);
-                Assert.That(Hit(image, filter, .75f, .75f), Is.True);
+                Assert.That(image.raycastTarget, Is.False);
+                Assert.That(Hit(image, filter, .25f, .25f), Is.False);
+                Assert.That(Hit(image, filter, .75f, .75f), Is.False);
                 Assert.That(Hit(image, filter, .25f, .75f), Is.False);
                 Assert.That(Hit(image, filter, .75f, .25f), Is.False);
                 Assert.That(Hit(image, filter, -1f, .25f), Is.False);
@@ -50,7 +50,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void UvFlipMovementAndHiddenTintFollowCurrentGraphic()
+        public void UvFlipMovementAndTintNeverExpandTheLogicalCellInput()
         {
             var root = new GameObject("UnitTransformHitTest", typeof(RectTransform), typeof(RawImage), typeof(CombatUnitPixelRaycast));
             try
@@ -60,11 +60,11 @@ namespace OCC.Combat.Tests
                 filter.Bind(image, new CombatTextureAlphaMask(2, 2, Diagonal()));
                 image.uvRect = new Rect(1, 0, -1, 1);
                 Assert.That(Hit(image, filter, .25f, .25f), Is.False);
-                Assert.That(Hit(image, filter, .75f, .25f), Is.True);
+                Assert.That(Hit(image, filter, .75f, .25f), Is.False);
                 Vector3 oldPoint = Point(image, .75f, .25f);
                 image.rectTransform.position += new Vector3(300, 200, 0);
                 Assert.That(filter.IsRaycastLocationValid(oldPoint, null), Is.False);
-                Assert.That(Hit(image, filter, .75f, .25f), Is.True);
+                Assert.That(Hit(image, filter, .75f, .25f), Is.False);
                 image.color = new Color(1, 1, 1, 0);
                 Assert.That(Hit(image, filter, .75f, .25f), Is.False);
             }

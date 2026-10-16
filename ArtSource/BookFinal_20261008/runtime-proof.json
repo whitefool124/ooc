@@ -1,0 +1,23 @@
+{
+  "fixed_spine_5_poses": true,
+  "closed_cover_height_native": 2.996253,
+  "open_cover_height_native": -6.183982e-07,
+  "native_geometry": [
+    50,
+    33
+  ],
+  "rt": [
+    320,
+    180
+  ],
+  "point": true,
+  "start": "PASS:click:开始游戏",
+  "start_destination": "角色档案",
+  "continue": "PASS:click:继续游戏",
+  "continue_destination": "已保存学院地图",
+  "save_test_setup": "Actual UI creates isolated round, then public menu entry initializes menu; not an end-to-end pause-and-save journey",
+  "console_errors": 0,
+  "scene_saved": false,
+  "human_approval": "PENDING",
+  "asset_status": "REVIEW_READY"
+}

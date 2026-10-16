@@ -1,0 +1,41 @@
+{
+  "status": "completed",
+  "duration": 0.39,
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.ArchivePaperDetailTests.EnterAndLeave_ReturnsToRest_WithoutAccumulatingObjects",
+      "Status": "Passed",
+      "Duration": 0.0352548,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.ArchivePaperDetailTests.PaperClick_ResolvesToItsOwningEntry_AndRejectsDetachedDecoration",
+      "Status": "Passed",
+      "Duration": 0.0065013,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.ArchivePaperDetailTests.RenderedPaper_UsesFormalArt_AndARealTexturedMesh",
+      "Status": "Passed",
+      "Duration": 0.0214946,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.ArchivePaperDetailTests.TurningMotionOff_ImmediatelyRestsThePulledPaper",
+      "Status": "Passed",
+      "Duration": 0.0008586,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

@@ -1,0 +1,1249 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "154a164b50e13c8aee31834246f52ff0b87beb66ad70e39e02d45ff9c4e21eb2",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Editor/Hd2DBattlefieldPropProbe.cs",
+    "UnityProject/Assets/Game/Editor/Hd2DBattlefieldPropProbe.cs.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/normal.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/normal.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/regions.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/regions.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/roughness.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/roughness.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged/normal.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged/normal.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged/roughness.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged/roughness.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact/normal.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact/normal.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact/roughness.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact/roughness.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble/normal.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble/normal.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble/roughness.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble/roughness.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/normal.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/normal.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/regions.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/regions.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/roughness.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/roughness.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/normal.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/normal.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/regions.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/regions.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/roughness.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/roughness.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/normal.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/normal.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/regions.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/regions.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/roughness.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/roughness.png.meta",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader.meta",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldPropMaps.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldPropMaps.cs.meta",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs.meta"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "f58a11f55edbac3893e59fd81d0089ac6ef97a105950ecd87687207204609b94"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "db7a596b423e44589e5a8f27fbbea0bb545be7f48d83ede06930174f9625f0c7"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "b6e9512854f40b266735f2ead588b3cf15932d8857825d2d27a1f14c47df8e7b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "850b28b54eed633573b2f8054c60d704f14591d963881941566cae35e48c8fd1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader",
+      "sha256": "b19cf1f5baf1f0fe3ed3df504350d738a854d8b353907985fcf16dac3d223914"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldPropMaps.cs",
+      "sha256": "f7c7c93f09e7a0b53b216a7233fbece0f8e0346b71c3d6fed261d0802adf56e2"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DBattlefieldPropProbe.cs",
+      "sha256": "85fa1524ef1582fff92b3c78a280494a5116e41620ae704f6afbb8811314d6c4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader.meta",
+      "sha256": "f94edf33c007eaacfdb119c9c01f40fbc520be9696ed139ef8be31eca026017a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldPropMaps.cs.meta",
+      "sha256": "f24cae16c24a60d3617d952dbe59a4393e0b6985a453b542107f9342aedf7844"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs.meta",
+      "sha256": "ced65329a3dc4392e52eee37f60cbbc3a2574eefcef2748ac9154192efe941e8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DBattlefieldPropProbe.cs.meta",
+      "sha256": "cf9f719e6c5235aa4ef6146e5fc8388c81fa8a5e8ae138dbb6ed7bb4d360574c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active.meta",
+      "sha256": "0201e7655400a22ad199891c3077c07cf4a58e07ad46d3f39eb5d13950dfa346"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged.meta",
+      "sha256": "21ce55cdb3810c531fa83ea06354ea1eb12955030c1e24de72ab0c3c6475f63f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact.meta",
+      "sha256": "71f3258e3be6515cabbd9fc5a86710dea2148c4887ff0b6fb61d56c9c178de68"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble.meta",
+      "sha256": "a6bed179d912b2d521162e7b642588e8a7e969f3588f707626b9bf41962e20f4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed.meta",
+      "sha256": "7ce204dc77dfd6d239ae72feef3c4675d45b315cd95592a0972d7db2249dd426"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty.meta",
+      "sha256": "81917cd53e35072a430f28a5ad41c2998088d8acd0148e797753d079b3a11cbb"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open.meta",
+      "sha256": "85774ac2c8f7a71b747a6007346a3ae4c0201d9675618ee4b2b46fa8b6e1506c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/normal.png",
+      "sha256": "ee752dea2bc448293d854df5bd9699b29f113040e2d9c552456c8b7d124cc1d8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/normal.png.meta",
+      "sha256": "a0ada46dfc47a3de43e7f6aa5ebe62d20185f344556650197c4dc44f4d63b2d7"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/regions.png",
+      "sha256": "a6dad890283afc55d3dc2bd939bfc81ff344503d12af81d9fecee62c99644a56"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/regions.png.meta",
+      "sha256": "67ccfc38da3771bfe024d5abb08b289af3339a5c925d1dd1328da281546c9046"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/roughness.png",
+      "sha256": "1153d0e0abd6ad1bd5e007ef76334ef5063f9fea8759dc9bac3df569436155ee"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/roughness.png.meta",
+      "sha256": "e7d6f8a34a52ced7f819cd7488c03cee7577820198a7692d37f66475af2b07a8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged/normal.png",
+      "sha256": "65ecc6308c39005ba0bf713bedfbfff428f26c527f89df44e5fd2ba9090c2aa2"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged/normal.png.meta",
+      "sha256": "fd1cfc84783da8e6d3f98595676aa1802c810886f8195925eb81fdd41e65b06c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged/roughness.png",
+      "sha256": "c77715973900355e25d08dfa4a2833e3dead0559a841d31daa74ec310ca81933"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_damaged/roughness.png.meta",
+      "sha256": "5f717f467b3b6f8c46c7dcf9098de746f2c43397657bcb4e61f6b596f379e6dd"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact/normal.png",
+      "sha256": "774e8681c7ac7d9c5e31b58bcc66f17fb279572eb45d6b668b1192879e53b5c4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact/normal.png.meta",
+      "sha256": "e2c88c05a072ee5ca3372d165bb5fad2b767fbbeaf3d74ebb2780138252ee785"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact/roughness.png",
+      "sha256": "08b5f11daa8a258b43081e41d571b67bf79ab01f9b7c1c6183c83a64fd5ce101"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_intact/roughness.png.meta",
+      "sha256": "b82d041c8f42b7e688c4fb22c98e1081a95de3617b557261213343d7b9224dc3"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble/normal.png",
+      "sha256": "43a14f6961b49068fb286901219a25dc15254a0a3f854f1e32c0379f05d86547"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble/normal.png.meta",
+      "sha256": "22481ac8a35350d3492aa22d42fc71dcac5642ce36b8af6aa2d6cceef0c8d5ea"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble/roughness.png",
+      "sha256": "a2ac0f2184459da1ea435a68d6e6a5b19054f02732519c844071ff4fa95391d4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_archive_stack_rubble/roughness.png.meta",
+      "sha256": "854501ef64567046db0dab0220a291d959080d85f9f0bf52c3eea01f4242ab96"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/normal.png",
+      "sha256": "c239767f2f6bb7068393d60d54b8d5a08599b89fe2d4c03236b319c67a69f98d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/normal.png.meta",
+      "sha256": "99d9826066dff0778bd7a83e0b319871c6687af5096cf442560f534c69dcd359"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/regions.png",
+      "sha256": "84370b1e03b72cceebc1d746438f4496802c3cd1d861f06c5d11507ab805d75d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/regions.png.meta",
+      "sha256": "df45cd3c997fabf2c9e501673e3bf8208a972c561e831caf01fde25592d0834a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/roughness.png",
+      "sha256": "fecbb9afced62e1f70f438099e429427b4a012085de86dbcffee619352a65291"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_closed/roughness.png.meta",
+      "sha256": "fcf0e1119aef32cb817130cd0243fd3d171edfe0bff0e5e522fdce64ec18659b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/normal.png",
+      "sha256": "35ceb9a1c239b25cec8879bfc6f40dc9238c68bbaab4eb2bdc9c6c6a5542538d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/normal.png.meta",
+      "sha256": "9fb0bdaa774a12ca0939cbd1d0a066a3ffea9a17157ebf56773f94230f3063a3"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/regions.png",
+      "sha256": "c9607518c772eda49f965376777f399edb85458590c91afbf2875ae7e111d0ab"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/regions.png.meta",
+      "sha256": "0aebe51443efc49032158038df4323158dd4cc8a5765aaa9aac391fe4412f187"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/roughness.png",
+      "sha256": "3036a980a4c665342ea7bd321fb1ee37eeed9c2a5345ade94b32a845ef15d812"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/roughness.png.meta",
+      "sha256": "c07ee13f0eb82201aabb39b09619d88336aeb3ec76dd9c20498557602e575825"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/normal.png",
+      "sha256": "08feded352c71426a3570e64229ac94066e0107024108c886efa722bc2a0b84b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/normal.png.meta",
+      "sha256": "a8d69d6bce8de0282027eda23d8193abd7973616f5dd61c37a33b985bb28b149"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/regions.png",
+      "sha256": "fd23635ce3665d23b6be972482f0b48f61e9f57f6963f6d86af6a01bfe8a3e39"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/regions.png.meta",
+      "sha256": "05a387a4c38ecfe03e103d861a50ec6016566b39f0693b8f02df8b117fe9d75f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/roughness.png",
+      "sha256": "7081cf3203a39bf486a5b48568c1776f0031aa4c9a6cd7e877b2dd2bc13480f6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_open/roughness.png.meta",
+      "sha256": "a8f035d0d31b524d9815b725af7ecdbc107561c8c1d23a35e4dbf84252ba0fbb"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_heavy_archive_stack_intact.png",
+      "sha256": "3aedfb1674ff0525aff5c7cf43ba3e1d46bf60a3bb375df2cedf8381fc57bd51"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_heavy_archive_stack_damaged.png",
+      "sha256": "aba5021919ce808b51848d877ea650ac50cdd2a7525e49024cce25fe23e6e39e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_heavy_archive_stack_rubble.png",
+      "sha256": "9e42109bded1640652262caa8ae12b45ffa3a878c2e14dc57107c6e73a06b473"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_loot_chest_closed.png",
+      "sha256": "7b405f8250650dcaf2831e6a0c1b0d8de94d88f3df35371673f7d128ca8fe1d4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_loot_chest_open.png",
+      "sha256": "d4bf3edb5826d448d4755de94d831e20e6b21f75dd77eb011fb27c67d0768369"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_loot_chest_empty.png",
+      "sha256": "b539018548e2ed8bf5d6c1befe0e9ad0c2a487fb232f37b3fff678f29f1d55d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_decoy_lantern_active.png",
+      "sha256": "0c2e6cf9cdc2d00c01218382ca2f0f264b30155900f869d34191f104d60d97d1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_aether_crystal_damaged_reference.png",
+      "sha256": "76a3fb4dbbec9410260aad72ad5267ed09958805564361eff8ad464e43b80c56"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_aether_crystal_intact_reference.png",
+      "sha256": "57d816cdb2c870b23fff6d77ca4eeb3eb6bdba742d9da7c24ed50954a1162165"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active_reference.png",
+      "sha256": "c03cc0a938b2097b57654b1ad5ab84b40456bf0c1af607b6be51d57fcbcee841"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged_reference.png",
+      "sha256": "35a300750848f7bfbcb9d5073065e0936260a693d5fa5048b9f684c25c44a71e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact_reference.png",
+      "sha256": "6354f1d75723b0d035d1d916e6abe8aa5eb9cfc67e8d8f1bc93c915280433b98"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble_reference.png",
+      "sha256": "bf5603882afbe2d5608c2d00e0b0addcb3a83778335a7cf48d5a555fc6eb8d54"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed_reference.png",
+      "sha256": "19420fa4a4b03ea7225151d0d2ef9113f6c1586c2a9f6ea85609b7ad5924c6a8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty_reference.png",
+      "sha256": "a7bf4a2747cceb85433a84601c2a525794839133159b8f55aef361ccec997d0d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open_reference.png",
+      "sha256": "f0acd5cbb9129797f121996b1bcb465a1e2bd7bb7633ed0f96f79ffdf79a08e9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_pressure_crystal_damaged_reference.png",
+      "sha256": "bd7454cf866b18ee3ac91d420086e6dc54179f2e1a11a6507d0c60b2b5894ced"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_pressure_crystal_intact_reference.png",
+      "sha256": "ca4e6c330ca3cdda138935d37e8a376b3d094c9c3f1b0233e8fb57a9f6a0a950"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/compile_final.json",
+      "sha256": "d133347abd10f577133842b866a5958f1f2a51d0201988e5a983caec0fa34020"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/console_after_probe.json",
+      "sha256": "3d02d3c6cc5789475df54fd95c6ff16328d85abf7ffd000937a136c0f99a5cae"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/console_before_probe.json",
+      "sha256": "f7668674fea12c094d260653a8d25c159efadd37575d297fb4cbb35635203b03"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/generation_sources.json",
+      "sha256": "07fdd862d182f4c3211dfbe447db568b8827c166f2d4eac9bc670d1a7012885d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/inventory.png",
+      "sha256": "036b84ccdb6d8a3a713da78cab20e2ac5c6a19e1d2446ef56a1201d3aa8d108b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/material_inventory.json",
+      "sha256": "2b66a34f4544938375cb2ee2eb2dfafbbba6c3a340bc69b87eec111d765b9b87"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe_dispatch.json",
+      "sha256": "f7ed5bc73178e597afc9be74f2ccb2c558499fbb2c4f41f736474be511a6384a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/props_before_after.png",
+      "sha256": "16c8ce84152da86703b514e9351a5aeca103e39f338e267c94023abdc4b95f5e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/render_metrics.json",
+      "sha256": "7129a0153b54575e4962e2f02eb76169e841cee4b1b381f902dfb25ce273cb2f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/material_provenance.json",
+      "sha256": "40a6b286cf33487d3ba872f7ecbb5f6e7f39f6be515c887d80bef8294756972e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/normal_manifest.json",
+      "sha256": "a6e570a812d6eb6c786b058ce9e8d46a67ed412374cb433464cd467ae7e70e17"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/normal_panel.png",
+      "sha256": "3d2256a4494999c32de506562cc63d6a903cf42da572944d37c818f2e0e8c24a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/normal_qa16x.png",
+      "sha256": "bdb8133b79023809802d2e20f7860fabb4b17fbd8d1360a544f4989577ff5382"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/normal_registration.json",
+      "sha256": "086b98469e2cb738643bd8ef591d0c18161a28def0a1b8c3ca0a7f848342d400"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/paired_raw_r1.png",
+      "sha256": "97b24bd1bb7fcfdc47ad0f2b001c7d9c5b286ecc1210b1c386a95146b9541586"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/regions_manifest.json",
+      "sha256": "39dec05a8cd037e2e53194a49dbb16c794bda150f471f4b234be9d039537a4f1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/regions_panel.png",
+      "sha256": "954855849f4a40d3f69b82ddf6ebff65f3885a7dbfa0dcf3d15d5eec6e3e395a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/regions_qa16x.png",
+      "sha256": "8dc7816893828a11a4fef384229cfc94c87a611b2c28f6fd341c3bef3092c42c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/regions_registration.json",
+      "sha256": "002089749bd4ee2a45d0c83563ad731b8a25a3a3a414cb11ad0ae345513af443"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/roughness_manifest.json",
+      "sha256": "6f6921159eff19e8a1b0364a3ba0b8d3b4ab3461ab67a317d1d3e5b8b22a1dee"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/roughness_panel_rejected.png",
+      "sha256": "c41f6dc5cfc2a2ad208776ead9ec84b5e56274bea047464d789b3f10de723920"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/roughness_qa16x.png",
+      "sha256": "150bde3b1ad4977970a96da1032f25066933e537b9224e36f0558f5228f63e2e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/roughness_raw_r2.png",
+      "sha256": "9d66ea2a4feb4bec74573398b0bd48a8af7579c94a222d9604943ea8db9d78bc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/roughness_registration.json",
+      "sha256": "05c85b405d0449ab38fc7843a92f4c9adab862c620b8c76092d11cd9ba9c57a4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/material_provenance.json",
+      "sha256": "da8c5277eae3252ee50bcc9ba229592b7711992bf04a9c75662efd3ac4666281"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/normal_manifest.json",
+      "sha256": "8d85b88205f8451d808cec7d9026ff43a02ac4621f6749826a5eb7beaf26be9e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/normal_panel.png",
+      "sha256": "a321f704121986ede4d652197c000d5886de8edf8588cc869adac2e9d58f0bde"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/normal_qa16x.png",
+      "sha256": "9b725ad98c039281ddb255236696dc810c6c96b15a956197149b606f8c37db4b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/normal_registration.json",
+      "sha256": "8d5dac67a83a002ec38b742ef3f3190648dd28a19177539a8a727acb7045df56"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/paired_raw_r1.png",
+      "sha256": "3a85b0565d09505cedfc61918b9e9f633cdae6986a1346cc5481880c81a6e4f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/regions_panel.png",
+      "sha256": "4b31f036d9f7815ce1071ccf434146c6ae6e6120669676d306bf2cb0f9ac4585"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/roughness_manifest.json",
+      "sha256": "8e3de5b6e7d3f43c0bd6d5c7e8c33dd8aabc72b9256c7ab30a785c3707935add"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/roughness_panel_rejected.png",
+      "sha256": "904219e76da37fc3fe6410bfe91eab7b72de4714232c6b81fa08317869fcdf78"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/roughness_qa16x.png",
+      "sha256": "7e8b4ce3cfd8b38eb7b1798a037565c0d1fc240ac52bb1214bace99d92799cb8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/roughness_raw_r2.png",
+      "sha256": "01a1ae698611f184f742a363b9528d5b51c277214d80c49fd4e0ada94f1513c8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_damaged/roughness_registration.json",
+      "sha256": "5f510391d5fe9d24b749332049da7c486b056162cf858314eff28ebd60d7f24e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/material_provenance.json",
+      "sha256": "616b235b7f0fa204c7a975b3424ecfd6d3888d7c8706a6932d9e3b152107f8b0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/normal_manifest.json",
+      "sha256": "de1922601b1e7623e2829484af055e2abb8dfe17faeaa493058677c606fcebd4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/normal_panel.png",
+      "sha256": "790a69802d706097303ccdf8d4a4418a10e6f6553c22a2b9a6a4eecf0c77b9fc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/normal_qa16x.png",
+      "sha256": "c03cbde043096786f58addf6cc26bc90da65b853a6eb79641bfce1aec6adf401"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/normal_registration.json",
+      "sha256": "741bc041284b045f6174ec97121be56c822671bba5ee14707bea40eab5c747a4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/paired_raw_r1.png",
+      "sha256": "620380cb89e86c8f77e8d919351d56455f73ce4d902d9d5717b19debeacbb635"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/regions_panel.png",
+      "sha256": "b3dbdd7f295a884f0c234d3a10d2eb4343e0661828c7f38e724d981aeb7d557a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/roughness_manifest.json",
+      "sha256": "c868ccd0461e7ccb67b80866f8516f21ff6ba731eb3081242cedc2fb3e3cffbe"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/roughness_panel_rejected.png",
+      "sha256": "660c1b50cbfeb24d22756205938b641334a69419e5f8d55be8b0a44c0a69503b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/roughness_qa16x.png",
+      "sha256": "8c5e4ffb432de98b5d4173a82513fbbb1366e0f5abae0dfeb99af5f3e13c2b5d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/roughness_raw_r2.png",
+      "sha256": "b66881aab21593a3d03ef65be731b4e780e49d501968ee3791354fd9b672a7c9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_intact/roughness_registration.json",
+      "sha256": "78f6e6613076e84160c7b5519e848fb8460911855ae407feae5d42b9571b9be3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/material_provenance.json",
+      "sha256": "e8c8835e64cd6d7eee436579ea3ec4a780cdac31473eab89dc46536f08c23cc2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/normal_manifest.json",
+      "sha256": "84092112f548c92047a077f05fb3a9ee207f1b879605fb7e3e07bb83a63bd4bd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/normal_panel.png",
+      "sha256": "de85eaa75103136838d515d1ea479b47d0d56fa58e9f5af6773a32a922229e50"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/normal_qa16x.png",
+      "sha256": "731c5216ea6d64b2768a65f54df13ff7089b966c133c50efe8c0e0e272b37180"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/normal_registration.json",
+      "sha256": "414efff5027d3d3b38d5dd3ed9dd211fbb2e79ac604bc3d0af9a4bcd94728f8e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/paired_raw_r1.png",
+      "sha256": "021a8b5e930e57db5ab5326100fccee6186284b10a51dc26d18bb56c3685b180"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/regions_panel.png",
+      "sha256": "88dbda8ab32cef8cb8e638a03e0d7cb5a37c0fbdae1c4a79999994c89eeb7e2d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/roughness_manifest.json",
+      "sha256": "0855ab40022db6171af6149ed002bebd2f3e90d654b519f468a6617606613f59"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/roughness_panel_rejected.png",
+      "sha256": "812f81aab92edc45370facc182dc55bf187bb6e832f15bb7d73701004adfa5d7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/roughness_qa16x.png",
+      "sha256": "f68f9762ff1c13f36608a773487eadf6957cb617033ab5ff1708f38458af6bf3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/roughness_raw_r2.png",
+      "sha256": "bd4efb4ee006abc055ae68db9ae74e5b064ae15a9b4c0b598dc892ed8d147c06"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_heavy_archive_stack_rubble/roughness_registration.json",
+      "sha256": "a0c90425a4c0bc3b88b59d41ac84011087a1622bb11d975dfe5f819b2759ebf0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/material_provenance.json",
+      "sha256": "6ddd0ac86752d9fdc2b5317772418e7d6d2c1d46d8819cb55ae4610bba7559ad"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/normal_manifest.json",
+      "sha256": "39ebdb5f45ac401c61a58ff4cfe71ed4a051a51c9d86f1b1022e4cbb95adaaec"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/normal_panel.png",
+      "sha256": "0dbf0bc718f95538e2301b684846a7bfd64a338925a563865be0b18f835de6eb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/normal_qa16x.png",
+      "sha256": "f8989a2611265888a3223a08e774e6c27e33d91fb03a36210b95dc114a372568"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/normal_raw_r2.png",
+      "sha256": "45db5350061b169c09a7f3dd94fec016e12bfedbf4a1820167677bfc06fb2550"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/normal_registration.json",
+      "sha256": "ab6b0698b56331dedb857456e1cae3f532c00da377f25a0746fb06b61dc99aec"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/paired_raw_r1.png",
+      "sha256": "287eb602cbb392e4b068c10b54873470c3443c1211f6f65f81c81c274e3f72e3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/regions_manifest.json",
+      "sha256": "6e3058b4aa07c7d266dce48da5fd46237b4d365c2225bfefac09d23de29bd2c7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/regions_panel.png",
+      "sha256": "4c71dc526c5f90bcc732dd5fefe8ebdef1907f17dae483d7bb1038aa7731b00e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/regions_qa16x.png",
+      "sha256": "15813cfe099d72e1888862046d226e1082b2ab06c14d7f53a32c2617145f07a1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/regions_registration.json",
+      "sha256": "5a957a608f35a818cd5e4bb4192f498b7b76877eb01bc06560e81a64b07dad3f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/roughness_manifest.json",
+      "sha256": "4a34cdadbe96eb6ecd8499f29ffb0b453eb81fb212e971693df9a6fde78b5bf8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/roughness_panel_rejected.png",
+      "sha256": "b91f261b4f4b3efbcf06859702f162eb9b5f06cd02e9b5473f614b947cd86bb0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/roughness_qa16x.png",
+      "sha256": "1b71295a5d94747a3f3af3ab29ffb74312500208506ae5c20a95419291875c0e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/roughness_raw_r2.png",
+      "sha256": "9eed3f836f9ec25bb97fd74667b33adef903a0291d98bcc67f39621761c6efd1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_closed/roughness_registration.json",
+      "sha256": "976bf76ed98c077e5a9e12675dc9c08a3211fbdde87af2ef20614b0d02d9b367"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/material_provenance.json",
+      "sha256": "89cf482ce7d2be5dfcb844095ab927e3670619c41d08384790b8f5e3a1a70ea2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/normal_manifest.json",
+      "sha256": "db386fe8b373a99bbed314c078bc47d90deb861a6e24c3cf956c3e6d8887fe73"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/normal_panel.png",
+      "sha256": "4311407678482262f9006bcd0140b03beff1a6a13fe13bbf9d9b7626005c5444"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/normal_qa16x.png",
+      "sha256": "05321be987215ce398c513db4f4e937e670bdca00d55e3ebe6c8f4dfcccc1672"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/normal_registration.json",
+      "sha256": "fdb0d53deacc1ed6e728f49a9485046e81e328e1269b56fc18e4cac7fba79ef1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/paired_raw_r1.png",
+      "sha256": "806be9a01e08768bf4fe932ba33d4d2e8bf4f5578536106761da9b9981b89f21"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/regions_manifest.json",
+      "sha256": "21a2b7364d31f6b4bd5006791474226951ed2ad7bf47dc80a3ea0498ca701ce5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/regions_panel.png",
+      "sha256": "2eee715958afd6a192dfda94b598431c1995e85fdca0ed454d1749f3a28df57a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/regions_qa16x.png",
+      "sha256": "6c2845908ada4df0618fef4c9cbfd9a6a910e7a0c2a76ecefaa18061655894f7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/regions_registration.json",
+      "sha256": "6ff8142e988778ffbc60474b36d4edf9022680dbc2972c0494da3880fb09ec42"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/roughness_manifest.json",
+      "sha256": "05a46b721d927097dc862407a0115c87415ba5627586033ba3e0c179d751ef33"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/roughness_panel_rejected.png",
+      "sha256": "6ff82d8febd875bfdab922685d6b63b94912352c9cb48f9b259fde50696a14f6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/roughness_qa16x.png",
+      "sha256": "01944c9fe2597fc28d31335f18682295880c7b2c1cf1959263650afb92f63494"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/roughness_raw_r2.png",
+      "sha256": "cd9dc92757b3ba7939270e95ded63979fda43629a330c44c07140c0b7c7a9e4a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/roughness_registration.json",
+      "sha256": "018b0fe06c89acfb77cca7444a8f8ed5f8e078082b61793d9009e26164aa2f25"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/material_provenance.json",
+      "sha256": "9e3b7e239dbe39460d01d8437f80e64f64c3d4c98767f077f7a4b77beb186083"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/normal_manifest.json",
+      "sha256": "21214950f26090027699e59be179e24ff8c2382a65bf7b0d043b48fbcfa99b8e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/normal_panel.png",
+      "sha256": "3445f456d71d86da17e1c1331167f90f0978119d4d7f1286a808f9a28bf66a5a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/normal_qa16x.png",
+      "sha256": "f28a20e5b3b4826f4aa33cabe81bff3cba8430f4b216eee5fdb46e844f641d77"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/normal_registration.json",
+      "sha256": "f940172a7a56dd80bda22c847aa1cc0539973692838406cf6999b4e575adacff"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/paired_raw_r1.png",
+      "sha256": "ade3884da5c451e567aaf2a5b719d1a0892d19bb714e19c961e142f5f1d2d838"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/regions_manifest.json",
+      "sha256": "752bbdcd0e45705a216138d853da9b30d0c2e2e6fc765615d394ed6b9b6a8034"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/regions_panel.png",
+      "sha256": "aafc76e4e79360e4c4c82ce191ae165cf384a2f5f5f43e133b977673623acb10"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/regions_qa16x.png",
+      "sha256": "480ad7dcad3577e87f5e1d47322fcb921443e235d44f4019610fa040b858094f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/regions_registration.json",
+      "sha256": "ec9a3d752466dea752b34d1d9e221f6958185916b36a7886d595a51bf040fb8c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/roughness_manifest.json",
+      "sha256": "a9bc4db487579319523896afc61f2dd5357c9392e7964e9d9d5fe6ad0c0bee05"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/roughness_panel_rejected.png",
+      "sha256": "e937ea9929a07b0dec451c07fbce729377b026da648483e115712c41f7747609"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/roughness_qa16x.png",
+      "sha256": "9554632d53c6e9589e7f10fb7ebaf042190681e461868a06b2497640aa2a2fa3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/roughness_raw_r2.png",
+      "sha256": "5de1f1c0bd54a4f21049b5ed67c02454af591fb9ccceafbef49abc7ccb42ef4a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_open/roughness_registration.json",
+      "sha256": "e54ed421471fc7c8520000a273cfa83ee8155e63bcf6a07ef9e09d318ad4acf2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/batch_state.json",
+      "sha256": "512551d2eeb75243875ab5783d2c828f7179a346ffe1aa522fcd896c4363ec25"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_decoy_lantern_active_dry/baseline_1080.png",
+      "sha256": "7a3641b56e35b2e3dad6fe7f5f05dc3b259b9f30608d2b72fdf5b22bad6ca174"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_decoy_lantern_active_dry/baseline_540.png",
+      "sha256": "63f7b10cdd9e7d3b1e0ee544068ae2ec0dc6c460c5ddd4255a1c51d483657d77"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_decoy_lantern_active_dry/full_1080.png",
+      "sha256": "4c6c01378d111804d373c2bf5b96cb269ccfe68ca75a6ee4f130314b0c2fc776"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_decoy_lantern_active_dry/full_540.png",
+      "sha256": "60b274b38275ed8721be90313db000c1ae20a20dc6b2926f75f077571f2b10f4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_decoy_lantern_active_dry/neutral_light_1080.png",
+      "sha256": "6d5b80e31cb847168a42a4c7c85d82d5b043a89fac500c4f22302de5141ca9dc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_decoy_lantern_active_dry/normal_only_1080.png",
+      "sha256": "390b19ef5923af0fff3d4dde5ea0fb3969feb1872c4bb86b8d436102ec9aa731"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_decoy_lantern_active_dry/result.json",
+      "sha256": "0135f5ea9b5ceb780738dc43207053c6ef28aea97828711e12a804553f6647f3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_decoy_lantern_active_dry/rotated_light_1080.png",
+      "sha256": "04060beeb425beacedee2e6e119c7eaf1e2edaf98109c506e42f27e200e37749"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_decoy_lantern_active_dry/surface_only_1080.png",
+      "sha256": "4285ccb9e4b99b8939986f92f6822d24bb50b310e402b03f7374053b31852cd2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_damaged_dry/baseline_540.png",
+      "sha256": "5a644081130ac7220982f61a99eb7d93bbb016e12704890e34d8ce8525b17a3b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_damaged_dry/full_540.png",
+      "sha256": "772cc2c4bb0d8c1747acedc0248ffcde96de81e6dd0b182e7af1dd70052f8b4d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_damaged_dry/result.json",
+      "sha256": "0d611752772b0b3cbc4c065f6910da931305aecc625a6b800af8fd2cd2d65a0e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_intact_dry/baseline_1080.png",
+      "sha256": "1e02784f3170a2ba89b5c2d7857e46553997b33e2a27555e934991691254135b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_intact_dry/baseline_540.png",
+      "sha256": "e6c44cfcf8edd8fe34b708996f19e02e2b2c032d8dc87cfc99e6b7d98d14e167"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_intact_dry/full_1080.png",
+      "sha256": "11e4e9823c3d6cb6b04f58a516dbac2ccaef0d829cb5ddc58bf3a3b2c3efd0be"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_intact_dry/full_540.png",
+      "sha256": "25a9096e1ab25419fc929b736e31a975434adff3ef7e14a021c3993d72f111d9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_intact_dry/neutral_light_1080.png",
+      "sha256": "572bebdcaa4eaf99bea3627bf33afc7e37e007cb6fae0a387df09177a52fd1e6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_intact_dry/normal_only_1080.png",
+      "sha256": "858bebb3cedd24e6a0da37f6f7080e27860b650b3cd75de04a4fd277639b3d83"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_intact_dry/result.json",
+      "sha256": "1e31a3da4585e5a90fad507edcd4b492ad6e7298e6df96ee060ac54dbe027fdd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_intact_dry/rotated_light_1080.png",
+      "sha256": "ded50d0655b7cf71d7f0499895fa26b16abbb2f1a56c4c4bff6b7f28bce8f34a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_intact_dry/surface_only_1080.png",
+      "sha256": "b28c746c8f6a64febc9cd9f9e201047625bd166c9d33ab4414374a5a695ee208"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_rubble_dry/baseline_540.png",
+      "sha256": "feaa469e4afa62a67e24109060147a63d18d7dc9fc167e97f5894b92b1ad8fd7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_rubble_dry/full_540.png",
+      "sha256": "65483a617a07672718e24398b174f65a9b7d77d7ed44f8ec4bac0b2dc1484808"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_heavy_archive_stack_rubble_dry/result.json",
+      "sha256": "e49eca89a8c63f06c49a800b990725b545181f54c37e7ab38fd752e8ba9f6cf1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_closed_dry/baseline_1080.png",
+      "sha256": "e6d906a5c346218eda7751c35fecb1dc5882dbb0ac7ecf61ae0ebbe17f80ca89"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_closed_dry/baseline_540.png",
+      "sha256": "ed9f2f4b05405adf2b84db14662d32f813b7b4bd4afb4f79c2af5461eff6cf5d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_closed_dry/full_1080.png",
+      "sha256": "dee4b32f699e114bd1a2340915326f6498ab1c6cf76d1210e947864f5f454952"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_closed_dry/full_540.png",
+      "sha256": "131362b4860c8611a783d17fe30c5555a93a8ef5bf0697797427473284fdf7e2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_closed_dry/neutral_light_1080.png",
+      "sha256": "715d5958e8710353ce7d76248ea30736cf49de6baa1382471952d36a347865c7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_closed_dry/normal_only_1080.png",
+      "sha256": "4fdae21248dfb4062a32f6432d39f6dcf65d9215eabc5c9386ff672f6266cc7e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_closed_dry/result.json",
+      "sha256": "4f59a883b17b58f2a50d36db88a6130ffdeba8fb54614dedeffafda01c05ac5f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_closed_dry/rotated_light_1080.png",
+      "sha256": "d140b3a02c231471ea2ee646f7ea9bc7587fe0d474d89f6978434b68a678bcdb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_closed_dry/surface_only_1080.png",
+      "sha256": "a8e4b160d8e7e26ebeb3feec7439e654f2bc9739b05d3e6676b5260a660a6cfd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_empty_dry/baseline_540.png",
+      "sha256": "0036d7c3801fe76b39262c34ee9a357460d877622983b7627ff1dd82012d1112"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_empty_dry/full_540.png",
+      "sha256": "020279a0493379e7dcb5f860603dda113c675b8a6415a26274eeca69bad583c2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_empty_dry/result.json",
+      "sha256": "aa82f0dea4d056f4561e547b175481b7ed919328ec46ec59bd7bd73aa2fe2195"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_open_dry/baseline_540.png",
+      "sha256": "328edf4702443bb1d811990ae8db2210879bb45003b53a32bd2ae802f32b8d51"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_open_dry/full_540.png",
+      "sha256": "62a31fdfe62a0605923df2b625d25ecaab2636c3e2696c5812395311cc44ff33"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/academy_loot_chest_open_dry/result.json",
+      "sha256": "7abcf0faf42c4eb1c4dd78a009ba74f0568f5180a67f30c974d7f31e4dd3a187"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 45,
+    "yaw": 0,
+    "wall_height": 0.65,
+    "unit_ground_angle": 45
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": true,
+    "resource_lifetime_pass": false,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/batch_state.json",
+      "sha256": "512551d2eeb75243875ab5783d2c828f7179a346ffe1aa522fcd896c4363ec25"
+    }
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Only local sprite material probes verified; source-region alignment/human review, full scene density, game motion/flow and performance pending",
+    "Glass is local mirror coat, not transmissive/refractive glass; unregistered numeric maps remain QA_PENDING"
+  ],
+  "local_prop_probe": {
+    "batch": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/probe/batch_state.json",
+      "sha256": "512551d2eeb75243875ab5783d2c828f7179a346ffe1aa522fcd896c4363ec25"
+    },
+    "metrics": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/render_metrics.json",
+      "sha256": "7129a0153b54575e4962e2f02eb76169e841cee4b1b381f902dfb25ce273cb2f"
+    },
+    "material_count": 7,
+    "normal_entry": false,
+    "window_focus": false,
+    "play_mode": false
+  }
+}

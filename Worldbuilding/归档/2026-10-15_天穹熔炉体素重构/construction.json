@@ -1,0 +1,178 @@
+{
+  "schema": "occ-hd2d-construction-v1",
+  "visible_models": [
+    {
+      "id": "courtyard_floors",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Two simple slabs establish intact floor/contact and7x7m spell scale.",
+      "instance_count": 2,
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+        "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee"
+      }
+    },
+    {
+      "id": "courtyard_walls_stairs",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Intact walls, two gateposts and five shallow stairs; pixel masonry owns visible detail.",
+      "instance_count": 11,
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png",
+        "sha256": "600006205fbf16204a98afcf272a2a420b618042e4f2d4cc18cef65d675f3d24"
+      }
+    },
+    {
+      "id": "intact_training_obstacles",
+      "role": "large_scene_prop",
+      "style": "simple_polygonal",
+      "rationale": "Three unchanged scale references; no fragment, collider, damage or trajectory system.",
+      "instance_count": 3,
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "dcf54f3072a585fb1447fbc2cebc2c204f6dbb03d3d50f8722bddb9e74ea4d11"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png",
+        "sha256": "600006205fbf16204a98afcf272a2a420b618042e4f2d4cc18cef65d675f3d24"
+      }
+    },
+    {
+      "id": "voxel_constraint_rings",
+      "role": "spatial_effect_model",
+      "style": "simple_polygonal",
+      "construction_method": "native32 voxel solid with merged external planar faces",
+      "rationale": "Three thick open rings with native pixel rune material and thin conducting rims",
+      "instance_count": 6,
+      "exception_rationale": "User explicitly selected voxel effect modelling with materials/textures on2026-10-15 and then authorized implementation. Scoped to this standalone spell; does not replace general paper-card policy.",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceVoxelStage.cs",
+        "sha256": "8ac6a9fbca183421072d63449bb98720615ae6946f33619895d4fdf5292583b6"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader",
+        "sha256": "c64b30f7cbb7c1d9a5936fe2b60029eaeb4ab8c3c4494f687ed3a7317bd0e4ae"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/ring_band.png",
+        "sha256": "59e551684e084fc197f9cc29cb821c89aefec2dc4383a2e2d68660e3b4dff9e7"
+      }
+    },
+    {
+      "id": "voxel_fire_currents",
+      "role": "spatial_effect_model",
+      "style": "simple_polygonal",
+      "construction_method": "native32 voxel solid with merged external planar faces",
+      "rationale": "Six spatial tapered currents surround a hollow chamber, eight native-grid compression poses each",
+      "instance_count": 6,
+      "exception_rationale": "User explicitly selected voxel effect modelling with materials/textures on2026-10-15 and then authorized implementation. Scoped to this standalone spell; does not replace general paper-card policy.",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceVoxelStage.cs",
+        "sha256": "8ac6a9fbca183421072d63449bb98720615ae6946f33619895d4fdf5292583b6"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader",
+        "sha256": "c64b30f7cbb7c1d9a5936fe2b60029eaeb4ab8c3c4494f687ed3a7317bd0e4ae"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_material_voxel.png",
+        "sha256": "2585d30e51057990321fc8f74738f98c63b36dd13bc2ab3822f0acddd93858a3"
+      }
+    },
+    {
+      "id": "voxel_core",
+      "role": "spatial_effect_model",
+      "style": "simple_polygonal",
+      "construction_method": "native32 voxel solid with merged external planar faces",
+      "rationale": "Open shell plus luminous enclosed core; real depth and silhouette",
+      "instance_count": 2,
+      "exception_rationale": "User explicitly selected voxel effect modelling with materials/textures on2026-10-15 and then authorized implementation. Scoped to this standalone spell; does not replace general paper-card policy.",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceVoxelStage.cs",
+        "sha256": "8ac6a9fbca183421072d63449bb98720615ae6946f33619895d4fdf5292583b6"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader",
+        "sha256": "c64b30f7cbb7c1d9a5936fe2b60029eaeb4ab8c3c4494f687ed3a7317bd0e4ae"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_material_voxel.png",
+        "sha256": "2585d30e51057990321fc8f74738f98c63b36dd13bc2ab3822f0acddd93858a3"
+      }
+    },
+    {
+      "id": "voxel_piercing_beam",
+      "role": "spatial_effect_model",
+      "style": "simple_polygonal",
+      "construction_method": "native32 voxel solid with merged external planar faces",
+      "rationale": "Actual thickness, local-height reveal without texture scaling",
+      "instance_count": 1,
+      "exception_rationale": "User explicitly selected voxel effect modelling with materials/textures on2026-10-15 and then authorized implementation. Scoped to this standalone spell; does not replace general paper-card policy.",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceVoxelStage.cs",
+        "sha256": "8ac6a9fbca183421072d63449bb98720615ae6946f33619895d4fdf5292583b6"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader",
+        "sha256": "c64b30f7cbb7c1d9a5936fe2b60029eaeb4ab8c3c4494f687ed3a7317bd0e4ae"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_material_voxel.png",
+        "sha256": "2585d30e51057990321fc8f74738f98c63b36dd13bc2ab3822f0acddd93858a3"
+      }
+    },
+    {
+      "id": "voxel_fire_crown",
+      "role": "spatial_effect_model",
+      "style": "simple_polygonal",
+      "construction_method": "native32 voxel solid with merged external planar faces",
+      "rationale": "One connected radial wave with25native-grid cached shapes; no repeated flame cards",
+      "instance_count": 1,
+      "exception_rationale": "User explicitly selected voxel effect modelling with materials/textures on2026-10-15 and then authorized implementation. Scoped to this standalone spell; does not replace general paper-card policy.",
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceVoxelStage.cs",
+        "sha256": "8ac6a9fbca183421072d63449bb98720615ae6946f33619895d4fdf5292583b6"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/Shaders/Hd2DVfxVoxelSurface.shader",
+        "sha256": "c64b30f7cbb7c1d9a5936fe2b60029eaeb4ab8c3c4494f687ed3a7317bd0e4ae"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/fire_material_voxel.png",
+        "sha256": "2585d30e51057990321fc8f74738f98c63b36dd13bc2ab3822f0acddd93858a3"
+      }
+    }
+  ],
+  "pixel_cards": "Existing actor, environment and smoke remain pixel cards. Furnace rings, chamber, core, beam and crown are voxel geometry.",
+  "curved_pixel_sheets": "Previous cylinder and flame-card main forms removed from runtime.",
+  "human_style_review": "PENDING",
+  "geometry_builder": {
+    "path": "UnityProject/Assets/Game/Runtime/Presentation/VfxVoxelMesh.cs",
+    "sha256": "593844d57684f772efd6b64f886f2207173d39c32f4ee36dd691108c580e0282"
+  },
+  "model_checks": {
+    "path": "Worldbuilding/归档/2026-10-15_天穹熔炉体素重构/model_views/model_checks.json",
+    "sha256": "8b4efc8e2cc728ae8d3b8942d31f30994d0277c46b02ad8fa6bd84510ae3bfc4"
+  }
+}

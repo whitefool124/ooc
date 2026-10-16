@@ -1,0 +1,31 @@
+{
+  "schema": "occ-ground-family-development-brief-v1",
+  "status": "QA_PENDING",
+  "asset_role": "ground_field_32",
+  "scope": "Editor-only candidate, academy court terrain family for shared battle rendering",
+  "world_pixel_pitch": 0.03125,
+  "reference": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+  "reference_role": "density and existing readable cell edge, not full aesthetic approval",
+  "delivery": {
+    "native_canvas": [
+      32,
+      32
+    ],
+    "logical_cells": [
+      1,
+      1
+    ],
+    "native_ppu": 32,
+    "palette_max": 8
+  },
+  "invariants": [
+    "single uniform square macro-pixel lattice over complete subject; confidence >= 1.2",
+    "independent built-in source for each asset and retry",
+    "lossless lattice decoding; no geometric scaling, interpolation, dithering or invented colors",
+    "four material-colored single native-pixel cell edges and thin inner lip",
+    "low-frequency field with at most three broad connected material clusters, dominant tone >= 45%",
+    "no baked shadows, glow, wet mirror highlights, stains imitating object shadows",
+    "normal/roughness supplied only from separately declared surface geometry and roles"
+  ],
+  "review": "technical admission and runtime candidate images only; human approval pending; original formal images retained"
+}

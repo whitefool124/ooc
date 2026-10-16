@@ -6,6 +6,29 @@ namespace OCC.Combat.Tests
 {
     public sealed class RogueMapViewportControllerTests
     {
+        [TestCase(0f,0f)]
+        [TestCase(1f,6f)]
+        public void EdgeDrag_RespectsAnimationPreferenceAndClearsSpringOnZoom(float animation,float overshoot)
+        {
+            var root=new GameObject("map-test",typeof(RectTransform),typeof(Canvas));
+            try
+            {
+                var viewObject=new GameObject("viewport",typeof(RectTransform));viewObject.transform.SetParent(root.transform,false);
+                var viewport=viewObject.GetComponent<RectTransform>();viewport.sizeDelta=new Vector2(400,300);
+                var contentObject=new GameObject("map",typeof(RectTransform));contentObject.transform.SetParent(viewport,false);
+                var content=contentObject.GetComponent<RectTransform>();content.sizeDelta=new Vector2(800,600);
+                var controller=viewObject.AddComponent<RogueMapViewportController>();controller.Initialize(viewport,content,root.GetComponent<Canvas>());
+                controller.SetAnimationIntensity(()=>animation);controller.SetView(new Vector2(200,0),0);
+                var pointer=new UnityEngine.EventSystems.PointerEventData(null){button=UnityEngine.EventSystems.PointerEventData.InputButton.Left,position=Vector2.zero};
+                controller.OnBeginDrag(pointer);pointer.position=new Vector2(200,0);pointer.delta=new Vector2(200,0);controller.OnDrag(pointer);
+                Assert.That(content.anchoredPosition.x,Is.EqualTo(200+overshoot).Within(.01));
+                controller.OnEndDrag(pointer);controller.ZoomIn();Vector2 zoomed=content.anchoredPosition;
+                typeof(RogueMapViewportController).GetMethod("Update",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).Invoke(controller,null);
+                Assert.That(content.anchoredPosition,Is.EqualTo(zoomed),"Old spring must not override a newly zoomed view");
+            }
+            finally {Object.DestroyImmediate(root);}
+        }
+
         [Test]
         public void ClampPan_PreventsExposingMapOutsideViewport()
         {

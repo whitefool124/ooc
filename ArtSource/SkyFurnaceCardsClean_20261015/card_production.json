@@ -1,0 +1,91 @@
+{
+  "route": "reference-derived native card construction",
+  "source": "ArtSource/SkyFurnaceCardsClean_20261015/raw/modular_kit.png",
+  "source_sha256": "087db37874124a85f2c1c76c6c358a1853d9e58aeb6dc9283d6c6205f5b721d1",
+  "script_sha256": "5a2e7df87817ce7d3483913467f7a784ef3d5aa1779cd6cff78ebe3100a3ff73",
+  "source_grid_confidence_inherited": false,
+  "lossless_source_decode": false,
+  "geometric_resampling_performed": true,
+  "resampling": "Complete separate source panels, authored160/128/96native canvases, nearest neighbour; not source-lattice decoding",
+  "panels": [
+    {
+      "layer": "outer",
+      "source_panel": [
+        0,
+        0,
+        724,
+        724
+      ],
+      "subject_bounds": [
+        55,
+        11,
+        673,
+        691
+      ],
+      "native_canvas": 160,
+      "native_subject": [
+        135,
+        148
+      ],
+      "world_size": 5.0,
+      "kept_component_areas": [
+        5468
+      ]
+    },
+    {
+      "layer": "sigils",
+      "source_panel": [
+        724,
+        0,
+        1448,
+        724
+      ],
+      "subject_bounds": [
+        74,
+        38,
+        652,
+        660
+      ],
+      "native_canvas": 128,
+      "native_subject": [
+        108,
+        116
+      ],
+      "world_size": 4.0,
+      "kept_component_areas": [
+        3587
+      ]
+    },
+    {
+      "layer": "core",
+      "source_panel": [
+        1448,
+        0,
+        2172,
+        724
+      ],
+      "subject_bounds": [
+        101,
+        37,
+        631,
+        661
+      ],
+      "native_canvas": 96,
+      "native_subject": [
+        71,
+        84
+      ],
+      "world_size": 3.0,
+      "kept_component_areas": [
+        2450
+      ]
+    }
+  ],
+  "new_colours_introduced": false,
+  "palette_limit": 12,
+  "hard_alpha_threshold": 220,
+  "background_speck_pixels_removed": 0,
+  "layer_partition": "Three complete separate generated components, no arbitrary radial splitting; central sun cropped in clear gap",
+  "world_pitch": 0.03125,
+  "human_review": "PENDING"
+}

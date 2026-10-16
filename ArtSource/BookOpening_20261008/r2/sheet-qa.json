@@ -1,0 +1,122 @@
+[
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 11,
+    "subject_lattice_confidence": 1.0393,
+    "subject_logical_size": [
+      33,
+      16
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      10,
+      33,
+      26
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 11,
+    "subject_lattice_confidence": 1.166,
+    "subject_logical_size": [
+      34,
+      21
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      12,
+      34,
+      33
+    ]
+  },
+  {
+    "status": "PASS_LOSSLESS_TARGET",
+    "inferred_subject_pixel_pitch": 11,
+    "subject_lattice_confidence": 1.3348,
+    "subject_logical_size": [
+      33,
+      29
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      3,
+      33,
+      32
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 36,
+    "subject_lattice_confidence": 1.0591,
+    "subject_logical_size": [
+      11,
+      10
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      11,
+      10
+    ]
+  },
+  {
+    "status": "PASS_LOSSLESS_TARGET",
+    "inferred_subject_pixel_pitch": 11,
+    "subject_lattice_confidence": 1.2546,
+    "subject_logical_size": [
+      36,
+      30
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      2,
+      36,
+      32
+    ]
+  },
+  {
+    "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+    "inferred_subject_pixel_pitch": 11,
+    "subject_lattice_confidence": 1.1999,
+    "subject_logical_size": [
+      38,
+      17
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      38,
+      17
+    ]
+  },
+  {
+    "status": "PASS_LOSSLESS_TARGET",
+    "inferred_subject_pixel_pitch": 11,
+    "subject_lattice_confidence": 1.2025,
+    "subject_logical_size": [
+      39,
+      16
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      9,
+      39,
+      25
+    ]
+  },
+  {
+    "status": "PASS_LOSSLESS_TARGET",
+    "inferred_subject_pixel_pitch": 11,
+    "subject_lattice_confidence": 1.5129,
+    "subject_logical_size": [
+      40,
+      15
+    ],
+    "subject_bounds_on_logical_grid": [
+      0,
+      0,
+      40,
+      15
+    ]
+  }
+]

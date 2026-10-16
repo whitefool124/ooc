@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>以太 · 开书与战斗外界面</title>
+<style>body{margin:0;background:#211a14;color:#f1e5ca;font:16px/1.65 system-ui}main{max-width:1440px;margin:auto;padding:24px}h1{font-size:26px}p{color:#c8bda7}nav{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0}button{border:1px solid #8c7655;background:#34281d;color:#eee0c5;padding:10px 18px;cursor:pointer}button[aria-pressed=true]{background:#e8d8b5;color:#2c241b}img,video{display:block;width:100%;image-rendering:pixelated}figure{margin:0}figcaption{padding:12px 0;color:#c8bda7}a{color:#e8d8b5}video{margin-top:20px}details{margin-top:24px}button:focus-visible{outline:3px solid #8cbbba}</style>
+<main><h1>以太 · 开书与战斗外界面</h1>
+<p>同一书桌场景、浅色纸面、棕色细线和青铜色按钮。点击下方标签查看 Unity 实际截图。</p>
+<nav id="pages" aria-label="页面预览"></nav>
+<figure><img id="preview" src="reset-character-final.png" alt="角色档案"><figcaption id="caption">角色档案：左右书页，立绘、角色队列与固定配置。</figcaption></figure>
+<p>开始游戏 → 封面抬起、左页展开 → 镜头推进 → 角色档案</p>
+<video controls preload="metadata" src="reset-start.mp4" poster="reset-menu-final.png"></video>
+<details><summary>实现与验证范围</summary><p>开书为约 1.3 秒的书脊铰链演出，采用现有像素素材切片，在原生 320×180 场景内渲染。三批独立生图动画原料因网格或形状不稳定淘汰，没有导入游戏。</p><p>真实按钮验证：开始、角色确认、进入地图、背包及设置返回；继续游戏恢复到未完成地图。服务、百科、术式、奖励和结算截图使用隔离的内存测试状态，未作为整轮通关证据。玩家存档已保护，音量恢复到验证前 80%。</p><p>1920×1080 主场景六区域统一 6px 网格检查通过；地图移除常驻百科入口，阶段显示“学院”。原有品牌片头与世界开场影片保留。</p></details>
+</main>
+<script>const pages=[['角色档案','character','角色档案：左右书页，立绘、角色队列与固定配置。'],['主界面','menu','原生场景由空房间与独立物件组合，共用场景光。'],['地图','map-revealed','纸质地图；阶段为学院，顶部只保留背包和设置。'],['装备背包','backpack','状态、装备和背包保持三列；容量与装备规则沿用正式数据。'],['术式编组','spells','装备术式与已掌握术式共用纸面层级。'],['商店','shop','商品卡与价格纸签，独立器物沿用已有素材。'],['医务室','medical','治疗与餐食使用共用场景和纸面卡。'],['校准工坊','workshop','强化台、预览与库存保持稳定分区。'],['见闻','event','见闻内容与选择呈现在同一纸页。'],['百科','encyclopedia','卷宗目录、检索与卡片网格。'],['行程档案','archive','行程与行囊摘要。'],['战利品','reward','搜刮、背包与领奖状态使用统一纸面。'],['阶段总结','victory','学院阶段完成总结。'],['失败总结','failure','失败状态的学院单轮总结。'],['设置','settings','修正音量滑块范围与百分比越界。']];const nav=document.getElementById('pages');for(const [label,key,caption] of pages){const b=document.createElement('button');b.textContent=label;b.setAttribute('aria-pressed',key==='character');b.onclick=()=>{document.getElementById('preview').src='reset-'+key+(key==='map-revealed'?'': '-final')+'.png';document.getElementById('preview').alt=label;document.getElementById('caption').textContent=caption;for(const x of nav.children)x.setAttribute('aria-pressed',x===b)};nav.appendChild(b)}</script>
+</html>

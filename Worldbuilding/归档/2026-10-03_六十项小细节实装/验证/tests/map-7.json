@@ -1,0 +1,62 @@
+{
+  "status": "completed",
+  "duration": 0.29,
+  "summary": {
+    "total": 7,
+    "passed": 7,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.RogueMapViewportControllerTests.ClampPan_CentersContentWhenViewportIsLarger",
+      "Status": "Passed",
+      "Duration": 0.0193134,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.RogueMapViewportControllerTests.ClampPan_PreservesRestoredViewInsideCurrentZoomBounds",
+      "Status": "Passed",
+      "Duration": 0.0023437,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.RogueMapViewportControllerTests.ClampPan_PreventsExposingMapOutsideViewport",
+      "Status": "Passed",
+      "Duration": 0.0004422,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.RogueMapViewportControllerTests.EdgeDrag_RespectsAnimationPreferenceAndClearsSpringOnZoom(0.0f,0.0f)",
+      "Status": "Passed",
+      "Duration": 0.0129692,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.RogueMapViewportControllerTests.EdgeDrag_RespectsAnimationPreferenceAndClearsSpringOnZoom(1.0f,6.0f)",
+      "Status": "Passed",
+      "Duration": 0.0006232,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.RogueMapViewportControllerTests.InteractionContract_UsesLaptopSafeThresholdAndDiscreteSharpZoom",
+      "Status": "Passed",
+      "Duration": 0.0043414,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.RogueMapViewportControllerTests.ZoomAroundPoint_KeepsThePointUnderThePointer",
+      "Status": "Passed",
+      "Duration": 0.0004344,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

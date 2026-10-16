@@ -116,7 +116,7 @@ namespace OCC.Combat.Tests
                     }
                     if (unit.ActionPoints <= 0) { CombatResolver.EndTurn(state, unit); commands++; continue; }
                     // 束缚只禁止移动；贴身时仍应攻击，否则验收策略会被永久定身而误判为打不过。
-                    if (unit.HasStatus(StatusType.Bound))
+                    if (unit.HasStatus(StatusType.Bound) && !unit.IsHero)
                     {
                         UnitState bound = state.Units.Values.Where(value => value.IsAlive && value.IsHero != unit.IsHero &&
                                 value.Position.ManhattanDistance(unit.Position) <= 1)
@@ -158,6 +158,25 @@ namespace OCC.Combat.Tests
 
         private static CombatCommand HeroCommand(CombatState state, UnitState hero, UnitState target)
         {
+            // Ranged attacks remain legal while bound; try every exposed opponent before walking.
+            foreach (UnitState other in state.Units.Values.Where(value => value.IsAlive && !value.IsHero)
+                .OrderBy(value => value.Id == target.Id ? 0 : 1))
+            {
+                int range = hero.Position.ManhattanDistance(other.Position);
+                SkillDefinition cast = hero.SkillOne;
+                if (cast != null && hero.Mana >= cast.ManaCost && hero.IsSkillReady(cast) &&
+                    range >= cast.MinimumRange && range <= cast.Range &&
+                    CombatResolver.PreviewSkillAttack(state, hero.Id, other.Id, cast).HasLineOfSight)
+                    return CombatCommand.UseSkill(hero.Id, 0, other.Id);
+                WeaponDefinition attack = hero.MainHand ?? CombatCatalog.Rifle;
+                if (range >= attack.MinimumRange && range <= attack.Range &&
+                    CombatResolver.PreviewAttack(state, hero.Id, other.Id, false).HasLineOfSight)
+                    return CombatCommand.Attack(hero.Id, other.Id);
+            }
+            foreach (GridPosition cell in state.Map.PositionsWith(tile => tile.Durability > 0 &&
+                (tile.Cover != CoverType.None || tile.IsDevice)))
+                if (cell.ManhattanDistance(hero.Position) == 1) return CombatCommand.Interact(hero.Id, cell);
+            if (hero.HasStatus(StatusType.Bound)) return CombatCommand.EndTurn(hero.Id);
             int distance = hero.Position.ManhattanDistance(target.Position);
             SkillDefinition skill = hero.SkillOne;
             if (skill != null && hero.Mana >= skill.ManaCost && hero.IsSkillReady(skill) &&
@@ -177,8 +196,20 @@ namespace OCC.Combat.Tests
                 .OrderBy(position => position.ManhattanDistance(hero.Position)).ToArray();
             foreach (GridPosition spot in spots)
             {
-                IReadOnlyList<GridPosition> path = CombatMovementQuery.FindPath(state, hero, spot);
-                if (path.Count > 1) return CombatCommand.Move(hero.Id, path[path.Count - 1]);
+                IReadOnlyList<GridPosition> path = state.Map.FindLowestCostPath(hero.Position, spot,
+                    state.Map.Width * state.Map.Height * 4,
+                    position => CombatMovementQuery.EntryCost(state, hero, position),
+                    position => state.IsOccupied(position, hero.Id));
+                int remaining = CombatMovementQuery.Budget(state, hero);
+                GridPosition destination = hero.Position;
+                foreach (GridPosition position in path.Skip(1))
+                {
+                    remaining -= CombatMovementQuery.EntryCost(state, hero, position);
+                    if (remaining < 0) break;
+                    destination = position;
+                    if (state.Map.GetTile(position).IsBindingMark) break;
+                }
+                if (destination != hero.Position) return CombatCommand.Move(hero.Id, destination);
             }
             return CombatCommand.EndTurn(hero.Id);
         }

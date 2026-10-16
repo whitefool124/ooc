@@ -1,0 +1,56 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_heavy_training_barricade_intact_roughness",
+  "role": "hd2d_material_data_32",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_panel.png",
+    "source_sha256": "c151d6b6541717a288837eaf911634c6fcdb1d678e6025ae8528e40c61643343",
+    "independent_raw": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/paired_raw.png",
+      "sha256": "3c588122015d67b07c143ea49ea39e8db23d6f60a14fee90aeca47bd37036ed9"
+    },
+    "registration": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_registration.json",
+      "sha256": "f781b17b628045ac1233cb4ee4cb5c90530e739b80e8c65c9d8a57c23b31261f"
+    }
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/roughness.png",
+    "output_sha256": "99590b476cf89538a50670e97fb1e58135d69adfe27fdb0663bc66d8ce7a1350",
+    "native_ppu": 32,
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "unity_import": {
+    "guid": "ac112d7f526dff64ea99cd46c36d923a",
+    "filter_mode": "Point",
+    "colour_space": "linear",
+    "mipmaps": false,
+    "compression": "Uncompressed",
+    "wrap_mode": "Clamp"
+  },
+  "application": {
+    "albedo": {
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_intact.png",
+      "sha256": "d32717d12b028f9f34e714da4db1ee3f05659b6b0847273b5bdeeb3e314dd3c9"
+    },
+    "shared_uv": true,
+    "world_pixel_pitch": 0.03125,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_heavy_training_barricade_intact_dry/result.json",
+      "sha256": "9745a53271d2b94eb99c058b6496c06676ca77e184f1fbe997262924f10f047d"
+    }
+  },
+  "human_review": {
+    "overall": "PENDING"
+  },
+  "admission_blockers": [
+    "Numeric material-data role not registered in Sprite formal admission; no FORMAL promotion",
+    "Source registration, complete scene density and genuine human material review pending"
+  ]
+}

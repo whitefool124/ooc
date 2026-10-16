@@ -1044,7 +1044,10 @@ namespace OCC.Combat.Tests
             run.CompleteFirstRunExperience();
             RogueliteDeveloperRunPolicy.TryResolveCurrentNode(run, null);
             if (run.HasPendingContentCombat) RogueliteDeveloperRunPolicy.TryResolveCurrentNode(run, null);
-            run.RogueRunState.StageTime = AcademyMapTuning.TransitionProgress;
+            Assert.That(AcademyMapTuning.TransitionProgress, Is.EqualTo(24));
+            run.RogueRunState.StageTime = 23;
+            Assert.That(run.IsTransitionPending, Is.False);
+            run.RogueRunState.StageTime = 24;
 
             Assert.That(run.IsTransitionPending, Is.True);
             Assert.That(run.IsNodeAvailable(RogueliteAcademyLayerCatalog.FinaleNodeId), Is.True);
@@ -1073,7 +1076,7 @@ namespace OCC.Combat.Tests
             run.CompleteFirstRunExperience();
             RogueliteMapNode next = run.AvailableNodes.First(node => node.Id != run.CurrentNodeId && node.Type != RogueliteMapNodeType.Finale);
             run.SelectNode(next.Id);
-            run.RogueRunState.StageTime = AcademyMapTuning.TransitionProgress;
+            run.RogueRunState.StageTime = 24;
 
             Assert.That(run.IsTransitionPending, Is.True);
             Assert.That(run.IsNodeAvailable(RogueliteAcademyLayerCatalog.FinaleNodeId), Is.False);

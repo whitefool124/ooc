@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"screen\\\":\\\"1920x1080\\\",\\\"host\\\":\\\"战斗管理器\\\",\\\"buttons\\\":[{\\\"name\\\":\\\"按钮_继续游戏\\\",\\\"text\\\":\\\"继续游戏\\\",\\\"enabled\\\":true,\\\"point\\\":[355.3159,642.5678]},{\\\"name\\\":\\\"按钮_设置\\\",\\\"text\\\":\\\"设置\\\",\\\"enabled\\\":true,\\\"point\\\":[355.3125,368.972839]},{\\\"name\\\":\\\"按钮_行程与行囊\\\",\\\"text\\\":\\\"行程与行囊\\\",\\\"enabled\\\":true,\\\"point\\\":[355.3125,460.179321]},{\\\"name\\\":\\\"按钮_退出游戏\\\",\\\"text\\\":\\\"退出游戏\\\",\\\"enabled\\\":true,\\\"point\\\":[355.3125,277.766357]},{\\\"name\\\":\\\"按钮_开始游戏\\\",\\\"text\\\":\\\"开始游戏\\\",\\\"enabled\\\":true,\\\"point\\\":[355.3159,551.3858]}],\\\"cameras\\\":[{\\\"name\\\":\\\"HD2D场景相机\\\",\\\"allowHDR\\\":true,\\\"allowMSAA\\\":false,\\\"fieldOfView\\\":24.0,\\\"orthographic\\\":false,\\\"cullingMask\\\":-2147483648,\\\"output\\\":\\\"1920x1080\\\"},{\\\"name\\\":\\\"主摄像机\\\",\\\"allowHDR\\\":false,\\\"allowMSAA\\\":false,\\\"fieldOfView\\\":60.0,\\\"orthographic\\\":true,\\\"cullingMask\\\":-1,\\\"output\\\":\\\"screen\\\"}]}\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

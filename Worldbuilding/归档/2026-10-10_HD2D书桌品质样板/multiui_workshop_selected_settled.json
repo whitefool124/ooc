@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"screen\\\":\\\"1920x1080\\\",\\\"host\\\":\\\"战斗管理器\\\",\\\"buttons\\\":[{\\\"name\\\":\\\"工坊卡_ACA-EQ-CH01\\\",\\\"text\\\":\\\"夹棉练习衣\\\",\\\"enabled\\\":true,\\\"point\\\":[366.592072,380.526672]},{\\\"name\\\":\\\"工坊卡_ACA-EQ-BP01\\\",\\\"text\\\":\\\"勘验背架\\\",\\\"enabled\\\":true,\\\"point\\\":[787.0816,380.526672]},{\\\"name\\\":\\\"按钮_返回地图\\\",\\\"text\\\":\\\"返回地图\\\",\\\"enabled\\\":true,\\\"point\\\":[1645.58215,245.405457]},{\\\"name\\\":\\\"按钮_确认安装\\\",\\\"text\\\":\\\"确认安装\\\",\\\"enabled\\\":false,\\\"point\\\":[1090.90881,487.6187]},{\\\"name\\\":\\\"页签_术式专精\\\",\\\"text\\\":\\\"术式专精\\\",\\\"enabled\\\":true,\\\"point\\\":[678.647339,691.6211]},{\\\"name\\\":\\\"页签_装备锻造\\\",\\\"text\\\":\\\"装备锻造\\\",\\\"enabled\\\":true,\\\"point\\\":[388.9428,691.6211]}],\\\"cameras\\\":[{\\\"name\\\":\\\"HD2D场景相机\\\",\\\"allowHDR\\\":true,\\\"allowMSAA\\\":false,\\\"fieldOfView\\\":24.0,\\\"orthographic\\\":false,\\\"cullingMask\\\":536870912,\\\"output\\\":\\\"1920x1080\\\"},{\\\"name\\\":\\\"主摄像机\\\",\\\"allowHDR\\\":false,\\\"allowMSAA\\\":false,\\\"fieldOfView\\\":60.0,\\\"orthographic\\\":true,\\\"cullingMask\\\":-1,\\\"output\\\":\\\"screen\\\"}]}\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

@@ -1,0 +1,352 @@
+[
+  {
+    "cue": "cloth_pick",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/cloth1.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/cloth_pick.wav",
+    "gain": 0.8760967071764497,
+    "trim_seconds": [
+      0.0,
+      0.644421768707483
+    ],
+    "duration": 0.644421768707483,
+    "peak": 0.7800000309944153,
+    "rms_db": -24.700241401759516,
+    "sha256": "b045bb84b7d04d8a9a641a9beb4601bc42d7dc7276fd6ea9bb5020bce11f30e5"
+  },
+  {
+    "cue": "cloth_drop",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/cloth2.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/cloth_drop.wav",
+    "gain": 1.6826294153752488,
+    "trim_seconds": [
+      0.007437641723356009,
+      0.4150793650793651
+    ],
+    "duration": 0.40764172335600907,
+    "peak": 0.7245855331420898,
+    "rms_db": -21.99999926276203,
+    "sha256": "4f41add63b1979a1d5156416603f2a11347a7f4c4b2da516944f15da495b525c"
+  },
+  {
+    "cue": "leather_pick",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/handleSmallLeather.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/leather_pick.wav",
+    "gain": 2.9725170721967635,
+    "trim_seconds": [
+      0.0,
+      0.29333333333333333
+    ],
+    "duration": 0.29333333333333333,
+    "peak": 0.7799999713897705,
+    "rms_db": -25.056740438721302,
+    "sha256": "eeffdb70868e98b81e5a97f850f155bbc0dd33e4ff8730ec0c8ca0fb0d920696"
+  },
+  {
+    "cue": "leather_drop",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/dropLeather.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/leather_drop.wav",
+    "gain": 0.925383238402876,
+    "trim_seconds": [
+      0.0,
+      0.4038095238095238
+    ],
+    "duration": 0.4038095238095238,
+    "peak": 0.5298274159431458,
+    "rms_db": -22.000000892187217,
+    "sha256": "0cc46e7d402e01212eba59d15c749dcbaf5b985d209e245099c6b11cc4c6b42b"
+  },
+  {
+    "cue": "metal_pick",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/metalLatch.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/metal_pick.wav",
+    "gain": 0.5116521995616743,
+    "trim_seconds": [
+      0.0,
+      0.2518367346938776
+    ],
+    "duration": 0.2518367346938776,
+    "peak": 0.7799999713897705,
+    "rms_db": -24.06987263412244,
+    "sha256": "92d70c9c419548293e557f53177f1feb371d9cb999067ed500b360eb2d4f29aa"
+  },
+  {
+    "cue": "metal_light",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/impactMetal_light_001.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/metal_light.wav",
+    "gain": 0.6105846672891494,
+    "trim_seconds": [
+      0.0,
+      0.24893424036281178
+    ],
+    "duration": 0.24893424036281178,
+    "peak": 0.7221691012382507,
+    "rms_db": -21.99999926276203,
+    "sha256": "b0a25acec7f67986b5a588a913ba9f63793fc83de10e101b4aa42e507cafe5f6"
+  },
+  {
+    "cue": "metal_heavy",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/impactMetal_heavy_001.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/metal_heavy.wav",
+    "gain": 0.7865294653700476,
+    "trim_seconds": [
+      0.0,
+      0.3563718820861678
+    ],
+    "duration": 0.3563718820861678,
+    "peak": 0.7800000309944153,
+    "rms_db": -25.28127286785216,
+    "sha256": "feb0700473ec1007a22cf04162d123a3ad5fd0a1f20c5948566227eaa9ac7f72"
+  },
+  {
+    "cue": "glass_pick",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/metalClick.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/glass_pick.wav",
+    "gain": 1.4133687356975329,
+    "trim_seconds": [
+      0.0,
+      0.4064172335600907
+    ],
+    "duration": 0.4064172335600907,
+    "peak": 0.7799999713897705,
+    "rms_db": -28.629656244916752,
+    "sha256": "3c74e8a9ba4e4c5df4a51b5cc2bdacbade3b08808174620a60393c3f8a22dc92"
+  },
+  {
+    "cue": "glass_drop",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/impactGlass_light_001.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/glass_drop.wav",
+    "gain": 0.7255946701186793,
+    "trim_seconds": [
+      0.0,
+      0.20668934240362813
+    ],
+    "duration": 0.20668934240362813,
+    "peak": 0.6369616985321045,
+    "rms_db": -21.99999926276203,
+    "sha256": "ac5122ee10026085f877456af36b7986a19d1c8b07453c68e0fe7c539c842beb"
+  },
+  {
+    "cue": "paper_pick",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/bookFlip3.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/paper_pick.wav",
+    "gain": 1.1077819757893845,
+    "trim_seconds": [
+      0.0,
+      0.23061224489795917
+    ],
+    "duration": 0.23061224489795917,
+    "peak": 0.7800000309944153,
+    "rms_db": -28.467569059585614,
+    "sha256": "90a3b4d5f63a48dd614e6a02583fb8df404d7e3eb150434f75a94c4a8bcddec7"
+  },
+  {
+    "cue": "paper_drop",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/bookPlace3.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/paper_drop.wav",
+    "gain": 0.43547095434646454,
+    "trim_seconds": [
+      0.0,
+      0.2613378684807256
+    ],
+    "duration": 0.2613378684807256,
+    "peak": 0.6507741212844849,
+    "rms_db": -21.99999926276203,
+    "sha256": "1aa3759b82c2d9c1e49d1a5f20f49eb23db0bf2feb9bae6f76bef09e045c3a05"
+  },
+  {
+    "cue": "neutral_drop",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/impactGeneric_light_001.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/neutral_drop.wav",
+    "gain": 0.8418163225675012,
+    "trim_seconds": [
+      0.0,
+      0.11460317460317461
+    ],
+    "duration": 0.11460317460317461,
+    "peak": 0.707886815071106,
+    "rms_db": -22.000000892187217,
+    "sha256": "60ce5813d1c6a376155b478fb6d06b567f7e847c3ef0ff2cb1fb5eaac47e23da"
+  },
+  {
+    "cue": "coins",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/handleCoins2.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/coins.wav",
+    "gain": 2.2014014099422003,
+    "trim_seconds": [
+      0.0,
+      0.3382086167800454
+    ],
+    "duration": 0.3382086167800454,
+    "peak": 0.7800000309944153,
+    "rms_db": -24.56960252006098,
+    "sha256": "f9e08af215a85e836d709c3414bf86353c2e3caa660b0044f3b6c985231196b4"
+  },
+  {
+    "cue": "forge",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/impactMining_001.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/forge.wav",
+    "gain": 0.5976349249512238,
+    "trim_seconds": [
+      0.0,
+      0.7593650793650794
+    ],
+    "duration": 0.7593650793650794,
+    "peak": 0.7533578872680664,
+    "rms_db": -22.000000077474585,
+    "sha256": "b781b08138d9516d049375fc61de3e0089ad77de188e5e28db0d9bdcb666f222"
+  },
+  {
+    "cue": "latch",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/metalLatch.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/latch.wav",
+    "gain": 0.5116521995616743,
+    "trim_seconds": [
+      0.0,
+      0.2518367346938776
+    ],
+    "duration": 0.2518367346938776,
+    "peak": 0.7799999713897705,
+    "rms_db": -24.06987263412244,
+    "sha256": "92d70c9c419548293e557f53177f1feb371d9cb999067ed500b360eb2d4f29aa"
+  },
+  {
+    "cue": "meal",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/impactPlate_light_001.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/meal.wav",
+    "gain": 0.7750342457762082,
+    "trim_seconds": [
+      0.0,
+      0.6546712018140589
+    ],
+    "duration": 0.6546712018140589,
+    "peak": 0.7800000309944153,
+    "rms_db": -27.445382868799904,
+    "sha256": "20badd6bfe3d13faef965c14569bffdee87ba57e8f614b4e3759d3bcb9c9cbc8"
+  },
+  {
+    "cue": "reject",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/rpg/Audio/clothBelt.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/reject.wav",
+    "gain": 0.90952671102507,
+    "trim_seconds": [
+      0.0,
+      0.7225396825396826
+    ],
+    "duration": 0.7225396825396826,
+    "peak": 0.7799999713897705,
+    "rms_db": -29.21800930026111,
+    "sha256": "d529223ffe7847aefcbdc1eff6c53427929de5aa4d718595901c8aae0990ddff"
+  },
+  {
+    "cue": "object_break",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/impactWood_heavy_001.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/object_break.wav",
+    "gain": 0.5937732820337407,
+    "trim_seconds": [
+      0.0,
+      0.3101360544217687
+    ],
+    "duration": 0.3101360544217687,
+    "peak": 0.754217803478241,
+    "rms_db": -22.000000077474585,
+    "sha256": "d9e67b0c3cd8f38c7fc0ef788d13efdff2aa24e35a96bca0bb93bab3ecb82c44"
+  },
+  {
+    "cue": "object_hit",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/impactGeneric_light_004.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/object_hit.wav",
+    "gain": 0.8633516603327643,
+    "trim_seconds": [
+      0.0,
+      0.137437641723356
+    ],
+    "duration": 0.137437641723356,
+    "peak": 0.7372626662254333,
+    "rms_db": -22.000000077474585,
+    "sha256": "5cf226759901416b3ab815699f1aafeee3410c2efd09268526fda7653ccd0232"
+  },
+  {
+    "cue": "defeat",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/impactSoft_heavy_001.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/defeat.wav",
+    "gain": 0.4257277482242548,
+    "trim_seconds": [
+      0.0,
+      0.5691383219954649
+    ],
+    "duration": 0.5691383219954649,
+    "peak": 0.538494348526001,
+    "rms_db": -22.000000077474585,
+    "sha256": "924165ffda9bab5bc5f74db468306299e4beda8592ff04e8b24c80db04eead84"
+  },
+  {
+    "cue": "stone_0",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/footstep_concrete_000.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/stone_0.wav",
+    "gain": 1.1822133178356915,
+    "trim_seconds": [
+      0.0,
+      0.10301587301587302
+    ],
+    "duration": 0.10301587301587302,
+    "peak": 0.6348060965538025,
+    "rms_db": -22.000000077474585,
+    "sha256": "cf1eae18bdf405c03fa15010011805ad11628c031da1c9fafeb72ec59128e1b1"
+  },
+  {
+    "cue": "stone_1",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/footstep_concrete_001.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/stone_1.wav",
+    "gain": 1.4243934663667308,
+    "trim_seconds": [
+      0.0,
+      0.10473922902494331
+    ],
+    "duration": 0.10473922902494331,
+    "peak": 0.6551631093025208,
+    "rms_db": -22.000000892187217,
+    "sha256": "bebad722ad2850a5c89ad9ebeee4e5490b34f2ba701907197faa25fafa4170fd"
+  },
+  {
+    "cue": "stone_2",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/impact/Audio/footstep_concrete_002.ogg",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/stone_2.wav",
+    "gain": 1.5073217963816188,
+    "trim_seconds": [
+      0.0,
+      0.10988662131519275
+    ],
+    "duration": 0.10988662131519275,
+    "peak": 0.7397422194480896,
+    "rms_db": -21.99999926276203,
+    "sha256": "0e2acb9c62c1983bbc96b67357b06d1a6772dc1d06ab05e23d094d5cf5178871"
+  },
+  {
+    "cue": "water_0",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/splash1.wav",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/water_0.wav",
+    "gain": 1.1143634461109173,
+    "trim_seconds": [
+      0.526734693877551,
+      1.5630385487528344
+    ],
+    "duration": 1.0363038548752834,
+    "peak": 0.7799999713897705,
+    "rms_db": -29.273831708508503,
+    "sha256": "be63224920f64af41e0890248f328744c3c8e39105d30392e9fbb5d519949698"
+  },
+  {
+    "cue": "water_1",
+    "source": "ArtSource/Audio/FoleyExpansion20261003/splash2.wav",
+    "output": "UnityProject/Assets/Resources/Audio/OCC/SFX/Foley/water_1.wav",
+    "gain": 0.8219133678489887,
+    "trim_seconds": [
+      0.6478684807256235,
+      1.7066666666666668
+    ],
+    "duration": 1.0587981859410431,
+    "peak": 0.7799999713897705,
+    "rms_db": -32.08904944862816,
+    "sha256": "8f243826ebfa4aa8e78bcd019d3804ce416ad52f4f9cfc3d0359b5db9e3351b3"
+  }
+]

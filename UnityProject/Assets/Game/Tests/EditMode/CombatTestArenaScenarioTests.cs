@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -10,6 +10,25 @@ namespace OCC.Combat.Tests
 {
     public sealed class CombatTestArenaScenarioTests
     {
+        [Test]
+        public void EveryBlockedArenaCellHasVisibleObjectTerrain()
+        {
+            var assets = new CombatFormalVisualAssets();
+            assets.LoadRuntime();
+            var presenter = new CombatBattlefieldCellPresenter(new BattlefieldPresentationAdapter(), assets);
+            foreach (var scenario in CombatTestArenaScenarioCatalog.All)
+            {
+                var state = CombatTestArenaScenarioCatalog.Build(scenario.Id).State;
+                foreach (var position in scenario.Level.BlockedPositions)
+                {
+                    var cell = presenter.Build(state, scenario.Level, new FireBattleState(state),
+                        new CombatSelectionController(), false, null, position, _ => null, (_, __) => null, _ => null, _ => null);
+                    Assert.That(cell.ObjectTexture, Is.Not.Null, scenario.Id + " " + position);
+                    Assert.That(state.Map.IsBlocked(position), Is.True);
+                }
+            }
+        }
+
         [Test]
         public void EveryScenarioBuildsACompactConnectedBattleWithFullLoadouts()
         {
@@ -492,6 +511,8 @@ namespace OCC.Combat.Tests
             CombatState phaseTwoState = new CombatState(new GridMap(5, 5), new[] { phaseTwoHero, phaseTwoCore });
             phaseTwoState.ConfigureRuleset(CombatRuleset.Roguelite);
             phaseTwoState.AttachAcademyCoreBoss(new AcademyCoreBossRuntime());
+            for (int turn = 0; turn < 4; turn++)
+                beginBossTurn.Invoke(phaseTwoState.AcademyCoreBoss, new object[] { phaseTwoState, phaseTwoCore });
             MethodInfo takeDamage = typeof(UnitState).GetMethod("TakeDamage", BindingFlags.Instance | BindingFlags.NonPublic);
             takeDamage.Invoke(phaseTwoCore, new object[] { phaseTwoCore.MaxHealth - phaseTwoCore.MaxHealth * 3 / 10 });
             Assert.That(phaseTwoCore.Health * 10, Is.LessThanOrEqualTo(phaseTwoCore.MaxHealth * 3));

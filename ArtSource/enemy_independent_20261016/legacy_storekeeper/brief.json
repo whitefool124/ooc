@@ -1,0 +1,25 @@
+{
+  "asset_id": "legacy_storekeeper_battle_candidate_20261016",
+  "content_id": "legacy_storekeeper",
+  "identity": "灰发老保管；工作帽、老花镜、袖套、臂下登记簿与铜质检定器。",
+  "identity_source": "Worldbuilding/OC世界观/04_教育与组织/学院敌人设定.md",
+  "role": "tactical_unit_32x64",
+  "canvas": [
+    32,
+    64
+  ],
+  "native_ppu": 32,
+  "world_pixel_pitch": 0.03125,
+  "logical_cells": [
+    1,
+    1
+  ],
+  "native_anchor": [
+    16,
+    62
+  ],
+  "grain_reference": "ArtSource/enemy_independent_20261016/signal_keeper/asset/signal_keeper_battle_candidate_32x64.png",
+  "view": "strict side profile facing right",
+  "source_channel": "codex_builtin_imagegen",
+  "status": "QA_PENDING"
+}

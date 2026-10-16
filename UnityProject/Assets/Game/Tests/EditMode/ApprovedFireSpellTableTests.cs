@@ -11,7 +11,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void EveryApprovedSpell_HasACommitAndADeterministicResolution()
         {
-            Assert.That(FireSpellCatalog.Version, Is.EqualTo("fire-personal-spells-v0.5-three-builds"));
+            Assert.That(FireSpellCatalog.Version, Is.EqualTo("fire-personal-spells-v0.6-full-balance"));
             Assert.That(FireSpellCatalog.All.Count, Is.EqualTo(80));
             foreach (FireSpellDefinition spell in FireSpellCatalog.All)
             {

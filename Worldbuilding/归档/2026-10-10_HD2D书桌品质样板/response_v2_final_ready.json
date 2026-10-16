@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"dbde78e247a14be1b0a3d21ad06d1a6d\",\"request_key\":\"response-v2-final-play-20261010\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"play\",\"status\":\"failed\",\"phase\":\"failed\",\"created_at\":\"2026-10-10T07:50:27.8060000+00:00\",\"updated_at\":\"2026-10-10T07:50:28.1610000+00:00\",\"finished_at\":\"2026-10-10T07:50:28.1610000+00:00\",\"error_code\":\"EDITOR_OPERATION_FAILED\",\"message\":\"无法删除要被替换的文件。\",\"refresh_assets\":false,\"timeout_seconds\":120,\"step\":1,\"created_seconds\":1791618627.806,\"deadline_seconds\":1791618747.806,\"settle_since\":0.0,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T07:50:27.8060000+00:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"},{\"timestamp\":\"2026-10-10T07:50:28.1610000+00:00\",\"phase\":\"failed\",\"message\":\"无法删除要被替换的文件。\"}]},\"current_editor\":{\"is_compiling\":false,\"is_updating\":false,\"is_playing\":false,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":true},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":0,\"journal_error\":\"无法删除要被替换的文件。\",\"task\":{\"task_id\":\"editor:dbde78e247a14be1b0a3d21ad06d1a6d\",\"kind\":\"editor\",\"id\":\"dbde78e247a14be1b0a3d21ad06d1a6d\",\"status\":\"failed\",\"phase\":\"failed\",\"revision\":\"0fce7478b08c8db44fd0ddbc61366f78a1557fc45aa5afe91d8e52008c472fd4\",\"changed\":true,\"wait_complete\":true,\"poll_after_ms\":0,\"wait_reason\":\"completed\",\"waited_ms\":350,\"snapshot_at\":\"2026-10-10T07:50:28.1848409Z\"}}}"
+      }
+    ]
+  }
+}

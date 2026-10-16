@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":false,\"code\":\"COMMAND_RUNTIME_ERROR\",\"error\":\"COMMAND_RUNTIME_ERROR\",\"data\":{\"message\":\"Expected one loadout stage\",\"stack\":\"  at WoodTexturePreview.Execute (Funplay.Editor.Tools.Scripting.ExecutionContext ctx) [0x00073] in <e42abf4448634df7992918522efcb622>:0 \\r\\n  at Funplay.Editor.Tools.Builtins.ScriptExecutionFunctions.ExecuteAsCommand (System.Type commandType, System.String compilerName) [0x0003c] in .\\\\Library\\\\PackageCache\\\\com.gamebooom.unity.mcp@7310de901a8c\\\\Editor\\\\Tools\\\\Builtins\\\\ScriptExecutionFunctions.cs:611 \",\"compiler\":\"Roslyn\",\"logs\":[],\"created\":[],\"modified\":[],\"destroyed\":[]}}"
+      }
+    ]
+  }
+}

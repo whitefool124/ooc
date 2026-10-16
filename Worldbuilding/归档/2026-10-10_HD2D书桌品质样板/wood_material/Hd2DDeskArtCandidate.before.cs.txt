@@ -1,0 +1,206 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Rendering;
+
+namespace OCC.Combat.Presentation
+{
+    // Reuses imported native-pixel assets for the persistent desk; visual approval is separate.
+    public sealed class Hd2DDeskArtCandidate : MonoBehaviour
+    {
+        private readonly List<Material> ownedMaterials = new List<Material>();
+        private Mesh cupMesh;
+        private readonly List<Mesh> modelMeshes = new List<Mesh>();
+        private readonly List<MeshRenderer> texturedModels = new List<MeshRenderer>();
+        private static Texture2D[] previewTextures;
+        private Texture2D[] sessionTextures;
+        private bool reuseNativeAssets;
+        public const float ScenePixelsPerUnit = 32f;
+        public static void BeginPreview(Texture2D wood, Texture2D plaster, Texture2D cup)
+        {
+            if (!Application.isPlaying || wood == null || plaster == null || cup == null || previewTextures != null)
+                throw new System.InvalidOperationException("One complete Play Mode preview session required.");
+            var session = new GameObject("书桌像素候选验证会话").AddComponent<Hd2DDeskArtCandidate>();
+            session.sessionTextures = previewTextures = new[] { wood, plaster, cup };
+            foreach (var stage in Object.FindObjectsByType<MainMenuHd2DStage>(FindObjectsSortMode.None))
+                Preview(stage, wood, plaster, cup);
+        }
+        internal static void Apply(MainMenuHd2DStage stage)
+        {
+            if (previewTextures != null)
+            {
+                Preview(stage,previewTextures[0],previewTextures[1],previewTextures[2]);
+                return;
+            }
+            if(stage==null||stage.GetComponent<Hd2DDeskArtCandidate>()!=null)return;
+            // Existing imported assets share the lantern's authored native pixel grid.
+            // New generated PNGs remain outside Unity until their import is allowed.
+            var wood = Resources.Load<Texture2D>("Art/MainMenuE/Stage/desk");
+            var plaster = Resources.Load<Texture2D>("Art/MainMenuE/Stage/room");
+            var cup = Resources.Load<Texture2D>("Art/MainMenuE/Stage/cup");
+            if (wood == null || plaster == null || cup == null)
+                throw new System.InvalidOperationException("Missing imported desk/room/cup pixel assets.");
+            var owner = stage.gameObject.AddComponent<Hd2DDeskArtCandidate>();
+            owner.reuseNativeAssets = true;
+            owner.Build(stage, wood, plaster, cup);
+        }
+
+        public static void Preview(MainMenuHd2DStage stage, Texture2D wood, Texture2D plaster, Texture2D cup)
+        {
+            if (stage == null || wood == null || plaster == null || cup == null ||
+                stage.GetComponent<Hd2DDeskArtCandidate>() != null) return;
+            var owner = stage.gameObject.AddComponent<Hd2DDeskArtCandidate>();
+            owner.Build(stage, wood, plaster, cup);
+        }
+
+        private Material Lit(Texture2D texture, Color color, bool cutout)
+        {
+            var material = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+            material.name = "QA_PENDING " + texture.name;
+            material.SetTexture("_BaseMap", texture);
+            material.SetColor("_BaseColor", color);
+            material.SetFloat("_Smoothness", 0);
+            material.SetFloat("_Metallic", 0);
+            material.SetFloat("_Cull", 0);
+            if (cutout)
+            {
+                material.SetFloat("_AlphaClip", 1);
+                material.SetFloat("_Cutoff", .4f);
+                material.EnableKeyword("_ALPHATEST_ON");
+                material.renderQueue = (int)RenderQueue.AlphaTest;
+            }
+            else if (!reuseNativeAssets)
+            {
+                // The processed library canvases have a transparent safety border.
+                // Keep it outside model UVs, rather than tiling transparent seams.
+                material.SetTextureScale("_BaseMap", new Vector2((texture.width - 2f) / texture.width,
+                    (texture.height - 2f) / texture.height));
+                material.SetTextureOffset("_BaseMap", new Vector2(1f / texture.width, 1f / texture.height));
+            }
+            ownedMaterials.Add(material);
+            return material;
+        }
+
+        private void Build(MainMenuHd2DStage stage, Texture2D wood, Texture2D plaster, Texture2D cup)
+        {
+            var timber = Lit(wood, new Color(.84f, .84f, .84f), false);
+            var trim = Lit(wood, new Color(.55f, .55f, .55f), false);
+            var wall = Lit(plaster, Color.white, false);
+            foreach (var renderer in stage.GetComponentsInChildren<MeshRenderer>(true))
+            {
+                string name = renderer.name;
+                if (name.StartsWith("地板木条") || name.StartsWith("桌面木板") ||
+                    name == "实体茶碟" || name == "实体杯身" || name == "杯中茶面" ||
+                    name.StartsWith("杯把") || name == "灯内晶体")
+                {
+                    renderer.gameObject.SetActive(false);
+                    continue;
+                }
+                var original = renderer.sharedMaterial;
+                if (original == null) continue;
+                if (reuseNativeAssets && name == "独立学院窗景")
+                {
+                    var vistaFilter=renderer.GetComponent<MeshFilter>();
+                    if(vistaFilter==null||vistaFilter.sharedMesh==null)continue;
+                    var vista=Instantiate(vistaFilter.sharedMesh);modelMeshes.Add(vista);texturedModels.Add(renderer);
+                    vistaFilter.sharedMesh=vista;
+                    var oldUv=vista.uv;var texture=original.mainTexture;
+                    if(oldUv.Length==4 && texture!=null)
+                    {
+                        var centre=(oldUv[0]+oldUv[2])*.5f;
+                        var size=vista.bounds.size;
+                        var half=new Vector2(size.x*renderer.transform.localScale.x*ScenePixelsPerUnit/texture.width,
+                            size.y*renderer.transform.localScale.y*ScenePixelsPerUnit/texture.height)*.5f;
+                        vista.uv=new[]{centre-half,new Vector2(centre.x+half.x,centre.y-half.y),centre+half,
+                            new Vector2(centre.x-half.x,centre.y+half.y)};
+                    }
+                    continue;
+                }
+                string source = original.name;
+                if (source == "warm timber" || source == "timber plank") renderer.sharedMaterial = timber;
+                else if (source == "window timber") renderer.sharedMaterial = trim;
+                else if (source == "warm plaster") renderer.sharedMaterial = wall;
+                else continue;
+                if (name == "桌面实体")
+                    renderer.transform.localScale = new Vector3(renderer.transform.localScale.x, .25f, renderer.transform.localScale.z);
+                var filter = renderer.GetComponent<MeshFilter>();
+                if (filter == null || filter.sharedMesh == null) continue;
+                var mesh = Instantiate(filter.sharedMesh);
+                mesh.name = "QA_PENDING planar UV " + name;
+                filter.sharedMesh = mesh;
+                modelMeshes.Add(mesh); texturedModels.Add(renderer);
+            }
+            RefreshModelUvs();
+            // One image supplies ceramic silhouette, tea surface and cup/saucer contact.
+            // Geometry only carries the card in the same real scene space.
+            var card = new GameObject("独立像素杯碟候选", typeof(MeshFilter), typeof(MeshRenderer));
+            card.layer = stage.sceneCamera.gameObject.layer;
+            card.transform.SetParent(stage.transform, false);
+            card.transform.localPosition = new Vector3(1.55f, 1.425f, -.3f);
+            card.transform.localRotation = Hd2DViewProfile.DioramaRotation;
+            // Alpha subject bounds in the existing 64x64 cup source (top-left coordinates).
+            // The authored 33x22 subject is placed at the same 32 PPU as the 14x34 lantern.
+            Rect region = reuseNativeAssets ? new Rect(15, 2, 33, 22) : new Rect(0, 0, cup.width, cup.height);
+            float width = reuseNativeAssets ? region.width / ScenePixelsPerUnit : .9f;
+            float height = width * region.height / region.width;
+            cupMesh = new Mesh { name = "QA_PENDING cup card" };
+            cupMesh.vertices = new[] { new Vector3(-width * .5f, 0, 0), new Vector3(width * .5f, 0, 0),
+                new Vector3(width * .5f, height, 0), new Vector3(-width * .5f, height, 0) };
+            cupMesh.uv = new[] { new Vector2(region.xMin/cup.width,region.yMin/cup.height),
+                new Vector2(region.xMax/cup.width,region.yMin/cup.height),
+                new Vector2(region.xMax/cup.width,region.yMax/cup.height),
+                new Vector2(region.xMin/cup.width,region.yMax/cup.height) };
+            cupMesh.triangles = new[] { 0, 2, 1, 0, 3, 2 };
+            cupMesh.RecalculateNormals(); cupMesh.RecalculateBounds();
+            card.GetComponent<MeshFilter>().sharedMesh = cupMesh;
+            var face = card.GetComponent<MeshRenderer>();
+            face.sharedMaterial = Lit(cup, Color.white, true);
+            face.shadowCastingMode = ShadowCastingMode.On;
+        }
+
+        public void RefreshModelUvs()
+        {
+            // Equal world-space density: a narrow beam samples a narrow patch of
+            // timber instead of compressing a whole texture into its front edge.
+            for (int i = 0; i < modelMeshes.Count; i++)
+            {
+                var mesh = modelMeshes[i]; var renderer = texturedModels[i];
+                if (mesh == null || renderer == null) continue;
+                if (reuseNativeAssets)
+                {
+                    if(renderer.name=="独立学院窗景")continue;
+                    var texture = renderer.sharedMaterial.mainTexture;
+                    // Reuse clean rectangular material regions; do not paint or generate replacement pixels.
+                    Rect patch = texture.name == "room" ? new Rect(8,98,24,24) : new Rect(96,36,32,16);
+                    Hd2DNativeMaterialMesh.Rebuild(mesh,renderer.transform.localScale,patch,
+                        new Vector2(texture.width,texture.height),ScenePixelsPerUnit);
+                    continue;
+                }
+                var vertices = mesh.vertices; var normals = mesh.normals;
+                if (normals.Length != vertices.Length) continue;
+                var uv = new Vector2[vertices.Length];
+                float worldSpan = renderer.sharedMaterial.mainTexture.name.Contains("plaster") ? 12f : 10f;
+                for (int j = 0; j < vertices.Length; j++)
+                {
+                    var p = Vector3.Scale(vertices[j], renderer.transform.localScale);
+                    var n = normals[j];
+                    Vector2 plane = Mathf.Abs(n.y) > .5f ? new Vector2(p.x, p.z) :
+                        Mathf.Abs(n.x) > .5f ? new Vector2(p.z, p.y) : new Vector2(p.x, p.y);
+                    uv[j] = Vector2.one * .5f + plane / worldSpan;
+                }
+                mesh.uv = uv;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            foreach (var material in ownedMaterials) if (material != null) Destroy(material);
+            if (cupMesh != null) Destroy(cupMesh);
+            foreach (var mesh in modelMeshes) if (mesh != null) Destroy(mesh);
+            if (sessionTextures != null)
+            {
+                if (previewTextures == sessionTextures) previewTextures = null;
+                foreach (var texture in sessionTextures) if (texture != null) Destroy(texture);
+            }
+        }
+    }
+}

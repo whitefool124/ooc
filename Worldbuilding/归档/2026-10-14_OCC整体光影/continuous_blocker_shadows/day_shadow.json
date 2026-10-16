@@ -1,0 +1,5 @@
+{
+  "enabledMaterials": 27,
+  "shaderDependencies": "9700a3c78c178a8984893a7ac5ac8baf",
+  "kernel": "12 gathered blocker statistics; bilinear contact + native 7x7 tent, 17 comparison fetches"
+}

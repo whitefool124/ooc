@@ -1,0 +1,30 @@
+{
+  "calls": 3,
+  "cost": null,
+  "records": [
+    {
+      "attempt": "r1",
+      "status": "REJECTED",
+      "provider": "Codex built-in image_gen",
+      "known_cost": null,
+      "reason": "Frame lattices disagree; some confidence below 1.2; no sequence accepted.",
+      "grid_report": "r1/sheet-qa.json"
+    },
+    {
+      "attempt": "r2",
+      "status": "REJECTED",
+      "provider": "Codex built-in image_gen",
+      "known_cost": null,
+      "reason": "Frame lattices disagree; some confidence below 1.2; no sequence accepted.",
+      "grid_report": "r2/sheet-qa.json"
+    },
+    {
+      "attempt": "r3",
+      "status": "REJECTED",
+      "provider": "Codex built-in image_gen",
+      "known_cost": null,
+      "reason": "Frame lattices disagree; some confidence below 1.2; no sequence accepted.",
+      "grid_report": "r3/sheet-qa.json"
+    }
+  ]
+}

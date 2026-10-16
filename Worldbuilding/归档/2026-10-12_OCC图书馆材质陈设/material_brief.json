@@ -1,0 +1,103 @@
+{
+  "schema": "occ-hd2d-material-brief-v1",
+  "status": "QA_PENDING",
+  "canonical_section": "A.2.4",
+  "asset_id": "occ.library.bookshelf.rejected.r3",
+  "asset_role": "hd2d_environment_module",
+  "scene_profile": "battlefield-v1/library_discipline",
+  "reading_goal": "Recognize wood shelves and paper book clusters in a low noninteractive backdrop",
+  "stage_theme_source": "OCC mother document A.2.4; existing library_discipline",
+  "pixel_density": {
+    "reference_asset_id": "academy_block_court_b/native32 battle units",
+    "reference_capture": null,
+    "authored_pixel_pitch": null,
+    "world_pixel_pitch": 0.03125,
+    "world_size_or_uv_mapping": "Intended native32 card; no accepted decode or placement",
+    "same_depth_application_review": "PENDING"
+  },
+  "construction": {
+    "type": "pixel card; not built",
+    "camera_view": null,
+    "support_plane_and_anchor": null,
+    "writing_region": null,
+    "model_rationale_if_needed": null
+  },
+  "material_regions": [
+    {
+      "id": "walnut",
+      "meaning": "wood structure"
+    },
+    {
+      "id": "paper",
+      "meaning": "book blocks"
+    }
+  ],
+  "maps": {
+    "albedo": {
+      "source": null,
+      "sha256": null,
+      "colour_space": "sRGB",
+      "external_lighting_baked": false,
+      "status": "RAW_REJECTED"
+    },
+    "normal": {
+      "source": null,
+      "sha256": null,
+      "colour_space": "linear",
+      "convention": null,
+      "status": "NOT_PROVIDED"
+    },
+    "surface": {
+      "source": null,
+      "sha256": null,
+      "colour_space": "linear",
+      "channels": "OCC Surface: R smoothness, G coat mask, B occlusion",
+      "status": "NOT_PROVIDED"
+    },
+    "metal_mask": {
+      "source": null,
+      "sha256": null,
+      "colour_space": "linear",
+      "status": "NOT_PROVIDED"
+    },
+    "emission_mask": {
+      "source": null,
+      "sha256": null,
+      "colour_space": "linear",
+      "semantic_reason": null,
+      "status": "NOT_PROVIDED"
+    }
+  },
+  "registration": {
+    "shared_subject_canvas_anchor_uv": "PENDING",
+    "map_pixel_pitch_review": "PENDING"
+  },
+  "generation_prompt_fields": [
+    "identity and actual use",
+    "OCC stage motif",
+    "grain reference and intended world pitch",
+    "view and support contact",
+    "material regions and connected clusters",
+    "neutral diffuse illumination",
+    "clean writing region where needed",
+    "exclude baked window shadows, flare, reflections, glow and DOF"
+  ],
+  "prohibitions": [
+    "no albedo luminance to inferred height/roughness",
+    "no blue/yellow colour to inferred emission/metal",
+    "no copying reference game scalar values as approved OCC values",
+    "no mixed source grain or per-object density compensation"
+  ],
+  "application_review": {
+    "neutral_light": "PENDING",
+    "default_light": "PENDING",
+    "rotated_light_material_response": "PENDING",
+    "normal_and_surface_maps_off": "PENDING",
+    "emission_off": "PENDING",
+    "contact": "PENDING",
+    "reading_at_1080_and_540": "PENDING",
+    "motion": "PENDING",
+    "human_aesthetic": "PENDING"
+  },
+  "admission": "This brief is a template, not an asset manifest or approval. Use existing role-specific manifest, density and runtime gates."
+}

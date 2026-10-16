@@ -1,0 +1,467 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "c6e069ff0f1f014e37e0dddf207f6b9dc3b1dd137a4d3a77ff25ba9de70ba1c7",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DCourtyardWaterMaterial.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DCourtyardWaterMaterial.cs.meta",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DCourtyardWater.shader",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DCourtyardWater.shader.meta",
+    "UnityProject/Assets/Game/Editor/Hd2DCombatReviewAudit.cs"
+  ],
+  "inputs": [
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "75c2acbf1878900a00f77d93cdaa165b753f9a2ae35e43eafbdda0037467c7d4"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DCombatReviewAudit.cs",
+      "sha256": "4903938ecb81b08cb059fb76fe8d924d2b84590b6996ede5077957fb62fd2aa0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalFirstBattle32/rain_court_water.png",
+      "sha256": "59d59b5c60548c95477e98213a96ee2b6b1a9d9a1fb157717c39055489399315"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DCourtyardWater.shader",
+      "sha256": "652db337e7c00d72643eaab805d6e8eb386584d0e505994b0e0c2a963f10492c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DCourtyardWater.shader.meta",
+      "sha256": "af8081cf1a803e3590819614c3450d417641447dbf05ff8aa02f5a088e8a2786"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "1aa1017bd487b2eb8d759e1e3d7123d401e09abef31e6ec528eca09fe76aee6a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "b9e60306ff22219dfe590c82abf2fb7f0b53ae23818fc0b9e3973bc6e83a29ad"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "b6e9512854f40b266735f2ead588b3cf15932d8857825d2d27a1f14c47df8e7b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DCourtyardWaterMaterial.cs",
+      "sha256": "abb133d44b82f57056c1aa28fa42dc262176c6f916fd2b3cc2a65371d71d5201"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DCourtyardWaterMaterial.cs.meta",
+      "sha256": "d206389ef1581c7b253975c6c3ee3c784e32c6fc65ae125639eac754f8c037f6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "72a78ddf11b8a002f1ce8b979c348fcd54f15d179f26da00e329ec78359df08c"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": {
+      "shader": "OCC/HD2D/CourtyardWater",
+      "source_sampling": "Point,32 texels/world unit",
+      "optical_depth_pool": 0.5,
+      "optical_depth_tactical_water": 0.12,
+      "smoothness": 0.9,
+      "wave_strength": 0.028,
+      "wave_speed": 0.7,
+      "water_f0": 0.02,
+      "shore": "authored rectangle distance, independent of albedo brightness",
+      "limitations": "Opaque authored absorption approximation, not screen-space refraction; existing local cubemap, not planar reflections."
+    },
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 45,
+    "yaw": 0,
+    "wall_height": 0.65,
+    "unit_ground_angle": 45
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": null
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Full density/construction inventory and human scene approval pending",
+    "Standalone Player performance budget unmeasured",
+    "Bright water highlights still sharp; physical refraction and accurate moving-object reflections incomplete"
+  ],
+  "additional_evidence": [
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水面层次/evidence/occ_water_candidate_1080.png",
+      "sha256": "0a1a4958359d6624bbb5db0d73184bcc66cddd61c8457470833904e03297d2b4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水面层次/evidence/occ_water_final_1080.png",
+      "sha256": "d555de24328ea699389eaa18360a885c7e387faa58aaaefd0a8619af397bf902"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水面层次/evidence/occ_water_final_540.png",
+      "sha256": "fff903a7a3fd04cffe1d61d743c520c5786389cc18b63805fbbd3f109e9b1243"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水面层次/evidence/occ_water_victory.png",
+      "sha256": "7acbe7963ccb2825ebfe1e91b918a5fbc7d758cb860c5c49ed4725f9312f490a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水面层次/evidence/occ_water_motion_t1.png",
+      "sha256": "716763869f932ae9aafe4c78f44215e744fc80b820523b4063d8146811e26326"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水面层次/evidence/occ_water_motion_t6.png",
+      "sha256": "b59ccedcc435929da1338b8e5a238024e0f11b5ffc66523e08249f0b3b7c7fe1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_OCC水面层次/evidence/water_motion.mp4",
+      "sha256": "c0d3ac33b141f6985601566f81864de3582dd4766edc6d4d7ec0d22442856670"
+    }
+  ],
+  "runtime_observations": {
+    "water": {
+      "projection": 30,
+      "supported": true,
+      "messages": [],
+      "water": [
+        {
+          "name": "环境_(4, 3)",
+          "depth": 0.12,
+          "wave": 0.028,
+          "smooth": 0.9,
+          "filter": "Point"
+        },
+        {
+          "name": "环境_(2, 3)",
+          "depth": 0.12,
+          "wave": 0.028,
+          "smooth": 0.9,
+          "filter": "Point"
+        },
+        {
+          "name": "浅水面",
+          "depth": 0.5,
+          "wave": 0.028,
+          "smooth": 0.9,
+          "filter": "Point"
+        },
+        {
+          "name": "环境_(3, 3)",
+          "depth": 0.12,
+          "wave": 0.028,
+          "smooth": 0.9,
+          "filter": "Point"
+        }
+      ]
+    },
+    "combat": {
+      "status": "PASS commands=14 moves=3 attacks=8  victory=PASS saved=True",
+      "commands": 14,
+      "moves": 3,
+      "attacks": 8,
+      "evidence": " victory=PASS saved=True",
+      "waterRenderers": 0,
+      "waterMaterials": 0
+    },
+    "cleanup": {
+      "path": "E:/数据库/OCC_Codex/UnityProject/Assets",
+      "play": false,
+      "compiling": false,
+      "resolutionIndex": 3,
+      "scenes": [
+        {
+          "path": "Assets/Scenes/CombatPrototype.unity",
+          "dirty": false
+        }
+      ],
+      "waterMaterials": 0
+    },
+    "motion": {
+      "duration_seconds": 8.006286200004979,
+      "frames": 77,
+      "ready": true,
+      "not_performance_measurement": true
+    }
+  }
+}

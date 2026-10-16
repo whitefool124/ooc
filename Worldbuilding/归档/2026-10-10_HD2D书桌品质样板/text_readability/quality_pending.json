@@ -1,0 +1,682 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.3",
+  "contract_sha256": "5f1b45719f50c7544ba5c901dd3eefbbc0a0181eeb86f039e5553c2a805d109b",
+  "scene_kind": "desk",
+  "baseline_id": "desk-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Text.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Text.cs.meta"
+  ],
+  "inputs": [
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "296d00399e90e469d9f84bf3e44cee5d7074748a3243a1da9dc2412d5812ef42"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DAtmosphere.asset",
+      "sha256": "adf26689a7e80b22ef256d4a7c516929d51aea7f3af97bbe91cb136db3a685f0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Fonts/FusionPixel12ProportionalZhHans.ttf",
+      "sha256": "ffa464aae492ed7a8526367debcce62603cec8157f59548cc50cebf1ed81a53f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Fonts/FusionPixel12ProportionalZhHans.ttf.meta",
+      "sha256": "306b569b6cd9f2a168cd153d4e69de12fd809ae969c99439898092e838e4cd52"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+      "sha256": "ef48856dbe8c0b10ab40e128c1f34ab84b322a5c2372959c6f7f8b6e396b3d6e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Text.cs",
+      "sha256": "68f2148b3ac8d5992ff672d00da28420148ca05249eb06a64bf4cbdb137d4492"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Text.cs.meta",
+      "sha256": "b1703581351a66d78dfa5568974c85d6aeebed609c92ede3c81a36c7fb0c4524"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/MainMenuHd2DStage.cs",
+      "sha256": "cc14c25431840009bd15a534a7ae7d7e74196c347d5c5964bfee829dd6da35d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "a3e19c8ccdf3e897e9c6c09cd508915afcbb56165e027180320f8796f812e396"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/text_bag_a6_1920.png",
+      "sha256": "04a1293ffd23c4b6248c01f5e0c21d61e579ed813949d3915a676c392ec60b3c"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/text_bag_a6_960.png",
+      "sha256": "f34c476827413fdeb740ac7065a24084656cb4a92cef1cc58490d5e7272e75a0"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/text_spell_a6_1920.png",
+      "sha256": "8f85492cb4a2469f6bb5fa3f620fdcb5885dd1efdc921fbf2d4ebd506598947c"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/text_spell_a6_960.png",
+      "sha256": "f4abc8a2c5eac526cdf4b31609b4154ba75121c68c26f760cd88eb8d4c318913"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a2_bag_capture.json",
+      "sha256": "5ea0fd1e4fb8211beca3378ee272da115acaa48022d7b97b82bf2733064097f6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a2_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a2_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a2_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a2_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a2_open.json",
+      "sha256": "dd84314c759a1d6e1a2f3a98d0dbf7d0d37deff61e3277bc9778ac5c4b811b98"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a2_scope.json",
+      "sha256": "759dbb8f44c46df91c20fb45c79d39b2b438cceb5ecc0f217048871b6ee4ae2a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a3_compile.json",
+      "sha256": "c74453798a72aa9ec8ea61b19f5983fff546789cf44ff4e9a165e01aa9a938e5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a3_ready.json",
+      "sha256": "9af25f31ce35403bf0dad358ee183338b3d9a53f08e1db58a8214db925e50c07"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_bag_capture.json",
+      "sha256": "7beb2df6f03808ba63611f5d21a19517a5ce109b3ec6252fd45e24d398acf9bf"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_bag_open.json",
+      "sha256": "ab5c947cd57f1041f4a086ae48ed2eb9c5f1d9357ee8555c6bdfff4ef19a1e47"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_compile.json",
+      "sha256": "1d9ab5d0289451e203f043a05dd0de94e9adab9d45f09fe38fd2a3f3a3945bc0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_ready.json",
+      "sha256": "215507c995b998989263ef73b8a473472d86fa769ed1c43f15ebec12dde7b7ab"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_scope.json",
+      "sha256": "eb3452f9e66c81678a50c655b28603ac11fe30b38e23297662d7bb0d82677e94"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_spell_capture.json",
+      "sha256": "2068fda2d8acd0689c76ae5d6b61b74fa1edb527b3b3db831166889a227f89f3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a4_spell_open.json",
+      "sha256": "56dd25b99bcced60e805674e44e61be0d5ea9e63d28d97b5500db75cae94df2f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_audit1920.json",
+      "sha256": "b56f8d539646bd5260bf80af6f9f7efbe015d1c37b6a5a8fd71d4c58485ba197"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_audit960.json",
+      "sha256": "9ac0bc753723b5073406d46bcc195abe2c1d43d0cd99b5a6973f84e08913f364"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_bag1920.json",
+      "sha256": "189922a6dd32140c83c8257d4d2f999a90e06fcbd54b617cc9b96a4563414699"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_bag960.json",
+      "sha256": "4504ffb2d286b7f8618fd4b0aa64596f7e6fd3e78e4fedfc6fcf488f298248ce"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_bag_open.json",
+      "sha256": "2cbd6491f184451ec08e8d01946a43931a9db03bba400588dc186681fb465b7a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_compile.json",
+      "sha256": "e2e65452e6fee6deb6661f0ca5f40ae622ee30424e416b601daace45f3acb5f8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_equipment_return.json",
+      "sha256": "f86427949fab3cf8b801f4982b0375493fff69ef0428a8985a6b51a7e83b8ed6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_ready.json",
+      "sha256": "5161e2bed5089d967afa48850074a42af7f22c7bd8ee747578d742a3ea19a3b7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_scope.json",
+      "sha256": "03a40cc6dbe0d9640fe71cd7aee89e2b68b2a03878c5ae12043d51789bad9344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_select960.json",
+      "sha256": "95b6c75aba1d7f87047f60437567c7dfed727437ae3cca244a4e8f012febf834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_select_spell.json",
+      "sha256": "5d8991690efb1154c5e98f536a635ef22a80caeb025562519cf830545b1787d5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_spell1920.json",
+      "sha256": "d2ee1d8433490fd1206cfe8ac1baec5ba861b7a0f280fc5ad9aa6faf1efae6a2"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_spell960.json",
+      "sha256": "a6688dcf23c791ee95be6428f562581d242341ffb3eae8ea7ba1d7c82bbed529"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a5_spell_open.json",
+      "sha256": "5924ac063fe20b4e24ba075819f9302de6d392fd8ca43a6d57eeb13b45bfa8b6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_audit1920.json",
+      "sha256": "972da437449a263038d0cf68c0987d453b1c4c398e2b7aa16034008c9dcc0ffa"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_audit960.json",
+      "sha256": "c9fa047c3b7f4dc1a2b13d83a0bdb67cf1d0ac1acd0f2c9ff9c1ca77367c5adf"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_bag1920.json",
+      "sha256": "aa15660c8d164f3ba835e3f016c10f831e691a158666d30ade80599547263fbd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_bag960.json",
+      "sha256": "570c1a0a23fa05942ce35f5f1eeb97261d835a2881039a666194b39e13d10e54"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_bag_open.json",
+      "sha256": "a2bc61e5b3536ff918bf25f0aea7f2ebd771fb3f8812c2294063fda00777b0e1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_compile.json",
+      "sha256": "828751b3e89d6b18d56bde0443388906f69475e0a7dbaaf6588426073d7bda28"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_console.json",
+      "sha256": "b14a61348c41888dbd7e5b1670ee161ec54e0b996ce3fa480c4f4929074b6c3e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_current.json",
+      "sha256": "db20e8c32d0b03b9e1917320e655da2ff9b6f1ee00ba171e6927255c7fc56fde"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_equipment_return.json",
+      "sha256": "1bd6f30ddd8022afa18cad9107c77b224fe33d9779bd2bec00639b1fe414b9d7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_lifetime.json",
+      "sha256": "69878218dfe51eeef603a17bfa48a1174a3c82ddc07446e1f62655519b832626"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_ready.json",
+      "sha256": "35ca44f48567139d07db053961bbf39043edafbe8d7e2bc84a5f101d5d8c2d63"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_restore960.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_return_map.json",
+      "sha256": "09044afe47c6fcd65faf1b839b96512046c9797a8fed6f38a463de51e0cd08a7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_scope.json",
+      "sha256": "d86091a70ea295532cfdffa46da935ee16c9ee50035fbc04ece2e263b99ee637"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_select960.json",
+      "sha256": "8357bda1021b5c2895e7025f5e44558a6c808ed29122b526ca671ca020027e02"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_select_spell.json",
+      "sha256": "091b73707ddff7e898cd26e6ca2c68a8460c21f375f7fec3927886f8304bcf63"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_spell1920.json",
+      "sha256": "fdbe6d3a8869b6f3628e9bb9bcd9055d02d384e6a41b8745c86d4e1da358d7f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_spell960.json",
+      "sha256": "2479f81ee03148f82b8b746536b2eb955eab6cb391dbfa9a262d28d3bb271c35"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_spell_open.json",
+      "sha256": "f8eac5259f765df87057a2c01f0f27c68ca44f647c195ba33fd65c3616ec6357"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_status_audit.json",
+      "sha256": "ed6a11d68888906b2342b471168d036179320687f6c70ef9b4032c4b0cf1ccc8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_status_probe.json",
+      "sha256": "2f67b20ffd7766ab9bd2e669dbcac6fc4a6057fbf1beeb6b44f46411f4d3668c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_bag_before.json",
+      "sha256": "cc2a5745c32d6e09694fa82d42bbd85ee424a52857c602275e913fca7ff7da8f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_before_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_before_preflight.json",
+      "sha256": "81069f32ffa5c7df2d991725afde5a67a1d9c662ae7df604b34c3cf1590245c3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_compile.json",
+      "sha256": "f74629fdf57e64f37c9de4c57d68040d2ebbda8ad22beb71668588a7af4726f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_compile_ready.json",
+      "sha256": "a5f889ef558185abc230c668f810c60c7e16ad41fbe25defc54b46455dac070b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_final_edit_preflight.json",
+      "sha256": "d1384d3be7643defa43ee8edde8643a0faaee32799d38b7739ba8d5888f30068"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_final_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_final_preflight.json",
+      "sha256": "81069f32ffa5c7df2d991725afde5a67a1d9c662ae7df604b34c3cf1590245c3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_open_bag.json",
+      "sha256": "6b2e6a98e56b4019f5f8550068ca9a91ddcb3c97929cae646054578396a3e87d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_open_scene.json",
+      "sha256": "72f80dcfe8bac63c6b02c70eba24e9a4cc05b094ec7be12436fafdd4e5e79d58"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_restore_scene.json",
+      "sha256": "21b89f082079496f11647493945e1ccc7928291f62cad9cc4d7776fc12a0c0a6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_scope.json",
+      "sha256": "6f9c66db876175065d8d05b92c6b59a68ae5da56e092a045857eec1496c5f3dc"
+    },
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "e3d411ed5c97764ebfd06659ab7dc4b12303319622a6401e6d59ee39b1fbf371"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 35,
+    "yaw": 0,
+    "field_of_view": 24
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": true,
+    "console_clear": false,
+    "interaction_pass": true,
+    "isolation_pass": false,
+    "resource_lifetime_pass": true,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/text_a6_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    }
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": 60,
+        "p95_budget_ms": 16.7,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": 60,
+        "p95_budget_ms": 16.7,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Complete HD2D sample/human approval and standalone Player performance remain pending.",
+    "Populated/full backpack, dragging, longest spell/passive descriptions and uncommon resolutions were not tested in this text-only iteration.",
+    "Unity QuickInstaller Editor assembly CodeBase exception remains unresolved."
+  ],
+  "current_screenshots": [
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/text_bag_a6_1920.png",
+      "sha256": "04a1293ffd23c4b6248c01f5e0c21d61e579ed813949d3915a676c392ec60b3c"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/text_bag_a6_960.png",
+      "sha256": "f34c476827413fdeb740ac7065a24084656cb4a92cef1cc58490d5e7272e75a0"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/text_spell_a6_1920.png",
+      "sha256": "8f85492cb4a2469f6bb5fa3f620fdcb5885dd1efdc921fbf2d4ebd506598947c"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/text_spell_a6_960.png",
+      "sha256": "f4abc8a2c5eac526cdf4b31609b4154ba75121c68c26f760cd88eb8d4c318913"
+    }
+  ],
+  "local_implementation": {
+    "scope": "Preparation desk text only; no change to lighting, model/card geometry, sprite density or game rules",
+    "reading": "Existing FusionPixel12, integer glyph sizes, projected positions rounded to output pixels, Canvas scale compensated. Body 24px at1080/12px at540; principal headings36px at1080/24px at540. No best-fit shrinking. Source binding remains alive; display labels never intercept input.",
+    "layout": "Slot text insets, headings moved clear of cards, range/visibility on separate target line, duplicate drag hint suppressed while current operation feedback remains visible, floating resource text has restrained shadow."
+  },
+  "validation_scope": {
+    "normal_entry": "PASS:entry; actual backpack/spell/second spell/backpack/map clicks",
+    "text": "Displayed spell labels have correct projected font size, no best-fit shrinking, and fit their rectangles at both actual resolutions. Second spell updates to 火花.",
+    "feedback": "Temporary text-binding probe displayed changed inventory status. Not an actual backpack-full or drag test.",
+    "lifetime": "No reading canvases, including inactive ones, after returning to map.",
+    "console": "Compilation ready. Cached QuickInstaller ExecutionEngineException still present; no claim of globally clean Console.",
+    "cleanup": "Original Game View index3 restored, verified temporary960 removed; clean original EpicToonVfxShowcase, EditMode; no scene save."
+  }
+}

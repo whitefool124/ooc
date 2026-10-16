@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"全目录数值版本|F-P-M12|F-P-R01|每次10火焰伤害\"><p id=\"doxcnBAXGyXgo98gQjUHSSXFMme\">全目录数值版本（2026-10-06）：覆盖80张个人术式、4张基础术式、3项精英被动、20件法宝及17类敌人。未列出的数值沿用各自现行配置；目标、几何、触发和反制机制保持现行定义。</p><p id=\"doxcn4rIksWaeWkEkULFK6KLIih\">F-P-M12 余烬格挡：行动点1，魔力2，冷却2自身回合; 护盾12。</p><p id=\"doxcntHjbPh5WAdCDbLhACrFj6b\">F-P-R01 火弹：行动点1，魔力2，冷却0自身回合; 直接伤害8。</p><p id=\"doxcnMuBQXd5WKRjUHciMoFSUjd\">法宝数值：F-T01 炎脉封装筒每次10火焰伤害，火场强度4、持续2来源自身回合，每件2次；G-T01 折盾匣每次12护盾、每件2次；G-T04 显迹测镜每件2次；G-T08 解构楔每次12物件伤害；G-T12 行程簿每件1次；G-T13 定锚支架每件3次；G-T15 诱导灯8耐久；G-T19 冒险封签每次10伤害、每件2次。其余12件法宝沿用现行数值。所有法宝仍为0行动点、0魔力和有限使用次数。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2674
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

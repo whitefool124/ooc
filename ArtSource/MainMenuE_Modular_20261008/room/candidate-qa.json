@@ -1,0 +1,18 @@
+{
+  "cols": 222,
+  "rows": 128,
+  "step_x": 7.5171,
+  "step_y": 7.3605,
+  "consensus": "arbitrated",
+  "confidence": "medium",
+  "detect_s": 10.298,
+  "recon_s": 0.981,
+  "route": "COMMUNITY_RECONSTRUCTION_REVIEW_ONLY",
+  "lossless_pass": false,
+  "native_size": [
+    224,
+    130
+  ],
+  "arbitrary_target_resizing": false,
+  "human_acceptance": false
+}

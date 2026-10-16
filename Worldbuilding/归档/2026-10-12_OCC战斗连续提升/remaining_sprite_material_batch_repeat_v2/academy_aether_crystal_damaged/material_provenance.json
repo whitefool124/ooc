@@ -1,0 +1,30 @@
+{
+  "schema": "occ-authored-sprite-material-v1",
+  "status": "QA_PENDING",
+  "id": "academy_aether_crystal_damaged",
+  "source": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_crystal_damaged.png",
+    "sha256": "fc3c48a06127f8e6d3aec41b8c03c83806e5940844f371c6fae874536fb1bf23"
+  },
+  "recipe_sha256": "556fb68fa933edd277fb4f4cfb0596639774ed80fe38e9e9db48972223617fe0",
+  "native_canvas": [
+    96,
+    64
+  ],
+  "world_pixel_pitch": 0.03125,
+  "height_basis": "explicit_authored_geometry",
+  "albedo_brightness_used_for_height": false,
+  "source_art_changed": false,
+  "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+  "fields": {
+    "normal.png": "80988b4db66e66fd4f1779caf34c87dacfc4c74ea0fc7d1eb0772df466cc7760",
+    "regions.png": "1d9d08c26c426f55772b5133a2039a8f308b17c4f3ad34435df72b42bf1ebf56"
+  },
+  "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+  "limitations": [
+    "Shallow-relief approximation; no physical transmission",
+    "Original albedo retains baked bright facets; numeric fields do not remove them"
+  ],
+  "runtime_review": "PENDING",
+  "human_registration_review": "PENDING"
+}

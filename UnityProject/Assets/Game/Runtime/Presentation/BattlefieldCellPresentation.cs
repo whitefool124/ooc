@@ -26,6 +26,11 @@ namespace OCC.Combat.Presentation
         public Texture2D TerrainBoundaryTexture { get; }
         public float TerrainBoundaryRotationDegrees { get; }
         public Texture2D EnvironmentTexture { get; }
+        public bool EnvironmentUpright { get; }
+        public Texture2D GroundMaterialTexture { get; }
+        public string GroundMaterialLabel { get; }
+        public string GroundLabel=>string.IsNullOrEmpty(GroundMaterialLabel)?FieldEffectLabel:
+            string.IsNullOrEmpty(FieldEffectLabel)?GroundMaterialLabel:GroundMaterialLabel+"\n"+FieldEffectLabel;
         public Texture2D MoveOverlayTexture { get; }
         public float MoveOverlayAlpha { get; }
         public Texture2D AttackOverlayTexture { get; }
@@ -48,6 +53,7 @@ namespace OCC.Combat.Presentation
         public Texture2D ObjectTextureLow { get; }
         public int ObjectForegroundRows { get; }
         public string ObjectLabel { get; }
+        public string FieldEffectLabel { get; }
         public Color ObjectLabelColor { get; }
         public Texture2D LootTexture { get; }
         public UnitState Unit { get; }
@@ -75,7 +81,9 @@ namespace OCC.Combat.Presentation
             BattlefieldCellMarker moveMarker = BattlefieldCellMarker.None,
             BattlefieldCellMarker attackMarker = BattlefieldCellMarker.None,
             BattlefieldCellMarker skillMarker = BattlefieldCellMarker.None,
-            bool isPlayerEffectCell = false, bool isPreviewedUnit = false, bool isPreviewedObject = false)
+            bool isPlayerEffectCell = false, bool isPreviewedUnit = false, bool isPreviewedObject = false,
+            string fieldEffectLabel = null, bool environmentUpright = false,
+            Texture2D groundMaterialTexture = null, string groundMaterialLabel = null)
         {
             Position = position;
             FloorTexture = floorTexture;
@@ -85,6 +93,9 @@ namespace OCC.Combat.Presentation
             TerrainBoundaryTexture = terrainBoundaryTexture;
             TerrainBoundaryRotationDegrees = terrainBoundaryRotationDegrees;
             EnvironmentTexture = environmentTexture;
+            EnvironmentUpright = environmentUpright;
+            GroundMaterialTexture = groundMaterialTexture;
+            GroundMaterialLabel = groundMaterialLabel ?? string.Empty;
             MoveOverlayTexture = moveOverlayTexture;
             MoveOverlayAlpha = moveOverlayAlpha;
             AttackOverlayTexture = attackOverlayTexture;
@@ -107,6 +118,7 @@ namespace OCC.Combat.Presentation
             ObjectTextureLow = objectTextureLow;
             ObjectForegroundRows = objectForegroundRows;
             ObjectLabel = objectLabel ?? string.Empty;
+            FieldEffectLabel = fieldEffectLabel ?? string.Empty;
             ObjectLabelColor = objectLabelColor;
             LootTexture = lootTexture;
             Unit = unit;

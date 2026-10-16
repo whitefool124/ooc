@@ -7,12 +7,37 @@ namespace OCC.Combat.Presentation
         public const string ActiveSlotKey = "OCC.FirstExperiencePrototype.activeSlot.v2";
         private const string SlotMapPrefix = "occ.first_experience.map_run.slot.";
 
-        public static int ActiveSlot => Mathf.Clamp(PlayerPrefs.GetInt(ActiveSlotKey, -1), -1, 2);
+#if UNITY_EDITOR
+        private static string verificationPrefix = string.Empty;
+        // Editor acceptance uses the production disk store without overwriting a player's occupied slots.
+        public static System.IDisposable BeginVerificationScope(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id) || id.IndexOfAny(new[] { '.', '/', '\\' }) >= 0)
+                throw new System.ArgumentException("A simple verification id is required.", nameof(id));
+            if (!string.IsNullOrEmpty(verificationPrefix)) throw new System.InvalidOperationException("A verification scope is already active.");
+            verificationPrefix = "occ.verification." + id + ".";
+            return new VerificationScope();
+        }
+        private sealed class VerificationScope : System.IDisposable
+        {
+            public void Dispose() { verificationPrefix = string.Empty; }
+        }
+#endif
+        public static string ResolveFrontEndKey(string key)
+        {
+#if UNITY_EDITOR
+            return verificationPrefix + key;
+#else
+            return key;
+#endif
+        }
+
+        public static int ActiveSlot => Mathf.Clamp(PlayerPrefs.GetInt(ResolveFrontEndKey(ActiveSlotKey), -1), -1, 2);
 
         public static void SelectSlot(int slot)
         {
             if (slot < 0 || slot > 2) throw new System.ArgumentOutOfRangeException(nameof(slot));
-            PlayerPrefs.SetInt(ActiveSlotKey, slot);
+            PlayerPrefs.SetInt(ResolveFrontEndKey(ActiveSlotKey), slot);
             PlayerPrefs.Save();
         }
 
@@ -30,7 +55,7 @@ namespace OCC.Combat.Presentation
         {
             if (slot < 0 || slot > 2 || string.IsNullOrEmpty(key) ||
                 !key.StartsWith(RogueliteSaveGateway.MapRunKey, System.StringComparison.Ordinal)) return key;
-            return SlotMapPrefix + slot + key.Substring(RogueliteSaveGateway.MapRunKey.Length);
+            return ResolveFrontEndKey(SlotMapPrefix + slot + key.Substring(RogueliteSaveGateway.MapRunKey.Length));
         }
     }
 

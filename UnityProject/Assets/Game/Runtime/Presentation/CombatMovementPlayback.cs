@@ -19,6 +19,9 @@ namespace OCC.Combat.Presentation
     {
         public const float MaximumDuration = .35f;
         private readonly Dictionary<string, Track> tracks = new Dictionary<string, Track>();
+        public event System.Action<Vector2, float> GroundContact;
+        public event System.Action<Vector2, Vector2, float, float> GroundStop;
+        public event System.Action<string, Vector2, float> Arrived;
         public int Count => tracks.Count;
         public float Remaining(string unitId, float now) => unitId != null && tracks.TryGetValue(unitId, out Track track)
             ? Mathf.Max(0f, track.StartedAt + track.Duration - now) : 0f;
@@ -28,9 +31,10 @@ namespace OCC.Combat.Presentation
             public Vector2[] Points;
             public float Length, StartedAt, Duration;
             public GridPosition Destination;
+            public int NextContact = 1;
             public CombatMovementPose Sample(float now, out int next)
             {
-                float distance = Mathf.Clamp01((now - StartedAt) / Duration) * Length;
+                float distance = DistanceProgress((now - StartedAt) / Duration) * Length;
                 for (next = 1; next < Points.Length; next++)
                 {
                     Vector2 delta = Points[next] - Points[next - 1];
@@ -77,6 +81,25 @@ namespace OCC.Combat.Presentation
         {
             if (tracks.TryGetValue(unitId, out Track track))
             {
+                if (track.Destination == resolvedPosition)
+                {
+                    float travelled = DistanceProgress((now - track.StartedAt) / track.Duration) * track.Length;
+                    float distance = 0f;
+                    for (int i = 1; i < track.Points.Length; i++)
+                    {
+                        distance += Vector2.Distance(track.Points[i - 1], track.Points[i]);
+                        if (i < track.NextContact || distance > travelled + .0001f) continue;
+                        track.NextContact = i + 1;
+                        GroundContact?.Invoke(track.Points[i], track.StartedAt + TimeProgress(distance / track.Length) * track.Duration);
+                        if (i == track.Points.Length - 1)
+                        {
+                            GroundStop?.Invoke(track.Points[i], (track.Points[i] - track.Points[i - 1]).normalized,
+                                track.Length, track.StartedAt + track.Duration);
+                            Arrived?.Invoke(unitId, (track.Points[i] - track.Points[i - 1]).normalized,
+                                track.StartedAt + track.Duration);
+                        }
+                    }
+                }
                 if (track.Destination == resolvedPosition && now < track.StartedAt + track.Duration)
                     return track.Sample(now, out _);
                 Cancel(unitId);
@@ -86,5 +109,35 @@ namespace OCC.Combat.Presentation
 
         public void Cancel(string unitId) { if (unitId != null) tracks.Remove(unitId); }
         public void Clear() => tracks.Clear();
+
+        // Velocity ramps occupy the existing route clock, not extra gameplay time.
+        private const float Ramp = .18f;
+        private static float DistanceProgress(float t)
+        {
+            t = Mathf.Clamp01(t);
+            if (t < Ramp) return t * t / (2f * Ramp * (1f - Ramp));
+            if (t > 1f - Ramp) return 1f - (1f - t) * (1f - t) / (2f * Ramp * (1f - Ramp));
+            return (t - Ramp * .5f) / (1f - Ramp);
+        }
+
+        private static float TimeProgress(float distance)
+        {
+            float edge = Ramp / (2f * (1f - Ramp));
+            if (distance < edge) return Mathf.Sqrt(distance * 2f * Ramp * (1f - Ramp));
+            if (distance > 1f - edge) return 1f - Mathf.Sqrt((1f - distance) * 2f * Ramp * (1f - Ramp));
+            return distance * (1f - Ramp) + Ramp * .5f;
+        }
+
+        public Vector2 BodyOffset(string unitId, GridPosition destination, float now)
+        {
+            if (!tracks.TryGetValue(unitId, out Track track) || track.Destination != destination ||
+                now < track.StartedAt || now >= track.StartedAt + track.Duration) return Vector2.zero;
+            float t = (now - track.StartedAt) / track.Duration;
+            CombatMovementPose pose = track.Sample(now, out int next);
+            Vector2 direction = (track.Points[Mathf.Min(next, track.Points.Length - 1)] - pose.Position).normalized;
+            float lean = Mathf.Sin(t * Mathf.PI) * 2f;
+            float lift = Mathf.Abs(Mathf.Sin(DistanceProgress(t) * track.Length * Mathf.PI)) * 2f;
+            return new Vector2(Mathf.Round(direction.x * lean), Mathf.Round(-direction.y * lean - lift));
+        }
     }
 }

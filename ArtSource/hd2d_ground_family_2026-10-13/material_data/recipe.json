@@ -1,0 +1,14 @@
+{
+  "schema": "occ-authored-ground-surface-v1",
+  "world_pixel_pitch": 0.03125,
+  "geometry": "flat slab interior at 2mm, outer native-cell seam at zero; same geometry for every variant",
+  "diffuse_brightness_used": false,
+  "roughness": {
+    "stone": 0.88,
+    "seam": 0.98
+  },
+  "metallic": 0,
+  "emission": 0,
+  "normal": "linear RGB +Y tangent space, A=1, native point sampling",
+  "human_review": "PENDING"
+}

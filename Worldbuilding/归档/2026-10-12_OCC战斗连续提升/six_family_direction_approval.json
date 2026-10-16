@@ -1,0 +1,71 @@
+{
+  "schema": "occ-human-direction-review-v1",
+  "status": "APPROVED_DIRECTION_ONLY",
+  "reviewer": "current human user",
+  "reviewed_at": "2026-10-12T15:13:28.851459+00:00",
+  "question": "刚展示的六类战场，其当前材质、光影层次和像素画风方向是否认可？这次仅审核画面方向；完整像素密度、运动和性能验收仍单独保持待验。",
+  "answer": "认可当前方向，继续补齐验证",
+  "reviewed_board": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/board.png",
+    "sha256": "b52d36a395c7de09fe063ff3209b310de23536c9171173063294b9613c646fc9"
+  },
+  "related_current_captures": [
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/AcademyCourt/full_output_offscreen_1920x1080.png",
+      "sha256": "2085c586117b3f9bc3ee3007631430afe1502e30166c5d88160bdf35230a232b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/AcademyCourt/full_output_offscreen_960x540.png",
+      "sha256": "8f8ee3c55f89f99572ac8bc8a905d0a71f6c5e1c2126413ce1b9832b71ffa179"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/Conservatory/full_output_offscreen_1920x1080.png",
+      "sha256": "71e939a72e613d95df2a70ac902f662c07afb44665b6b85a32b7c5551bceb8a6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/Conservatory/full_output_offscreen_960x540.png",
+      "sha256": "c01b4b7b648db954ed97b74d23b1f2637fe6e186e1b9d24c34ee422dd26d7b78"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/StoneRoad/full_output_offscreen_1920x1080.png",
+      "sha256": "1cb4e509291f10c35872da6c7b783b38b8cf5e2a23252f2d9e835193e7f70745"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/StoneRoad/full_output_offscreen_960x540.png",
+      "sha256": "97d74dca88fc12dc6102f9967fd0f66c73928d93f3b57522918a0c1909367edb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/RuinSite/full_output_offscreen_1920x1080.png",
+      "sha256": "e70f66179c6104d335844090934d2dfc44f94f4fe86a5868018a28bf45e189fd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/RuinSite/full_output_offscreen_960x540.png",
+      "sha256": "68acb050a1d6ee5917e3bde1155543a0db54124ba2f4acb6ee25daba604b6f7e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/InteriorHall/full_output_offscreen_1920x1080.png",
+      "sha256": "214c89eace6d0287ebfc3c59a73bfb1e302774f29869eee6a1c474d8ba9e16ec"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/InteriorHall/full_output_offscreen_960x540.png",
+      "sha256": "7483e92c67b90c5f01d9474bfd9679ddc638c0926ce5adac2b74031f3bdd8704"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/AetherTower/full_output_offscreen_1920x1080.png",
+      "sha256": "72c1fb18998349f1389aaeff2d5758eed457bbfc8632f082ce1c37c0f6475101"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/six_family_direction_approved/AetherTower/full_output_offscreen_960x540.png",
+      "sha256": "44a390a360f23bc8890bf8fe7d3fd0970b1c686267e348ce9c8c3ba634766257"
+    }
+  ],
+  "does_not_approve": [
+    "individual source macro-pixel uniformity",
+    "complete source-density inventory",
+    "continuous motion",
+    "model/card completeness",
+    "normal entry",
+    "Player GPU/P95 performance",
+    "APPROVED_BASELINE"
+  ]
+}

@@ -16,8 +16,9 @@ namespace OCC.Combat
         // 固定段收束后交接到随机层：再完成 10 个随机阶段节点即可提前挑战首领。
         public const int BossMinimumProgress = 10;
         public const int ConsolidationProgress = 21;
-        public const int TransitionWarningProgress = 25;
-        public const int TransitionProgress = 28;
+        // Warning is display-only and must precede the current 24-point deadline.
+        public const int TransitionWarningProgress = 23;
+        public const int TransitionProgress = 24;
         public const bool EnforceBossGate = true;
         public const bool EnforceTransition = true;
 
@@ -393,8 +394,11 @@ namespace OCC.Combat
         public int CurrentHealth { get; private set; } = UnitState.HeroBaseHealth;
         public int CurrentShield { get; private set; } = 2;
         public int CurrentMana { get; private set; } = 12;
+        public string ActiveMealId=>rogueRunDto?.MealBattlesRemaining>0?rogueRunDto.ActiveMealId:string.Empty;
+        public int MealBattlesRemaining=>rogueRunDto?.MealBattlesRemaining??0;
+        public int RogueHealthCapacity=>UnitState.HeroBaseHealth+(ActiveMealId=="MEAL-VITAL"?4:0);
         public int RogueManaCapacity => 12 + (rogueRunDto == null ? 0 :
-            OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(rogueRunDto).ForgeManaCapacityBonus);
+            OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(rogueRunDto).ForgeManaCapacityBonus)+(ActiveMealId=="MEAL-AETHER"?2:0);
         public FirstRunExperienceState FirstRunExperience { get; private set; }
         public RogueliteRunProgram RunProgram => FirstRunExperience != null
             ? RogueliteRunProgram.FirstRunV1
@@ -1134,12 +1138,16 @@ namespace OCC.Combat
             if (IsTutorialPhase)
             {
                 FirstRunExperience.CompleteCombat(CurrentNodeId);
+                AdvanceMealAfterCombat();
                 if (rogueRunDto != null)
                 {
                     bool elite = FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory;
                     rogueRunDto.PendingRewardGold = elite ? 6 : 3;
                     rogueRunDto.PendingRewardContribution = elite ? 2 : 1;
                     rogueRunDto.PendingRewardStepId = "main";
+                    rogueRunDto.SelectedRewardId = string.Empty;
+                    rogueRunDto.RewardChoicesOpened = false;
+                    rogueRunDto.LootPendingExit = false;
                     if (elite)
                     {
                         rogueRunDto.PendingFixedMaterialIds.Clear();
@@ -1151,7 +1159,19 @@ namespace OCC.Combat
                 return;
             }
             RogueliteMapNode node = MapNode(CurrentNodeId);
-            if (!node.IsCombat || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not an active combat.");            Complete(node, true);
+            if (!node.IsCombat || completed.Contains(node.Id)) throw new InvalidOperationException("Current node is not an active combat.");
+            Complete(node, true);AdvanceMealAfterCombat();
+        }
+        private void AdvanceMealAfterCombat()
+        {
+            if(rogueRunDto==null||rogueRunDto.MealBattlesRemaining<=0)return;
+            rogueRunDto.MealBattlesRemaining--;
+            if(rogueRunDto.MealBattlesRemaining==0)
+            {
+                rogueRunDto.ActiveMealId=string.Empty;
+                CurrentHealth=rogueRunDto.CurrentHealth=Math.Min(UnitState.HeroBaseHealth,rogueRunDto.CurrentHealth);
+                CurrentMana=rogueRunDto.CurrentMana=Math.Min(RogueManaCapacity,rogueRunDto.CurrentMana);
+            }
         }
         public void CompleteCurrentNode()
         {
@@ -1276,7 +1296,7 @@ namespace OCC.Combat
             int healthBefore = rogueRunDto?.CurrentHealth ?? 0;
             int manaBefore = rogueRunDto?.CurrentMana ?? 0;
             int timeBefore = rogueRunDto?.StageTime ?? 0;
-            ApplyContentChoice(choice); Complete(current, false);
+            ApplyContentChoice(choice); Complete(current, false);AdvanceMealAfterCombat();
             PendingContentChoiceId = null; PendingContentCombatMissionId = null;
             if (rogueRunDto != null && rogueRunDto.PendingRewardIds != null && !string.IsNullOrEmpty(choice.RewardId)) AwaitingReward = true;
             else if (IsInAcademyLayer && rogueRunDto != null && current.Type == RogueliteMapNodeType.Event)
@@ -1314,7 +1334,7 @@ namespace OCC.Combat
             {
                 rogueRunDto.Gold += choice.GoldGain;
                 rogueRunDto.StageContribution += choice.ContributionGain;
-                rogueRunDto.CurrentHealth = Math.Max(1, Math.Min(UnitState.HeroBaseHealth, rogueRunDto.CurrentHealth + choice.HealthGain));
+                rogueRunDto.CurrentHealth = Math.Max(1, Math.Min(RogueHealthCapacity, rogueRunDto.CurrentHealth + choice.HealthGain));
                 rogueRunDto.CurrentMana = Math.Max(0, Math.Min(RogueManaCapacity, rogueRunDto.CurrentMana + choice.ManaGain));
                 CurrentHealth = rogueRunDto.CurrentHealth; CurrentMana = rogueRunDto.CurrentMana;
                 string contentSourceId = string.IsNullOrEmpty(CurrentEventId) ? CurrentNodeId : CurrentEventId;
@@ -1329,7 +1349,7 @@ namespace OCC.Combat
                 Supplies++;
                 if (HasCombatSnapshot)
                 {
-                    CurrentHealth = Math.Min(UnitState.HeroBaseHealth, CurrentHealth + 6);
+                    CurrentHealth = Math.Min(RogueHealthCapacity, CurrentHealth + 6);
                     if (CurrentShield < 6) CurrentShield = Math.Min(6, CurrentShield + 2);
                     CurrentMana = Math.Min(RogueManaCapacity, CurrentMana + 4);
                 }
@@ -1594,6 +1614,8 @@ namespace OCC.Combat
                 SyncFirstRunProjection();
                 rogueRunDto.PendingRewardStepId = "collected";
                 rogueRunDto.LootPendingExit = true;
+                rogueRunDto.SelectedRewardId = string.Empty;
+                rogueRunDto.RewardChoicesOpened = false;
                 return;
             }
             if (!IsInAcademyLayer || rogueRunDto == null || rogueRunDto.PendingRewardIds.Contains(choiceId))
@@ -1660,6 +1682,8 @@ namespace OCC.Combat
                 rogueRunDto.PendingRewardContribution = 0;
                 rogueRunDto.PendingFixedMaterialIds.Clear();
                 rogueRunDto.PendingRewardStepId = string.Empty;
+                rogueRunDto.SelectedRewardId = string.Empty;
+                rogueRunDto.RewardChoicesOpened = false;
             }
             if (rogueRunDto != null) rogueRunDto.LootPendingExit = false;
             transientLootPendingExit = false;
@@ -2050,6 +2074,8 @@ namespace OCC.Combat
         public void UseFirstRunHeal()
         {
             if (!IsFirstRunExperience && !IsInAcademyLayer) throw new InvalidOperationException("Academy treatment is unavailable.");
+            if (IsTutorialPhase && (CurrentNodeId != "M" || CurrentMedicalService.HealUsed))
+                throw new InvalidOperationException("First-run treatment is unavailable.");
             FirstRunMedicalSnapshot layerMedical = null;
             if (!IsTutorialPhase)
             {
@@ -2059,7 +2085,7 @@ namespace OCC.Combat
             }
             if (rogueRunDto.StageContribution < 1) throw new InvalidOperationException("Insufficient stage contribution.");
             rogueRunDto.StageContribution--;
-            rogueRunDto.CurrentHealth = Math.Min(UnitState.HeroBaseHealth, rogueRunDto.CurrentHealth + UnitState.HeroBaseHealth / 2);
+            rogueRunDto.CurrentHealth = Math.Min(RogueHealthCapacity, rogueRunDto.CurrentHealth + RogueHealthCapacity / 2);
             CurrentHealth = rogueRunDto.CurrentHealth;
             if (IsTutorialPhase)
             {
@@ -2074,7 +2100,12 @@ namespace OCC.Combat
 
         public void ChooseFirstRunMeal(string mealId)
         {
+            var meal=AcademyMealCatalog.Get(mealId);
+            if(MealBattlesRemaining>0)throw new InvalidOperationException("An academy meal is already active.");
             if (!IsFirstRunExperience && !IsInAcademyLayer) throw new InvalidOperationException("Academy meal is unavailable.");
+            if (IsTutorialPhase && (CurrentNodeId != "M" || CurrentMedicalService.MealUsed ||
+                !CurrentMedicalService.MealCandidateIds.Contains(mealId)))
+                throw new InvalidOperationException("First-run meal is unavailable.");
             FirstRunMedicalSnapshot layerMedical = null;
             if (!IsTutorialPhase)
             {
@@ -2082,22 +2113,23 @@ namespace OCC.Combat
                 if (layerMedical.MealUsed || !layerMedical.MealCandidateIds.Contains(mealId))
                     throw new InvalidOperationException("Academy-layer meal is unavailable.");
             }
-            if (mealId == "MEAL-POWER")
+            if (meal.Currency == "gold")
             {
-                if (rogueRunDto.Gold < 3) throw new InvalidOperationException("Insufficient gold.");
-                rogueRunDto.Gold -= 3;
+                if (rogueRunDto.Gold < meal.Cost) throw new InvalidOperationException("Insufficient gold.");
+                rogueRunDto.Gold -= meal.Cost;
             }
-            else if (mealId == "MEAL-AETHER")
+            else if (meal.Currency == "contribution")
             {
                 if (rogueRunDto.StageContribution < 1) throw new InvalidOperationException("Insufficient stage contribution.");
                 rogueRunDto.StageContribution--;
             }
-            else if (mealId == "MEAL-GUARD")
+            else if (meal.Currency == "food")
             {
                 if (AcademyFoodCount < 1) throw new InvalidOperationException("Insufficient academy food.");
                 if (FirstRunExperience != null) FirstRunExperience.AcademyFoodCount--;
                 else rogueRunDto.AcademyFoodCount--;
             }
+            rogueRunDto.ActiveMealId=mealId;rogueRunDto.MealBattlesRemaining=3;
             if (IsTutorialPhase)
             {
                 FirstRunExperience.ChooseMeal(mealId);
@@ -2107,12 +2139,15 @@ namespace OCC.Combat
             {
                 layerMedical.MealUsed = true;
                 layerMedical.SelectedMealId = mealId;
+                CaptureLayerServiceSession();
             }
         }
 
         public void PurchaseFirstRunOffer(string offerId)
         {
             if (!IsFirstRunExperience && !IsInAcademyLayer) throw new InvalidOperationException("Academy shop is unavailable.");
+            if (IsTutorialPhase && CurrentNodeId != FirstRunExperienceCatalog.ShopNodeId)
+                throw new InvalidOperationException("First-run shop is unavailable.");
             FirstRunShopSnapshot shop = CurrentShopService;
             FirstRunShopOfferSnapshot offer = shop.Offers.SingleOrDefault(value => value.OfferId == offerId);
             if (offer == null || offer.Sold) throw new InvalidOperationException("Shop offer is unavailable.");
@@ -2163,7 +2198,7 @@ namespace OCC.Combat
             else if (type == RogueliteMapNodeType.Medical)
             {
                 layerMedicalService = new FirstRunMedicalSnapshot();
-                layerMedicalService.MealCandidateIds.AddRange(new[] { "MEAL-POWER", "MEAL-AETHER", "MEAL-GUARD" });
+                layerMedicalService.MealCandidateIds.AddRange(AcademyMealCatalog.Candidates(Seed,nodeId));
             }
             else if (type == RogueliteMapNodeType.Shop)
             {
@@ -2173,7 +2208,7 @@ namespace OCC.Combat
                 layerShopService.Offers.Add(new FirstRunShopOfferSnapshot("LAYER-SHOP-GOGGLES", "ACA-EQ-HD01", 4, "gold"));
             }
             string row = rogueRunDto?.LayerServiceRows.FirstOrDefault(value => value.StartsWith(nodeId + "~", StringComparison.Ordinal));
-            if (row == null) return;
+            if (row == null) { CaptureLayerServiceSession(); return; }
             string[] fields = row.Split('~');
             if (type == RogueliteMapNodeType.Workshop)
             {
@@ -2190,6 +2225,8 @@ namespace OCC.Combat
                 layerMedicalService.HealUsed = fields[3] == "1";
                 layerMedicalService.MealUsed = fields[4] == "1";
                 layerMedicalService.SelectedMealId = fields[5];
+                layerMedicalService.MealCandidateIds.Clear();
+                layerMedicalService.MealCandidateIds.AddRange(fields.Length>6?fields[6].Split(','):new[]{"MEAL-POWER","MEAL-AETHER","MEAL-GUARD"});
             }
             else if (type == RogueliteMapNodeType.Shop)
                 foreach (FirstRunShopOfferSnapshot offer in layerShopService.Offers)
@@ -2215,7 +2252,8 @@ namespace OCC.Combat
                     layerWorkshopService.SpecializedMaterialId)
                 : layerMedicalService != null
                     ? string.Join("~", activeLayerServiceNodeId, "M", layerMedicalService.HealthCheckCompleted ? "1" : "0",
-                        layerMedicalService.HealUsed ? "1" : "0", layerMedicalService.MealUsed ? "1" : "0", layerMedicalService.SelectedMealId)
+                        layerMedicalService.HealUsed ? "1" : "0", layerMedicalService.MealUsed ? "1" : "0", layerMedicalService.SelectedMealId,
+                        string.Join(",",layerMedicalService.MealCandidateIds))
                     : layerShopService != null
                         ? string.Join("~", new[] { activeLayerServiceNodeId, "S" }.Concat(layerShopService.Offers.Where(value => value.Sold).Select(value => value.OfferId)))
                         : string.Empty;
@@ -2232,11 +2270,17 @@ namespace OCC.Combat
                 string[] fields = (row ?? string.Empty).Split('~');
                 if (fields.Length < 2 || !seen.Add(fields[0])) throw new InvalidOperationException("Invalid academy service snapshot.");
                 if (fields[0] == "layer_workshop" && fields[1] == "W" && (fields.Length == 6 || fields.Length == 8) ||
-                    fields[0] == "layer_medical" && fields[1] == "M" && fields.Length == 6)
+                    fields[0] == "layer_medical" && fields[1] == "M" && (fields.Length == 6||fields.Length==7))
                 {
                     int flagCount = fields[1] == "W" ? 2 : 3;
                     for (int i = 2; i < 2 + flagCount; i++)
                         if (fields[i] != "0" && fields[i] != "1") throw new InvalidOperationException("Invalid academy service flag.");
+                    if(fields[1]=="M"&&fields.Length==7)
+                    {
+                        var meals=fields[6].Split(',');
+                        if(meals.Length!=3||meals.Distinct(StringComparer.Ordinal).Count()!=3)throw new InvalidOperationException("Invalid meal offer snapshot.");
+                        foreach(string meal in meals)AcademyMealCatalog.Get(meal);
+                    }
                     if (fields[1] == "W" && fields.Length == 8 &&
                         (fields[6] != AcademyBattleRewardCatalog.ForgeLoad && fields[6] != AcademyBattleRewardCatalog.ForgeCircuit ||
                          fields[7] != AcademyBattleRewardCatalog.SpecAmplify && fields[7] != AcademyBattleRewardCatalog.SpecEfficient))
@@ -2410,7 +2454,7 @@ namespace OCC.Combat
             foreach (string spellId in ownedFireSpells)
                 if (FireSpellCatalog.All.Any(spell => spell.Id == spellId) && !rogueRunDto.MasteredSpellIds.Contains(spellId))
                     rogueRunDto.MasteredSpellIds.Add(spellId);
-            rogueRunDto.CurrentHealth = Math.Max(1, Math.Min(UnitState.HeroBaseHealth, rogueRunDto.CurrentHealth));
+            rogueRunDto.CurrentHealth = Math.Max(1, Math.Min(RogueHealthCapacity, rogueRunDto.CurrentHealth));
             rogueRunDto.CurrentMana = Math.Max(0, Math.Min(RogueManaCapacity, rogueRunDto.CurrentMana));
             CurrentHealth = rogueRunDto.CurrentHealth;
             CurrentMana = rogueRunDto.CurrentMana;
@@ -2460,6 +2504,14 @@ namespace OCC.Combat
                 rogueRunDto.AwaitingReward = AwaitingReward;
                 rogueRunDto.RunProgramId = RogueliteRunProgram.FirstRunV1.ToString();
                 rogueRunDto.FirstRunExperience = FirstRunExperience;
+                // Old saves can carry the previous group's selection into a new tutorial reward.
+                // Preserve a valid current selection and its frozen candidates; repair only stale UI state.
+                if (AwaitingReward && !string.IsNullOrEmpty(rogueRunDto.SelectedRewardId) &&
+                    !CurrentFirstRunRewardIds.Contains(rogueRunDto.SelectedRewardId))
+                {
+                    rogueRunDto.SelectedRewardId = string.Empty;
+                    rogueRunDto.RewardChoicesOpened = false;
+                }
             }
         }
         internal OCC.Combat.Roguelite.RogueRunDto ExportRogue11(OCC.Combat.Roguelite.RogueRunDto preserved = null, string migrationReportId = "")
@@ -2469,7 +2521,7 @@ namespace OCC.Combat
             CaptureLayerServiceSession();
             dto.CurrentNodeId = CurrentNodeId; dto.RegionBossId = IsInAcademyLayer ? "core_overseer" : IsFirstRunExperience ? string.Empty : "core_overseer"; dto.StarterId = StarterId;
             dto.CurrentHealth = IsFirstRunExperience && FirstRunExperience.RunSealed || RunEndReason == "death"
-                ? 0 : Math.Max(1, Math.Min(UnitState.HeroBaseHealth, CurrentHealth)); dto.CurrentMana = Math.Max(0, Math.Min(RogueManaCapacity, CurrentMana));
+                ? 0 : Math.Max(1, Math.Min(RogueHealthCapacity, CurrentHealth)); dto.CurrentMana = Math.Max(0, Math.Min(RogueManaCapacity, CurrentMana));
             dto.AwaitingReward = AwaitingReward; dto.PendingContentChoiceId = PendingContentChoiceId ?? string.Empty;
             dto.PendingContentCombatMissionId = PendingContentCombatMissionId ?? string.Empty;
             Replace(dto.VisitedNodeIds, visited.OrderBy(id => id, StringComparer.Ordinal));
@@ -2824,9 +2876,11 @@ namespace OCC.Combat
             if (rogueRunDto != null)
             {
                 int forgeManaBonus = OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(rogueRunDto).ForgeManaCapacityBonus;
-                hero.ConfigureMana(12 + forgeManaBonus, rogueRunDto.CurrentMana);
-                if (hero.Health > rogueRunDto.CurrentHealth) hero.TakeDamage(hero.Health - rogueRunDto.CurrentHealth);
-                hero.ClearShield(); return;
+                hero.ConfigureMana(12 + forgeManaBonus+(ActiveMealId=="MEAL-AETHER"?2:0),ActiveMealId=="MEAL-AETHER"?-1:rogueRunDto.CurrentMana);
+                hero.ConfigureVitality(RogueHealthCapacity);
+                int health=Math.Min(RogueHealthCapacity,rogueRunDto.CurrentHealth+(ActiveMealId=="MEAL-VITAL"?4:0));
+                if (hero.Health > health) hero.TakeDamage(hero.Health - health);
+                hero.ClearShield();if(ActiveMealId=="MEAL-GUARD")hero.GrantShield(6);return;
             }
             hero.ConfigureMana(12, HasCombatSnapshot ? CurrentMana : 12);
             if (!string.IsNullOrEmpty(EquippedWeaponId)) hero.Equip(RogueliteMapCatalog.Rewards.First(item => item.Id == EquippedWeaponId).Weapon, CombatCatalog.Shield, hero.SkillOne, hero.SkillTwo);

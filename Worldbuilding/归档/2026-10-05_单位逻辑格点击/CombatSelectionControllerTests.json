@@ -1,0 +1,153 @@
+{
+  "status": "completed",
+  "duration": 0.67,
+  "summary": {
+    "total": 20,
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ArmedRogueCoverStamp_ClickCreatesHeavyCoverInsteadOfCastingSpellOne",
+      "Status": "Passed",
+      "Duration": 0.1270605,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.CommitAndCancel_EndCursorWithExistingTargetSemantics",
+      "Status": "Passed",
+      "Duration": 0.0020332,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ContextActions_ExposeLootForAnAdjacentSearchableContainer",
+      "Status": "Passed",
+      "Duration": 0.0387531,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ContextActions_ExposeOnlyLegalPositionActionsAndQuickMoveDeferralIsModeAware",
+      "Status": "Passed",
+      "Duration": 0.0127676,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ContextActions_HideAllSpellsWhenPersonalManaIsEmpty",
+      "Status": "Passed",
+      "Duration": 0.0065893,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ContextAttackSubmission_ExecutesAttackAndClosesMenu",
+      "Status": "Passed",
+      "Duration": 0.0373758,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ContextMenu_ListsAndExecutesLegalQuickbarArtifact",
+      "Status": "Passed",
+      "Duration": 0.0084689,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ContextMenuPreview_ShowsTheHoveredRowsRangeInsteadOfTheCommittedAction",
+      "Status": "Passed",
+      "Duration": 0.2324969,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ContextSpellSubmission_UsesMatchingSlotAndSpendsOnlyItsAuthoritativeCosts",
+      "Status": "Passed",
+      "Duration": 0.0145575,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.KeyboardTargeting_StartsAtSelectionMovesAndTracksEnemyOnly",
+      "Status": "Passed",
+      "Duration": 0.0018097,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ModeInstruction_StatesWhatPrimaryClickWillDo(\"移动\",\"双击空地：快捷移动\")",
+      "Status": "Passed",
+      "Duration": 0.000637,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ModeInstruction_StatesWhatPrimaryClickWillDo(\"攻击\",\"左键敌人：攻击\")",
+      "Status": "Passed",
+      "Duration": 0.0002399,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ModeInstruction_StatesWhatPrimaryClickWillDo(\"技能8\",\"左键合法目标：施放术式\")",
+      "Status": "Passed",
+      "Duration": 0.0002625,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.ModeInstruction_StatesWhatPrimaryClickWillDo(\"互动\",\"左键相邻目标：互动\")",
+      "Status": "Passed",
+      "Duration": 0.0001203,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.PointerSelection_SurvivesHoverLeavingButCannotLeakIntoAnotherAction",
+      "Status": "Passed",
+      "Duration": 0.0006627,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.QuickMoveConfirmation_RequiresTwoClicksOnTheSameLegalCell",
+      "Status": "Passed",
+      "Duration": 0.0004918,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.QuickMoveSubmission_UsesAuthoritativeMoveCostAndRejectsOccupiedDestination",
+      "Status": "Passed",
+      "Duration": 0.006649,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.SelectActionAndReset_ClearTargetAndKeyboardCursor",
+      "Status": "Passed",
+      "Duration": 0.0006679,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.SpellShortcut_RejectsMissingManaAndArmsAffordableSlotWithoutCasting",
+      "Status": "Passed",
+      "Duration": 0.0040145,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatSelectionControllerTests.TargetValidationRejectsUnknownUnitsAndInactiveHeroCannotStartCursor",
+      "Status": "Passed",
+      "Duration": 0.0004049,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

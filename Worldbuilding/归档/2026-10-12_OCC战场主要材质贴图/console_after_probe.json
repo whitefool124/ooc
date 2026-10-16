@@ -1,0 +1,41 @@
+{
+  "success": true,
+  "command": "command console",
+  "data": {
+    "command": "console",
+    "parameters": {
+      "since": "663",
+      "since_session": "a185b0efb79549a6b6d45e4089d0ca75"
+    },
+    "result": {
+      "entries": [],
+      "cursor": 663,
+      "session": "a185b0efb79549a6b6d45e4089d0ca75",
+      "returned": 0,
+      "dropped": false,
+      "reset": false,
+      "counts": {
+        "error": 4,
+        "warn": 553,
+        "log": 106
+      },
+      "groundTruth": {
+        "sampledUtc": "2026-10-12T05:31:26.5319395Z",
+        "ageMs": 220,
+        "compilationFailed": false,
+        "compiling": false,
+        "consoleErrors": 0,
+        "consoleWarnings": 45,
+        "consoleLogs": 0,
+        "seeded": true
+      }
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "E:\\数据库\\OCC_Codex\\UnityProject"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

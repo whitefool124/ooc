@@ -1456,7 +1456,7 @@ namespace OCC.Combat.Tests
         {
             FireSpellDefinition fireball = FireSpellCatalog.All.Single(spell => spell.Id == "F-P-R01");
             FireSpellDefinition dash = FireSpellCatalog.All.Single(spell => spell.Id == "F-P-U01");
-            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(fireball), Does.Contain("12点火焰伤害"));
+            Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(fireball), Does.Contain("8点火焰伤害"));
             Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(dash), Does.Contain("下回合获得1点行动点"));
             Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(dash), Does.Not.Contain("ReserveNextTurnAction"));
             Assert.That(RogueliteSettlementPresentation.FireSpellPlayerSummary(dash), Does.Not.Contain("Destination"));

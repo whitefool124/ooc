@@ -7,6 +7,20 @@ namespace OCC.Combat.Tests
     public sealed class BattlefieldPresentationAdapterTests
     {
         [Test]
+        public void AdjacentCrystalInteractionPreviewMatchesLegalExecution()
+        {
+            var map = new GridMap(3, 2);
+            var cell = new GridPosition(1, 0);
+            map.SetTile(cell, new TileState { IsDevice=true, IsAetherCrystal=true, Durability=16 });
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var state = new CombatState(map, new[] { hero, new UnitState("enemy", false, new GridPosition(2, 1)) });
+            CombatResolver.BeginTurn(state, "hero");
+            Assert.That(new BattlefieldPresentationAdapter().InvalidReasonForCell(state, "互动", cell), Is.Null.Or.Empty);
+            CombatResolver.Resolve(state, CombatCommand.Interact("hero", cell));
+            Assert.That(map.GetTile(cell).Durability, Is.LessThan(16));
+        }
+
+        [Test]
         public void BoardRect_PreservesSeventyFivePercentCombatRegion()
         {
             BattlefieldPresentationAdapter adapter = new BattlefieldPresentationAdapter();
@@ -77,7 +91,9 @@ namespace OCC.Combat.Tests
                 viewport.ZoomAt(700f, 400f, 1);
                 Assert.That(viewport.CellSize, Is.EqualTo(224f));
                 viewport.ResetOverview();
-                Assert.That(viewport.CellSize, Is.EqualTo(192f));
+                Assert.That(viewport.BoardRect.Width, Is.LessThanOrEqualTo(viewport.ViewportRect.Width));
+                Assert.That(viewport.BoardRect.Height, Is.LessThanOrEqualTo(viewport.ViewportRect.Height));
+                Assert.That(viewport.CellSize % 32f, Is.Zero);
             }
             Assert.That(BattlefieldPresentationAdapter.DefaultCellSize(12, 9), Is.EqualTo(192f));
             // 小盘面仍按最紧的整数档放大，但不会超过最大档。
@@ -242,14 +258,14 @@ namespace OCC.Combat.Tests
             viewport.ZoomAt(720f, 400f, 1);
             viewport.Pan(17.3f, 27.4f);
             viewport.ResetOverview();
-            // 定案 6 倍档下 12x9 盘不可能整屏装下：复位后应回到默认原点对齐、完整覆盖视口，且保持像素对齐。
-            Assert.That(viewport.CellSize, Is.EqualTo(BattlefieldPresentationAdapter.CellSize));
+            // Full overview must expose every logical cell and preserve native integer scaling.
+            Assert.That(viewport.CellSize, Is.EqualTo(64f));
             Assert.That(viewport.BoardRect.X % 1f, Is.Zero);
             Assert.That(viewport.BoardRect.Y % 1f, Is.Zero);
-            Assert.That(viewport.BoardRect.X, Is.LessThanOrEqualTo(safe.X));
-            Assert.That(viewport.BoardRect.XMax, Is.GreaterThanOrEqualTo(safe.XMax));
-            Assert.That(viewport.BoardRect.Y, Is.LessThanOrEqualTo(safe.Y));
-            Assert.That(viewport.BoardRect.YMax, Is.GreaterThanOrEqualTo(safe.YMax));
+            Assert.That(viewport.BoardRect.X, Is.GreaterThanOrEqualTo(safe.X));
+            Assert.That(viewport.BoardRect.XMax, Is.LessThanOrEqualTo(safe.XMax));
+            Assert.That(viewport.BoardRect.Y, Is.GreaterThanOrEqualTo(safe.Y));
+            Assert.That(viewport.BoardRect.YMax, Is.LessThanOrEqualTo(safe.YMax));
         }
 
         [Test]

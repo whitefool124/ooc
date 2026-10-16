@@ -1,0 +1,16 @@
+{
+  "status": "captured",
+  "source": "Unity Editor Play Mode, real B1 battlefield camera RenderTexture; isolated preview entry, not player build or normal-entry journey",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "level": "rain_lantern_court",
+  "play": true,
+  "width": 1888,
+  "height": 768,
+  "camera": "HD2D战场相机",
+  "postProcessing": true,
+  "mappedGroundMaterials": 0,
+  "mappedPropMaterials": 0,
+  "noWindowCreated": true,
+  "focusRequested": false,
+  "uiExcluded": true
+}

@@ -41,23 +41,23 @@ namespace OCC.Combat
     {
         public static readonly IReadOnlyList<FormalArtEntry> Units = new[]
         {
-            new FormalArtEntry("unit.hero", "hero", "Art/FormalUnits64/hero"),
+            new FormalArtEntry("unit.hero", "hero", "Art/VictorBattle/victor_static"),
             new FormalArtEntry("unit.shieldguard", "shieldguard", "Art/UnitStatic32x64/shieldguard"),
             new FormalArtEntry("unit.pyromancer", "pyromancer", "Art/FormalUnits64/pyromancer"),
             new FormalArtEntry("unit.raider", "raider", "Art/UnitStatic32x64/raider"),
             new FormalArtEntry("unit.elite_vanguard", "elite_vanguard", "Art/UnitStatic32x64/elite_vanguard"),
             new FormalArtEntry("unit.core_overseer", "core_overseer", "Art/FormalUnits64/core_overseer"),
             new FormalArtEntry("unit.sigil_mauler", "sigil_mauler", "Art/FormalUnits64/sigil_mauler"),
+            new FormalArtEntry("unit.breach_ram", "breach_ram", "Art/FormalUnits64/breach_ram"),
             new FormalArtEntry("unit.barrier_mender", "barrier_mender", "Art/FormalUnits64/barrier_mender"),
             new FormalArtEntry("unit.tether_hound", "tether_hound", "Art/FormalUnits64/tether_hound"),
             new FormalArtEntry("unit.stone_snare", "stone_snare", "Art/UnitStatic32x64/stone_snare"),
             new FormalArtEntry("unit.lantern_revealer", "lantern_revealer", "Art/FormalUnits64/lantern_revealer"),
             new FormalArtEntry("unit.rune_arbalist", "rune_arbalist", "Art/UnitStatic32x64/rune_arbalist"),
-            // 新单位正式美术尚未入库，先复用最接近的既有剪影作为占位资源；正式图入库后再替换。
-            new FormalArtEntry("unit.elder_tracker_hound", "elder_tracker_hound", "Art/FormalUnits64/tether_hound"),
-            new FormalArtEntry("unit.signal_keeper", "signal_keeper", "Art/FormalUnits64/lantern_revealer"),
-            new FormalArtEntry("unit.wind_librarian", "wind_librarian", "Art/FormalUnits64/pyromancer"),
-            new FormalArtEntry("unit.legacy_storekeeper", "legacy_storekeeper", "Art/FormalUnits64/barrier_mender"),
+            new FormalArtEntry("unit.elder_tracker_hound", "elder_tracker_hound", "Art/FormalUnits64/elder_tracker_hound"),
+            new FormalArtEntry("unit.signal_keeper", "signal_keeper", "Art/FormalUnits64/signal_keeper"),
+            new FormalArtEntry("unit.wind_librarian", "wind_librarian", "Art/FormalUnits64/wind_librarian"),
+            new FormalArtEntry("unit.legacy_storekeeper", "legacy_storekeeper", "Art/FormalUnits64/legacy_storekeeper"),
             new FormalArtEntry("unit.prototype_hand", "prototype_hand", "Art/FormalUnits64/prototype_hand")
         };
 
@@ -463,7 +463,9 @@ namespace OCC.Combat
 
         public static string UnitPath(string runtimeId) => Required(Units, runtimeId).ResourcePath;
         public static string CommandPath(string runtimeId) => Required(Commands, runtimeId).ResourcePath;
-        public static string FeedbackPath(string runtimeId) => Required(Feedback, runtimeId).ResourcePath;
+        // Break stance uses the approved armour-break semantic icon, as the status view does.
+        public static string FeedbackPath(string runtimeId) => Required(Feedback,
+            runtimeId == "break_stance" ? "armor_break" : runtimeId).ResourcePath;
         public static string IntentPath(string runtimeId) => Required(Intents, runtimeId).ResourcePath;
         public static string StatusPath(string runtimeId) => Required(Statuses, runtimeId).ResourcePath;
         public static string EnvironmentPath(string runtimeId) => Required(Environments, runtimeId).ResourcePath;

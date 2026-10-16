@@ -1,0 +1,68 @@
+{
+  "provider": "codex_builtin_imagegen",
+  "calls": 6,
+  "known_cost": null,
+  "attempts": [
+    {
+      "kind": "cover",
+      "round": 1,
+      "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+      "confidence": 1.1348,
+      "native_subject": [
+        141,
+        86
+      ]
+    },
+    {
+      "kind": "cover",
+      "round": 2,
+      "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+      "confidence": 1.149,
+      "native_subject": [
+        46,
+        31
+      ]
+    },
+    {
+      "kind": "cover",
+      "round": 3,
+      "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+      "confidence": 1.1191,
+      "native_subject": [
+        78,
+        50
+      ]
+    },
+    {
+      "kind": "paper",
+      "round": 1,
+      "status": "PASS_LOSSLESS_TARGET",
+      "confidence": 1.337,
+      "native_subject": [
+        46,
+        28
+      ]
+    },
+    {
+      "kind": "paper",
+      "round": 2,
+      "status": "PASS_LOSSLESS_TARGET",
+      "confidence": 1.3277,
+      "native_subject": [
+        46,
+        29
+      ]
+    },
+    {
+      "kind": "paper",
+      "round": 3,
+      "status": "PASS_LOSSLESS_TARGET",
+      "confidence": 1.2863,
+      "native_subject": [
+        28,
+        46
+      ]
+    }
+  ],
+  "composition": "Qualified cloth colour plus complete independent paper label and two independent leaves; physical cover50x33. Rejected full-cover raw art is not imported."
+}

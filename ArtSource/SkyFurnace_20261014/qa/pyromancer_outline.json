@@ -1,0 +1,1 @@
+{"operation": "replace existing outermost opaque native texels with required pure-black contour; no Alpha expansion", "outline_native_pixels": 216, "alpha_preserved": true}

@@ -1,0 +1,10 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>OCC · HD-2D 游戏内实装</title><style>body{margin:0;background:#201b17;color:#eee3d0;font:16px/1.7 system-ui}main{max-width:1440px;margin:auto;padding:28px}h1{font-size:28px;margin:0}p{color:#cdc0aa}video,img{display:block;width:100%;margin:18px 0}details{margin:24px 0}summary{cursor:pointer}</style><main>
+<h1>OCC · HD-2D 游戏内实装</h1>
+<p>正式入口现在默认使用立体书桌与庭院场景。开始游戏和继续游戏通过桌面开书进入对应流程；学院路线图和战斗外界面共用书桌空间，正文与操作保持清晰的二维布局。</p>
+<video controls muted playsinline preload="metadata" src="hd2d-formal-flow.mp4" poster="hd2d-formal-final.png"></video>
+<p>本次 Unity 实机录制：正常开局、角色配置、学院地图、战斗与奖励流程。操作来自真实界面事件与相机投影命中检查；录制无音频。</p>
+<img src="hd2d-formal-final.png" alt="正式入口学院战场：资源条、意图、预览范围和原战斗HUD">
+<p>战场保留正面俯视近景、低永久墙、共享朝向的像素面片和统一暖日光。各关卡沿用实际地图与结构；资源条、护盾、状态、公开意图、路线、预览格、右键菜单与跳字接入真实战斗。支持缩放、拖动、归中及放大视图的足点跟随。</p>
+<p>静态建筑合批与接触遮蔽继续使用；源纹理保持原生像素与 Point 采样。离开战斗释放场景，离屏渲染匹配窗口，静止模型减少重复计算，动作期间仍逐帧更新。本轮没有进行完整光照贴图 GI 烘焙。</p>
+<details><summary>前一轮渲染样板</summary><video controls muted playsinline preload="none" src="hd2d-baked-v3.mp4" poster="hd2d-baked-v3.png"></video></details>
+</main></html>

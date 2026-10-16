@@ -1,0 +1,13 @@
+{
+  "count": 1,
+  "scenes": [
+    {
+      "name": "CombatPrototype",
+      "path": "Assets/Scenes/CombatPrototype.unity",
+      "isLoaded": true,
+      "isDirty": false,
+      "isActive": true,
+      "rootCount": 2
+    }
+  ]
+}

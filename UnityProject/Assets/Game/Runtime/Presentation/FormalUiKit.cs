@@ -290,6 +290,14 @@ namespace OCC.Combat.Presentation
             if (existingFrame != null) existingFrame.gameObject.SetActive(false);
 
             Image overlay = SkinOverlay(image, true);
+            if(image.GetComponentInParent<AcademyDeskBackdrop>()!=null &&
+               (id=="panel" || id=="panel_elevated") && image.rectTransform.rect.width>=600f)
+            {
+                overlay.sprite=null;overlay.color=Color.clear;overlay.raycastTarget=false;
+                AcademyPaperDepth.Apply(image);
+                SetThinBorder(image.transform,new Color(.43f,.35f,.255f,.28f));
+                return;
+            }
             if (UsesThinBorder(id))
             {
                 overlay.sprite = null;

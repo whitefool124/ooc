@@ -1,0 +1,113 @@
+{
+  "schema": "occ-runtime-pixel-grid-v1",
+  "capture": "UnityProject/ReviewEvidence/MainMenuE/menu-modular-room.png",
+  "capture_size": [
+    1920,
+    1080
+  ],
+  "expected_tier": 6,
+  "detected_tiers": [
+    6
+  ],
+  "uniform_across_regions": true,
+  "lattice_offset_zero": true,
+  "regions": {
+    "room": {
+      "pitch": 6,
+      "uniform_fraction": 1.0,
+      "offset": [
+        0,
+        0
+      ],
+      "offset_uniform_fraction": 1.0,
+      "colors": 19,
+      "box": [
+        600,
+        240,
+        732,
+        420
+      ]
+    },
+    "vista": {
+      "pitch": 6,
+      "uniform_fraction": 1.0,
+      "offset": [
+        0,
+        0
+      ],
+      "offset_uniform_fraction": 1.0,
+      "colors": 34,
+      "box": [
+        1032,
+        240,
+        1260,
+        564
+      ]
+    },
+    "desk": {
+      "pitch": 6,
+      "uniform_fraction": 1.0,
+      "offset": [
+        0,
+        0
+      ],
+      "offset_uniform_fraction": 1.0,
+      "colors": 140,
+      "box": [
+        570,
+        744,
+        1308,
+        1020
+      ]
+    },
+    "book": {
+      "pitch": 6,
+      "uniform_fraction": 1.0,
+      "offset": [
+        0,
+        0
+      ],
+      "offset_uniform_fraction": 1.0,
+      "colors": 90,
+      "box": [
+        858,
+        840,
+        1200,
+        984
+      ]
+    },
+    "cup": {
+      "pitch": 6,
+      "uniform_fraction": 1.0,
+      "offset": [
+        0,
+        0
+      ],
+      "offset_uniform_fraction": 1.0,
+      "colors": 163,
+      "box": [
+        1356,
+        780,
+        1584,
+        930
+      ]
+    },
+    "lamp": {
+      "pitch": 6,
+      "uniform_fraction": 1.0,
+      "offset": [
+        0,
+        0
+      ],
+      "offset_uniform_fraction": 1.0,
+      "colors": 195,
+      "box": [
+        1644,
+        744,
+        1740,
+        966
+      ]
+    }
+  },
+  "pass": true
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "occ-registered-prop-material-data-v1",
+  "id": "academy_aether_pillar_intact",
+  "status": "QA_PENDING",
+  "source": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_aether_pillar_intact/normal_raw.png",
+    "sha256": "82469eb18f01d34344b9f654f472d797d88e0b4f024ffd5da49f943cae97f3b8"
+  },
+  "panel": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_aether_pillar_intact/normal_panel.png",
+    "sha256": "ae60834e7987fc633ddb39a7ce59a32c50fe3e9b3a9b0924ba13598b4e89a494"
+  },
+  "source_albedo": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_pillar_intact.png",
+    "sha256": "ae7431fac16244a7f20abee8d4aa045cb7a73f16b136a1b125cb223ed54ed6f0",
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "normal": {
+    "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_aether_pillar_intact/normal.png",
+    "sha256": "e4357e575de723c709401749e61cd720227a8071f71055ba2b18215e1eae0087"
+  },
+  "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+  "native_grid": [
+    32,
+    32
+  ],
+  "world_pixel_pitch": 0.03125,
+  "normal_convention": "OpenGL +Y, no green flip",
+  "uniform_surface": {
+    "roughness": 0.88,
+    "metallic": 0,
+    "coat": 0,
+    "reason": "Explicit semantic material role, not grayscale conversion"
+  },
+  "human_registration_review": "PENDING",
+  "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+}

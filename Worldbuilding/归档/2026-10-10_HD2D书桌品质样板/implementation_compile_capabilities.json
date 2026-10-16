@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Tool implementation and exposure are separate capabilities.\",\"data\":{\"profile\":\"full\",\"core_customized\":false,\"full_customized\":false,\"tools\":[{\"name\":\"request_recompile\",\"implemented\":true,\"enabled\":true,\"exposed\":true,\"read_only\":true,\"role\":\"structured\"}],\"hint\":\"If implemented but unexposed, adjust MCP Server tool exposure deliberately; do not assume the plugin lacks the capability.\"}}"
+      }
+    ]
+  }
+}

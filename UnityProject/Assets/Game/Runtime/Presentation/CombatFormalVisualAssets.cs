@@ -24,21 +24,44 @@ namespace OCC.Combat.Presentation
 
         public int EnvironmentFrameCount => firegroundFrames.Length;
         public Texture2D LootClosed => Relay("loot_crate_closed");
-        public Texture2D Academy(string id) => academy[id];
+        public Texture2D Academy(string id)
+        {
+            var candidate=Hd2DBattleCrystalCandidates.Resolve(id);
+            return candidate!=null?candidate:academy[id];
+        }
         public Texture2D Environment(string id) => environments[id];
         public Texture2D Relay(string id) => relay[id];
         public Texture2D Overlay(string id) => overlays[id];
         public Texture2D Intent(string id) => !string.IsNullOrEmpty(id) && intents.TryGetValue(id, out Texture2D value) ? value : null;
         public Texture2D Status(StatusType status) => statuses.TryGetValue(status, out Texture2D value) ? value : null;
-        public Texture2D FiregroundFrame(int frame) => firegroundFrames[frame];
-        public Texture2D SmokeFrame(int frame) => smokeFrames[frame];
+        public Texture2D FiregroundFrame(int frame)
+        {
+            return firegroundFrames[(frame%firegroundFrames.Length+firegroundFrames.Length)%firegroundFrames.Length];
+        }
+        public Texture2D SmokeFrame(int frame)
+        {
+            return smokeFrames[(frame%smokeFrames.Length+smokeFrames.Length)%smokeFrames.Length];
+        }
+        public Texture2D GroundEffect(TileState tile)
+        {
+            string id=BattlefieldArtResources.GroundEffectId(tile);
+            return id==null?null:BattlefieldArtResources.Load(BattlefieldArtResources.Fields+id);
+        }
+        public Texture2D GroundMaterial(TileState tile)
+        {
+            return tile?.IsCrystalShard==true?BattlefieldArtResources.Load(BattlefieldArtResources.Devices+"material_crystal_shards"):null;
+        }
+        public Texture2D Device(TileState tile)
+        {
+            string id=BattlefieldArtResources.DeviceId(tile);
+            return id==null?null:BattlefieldArtResources.Load(BattlefieldArtResources.Devices+id);
+        }
 
         public Texture2D Unit(UnitState unit, int animationFrame = -1)
         {
             if (unit == null) return null;
             if (CombatTestArenaEntry.IsDedicatedTestArena)
             {
-                if (unit.IsHero && testArenaUnits.TryGetValue("hero", out Texture2D testHero)) return testHero;
                 if (!string.IsNullOrEmpty(unit.EnemyArchetypeId) && testArenaUnits.TryGetValue(unit.EnemyArchetypeId, out Texture2D testUnit)) return testUnit;
                 if (!unit.IsHero && testArenaUnits.TryGetValue("raider", out Texture2D testFallback)) return testFallback;
             }
@@ -94,7 +117,6 @@ namespace OCC.Combat.Presentation
             LoadUnits();
             if (CombatTestArenaEntry.IsDedicatedTestArena)
             {
-                testArenaUnits["hero"] = LoadOptionalTexture("Art/CombatTestArenaSephiriaDebug/sephiria_unit_side_post_outline_64");
                 testArenaUnits["raider"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_raider_pixel_candidate_64");
                 testArenaUnits["shieldguard"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_shieldguard_pixel_candidate_64");
                 testArenaUnits["pyromancer"] = LoadOptionalTexture("Art/CombatTestArenaGround/academy_test_pyromancer_pixel_candidate_64");
@@ -135,8 +157,8 @@ namespace OCC.Combat.Presentation
                 statuses[status] = statuses[StatusType.Revealed];
             for (int frame = 0; frame < firegroundFrames.Length; frame++)
             {
-                firegroundFrames[frame] = RequiredTexture($"Art/FormalVfx32/fire_burning_ground/frame_{frame:00}");
-                smokeFrames[frame] = RequiredTexture($"Art/FormalVfx32/fire_smoke/frame_{frame:00}");
+                firegroundFrames[frame] = BattlefieldArtResources.Load(BattlefieldArtResources.Fields+$"field_burning_{frame:00}");
+                smokeFrames[frame] = BattlefieldArtResources.Load(BattlefieldArtResources.Fields+$"field_smoke_{frame:00}");
             }
         }
 

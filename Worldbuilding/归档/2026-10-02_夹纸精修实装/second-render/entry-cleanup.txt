@@ -1,0 +1,1 @@
+New game button entered archive selection normally; no archive chosen. Active paper and tooltip during selection = 0. Return: one paper, progress=0. Disable/re-enable: progress=0.

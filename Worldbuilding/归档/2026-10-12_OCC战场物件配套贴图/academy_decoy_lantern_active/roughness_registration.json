@@ -1,0 +1,29 @@
+{
+  "schema": "occ-registered-prop-material-data-v1",
+  "status": "REVIEW_READY",
+  "source": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_decoy_lantern_active/roughness_raw_r2.png",
+    "sha256": "9d66ea2a4feb4bec74573398b0bd48a8af7579c94a222d9604943ea8db9d78bc"
+  },
+  "reference": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_decoy_lantern_active.png",
+    "sha256": "0c2e6cf9cdc2d00c01218382ca2f0f264b30155900f869d34191f104d60d97d1"
+  },
+  "output": {
+    "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_decoy_lantern_active/roughness.png",
+    "sha256": "1153d0e0abd6ad1bd5e007ef76334ef5063f9fea8759dc9bac3df569436155ee"
+  },
+  "native_grid": [
+    32,
+    32
+  ],
+  "source_macro_pitch_xy": [
+    39.1875,
+    39.1875
+  ],
+  "method": "Observed central-cell medoid on known original UV canvas; opaque numeric background retained",
+  "geometric_resize_or_interpolation": false,
+  "new_rgb_colours": false,
+  "max_cell_std": 1.079397980357575,
+  "human_registration_review": "PENDING"
+}

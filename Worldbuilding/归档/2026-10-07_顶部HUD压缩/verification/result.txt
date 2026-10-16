@@ -1,0 +1,8 @@
+PASS
+Normal UI entry to B1; production disk save namespace; saved=True
+PASS hover delay, panel transit, pin/unpin, grace close, keyboard focus, no invisible raycast; no camera shift; status flip; size=1920x1080
+PASS portrait real pointer hover, left click and right click suppression; independent keyboard selection and submit event; deselect clears locator; size=1920x1080
+PASS hover delay, panel transit, pin/unpin, grace close, keyboard focus, no invisible raycast; no camera shift; status flip; size=1920x1080
+PASS portrait real pointer hover, left click and right click suppression; independent keyboard selection and submit event; deselect clears locator; size=1920x1080
+PASS hover delay, panel transit, pin/unpin, grace close, keyboard focus, no invisible raycast; no camera shift; status flip; size=960x540
+PASS portrait real pointer hover, left click and right click suppression; independent keyboard selection and submit event; deselect clears locator; size=960x540

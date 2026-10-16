@@ -1,0 +1,23 @@
+{
+  "cols": 109,
+  "rows": 82,
+  "step_x": 13.2877,
+  "step_y": 13.2514,
+  "consensus": "arbitrated",
+  "confidence": "medium",
+  "detect_s": 8.555,
+  "recon_s": 0.943,
+  "route": "community_grid_reconstruction",
+  "lossless_decode": false,
+  "subject_bounds": [
+    22,
+    18,
+    88,
+    64
+  ],
+  "canvas": [
+    64,
+    64
+  ],
+  "original_decoder_accepted": false
+}

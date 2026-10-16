@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"screen\\\":[1920,1080],\\\"stages\\\":[{\\\"name\\\":\\\"MainMenuEHD2DStage(Clone)\\\",\\\"layer\\\":29,\\\"output\\\":[1920,1080],\\\"post\\\":true,\\\"probes\\\":[{\\\"name\\\":\\\"整备台局部环境反射\\\",\\\"resolution\\\":128,\\\"intensity\\\":0.7,\\\"ready\\\":true,\\\"texture\\\":\\\"整备台局部环境反射\\\"}],\\\"exposure\\\":[0.35],\\\"depth\\\":[false]}]}\",\"compiler\":\"Roslyn\"}}"
+      }
+    ]
+  }
+}

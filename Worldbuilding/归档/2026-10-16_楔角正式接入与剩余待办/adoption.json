@@ -1,0 +1,18 @@
+{
+  "source": "Assets/Game/Resources/Art/EnemyUnitCandidates32x64/breach_ram.png",
+  "target": "Assets/Game/Resources/Art/FormalUnits64/breach_ram.png",
+  "guid": "b05755e06f213d24686d0c5345b35505",
+  "preservedGuid": true,
+  "pixelsPerUnit": 32.0,
+  "width": 64,
+  "height": 64,
+  "pivot": [
+    32.0,
+    2.0
+  ],
+  "filter": "Point",
+  "compression": "Uncompressed",
+  "mipmapEnabled": false,
+  "sceneSaved": false,
+  "authorization": "User explicitly approved this exact sprite and requested formal resource adoption on2026-10-16"
+}

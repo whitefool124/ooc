@@ -1,0 +1,1 @@
+PASS: disposable preview starts at S directly, not full journey. Actual pointer purchase of default goggles (gold -4, sold, backpack granted), actual chest unequip, actual backpack lift/move/release of weight 1 and 2 with distinct 6/4px lift. Real sprites, no injected items or edited stats. Player saves untouched. No shop holder or sold-prop animation added.

@@ -1,0 +1,29 @@
+{
+  "schema": "occ-registered-prop-material-data-v1",
+  "status": "REVIEW_READY",
+  "source": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战场物件配套贴图/academy_loot_chest_empty/normal_panel.png",
+    "sha256": "4311407678482262f9006bcd0140b03beff1a6a13fe13bbf9d9b7626005c5444"
+  },
+  "reference": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_loot_chest_empty.png",
+    "sha256": "b539018548e2ed8bf5d6c1befe0e9ad0c2a487fb232f37b3fff678f29f1d55d6"
+  },
+  "output": {
+    "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_loot_chest_empty/normal.png",
+    "sha256": "35ceb9a1c239b25cec8879bfc6f40dc9238c68bbaab4eb2bdc9c6c6a5542538d"
+  },
+  "native_grid": [
+    32,
+    32
+  ],
+  "source_macro_pitch_xy": [
+    19.59375,
+    19.59375
+  ],
+  "method": "Observed central-cell medoid on known original UV canvas; opaque numeric background retained",
+  "geometric_resize_or_interpolation": false,
+  "new_rgb_colours": false,
+  "max_cell_std": 74.85728488263517,
+  "human_registration_review": "PENDING"
+}

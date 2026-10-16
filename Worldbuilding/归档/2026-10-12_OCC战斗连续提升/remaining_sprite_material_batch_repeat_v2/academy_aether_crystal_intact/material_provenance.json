@@ -1,0 +1,30 @@
+{
+  "schema": "occ-authored-sprite-material-v1",
+  "status": "QA_PENDING",
+  "id": "academy_aether_crystal_intact",
+  "source": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_crystal_intact.png",
+    "sha256": "e3728c4b07c1e1dd16a00ba4f0d30ace06522161e6f3b616e04d43c6c8da24ca"
+  },
+  "recipe_sha256": "556fb68fa933edd277fb4f4cfb0596639774ed80fe38e9e9db48972223617fe0",
+  "native_canvas": [
+    96,
+    64
+  ],
+  "world_pixel_pitch": 0.03125,
+  "height_basis": "explicit_authored_geometry",
+  "albedo_brightness_used_for_height": false,
+  "source_art_changed": false,
+  "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+  "fields": {
+    "normal.png": "d6dabc280d25f81985e8e96a78db2bfb446e83be8444c132c662e5d83350407a",
+    "regions.png": "14cab52433d196ef9b9d465543c93ddfdb85257a2d73c450e78eb189813cc6af"
+  },
+  "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+  "limitations": [
+    "Shallow-relief approximation; no physical transmission",
+    "Original albedo retains baked bright facets; numeric fields do not remove them"
+  ],
+  "runtime_review": "PENDING",
+  "human_registration_review": "PENDING"
+}

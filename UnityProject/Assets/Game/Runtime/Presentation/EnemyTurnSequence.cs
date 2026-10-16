@@ -24,12 +24,12 @@ namespace OCC.Combat.Presentation
     /// </summary>
     public sealed class EnemyTurnSequence
     {
-        public const float FocusSeconds = .65f;
-        public const float ActorGapSeconds = .30f;
-        private const float MoveResultSeconds = .70f;
-        private const float AttackResultSeconds = .90f;
-        private const float SkillResultSeconds = 1.00f;
-        private const float DefaultResultSeconds = .75f;
+        public const float FocusSeconds = .28f;
+        public const float ActorGapSeconds = .10f;
+        private const float MoveResultSeconds = .18f;
+        private const float AttackResultSeconds = .28f;
+        private const float SkillResultSeconds = .38f;
+        private const float DefaultResultSeconds = .18f;
 
         public EnemyTurnSequencePhase Phase { get; private set; } = EnemyTurnSequencePhase.Idle;
         public string UnitId { get; private set; }
@@ -48,9 +48,9 @@ namespace OCC.Combat.Presentation
             Deadline = now + FocusSeconds;
         }
 
-        public EnemyTurnSequenceSignal Advance(float now)
+        public EnemyTurnSequenceSignal Advance(float now, bool animationsEnabled = true)
         {
-            if (!IsRunning || now < Deadline) return EnemyTurnSequenceSignal.None;
+            if (!IsRunning || animationsEnabled && now < Deadline) return EnemyTurnSequenceSignal.None;
 
             switch (Phase)
             {

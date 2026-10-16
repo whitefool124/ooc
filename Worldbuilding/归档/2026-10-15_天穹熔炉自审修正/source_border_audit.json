@@ -1,0 +1,73 @@
+{
+  "scope": "Read-only source alpha border audit, does not certify design completeness or scene aesthetics",
+  "items": [
+    {
+      "name": "outer",
+      "source": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_outer.png",
+      "sha256": "3c651ece76eebcc2f43c6047330e4486d5e15be14bff60b0552405560b853510",
+      "size": [
+        160,
+        160
+      ],
+      "alpha_bounds": [
+        12,
+        6,
+        147,
+        154
+      ],
+      "opaque_border_pixels": 0,
+      "no_canvas_edge_clipping": true
+    },
+    {
+      "name": "sigils",
+      "source": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_sigils.png",
+      "sha256": "348292f064ff8eee67263467822bd8d39961956638748cce0c7a53c29f11f0c0",
+      "size": [
+        128,
+        128
+      ],
+      "alpha_bounds": [
+        10,
+        7,
+        118,
+        122
+      ],
+      "opaque_border_pixels": 0,
+      "no_canvas_edge_clipping": true
+    },
+    {
+      "name": "core",
+      "source": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_core.png",
+      "sha256": "6a0f1fcc14c18d49dba25597a1a0f07ebbc158133ffab5fb23002ebe158924ef",
+      "size": [
+        96,
+        96
+      ],
+      "alpha_bounds": [
+        13,
+        6,
+        83,
+        90
+      ],
+      "opaque_border_pixels": 0,
+      "no_canvas_edge_clipping": true
+    },
+    {
+      "name": "caster",
+      "source": "UnityProject/Assets/Game/Resources/Art/SkyFurnace/magic_card_caster.png",
+      "sha256": "21bda3c898714f638ddf5b5bccf30b75155e8d7c583e78e664f089d4366db5a8",
+      "size": [
+        64,
+        64
+      ],
+      "alpha_bounds": [
+        19,
+        19,
+        45,
+        45
+      ],
+      "opaque_border_pixels": 0,
+      "no_canvas_edge_clipping": true
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.main_menu_e.book_opening_sample.r1",
+  "role": "ui_detail_adaptive",
+  "status": "REJECTED",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent six-key-pose book opening source; rejected as sequence",
+    "source_path": "ArtSource/BookOpeningSample_20261008/source-r1.png",
+    "source_sha256": "51fc3d48dcce60d016b9cc08c9fba97f37a4bfc8617d9b4cd72a4ac21f24e396"
+  },
+  "delivery": {
+    "output_path": null,
+    "output_sha256": null,
+    "logical_cells": null,
+    "palette_max": 16
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "notes": "Not offered for approval or imported: machine sequence rejection precedes aesthetic gate"
+  },
+  "rejection": {
+    "reason": "Frame lattices disagree; some confidence below 1.2; no sequence accepted.",
+    "frame_diagnostics": [
+      {
+        "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+        "inferred_subject_pixel_pitch": 32,
+        "subject_lattice_confidence": 1.148,
+        "subject_logical_size": [
+          11,
+          7
+        ],
+        "subject_bounds_on_logical_grid": [
+          0,
+          4,
+          11,
+          11
+        ]
+      },
+      {
+        "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+        "inferred_subject_pixel_pitch": 36,
+        "subject_lattice_confidence": 1.1182,
+        "subject_logical_size": [
+          11,
+          8
+        ],
+        "subject_bounds_on_logical_grid": [
+          0,
+          0,
+          11,
+          8
+        ]
+      },
+      {
+        "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+        "inferred_subject_pixel_pitch": 37,
+        "subject_lattice_confidence": 1.0788,
+        "subject_logical_size": [
+          10,
+          10
+        ],
+        "subject_bounds_on_logical_grid": [
+          0,
+          0,
+          10,
+          10
+        ]
+      },
+      {
+        "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+        "inferred_subject_pixel_pitch": 37,
+        "subject_lattice_confidence": 1.0627,
+        "subject_logical_size": [
+          14,
+          7
+        ],
+        "subject_bounds_on_logical_grid": [
+          0,
+          0,
+          14,
+          7
+        ]
+      },
+      {
+        "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+        "inferred_subject_pixel_pitch": 37,
+        "subject_lattice_confidence": 1.1232,
+        "subject_logical_size": [
+          14,
+          6
+        ],
+        "subject_bounds_on_logical_grid": [
+          0,
+          0,
+          14,
+          6
+        ]
+      },
+      {
+        "status": "REJECT_UNSTABLE_SUBJECT_GRID",
+        "inferred_subject_pixel_pitch": 37,
+        "subject_lattice_confidence": 1.1856,
+        "subject_logical_size": [
+          14,
+          6
+        ],
+        "subject_bounds_on_logical_grid": [
+          0,
+          0,
+          14,
+          6
+        ]
+      }
+    ]
+  },
+  "known_cost": null
+}

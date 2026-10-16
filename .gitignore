@@ -56,3 +56,6 @@ ArtSource/sephiria_style_study_2026-09-16/refs/
 # External reference repos (read-only study material; keep only the README tracked)
 /Reference/*
 !/Reference/README.md
+
+# Local pixel-tool comparison dependencies
+/ArtSource/_pixel_tools/

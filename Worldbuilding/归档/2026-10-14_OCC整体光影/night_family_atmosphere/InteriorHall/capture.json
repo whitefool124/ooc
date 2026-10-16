@@ -1,0 +1,41 @@
+{
+  "status": "CAPTURED_FOR_MANUAL_REVIEW",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "level": "calibration_lockdown",
+  "environment": "InteriorHall",
+  "timeOfDay": "Night",
+  "weather": "Clear",
+  "source": "Unity Editor Play Mode runtime battlefield/full HUD; isolated preview, not standalone Player or full journey acceptance",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "focusRequested": false,
+  "suitesRun": false,
+  "humanReview": "PENDING",
+  "diffuseUpdates": 2,
+  "diffuseSurfaces": 69,
+  "lights": [
+    {
+      "name": "战场统一日光",
+      "intensity": 1.06521738
+    },
+    {
+      "name": "战场柔和补光",
+      "intensity": 0.456
+    },
+    {
+      "name": "战场水平轮廓补光",
+      "intensity": 0.7772727
+    }
+  ],
+  "shaders": [
+    "OCC/HD2D/BakedArchitecture",
+    "Universal Render Pipeline/Lit",
+    "OCC/HD2D/GroundedSprite",
+    "OCC/HD2D/CourtyardWater"
+  ],
+  "gardenSurfaceVariants": 4,
+  "peripheralSurfaceVariants": 8,
+  "foliageMaterials": 0
+}

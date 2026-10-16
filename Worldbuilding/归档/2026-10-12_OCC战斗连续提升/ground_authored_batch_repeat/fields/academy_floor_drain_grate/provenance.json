@@ -1,0 +1,26 @@
+{
+  "schema": "occ-authored-normal-field-v1",
+  "status": "QA_PENDING",
+  "asset_id": "academy_floor_drain_grate",
+  "source_type": "deterministic_numeric_bake_from_explicit_physical_heights",
+  "source_height_record": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_repeat\\authored_heights.json",
+  "source_height_sha256": "3ddb5e654e03c4758787f77e6a9269997a87d66a0b5414db51b468a94b831eb9",
+  "albedo_reference": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_drain_grate.png",
+    "sha256": "e560a576464acf1a52021e17a9b71e439d6dd658b82268bb7c7edaffcf5b3a45"
+  },
+  "native_canvas": [
+    32,
+    32
+  ],
+  "world_pixel_pitch": 0.03125,
+  "normal_convention": "OpenGL +Y, image rows top-down",
+  "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+  "normal_sha256": "c292dcb6f80468124344a9fdb36d04b923991fc146f4d468ad933a537b823325",
+  "normal_path": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_repeat\\fields\\academy_floor_drain_grate\\normal.png",
+  "albedo_pixels_read": false,
+  "interpolation": false,
+  "source_art_changed": false,
+  "human_registration_review": "PENDING",
+  "runtime_review": "PENDING"
+}

@@ -1,0 +1,1432 @@
+{
+  "schema": "occ-authored-material-recipes-v1",
+  "status": "QA_PENDING",
+  "native_canvas": [
+    32,
+    32
+  ],
+  "world_pixel_pitch": 0.03125,
+  "materials": {
+    "void": {
+      "roughness": 1,
+      "metallic": 0,
+      "coat": 0
+    },
+    "stone": {
+      "roughness": 0.93,
+      "metallic": 0,
+      "coat": 0
+    },
+    "iron": {
+      "roughness": 0.65,
+      "metallic": 0.85,
+      "coat": 0
+    },
+    "paint": {
+      "roughness": 0.8,
+      "metallic": 0,
+      "coat": 0
+    },
+    "rust": {
+      "roughness": 0.9,
+      "metallic": 0.15,
+      "coat": 0
+    },
+    "copper": {
+      "roughness": 0.55,
+      "metallic": 0.85,
+      "coat": 0
+    },
+    "moss": {
+      "roughness": 0.98,
+      "metallic": 0,
+      "coat": 0
+    },
+    "glass": {
+      "roughness": 0.12,
+      "metallic": 0,
+      "coat": 1
+    },
+    "water": {
+      "roughness": 0.12,
+      "metallic": 0,
+      "coat": 1
+    }
+  },
+  "assets": [
+    {
+      "asset_id": "academy_floor_drain_round",
+      "template_family": "grate",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 14,
+          "inner_radius": 11,
+          "height_m": 0.006,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            6,
+            8,
+            25,
+            9
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            6,
+            14,
+            25,
+            15
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            6,
+            20,
+            25,
+            21
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_drain_slot",
+      "template_family": "grate",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            3,
+            5,
+            28,
+            26
+          ],
+          "height_m": 0.005,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            8,
+            26,
+            23
+          ],
+          "height_m": -0.004,
+          "material": "void"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            9,
+            8,
+            10,
+            23
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            15,
+            8,
+            16,
+            23
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            21,
+            8,
+            22,
+            23
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_service_hatch_round",
+      "template_family": "hatch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 14,
+          "inner_radius": 0,
+          "height_m": 0.005,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 11,
+          "inner_radius": 0,
+          "height_m": 0.002,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            15,
+            7,
+            16,
+            26
+          ],
+          "height_m": -0.002,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            8,
+            12,
+            9,
+            20
+          ],
+          "height_m": -0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            22,
+            12,
+            23,
+            20
+          ],
+          "height_m": -0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            7,
+            7,
+            9,
+            9
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            12,
+            4,
+            14,
+            6
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            19,
+            4,
+            21,
+            6
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            25,
+            11,
+            27,
+            13
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            25,
+            20,
+            27,
+            22
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            7,
+            24,
+            9,
+            26
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            13,
+            27,
+            15,
+            29
+          ],
+          "material": "paint"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_service_hatch_square",
+      "template_family": "hatch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            2,
+            2,
+            29,
+            29
+          ],
+          "height_m": 0.005,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            5,
+            26,
+            26
+          ],
+          "height_m": 0.002,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            12,
+            14,
+            20,
+            16
+          ],
+          "height_m": -0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            3,
+            3,
+            5,
+            4
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            9,
+            3,
+            11,
+            4
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            15,
+            3,
+            17,
+            4
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            21,
+            3,
+            23,
+            4
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            27,
+            3,
+            28,
+            4
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            3,
+            3,
+            4,
+            5
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            3,
+            9,
+            4,
+            11
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            3,
+            15,
+            4,
+            17
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            3,
+            21,
+            4,
+            23
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            3,
+            27,
+            4,
+            28
+          ],
+          "material": "paint"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_repair_stone",
+      "template_family": "inlay_or_patch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            2,
+            2,
+            29,
+            29
+          ],
+          "height_m": 0.002,
+          "material": "stone"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            5,
+            26,
+            26
+          ],
+          "height_m": 0.003,
+          "material": "stone"
+        },
+        {
+          "shape": "line",
+          "a": [
+            9,
+            22
+          ],
+          "b": [
+            22,
+            10
+          ],
+          "width": 0.8,
+          "height_m": -0.001,
+          "material": "stone"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_repair_iron",
+      "template_family": "inlay_or_patch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            2,
+            2,
+            29,
+            29
+          ],
+          "height_m": 0.003,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            5,
+            26,
+            26
+          ],
+          "height_m": 0.002,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            17,
+            7,
+            21,
+            10
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            7,
+            21,
+            10,
+            24
+          ],
+          "material": "paint"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_cable_cap",
+      "template_family": "hatch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            3,
+            3,
+            28,
+            28
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            16
+          ],
+          "radius": 10,
+          "inner_radius": 0,
+          "height_m": 0.002,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            12,
+            15,
+            20,
+            17
+          ],
+          "height_m": -0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            4,
+            6,
+            5
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            11,
+            4,
+            12,
+            5
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            17,
+            4,
+            18,
+            5
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            23,
+            4,
+            24,
+            5
+          ],
+          "material": "paint"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_pipe_socket",
+      "template_family": "inlay_or_patch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 14,
+          "inner_radius": 10,
+          "height_m": 0.008,
+          "material": "stone"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 9,
+          "inner_radius": 0,
+          "height_m": -0.003,
+          "material": "rust"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 8,
+          "inner_radius": 6,
+          "height_m": 0.003,
+          "material": "copper"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_anchor_plate",
+      "template_family": "hatch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            2,
+            2,
+            29,
+            29
+          ],
+          "height_m": 0.002,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            16
+          ],
+          "radius": 10,
+          "inner_radius": 8,
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            16
+          ],
+          "radius": 7,
+          "inner_radius": 0,
+          "height_m": 0.001,
+          "material": "rust"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            5,
+            5
+          ],
+          "radius": 2,
+          "inner_radius": 0,
+          "height_m": 0.007,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            26,
+            5
+          ],
+          "radius": 2,
+          "inner_radius": 0,
+          "height_m": 0.007,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            5,
+            26
+          ],
+          "radius": 2,
+          "inner_radius": 0,
+          "height_m": 0.007,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            26,
+            26
+          ],
+          "radius": 2,
+          "inner_radius": 0,
+          "height_m": 0.007,
+          "material": "iron"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_inspection_window",
+      "template_family": "framed_glass",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            2,
+            2,
+            29,
+            29
+          ],
+          "height_m": 0.006,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            5,
+            26,
+            26
+          ],
+          "height_m": -0.003,
+          "material": "glass"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            11,
+            26,
+            12
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            20,
+            26,
+            21
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_mortar_inlay",
+      "template_family": "inlay_or_patch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 14,
+          "inner_radius": 0,
+          "height_m": 0.004,
+          "material": "stone"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            10,
+            10
+          ],
+          "radius": 3,
+          "inner_radius": 0,
+          "height_m": -0.006,
+          "material": "void"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            22,
+            10
+          ],
+          "radius": 3,
+          "inner_radius": 0,
+          "height_m": -0.006,
+          "material": "void"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            10,
+            22
+          ],
+          "radius": 3,
+          "inner_radius": 0,
+          "height_m": -0.006,
+          "material": "void"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            22,
+            22
+          ],
+          "radius": 3,
+          "inner_radius": 0,
+          "height_m": -0.006,
+          "material": "void"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_threshold_studs",
+      "template_family": "inlay_or_patch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            2,
+            2,
+            29,
+            29
+          ],
+          "height_m": 0.002,
+          "material": "stone"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            9,
+            9
+          ],
+          "radius": 4,
+          "inner_radius": 0,
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            9,
+            9
+          ],
+          "radius": 1,
+          "inner_radius": 0,
+          "height_m": -0.003,
+          "material": "void"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            23,
+            9
+          ],
+          "radius": 4,
+          "inner_radius": 0,
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            23,
+            9
+          ],
+          "radius": 1,
+          "inner_radius": 0,
+          "height_m": -0.003,
+          "material": "void"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            9,
+            23
+          ],
+          "radius": 4,
+          "inner_radius": 0,
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            9,
+            23
+          ],
+          "radius": 1,
+          "inner_radius": 0,
+          "height_m": -0.003,
+          "material": "void"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            23,
+            23
+          ],
+          "radius": 4,
+          "inner_radius": 0,
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            23,
+            23
+          ],
+          "radius": 1,
+          "inner_radius": 0,
+          "height_m": -0.003,
+          "material": "void"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_safety_marker",
+      "template_family": "grate",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            2,
+            2,
+            29,
+            29
+          ],
+          "height_m": 0.002,
+          "material": "iron"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 12,
+          "inner_radius": 0,
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            7,
+            9,
+            24,
+            10
+          ],
+          "height_m": -0.003,
+          "material": "void"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            7,
+            13,
+            24,
+            14
+          ],
+          "height_m": -0.003,
+          "material": "void"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            7,
+            17,
+            24,
+            18
+          ],
+          "height_m": -0.003,
+          "material": "void"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            7,
+            21,
+            24,
+            22
+          ],
+          "height_m": -0.003,
+          "material": "void"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            5,
+            8,
+            7
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            24,
+            5,
+            27,
+            7
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            25,
+            8,
+            27
+          ],
+          "material": "paint"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            24,
+            25,
+            27,
+            27
+          ],
+          "material": "paint"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_herb_drain",
+      "template_family": "grate",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 14,
+          "inner_radius": 11,
+          "height_m": 0.006,
+          "material": "stone"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            9,
+            7,
+            10,
+            25
+          ],
+          "height_m": 0.003,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            14,
+            7,
+            15,
+            25
+          ],
+          "height_m": 0.003,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            19,
+            7,
+            20,
+            25
+          ],
+          "height_m": 0.003,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            7,
+            14,
+            25,
+            15
+          ],
+          "height_m": 0.003,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            12,
+            17,
+            13,
+            20
+          ],
+          "material": "moss"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            20,
+            8,
+            21,
+            12
+          ],
+          "material": "moss"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_rain_channel",
+      "template_family": "gutter",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            10,
+            3,
+            12,
+            24
+          ],
+          "height_m": 0.006,
+          "material": "stone"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            19,
+            3,
+            21,
+            24
+          ],
+          "height_m": 0.006,
+          "material": "stone"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            13,
+            3,
+            18,
+            24
+          ],
+          "height_m": -0.004,
+          "material": "water"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            26
+          ],
+          "radius": 6,
+          "inner_radius": 4,
+          "height_m": 0.005,
+          "material": "stone"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            26
+          ],
+          "radius": 4,
+          "inner_radius": 0,
+          "height_m": -0.004,
+          "material": "rust"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_conduit_blank",
+      "template_family": "inlay_or_patch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 14,
+          "inner_radius": 0,
+          "height_m": 0.003,
+          "material": "stone"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 4,
+          "inner_radius": 0,
+          "height_m": -0.005,
+          "material": "void"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_convergence_scribe",
+      "template_family": "inlay_or_patch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            2,
+            2,
+            29,
+            29
+          ],
+          "height_m": 0.003,
+          "material": "stone"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 13,
+          "inner_radius": 0,
+          "height_m": 0.004,
+          "material": "stone"
+        },
+        {
+          "shape": "circle",
+          "center": [
+            15.5,
+            15.5
+          ],
+          "radius": 12.5,
+          "inner_radius": 11.5,
+          "height_m": 0.001,
+          "material": "stone"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_drain_grate",
+      "template_family": "grate",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            4,
+            4,
+            27,
+            27
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            7,
+            6,
+            9,
+            25
+          ],
+          "height_m": -0.004,
+          "material": "void"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            12,
+            6,
+            14,
+            25
+          ],
+          "height_m": -0.004,
+          "material": "void"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            17,
+            6,
+            19,
+            25
+          ],
+          "height_m": -0.004,
+          "material": "void"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            22,
+            6,
+            24,
+            25
+          ],
+          "height_m": -0.004,
+          "material": "void"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_maintenance_hatch",
+      "template_family": "hatch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            2,
+            2,
+            29,
+            29
+          ],
+          "height_m": 0.006,
+          "material": "stone"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            5,
+            5,
+            26,
+            26
+          ],
+          "height_m": 0.002,
+          "material": "iron"
+        },
+        {
+          "shape": "line",
+          "a": [
+            6,
+            23
+          ],
+          "b": [
+            23,
+            6
+          ],
+          "width": 1.3,
+          "height_m": 0.005,
+          "material": "iron"
+        },
+        {
+          "shape": "line",
+          "a": [
+            10,
+            26
+          ],
+          "b": [
+            26,
+            10
+          ],
+          "width": 1.3,
+          "height_m": 0.005,
+          "material": "iron"
+        }
+      ]
+    },
+    {
+      "asset_id": "academy_floor_repair_plate",
+      "template_family": "inlay_or_patch",
+      "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+      "layers": [
+        {
+          "shape": "rect",
+          "bounds": [
+            2,
+            2,
+            29,
+            29
+          ],
+          "height_m": 0.003,
+          "material": "stone"
+        },
+        {
+          "shape": "rect",
+          "bounds": [
+            16,
+            13,
+            27,
+            23
+          ],
+          "height_m": 0.004,
+          "material": "iron"
+        }
+      ]
+    }
+  ]
+}

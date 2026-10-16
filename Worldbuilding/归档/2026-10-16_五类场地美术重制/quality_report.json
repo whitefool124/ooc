@@ -1,0 +1,662 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "38625900f0f7a2c9c8c48eddc0291138ddbf9d5238cf65825426f6b91cb5f4d6",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "Tools/OCCArt/decode_generated_pixel_grid.py",
+    "UnityProject/Assets/Game/Runtime/Presentation/BattlefieldFieldArtCandidates.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/CombatFormalVisualAssets.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/CombatBattlefieldCellPresenter.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/BattlefieldCellPresentation.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+    "UnityProject/Assets/Game/Tests/EditMode/FieldEffectPresentationTests.cs",
+    "UnityProject/Assets/Game/Editor/EnemyFieldRuntimeScreenshots.cs",
+    "Worldbuilding/数据表/OCC_学院第一阶段全流程内容清单_v1.0.csv",
+    "ArtSource/field_effect_reset_20261016/binding/asset/field_binding_mark.png",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_00.png",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_01.png",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_02.png",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_03.png",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_04.png",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_05.png",
+    "ArtSource/field_effect_reset_20261016/screen/asset/field_paper_screen.png",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_00.png",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_01.png",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_02.png",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_03.png",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_04.png",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_05.png",
+    "ArtSource/field_effect_reset_20261016/trace/asset/field_trace.png"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "8026256376fcbbb14b48a072a79522cf0ed9278744c0507c97b848b89d29e531"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "77878b3e4141fc1fa04f4a524694e261e46262d2e37afd0c34277d3b05c33506"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "02db449a5dda7f4a8d22ba78df12388077c4d4ebc7d3e696540a7a45f87dda00"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "cb0d43a9604da681e1d28b56f540b3daf75394b36d949ec78bcf56796d00568b"
+    },
+    {
+      "path": "Tools/OCCArt/decode_generated_pixel_grid.py",
+      "sha256": "2edeb19664611332d5ab10c39467682badac7a8aa4b475b079d53971347028a8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/BattlefieldFieldArtCandidates.cs",
+      "sha256": "d415978116cb4ea5299419a4a1fa194c3ce2dac9faa738cf65e2193b4ffe2d90"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/CombatFormalVisualAssets.cs",
+      "sha256": "aed42b1b0424829fa888a446f933b0e05074190d0b5e2a87d93cfc02c8e95f76"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/CombatBattlefieldCellPresenter.cs",
+      "sha256": "d4be7d608e097b69ea1e4d599da9a8b5cc3b97f98e2183a95cd68334243f720d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/BattlefieldCellPresentation.cs",
+      "sha256": "1b620756bca8622c4751c558317d11c058f855aba6a250a85e02fc487f845ee5"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Tests/EditMode/FieldEffectPresentationTests.cs",
+      "sha256": "6730fc5539ccb80b73f1aacfcb99a8ee5ff36abcfdb67ed88afa91844bb612ec"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/EnemyFieldRuntimeScreenshots.cs",
+      "sha256": "618f21c8841eb414892ffaa48eb112fb2155098c4f43743a5e3629502040109d"
+    },
+    {
+      "path": "Worldbuilding/数据表/OCC_学院第一阶段全流程内容清单_v1.0.csv",
+      "sha256": "86c09823a4d5c34c703dbe05dcb3cea5814cea16266dc2451d9ab166fa8d408d"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/binding/asset/field_binding_mark.png",
+      "sha256": "45fbd97a839ecffc621997691c5825c31e74719ec86bef877e541ee2773eff0e"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_00.png",
+      "sha256": "90ac1d955c2e6d9a532705e09e12505ab681da0117de01361e153ac4aba0ab60"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_01.png",
+      "sha256": "d259fdacf5aad73bd5d4942adcd018d845fce572bbebc1d91c0e16e68887eec0"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_02.png",
+      "sha256": "e0f2912f469685fd8b399ce2dd32ff7aaeb3b9b44ee37869b54dd45af3ac29f5"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_03.png",
+      "sha256": "d22e25697c98c3bb532881059322bf39d275642d7afda064af02f3ac0f098934"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_04.png",
+      "sha256": "ed3d5f5dfa9f0eaeb7ea80bb49531dff350d28eef05e0f912e123b44b1810230"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_05.png",
+      "sha256": "e40e01558836c75c8d0dc57181954af3309de9f8fd644b9d05fae9b04a74cfd3"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/screen/asset/field_paper_screen.png",
+      "sha256": "68cbc6cf0f78767d8eabc11b2b9ff807f664b0dd48f53763bde84aef6dcb467b"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_00.png",
+      "sha256": "f360f91ad28f8e17182a9f7b61acf8f2e896ae0e59c1ddde075f664637f12e2d"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_01.png",
+      "sha256": "460145c1980fdc0b5abc3e0fe67f1ba78aa3cc8e8a1a277a24905d184fbc9882"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_02.png",
+      "sha256": "28a845b5b77d33de3e3067da26e1eb5e9862a92f1bb8a2aec87af8f59e14ff56"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_03.png",
+      "sha256": "25578fc5654eed9b9bf12b66de779387479d2c12499e55116d91f8f928965557"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_04.png",
+      "sha256": "b482f46f72471d8059d6e5d1eba78c0048a73b7f0af97c49669160b674be6aa2"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_05.png",
+      "sha256": "f360f91ad28f8e17182a9f7b61acf8f2e896ae0e59c1ddde075f664637f12e2d"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/trace/asset/field_trace.png",
+      "sha256": "4a76b7caaac992118b1acf144197b93248c641fcf195e05d3e4158ddab32adb9"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/binding/asset/field_binding_mark.occ-art-manifest-v1.json",
+      "sha256": "3d91f6102ca5fd5fcf1beeb18877b0d449079368d65a3ebe40cb9c261fa7feba"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_00.occ-art-manifest-v1.json",
+      "sha256": "1aa6367b981bab0827ba27893d9a4831b47261fd2bef1df7afcc217e312d1f19"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_01.occ-art-manifest-v1.json",
+      "sha256": "3684d7de8f5097dd530d526c643e831b106859ec498b93e2738df9a4fdbfbf6d"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_02.occ-art-manifest-v1.json",
+      "sha256": "1e897e4d1dfe387824d7a31514e996a69c9abedc8c23afc077985b23f557be63"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_03.occ-art-manifest-v1.json",
+      "sha256": "684259453eca4254e34ccaec95191b6460e2c1f44212d6c03bf6ff5e4b09187d"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_04.occ-art-manifest-v1.json",
+      "sha256": "afb4714b735d362bb94b196052667c607968183903b284224ed54fe780094c6d"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_05.occ-art-manifest-v1.json",
+      "sha256": "535c146478cb53a3995d668e8040d236b4d6ddaa9de8bb52e0c7ea041dc0e37c"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/screen/asset/field_paper_screen.occ-art-manifest-v1.json",
+      "sha256": "2c3ba29ba8cb1499cffb0407f72af38d99e73f74f5347f388c0b2ddacd81fe6d"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_00.occ-art-manifest-v1.json",
+      "sha256": "cea28a8ffbd4294d807319bce3e5dc33ad7c7c2aa33d1edc144f361dceb151f9"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_01.occ-art-manifest-v1.json",
+      "sha256": "17749bb547aa6d3bd4b177bd37570a8b64c4f5dd002110806029c7628d76dcbf"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_02.occ-art-manifest-v1.json",
+      "sha256": "92c72f3a65ac6942d6e7a438b49c36e3a2f999133becd3d1aab8612701392f11"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_03.occ-art-manifest-v1.json",
+      "sha256": "636642940664bd1a84821a5d8d1e3040010ff835234de74dadea780627d13f44"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_04.occ-art-manifest-v1.json",
+      "sha256": "2576d4844e6fe71e991ffbcf919c3d53f72a93e94b313a8cb488006abd8aecfc"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_05.occ-art-manifest-v1.json",
+      "sha256": "f3dfd55db4b2a8c9b90b392c9aaa68c8f9e7474a752ed1f288017db526cd1e0a"
+    },
+    {
+      "path": "ArtSource/field_effect_reset_20261016/trace/asset/field_trace.occ-art-manifest-v1.json",
+      "sha256": "3baecb0f8a8dace7c5e15a607869b70b263e9967f0f3e07f352ad54a32b25e0c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_binding_mark.png",
+      "sha256": "45fbd97a839ecffc621997691c5825c31e74719ec86bef877e541ee2773eff0e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_00.png",
+      "sha256": "90ac1d955c2e6d9a532705e09e12505ab681da0117de01361e153ac4aba0ab60"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_01.png",
+      "sha256": "d259fdacf5aad73bd5d4942adcd018d845fce572bbebc1d91c0e16e68887eec0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_02.png",
+      "sha256": "e0f2912f469685fd8b399ce2dd32ff7aaeb3b9b44ee37869b54dd45af3ac29f5"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_03.png",
+      "sha256": "d22e25697c98c3bb532881059322bf39d275642d7afda064af02f3ac0f098934"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_04.png",
+      "sha256": "ed3d5f5dfa9f0eaeb7ea80bb49531dff350d28eef05e0f912e123b44b1810230"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_05.png",
+      "sha256": "e40e01558836c75c8d0dc57181954af3309de9f8fd644b9d05fae9b04a74cfd3"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_loose_paper.png",
+      "sha256": "caab948d3c04b08b5a7be3f042be68db9d06e152c254d9984b88d53302e8b02f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_paper_screen.png",
+      "sha256": "68cbc6cf0f78767d8eabc11b2b9ff807f664b0dd48f53763bde84aef6dcb467b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_00.png",
+      "sha256": "f360f91ad28f8e17182a9f7b61acf8f2e896ae0e59c1ddde075f664637f12e2d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_01.png",
+      "sha256": "460145c1980fdc0b5abc3e0fe67f1ba78aa3cc8e8a1a277a24905d184fbc9882"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_02.png",
+      "sha256": "28a845b5b77d33de3e3067da26e1eb5e9862a92f1bb8a2aec87af8f59e14ff56"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_03.png",
+      "sha256": "25578fc5654eed9b9bf12b66de779387479d2c12499e55116d91f8f928965557"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_04.png",
+      "sha256": "b482f46f72471d8059d6e5d1eba78c0048a73b7f0af97c49669160b674be6aa2"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_05.png",
+      "sha256": "f360f91ad28f8e17182a9f7b61acf8f2e896ae0e59c1ddde075f664637f12e2d"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_trace.png",
+      "sha256": "4a76b7caaac992118b1acf144197b93248c641fcf195e05d3e4158ddab32adb9"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_binding_mark.png.meta",
+      "sha256": "21d02a778bec92f2c45c7106e8c8cd710ca9d6681f9ac0823e0445bf8c3f445c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_00.png.meta",
+      "sha256": "a2b51af0e9349eb04a957a44ee25cb6cc5e811351b184539cb66c04fb80ddf05"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_01.png.meta",
+      "sha256": "fd37949aea99e3de9cedd15acc52ca880453d47cb4c0c124baffc5740361e0f7"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_02.png.meta",
+      "sha256": "c8cfb7c6f95e9c99d3b8c2729282f57a25cd0899030cd52a945c18b89e343354"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_03.png.meta",
+      "sha256": "c8e8653f1298383e2a26548c784e53d2685a9e22a608a26ef29e942640599b3e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_04.png.meta",
+      "sha256": "c8a917fb72a9d7a0a16fccc1a2560f5317b72127454bfa950501cd5032ec6f29"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_burning_05.png.meta",
+      "sha256": "d3b57c1c5ce2c731d774d1ffeef40d9c9a49eb8f20556524e63edce52e2626be"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_loose_paper.png.meta",
+      "sha256": "7990bac35d435550ed6cdce04d0eca304ed7fd1f1bb5ef170949aec57ec8dab8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_paper_screen.png.meta",
+      "sha256": "264d6c5c0312a28ede5f4a3864ab90f8a0de6e9e443e2744981e2194b3f02f2b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_00.png.meta",
+      "sha256": "32901f71f9cc08e632bac6ead5a273e0f9eebec0d820b111480add11624d75bc"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_01.png.meta",
+      "sha256": "80c059f28f557a9319335efc4a520427e560aeed5a9f34ee66ff788b36f1d124"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_02.png.meta",
+      "sha256": "01fa6e7129771ab5a4c3ad3758ccf1c4eddc2caf191608c4ffd86a4321a4e160"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_03.png.meta",
+      "sha256": "639e832680714d083e19667d723c222c385015fa8e8f01aa109da47d996d3617"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_04.png.meta",
+      "sha256": "1e90198da525d663a7ecb55b118d9e394c8ace4fc9434e906ca54bc53fcc6b84"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_smoke_05.png.meta",
+      "sha256": "53d39e75b91436cb276c237e494ce2a355d363be43ad0ac3e4e75f5cd3b625e5"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FieldEffectCandidates32/field_trace.png.meta",
+      "sha256": "75f19d70e3dfb22443958426580deaa4f6b7a34de8ea7a0f400df27c4ff09614"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 45,
+    "yaw": 0,
+    "wall_height": 0.65,
+    "unit_ground_angle": 45
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": true,
+    "interaction_pass": false,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-16_五类场地美术重制/runtime/capture.json",
+      "sha256": "c9e7778c5df846f81f6d92001db567738346e040811a7943e91f07902706f15c"
+    }
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "New art is QA_PENDING. Runtime images use in-memory artwork staging, not normal encounter validation. Human aesthetic approval, complete scene density inventory, motion and performance sample approval remain pending."
+  ],
+  "local_validation": {
+    "unity_field_tests": {
+      "path": "Worldbuilding/归档/2026-10-16_五类场地美术重制/tests.xml",
+      "sha256": "aaec3a1864158b8603d298a886545fcdea61f9f10f8e6e8d1c54aeb1cf1403b4",
+      "passed": 18,
+      "failed": 0
+    },
+    "decoder_regression": {
+      "passed": 4
+    },
+    "asset_manifests": 15,
+    "source_geometric_resize": false
+  },
+  "local_runtime_captures": [
+    {
+      "path": "Worldbuilding/归档/2026-10-16_五类场地美术重制/runtime/01_signal_keeper_and_hound.png",
+      "sha256": "6295cf46ab657824949d7bb2d7ca62f304464aff13af890adc44f0d99c75da89"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_五类场地美术重制/runtime/02_librarian_and_storekeeper.png",
+      "sha256": "ec0bb30d2a51019c8bf53cad5e859ae5b6edb67c50a989d0085f704ef28087c0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_五类场地美术重制/runtime/03_field_effects.png",
+      "sha256": "2d2780c95b35b0f43e0f85d8a9111a9003950af1cf8de759cd11f0605e4da78b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_五类场地美术重制/runtime/03_field_effects_960.png",
+      "sha256": "38d09dcc9bb01f7ee214d59487d5b09c54e297cb30fbac670905111f40ae04bf"
+    }
+  ]
+}

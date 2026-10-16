@@ -1,0 +1,49 @@
+{
+  "schema": "occ-ground-material-data-v1",
+  "status": "QA_PENDING",
+  "asset_id": "academy_floor_repair_plate",
+  "template_family": "inlay_or_patch",
+  "source_recipe": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_material_recipes_v1.json",
+  "source_recipe_sha256": "8ba6ee8bef09c0d2b87f8c09a839d4206e205ecb2135df100e7e7b7560294f8d",
+  "height_record": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_r1\\authored_heights.json",
+  "height_record_sha256": "3ddb5e654e03c4758787f77e6a9269997a87d66a0b5414db51b468a94b831eb9",
+  "normal": {
+    "schema": "occ-authored-normal-field-v1",
+    "status": "QA_PENDING",
+    "asset_id": "academy_floor_repair_plate",
+    "source_type": "deterministic_numeric_bake_from_explicit_physical_heights",
+    "source_height_record": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_r1\\authored_heights.json",
+    "source_height_sha256": "3ddb5e654e03c4758787f77e6a9269997a87d66a0b5414db51b468a94b831eb9",
+    "albedo_reference": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_repair_plate.png",
+      "sha256": "0afc2015c074d36111f95ce0c3a32d3be07bf91c0f5173ec8c99eded4a2ba638"
+    },
+    "native_canvas": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, image rows top-down",
+    "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+    "normal_sha256": "35851a3b02dc196c3053ab96e9a77052e26171547facff0b4c56425020a2e3d2",
+    "normal_path": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_r1\\fields\\academy_floor_repair_plate\\normal.png",
+    "albedo_pixels_read": false,
+    "interpolation": false,
+    "source_art_changed": false,
+    "human_registration_review": "PENDING",
+    "runtime_review": "PENDING"
+  },
+  "surface_path": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_r1\\fields\\academy_floor_repair_plate\\surface.png",
+  "surface_sha256": "885f8b5c54e8df31f37d7d7115241849d8a14510dfd31113a01b14a0d50976e6",
+  "regions_path": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_r1\\fields\\academy_floor_repair_plate\\authored_regions.json",
+  "regions_sha256": "4a19afbd86b55d195e51a7d0692a19e58a465239a89a2dd8c0aa5e91c432957e",
+  "channels": "linear RGB: R roughness, G metallic, B clearcoat; no emission/AO/transmission claim",
+  "source_type": "explicit_geometry_and_semantic_roles_numeric_bake",
+  "albedo_pixels_used": false,
+  "missing_features": [
+    "Glass/water coating approximation only; no physical transmission"
+  ],
+  "source_art_modified": false,
+  "human_registration_review": "PENDING",
+  "runtime_review": "PENDING"
+}

@@ -1,0 +1,86 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "medical_hot_drink",
+  "role": "ui_detail_adaptive",
+  "status": "FORMAL",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset",
+    "source_path": "Worldbuilding/归档/2026-10-03_医务室热饮样板/source-02.png",
+    "source_sha256": "f1a9b4f477d98d7a090d8000c0df8fdc14dd62c5c7e00d5c36d75be2a699acd1"
+  },
+  "delivery": {
+    "output_path": "UnityProject/Assets/Game/Resources/Art/FormalMedicalDetails/hot_drink.png",
+    "output_sha256": "1ce557f40f6e9c074278f1a669f6f0d84227d1483556291ecfcfbdc39325cbd7",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 2,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 2,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Nonbattlefield display cup at natural UI scale; battlefield scale rules unchanged."
+  },
+  "application": {
+    "runtime_draw_rect": "Medical MEAL-AETHER button local (40,+8), 74x74; rim/steam share 2x native grid; cup and saucer fixed.",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/one-x.png",
+    "four_x": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/four-x.png",
+    "six_x": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/six-x.png",
+    "grayscale": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/grayscale.png",
+    "checker": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/steam-00.png"
+  },
+  "human_review": {
+    "overall": "PASS",
+    "reviewer": "user",
+    "date": "2026-10-03",
+    "silhouette": "PASS",
+    "material": "PASS",
+    "perspective": "PASS",
+    "style": "PASS",
+    "application": "PASS",
+    "illumination": "PASS",
+    "notes": "User accepted the implemented cup sample with 还行，继续下一项吧. Fixed volume shading only; runtime owns steam."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "guid": "a4218bd00f8ade9498af106aa0b13658",
+    "runtime_lattice": {
+      "tool": "Tools/OCCArt/verify_runtime_pixel_grid.py",
+      "capture": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/animation-zero.png",
+      "tier": 2,
+      "offset": [
+        0,
+        0
+      ],
+      "pass": true,
+      "uniform_with_siblings": true,
+      "report": "Worldbuilding/归档/2026-10-03_背景植物样板与热饮入库/cup-runtime-lattice.json"
+    },
+    "stable_guid": "a4218bd00f8ade9498af106aa0b13658",
+    "importer_verified": true,
+    "runtime_verified": true
+  }
+}

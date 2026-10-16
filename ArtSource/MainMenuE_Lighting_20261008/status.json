@@ -1,0 +1,5 @@
+{
+  "status": "NOT_APPLIED",
+  "reason": "User corrected scope to scene rendering pipeline; regeneration route halted",
+  "channel": "codex_builtin_imagegen"
+}

@@ -103,11 +103,10 @@ namespace OCC.Combat.Presentation
             FormalRogueliteSettlementShellView shell = FormalRogueliteSettlementShellView.Create(FormalUiKit.ContentParent(canvas.transform));
             panel = shell.gameObject;
             Image veil = panel.GetComponent<Image>();
-            FormalUiEffects.ApplyBackdrop(veil, "settlement");
-            FormalUiEffects.AddPageDecorations(panel.transform, "settlement", bootstrap.UiPreferences.AnimationIntensity);
+            AcademyDeskBackdrop.Attach(veil,false);
 
             GameObject card = shell.Card.gameObject;
-            FormalUiKit.ApplySkin(card.GetComponent<Image>(), "panel_elevated", FormalUiTheme.SurfaceRaised);
+            ArchiveUiStyle.PaperContent(card);
             card.transform.SetAsLastSibling();
             RectTransform cardRect = shell.Card;
             AcademyResourceReceipt receipt = run.PendingResourceReceipt;
@@ -116,8 +115,11 @@ namespace OCC.Combat.Presentation
 
             bool firstEliteReward = run.IsTutorialPhase && run.FirstRunExperience.Outcome == FirstRunOutcome.EliteVictory &&
                 (run.AwaitingReward || run.LootPendingExit);
-            AddLabel(shell.Header, "标题", "战利品搜刮", new Vector2(54, -42), new Vector2(1550, 54), 38, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            FormalUiKit.Line(shell.Header, new Vector2(56, -164), new Vector2(1588, 2), FormalUiTheme.WithAlpha(FormalUiTheme.Muted, .72f), "分隔");
+            AddLabel(shell.Header, "标题", "战利品搜刮", new Vector2(54, -42), new Vector2(568, 54), 38, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+            GameObject heading = FormalUiKit.FlatPanel("清点标题纸签", shell.Header, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(40, -20), new Vector2(620, 112), ArchiveUiStyle.Paper);
+            ArchiveUiStyle.PaperPanel(heading, ArchiveUiStyle.Paper, false);
+            heading.transform.SetAsFirstSibling();
 
             List<RogueliteReward> choices = run.CurrentFireSpellChoices.Select(AsReward).ToList();
             choices.AddRange(run.CurrentRewards.Take(3 - choices.Count));
@@ -126,16 +128,18 @@ namespace OCC.Combat.Presentation
                 (choices.Count == 3 || run.LootPendingExit || run.PendingRewardStepId == "collected");
             string envelopeName = run.PendingRewardStepId == "followup" ? "额外掉落" :
                 run.IsTutorialPhase ? "固定奖励" : "随机奖励";
-            float lootWidth = ritualReward ? 850f : 1034f;
-            float backpackX = ritualReward ? 908f : 1092f;
-            float backpackWidth = ritualReward ? 752f : 568f;
+            float lootWidth = ritualReward ? 620f : 1034f;
+            float backpackX = ritualReward ? 684f : 1092f;
+            float backpackWidth = ritualReward ? 976f : 568f;
             GameObject lootPane = FormalUiKit.FlatPanel("待领取战利品", shell.Rewards, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(40, -184), new Vector2(lootWidth, 646), ritualReward ? FormalUiTheme.Surface : FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .92f));
             GameObject backpackPane = FormalUiKit.FlatPanel("随身背包", shell.Rewards, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(backpackX, -184), new Vector2(backpackWidth, 646), FormalUiTheme.WithAlpha(FormalUiTheme.SurfaceRaised, .92f));
+            ArchiveUiStyle.PaperPanel(lootPane, ArchiveUiStyle.LightPaper, false);
+            ArchiveUiStyle.PaperPanel(backpackPane, ArchiveUiStyle.LightPaper, false);
             AddLootIcon(lootPane.transform, "战利品标记", FormalArtRegistry.CommandPath("loot"), new Vector2(24, -17), 40);
             AddLabel(lootPane.transform, "待领取标题", receipt != null ? "结算收据" : "待领取",
-                new Vector2(76, -17), new Vector2(770, 42), 27, FormalUiTheme.Text, TextAnchor.MiddleLeft);
+                new Vector2(76, -17), new Vector2(lootWidth-208, 42), 27, FormalUiTheme.Text, TextAnchor.MiddleLeft);
             int visibleLootCount = ritualReward ? firstEliteReward
                     ? (run.ClaimedRewards.Contains("ACA-EQ-HD02") ? 0 : 1) +
                         (run.ClaimedRewards.Contains("G-T13") ? 0 : 1) +
@@ -195,6 +199,12 @@ namespace OCC.Combat.Presentation
             AddLabel(shell.Footer, "收集进度", progressText,
                 new Vector2(run.UsesRogue11 && receipt == null ? 400 : 56, -862), new Vector2(run.UsesRogue11 && receipt == null ? 510 : 820, 48),
                 18, needsInventory ? FormalUiTheme.Amber : FormalUiTheme.Muted, TextAnchor.MiddleLeft);
+            float progressX = run.UsesRogue11 && receipt == null ? 390 : 46;
+            float progressWidth = run.UsesRogue11 && receipt == null ? 530 : 840;
+            GameObject progressPaper = FormalUiKit.FlatPanel("清点进度纸签", shell.Footer, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(progressX, -854), new Vector2(progressWidth, 64), ArchiveUiStyle.Paper);
+            ArchiveUiStyle.PaperPanel(progressPaper, ArchiveUiStyle.Paper, false);
+            progressPaper.transform.SetAsFirstSibling();
             Button leave = FormalUiKit.Button("离开战利品", "离开", shell.Footer,
                 new Vector2(1310, -862), new Vector2(304, 64), FormalUiTheme.Interactive);
             leave.onClick.AddListener(bootstrap.RequestLeaveMapLoot);
@@ -217,9 +227,18 @@ namespace OCC.Combat.Presentation
             }
 
             if (ritualReward && run.RewardChoicesOpened && string.IsNullOrEmpty(run.SelectedRewardId) && !choiceWindowSuppressed)
+            {
+                if(Application.isPlaying)
+                {
+                    shell.Header.gameObject.SetActive(false);
+                    shell.Rewards.gameObject.SetActive(false);
+                    shell.Footer.gameObject.SetActive(false);
+                }
                 DrawChoiceWindow(shell.Card, choices, run);
+            }
 
             tooltip.transform.SetAsLastSibling();
+            Hd2DContentGeometry.Attach(panel);
 
             RewardCardInput firstAvailable = rewardCards.FirstOrDefault(item => item.Button != null && item.Button.interactable);
             if (firstAvailable != null) RuntimeUiEventSystem.Select(firstAvailable.Button.gameObject);
@@ -343,11 +362,11 @@ namespace OCC.Combat.Presentation
             FormalUiKit.Line(row.transform, new Vector2(0, -height + 3), new Vector2(rowWidth, 3),
                 actionable ? FormalUiTheme.Amber : FormalUiTheme.WithAlpha(FormalUiTheme.Rule, .32f), "战利品下沿");
             AddLootIcon(row.transform, "战利品图标_" + index, iconPath,
-                compact ? new Vector2(20, -8) : actionable ? new Vector2(12, -13) : new Vector2(22, -16), compact ? 64 : actionable ? 118 : 80);
-            AddLabel(row.transform, "战利品名称", title, new Vector2(compact ? 110 : actionable ? 145 : 122, compact ? -7 : actionable ? -38 : -23),
-                new Vector2(rowWidth - 270, 66), compact ? 28 : actionable ? 36 : 30,
+                compact ? new Vector2(20, -8) : actionable ? new Vector2(22, -24) : new Vector2(22, -16), compact ? 64 : actionable ? 96 : 80);
+            AddLabel(row.transform, "战利品名称", title, new Vector2(compact ? 110 : actionable ? 130 : 122, compact ? -7 : actionable ? -38 : -23),
+                new Vector2(rowWidth - (compact ? 220 : actionable ? 230 : 222), 66), compact ? 28 : actionable ? 36 : 30,
                 actionable ? FormalUiTheme.Amber : FormalUiTheme.Text, TextAnchor.MiddleLeft);
-            AddLabel(row.transform, "战利品数量", amount, new Vector2(rowWidth - 110, compact ? -7 : actionable ? -37 : -22), new Vector2(80, 66),
+            AddLabel(row.transform, "战利品数量", amount, new Vector2(rowWidth - 80, compact ? -7 : actionable ? -37 : -22), new Vector2(60, 66),
                 compact ? 28 : 35, actionable ? FormalUiTheme.Amber : FormalUiTheme.Text, TextAnchor.MiddleCenter);
             if (action != null)
             {
@@ -375,6 +394,14 @@ namespace OCC.Combat.Presentation
             GameObject window = FormalUiKit.FlatPanel("三选一窗口", card, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(18, -18), new Vector2(1664, 914), FormalUiTheme.SurfaceRaised);
             window.transform.SetAsLastSibling();
+            if (Application.isPlaying)
+            {
+                ArchiveUiStyle.PaperContent(window);
+                Hd2DRewardGallery.Attach(window,!UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity).IsImmediate);
+                window.GetComponent<Image>().raycastTarget=true;
+                var titlePaper=FormalUiKit.FlatPanel("揭晓标题纸签",window.transform,new Vector2(0,1),new Vector2(0,1),new Vector2(25,-18),new Vector2(1614,90),ArchiveUiStyle.Paper);
+                ArchiveUiStyle.PaperPanel(titlePaper,ArchiveUiStyle.Paper,false);
+            }
             FormalUiKit.Line(window.transform, new Vector2(25, -98), new Vector2(1614, 3), FormalUiTheme.Amber, "揭晓分隔");
             AddLootIcon(window.transform, "揭晓图标", FormalArtRegistry.CommandPath("loot"), new Vector2(46, -30), 50);
             AddLabel(window.transform, "揭晓标题", choices.Count == 1 ? "额外掉落" : "战利品搜刮", new Vector2(112, -26), new Vector2(900, 62),
@@ -396,18 +423,29 @@ namespace OCC.Combat.Presentation
             RectTransform rect = card.GetComponent<RectTransform>();
             Image background = card.GetComponent<Image>();
             background.raycastTarget = true;
-            AddRewardCardFrame(card.transform, rect.sizeDelta);
-            FormalUiKit.Line(card.transform, new Vector2(16, -16), new Vector2(456, 4), FormalUiTheme.Amber, "卡牌顶光");
+            if(!Application.isPlaying)AddRewardCardFrame(card.transform, rect.sizeDelta);
+            if(!Application.isPlaying)FormalUiKit.Line(card.transform, new Vector2(16, -16), new Vector2(456, 4), FormalUiTheme.Amber, "卡牌顶光");
             GameObject portrait = FormalUiKit.FlatPanel("奖励画像底", card.transform, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(24, -60), new Vector2(440, 430), FormalUiTheme.Panel);
-            AddLootIcon(portrait.transform, "奖励大图标_" + reward.Id, iconPath, new Vector2(60, -54), 320);
-            AddLabel(card.transform, "奖励类别", RewardCategory(reward), new Vector2(28, -18), new Vector2(432, 40),
+                new Vector2(24, -60), new Vector2(440, 300), FormalUiTheme.Panel);
+            Image objectIcon=AddLootIcon(portrait.transform, "奖励大图标_" + reward.Id, iconPath, new Vector2(108, -38), 224);
+            if(Application.isPlaying)
+            {
+                ArchiveUiStyle.PaperContent(card);
+                background.raycastTarget=true;
+                ArchiveUiStyle.PaperContent(portrait);
+                var description=FormalUiKit.FlatPanel("实体物件说明纸签",card.transform,new Vector2(0,1),new Vector2(0,1),new Vector2(24,-400),new Vector2(440,224),ArchiveUiStyle.LightPaper);
+                // Write on the card itself; a second native rim occludes Chinese glyphs.
+                ArchiveUiStyle.PaperContent(description);
+                Hd2DRewardObject.Attach(card,objectIcon,!UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity).IsImmediate);
+            }
+            AddLabel(card.transform, "奖励类别", RewardCategory(reward), new Vector2(28, Application.isPlaying ? 38 : -18), new Vector2(432, 40),
                 22, FormalUiTheme.Muted, TextAnchor.MiddleCenter);
-            FormalUiKit.Line(card.transform, new Vector2(24, -500), new Vector2(440, 2), FormalUiTheme.Amber, "卡牌分隔");
-            AddLabel(card.transform, "名称", reward.DisplayName, new Vector2(24, -506), new Vector2(440, 60),
+            if (!Application.isPlaying)
+                FormalUiKit.Line(card.transform, new Vector2(24, -400), new Vector2(440, 2), FormalUiTheme.Amber, "卡牌分隔");
+            AddLabel(card.transform, "名称", reward.DisplayName, new Vector2(72, -444), new Vector2(344, 50),
                 34, FormalUiTheme.Text, TextAnchor.MiddleCenter);
-            AddLabel(card.transform, "查看详情", "悬浮查看详情", new Vector2(24, -576), new Vector2(440, 36),
-                20, FormalUiTheme.Muted, TextAnchor.MiddleCenter);
+            AddLabel(card.transform, "关键效果", RewardEffect(reward), new Vector2(64, -508), new Vector2(360, 104),
+                20, FormalUiTheme.Text, TextAnchor.UpperLeft);
             Button button = card.AddComponent<Button>();
             button.targetGraphic = background;
             button.transition = Selectable.Transition.None;
@@ -620,9 +658,9 @@ namespace OCC.Combat.Presentation
                 27, FormalUiTheme.Text, TextAnchor.MiddleLeft);
             int usedCells = items.Sum(item => item.Width * item.Height);
             AddLabel(parent, "背包容量", runtime == null ? "未启用" : bookBackpack
-                    ? usedCells + " / " + runtime.BackpackColumns * runtime.BackpackRows
+                    ? "已用 " + usedCells + " 格　共 " + runtime.BackpackColumns * runtime.BackpackRows + " 格"
                     : runtime.BackpackColumns + " × " + runtime.BackpackRows,
-                new Vector2(paneWidth - 198, -21), new Vector2(174, 36), 24,
+                new Vector2(paneWidth - 330, -21), new Vector2(306, 36), 24,
                 FormalUiTheme.Amber, TextAnchor.MiddleRight);
             FormalUiKit.Line(parent, new Vector2(24, -67), new Vector2(paneWidth - 48, 2), FormalUiTheme.WithAlpha(FormalUiTheme.Amber, .66f), "背包分隔");
             if (runtime != null)
@@ -636,7 +674,7 @@ namespace OCC.Combat.Presentation
                 int gridRows = bookBackpack ? runtime.BackpackColumns : runtime.BackpackRows;
                 float cell = wideBackpack
                     ? Mathf.Min(45f, (paneWidth - 58f) / runtime.BackpackColumns, 350f / runtime.BackpackRows)
-                    : bookBackpack ? Mathf.Min(64f, (paneWidth - 64f) / gridColumns, 486f / gridRows)
+                    : bookBackpack ? Mathf.Min(80f, (paneWidth - 64f) / gridColumns, 486f / gridRows)
                     : Mathf.Min(46f, 280f / runtime.BackpackColumns, 480f / runtime.BackpackRows);
                 float originX = wideBackpack ? Mathf.Round((paneWidth - runtime.BackpackColumns * cell) * .5f) :
                     bookBackpack ? Mathf.Round((paneWidth - gridColumns * cell) * .5f) : 24f;

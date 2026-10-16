@@ -1,0 +1,23 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "ui.main_menu_e.modular.vista",
+  "role": "ui_scene_plate_native",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      281,
+      151
+    ],
+    "bounds": [
+      0,
+      0,
+      281,
+      151
+    ],
+    "hard_alpha": true,
+    "fully_opaque": true,
+    "visible_colors": 32,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

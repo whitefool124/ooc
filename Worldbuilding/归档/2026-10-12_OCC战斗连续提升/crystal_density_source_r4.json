@@ -1,0 +1,16 @@
+{
+  "prompt": "Regenerate this same matte medium-blue mineral cluster sprite, same identity, colors and complete compact silhouette. Correct only the authored pixel lattice: every corner, contour step, internal facet boundary and stone-base cell must land on ONE common square macro grid, with exactly the same cell width and height throughout the entire subject. No thinner half cells, warped cells, tiny jagged contour fragments or varying pitch between upper crystals and lower stone. Flat solid color plate, hard crisp grid-aligned transitions, transparent empty canvas outside the contour. Native32PPU single-cell prop, safe64x64 adaptive visual canvas, bottom-centre contact. Preserve the matte unlit color language; all lights, emission and reflections are separate renderer data. Bare isolated connected cluster and base only.",
+  "source": "C:\\Users\\FNHF\\.codex\\generated_images\\01a12f14-7a73-7871-b3db-2c160edcd4d0\\exec-fd77064a-7427-4f1f-b061-c33d2f6696fb.png",
+  "status": "QA_PENDING",
+  "lattice_confidence": 1.7105,
+  "native_canvas": [
+    64,
+    64
+  ],
+  "subject": [
+    31,
+    32
+  ],
+  "world_pixel_pitch": 0.03125,
+  "limitation": "Machine decode only; native outline/import/application/density and human review pending"
+}

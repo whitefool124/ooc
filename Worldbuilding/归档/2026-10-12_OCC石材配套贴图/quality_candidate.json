@@ -1,0 +1,543 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "154a164b50e13c8aee31834246f52ff0b87beb66ad70e39e02d45ff9c4e21eb2",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "AGENTS.md",
+    "Tools/OCCArt/decode_registered_material_map.py",
+    "Tools/OCCArt/native32_generation_profiles.json",
+    "Tools/OCCArt/occ_art_contract_v1.json",
+    "Tools/OCCArt/occ_art_production_brief_template_v1.json",
+    "UnityProject/Assets/Game/Editor/Hd2DStoneMaterialProbe.cs",
+    "UnityProject/Assets/Game/Editor/Hd2DStoneMaterialProbe.cs.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone/normal.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone/normal.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone/roughness.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone/roughness.png.meta",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader.meta",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DWetCourtyard.shader",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DWetCourtyard.shader.meta",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs.meta",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs.meta",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DCourtyardStoneMaps.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DCourtyardStoneMaps.cs.meta",
+    "Worldbuilding/数据表/OCC_美术与界面规格表_v1.0.csv",
+    "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "f58a11f55edbac3893e59fd81d0089ac6ef97a105950ecd87687207204609b94"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "c6b3befaec03f9cf4f67a116c5d06e31d9b2100aa6f6a501dd132a88bb5cbf44"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "b6e9512854f40b266735f2ead588b3cf15932d8857825d2d27a1f14c47df8e7b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "2292424091f4aaa40afa393d0aa4daaf026153c2bd42834528c462c6084aee5e"
+    },
+    {
+      "path": "Tools/OCCArt/decode_registered_material_map.py",
+      "sha256": "e17cf72b0f1d8f9026ed49160be47150762923de64d288b0b5a00f3ed9b3a9f9"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DCourtyardStoneMaps.cs",
+      "sha256": "c930190794ba20a25f893e6db8cfc7260b7f3d0b8874701a6e49bb92ab037fc8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DStoneMaterialProbe.cs",
+      "sha256": "7a7f50bd76fc068f6cbee6c2c9784c36090a498f9255f2b54fb7690f8b98e9be"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader",
+      "sha256": "4937fb2549eed27e27681d432b384597fb85390f418a09d5eda25addde452807"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DWetCourtyard.shader",
+      "sha256": "ed5ed0f5054056bfdc856f0f6166c16d4250139730c955adbc1d1459fa0d0b06"
+    },
+    {
+      "path": "Tools/OCCArt/native32_generation_profiles.json",
+      "sha256": "8f4745f06f55899ebaecfc4d24009295305fd62270c386f6d4f9189b1ef22563"
+    },
+    {
+      "path": "Tools/OCCArt/occ_art_contract_v1.json",
+      "sha256": "154a164b50e13c8aee31834246f52ff0b87beb66ad70e39e02d45ff9c4e21eb2"
+    },
+    {
+      "path": "Tools/OCCArt/occ_art_production_brief_template_v1.json",
+      "sha256": "0660f164adc8a099a2daf81a08438f61ba9faa84b00b00b325b12128580da854"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "aa4c005fd705d55c48e67d01e19385526596b9132d7050c951b199bc2568b95f"
+    },
+    {
+      "path": "Worldbuilding/数据表/OCC_美术与界面规格表_v1.0.csv",
+      "sha256": "803c38b9038e85a4b1d5867cbcbf4a95775a310da443fdb9dbcb190b2b27392c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone/normal.png",
+      "sha256": "2820d9b0e8bfa7ce9cb31b71dd930d43f2de2fb5a0aca5a57b4dff952eafc911"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone/roughness.png",
+      "sha256": "245cca529510c9650915579e16f9be0292f3518f1655317a68ca4161b7591a61"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone.meta",
+      "sha256": "7f35e047d5a68349c3d8c6ae3a64970d09ffb5f9aa0ecaff336c1c86971f9745"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone/normal.png.meta",
+      "sha256": "d80db1707f2a6c92413bb09e914d455826592cb7371667584cad0e6afac068ca"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/CourtyardStone/roughness.png.meta",
+      "sha256": "82797d7307f6d6061c8c1228f1d03d91cbde8fddda1fd143463a362f28716060"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DCourtyardStoneMaps.cs.meta",
+      "sha256": "2a84f2a59a706f93f3734fdb21fdf596095e73d38f7b1f271a8246798d575481"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs.meta",
+      "sha256": "8649c0a976c1b3600e1db53e752ef6ef8c105844fd0c29454d374b9c86edbfc1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs.meta",
+      "sha256": "ced65329a3dc4392e52eee37f60cbbc3a2574eefcef2748ac9154192efe941e8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DStoneMaterialProbe.cs.meta",
+      "sha256": "4d26b7df0d1b26bf6263249f971cd2169861d95c3a7f3b9fa683d6d6bf60d2cf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DBakedArchitecture.shader.meta",
+      "sha256": "6d780bbcfea131336bf587ac6c8c2fefe6a7a30d334792a9f166b0ca22fc448f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DWetCourtyard.shader.meta",
+      "sha256": "85cf95002cc6a7887eb100cac1dbe6c045d2fe1afcf944f8d3ef00475106c290"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png",
+      "sha256": "9d77d4dc7b23873ecdecc7d71b5206e92ea6a1c39962554d3f3d165876a80834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/feishu_retry_after.json",
+      "sha256": "fffde6cab11d988be344fea9809c3b93da55365403fc4c565d5e2b50177cb5df"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/feishu_retry_before.json",
+      "sha256": "ad5beb3595d0845d42f20d06decb14688db69caf60d50d348d733d4d2c75f3ff"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/feishu_retry_update.json",
+      "sha256": "8d54a6185157c2ff03432806b3570f7455f94ef45c7175b80bb7a753e0a1253a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/material_brief.json",
+      "sha256": "96fdf0408293a6e5355f1f63d3eca7c31a442b32c231220bb746a67424764438"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/normal_decode.json",
+      "sha256": "cf60dc82054dc7bea09c7fb2e0b9162bad58e1131784bb12fea5478117d14bb4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/normal_manifest.json",
+      "sha256": "f04801c6f622e5da63ba19fe21f62d53b541b5ab3c4cf809b6e870aa4b9117b7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/normal_registered_decode.json",
+      "sha256": "29b31a800d03bae133a5d71de0e25f1b493692ec713aecaa037c26e74213b666"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_metrics.json",
+      "sha256": "5ae314e966bdbeb8050c4344cee3fafd60c2a106f520fd38168e6f705a14bf1e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/retry_rule_changes.json",
+      "sha256": "a5e75e78b555abc2965235f5c9e5bd4b1c5f91b574fb82283ae3e5e022f991e5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/roughness_manifest.json",
+      "sha256": "abcfb7e030c95dcadebf5cc31fb55f89f15b1590c00c9e277541e66c9de831aa"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/roughness_registered_decode.json",
+      "sha256": "38b7b5a605b0c02b7b62e6918bb756c2ac6d8daf691220dcfde7494718099ce6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/stone_normal_raw_r1.png",
+      "sha256": "473f7aa35e304ea5493128669c0ca90c7f90060b40421a325e6ae1afeca92bfd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/stone_roughness_raw_r1.png",
+      "sha256": "01032d4f1480a8be13358437f8325cea687b6111b2279b51e8a236f6038f42cd"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/baseline_1080.png",
+      "sha256": "21d8179af5639dc67110457a5f6e3a7202e22de11edead3e8ebe49dcb094ff2d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/full_1080.png",
+      "sha256": "9b2a13f2b4b45834677bf5b91fb1ff7269de994d4a0de08ed5ea1eebb2fdd994"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/full_540.png",
+      "sha256": "93f7388ffd5e4454eac7f8e815d09eaf655d0c789704c9a8da4331beb5e0535f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/neutral_light_1080.png",
+      "sha256": "dcbee8f743e8411aea11b2a14b818b8ca26b83b53c1ce98d680642cac042b5e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/normal_only_1080.png",
+      "sha256": "3db19fb490f4448eb30d5766fb44a5ccf6686db9cb566e7b617b7af3b81e15af"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/result.json",
+      "sha256": "a29a8ca40ae28fc282d5d1e6ad5e883a7258d74d64a17d644114c6fecd56d2db"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/rotated_light_1080.png",
+      "sha256": "ddca71a177fdd3dab97bf11878bf776fcf7692b0ede43d86cd584f2c4ae0ecb4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/roughness_only_1080.png",
+      "sha256": "626db859dbcb76479eb987f98844c4bc1f52d4ccaae5239c16fb78c79653f432"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/before_after_1080.png",
+      "sha256": "5d15f715f77a8404a1516f0a9fa621f2b3cdb2a0164bd21cf3f077236f824cfd"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 45,
+    "yaw": 0,
+    "wall_height": 0.65,
+    "unit_ground_angle": 45
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": true,
+    "resource_lifetime_pass": false,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/result.json",
+      "sha256": "a29a8ca40ae28fc282d5d1e6ad5e883a7258d74d64a17d644114c6fecd56d2db"
+    }
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Only single-material offscreen render verified; normal-entry scene, motion/zoom, complete density inventory, performance and genuine human approval remain pending",
+    "Opaque numeric material-data role has not passed formal asset admission"
+  ],
+  "local_material_probe": {
+    "result": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_v4/result.json",
+      "sha256": "a29a8ca40ae28fc282d5d1e6ad5e883a7258d74d64a17d644114c6fecd56d2db"
+    },
+    "metrics": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC石材配套贴图/probe_metrics.json",
+      "sha256": "5ae314e966bdbeb8050c4344cee3fafd60c2a106f520fd38168e6f705a14bf1e"
+    },
+    "normal_strength": 0.35,
+    "normal_green_flip": true,
+    "normal_entry": false,
+    "window_focus": false,
+    "play_mode": false
+  }
+}

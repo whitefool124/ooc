@@ -1,0 +1,92 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "hd2d_pixel_library_notes",
+  "role": "hd2d_library_display",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "ArtLibrary/HD2D/20261009/pixel-v2/notes/source-01.png",
+    "source_sha256": "23977acb22aa2d28b9a0485a7aa03f32b731724f420fa43a3e699be82febc75d",
+    "generation_attempt": 1,
+    "style_reference": "ArtLibrary/HD2D/20261009/pixel-v2/dossier/source-rejected-02-alpha.png",
+    "source_descriptor": "Independent Codex builtin imagegen; dossier is material/style reference only."
+  },
+  "delivery": {
+    "output_path": "ArtLibrary/HD2D/20261009/pixel-v2/notes/delivery.png",
+    "output_sha256": "8458cb581b411f073b9e2ae3b5946399a0e8138ec3ad9a6963bfb6d48c9cf7f2",
+    "logical_cells": null,
+    "palette_max": 1000000,
+    "size": [
+      1580,
+      825
+    ],
+    "alpha_policy": "transparent_soft_alpha",
+    "native_anchor": [
+      790,
+      809
+    ],
+    "processing": {
+      "alpha_zero_at_or_below": 8,
+      "alpha_opaque_at_or_above": 248,
+      "zero_hidden_rgb": true,
+      "crop_source_bbox": [
+        45,
+        69,
+        1593,
+        862
+      ],
+      "transparent_padding_px": 16,
+      "delivery_resized": false,
+      "palette_quantized": false,
+      "art_redrawn": false,
+      "matte_removal": null
+    }
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "application": "PENDING",
+    "note": "Existing family direction is approved; these individual generated assets have not been approved or imported."
+  },
+  "prompt": "OCC noncombat HD2D prop library. TRUE 32-bit-era low-resolution PIXEL ART GAME SPRITE, NOT painted illustration. Every contour visibly stair-stepped with coarse square pixel blocks. Broad flat pixel clusters, sparse clean internal details, narrow dark pixel contour, hard abrupt shade steps using a restrained cohesive palette. No smooth curves, no brush texture, no realistic wood grain, no canvas grain, no antialiasing, no soft gradients, no photorealistic metal reflection. Ivory paper, dark walnut, desaturated teal and sparse muted brass. Neutral upper-left simple 3-tone form shading. Camera-parallel main writing face, front facing zero yaw; thin visible perimeter thickness. Single isolated complete object on genuine transparent background. No glow, no haze, no cast shadow, no floor. Generous clean blank area for live Chinese text; no letters, no pseudo-writing. Use the provided approved sprites as style references for their actual coarse pixel art and simple material clusters; create an independent new asset, not a redraw of the same small sprite. Larger display object may have more pixels, but must retain the same deliberately low-resolution pixel-art language.\nMatch the new reference book's COARSE PIXEL CLUSTERS AND STEPPED OUTLINE. Not a smooth detailed painted object. Use sparse large square pixels; blank writing face is opaque uniform ivory. Maintain similar apparent pixel density to the book. STYLE REFERENCE ONLY.\nSUBJECT: A compact wide ivory memo pad with softly rounded paper corners, a walnut top binding strip and small brass clip, a few staggered blank pages underneath. Large clean blank writing surface. An asymmetrical small muted teal cloth tab protrudes from the side. Physical stationery, not a generic rectangular UI frame.",
+  "style_policy": "32-bit-era coarse pixel art; preserve existing pixel language, no forced 32x32 canvas",
+  "application": {
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "Pending Unity application; camera-parallel sprite, preserve aspect ratio; catalog uses proportional display.",
+    "current_evidence_scope": "library display and live-text prototype only; no Unity runtime verification",
+    "recommended_importer": {
+      "filterMode": "Point",
+      "mipmaps": false,
+      "compression": "None",
+      "meshType": "FullRect"
+    },
+    "external_lighting": "Scene-owned; do not bake floor shadow into asset"
+  },
+  "placement_semantics": {
+    "application_scope": "concept_display",
+    "mount_type": "tabletop",
+    "logical_cell": null,
+    "native_anchor": [
+      790,
+      809
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 809
+    },
+    "depth_sort_baseline": 809,
+    "allowed_occlusion_direction": "front_to_back_by_contact_baseline",
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": "shared academy desktop",
+    "combined_room_shell": false,
+    "contact_verification": "Pending physical scene placement; isolated display only"
+  },
+  "evidence": {
+    "one_x": "ArtLibrary/HD2D/20261009/pixel-v2/notes/delivery.png",
+    "four_x": "ArtLibrary/HD2D/20261009/pixel-v2/notes/qa/four-x.png",
+    "grayscale": "ArtLibrary/HD2D/20261009/pixel-v2/notes/qa/grayscale.png",
+    "checker": "ArtLibrary/HD2D/20261009/pixel-v2/notes/qa/checker.png",
+    "application_contact": "ArtLibrary/HD2D/20261009/pixel-v2/index.html"
+  }
+}

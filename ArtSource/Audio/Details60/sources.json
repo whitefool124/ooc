@@ -1,0 +1,18 @@
+[
+  {
+    "file": "ArtSource\\Audio\\Details60\\wind.wav",
+    "url": "https://opengameart.org/sites/default/files/wind1.wav",
+    "page": "https://opengameart.org/content/wind1",
+    "author": "Luke.RUSTLTD",
+    "license": "CC0",
+    "sha256": "a2856f794fbf77e05f8241dc4adeade7f62fa21c3c9dc49f7725b6c6218060c3"
+  },
+  {
+    "file": "ArtSource\\Audio\\Details60\\rooms.zip",
+    "url": "https://opengameart.org/sites/default/files/legit_audio_-_the_shop_free_sfx_wav.zip",
+    "page": "https://opengameart.org/content/the-shop",
+    "author": "LEGIT Audio",
+    "license": "CC0",
+    "sha256": "87d49c4431fdf5647f3c434455b3bcd402fc757f97f2640b2ef84e2e5db9d86e"
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "brief": "new pixel version",
+  "attempts": [
+    {"attempt":1,"source":"source-rejected-01-alpha.png","accepted":false,"reason":"Paper face erroneously translucent; not usable as text carrier."},
+    {"attempt":2,"source":"source-rejected-02-alpha.png","accepted":false,"reason":"Paper face has uneven alpha; retained only as the other seven assets' pixel-style reference."},
+    {"attempt":3,"source":"source-03.png","accepted_for_technical_review":true,"method":"Independent built-in generation with dedicated magenta matte, deterministic alpha extraction; object RGB not repainted."}
+  ],
+  "human_review":"PENDING"
+}

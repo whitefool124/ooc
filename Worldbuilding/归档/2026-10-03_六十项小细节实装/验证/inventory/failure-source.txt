@@ -1,0 +1,1 @@
+sprite=True details=0 pointer=(1276.21, 88.87) mouse=(943.90, -890.02)

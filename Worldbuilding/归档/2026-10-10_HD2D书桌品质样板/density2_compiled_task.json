@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Inspect operation.status; this envelope only acknowledges the query.\",\"data\":{\"operation\":{\"operation_id\":\"ceb6732ec4354b2f90f546fa1e94edd7\",\"request_key\":\"occ-service-density-v2-20261010\",\"editor_session\":\"8a46318e2fbb4a75944c60aa55f6b694\",\"target\":\"edit\",\"status\":\"running\",\"phase\":\"compiling\",\"created_at\":\"2026-10-10T05:12:08.1130000+00:00\",\"updated_at\":\"2026-10-10T05:12:16.1030000+00:00\",\"finished_at\":null,\"error_code\":null,\"message\":null,\"refresh_assets\":true,\"timeout_seconds\":120,\"step\":2,\"created_seconds\":1791609128.113,\"deadline_seconds\":1791609248.113,\"settle_since\":0.0,\"compilation_errors\":[],\"history\":[{\"timestamp\":\"2026-10-10T05:12:08.1130000+00:00\",\"phase\":\"queued\",\"message\":\"Preparation accepted; not yet ready.\"},{\"timestamp\":\"2026-10-10T05:12:08.3780000+00:00\",\"phase\":\"importing\",\"message\":null},{\"timestamp\":\"2026-10-10T05:12:16.1030000+00:00\",\"phase\":\"compiling\",\"message\":null}]},\"current_editor\":{\"is_compiling\":true,\"is_updating\":false,\"is_playing\":false,\"is_changing_play_mode\":false,\"compilation_failed\":false,\"refresh_pending\":false,\"refresh_error\":null,\"ready\":false},\"journal_path\":\"E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Library/FunplayMcp/Operations/editor-operations.json\",\"poll_after_ms\":5000,\"journal_error\":null,\"task\":{\"task_id\":\"editor:ceb6732ec4354b2f90f546fa1e94edd7\",\"kind\":\"editor\",\"id\":\"ceb6732ec4354b2f90f546fa1e94edd7\",\"status\":\"running\",\"phase\":\"compiling\",\"revision\":\"e2fbdec54ea392d62ed470794da7253becc9e25252f490508d8a6e9ca0c9251d\",\"changed\":true,\"wait_complete\":false,\"poll_after_ms\":5000,\"wait_reason\":\"read_timeout\",\"waited_ms\":9902,\"snapshot_at\":\"2026-10-10T05:12:27.8213917Z\"}}}"
+      }
+    ]
+  }
+}

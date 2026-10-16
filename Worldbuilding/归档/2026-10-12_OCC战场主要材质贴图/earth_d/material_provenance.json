@@ -1,0 +1,66 @@
+{
+  "id": "earth_d",
+  "status": "QA_PENDING",
+  "albedo": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_earth_d.png",
+    "sha256": "bffa9d38e1244c47810bf6dc539c42ade477d83d858e143e817c6e303cfce874"
+  },
+  "raw_pair": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_d/paired_raw_r1.png",
+    "sha256": "b8123666f0268f53a119433760d3f4a25249d958e34828580b24d19e922190e1"
+  },
+  "panel_crop": "Normal top-left; roughness top-right; exact quadrant crop without resampling. Bottom duplicates unused.",
+  "maps": [
+    {
+      "kind": "normal",
+      "source": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_d/normal_panel.png",
+        "sha256": "9167f71381c7d9d648ec33890f99ab25f082942c78fa9441703fd7f819c4db3c"
+      },
+      "registration": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_d/normal_registration.json",
+        "sha256": "5b78a5c8507b473995ad07d8d8aeed9268d97dc54615303709e4eec602d6a154"
+      },
+      "delivery": {
+        "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_d/normal.png",
+        "sha256": "abe6fe0a02399cf3d862bd6bb8cd2ad60b01e5f45c32ef73eff9a6c4d7ece70f"
+      },
+      "rgb_min": [
+        90,
+        84,
+        249
+      ],
+      "rgb_max": [
+        185,
+        184,
+        253
+      ]
+    },
+    {
+      "kind": "roughness",
+      "source": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_d/roughness_panel_r1.png",
+        "sha256": "b1050250b750d9441d22c5c6a5c0b565b94f09fd3f34f593fc2eac40a0716561"
+      },
+      "registration": {
+        "path": "Worldbuilding/归档/2026-10-12_OCC战场主要材质贴图/earth_d/roughness_registration.json",
+        "sha256": "d4950bc79939489d17a17c11a4ec87a4b00edd819e5b51d282ea6ba2193b3799"
+      },
+      "delivery": {
+        "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Battlefield/academy_block_earth_d/roughness.png",
+        "sha256": "844f945576ac30a92139692aa91ea578e0376594b8f927b5439b6374bc2d94c2"
+      },
+      "rgb_min": [
+        180,
+        179,
+        179
+      ],
+      "rgb_max": [
+        222,
+        221,
+        221
+      ]
+    }
+  ],
+  "human_registration_review": "PENDING"
+}

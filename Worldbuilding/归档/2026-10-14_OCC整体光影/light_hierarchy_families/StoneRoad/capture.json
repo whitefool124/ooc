@@ -1,0 +1,41 @@
+{
+  "status": "CAPTURED_FOR_MANUAL_REVIEW",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "level": "rail_patrol",
+  "environment": "StoneRoad",
+  "source": "Unity Editor Play Mode runtime battlefield/full HUD; isolated preview, not standalone Player or full journey acceptance",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "focusRequested": false,
+  "suitesRun": false,
+  "humanReview": "PENDING",
+  "diffuseUpdates": 1,
+  "diffuseSurfaces": 71,
+  "lights": [
+    {
+      "name": "战场统一日光",
+      "intensity": 2.3
+    },
+    {
+      "name": "战场柔和补光",
+      "intensity": 0.3
+    },
+    {
+      "name": "战场水平轮廓补光",
+      "intensity": 0.55
+    },
+    {
+      "name": "Pixel emission light group",
+      "intensity": 1.2
+    }
+  ],
+  "shaders": [
+    "OCC/HD2D/BakedArchitecture",
+    "Universal Render Pipeline/Lit",
+    "OCC/HD2D/GroundedSprite"
+  ],
+  "peripheralSurfaceVariants": 8,
+  "foliageMaterials": 7
+}

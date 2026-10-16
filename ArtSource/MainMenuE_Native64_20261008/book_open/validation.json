@@ -1,0 +1,23 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "ui.main_menu_e.native64.book_open",
+  "role": "ui_tabletop_book_open_128x64",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      128,
+      64
+    ],
+    "bounds": [
+      4,
+      26,
+      123,
+      62
+    ],
+    "hard_alpha": true,
+    "fully_opaque": false,
+    "visible_colors": 16,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

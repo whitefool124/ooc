@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "scope": "Local source-texel disassembly only",
+  "normalPlayback": "PASS",
+  "pauseResumeReset": "PASS",
+  "primitiveContract": "PASS",
+  "auxiliaryTextureFree": true,
+  "sourceTexels": 19703,
+  "peakParticles": 10648,
+  "cubeMetres": 0.03125,
+  "maximumTravelMetres": 0.8970907,
+  "wholeMotionSpanMetres": [
+    5.073064,
+    2.52240658,
+    5.278102
+  ],
+  "fragmentAlpha": 1,
+  "emission": 3.2,
+  "humanAestheticReview": "PENDING",
+  "performanceBenchmark": false
+}

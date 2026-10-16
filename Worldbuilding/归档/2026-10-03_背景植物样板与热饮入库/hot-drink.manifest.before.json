@@ -1,0 +1,82 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "medical_hot_drink",
+  "role": "ui_detail_adaptive",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Codex built-in image generation; independent single asset",
+    "source_path": "Worldbuilding/归档/2026-10-03_医务室热饮样板/source-02.png",
+    "source_sha256": "f1a9b4f477d98d7a090d8000c0df8fdc14dd62c5c7e00d5c36d75be2a699acd1"
+  },
+  "delivery": {
+    "output_path": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/hot-drink.png",
+    "output_sha256": "1ce557f40f6e9c074278f1a669f6f0d84227d1483556291ecfcfbdc39325cbd7",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "ground tiles, directional edges, props, structures and units in one battle view must share one pixel size; a 16 px tile occupies 96 screen units and a 32 px prop or unit occupies 192"
+  },
+  "application": {
+    "runtime_draw_rect": "Medical MEAL-AETHER button local (40,+8), 74x74; rim/steam share 2x native grid; cup and saucer fixed.",
+    "default_integer_scale": 2,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/one-x.png",
+    "four_x": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/four-x.png",
+    "six_x": "repo/relative/6x.png",
+    "grayscale": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/grayscale.png",
+    "checker": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/steam-00.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "User loosened nonbattlefield canvas restriction. Specific cup aesthetic approval remains pending; decoded asset supplied only to Editor review harness."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "guid": "",
+    "runtime_lattice": {
+      "tool": "Tools/OCCArt/verify_runtime_pixel_grid.py",
+      "capture": "repo/relative/runtime_capture.png",
+      "tier": 6,
+      "offset": [
+        0,
+        0
+      ],
+      "pass": false,
+      "uniform_with_siblings": false
+    }
+  }
+}

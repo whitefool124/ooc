@@ -112,7 +112,7 @@ namespace OCC.Combat
                             Math.Min(6, 4 + ReleasedMechanismCount(state)));
                         int damage = TowerPressDamage(state, enemy);
                         return new EnemyIntentPresentation("SK-BOSS-06:" + enemy.Id + ":" + hero.Position.X + "," + hero.Position.Y,
-                            "塔压", "朝主角的正交直线", "直线内每个单位受到 " + damage +
+                            "塔压", "朝主角的正交直线", PhaseContext(state, enemy) + " 直线内每个单位受到 " + damage +
                             " 点以太伤害；遮挡截断。" + mechanismResult,
                             "attack", true, hero.Position, damage, attackRange: line,
                             affectedCells: line.Concat(mechanismCells).Distinct().ToArray());
@@ -124,13 +124,22 @@ namespace OCC.Combat
                         enemy.Position + new GridPosition(0, -1), enemy.Position + new GridPosition(-1, 0)
                     }.Where(state.Map.IsInside).ToArray();
                     return new EnemyIntentPresentation("SK-BOSS-05:" + enemy.Id + ":" + hero.Position.X + "," + hero.Position.Y,
-                        maul.ActionName, maul.TargetSummary, maul.ResultSummary + mechanismResult,
+                        maul.ActionName, maul.TargetSummary, PhaseContext(state, enemy) + " " + maul.ResultSummary + mechanismResult,
                         maul.IconId, true, hero.Position, maul.ExpectedDamage, attackRange: adjacent,
                         affectedCells: new[] { hero.Position }.Concat(mechanismCells).Distinct().ToArray());
                 }
             }
             EnemyIntentPresentation basic = CombatInformationPresenter.BuildEnemyIntent(state, enemy, command);
             if (enemy?.EnemyArchetypeId != "core_overseer") return basic;
+            int phase = PhaseFor(state, enemy);
+            int released = ReleasedMechanismCount(state);
+            return new EnemyIntentPresentation("academy-core:p" + phase + ":links" + released + ":" + basic.Signature,
+                basic.ActionName, basic.TargetSummary, PhaseContext(state, enemy) + " " + basic.ResultSummary,
+                basic.IconId, basic.HasDestination, basic.Destination, basic.ExpectedDamage);
+        }
+
+        private string PhaseContext(CombatState state, UnitState enemy)
+        {
             int phase = PhaseFor(state, enemy);
             int released = ReleasedMechanismCount(state);
             int pending = PendingMechanismCount(state);
@@ -143,9 +152,7 @@ namespace OCC.Combat
                 ? "维护链尚未放行，本回合开始不获得维护护盾。"
                 : "已放行 " + released + " 条维护链，本回合开始获得 " + (released * MaintenanceShieldPerMechanism) + " 护盾。";
             string pendingText = pending > 0 ? " 尚有 " + pending + " 组机关未放行。" : " 三道门槛已走完。";
-            return new EnemyIntentPresentation("academy-core:p" + phase + ":links" + released + ":" + basic.Signature,
-                basic.ActionName, basic.TargetSummary, phaseRule + " " + maintenance + pendingText + " " + basic.ResultSummary,
-                basic.IconId, basic.HasDestination, basic.Destination, basic.ExpectedDamage);
+            return phaseRule + " " + maintenance + pendingText;
         }
 
         internal void BeginTurn(CombatState state, UnitState unit)

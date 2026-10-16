@@ -1,0 +1,41 @@
+{
+  "status": "completed",
+  "duration": 0.26,
+  "summary": {
+    "total": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.EnemyMovementBudgetTests.BindingMarkStopsThePublishedDestination",
+      "Status": "Passed",
+      "Duration": 0.0786137,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyMovementBudgetTests.PursuitSpendsFiveStepsAndEndsWithoutAttacking",
+      "Status": "Passed",
+      "Duration": 0.0063422,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyMovementBudgetTests.SlowCapsPursuitAtThreeAndBindingPreventsMovement",
+      "Status": "Passed",
+      "Duration": 0.0018156,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EnemyMovementBudgetTests.WaterConsumesBudgetRatherThanCountingOnlyPathCells",
+      "Status": "Passed",
+      "Duration": 0.003277,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

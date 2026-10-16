@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Passed" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.545748">
+  <test-suite type="TestSuite" id="1000" name="My project" fullname="My project" runstate="Runnable" testcasecount="2771" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.545748" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2679" name="OCC.Combat.EditModeTests.dll" fullname="E:/数据库/OCC_Codex/UnityProject/Library/ScriptAssemblies/OCC.Combat.EditModeTests.dll" runstate="Runnable" testcasecount="1461" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.414636" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="48020" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2680" name="OCC" fullname="OCC" runstate="Runnable" testcasecount="1461" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.347663" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2682" name="Combat" fullname="OCC.Combat" runstate="Runnable" testcasecount="1459" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.271502" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2683" name="Tests" fullname="OCC.Combat.Tests" runstate="Runnable" testcasecount="1459" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.192728" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2202" name="Hd2DWaterShorelineTests" fullname="OCC.Combat.Tests.Hd2DWaterShorelineTests" classname="OCC.Combat.Tests.Hd2DWaterShorelineTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.090936" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <output><![CDATA[Water shore local check: scene=, dirty=False
+Water shore local check: dataPath=E:/数据库/OCC_Codex/UnityProject/Assets
+]]></output>
+              <test-case id="2204" name="ConcaveBank_TracksDryDiagonalWithoutClosingOpenEdges" fullname="OCC.Combat.Tests.Hd2DWaterShorelineTests.ConcaveBank_TracksDryDiagonalWithoutClosingOpenEdges" methodname="ConcaveBank_TracksDryDiagonalWithoutClosingOpenEdges" classname="OCC.Combat.Tests.Hd2DWaterShorelineTests" runstate="Runnable" seed="261180061" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.022435" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2205" name="InteriorIsland_ExposesBankInsideOuterWaterBounds" fullname="OCC.Combat.Tests.Hd2DWaterShorelineTests.InteriorIsland_ExposesBankInsideOuterWaterBounds" methodname="InteriorIsland_ExposesBankInsideOuterWaterBounds" classname="OCC.Combat.Tests.Hd2DWaterShorelineTests" runstate="Runnable" seed="4224431" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.000907" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2203" name="OpenWater_DoesNotCreateBanksAtInternalTileSeams" fullname="OCC.Combat.Tests.Hd2DWaterShorelineTests.OpenWater_DoesNotCreateBanksAtInternalTileSeams" methodname="OpenWater_DoesNotCreateBanksAtInternalTileSeams" classname="OCC.Combat.Tests.Hd2DWaterShorelineTests" runstate="Runnable" seed="1837400810" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.000629" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2206" name="TopologyChange_RemovesBankAndUpdatesWorldCell" fullname="OCC.Combat.Tests.Hd2DWaterShorelineTests.TopologyChange_RemovesBankAndUpdatesWorldCell" methodname="TopologyChange_RemovesBankAndUpdatesWorldCell" classname="OCC.Combat.Tests.Hd2DWaterShorelineTests" runstate="Runnable" seed="735764040" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.003103" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2207" name="WaterShader_CompilesAndKeepsNonBattlefieldDefault" fullname="OCC.Combat.Tests.Hd2DWaterShorelineTests.WaterShader_CompilesAndKeepsNonBattlefieldDefault" methodname="WaterShader_CompilesAndKeepsNonBattlefieldDefault" classname="OCC.Combat.Tests.Hd2DWaterShorelineTests" runstate="Runnable" seed="1084726363" result="Passed" start-time="2026-10-16 07:16:23Z" end-time="2026-10-16 07:16:23Z" duration="0.010560" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/FNHF/AppData/LocalLow/DefaultCompany/My project\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,14 @@
+[
+  {
+    "renderer": "物件_(5, 2)",
+    "pixels": 161,
+    "lights": 3,
+    "enabled": true
+  },
+  {
+    "renderer": "单位_(5, 0)",
+    "pixels": 36,
+    "lights": 1,
+    "enabled": true
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "status": "completed",
+  "duration": 0.46,
+  "summary": {
+    "total": 5,
+    "passed": 4,
+    "failed": 1,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.UiMicroDetailTests.DisabledAndReenabledButton_DoesNotResumeOldHoverOrFocus",
+      "Status": "Failed",
+      "Duration": 0.0859063,
+      "Message": "  Expected: 0\r\n  But was:  1\r\n",
+      "StackTrace": "at OCC.Combat.Tests.UiMicroDetailTests.DisabledAndReenabledButton_DoesNotResumeOldHoverOrFocus () [0x00040] in E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Tests\\EditMode\\UiMicroDetailTests.cs:76\r\n"
+    },
+    {
+      "FullName": "OCC.Combat.Tests.UiMicroDetailTests.KeyboardThenPointer_UsesOneTrace_AndClearsOnlyAfterBothLeave",
+      "Status": "Passed",
+      "Duration": 0.0056031,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.UiMicroDetailTests.RapidPointerReentry_DoesNotAccumulateTraces",
+      "Status": "Passed",
+      "Duration": 0.0053469,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.UiMicroDetailTests.SelectedBookmark_RemainsAtZeroMotion_WithoutInterceptingInput",
+      "Status": "Passed",
+      "Duration": 0.0032991,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.UiMicroDetailTests.UnavailableButton_DoesNotProduceExecutableFocusTrace",
+      "Status": "Passed",
+      "Duration": 0.0027399,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

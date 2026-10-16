@@ -1,0 +1,10 @@
+{
+  "sizeSetter": null,
+  "viewType": "UnityEditor.PlayModeView",
+  "sizeProperty": "UnityEngine.Vector2 targetSize",
+  "methods": [
+    "UnityEditor.GUIView Void SetMainPlayModeViewSize_Injected(IntPtr, UnityEngine.Vector2 ByRef)",
+    "UnityEditor.GUIView Void SetDisplayViewSize_Injected(IntPtr, Int32, UnityEngine.Vector2 ByRef)",
+    "UnityEditor.GUIView Void GetDisplayViewSize_Injected(IntPtr, Int32, UnityEngine.Vector2 ByRef)"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "status": "completed",
+  "duration": 0.31,
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.ArtifactRuntimeTests.DecoyLantern_ChangesPublicEnemyIntentAndTakesRealObjectDamage",
+      "Status": "Passed",
+      "Duration": 0.138583,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

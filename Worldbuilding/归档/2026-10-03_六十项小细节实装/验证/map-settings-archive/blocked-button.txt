@@ -1,0 +1,1 @@
+按钮_百科_装备 point=(142.00, 819.00) target=按钮_百科_装备 (UnityEngine.UI.Image) raycast=True depth=-1 cull=False canvas=正式肉鸽UI (UnityEngine.Canvas) groups=内容:True:1 hits=

@@ -1,0 +1,390 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "38625900f0f7a2c9c8c48eddc0291138ddbf9d5238cf65825426f6b91cb5f4d6",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/CombatBattlefieldCellPresenter.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/EnemyUnitArtCandidates.cs",
+    "UnityProject/Assets/Game/Resources/Art/EnemyUnitCandidates32x64/breach_ram.png",
+    "UnityProject/Assets/Game/Resources/Art/EnemyUnitCandidates32x64/breach_ram.png.meta",
+    "ArtSource/breach_ram_triangle_20261016/manifest.occ-art-manifest-v1.json",
+    "ArtSource/breach_ram_triangle_20261016/round2_source.png",
+    "ArtSource/breach_ram_triangle_20261016/round2_qa.json"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "f40a13353ffc69f05623400280cbfd779e3526633192f696f7370d687c0f3ef2"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "da0d457d538980b54e2db67889d5760bf0b037f176678d9ccace7a0c76ada861"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "02db449a5dda7f4a8d22ba78df12388077c4d4ebc7d3e696540a7a45f87dda00"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "cd7c15b62e32ffed2b8cf9c5044b0f6dab63a15eae8d0b959c7647c38f07e36a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/CombatBattlefieldCellPresenter.cs",
+      "sha256": "b04b47cd996c8b1b4353c65f2d2fd8aab2ff2181df50264e8bc230a53c81b45f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/CombatVisualFeedback.cs",
+      "sha256": "f022d125cd78fc117343a298d8f4c61cdf9121bb83eecd53072dd511769ac081"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/EnemyUnitArtCandidates.cs",
+      "sha256": "f033ab4d2bf8fd9c4e37a38cd61977b837c7c062384cdf78910a85589d6ab307"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/EnemyUnitCandidates32x64/breach_ram.png",
+      "sha256": "6e8b972bf3bd10eea5c8e0546fe50a1b06ddbc6cad063e7f64a91123b94ad431"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/EnemyUnitCandidates32x64/breach_ram.png.meta",
+      "sha256": "045769696c893e48d27a4bab27b1a0a6ad065efe660e1e2b2df88e5262d0ac19"
+    },
+    {
+      "path": "ArtSource/breach_ram_triangle_20261016/manifest.occ-art-manifest-v1.json",
+      "sha256": "2c1a9c558e34234fb19effcdf030e6465e3ac769403915da0f220f7e7897a2fe"
+    },
+    {
+      "path": "ArtSource/breach_ram_triangle_20261016/round2_source.png",
+      "sha256": "a34f5abb40caf89561708760172f10d308873775e010d408e76335cd274754aa"
+    },
+    {
+      "path": "ArtSource/breach_ram_triangle_20261016/round2_qa.json",
+      "sha256": "cbd36e007dcec9bacd41f4b11f173fc84471179be54abe13dbd6ac5e9e21e24c"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 45,
+    "yaw": 0,
+    "wall_height": 0.65,
+    "unit_ground_angle": 45
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": null
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Candidate only; no full scene pixel-density/human/performance baseline approval. User-selected old concept identity does not approve the new delivery image."
+  ],
+  "local_evidence": [
+    {
+      "path": "Worldbuilding/归档/2026-10-16_楔角旧形象与文字反馈/runtime/ram.png",
+      "sha256": "196294fccb63d04757ad0da37c6a80c899440afdfefad324290c712c1ebd7a9e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_楔角旧形象与文字反馈/runtime/ram_960.png",
+      "sha256": "1629f5c06aa1449b85b84189a3f5eaa9abeeb917e745397e67eb8086ee49c963"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_楔角旧形象与文字反馈/runtime/capture.json",
+      "sha256": "399a0bd4d39bd384c4b475e203f9f92fb4ee3f137312ce673b82ee41f80c91b9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_楔角旧形象与文字反馈/runtime/cleanup.json",
+      "sha256": "77a2cbb5c83c6553ed54d9402cfd7ea431ebab6dd205c6f7245a31d926441d8e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_楔角旧形象与文字反馈/tests_initial.xml",
+      "sha256": "1c333c432a68dfb8df9a4ffcd8f6e5cc21b5e092fb2f9c475d218427cd69b88e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-16_楔角旧形象与文字反馈/tests_candidate.xml",
+      "sha256": "cc717f2f21cf424f49b0575a38ef626eb079e078945bc9fe8e7eb368f5eba981"
+    }
+  ]
+}

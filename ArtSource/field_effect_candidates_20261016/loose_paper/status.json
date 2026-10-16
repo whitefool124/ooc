@@ -1,0 +1,20 @@
+{
+  "status": "QA_PENDING",
+  "selected_round": 2,
+  "rejected_rounds": {
+    "1": "42x24 exceeds 32x32 intact-subject target; soft external dark halo rejected"
+  },
+  "subject_size": [
+    21,
+    25
+  ],
+  "canvas": [
+    32,
+    32
+  ],
+  "lattice_confidence": 8.2206,
+  "geometric_resize": false,
+  "alpha_preserved": true,
+  "human_review": "PENDING",
+  "formal_registry_replaced": false
+}

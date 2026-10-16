@@ -1,0 +1,16 @@
+{
+  "status": "LOCAL_RENDER_FIXTURE",
+  "source": "Disposable in-memory preview run: durability thresholds explicitly set to test damaged texture selection. Not a player action, gameplay result or normal-entry proof",
+  "cells": [
+    {
+      "x": 5,
+      "y": 3,
+      "before": 24,
+      "fixture": 16
+    }
+  ],
+  "mappedCrystalAlbedos": [
+    "academy_pressure_crystal_damaged"
+  ],
+  "focusRequested": false
+}

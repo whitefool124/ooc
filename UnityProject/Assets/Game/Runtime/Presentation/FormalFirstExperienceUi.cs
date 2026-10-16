@@ -17,6 +17,8 @@ namespace OCC.Combat.Presentation
         private Slider volumeSlider;
         private Text volumeValue;
         private Text confirmationCountdown;
+        private FormalHoverTooltip hoverTooltip;
+        private MainMenuDeskScene deskScene;
         private readonly List<Button> buttons = new List<Button>();
 
         public bool IsVisible => page != null && page.activeSelf;
@@ -32,8 +34,13 @@ namespace OCC.Combat.Presentation
         {
             if (flow == null || canvas == null) return;
             bool visible = flow.enabled;
-            if (canvas.gameObject.activeSelf != visible) canvas.gameObject.SetActive(visible);
+            if (canvas.gameObject.activeSelf != visible)
+            {
+                if(!visible)Hd2DContentGeometry.PrepareToHide(canvas.gameObject);
+                canvas.gameObject.SetActive(visible);
+            }
             if (!visible) return;
+            if ((flow.IsEncyclopediaOpen || flow.IsArchiveOpen) && hoverTooltip != null && hoverTooltip.IsVisible) hoverTooltip.HideAll();
             string next = PageSignature();
             if (next != signature) Rebuild();
             if (confirmationCountdown != null)
@@ -43,20 +50,23 @@ namespace OCC.Combat.Presentation
                 volumeSlider.SetValueWithoutNotify(flow.PendingVolume);
                 volumeValue.text = Mathf.RoundToInt(flow.PendingVolume * 100f) + "%";
             }
-            if (!flow.IsEncyclopediaOpen && Keyboard.current?.escapeKey.wasPressedThisFrame == true) flow.GoBack();
+            if (!flow.IsEncyclopediaOpen && !flow.IsArchiveOpen && (deskScene == null || !deskScene.IsOpening) && Keyboard.current?.escapeKey.wasPressedThisFrame == true) flow.GoBack();
         }
 
         private void Rebuild()
         {
             if (flow == null || canvas == null) return;
+            if (hoverTooltip != null) hoverTooltip.HideAll();
             if (page != null) Destroy(page);
             volumeSlider = null;
             volumeValue = null;
             confirmationCountdown = null;
             buttons.Clear();
+            deskScene = null;
             page = FormalUiKit.Create("页面_" + flow.CurrentStage, canvas.transform);
             RectTransform pageRect = page.AddComponent<RectTransform>(); FormalUiKit.Stretch(pageRect);
-            BuildBackground(page.transform, flow.CurrentStage);
+            if (flow.CurrentStage != FirstExperiencePrototypeController.FlowStage.Landing || !MainMenuDeskScene.HasCompleteSceneArt)
+                BuildBackground(page.transform, flow.CurrentStage);
             switch (flow.CurrentStage)
             {
                 case FirstExperiencePrototypeController.FlowStage.Branding: BuildBranding(); break;
@@ -73,11 +83,15 @@ namespace OCC.Combat.Presentation
                 default: BuildHandoff(); break;
             }
             LinkNavigation();
+            if(flow.CurrentStage!=FirstExperiencePrototypeController.FlowStage.FirstSettings &&
+                flow.CurrentStage!=FirstExperiencePrototypeController.FlowStage.Branding)
+                Hd2DContentGeometry.Attach(page);
             if (buttons.Count > 0) RuntimeUiEventSystem.Select(buttons[0].gameObject);
             signature = PageSignature();
             if (animatedStage != flow.CurrentStage &&
                 flow.CurrentStage != FirstExperiencePrototypeController.FlowStage.Branding &&
-                flow.CurrentStage != FirstExperiencePrototypeController.FlowStage.WorldOpening)
+                flow.CurrentStage != FirstExperiencePrototypeController.FlowStage.WorldOpening &&
+                flow.CurrentStage != FirstExperiencePrototypeController.FlowStage.Landing)
                 PixelPresentationMotion.EnterPage(page.transform, flow.AnimationIntensity);
             animatedStage = flow.CurrentStage;
         }
@@ -87,13 +101,23 @@ namespace OCC.Combat.Presentation
             return flow.CurrentStage + "|" + flow.TutorialPage + "|" + flow.IsSelectingContinue + "|" + flow.IsPendingOverwrite + "|" +
                 flow.ResolutionIndex + "|" + flow.DisplayModeLabel + "|" + flow.PendingVSync + "|" + flow.FrameRateLabel + "|" +
                 flow.IsConfirmingDisplay + "|" +
-                flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasSave + "|" +
+                flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasUnfinishedRun + "|" +
                 flow.HandoffError + "|" + flow.IsSlotWriteProtected(0) + flow.IsSlotWriteProtected(1) + flow.IsSlotWriteProtected(2);
         }
 
         private static void BuildBackground(Transform parent, FirstExperiencePrototypeController.FlowStage stage)
         {
             Image background = parent.gameObject.AddComponent<Image>();
+            if(stage!=FirstExperiencePrototypeController.FlowStage.Branding)
+            {
+                AcademyDeskBackdrop.Attach(background,stage==FirstExperiencePrototypeController.FlowStage.Configuration);
+                if (stage == FirstExperiencePrototypeController.FlowStage.FirstSettings ||
+                    stage == FirstExperiencePrototypeController.FlowStage.AcademyIntro ||
+                    stage == FirstExperiencePrototypeController.FlowStage.TutorialGuide)
+                    background.GetComponent<AcademyDeskBackdrop>().SetDocumentFraming(-2f, .22f);
+                background.raycastTarget=stage==FirstExperiencePrototypeController.FlowStage.FirstSettings;
+                return;
+            }
             string id = stage == FirstExperiencePrototypeController.FlowStage.Landing || stage == FirstExperiencePrototypeController.FlowStage.SaveSelection || stage == FirstExperiencePrototypeController.FlowStage.Configuration
                 ? "landing" : stage == FirstExperiencePrototypeController.FlowStage.FirstSettings ? "settings" : "startup";
             FormalUiEffects.ApplyBackdrop(background, id);
@@ -124,27 +148,25 @@ namespace OCC.Combat.Presentation
                 return;
             }
             GameObject heading = FormalUiKit.AnchoredPanel("设置页眉", page.transform, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(64, -50), new Vector2(1792, 150), ArchiveUiStyle.Paper);
+                new Vector2(64, -64), new Vector2(1120, 104), ArchiveUiStyle.Paper);
             ArchiveUiStyle.PaperPanel(heading, ArchiveUiStyle.Paper, true);
             Label("标题", flow.IsSettingsFromLanding ? "辅助设置" : "首启设置", heading.transform,
-                new Vector2(42, -22), new Vector2(1600, 70), 48, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            Label("说明", "声音与画面", heading.transform,
-                new Vector2(44, -94), new Vector2(1580, 42), 24, ArchiveUiStyle.QuietInk, TextAnchor.MiddleLeft);
+                new Vector2(42, -18), new Vector2(1000, 70), 48, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
 
-            GameObject sheet = FormalUiKit.AnchoredPanel("设置档案", page.transform, new Vector2(.5f, .5f), new Vector2(.5f, .5f),
-                new Vector2(0, -70), new Vector2(1440, 790), ArchiveUiStyle.LightPaper);
+            GameObject sheet = FormalUiKit.AnchoredPanel("设置档案", page.transform, new Vector2(0, 1), new Vector2(0, 1),
+                new Vector2(64, -192), new Vector2(1120, 790), ArchiveUiStyle.LightPaper);
             ArchiveUiStyle.PaperPanel(sheet, ArchiveUiStyle.LightPaper, true);
             Label("卷宗标题", "本机偏好", sheet.transform, new Vector2(52, -20), new Vector2(600, 42), 28,
                 ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            FormalUiKit.Line(sheet.transform, new Vector2(52, -70), new Vector2(1336, 1), ArchiveUiStyle.Rule, "标题分隔");
+            FormalUiKit.Line(sheet.transform, new Vector2(52, -70), new Vector2(1016, 1), ArchiveUiStyle.Rule, "标题分隔");
             ArchiveVolumeSliderRow(sheet.transform, 88);
             ArchiveSettingRow(sheet.transform, 218, "分辨率", flow.ResolutionLabel, "切换", flow.CycleResolution, null, null);
             ArchiveSettingRow(sheet.transform, 320, "显示模式", flow.DisplayModeLabel, "更改", flow.CycleDisplayMode, null, null);
             ArchiveSettingRow(sheet.transform, 422, "垂直同步", flow.PendingVSync ? "开启" : "关闭", "更改", flow.ToggleVSync, null, null);
             ArchiveSettingRow(sheet.transform, 524, "帧率上限", flow.FrameRateLabel, "切换", flow.CycleFrameRate, null, null);
             buttons[buttons.Count - 1].interactable = !flow.PendingVSync;
-            Button apply = AddButton("应用设置", "应用设置", sheet.transform, new Vector2(962, -672),
-                new Vector2(410, 90), flow.ApplyPendingSettings, FormalUiTheme.Cyan);
+            Button apply = AddButton("应用设置", "应用设置", sheet.transform, new Vector2(678, -672),
+                new Vector2(390, 90), flow.ApplyPendingSettings, FormalUiTheme.Cyan);
             ArchiveUiStyle.ScrollButton(apply, () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
             if (flow.IsSettingsFromLanding)
                 ArchiveUiStyle.TabButton(AddButton("取消", "返回", sheet.transform, new Vector2(52, -672),
@@ -161,21 +183,35 @@ namespace OCC.Combat.Presentation
 
         private void BuildLanding()
         {
+            if (!MainMenuDeskScene.HasCompleteSceneArt) { BuildLegacyLanding(); return; }
+            deskScene = MainMenuDeskScene.Create(page.transform, () => flow.AnimationIntensity);
+            buttons.AddRange(deskScene.Configure(flow.HasUnfinishedRun, flow.StartGameFromDesk,
+                flow.ContinueGameFromDesk, flow.OpenJourneyArchive, flow.OpenSettings, flow.QuitToDesktop));
+        }
+
+        private void BuildLegacyLanding()
+        {
             GameObject left = FormalUiKit.Panel("以太主界面主栏", page.transform, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(1220, 1080), ArchiveUiStyle.Paper);
             RectTransform leftRect = left.GetComponent<RectTransform>(); leftRect.anchorMin = new Vector2(0, 0); leftRect.anchorMax = new Vector2(0, 1); leftRect.pivot = new Vector2(0, 1); leftRect.anchoredPosition = Vector2.zero;
             leftRect.sizeDelta = new Vector2(1220f, 0f);
             ArchiveUiStyle.PaperPanel(left, ArchiveUiStyle.Paper, false);
             FormalUiKit.FlatPanel("装订边", left.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1206, 0), new Vector2(14, 1080), ArchiveUiStyle.Brass);
             Label("卷宗", "以太人生档案", left.transform, new Vector2(84, -92), new Vector2(1020, 80), 48, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            Label("说明", "从学院出发，记录人生的转折。", left.transform, new Vector2(84, -202), new Vector2(1020, 66), 48, ArchiveUiStyle.QuietInk, TextAnchor.MiddleLeft);
+            // Stage availability stays visible; additional guidance is opt-in.
+            Button stage = LandingInfoIcon(left.transform);
+            Label("当前人生阶段", "学院", left.transform, new Vector2(164, -212), new Vector2(200, 44),
+                30, ArchiveUiStyle.QuietInk, TextAnchor.MiddleLeft);
+            AttachLandingHint(stage.gameObject, "人生档案", "当前开放学院阶段。新建或继续档案，开始行程。");
             FormalUiKit.Line(left.transform, new Vector2(84, -276), new Vector2(1048, 2), ArchiveUiStyle.Rule, "卷宗分隔");
             Button start = AddButton("开始新游戏", "新建档案", left.transform, new Vector2(84, -330), new Vector2(520, 90), flow.StartNewRun, FormalUiTheme.Cyan);
             start.GetComponentInChildren<Text>().fontSize = 48;
             ArchiveUiStyle.ScrollButton(start, () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
+            AttachLandingHint(start.gameObject, "新建档案", "先选择角色和档案位置；覆盖已有档案前会再次确认。");
             Button resume = AddButton("继续游戏", "继续档案", left.transform, new Vector2(632, -330), new Vector2(500, 90), flow.ContinueRun);
             resume.GetComponentInChildren<Text>().fontSize = 48;
             resume.interactable = flow.HasSave;
             ArchiveUiStyle.ScrollButton(resume, () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
+            AttachLandingHint(resume.gameObject, "继续档案", "选择已有档案，恢复到上次的行程或战斗。");
             ArchiveUiStyle.TabButton(AddButton("百科", "战斗百科", left.transform, new Vector2(84, -452), new Vector2(330, 78), flow.OpenEncyclopedia, FormalUiTheme.Cyan), false,
                 () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
             ArchiveUiStyle.TabButton(AddButton("设置", "辅助设置", left.transform, new Vector2(440, -452), new Vector2(330, 78), flow.OpenSettings), false,
@@ -191,8 +227,7 @@ namespace OCC.Combat.Presentation
                 new Vector2(330, 72), flow.QuitToDesktop);
             ArchiveUiStyle.TabButton(quit, false, () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
             quit.GetComponentInChildren<Text>().fontSize = 30;
-            Label("退出说明", "返回桌面", left.transform, new Vector2(444, -966), new Vector2(500, 48),
-                24, ArchiveUiStyle.QuietInk, TextAnchor.MiddleLeft);
+            AttachLandingHint(quit.gameObject, "退出游戏", "关闭游戏并返回桌面。");
             for (int slot = 0; slot < 3; slot++)
             {
                 float x = 84 + slot * 360;
@@ -202,6 +237,33 @@ namespace OCC.Combat.Presentation
                 Text status = Label("状态", flow.SlotExists(slot) ? flow.SlotDisplaySummary(slot) : "空白卷宗", card.transform, new Vector2(30, -82), new Vector2(260, 132), 24, flow.SlotExists(slot) ? FormalUiTheme.Safe : ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
                 status.fontSize = FormalUiTheme.BodyFontSize;
             }
+            buttons.Add(stage);
+        }
+
+        private Button LandingInfoIcon(Transform parent)
+        {
+            GameObject node = new GameObject("按钮_人生阶段图标", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+            node.transform.SetParent(parent, false);
+            RectTransform rect = node.GetComponent<RectTransform>();
+            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0f, 1f);
+            rect.anchoredPosition = new Vector2(84f, -202f);
+            rect.sizeDelta = new Vector2(64f, 64f);
+            Image icon = node.GetComponent<Image>();
+            icon.sprite = Resources.Load<Sprite>(FormalUiEffectsConfig.ChapterMarkerPath("teaching_chalk_clip"));
+            icon.preserveAspect = true;
+            Button button = node.GetComponent<Button>();
+            button.targetGraphic = icon;
+            button.transition = UnityEngine.UI.Selectable.Transition.None;
+            node.AddComponent<UiButtonFeedback>().Configure(button, Color.white, Color.white, Color.white,
+                Color.white, Color.gray, () => UiMotionProfile.FromIntensity(flow.AnimationIntensity), null);
+            return button;
+        }
+
+        private void AttachLandingHint(GameObject target, string title, string explanation)
+        {
+            if (hoverTooltip == null) hoverTooltip = FormalHoverTooltip.Create(canvas);
+            target.AddComponent<FormalHoverTooltipTrigger>().Configure(hoverTooltip,
+                () => new FormalTooltipContent(title, explanation, FormalUiTheme.Amber));
         }
 
         private void BuildSlots()
@@ -233,9 +295,9 @@ namespace OCC.Combat.Presentation
         private void BuildConfirmation()
         {
             GameObject card = CenterPanel(new Vector2(1120, 420));
-            Label("标题", flow.IsPendingOverwrite ? "确认覆盖档案" : "确认建立档案", card.transform, new Vector2(56, -54), new Vector2(1008, 74), 48, flow.IsPendingOverwrite ? FormalUiTheme.Danger : ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
+            Label("标题", flow.IsPendingOverwrite ? "开始新的游戏？" : "确认建立档案", card.transform, new Vector2(56, -54), new Vector2(1008, 74), 48, flow.IsPendingOverwrite ? FormalUiTheme.Danger : ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
             FormalUiKit.Line(card.transform, new Vector2(56, -146), new Vector2(1008, 1), ArchiveUiStyle.Rule, "确认分隔");
-            Label("正文", flow.IsPendingOverwrite ? "原有进度将被新档案替换。该操作不可撤回。" : "建立固定学生档案并进入基础配置。", card.transform, new Vector2(56, -166), new Vector2(1008, 110), 24, ArchiveUiStyle.Ink, TextAnchor.UpperLeft);
+            Label("正文", flow.IsPendingOverwrite ? "当前未完成的轮次将被新轮次替换。确认后选择角色；确认角色前不会覆盖原记录。" : "建立固定学生档案并进入基础配置。", card.transform, new Vector2(56, -166), new Vector2(1008, 110), 24, ArchiveUiStyle.Ink, TextAnchor.UpperLeft);
             AddButton("取消", "取消", card.transform, new Vector2(56, -292), new Vector2(360, 78), flow.GoBack);
             Button confirm = AddButton("确认", flow.IsPendingOverwrite ? "确认覆盖" : "确认建立", card.transform, new Vector2(632, -292), new Vector2(432, 78), flow.ConfirmSelectedSlot, flow.IsPendingOverwrite ? FormalUiTheme.Danger : FormalUiTheme.Cyan);
             if (!flow.IsPendingOverwrite)
@@ -245,63 +307,22 @@ namespace OCC.Combat.Presentation
 
         private void BuildConfiguration()
         {
-            Header("选择主角", "维克多·维恩");
-
-            GameObject profile = FormalUiKit.AnchoredPanel("角色档案", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(80, -230), new Vector2(1050, 500), FormalUiTheme.SurfaceRaised);
-            ArchiveUiStyle.PaperPanel(profile, ArchiveUiStyle.LightPaper, true);
-            Label("姓名", "维克多·维恩", profile.transform, new Vector2(38, -28), new Vector2(960, 68), 48, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            Label("身份", "雾桥村出身　学院工读学生\n火系　公共修缮与实地安全", profile.transform, new Vector2(40, -104), new Vector2(960, 68), 24, FormalUiTheme.Amber, TextAnchor.UpperLeft);
-            Label("简介", "佃农家庭出身，完成教会基础教育后通过学院公开考核，以工读生身份入学。", profile.transform, new Vector2(40, -182), new Vector2(940, 72), 24, FormalUiTheme.Text, TextAnchor.UpperLeft);
-            Label("志向", "希望把火系术式用于公共修缮，让危险的以太泄漏有可控、可复核的处置办法。", profile.transform, new Vector2(40, -280), new Vector2(940, 86), 24, FormalUiTheme.Text, TextAnchor.UpperLeft);
-            Label("习惯", "先登记风险，再处理最坏的泄漏点。", profile.transform, new Vector2(40, -380), new Vector2(940, 48), 24, FormalUiTheme.Text, TextAnchor.UpperLeft);
-
-            GameObject portrait = FormalUiKit.AnchoredPanel("角色立绘", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1160, -230), new Vector2(680, 500), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .96f));
-            // The archive page uses the dedicated portrait candidate rather than the
-            // tiny combat unit sprite, so facial features remain readable at a 3x integer display scale.
-            Sprite heroSprite = Resources.Load<Sprite>(FormalArtRegistry.DisplayPortraitPath("hero"));
-            GameObject portraitObject = FormalUiKit.Create("维克多像素立绘", portrait.transform);
-            RectTransform portraitRect = portraitObject.AddComponent<RectTransform>(); portraitRect.anchorMin = portraitRect.anchorMax = new Vector2(.5f, .5f); portraitRect.pivot = new Vector2(.5f, .5f); portraitRect.anchoredPosition = new Vector2(0, 24); portraitRect.sizeDelta = new Vector2(384, 384);
-            Image portraitImage = portraitObject.AddComponent<Image>(); portraitImage.sprite = heroSprite; portraitImage.preserveAspect = true; portraitImage.raycastTarget = false;
-            Label("代号", "档案代号：灰签", portrait.transform, new Vector2(40, -422), new Vector2(600, 40), 24, FormalUiTheme.OnInk, TextAnchor.MiddleCenter);
-
-            GameObject fixedConfig = FormalUiKit.AnchoredPanel("首次体验固定配置", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(80, -758), new Vector2(1050, 212), FormalUiTheme.SurfaceRaised);
-            ArchiveUiStyle.PaperPanel(fixedConfig, ArchiveUiStyle.Paper, true);
-            Label("配置标题", "初始能力", fixedConfig.transform, new Vector2(28, -18), new Vector2(980, 36), 24, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
-            string[] titles = { "就地接线", "维克多护幕" };
-            string[] details = { "邻接掩体后回盾回魔", "自身获得 8 点普通护盾" };
-            for (int i = 0; i < titles.Length; i++)
-            {
-                float x = 28 + i * 500;
-                GameObject card = FormalUiKit.AnchoredPanel("固定配置卡" + i, fixedConfig.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(x, -66), new Vector2(476, 112), FormalUiTheme.Surface);
-                ArchiveUiStyle.NotePanel(card);
-                Label("名称", titles[i], card.transform, new Vector2(40, -12), new Vector2(410, 36), 24, FormalUiTheme.Text, TextAnchor.MiddleLeft);
-                Label("说明", details[i], card.transform, new Vector2(22, -54), new Vector2(430, 38), 18, FormalUiTheme.Muted, TextAnchor.MiddleLeft);
-            }
-
-            GameObject queue = FormalUiKit.AnchoredPanel("角色队列", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(1160, -758), new Vector2(680, 108), FormalUiTheme.SurfaceRaised);
-            ArchiveUiStyle.PaperPanel(queue, ArchiveUiStyle.Paper, true);
-            for (int i = 0; i < 6; i++)
-            {
-                GameObject slot = FormalUiKit.AnchoredPanel("角色槽" + i, queue.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(16 + i * 110, -14), new Vector2(94, 78), i == 0 ? FormalUiTheme.WithAlpha(FormalUiTheme.Cyan, .28f) : FormalUiTheme.Surface);
-                ArchiveUiStyle.PaperPanel(slot, i == 0 ? new Color(.88f, .81f, .67f, 1f) : ArchiveUiStyle.LightPaper, true);
-                Label("槽位", i == 0 ? "维克多" : "未开放", slot.transform, new Vector2(4, -12), new Vector2(86, 48), i == 0 ? 18 : 14, i == 0 ? FormalUiTheme.Cyan : FormalUiTheme.Muted, TextAnchor.MiddleCenter);
-            }
-            AddButton("返回角色选择", "返回", page.transform, new Vector2(1160, -890), new Vector2(220, 80), flow.GoBack);
-            ArchiveUiStyle.ScrollButton(AddButton("以此角色开始", "以此角色开始", page.transform, new Vector2(1400, -890), new Vector2(440, 80), flow.ConfirmConfiguration, FormalUiTheme.Cyan),
-                () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
+            var template=Resources.Load<CharacterDossierView>(CharacterDossierView.ResourcePath);
+            if(template==null)throw new InvalidOperationException("Missing character dossier prefab");
+            var dossier=Instantiate(template,page.transform,false);
+            buttons.AddRange(dossier.Bind(flow));
         }
-
         private void BuildAcademyIntro()
         {
             Header("学院阶段　入学", "维克多的学院生活从这里开始。");
-            GameObject module = FormalUiKit.AnchoredPanel("学院说明", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(310, -250), new Vector2(1300, 500), FormalUiTheme.WithAlpha(FormalUiTheme.Ink, .95f));
+            GameObject module = FormalUiKit.AnchoredPanel("学院说明", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(64, -236), new Vector2(1120, 700), ArchiveUiStyle.LightPaper);
             ArchiveUiStyle.PaperPanel(module, ArchiveUiStyle.LightPaper, true);
-            Label("标题", "维克多的入学档案", module.transform, new Vector2(60, -50), new Vector2(1160, 74), 46, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
+            Label("标题", "维克多的入学档案", module.transform, new Vector2(60, -50), new Vector2(1000, 74), 46, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
             Label("背景", "学院以可测量的以太工程为基础，课程从器材维护和实地安全开始。", module.transform,
-                new Vector2(60, -160), new Vector2(1160, 92), 27, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
+                new Vector2(60, -160), new Vector2(1000, 130), 27, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
             Label("入学", "维克多从雾桥村来到学院。通过公开考核后，他一边工读，一边学习如何让火系术式真正用于修缮。", module.transform,
-                new Vector2(60, -290), new Vector2(1160, 122), 27, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
-            ArchiveUiStyle.ScrollButton(AddButton("进入首次地图", "进入学院地图", page.transform, new Vector2(710, -790), new Vector2(500, 88), flow.EnterAcademy, FormalUiTheme.Cyan),
+                new Vector2(60, -320), new Vector2(1000, 180), 27, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
+            ArchiveUiStyle.ScrollButton(AddButton("进入首次地图", "进入学院地图", module.transform, new Vector2(560, -556), new Vector2(500, 88), flow.EnterAcademy, FormalUiTheme.Cyan),
                 () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
         }
 
@@ -326,14 +347,15 @@ namespace OCC.Combat.Presentation
                 "行动完成后，用结束回合推进战斗，留意行动条与敌人意图。\n\n地图选择、战果和奖励等完成操作会保存。退出后使用继续档案返回；战斗失败时按结算界面的重试入口继续。"
             };
             int index = flow.TutorialPage;
-            GameObject card = CenterPanel(new Vector2(1380, 790));
-            Label("教程进度", "入门操作教程　" + (index + 1) + " / 5", card.transform, new Vector2(70, -38), new Vector2(1240, 48), 24, ArchiveUiStyle.Brass, TextAnchor.MiddleLeft);
-            Label("教程标题", titles[index], card.transform, new Vector2(70, -110), new Vector2(1240, 88), 44, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            FormalUiKit.Line(card.transform, new Vector2(70, -220), new Vector2(1240, 2), ArchiveUiStyle.Rule, "教程分隔");
-            Label("教程内容", text[index], card.transform, new Vector2(80, -270), new Vector2(1220, 300), 32, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
-            AddButton("教程下一页", index == 4 ? "开始探索" : "下一页", card.transform, new Vector2(1000, -650), new Vector2(300, 86), flow.AdvanceTutorial, FormalUiTheme.Cyan);
-            if (index > 0) AddButton("教程上一页", "上一页", card.transform, new Vector2(80, -650), new Vector2(260, 86), flow.PreviousTutorialPage);
-            AddButton("结束教程", "结束教程", card.transform, new Vector2(380, -650), new Vector2(260, 86), flow.FinishTutorial);
+            GameObject card = FormalUiKit.AnchoredPanel("教程文件", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(64, -140), new Vector2(1120, 820), ArchiveUiStyle.LightPaper);
+            ArchiveUiStyle.PaperPanel(card, ArchiveUiStyle.LightPaper, true);
+            Label("教程进度", "入门操作教程　第 " + (index + 1) + " 页　共 5 页", card.transform, new Vector2(70, -38), new Vector2(980, 48), 24, ArchiveUiStyle.Brass, TextAnchor.MiddleLeft);
+            Label("教程标题", titles[index], card.transform, new Vector2(70, -110), new Vector2(980, 88), 44, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
+            FormalUiKit.Line(card.transform, new Vector2(70, -220), new Vector2(980, 2), ArchiveUiStyle.Rule, "教程分隔");
+            Label("教程内容", text[index], card.transform, new Vector2(80, -270), new Vector2(960, 350), 32, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
+            AddButton("教程下一页", index == 4 ? "开始探索" : "下一页", card.transform, new Vector2(750, -676), new Vector2(300, 86), flow.AdvanceTutorial, FormalUiTheme.Cyan);
+            if (index > 0) AddButton("教程上一页", "上一页", card.transform, new Vector2(80, -676), new Vector2(260, 86), flow.PreviousTutorialPage);
+            AddButton("结束教程", "结束教程", card.transform, new Vector2(380, -676), new Vector2(260, 86), flow.FinishTutorial);
         }
 
         private void BuildRunCreation()
@@ -363,10 +385,10 @@ namespace OCC.Combat.Presentation
 
         private void Header(string title, string subtitle)
         {
-            GameObject header = FormalUiKit.AnchoredPanel("页面抬头", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(64, -50), new Vector2(1792, 150), ArchiveUiStyle.Paper);
+            GameObject header = FormalUiKit.AnchoredPanel("页面抬头", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(64, -64), new Vector2(1120, 150), ArchiveUiStyle.Paper);
             ArchiveUiStyle.PaperPanel(header, ArchiveUiStyle.Paper, true);
-            Label("标题", title, header.transform, new Vector2(42, -22), new Vector2(1660, 70), 48, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            Label("副标题", subtitle, header.transform, new Vector2(42, -92), new Vector2(1660, 42), 24, ArchiveUiStyle.QuietInk, TextAnchor.MiddleLeft);
+            Label("标题", title, header.transform, new Vector2(42, -22), new Vector2(1036, 70), 48, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
+            Label("副标题", subtitle, header.transform, new Vector2(42, -92), new Vector2(1036, 42), 24, ArchiveUiStyle.QuietInk, TextAnchor.MiddleLeft);
         }
 
         private GameObject CenterPanel(Vector2 size)
@@ -389,39 +411,39 @@ namespace OCC.Combat.Presentation
             string leftLabel, Action left, string rightLabel, Action right)
         {
             GameObject row = FormalUiKit.Panel("设置行_" + name, parent, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(52, -y), new Vector2(1336, 94), ArchiveUiStyle.LightPaper);
+                new Vector2(52, -y), new Vector2(1016, 94), ArchiveUiStyle.LightPaper);
             ArchiveUiStyle.PaperContent(row);
-            Label("名称", name, row.transform, new Vector2(18, -30), new Vector2(330, 58), 26,
+            Label("名称", name, row.transform, new Vector2(18, -30), new Vector2(260, 58), 26,
                 ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            Label("值", value, row.transform, new Vector2(400, -30), new Vector2(390, 58), 26,
+            Label("值", value, row.transform, new Vector2(290, -30), new Vector2(330, 58), 26,
                 ArchiveUiStyle.Brass, TextAnchor.MiddleCenter);
             if (left != null)
                 ArchiveUiStyle.TabButton(AddButton("设置_" + name + "_左", leftLabel, row.transform,
-                    new Vector2(822, -28), new Vector2(right == null ? 470 : 210, 70), left), false,
+                    new Vector2(660, -28), new Vector2(right == null ? 328 : 150, 70), left), false,
                     () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
             if (right != null)
                 ArchiveUiStyle.TabButton(AddButton("设置_" + name + "_右", rightLabel, row.transform,
-                    new Vector2(1060, -28), new Vector2(236, 70), right), false,
+                    new Vector2(836, -28), new Vector2(152, 70), right), false,
                     () => UiMotionProfile.FromIntensity(flow.AnimationIntensity));
-            FormalUiKit.Line(parent, new Vector2(70, -y - 100), new Vector2(1300, 1), ArchiveUiStyle.Rule, "设置分隔");
+            FormalUiKit.Line(parent, new Vector2(70, -y - 100), new Vector2(980, 1), ArchiveUiStyle.Rule, "设置分隔");
         }
 
         private void ArchiveVolumeSliderRow(Transform parent, float y)
         {
             GameObject row = FormalUiKit.Panel("设置行_主音量", parent, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(52, -y), new Vector2(1336, 100), ArchiveUiStyle.LightPaper);
+                new Vector2(52, -y), new Vector2(1016, 100), ArchiveUiStyle.LightPaper);
             ArchiveUiStyle.PaperContent(row);
-            Label("名称", "主音量", row.transform, new Vector2(18, -30), new Vector2(280, 58), 26,
+            Label("名称", "主音量", row.transform, new Vector2(18, -30), new Vector2(230, 58), 26,
                 ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            volumeValue = Label("值", string.Empty, row.transform, new Vector2(1190, -30), new Vector2(120, 58), 26,
+            volumeValue = Label("值", string.Empty, row.transform, new Vector2(890, -30), new Vector2(100, 58), 26,
                 ArchiveUiStyle.Brass, TextAnchor.MiddleRight);
             GameObject sliderObject = FormalUiKit.Panel("主音量滑动条", row.transform, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(330, -32), new Vector2(840, 62), Color.clear);
+                new Vector2(270, -32), new Vector2(600, 62), Color.clear);
             Image background = FormalUiKit.Panel("轨道", sliderObject.transform, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(8, -25), new Vector2(824, 12), ArchiveUiStyle.Rule).GetComponent<Image>();
+                new Vector2(8, -25), new Vector2(584, 12), ArchiveUiStyle.Rule).GetComponent<Image>();
             background.raycastTarget = false;
             RectTransform fillArea = FormalUiKit.Panel("填充区", sliderObject.transform, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(8, -25), new Vector2(824, 12), Color.clear).GetComponent<RectTransform>();
+                new Vector2(8, -25), new Vector2(584, 12), Color.clear).GetComponent<RectTransform>();
             Image fill = FormalUiKit.Panel("已设置音量", fillArea, Vector2.zero, Vector2.one,
                 Vector2.zero, Vector2.zero, FormalUiTheme.Cyan).GetComponent<Image>();
             fill.rectTransform.offsetMin = Vector2.zero;
@@ -443,7 +465,7 @@ namespace OCC.Combat.Presentation
             volumeSlider.SetValueWithoutNotify(flow.PendingVolume);
             volumeSlider.onValueChanged.AddListener(value => { if (flow != null) flow.PendingVolume = value; });
             volumeValue.text = Mathf.RoundToInt(flow.PendingVolume * 100f) + "%";
-            FormalUiKit.Line(parent, new Vector2(70, -y - 110), new Vector2(1300, 1), ArchiveUiStyle.Rule, "设置分隔");
+            FormalUiKit.Line(parent, new Vector2(70, -y - 110), new Vector2(980, 1), ArchiveUiStyle.Rule, "设置分隔");
         }
 
         private Button AddButton(string name, string title, Transform parent, Vector2 position, Vector2 size, Action action, Color? tone = null)

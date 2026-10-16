@@ -211,6 +211,8 @@ namespace OCC.Combat.Roguelite
             RogueSpellExecution execution = spell.IsBasic ? ExecuteBasic(spell, source, command) : ExecuteFire(spell, source, command);
             if (command.UnitId == "hero" && Combat.RogueEquipment?.FirstForgeSpellDiscountAvailable == true)
                 Combat.RogueEquipment.ConsumeFirstForgeSpellDiscount();
+            if(command.UnitId=="hero"&&Combat.RogueEquipment?.MealSpellDiscountAvailable==true)
+                Combat.RogueEquipment.ConsumeMealSpellDiscount();
             FireBattle.ResolveMarkedDestructions(source.Id);
             bool dealtPersonalFireDamage = execution.FireEffects != null
                 ? execution.FireEffects.Steps.Any(step => step.Kind == FireRuleKind.Damage && step.Applied > 0)
@@ -272,24 +274,33 @@ namespace OCC.Combat.Roguelite
 
         private RogueSpellExecution ExecuteFire(SpellDefinition spell, UnitState source, CombatCommand command)
         {
-            FireSpellDefinition old = Specialized(FireSpellCatalog.Get(spell.DefinitionId));
-            if (source.Id == "hero" && Combat.RogueEquipment?.FirstForgeSpellDiscountAvailable == true)
-                old = new FireSpellDefinition(old, old.Rules, old.MinimumRange, old.Range, old.ShapeLength,
-                    Math.Max(0, old.ManaCost - 1), old.Cooldown);
+            FireSpellDefinition old = EffectiveFireDefinition(spell.DefinitionId, source.Id);
             FireSpellTarget target = !string.IsNullOrEmpty(command.TargetUnitId)
                 ? FireSpellTarget.Unit(command.TargetUnitId, command.AimDirection)
                 : FireSpellTarget.At(command.Destination, command.AimDirection);
             return new RogueSpellExecution(CombatEffectExecution.Empty, FireSpellEngine.Execute(FireBattle, source.Id, old, target));
         }
 
+        public FireSpellDefinition EffectiveFireDefinition(string spellId, string unitId = "hero")
+        {
+            FireSpellDefinition old = Specialized(FireSpellCatalog.Get(spellId));
+            int discount=unitId=="hero"?((Combat.RogueEquipment?.FirstForgeSpellDiscountAvailable==true?1:0)+
+                (Combat.RogueEquipment?.MealSpellDiscountAvailable==true?1:0)):0;
+            if (discount>0)
+                old = new FireSpellDefinition(old, old.Rules, old.MinimumRange, old.Range, old.ShapeLength,
+                    Math.Max(0, old.ManaCost - discount), old.Cooldown);
+            return old;
+        }
+
         private bool IsAmplified(string spellId) => academySpecializations.TryGetValue(spellId, out string material) && material == "SPEC-AMPLIFY";
         private bool IsThrottled(string spellId) => academySpecializations.TryGetValue(spellId, out string material) && material == "SPEC-EFFICIENT";
-        private int EffectiveManaCost(SpellDefinition spell, string unitId)
+        public int EffectiveManaCost(SpellDefinition spell, string unitId = "hero")
         {
             int cost = IsThrottled(spell.DefinitionId) && spell.DefinitionId != "BASE-MANA-RECOVER"
                 ? Math.Max(0, spell.ManaCost - 1) : spell.ManaCost;
-            return unitId == "hero" && Combat.RogueEquipment?.FirstForgeSpellDiscountAvailable == true
-                ? Math.Max(0, cost - 1) : cost;
+            int discount=unitId=="hero"?((Combat.RogueEquipment?.FirstForgeSpellDiscountAvailable==true?1:0)+
+                (Combat.RogueEquipment?.MealSpellDiscountAvailable==true?1:0)):0;
+            return Math.Max(0,cost-discount);
         }
         private int EffectiveCooldown(SpellDefinition spell) => IsThrottled(spell.DefinitionId) &&
             spell.DefinitionId == "BASE-MANA-RECOVER" ? Math.Max(0, spell.CooldownOwnTurns - 1) : spell.CooldownOwnTurns;
@@ -350,14 +361,18 @@ namespace OCC.Combat.Roguelite
                         rules.Add(rule.Kind == FireRuleKind.Damage && rule.Amount == 8 ? Copy(rule, 10) : rule);
                         break;
                     case "F-P-U04":
-                    case "F-P-U18":
                         // 单位与物件伤害 8 → 10；破障与推位距离不变。
                         rules.Add((rule.Kind == FireRuleKind.Damage || rule.Kind == FireRuleKind.DamageDurability) && rule.Amount == 8
                             ? Copy(rule, 10) : rule);
                         break;
+                    case "F-P-U18":
+                        // Current landing damage 4 -> 6; displacement remains unchanged.
+                        rules.Add((rule.Kind == FireRuleKind.Damage || rule.Kind == FireRuleKind.DamageDurability) && rule.Amount == 4
+                            ? Copy(rule, 6) : rule);
+                        break;
                     case "F-P-R01":
-                        // 伤害 12 → 14。
-                        rules.Add(rule.Kind == FireRuleKind.Damage && rule.Amount == 12 ? Copy(rule, 14) : rule);
+                        // 伤害 8 → 10。
+                        rules.Add(rule.Kind == FireRuleKind.Damage && rule.Amount == 8 ? Copy(rule, 10) : rule);
                         break;
                     case "F-P-R19":
                         // 中心单位与物件伤害 16 → 20；邻格 8 点不变。

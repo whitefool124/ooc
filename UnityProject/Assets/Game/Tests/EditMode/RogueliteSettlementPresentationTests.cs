@@ -214,8 +214,10 @@ namespace OCC.Combat.Tests
                     Assert.That(reveal.GetComponent<Image>().raycastTarget, Is.True);
                     Assert.That(reveal.GetComponent<FormalHoverTooltipTrigger>(), Is.Not.Null);
                     Assert.That(reveal.GetComponentsInChildren<RectTransform>(true)
-                        .Single(rect => rect.name.StartsWith("奖励大图标_")).sizeDelta.x, Is.EqualTo(320f));
-                    Assert.That(reveal.Find("关键效果"), Is.Null);
+                        .Single(rect => rect.name.StartsWith("奖励大图标_")).sizeDelta.x, Is.EqualTo(224f));
+                    Text effect = reveal.Find("关键效果").GetComponent<Text>();
+                    Assert.That(effect.text, Is.Not.Empty);
+                    Assert.That(effect.horizontalOverflow, Is.EqualTo(HorizontalWrapMode.Wrap));
                 }
                 string choiceId = host.CurrentMapRun.CurrentRewards[1].Id;
                 host.SelectMapReward(choiceId);
@@ -284,7 +286,7 @@ namespace OCC.Combat.Tests
         private static void DestroyCanvases()
         {
             foreach (Canvas canvas in Object.FindObjectsByType<Canvas>(FindObjectsInactive.Include))
-                if (canvas.name == "肉鸽结算UI") Object.DestroyImmediate(canvas.gameObject);
+                if (canvas != null && canvas.name == "肉鸽结算UI") Object.DestroyImmediate(canvas.gameObject);
         }
     }
 }

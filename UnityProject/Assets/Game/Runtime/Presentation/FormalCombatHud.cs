@@ -10,7 +10,7 @@ using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Presentation
 {
-    // Runtime-built production HUD. The battlefield keeps its 75% width above a full-width command deck.
+    // Floating HUD above a full-width battlefield; the action-value drawer does not reserve space.
     public sealed class FormalCombatHud : MonoBehaviour
     {
         /// <summary>
@@ -64,8 +64,8 @@ namespace OCC.Combat.Presentation
         private const float HeroEntryHeight = 30f;
         // Roughly the 132px label slot at 24px type.
         private const int HeroEntryNameMaxChars = 8;
-        private const float HeroBarTop = 52f;
-        private const float HeroBarPitch = 72f;
+        private const float HeroBarTop = 40f;
+        private const float HeroBarPitch = 56f;
 
         // Timeline row band inside the 436-tall action-value module. Row size stays the tuned
         // compact cell; only the layout inside each row is packed.
@@ -88,6 +88,8 @@ namespace OCC.Combat.Presentation
         private GameObject root;
         private FormalHoverTooltip tooltip;
         private Text actionPointBadgeValue;
+        private Text commandStatus;
+        private string commandAvailability = "可用";
         private readonly RectTransform[] headerResourceChips = new RectTransform[HeaderResourceIds.Length];
         private readonly Text[] headerResourceValues = new Text[HeaderResourceIds.Length];
         private GameObject heroModule;
@@ -101,6 +103,22 @@ namespace OCC.Combat.Presentation
         private bool heroShowingBack;
         private bool heroFlipAnimating;
         private GameObject timelineModule;
+        private CombatTimelineDrawer timelineDrawer;
+        private RawImage heroPortrait;
+        private CombatPortraitCardView heroIdentity;
+        private readonly CombatPortraitCardView[] orderCards = new CombatPortraitCardView[7];
+        private RectTransform orderRoot;
+        private RectTransform actionOrderRail;
+        private Text heroName;
+        private readonly Image[] compactStatusIcons = new Image[2];
+        private Text compactStatusOverflow;
+        private readonly Image[] actionOrderSlots = new Image[7];
+        private readonly RawImage[] actionOrderPortraits = new RawImage[7];
+        private readonly Text[] actionOrderLabels = new Text[7];
+        private readonly TimelineRowInteraction[] actionOrderInteractions = new TimelineRowInteraction[7];
+        private readonly Text[] actionOrderDirections = new Text[6];
+        private Text actionOrderCaption, actionOrderOverflow;
+        private Text timelineGlobalProgress;
         private GameObject timelineFront;
         private GameObject timelineBack;
         private Text historyText;
@@ -130,11 +148,11 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, int> timelineSlotsByUnit = new Dictionary<string, int>();
         private CombatState displayedTimelineState;
         private Image healthFill;
-        private Image shieldFill;
         private Image manaFill;
         private readonly Dictionary<Image, Image> resourceChangeMarkers = new Dictionary<Image, Image>();
         private Text healthValue;
         private Text shieldValue;
+        private GameObject shieldBadge;
         private Text manaValue;
         private Button endTurnButton;
         private Button restartButton;
@@ -151,7 +169,6 @@ namespace OCC.Combat.Presentation
         private readonly GameObject[] quickbarEmptyStates = new GameObject[RogueRuntimeConstants.ItemQuickbarSize];
         private readonly Button[] quickbarButtons = new Button[RogueRuntimeConstants.ItemQuickbarSize];
         private float displayedHealth = -1f;
-        private float displayedShield = -1f;
         private float displayedMana = -1f;
         private bool wasVisible;
         private bool outcomeWasVisible;
@@ -186,14 +203,18 @@ namespace OCC.Combat.Presentation
             if (shell == null) return null;
             if (id == "B1-03") return shell.ActionPointBadge;
             if (id == "B1-05") return shell.Commands;
-            if (id == "B1-06") return timelineModule == null ? null : timelineModule.GetComponent<RectTransform>();
-            return shell.RightConsole;
+            if (id == "B1-06") return shell.TimelineTab;
+            return shell.HeroStatus;
         }
 
         private void Update()
         {
             if (root == null || bootstrap == null) return;
-            bool visible = bootstrap.IsDeveloperCombatActive || bootstrap.IsCombatOutcomeVisible;
+            // The world-space reward page owns input after victory. A leftover
+            // overlay canvas would otherwise raycast through its visible cards.
+            var run = bootstrap.CurrentMapRun;
+            bool settlementVisible = run != null && (run.AwaitingReward || run.LootPendingExit);
+            bool visible = !settlementVisible && (bootstrap.IsDeveloperCombatActive || bootstrap.IsCombatOutcomeVisible);
             if (root.activeSelf != visible) { root.SetActive(visible); refreshDirty = true; }
             if (!visible || bootstrap.CurrentState == null)
             {
@@ -201,6 +222,7 @@ namespace OCC.Combat.Presentation
                 {
                     ResetCardFlips();
                     ResetTimelineMotionState();
+                    timelineDrawer?.ResetDrawer();
                 }
                 wasVisible = false;
                 hasPresentedModel = false;
@@ -222,6 +244,21 @@ namespace OCC.Combat.Presentation
             bool handledShortcut = !handledCardFlip && bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && HandleSpellShortcutInput();
             bool handledTargetInput = !handledCardFlip && !handledShortcut && bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && HandleTargetNavigationInput();
             if (!handledCardFlip && !handledShortcut && !handledTargetInput && bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && RuntimeUiEventSystem.CancelPressedThisFrame()) bootstrap.CancelCombatSelectionOrRequestLeave();
+            UnitState active = bootstrap.CurrentState.GetUnit(bootstrap.CurrentState.ActiveUnitId);
+            string actionName = bootstrap.SelectedAction;
+            int statusSlot = SkillSlot(actionName);
+            if (statusSlot >= 0) actionName = bootstrap.CurrentState.RogueSpells?.DefinitionAtSlot(statusSlot)?.DisplayName ?? actionName;
+            if (refreshDirty)
+            {
+                CombatActionPreview preview = bootstrap.CurrentActionPreview;
+                var rogue = statusSlot < 0 ? null : bootstrap.CurrentState.RogueSpells?.DefinitionAtSlot(statusSlot);
+                commandAvailability = rogue == null ? preview?.CanSubmit == true ? "可用" : "不可用" :
+                    RogueSpellAvailabilityText(rogue, preview);
+                if (commandAvailability.Length > 10) commandAvailability = "不可用";
+            }
+            string status = active?.IsHero == true ? ((bootstrap as ICombatActionPresentationHost)?.IsCombatActionPlaying == true ? "结算中" :
+                active.ActionPoints < 1 ? "行动点不足" : commandAvailability) : "敌方行动";
+            commandStatus.text = "回合 " + bootstrap.CurrentState.TurnSequence + "　" + actionName + "　" + status;
             int actionVersion = (bootstrap as ICombatActionPresentationHost)?.CombatActionPresentationVersion ?? 0;
             bool actionChanged = actionVersion != displayedActionVersion;
             if (actionChanged) refreshDirty = true;
@@ -269,6 +306,8 @@ namespace OCC.Combat.Presentation
             GameObject top = shell.Header.gameObject;
             ConfigureOutlinedPanel(top, FormalUiTheme.Panel, FormalUiTheme.Rule);
             BuildHeaderResources(top.transform);
+            commandStatus = Label("当前战斗指令", top.transform, new Vector2(580, -8), new Vector2(596, 40), 24, FormalUiTheme.Ink, TextAnchor.MiddleLeft);
+            commandStatus.raycastTarget = false;
 
             GameObject side = shell.RightConsole.gameObject;
             Image sideSurface = side.GetComponent<Image>();
@@ -276,17 +315,18 @@ namespace OCC.Combat.Presentation
             sideSurface.raycastTarget = false;
             Image sideSkin = FormalUiKit.SkinOverlay(sideSurface);
             if (sideSkin != null) sideSkin.gameObject.SetActive(false);
-            heroModule = ConsoleModule("英雄概况", side.transform, "combat.hero");
+            heroModule = ConsoleModule("英雄概况", shell.HeroStatus, "combat.hero");
             heroFront = CardFace("英雄概况正面", heroModule.transform);
             heroBack = CardFace("英雄概况背面", heroModule.transform);
-            // The front face is vitals only: three bars and the status button.
-            healthFill = ResourceBar(heroFront.transform, "生命", new Vector2(16, -HeroBarTop), FormalUiTheme.ResourceHealthFill, out healthValue);
-            shieldFill = ResourceBar(heroFront.transform, "护盾", new Vector2(16, -(HeroBarTop + HeroBarPitch)), FormalUiTheme.ResourceShieldFill, out shieldValue);
-            manaFill = ResourceBar(heroFront.transform, "个人魔力", new Vector2(16, -(HeroBarTop + HeroBarPitch * 2f)), FormalUiTheme.ResourceMagicFill, out manaValue);
+            // Health and mana use tracks; guard is a compact current-value badge.
+            healthFill = ResourceBar(heroFront.transform, "生命", new Vector2(176, -HeroBarTop), FormalUiTheme.ResourceHealthFill, out healthValue, 288f);
+            manaFill = ResourceBar(heroFront.transform, "个人魔力", new Vector2(176, -(HeroBarTop + HeroBarPitch)), FormalUiTheme.ResourceMagicFill, out manaValue, 288f);
             BuildHeroBack();
-            heroFlipButton = Button(heroModule.transform, "英雄概况翻面", new Vector2(296, -3), new Vector2(104, 36), "状态", FormalUiTheme.Panel, FormalUiTheme.BodyFontSize, FormalUiButtonTone.Neutral);
+            BuildCompactHeroFront();
+            heroFlipButton = Button(heroModule.transform, "英雄概况翻面", new Vector2(424, -8), new Vector2(40, 36), "⋯", FormalUiTheme.Panel, FormalUiTheme.BodyFontSize, FormalUiButtonTone.Neutral);
             ConfigureCompactFrame(heroFlipButton);
             heroFlipButton.onClick.AddListener(ToggleHeroCard);
+            BindTooltip(heroFlipButton.gameObject, () => new FormalTooltipContent(heroShowingBack ? "返回概况" : "人物详情", "查看状态与被动效果；Tab 可同时翻转人物与行动值面板。", FormalUiTheme.Cyan));
             Label("英雄翻面提示", heroBack.transform, new Vector2(192, -4), new Vector2(96, 32), 18, muted, TextAnchor.MiddleRight).text = "Tab 双翻";
 
             timelineModule = ConsoleModule("行动序列模块", side.transform, "combat.timeline");
@@ -294,6 +334,11 @@ namespace OCC.Combat.Presentation
             timelineBack = CardFace("行动历史背面", timelineModule.transform);
             Label("行动值", timelineFront.transform, new Vector2(16, -4), new Vector2(264, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
             for (int i = 0; i < timelineNames.Length; i++) CreateTimelineSlot(i);
+            Line(timelineFront.transform, new Vector2(30, -360), new Vector2(356, 2), muted);
+            Label("行动轴起点", timelineFront.transform, new Vector2(30, -366), new Vector2(48, 24), 18, muted, TextAnchor.MiddleLeft).text = "0";
+            Label("行动轴阈值", timelineFront.transform, new Vector2(184, -366), new Vector2(48, 24), 18, FormalUiTheme.Cyan, TextAnchor.MiddleCenter).text = "100";
+            Label("行动轴上限", timelineFront.transform, new Vector2(338, -366), new Vector2(48, 24), 18, muted, TextAnchor.MiddleRight).text = "199";
+            timelineGlobalProgress = Label("全局进度", timelineFront.transform, new Vector2(16, -400), new Vector2(448, 28), 18, muted, TextAnchor.MiddleLeft);
             BuildTimelineBack();
             timelineFlipButton = Button(timelineModule.transform, "行动值翻面", new Vector2(296, -3), new Vector2(104, 36), "记录", FormalUiTheme.Panel, FormalUiTheme.BodyFontSize, FormalUiButtonTone.Neutral);
             ConfigureCompactFrame(timelineFlipButton);
@@ -301,6 +346,17 @@ namespace OCC.Combat.Presentation
             Label("行动值翻面提示", timelineBack.transform, new Vector2(184, -4), new Vector2(104, 32), 18, muted, TextAnchor.MiddleRight).text = "最新在前";
             heroBack.SetActive(false);
             timelineBack.SetActive(false);
+            BuildActionOrder(shell.ActionOrder);
+            Button drawerTab = Button(shell.TimelineTab, "行动值页签", Vector2.zero, new Vector2(44, 136),
+                "行\n动\n值\n‹", panel, 24, FormalUiButtonTone.Neutral);
+            ConfigureCompactFrame(drawerTab);
+            Button drawerPin = Button(timelineModule.transform, "固定行动值", new Vector2(192, -3), new Vector2(96, 36),
+                "固定", panel, 18, FormalUiButtonTone.Neutral);
+            ConfigureCompactFrame(drawerPin);
+            timelineDrawer = root.AddComponent<CombatTimelineDrawer>();
+            timelineDrawer.Configure(shell.RightConsole, drawerTab, drawerPin,
+                () => bootstrap.IsInteractionModalOpen || bootstrap.IsCombatOutcomeVisible || !bootstrap.IsDeveloperCombatActive,
+                () => bootstrap.SetTimelineHoveredUnit(null));
 
             GameObject apBadge = shell.ActionPointBadge.gameObject;
             GameObject outerDiamond = Panel("行动点外菱形", apBadge.transform, new Vector2(0, 1), new Vector2(0, 1),
@@ -507,12 +563,101 @@ namespace OCC.Combat.Presentation
             return face;
         }
 
+        private void BuildCompactHeroFront()
+        {
+            FormalUiKit.ApplySkin(heroModule.GetComponent<Image>(), "panel", panel);
+            heroName = Label("人物姓名", heroFront.transform, new Vector2(176, -8), new Vector2(160, 32), 24, text, TextAnchor.MiddleLeft);
+
+            Line(heroFront.transform, new Vector2(160, -8), new Vector2(2, 144), line);
+            heroIdentity = CombatPortraitCardView.Create(heroFront.transform);
+            heroIdentity.name = "人物立绘头像";
+            RectTransform rect = (RectTransform)heroIdentity.transform;
+            rect.anchoredPosition = new Vector2(8, -8); rect.sizeDelta = new Vector2(144, 144);
+            heroIdentity.Caption.gameObject.SetActive(false);
+            heroIdentity.Initialize(() => bootstrap.IsInteractionModalOpen, id => bootstrap.SetTimelineHoveredUnit(id), id => bootstrap.FocusBattlefieldOnUnit(id));
+            heroPortrait = heroIdentity.Portrait;
+            BindTooltip(heroIdentity.gameObject, () => heroIdentity.Tooltip(0, false));
+            shieldBadge = FormalUiKit.FlatPanel("护盾徽记", heroFront.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(240, -40), new Vector2(112, 40), Color.clear);
+            Image shieldIcon = FormalUiKit.TopLeftIconSlot("护盾图标", shieldBadge.transform, Resources.Load<Sprite>(FormalArtRegistry.ResourceMetricPath("shield")), new Vector2(0, -8));
+            shieldIcon.rectTransform.sizeDelta = new Vector2(24, 24); shieldIcon.raycastTarget = false;
+            shieldValue = Label("护盾数值", shieldBadge.transform, new Vector2(28, 0), new Vector2(80, 40), 24, FormalUiTheme.Ink, TextAnchor.MiddleLeft);
+            FormalUiKit.ConfigureNumericLabel(shieldValue);
+            BindTooltip(shieldBadge, () => { UnitState current = bootstrap.CurrentState.GetUnit("hero"); current = (bootstrap as ICombatActionPresentationHost)?.PresentCombatUnit(current) ?? current; return new FormalTooltipContent("护盾", "当前护盾 " + current.Shield, FormalUiTheme.Cyan); });
+
+            for (int i = 0; i < compactStatusIcons.Length; i++)
+            {
+                int captured = i;
+                GameObject chip = FormalUiKit.FlatPanel("人物状态图标" + i, heroFront.transform, new Vector2(0, 1), new Vector2(0, 1),
+                    new Vector2(336 + i * 40, -8), new Vector2(32, 32), Color.clear);
+                chip.GetComponent<Image>().raycastTarget = true;
+                compactStatusIcons[i] = FormalUiKit.TopLeftIconSlot("状态图标", chip.transform, null, Vector2.zero);
+                compactStatusIcons[i].rectTransform.sizeDelta = new Vector2(32, 32);
+                BindTooltip(chip, () => BuildHeroStatusEntryTooltip(captured));
+            }
+            compactStatusOverflow = Label("状态空态", heroFront.transform, new Vector2(408, -8), new Vector2(16, 32), 18, muted, TextAnchor.MiddleLeft);
+            compactStatusOverflow.raycastTarget = true;
+            BindTooltip(compactStatusOverflow.gameObject, () => new FormalTooltipContent("全部状态", heroStatusRows.Count == 0 ? "暂无持续状态" : string.Join("\n", heroStatusRows.Select(row => row.Label + "：" + row.Body)), FormalUiTheme.Cyan));
+        }
+
+        private void BuildActionOrder(Transform parent)
+        {
+            orderRoot = (RectTransform)parent;
+            Image background = parent.GetComponent<Image>(); background.color = Color.clear; background.raycastTarget = false;
+            Image skin = FormalUiKit.SkinOverlay(background); if (skin != null) skin.gameObject.SetActive(false);
+            GameObject rail = FormalUiKit.FlatPanel("连续行动轨道", parent, new Vector2(0, 1), new Vector2(0, 1), new Vector2(8, -60), new Vector2(896, 24), FormalUiTheme.Panel);
+            rail.GetComponent<Image>().raycastTarget = false;
+            actionOrderRail = (RectTransform)rail.transform;
+            actionOrderCaption = Label("行动方向图标", parent, new Vector2(8, -52), new Vector2(48, 40), 32, text, TextAnchor.MiddleCenter);
+            actionOrderCaption.text = "→";
+            actionOrderCaption.raycastTarget = true;
+            BindTooltip(actionOrderCaption.gameObject, () => new FormalTooltipContent("预计行动顺序", "当前行动者在前，每名存活单位显示一次。读取当前行动值和速度；后续速度变化与敌方行动可能改变顺序。", FormalUiTheme.Cyan));
+            for (int i = 0; i < orderCards.Length; i++)
+            {
+                CombatPortraitCardView card = CombatPortraitCardView.Create(parent, true); orderCards[i] = card;
+                card.name = "立绘顺序卡" + (i + 1);
+                card.Initialize(() => bootstrap.IsInteractionModalOpen || bootstrap.IsCombatOutcomeVisible,
+                    id => bootstrap.SetTimelineHoveredUnit(id), id => bootstrap.FocusBattlefieldOnUnit(id));
+                BindTooltip(card.gameObject, () => { var order = CombatActionOrderPresentation.Build(bootstrap.CurrentState, bootstrap.CurrentActionPreview); int ordinal = order.ToList().FindIndex(unit => unit.Id == card.UnitId); return card.Tooltip(Math.Max(0, ordinal), bootstrap.CurrentActionPreview?.CanSubmit == true && bootstrap.CurrentActionPreview.HasActionValuePreview); });
+            }
+            actionOrderOverflow = Label("顺序剩余", parent, new Vector2(0, -40), new Vector2(64, 40), 24, text, TextAnchor.MiddleCenter);
+            actionOrderOverflow.raycastTarget = true;
+            BindTooltip(actionOrderOverflow.gameObject, () => new FormalTooltipContent("其余行动单位", string.Join("\n", CombatActionOrderPresentation.Build(bootstrap.CurrentState, bootstrap.CurrentActionPreview).Skip(7).Select((unit, index) => (index + 8) + " " + unit.DisplayName)), FormalUiTheme.Cyan));
+        }
+
+        private void RefreshActionOrder(CombatState state, CombatActionPreview preview)
+        {
+            IReadOnlyList<UnitState> order = CombatActionOrderPresentation.Build(state, preview);
+            IReadOnlyList<UnitState> baseline = CombatActionOrderPresentation.Build(state);
+            bool projected = preview != null && preview.CanSubmit && preview.HasActionValuePreview;
+            actionOrderCaption.color = projected ? FormalUiTheme.Amber : text;
+            int count = Math.Min(7, order.Count); bool overflow = order.Count > 7;
+            float width = 64 + count * 104 + 8 + (overflow ? 48 : 0);
+            actionOrderRail.sizeDelta = new Vector2(width - 16, 24);
+            orderRoot.sizeDelta = new Vector2(width, 96); orderRoot.anchoredPosition = new Vector2(1904 - width, -80);
+            var used = new HashSet<CombatPortraitCardView>(); var visible = new List<CombatPortraitCardView>();
+            for (int i = 0; i < count; i++)
+            {
+                UnitState unit = order[i];
+                CombatPortraitCardView card = orderCards.FirstOrDefault(value => value.UnitId == unit.Id);
+                if (card == null) card = orderCards.First(value => !used.Contains(value) && !order.Take(count).Any(u => u.Id == value.UnitId));
+                used.Add(card); visible.Add(card); card.gameObject.SetActive(true);
+                int previous = baseline.ToList().FindIndex(value => value.Id == unit.Id);
+                card.Bind(unit, i, projected ? previous - i : 0, bootstrap.SelectedTargetId == unit.Id, preview);
+                card.MoveTo(i, UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity));
+            }
+            foreach (CombatPortraitCardView card in orderCards) if (!used.Contains(card)) card.gameObject.SetActive(false);
+            for (int i = 0; i < visible.Count; i++) visible[i].Button.navigation = new Navigation { mode = Navigation.Mode.Explicit, selectOnLeft = i > 0 ? visible[i - 1].Button : heroFlipButton, selectOnRight = i + 1 < visible.Count ? visible[i + 1].Button : null, selectOnDown = endTurnButton };
+            actionOrderOverflow.gameObject.SetActive(overflow); actionOrderOverflow.text = "…";
+            actionOrderOverflow.rectTransform.anchoredPosition = new Vector2(width - 48, -52);
+            actionOrderOverflow.rectTransform.sizeDelta = new Vector2(40, 40);
+        }
+
         private void BuildHeroBack()
         {
             Label("状态与被动", heroBack.transform, new Vector2(16, -4), new Vector2(192, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
-            Label("玩家状态", heroBack.transform, new Vector2(16, -44), new Vector2(176, 28), FormalUiTheme.BodyFontSize, FormalUiTheme.Cyan, TextAnchor.MiddleLeft);
-            Label("被动效果", heroBack.transform, new Vector2(224, -44), new Vector2(176, 28), FormalUiTheme.BodyFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
-            Line(heroBack.transform, new Vector2(208, -46), new Vector2(2, 240), FormalUiTheme.WithAlpha(line, .72f));
+            Label("玩家状态", heroBack.transform, new Vector2(16, -44), new Vector2(208, 28), FormalUiTheme.BodyFontSize, FormalUiTheme.Cyan, TextAnchor.MiddleLeft);
+            Label("被动效果", heroBack.transform, new Vector2(256, -44), new Vector2(208, 28), FormalUiTheme.BodyFontSize, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
+            Line(heroBack.transform, new Vector2(240, -46), new Vector2(2, 216), FormalUiTheme.WithAlpha(line, .72f));
             // Each status and passive is its own entry with its own hover card; the column as a
             // whole is deliberately not hoverable, so a tooltip cannot cover the whole panel.
             for (int i = 0; i < HeroStatusEntryCount; i++)
@@ -520,7 +665,7 @@ namespace OCC.Combat.Presentation
                 int captured = i;
                 heroStatusEntries[i] = BuildHeroEntry(heroBack.transform, "状态词条", 16f, -76f - i * HeroEntryPitch,
                     () => BuildHeroStatusEntryTooltip(captured));
-                heroPassiveEntries[i] = BuildHeroEntry(heroBack.transform, "被动词条", 224f, -76f - i * HeroEntryPitch,
+                heroPassiveEntries[i] = BuildHeroEntry(heroBack.transform, "被动词条", 256f, -76f - i * HeroEntryPitch,
                     () => BuildHeroPassiveEntryTooltip(captured));
             }
         }
@@ -533,13 +678,13 @@ namespace OCC.Combat.Presentation
         {
             heroEntrySerial++;
             GameObject row = FormalUiKit.FlatPanel(name + heroEntrySerial, parent, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(x, y), new Vector2(176f, HeroEntryHeight), FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .82f));
+                new Vector2(x, y), new Vector2(208f, HeroEntryHeight), FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .82f));
             HeroEntryView view = new HeroEntryView(row);
             Image glyph = FormalUiKit.IconSlot("图标", row.transform, null, new Vector2(4f, 0f));
             view.Icon = glyph;
             view.IconRect = glyph.rectTransform;
             // The icon slot is a full 32px, so the label has to start clear of it.
-            view.Label = Label("词条", row.transform, new Vector2(40f, -2f), new Vector2(132f, HeroEntryHeight - 4f),
+            view.Label = Label("词条", row.transform, new Vector2(40f, -2f), new Vector2(164f, HeroEntryHeight - 4f),
                 FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
             view.Label.verticalOverflow = VerticalWrapMode.Truncate;
             view.Row = row.GetComponent<Image>();
@@ -665,6 +810,7 @@ namespace OCC.Combat.Presentation
             for (int i = 0; i < HeaderResourceIds.Length; i++)
             {
                 string name = HeaderResourceNames[i];
+                if (i == 0) continue; // Health now belongs to the compact hero card.
                 string hint = HeaderResourceHints[i];
                 Color accent = HeaderResourceAccent(i);
                 Sprite icon = Resources.Load<Sprite>(FormalArtRegistry.ResourceMetricPath(HeaderResourceIds[i]));
@@ -738,7 +884,6 @@ namespace OCC.Combat.Presentation
             UnitState hero = state.GetUnit("hero");
             hero = (bootstrap as ICombatActionPresentationHost)?.PresentCombatUnit(hero) ?? hero;
             RogueliteMapRun run = bootstrap.CurrentMapRun;
-            headerResourceValues[0].text = hero.Health + "／" + hero.MaxHealth;
             headerResourceValues[1].text = (run?.Gold ?? 0).ToString();
             headerResourceValues[2].text = (run?.StageContribution ?? 0).ToString();
             headerResourceValues[3].text = Math.Max(0, AcademyMapTuning.TransitionProgress - (run?.StageTime ?? 0)).ToString();
@@ -761,15 +906,19 @@ namespace OCC.Combat.Presentation
             }
             actionPointBadgeValue.text = ActionPointText(hero.ActionPoints);
             healthValue.text = hero.Health + "／" + hero.MaxHealth;
-            shieldValue.text = rogue ? hero.Shield.ToString() : hero.Shield + "／" + hero.MaxShield;
+            shieldValue.text = ShieldBadgeValue(hero.Shield);
+            shieldBadge.SetActive(hero.Shield > 0);
             manaValue.text = hero.Mana + "／" + hero.MaxMana;
             SetBar(healthFill, hero.Health / (float)Math.Max(1, hero.MaxHealth), ref displayedHealth);
-            SetBar(shieldFill, rogue ? (hero.Shield > 0 ? 1f : 0f) : hero.Shield / (float)Math.Max(1, hero.MaxShield), ref displayedShield);
             SetBar(manaFill, hero.Mana / (float)Math.Max(1, hero.MaxMana), ref displayedMana);
             RefreshHeroBack(state, hero, rogue);
+            heroName.text = hero.DisplayName;
+            heroIdentity.Bind(hero, state.ActiveUnitId == hero.Id ? 0 : 1, 0, false);
             RefreshHistory(state);
             IReadOnlyList<CombatTurnTrackEntry> track = CombatTurnTrackPresentation.Build(state, timelineNames.Length);
             CombatActionPreview timelinePreview = bootstrap.CurrentActionPreview;
+            RefreshActionOrder(state, timelinePreview);
+            timelineGlobalProgress.text = "全局进度  " + state.CurrentTime;
             IReadOnlyDictionary<string, int> orderChanges = timelinePreview != null && timelinePreview.CanSubmit && timelinePreview.HasActionValuePreview
                 ? CombatTurnTrackPresentation.PreviewOrderChanges(state, timelinePreview.ActionValueTargetId, timelinePreview.ActionValueDelay)
                 : new Dictionary<string, int>();
@@ -786,7 +935,7 @@ namespace OCC.Combat.Presentation
                 Color faction = entry.IsHero ? line : FormalUiTheme.Danger;
                 timelineNodes[slot].color = entry.IsActive ? faction : FormalUiTheme.WithAlpha(faction, .55f);
                 timelineRows[slot].color = entry.IsActive ? FormalUiTheme.WithAlpha(faction, .16f) : FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .76f);
-                timelinePortraits[slot].texture = TimelinePortrait(state.GetUnit(entry.UnitId));
+                CombatHudPortraitAssets.Bind(timelinePortraits[slot], state.GetUnit(entry.UnitId));
                 timelinePortraits[slot].color = entry.IsActive ? Color.white : FormalUiTheme.WithAlpha(Color.white, .72f);
                 timelineSpeedIcons[slot].color = entry.IsActive ? faction : muted;
                 timelineSpeeds[slot].text = entry.EffectiveSpeed.ToString();
@@ -1283,6 +1432,7 @@ namespace OCC.Combat.Presentation
         private void ToggleBothCards()
         {
             if (heroFlipAnimating || timelineFlipAnimating) return;
+            timelineDrawer?.OpenPinned();
             ToggleHeroCard();
             ToggleTimelineCard();
         }
@@ -1291,7 +1441,8 @@ namespace OCC.Combat.Presentation
         {
             if (heroFlipAnimating) return;
             bool showBack = !heroShowingBack;
-            StartCardFlip(heroFront, heroBack, heroFlipButton, showBack, "概况", "状态",
+            heroModule.GetComponent<RectTransform>().sizeDelta = new Vector2(480, showBack ? 280 : 160);
+            StartCardFlip(heroFront, heroBack, heroFlipButton, showBack, "‹", "⋯",
                 value => heroShowingBack = value, value => heroFlipAnimating = value);
         }
 
@@ -1299,6 +1450,7 @@ namespace OCC.Combat.Presentation
         {
             if (timelineFlipAnimating) return;
             bool showBack = !timelineShowingBack;
+            timelineDrawer?.OpenPinned();
             StartCardFlip(timelineFront, timelineBack, timelineFlipButton, showBack, "行动值", "记录",
                 value => timelineShowingBack = value, value => timelineFlipAnimating = value);
         }
@@ -1313,7 +1465,9 @@ namespace OCC.Combat.Presentation
             RectTransform incomingRect = incoming.GetComponent<RectTransform>();
             UiMotionProfile motion = UiMotionProfile.FromIntensity(bootstrap == null ? 1f : bootstrap.UiPreferences.AnimationIntensity);
             setAnimating(true);
-            button.interactable = false;
+            // The flip handlers already ignore repeated activation while animating. Keep the
+            // originating button available so its accepted click feedback is not classified
+            // as a disabled click later in the same EventSystem dispatch.
             outgoing.SetActive(true);
             outgoingRect.localScale = Vector3.one;
 
@@ -1351,7 +1505,7 @@ namespace OCC.Combat.Presentation
         private void ResetCardFlips()
         {
             DOTween.Kill(this);
-            ResetCardFace(heroFront, heroBack, heroFlipButton, "状态");
+            ResetCardFace(heroFront, heroBack, heroFlipButton, "⋯");
             ResetCardFace(timelineFront, timelineBack, timelineFlipButton, "记录");
             heroShowingBack = false;
             timelineShowingBack = false;
@@ -1385,6 +1539,18 @@ namespace OCC.Combat.Presentation
         {
             if (heroStatusEntries[0] == null || state == null || hero == null) return;
             BuildHeroStatusRows(state, hero);
+            for (int i = 0; i < compactStatusIcons.Length; i++)
+            {
+                bool used = i < heroStatusRows.Count;
+                compactStatusIcons[i].transform.parent.gameObject.SetActive(used);
+                if (!used) continue;
+                HeroStatusRow status = heroStatusRows[i];
+                compactStatusIcons[i].sprite = status.Icon ?? Resources.Load<Sprite>(FormalArtRegistry.SemanticPath("notice"));
+                compactStatusIcons[i].color = Color.white;
+            }
+            compactStatusOverflow.text = heroStatusRows.Count > compactStatusIcons.Length ? "+" : "";
+            compactStatusOverflow.rectTransform.anchoredPosition = new Vector2(408, -8);
+            compactStatusOverflow.rectTransform.sizeDelta = new Vector2(16, 32);
             for (int i = 0; i < HeroStatusEntryCount; i++)
             {
                 HeroEntryView view = heroStatusEntries[i];
@@ -1424,7 +1590,6 @@ namespace OCC.Combat.Presentation
             heroStatusRows.Clear();
             foreach (KeyValuePair<StatusType, int> pair in hero.Statuses)
             {
-                if (heroStatusRows.Count >= HeroStatusEntryCount) break;
                 CombatFeedbackSemantic semantic = CombatFeedbackCatalog.For(CombatFeedbackCatalog.ForStatus(pair.Key));
                 CombatStatusPresentation status = CombatStatusPresentation.From(hero, pair.Key, state);
                 heroStatusRows.Add(new HeroStatusRow
@@ -1438,7 +1603,6 @@ namespace OCC.Combat.Presentation
 
             foreach (CombatStatusBarEntry entry in state.PassiveEffects.StatusBarEntriesFor(hero.Id))
             {
-                if (heroStatusRows.Count >= HeroStatusEntryCount) break;
                 if (entry.Kind != CombatStatusBarEntryKind.OngoingEffect) continue;
                 string body = CombatStatusPresentation.FirstSentence(entry.Detail);
                 heroStatusRows.Add(new HeroStatusRow
@@ -1452,7 +1616,7 @@ namespace OCC.Combat.Presentation
 
             FirePendingEffect pending = state.RogueSpells == null ? null : state.RogueSpells.FireBattle.PendingEffects
                 .FirstOrDefault(value => value.SourceUnitId == hero.Id);
-            if (pending != null && heroStatusRows.Count < HeroStatusEntryCount)
+            if (pending != null)
             {
                 string body = "已经写入，等待触发。";
                 if (pending.Spell.Id == "F-P-M05")
@@ -1498,15 +1662,6 @@ namespace OCC.Combat.Presentation
             CombatStatusBarEntry entry = passives[index];
             string body = CombatStatusPresentation.FirstSentence(entry.Detail);
             return new FormalTooltipContent(entry.DisplayName, "被动详情", body, FormalUiTheme.Amber);
-        }
-
-        private static Texture TimelinePortrait(UnitState unit)
-        {
-            if (unit == null) return null;
-            string artId = unit.IsHero ? "hero" : unit.EnemyArchetypeId;
-            if (string.IsNullOrEmpty(artId)) return null;
-            try { return Resources.Load<Texture2D>(FormalArtRegistry.UnitPath(artId)); }
-            catch (KeyNotFoundException) { return null; }
         }
 
         private void RefreshHistory(CombatState state)
@@ -1623,17 +1778,17 @@ namespace OCC.Combat.Presentation
             trigger.Configure(tooltip, provider);
         }
 
-        private Image ResourceBar(Transform parent, string title, Vector2 position, Color fillColor, out Text valueLabel)
+        private Image ResourceBar(Transform parent, string title, Vector2 position, Color fillColor, out Text valueLabel, float width = 384f)
         {
             Label(title, parent, position, new Vector2(200, 32), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleLeft);
-            valueLabel = Label(title + "数值", parent, position, new Vector2(374, 32), CombatHudTypography.ResourceValueFontSize,
+            valueLabel = Label(title + "数值", parent, position, new Vector2(width - 8, 32), CombatHudTypography.ResourceValueFontSize,
                 text, CombatHudTypography.ResourceValueAlignment);
             FormalUiKit.ConfigureNumericLabel(valueLabel);
             FormalResourceBarView prefab = FormalResourceBarView.InstantiateHud(parent);
             prefab.ConfigureHud(title, fillColor);
             prefab.Root.anchorMin = prefab.Root.anchorMax = prefab.Root.pivot = new Vector2(0f, 1f);
             prefab.Root.anchoredPosition = position + new Vector2(0f, -32f);
-            prefab.Root.sizeDelta = new Vector2(384f, 24f);
+            prefab.Root.sizeDelta = new Vector2(width, 24f);
             resourceChangeMarkers[prefab.Fill] = prefab.Marker;
             return prefab.Fill;
         }
@@ -1649,8 +1804,9 @@ namespace OCC.Combat.Presentation
             if (cooldown > 0) return "冷却中，还需 " + cooldown + " 个自身回合";
             if (hero.ActionPoints < spell.ActionPointCost)
                 return "行动点不足，需要 " + spell.ActionPointCost + " 点";
-            if (hero.Mana < spell.ManaCost)
-                return "个人魔力不足，需要 " + spell.ManaCost + " 点";
+            int manaCost = state.RogueSpells.EffectiveManaCost(spell);
+            if (hero.Mana < manaCost)
+                return "个人魔力不足，需要 " + manaCost + " 点";
             return preview == null ? "状态未就绪" : preview.CanSubmit ? "可用" : "不可用：" + preview.FailureReason;
         }
 
@@ -1806,6 +1962,12 @@ namespace OCC.Combat.Presentation
             displayed = value;
         }
 
+        private static string ShieldBadgeValue(int value)
+        {
+            if (value >= 1000000000) return (value / 1000000000d).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "B";
+            if (value >= 1000000) return (value / 1000000d).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "M";
+            return value.ToString();
+        }
         private static string ActionPointText(int current) => current + "／" + CombatResolver.HeroActionPointsPerTurn;
 
         private void RefreshAvailability(CombatState state, UnitState hero)
@@ -1823,25 +1985,29 @@ namespace OCC.Combat.Presentation
                 int fireSlot = parsedSlot;
                 FireSpellDefinition fire = fireSlot < 0 ? null : bootstrap.FireSpellInSlot(fireSlot);
                 ArtifactDefinition artifact = fireSlot == 0 ? (bootstrap.CurrentArmedArtifact ?? bootstrap.CurrentTrainingRangeArtifact) : null;
+                if (artifact != null) rogueSpell = null;
+                if (rogueSpell != null) fire = null;
                 if (available && artifact != null && hero.ActionPoints < artifact.ActionPointCost) { available = false; reason = "行动点不足：需要 " + artifact.ActionPointCost; }
                 if (available && fire != null && bootstrap.CurrentFireBattle != null && bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) > 0) { available = false; reason = "术式冷却中，还需 " + bootstrap.CurrentFireBattle.Cooldown(hero.Id, fire.Id) + " 回合"; }
                 if (available && fire != null && hero.Mana < fire.ManaCost) { available = false; reason = "能量不足：需要 " + fire.ManaCost; }
                 if (available && fire != null && hero.ActionPoints < fire.ActionPointCost) { available = false; reason = "行动点不足：需要 " + fire.ActionPointCost; }
-                if (fire != null || artifact != null) skill = null;
+                if (fire != null || artifact != null || rogueSpell != null) skill = null;
                 if (available && skill != null && hero.Cooldown(skill) > 0) { available = false; reason = "技能冷却中，还需 " + hero.Cooldown(skill) + " 回合"; }
                 if (available && skill != null && hero.Mana < skill.ManaCost) { available = false; reason = "以太不足：需要 " + skill.ManaCost; }
                 if (available && parsedSlot >= 0 && state.Ruleset == CombatRuleset.Roguelite && rogueSpell == null) { available = false; reason = "术式槽为空"; }
                 if (available && rogueSpell != null && state.RogueSpells.CooldownRemaining(rogueSpell.DefinitionId) > 0) { available = false; reason = "术式冷却中"; }
-                if (available && rogueSpell != null && hero.Mana < rogueSpell.ManaCost) { available = false; reason = "个人魔力不足：需要 " + rogueSpell.ManaCost; }
+                int rogueManaCost = rogueSpell == null ? 0 : state.RogueSpells.EffectiveManaCost(rogueSpell);
+                if (available && rogueSpell != null && hero.Mana < rogueManaCost) { available = false; reason = "个人魔力不足：需要 " + rogueManaCost; }
                 if (available && rogueSpell != null && hero.ActionPoints < rogueSpell.ActionPointCost) { available = false; reason = "行动点不足：需要 " + rogueSpell.ActionPointCost; }
                 Text spellLabel = parsedSlot < 0 ? null : pair.Value.transform.Find("文字")?.GetComponent<Text>();
                 if (available && spellLabel != null && spellLabel.text == "空槽") { available = false; reason = "术式槽为空"; }
                 pair.Value.GetComponent<UiButtonFeedback>()?.SetAvailability(available, reason);
                 int actionCost = rogueSpell?.ActionPointCost ?? fire?.ActionPointCost ?? artifact?.ActionPointCost ??
                     (skill == null ? 0 : CombatResolver.BasicActionPointCost);
-                int manaCost = rogueSpell?.ManaCost ?? fire?.ManaCost ?? artifact?.ManaCost ?? skill?.ManaCost ?? 0;
+                int manaCost = rogueSpell != null ? rogueManaCost : fire?.ManaCost ?? artifact?.ManaCost ?? skill?.ManaCost ?? 0;
                 int cooldownRemaining = rogueSpell != null ? state.RogueSpells.CooldownRemaining(rogueSpell.DefinitionId) :
                     fire != null ? bootstrap.CurrentFireBattle?.Cooldown(hero.Id, fire.Id) ?? 0 : skill == null ? 0 : hero.Cooldown(skill);
+                if (parsedSlot >= 0) SetCostChips(pair.Value, actionCost, manaCost);
                 ApplySpellAvailabilityVisual(pair.Value, available, reason, pair.Key == bootstrap.SelectedAction,
                     hero.ActionPoints < actionCost, hero.Mana < manaCost, cooldownRemaining);
             }

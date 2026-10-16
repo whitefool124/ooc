@@ -1,0 +1,8 @@
+{
+  "status": "REJECTED_SCENE_DIRECTION",
+  "runtime_capture": "Worldbuilding/归档/2026-10-13_OCC战场层次提升/ground_family_candidates/day.png",
+  "observed_failure": "Large mineral blobs and diagonal veins form repetitive high-contrast stains over peripheral paving and distract from units. Do not expand this set.",
+  "next_change": "keep registered native lattice and cell edges, reduce the surface marking's area and contrast",
+  "asset_checks": "32x32/5 colours/opaque checks passed, but do not constitute aesthetic approval",
+  "human_review": "PENDING"
+}

@@ -1,0 +1,36 @@
+{
+  "schema": "occ-hd2d-baselines-v1",
+  "baselines": {
+    "desk-v1": {
+      "scene_kind": "desk",
+      "status": "QA_PENDING",
+      "configuration": {},
+      "reason": "QA_PENDING: textured desk/card sample exists; local irradiance candidate requires current density, normal-entry, performance and human review evidence.",
+      "performance_budget": {
+        "device": "current_computer_2026-10-10",
+        "quality_tier": "pending_actual_configuration",
+        "approved_by": "user",
+        "approved_at": "2026-10-10",
+        "resolutions": {
+          "1920x1080": {
+            "target_fps": 60,
+            "p95_budget_ms": 16.7
+          },
+          "960x540": {
+            "target_fps": 60,
+            "p95_budget_ms": 16.7
+          }
+        },
+        "measurement_policy": "record actual hardware and tier; Editor and standalone Player separately; current labels require measured device identity before promotion"
+      },
+      "pixel_density_review": "PENDING: require complete bound scene inventory and two-resolution same-frame evidence under highest priority density policy"
+    },
+    "battlefield-v1": {
+      "scene_kind": "battlefield",
+      "status": "QA_PENDING",
+      "configuration": {},
+      "reason": "QA_PENDING: unified battlefield profile covers 18 catalog levels; current 1920x1080 and 960x540 normal four-battle journeys pass (2026-10-12 archive). Complete scene inventories, human review and Player performance remain pending.",
+      "pixel_density_review": "PENDING: require complete bound scene inventory and two-resolution same-frame evidence under highest priority density policy"
+    }
+  }
+}

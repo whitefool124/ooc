@@ -1,0 +1,11 @@
+{
+  "schema": "occ-art-brief-v1",
+  "asset_id": "hd2d_medical_meal_plate",
+  "status": "QA_PENDING",
+  "role": "ui_detail_adaptive",
+  "source_channel": "codex_builtin_imagegen",
+  "prompt": "ONE isolated pixel-art game object: a magical academy cafeteria meal serving set, a shallow ROUND ivory enamel dinner plate with bread and a small blue ceramic soup bowl resting naturally on it. Near-modern magical academy, practical clean utensils, no medieval or steampunk. Entire intact connected object, transparent background with safe margin. Front facing slightly overhead, no yaw, circular and oval silhouette with no rectangle frame. Coarse old console inventory sprite constructed on ONE perfectly even square macro-pixel grid. ALL detail, contour steps and highlight blocks must have exactly the same visibly large square pixel size. Broad clean flat solid color clusters, about sixteen colors, cream enamel, muted blue ceramic, walnut-brown bread, charcoal one-final-pixel outline, subtle fixed upper-left volume shading, no smaller pixels. No smoothly painted edges, antialiasing, gradients, grain, dither, glow, labels, text, table, floor or cast shadow outside subject. Simple readable shapes, not clutter, limited details.",
+  "palette_max": 16,
+  "confidence_min": 1.2,
+  "human_review": "PENDING"
+}

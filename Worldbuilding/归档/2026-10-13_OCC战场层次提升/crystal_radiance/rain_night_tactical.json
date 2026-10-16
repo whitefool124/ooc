@@ -1,0 +1,7 @@
+{
+  "action": "移动",
+  "movePreviewCells": 7,
+  "glowGraphics": 50,
+  "emissionUsesOriginalPixels": true,
+  "emissionTexture": false
+}

@@ -1,0 +1,49 @@
+{
+  "schema": "occ-ground-material-data-v1",
+  "status": "QA_PENDING",
+  "asset_id": "academy_floor_rain_channel",
+  "template_family": "gutter",
+  "source_recipe": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_material_recipes_v1.json",
+  "source_recipe_sha256": "8ba6ee8bef09c0d2b87f8c09a839d4206e205ecb2135df100e7e7b7560294f8d",
+  "height_record": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_repeat\\authored_heights.json",
+  "height_record_sha256": "3ddb5e654e03c4758787f77e6a9269997a87d66a0b5414db51b468a94b831eb9",
+  "normal": {
+    "schema": "occ-authored-normal-field-v1",
+    "status": "QA_PENDING",
+    "asset_id": "academy_floor_rain_channel",
+    "source_type": "deterministic_numeric_bake_from_explicit_physical_heights",
+    "source_height_record": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_repeat\\authored_heights.json",
+    "source_height_sha256": "3ddb5e654e03c4758787f77e6a9269997a87d66a0b5414db51b468a94b831eb9",
+    "albedo_reference": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_rain_channel.png",
+      "sha256": "8bb7acd977b729b43a80804f3dd5457bbf19820c819577a0328a65aff627fecf"
+    },
+    "native_canvas": [
+      32,
+      32
+    ],
+    "world_pixel_pitch": 0.03125,
+    "normal_convention": "OpenGL +Y, image rows top-down",
+    "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+    "normal_sha256": "7092bd760eb27e71cfea45e15b99ca7d766b33530b8a6a096401115d7e87de04",
+    "normal_path": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_repeat\\fields\\academy_floor_rain_channel\\normal.png",
+    "albedo_pixels_read": false,
+    "interpolation": false,
+    "source_art_changed": false,
+    "human_registration_review": "PENDING",
+    "runtime_review": "PENDING"
+  },
+  "surface_path": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_repeat\\fields\\academy_floor_rain_channel\\surface.png",
+  "surface_sha256": "7bb5a445955456d19b994671c64d52fb589b4c42c73f05d6035d3cdc1f7b6809",
+  "regions_path": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_repeat\\fields\\academy_floor_rain_channel\\authored_regions.json",
+  "regions_sha256": "50b8ef9cf2d94eaf938f5cea8186590c8ee2e8998bdfb9e4b05acd58e7c1caf4",
+  "channels": "linear RGB: R roughness, G metallic, B clearcoat; no emission/AO/transmission claim",
+  "source_type": "explicit_geometry_and_semantic_roles_numeric_bake",
+  "albedo_pixels_used": false,
+  "missing_features": [
+    "Glass/water coating approximation only; no physical transmission"
+  ],
+  "source_art_modified": false,
+  "human_registration_review": "PENDING",
+  "runtime_review": "PENDING"
+}

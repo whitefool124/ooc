@@ -1,0 +1,11 @@
+{
+  "status": "QA_PENDING",
+  "source": "academy_aether_crystal_intact",
+  "renderer": "物件_(5, 2)",
+  "pixelCount": 3,
+  "lightGroups": 3,
+  "coordinates": "source bottom-left; selected opaque texels (25,28),(40,36),(61,25)",
+  "albedoChanged": false,
+  "formalReplacement": false,
+  "scope": "One runtime crystal sample; other unit/model bindings not runtime reviewed"
+}

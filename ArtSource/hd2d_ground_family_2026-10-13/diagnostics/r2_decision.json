@@ -1,0 +1,6 @@
+{
+  "status": "REJECTED_NOT_ADMITTED",
+  "basis": "Read-only opaque subject inference yields confidences 1.0473, 1.0011, 1.0605; visual frame uses a half-size unit. No confidence reduction or source scale change accepted.",
+  "retry_dimension": "anchor the single logical lattice to the supplied current 32x32 ground tile",
+  "reference": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_b.png"
+}

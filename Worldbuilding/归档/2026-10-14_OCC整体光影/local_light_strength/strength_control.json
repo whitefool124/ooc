@@ -1,0 +1,11 @@
+{
+  "source": "Same-frame direct point-light intensity only; source-pixel emission, key/fill, captured irradiance, camera and HUD held fixed",
+  "factors": [
+    1.0,
+    0.4,
+    0.0
+  ],
+  "points": 2,
+  "restored": true,
+  "humanReview": "PENDING"
+}

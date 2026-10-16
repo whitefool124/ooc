@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Command executed.\",\"data\":{\"compiler\":\"Roslyn\",\"logs\":[{\"Level\":\"info\",\"Message\":\"Existing authenticated Pipeline server restarted on session port 7801; no settings or asset saved\"}],\"created\":[],\"modified\":[],\"destroyed\":[],\"returnValue\":null}}"
+      }
+    ]
+  }
+}

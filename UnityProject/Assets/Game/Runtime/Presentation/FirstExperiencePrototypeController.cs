@@ -76,6 +76,8 @@ namespace OCC.Combat.Presentation
         private bool selectingContinue, pendingOverwrite, settingsFromLanding, eliteArmed;
         private int selectedSlot = -1, pendingResolution;
         private bool pendingNewRunCreation;
+        private bool menuEntry, menuHasUnfinishedRun, menuTutorialComplete;
+        private int menuSlot = -1;
         private float pendingVolume;
         private PcDisplayPreferences displayPreferences, confirmedDisplayPreferences;
         private float displayConfirmationDeadline;
@@ -92,6 +94,7 @@ namespace OCC.Combat.Presentation
         public int DebugSelectedSlot => selectedSlot;
         public int DebugOpeningBrandMarkIndex => brandIndex;
         public bool HasSave => HasAnySaveRecord();
+        public bool HasUnfinishedRun => menuHasUnfinishedRun;
         public bool HasLegacySave => PlayerPrefs.HasKey(LegacySaveKey);
         public bool HasOpeningBrandMarks => brandMarks != null && brandMarks.Length == 2 && brandMarks[0] != null && brandMarks[1] != null;
         public FlowStage CurrentStage => data == null ? FlowStage.Branding : data.stage;
@@ -115,6 +118,8 @@ namespace OCC.Combat.Presentation
 
         public bool IsEncyclopediaOpen => combatBootstrap != null && combatBootstrap.IsEncyclopediaOpen;
         public void OpenEncyclopedia() => combatBootstrap?.OpenEncyclopedia();
+        public bool IsArchiveOpen => combatBootstrap?.GetComponent<FormalRogueliteUi>()?.IsArchiveOpen == true;
+        public void OpenJourneyArchive() => combatBootstrap?.OpenJourneyArchive();
 
         public static bool IsRuntimeStage(FlowStage stage) => stage >= FlowStage.Map && stage <= FlowStage.RunCreation;
 
@@ -559,7 +564,7 @@ namespace OCC.Combat.Presentation
         private void Small(float y, string label, Action action) => Button(new Rect(1480, y, 390, 78), label, action);
         private void Button(Rect r, string label, Action action) { if (GUI.Button(r, label, buttonStyle)) action(); }
         private static string Mark(bool value) => value ? "已完成" : "未完成";
-        private static string SlotKey(int slot) => SavePrefix + slot;
+        private static string SlotKey(int slot) => FirstExperienceSaveRouting.ResolveFrontEndKey(SavePrefix + slot);
 
         public bool SlotExists(int slot) => slot >= 0 && slot < 3 &&
             (PlayerPrefs.HasKey(SlotKey(slot)) || FirstExperienceSaveRouting.HasMapRun(slot));
@@ -693,7 +698,8 @@ namespace OCC.Combat.Presentation
         }
         private void ConfirmCreateSlot()
         {
-            data = new SaveData { slot = selectedSlot, stage = FlowStage.Configuration };
+            data = new SaveData { slot = selectedSlot, stage = FlowStage.Configuration,
+                fixedExperienceComplete = menuEntry && menuTutorialComplete };
             pendingNewRunCreation = true;
         }
         private void ContinueSlot(int slot)
@@ -737,6 +743,68 @@ namespace OCC.Combat.Presentation
         }
         public void StartNewRun() => BeginSaveSelection(false);
         public void ContinueRun() => BeginSaveSelection(true);
+        // Menu routing reads the selected profile without creating, deleting or migrating saves.
+        private void RefreshMainMenuState()
+        {
+            menuSlot = FirstExperienceSaveRouting.ActiveSlot;
+            if (menuSlot < 0 || !SlotExists(menuSlot))
+            {
+                menuSlot = -1;
+                for (int i = 0; i < 3; i++) if (SlotExists(i)) { menuSlot = i; break; }
+            }
+            menuHasUnfinishedRun = false;
+            menuTutorialComplete = false;
+            if (menuSlot < 0) return;
+            try
+            {
+                if (FirstExperienceSaveRouting.HasMapRun(menuSlot))
+                {
+                    string key = FirstExperienceSaveRouting.ResolveMapKey(RogueliteSaveGateway.MapRunKey, menuSlot);
+                    RogueliteMapRun saved = RogueliteMapRun.FromRogue11(Rogue11Serializer.Deserialize(PlayerPrefs.GetString(key)));
+                    menuHasUnfinishedRun = !saved.IsComplete;
+                    menuTutorialComplete = !saved.IsTutorialPhase;
+                }
+                else
+                {
+                    SaveData saved = JsonUtility.FromJson<SaveData>(PlayerPrefs.GetString(SlotKey(menuSlot)));
+                    if (saved == null) { menuHasUnfinishedRun = true; return; }
+                    menuHasUnfinishedRun = saved.stage != FlowStage.Complete && saved.stage != FlowStage.RunCreation;
+                    menuTutorialComplete = saved.fixedExperienceComplete;
+                }
+                if (IsSlotWriteProtected(menuSlot)) menuHasUnfinishedRun = true;
+            }
+            catch (Exception) { menuHasUnfinishedRun = true; } // Keep the recovery action visible.
+        }
+
+        public void StartGameFromDesk()
+        {
+            if (data.stage != FlowStage.Landing) return;
+            RefreshMainMenuState();
+            menuEntry = true;
+            selectingContinue = false;
+            selectedSlot = menuSlot < 0 ? 0 : menuSlot;
+            handoffError = string.Empty;
+            if (IsSlotWriteProtected(selectedSlot))
+            {
+                handoffError = "该记录处于写入保护中，请先验证恢复；原记录不会自动覆盖。";
+                selectingContinue = true;
+                data.stage = FlowStage.SaveSelection;
+                return;
+            }
+            pendingOverwrite = menuHasUnfinishedRun;
+            if (pendingOverwrite) data.stage = FlowStage.SaveConfirmation;
+            else ConfirmCreateSlot();
+        }
+
+        public void ContinueGameFromDesk()
+        {
+            if (data.stage != FlowStage.Landing) return;
+            RefreshMainMenuState();
+            if (!menuHasUnfinishedRun || menuSlot < 0) return;
+            menuEntry = true;
+            selectingContinue = true;
+            ContinueSlot(menuSlot);
+        }
         public void ShowLanding()
         {
             StopOpening();
@@ -745,6 +813,8 @@ namespace OCC.Combat.Presentation
             settingsFromLanding = false;
             selectedSlot = -1;
             pendingNewRunCreation = false;
+            menuEntry = false;
+            RefreshMainMenuState();
             data.stage = FlowStage.Landing;
             enabled = true;
         }
@@ -784,7 +854,9 @@ namespace OCC.Combat.Presentation
         public void ConfirmConfiguration()
         {
             data.slot = selectedSlot;
-            data.stage = FlowStage.AcademyIntro;
+            data.stage = menuEntry && data.fixedExperienceComplete ? FlowStage.RunCreation : FlowStage.AcademyIntro;
+            // The original completed run remains on disk until the new round is safely created.
+            if (data.stage == FlowStage.RunCreation) { ConfirmSubsequentRound(); return; }
             Save();
         }
         public void ConfirmSubsequentRound()
@@ -860,8 +932,8 @@ namespace OCC.Combat.Presentation
                     if (settingsFromLanding) { settingsFromLanding = false; data.stage = FlowStage.Landing; }
                     break;
                 case FlowStage.SaveSelection: data.stage = FlowStage.Landing; break;
-                case FlowStage.SaveConfirmation: data.stage = FlowStage.SaveSelection; break;
-                case FlowStage.Configuration: data.stage = FlowStage.SaveSelection; break;
+                case FlowStage.SaveConfirmation: data.stage = menuEntry ? FlowStage.Landing : FlowStage.SaveSelection; break;
+                case FlowStage.Configuration: data.stage = menuEntry ? FlowStage.Landing : FlowStage.SaveSelection; break;
                 case FlowStage.RunCreation: data.stage = FlowStage.Landing; break;
                 default: break;
             }

@@ -1,0 +1,95 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.main_menu_e.rig.flat_cover",
+  "role": "ui_tabletop_prop_64",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent static overhead cover generation r2. Not an animation sheet. r1 mixed lattice rejected, r3 exceeds 64px role canvas rejected.",
+    "source_path": "ArtSource/BookRig_20261008/cover-source-r2.png",
+    "source_sha256": "a91696f024100ed026ec7cfeab11da24cc7ad8a308b6de8993d01d681208dbe1"
+  },
+  "delivery": {
+    "output_path": "ArtSource/BookRig_20261008/cover-native-r2.png",
+    "output_sha256": "5ae83a8885d4a063bd6ea2157761d5d16403262d20631c92bca5edbc188e8431",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 16,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "All physical surfaces rasterize into the shared 320x180 Point output. Static native subject stays 21x26; it is not enlarged to fill its 64x64 canvas."
+  },
+  "application": {
+    "runtime_draw_rect": [
+      0,
+      0,
+      1920,
+      1080
+    ],
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/BookRig_20261008/one_x.png",
+    "four_x": "ArtSource/BookRig_20261008/four_x.png",
+    "grayscale": "ArtSource/BookRig_20261008/grayscale.png",
+    "checker": "ArtSource/BookRig_20261008/checker.png",
+    "application_contact": "ArtSource/BookRig_20261008/rig-closed.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "Pending human review of static material and physical hinge. Source native subject21x26 stays intact; Unity surfaces rotated orthographically, no source resizing."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "runtime_lattice": {
+      "tier": 6,
+      "crop": [
+        780,
+        480,
+        372,
+        192
+      ],
+      "blocks": 1984,
+      "mixed_blocks": 0,
+      "pass": true,
+      "scope": "Open-book region of actual 1920x1080 Game View; 6px blocks. Material texels are foreshortened by physical surfaces before 320x180 rasterization."
+    }
+  },
+  "processing": {
+    "method": "subject_grid_lossless_decode",
+    "geometric_component_resizing": false,
+    "reports": [
+      "ArtSource/BookRig_20261008/cover-qa-r2.json"
+    ],
+    "human_aesthetic_acceptance": false
+  }
+}

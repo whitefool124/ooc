@@ -1,0 +1,38 @@
+{
+  "schema": "occ-registered-material-data-decode-v1",
+  "status": "REVIEW_READY",
+  "kind": "roughness",
+  "source": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-12_OCC战场主要材质贴图\\earth_c\\roughness_panel_r1.png",
+  "source_sha256": "683d78b438bd01017b39c88f406c970bad0dcca8bbc595290bf77b744d994eb8",
+  "reference": "E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Resources\\Art\\FormalAcademyIndependentFloors32\\academy_block_earth_c.png",
+  "reference_sha256": "8531085787faf46e266da7234faf58443e8831cc94d63f09bc5657ee624e1e7a",
+  "native_grid": [
+    32,
+    32
+  ],
+  "source_macro_pitch_xy": [
+    19.59375,
+    19.59375
+  ],
+  "registration_basis": "Full opaque UV field; one rim cell on the supplied native32 stone; fixed normalized32x32 layout. Sparse/repetitive numeric fields are not sprite silhouettes.",
+  "output": "E:\\数据库\\OCC_Codex\\Worldbuilding\\归档\\2026-10-12_OCC战场主要材质贴图\\earth_c\\roughness32.png",
+  "output_sha256": "af631984c7088d4c92fdd2c139fbfbac39e6720e77cce736cab38ce17fe97455",
+  "geometry_resize_or_interpolation_performed": false,
+  "new_rgb_colours_introduced": false,
+  "background_pixels_removed": 0,
+  "macro_cell_rgb_selection": "observed central-cell RGB medoid",
+  "max_central_cell_std": 16.649253866794982,
+  "rgb_min": [
+    170,
+    170,
+    170
+  ],
+  "rgb_max": [
+    217,
+    217,
+    216
+  ],
+  "manual_registered_field_review_required": true,
+  "human_registration_review": "PENDING",
+  "limitation": "No lowered generic1.2 threshold and no automatic formal approval. Validate actual map alignment and neutral/default/rotated-light response."
+}

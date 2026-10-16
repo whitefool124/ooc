@@ -1,0 +1,22 @@
+{
+  "provider": "Codex built-in image_gen",
+  "calls": 3,
+  "known_cost": null,
+  "attempts": [
+    {
+      "id": "r1",
+      "decision": "REJECTED mixed grid",
+      "qa": "cover-qa-r1.json"
+    },
+    {
+      "id": "r2",
+      "decision": "REVIEW_READY static cover",
+      "qa": "cover-qa-r2.json"
+    },
+    {
+      "id": "r3",
+      "decision": "REJECTED exceeds target",
+      "qa": "cover-qa-r3.json"
+    }
+  ]
+}

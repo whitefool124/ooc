@@ -1,0 +1,174 @@
+{
+  "updated": [
+    "ArtSource/enemy_independent_20261016/elder_tracker_hound/manifest.occ-art-manifest-v1.json",
+    "ArtSource/enemy_independent_20261016/legacy_storekeeper/manifest.occ-art-manifest-v1.json",
+    "ArtSource/enemy_independent_20261016/signal_keeper/manifest.occ-art-manifest-v1.json",
+    "ArtSource/enemy_independent_20261016/wind_librarian/manifest.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_candidates_20261016/loose_paper/manifest.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/binding/asset/field_binding_mark.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_00.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_01.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_02.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_03.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_04.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_05.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/screen/asset/field_paper_screen.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_00.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_01.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_02.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_03.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_04.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_05.occ-art-manifest-v1.json",
+    "ArtSource/field_effect_reset_20261016/trace/asset/field_trace.occ-art-manifest-v1.json",
+    "ArtSource/device_material_candidates_20261016/overload/asset/device_overload.occ-art-manifest-v1.json",
+    "ArtSource/device_material_candidates_20261016/shard/asset/material_crystal_shards.occ-art-manifest-v1.json",
+    "ArtSource/device_material_candidates_20261016/tower/asset/device_tower_mechanism.occ-art-manifest-v1.json",
+    "ArtSource/device_material_candidates_20261016/ward/asset/device_ward_generator.occ-art-manifest-v1.json"
+  ],
+  "validation": [
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/elder_tracker_hound.png",
+      "manifest": "ArtSource/enemy_independent_20261016/elder_tracker_hound/manifest.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/elder_tracker_hound.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/legacy_storekeeper.png",
+      "manifest": "ArtSource/enemy_independent_20261016/legacy_storekeeper/manifest.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/legacy_storekeeper.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/signal_keeper.png",
+      "manifest": "ArtSource/enemy_independent_20261016/signal_keeper/manifest.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/signal_keeper.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/wind_librarian.png",
+      "manifest": "ArtSource/enemy_independent_20261016/wind_librarian/manifest.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/wind_librarian.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_loose_paper.png",
+      "manifest": "ArtSource/field_effect_candidates_20261016/loose_paper/manifest.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_loose_paper.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_binding_mark.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/binding/asset/field_binding_mark.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_binding_mark.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_burning_00.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_00.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_burning_00.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_burning_01.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_01.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_burning_01.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_burning_02.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_02.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_burning_02.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_burning_03.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_03.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_burning_03.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_burning_04.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_04.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_burning_04.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_burning_05.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/fire/asset/field_burning_05.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_burning_05.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_paper_screen.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/screen/asset/field_paper_screen.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_paper_screen.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_smoke_00.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_00.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_smoke_00.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_smoke_01.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_01.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_smoke_01.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_smoke_02.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_02.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_smoke_02.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_smoke_03.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_03.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_smoke_03.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_smoke_04.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_04.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_smoke_04.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_smoke_05.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/smoke/asset/field_smoke_05.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_smoke_05.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldFields32/field_trace.png",
+      "manifest": "ArtSource/field_effect_reset_20261016/trace/asset/field_trace.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/field_trace.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldDevices32/device_overload.png",
+      "manifest": "ArtSource/device_material_candidates_20261016/overload/asset/device_overload.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/device_overload.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldDevices32/material_crystal_shards.png",
+      "manifest": "ArtSource/device_material_candidates_20261016/shard/asset/material_crystal_shards.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/material_crystal_shards.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldDevices32/device_tower_mechanism.png",
+      "manifest": "ArtSource/device_material_candidates_20261016/tower/asset/device_tower_mechanism.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/device_tower_mechanism.json"
+    },
+    {
+      "asset": "UnityProject/Assets/Game/Resources/Art/FormalBattlefieldDevices32/device_ward_generator.png",
+      "manifest": "ArtSource/device_material_candidates_20261016/ward/asset/device_ward_generator.occ-art-manifest-v1.json",
+      "pass": true,
+      "report": "Worldbuilding/归档/2026-10-16_第一阶段待办清空/asset_validation/device_ward_generator.json"
+    }
+  ]
+}

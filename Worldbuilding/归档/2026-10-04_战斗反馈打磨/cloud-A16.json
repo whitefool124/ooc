@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"section\" requested-start=\"doxcnIvSTr8WNZbNHop7wZHBwlf\"><h2 id=\"doxcnIvSTr8WNZbNHop7wZHBwlf\">A.16 同时反馈的可读性</h2><p id=\"doxcnFd9xK2pWao7EoCsFZzBIjd\">状态卡和数字反馈为完整上浮轨迹预留空间，在8px视口安全区内选择最近的不重叠位置；空间不足时选择总遮挡最小的位置，不得隐藏结果。伤害显示“-N”，治疗、回蓝和套盾显示“+N”，护盾承伤显示“盾 -N”；护盾相关数字统一使用钢铁银，不使用治疗绿色。伤害数字只可短暂覆盖受击者身体；状态卡避让角色主体、生命／护盾条、状态图标、敌情和其他反馈。位移后的反馈用细正交引线指回原格，引线不接收输入并随反馈淡出。位置对齐2px网格；同格后续状态沿既有状态列排列。</p></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2639
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

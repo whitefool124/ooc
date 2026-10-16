@@ -1,0 +1,84 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.main_menu_e.neutral_albedo.background",
+  "role": "ui_scene_plate_native",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in imagegen neutral material plate; original is composition reference only. Community reconstruction review candidate, NOT lossless grid pass.",
+    "source_path": "ArtSource/MainMenuE_Albedo_20261008/background/source-r3.png",
+    "source_sha256": "453d906db4190af66418aa58880dc1d5250087ce561b0f84544a960533700ced"
+  },
+  "delivery": {
+    "output_path": "ArtSource/MainMenuE_Albedo_20261008/background/native.png",
+    "output_sha256": "dd09910b60d1024fb92b9cf5e7fb5f459f06a4b6f804e05fd5a61b11b72b87e9",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 64,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Single displayed pixel grid, 6 screen pixels per logical pixel at 1920x1080."
+  },
+  "application": {
+    "runtime_draw_rect": [
+      0,
+      0,
+      1920,
+      1080
+    ],
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/MainMenuE_Albedo_20261008/background/one_x.png",
+    "four_x": "ArtSource/MainMenuE_Albedo_20261008/background/four_x.png",
+    "grayscale": "ArtSource/MainMenuE_Albedo_20261008/background/grayscale.png",
+    "checker": "ArtSource/MainMenuE_Albedo_20261008/background/checker.png",
+    "application_contact": "UnityProject/ReviewEvidence/MainMenuE/menu-neutral-background.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "Removes directional sun stripes, window cast shadows and tabletop reflections. Human acceptance pending. Third independent raw revision. After latest empty-room-only production instruction, this plate with baked furniture/foliage/vista is retained as an intermediate rendering comparison, not the final production background."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0
+  },
+  "processing": {
+    "method": "recorded_community_reconstruction",
+    "geometric_component_resizing": false,
+    "human_aesthetic_acceptance": false,
+    "reports": [
+      "ArtSource/MainMenuE_Albedo_20261008/background/native-grid-qa.json",
+      "ArtSource/MainMenuE_Albedo_20261008/background/candidate-qa.json"
+    ],
+    "empty_room_production_compliant": false
+  }
+}

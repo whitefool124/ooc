@@ -1,0 +1,12 @@
+{
+    "meshes": 82,
+    "vertices": 1332344,
+    "invalidTriangles": 0,
+    "worldPitch": 0.03125,
+    "maximumGridError": 0.0,
+    "maximumUvDensityError": 0.0,
+    "mainCameraLocked": true,
+    "technicalPass": true,
+    "aestheticReview": "PENDING",
+    "scope": "Four auxiliary static views; playback camera never moved"
+}

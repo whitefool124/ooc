@@ -1,0 +1,738 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.4",
+  "contract_sha256": "154a164b50e13c8aee31834246f52ff0b87beb66ad70e39e02d45ff9c4e21eb2",
+  "scene_kind": "battlefield",
+  "baseline_id": "battlefield-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Editor/Hd2DBattlefieldPropProbe.cs",
+    "UnityProject/Assets/Game/Editor/Hd2DBattlefieldPropProbe.cs.meta",
+    "UnityProject/Assets/Game/Editor/Hd2DLiveAcademyCoverCapture.cs",
+    "UnityProject/Assets/Game/Editor/Hd2DLiveAcademyCoverCapture.cs.meta",
+    "UnityProject/Assets/Game/Editor/Hd2DLiveCoverCapture.cs",
+    "UnityProject/Assets/Game/Editor/Hd2DLiveCoverCapture.cs.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/normal.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/normal.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/roughness.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/roughness.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/normal.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/normal.png.meta",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/roughness.png",
+    "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/roughness.png.meta",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader",
+    "UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader.meta",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldPropMaps.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldPropMaps.cs.meta",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs.meta"
+  ],
+  "inputs": [
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "f58a11f55edbac3893e59fd81d0089ac6ef97a105950ecd87687207204609b94"
+    },
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "df8a1845c6484a87b1123ec9dffa7d55cc60d003098790a2fa6e0befd6e911bf"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "6debc9099b945a4a4996ee04318ed3ab001dfee0f376389172df808bc8587ace"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs",
+      "sha256": "2d3b90a575d03ec6d87a9c08988b510dd438002efb7787a6c78d5e4ee5c7b4df"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldTactics.cs",
+      "sha256": "b6e9512854f40b266735f2ead588b3cf15932d8857825d2d27a1f14c47df8e7b"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DAcademyEnvironment.cs",
+      "sha256": "850b28b54eed633573b2f8054c60d704f14591d963881941566cae35e48c8fd1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader",
+      "sha256": "b19cf1f5baf1f0fe3ed3df504350d738a854d8b353907985fcf16dac3d223914"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DLiveCoverCapture.cs",
+      "sha256": "aee9cc64ab59b97184b99b729375e5e28b4dbe7a2f6e1f4b7c3cb94afb41304a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldPropMaps.cs",
+      "sha256": "c40e7a36d52c1a012415d8fb4f04ba56cca44b3ebfe3479112a7c76606d198b1"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DBattlefieldPropProbe.cs",
+      "sha256": "043a310c8d33a79e5199dc3897f56700acdd2f62d7b1dd43216bd803cd997eff"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DLiveAcademyCoverCapture.cs",
+      "sha256": "738563bb8f369620a48586d898b24fc979b5f77cd04ebc870e129c0bfa146135"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Shaders/Hd2DGroundedSprite.shader.meta",
+      "sha256": "f94edf33c007eaacfdb119c9c01f40fbc520be9696ed139ef8be31eca026017a"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DLiveCoverCapture.cs.meta",
+      "sha256": "c075cbd29188777f8a210a7472103ca1ce2feb09a6de1bf4acdabff4c53ecf6f"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldPropMaps.cs.meta",
+      "sha256": "f24cae16c24a60d3617d952dbe59a4393e0b6985a453b542107f9342aedf7844"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DBattlefieldSample.cs.meta",
+      "sha256": "ced65329a3dc4392e52eee37f60cbbc3a2574eefcef2748ac9154192efe941e8"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DBattlefieldPropProbe.cs.meta",
+      "sha256": "cf9f719e6c5235aa4ef6146e5fc8388c81fa8a5e8ae138dbb6ed7bb4d360574c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Editor/Hd2DLiveAcademyCoverCapture.cs.meta",
+      "sha256": "39df7e00093f0f18ba118f5c563a9c90c79aa2631f4be76e9eb73315bfd5cfde"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/normal.png",
+      "sha256": "4a73f59b5de702ec536e3c03ba743adf8df5f270f46233750ab01f2d515bce06"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/normal.png.meta",
+      "sha256": "71ed2291b60b47b0a31d035d7502acad3d19c7bee6708befc3f17b410a92d427"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/roughness.png",
+      "sha256": "99590b476cf89538a50670e97fb1e58135d69adfe27fdb0663bc66d8ce7a1350"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_heavy_training_barricade_intact/roughness.png.meta",
+      "sha256": "7bae5d7ceebf99a7914914731e2069f55eea9ef5f0ee6a1a967f27ccf9256a87"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/normal.png",
+      "sha256": "deb85ea2bce06542ac882a3e85a28dc20c0c138143f73a67a52fed5f855d2a91"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/normal.png.meta",
+      "sha256": "0ef0181db4e7975aa42d519925fe27507c3c9f7ed4d3700bad3ff68f198c0c7e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/roughness.png",
+      "sha256": "5444b738802fa595626b42a42d451be2c0aa0318fe1340fb840d22ef327ded9e"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_book_crate_intact/roughness.png.meta",
+      "sha256": "1e6705c747a4a5126d68ab520e3fbb865325f987ed05ecce9f8ae78965e97673"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_heavy_training_barricade_intact.png",
+      "sha256": "d32717d12b028f9f34e714da4db1ee3f05659b6b0847273b5bdeeb3e314dd3c9"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_light_book_crate_intact.png",
+      "sha256": "ecb2514718fdeb4c348307705af45c91a369b56cc4d6256b366b9a5a139155ba"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact_reference.png",
+      "sha256": "7a91addb54bfb1b11e4494a3db17fae603f8636f728081c7779d6237faa4083a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact_reference.png",
+      "sha256": "1e5a41a1db16edc24aea42c97ffa7b78078b19df1883dff263724faf5c67bad1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/compile_final.json",
+      "sha256": "d133347abd10f577133842b866a5958f1f2a51d0201988e5a983caec0fa34020"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/console_status.json",
+      "sha256": "d4fde2a3b4847ae620ac9cd82d0d8aa5043774983fb8444f20b54e487894b712"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/generation_sources.json",
+      "sha256": "4cd48ffce2dde4fbc12990bdcf6c8a8ec35f8561b66c4b757c60c002df9441e6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/live_dispatch.json",
+      "sha256": "04e88e93e8d426060f3547649219128021e0db5146ed942e6eadcc4467e4b00b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/material_inventory.json",
+      "sha256": "ae5ee5b6e8ef5ecf4a46d7be340ba69c8d1fc3c0a59a144ac09211845f3f1e4a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe_dispatch.json",
+      "sha256": "5c4974d38fc28f4643b11c56f20e72a63adaaa00099add4aa841255bde59b1df"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/props_before_after.png",
+      "sha256": "0fbd276154a4a3c92f7bf0fe7efbdf9e7f8813d7e7b324b8561388896b583d4f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/render_metrics.json",
+      "sha256": "b5ee0d097b9412a13e2d572192160555285b60e8d535ab11f5f2c766da003520"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/material_provenance.json",
+      "sha256": "09eb42f622a01cd88bff6e84cb7633c544ab111359d7c3e28474963a9aaa304a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/normal_manifest.json",
+      "sha256": "776cc622d184884855c9b6ca4c7330c0bce748ecf2de4aa01dd0f2b24fbf7ce9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/normal_panel.png",
+      "sha256": "ccfc3425a6ae9b4300e6739198c55a928f3add9c840229738b62653b6f02377c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/normal_qa16x.png",
+      "sha256": "b6be7cef36ded04cf52fcb99852f47940c917ac6b020e159549a0a03b62fa28a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/normal_registration.json",
+      "sha256": "07f85c9187390ffcdaf2850e3e9a3bdc2a8b18e0f2035b639035aeaf9d488ba9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/paired_raw.png",
+      "sha256": "3c588122015d67b07c143ea49ea39e8db23d6f60a14fee90aeca47bd37036ed9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_manifest.json",
+      "sha256": "adee63a466fc85143f98201151fe38dbc703d4e81372f303405db4f42fa47ce4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_panel.png",
+      "sha256": "c151d6b6541717a288837eaf911634c6fcdb1d678e6025ae8528e40c61643343"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_qa16x.png",
+      "sha256": "e891d155577c21d06c14b3b27f6b2cf3393b545e8eec989129d875f51550fbb3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_registration.json",
+      "sha256": "f781b17b628045ac1233cb4ee4cb5c90530e739b80e8c65c9d8a57c23b31261f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/material_provenance.json",
+      "sha256": "94260fad547daa3c52b081262ba40e8cc629bfc65a7aba050c5b58b9aab91607"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_manifest.json",
+      "sha256": "2b532807e3a01d362729209c813f52c0ae490000f8228ce849dddba4c79e898a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_panel.png",
+      "sha256": "954a8ce5e8fc1e61871879f67f1ccb2d72088bbfb14053607d1b2f38397748b6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_qa16x.png",
+      "sha256": "d04bbc27461e1486121de1fe28cbec1b421a64bc1eff401d3bde607cb0cd4743"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_raw_r3.png",
+      "sha256": "5df2ae6fe291cd4ea52eb7ae93017e343563388d1c51bc7bd29bbe439178a0e3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_registration.json",
+      "sha256": "ccdc562119c0049cc325cc890fc8b86c237871344a61c4d60b58bb065e225fb6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/paired_raw.png",
+      "sha256": "010295bbe3e301912a3083378c7e3a7e6f4322fcfd331da4a7eb161474614c82"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/rejected_anchor_r1.png",
+      "sha256": "544ffb02d873c19a1f12bec75f7c7a9df0627a8be210b4ef3a7fada08df58b7a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/roughness_manifest.json",
+      "sha256": "86b98d85e5eb00424c2990278334603090a692af805972aba5c5fea9d1c8526f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/roughness_panel.png",
+      "sha256": "a26bea5a109b050b234b8567dbf4cdc839ab790efdf73eaaf3cccc29db166923"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/roughness_qa16x.png",
+      "sha256": "e51395140f3b37709546a1923cc827468c7f39073554c42c886f153339d451a4"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/roughness_registration.json",
+      "sha256": "579c329cfbc2dd815754cb1a42385407bb239e42ae46992f20f31be4d891b0bc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_live/academy_covers_live.png",
+      "sha256": "5110e8d1d99dfa6887ca2e0b728f1e1465e748737aba14c4b7f35fc66fab0149"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_live/capture.json",
+      "sha256": "5806132d3a9ef3d332bf21241c8c55ab5cca7326d793732372dfc940942d01f0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_live/cleanup.json",
+      "sha256": "6c8f0fa20f7222f56fcafa47aaffdfbcf5ba8e5b5e35eaec798fe6ddcac606e6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/live/capture.json",
+      "sha256": "8b27239144c3df0edad21dcd570e56a272495504bcfac63502daafe3ad71acb5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/live/capture_backface_r1.json",
+      "sha256": "51aaeb608980ce185d99183e7bfd9ccbb1546380414a5465c2cd3479fb221f10"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/live/cleanup.json",
+      "sha256": "6c8f0fa20f7222f56fcafa47aaffdfbcf5ba8e5b5e35eaec798fe6ddcac606e6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/live/cleanup_backface_r1.json",
+      "sha256": "6c8f0fa20f7222f56fcafa47aaffdfbcf5ba8e5b5e35eaec798fe6ddcac606e6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/live/greenhouse_live.png",
+      "sha256": "10ac37fbe841806d4eb0975cacf199fcf05011c1bb3238726ebb452c70e83ca7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/live/greenhouse_live_backface_r1.png",
+      "sha256": "5a60ab302b2d687746a2646b62fdfc50f45b3798a1e7c030baca09b15e406c32"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/batch_state.json",
+      "sha256": "03b58a6a0394bf2411c58d473f56bc58524d6100967512eaff16808eb84f624e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_heavy_training_barricade_intact_dry/baseline_1080.png",
+      "sha256": "b1c293ca8388a8b62dd3c2567fe21c6d5c4cd1f52911a638d2e3fb9acd9d0e5e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_heavy_training_barricade_intact_dry/baseline_540.png",
+      "sha256": "944647b84f5593a34fdce9ea05b95b1aee408a4d98d6cc0080e52a9cc39c6bb7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_heavy_training_barricade_intact_dry/full_1080.png",
+      "sha256": "c5a53c7be3f5fe2ea537e564b491e876181b5e8ba14f4ac38abfb344fa5b383d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_heavy_training_barricade_intact_dry/full_540.png",
+      "sha256": "eb9fcb75348904f2028e92129821b018d0fda68fcdbdc4e7986ab338335f9d15"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_heavy_training_barricade_intact_dry/neutral_light_1080.png",
+      "sha256": "3540b5e9717b925c8fbe4d72979af315e3dd0b4c6c0411b7a8c49ee39a87ecab"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_heavy_training_barricade_intact_dry/normal_only_1080.png",
+      "sha256": "14b1426008fdd7c03a027264432b7a89fea81153b15cf2834dcc7bae33cb8205"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_heavy_training_barricade_intact_dry/result.json",
+      "sha256": "9745a53271d2b94eb99c058b6496c06676ca77e184f1fbe997262924f10f047d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_heavy_training_barricade_intact_dry/rotated_light_1080.png",
+      "sha256": "6afed11519ecd3646373259a40a32c718f965f5271d84a67c946fa577bcdb15d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_heavy_training_barricade_intact_dry/surface_only_1080.png",
+      "sha256": "953c58de02d4e4afb63e035a6c9c3bb198943fcf3664f0d166b522b777741bcc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_light_book_crate_intact_dry/baseline_1080.png",
+      "sha256": "9c5641f2c4628a61074b3cccf931a2a3f2d5a3e77ef489a3c8ee28422e3a2f48"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_light_book_crate_intact_dry/baseline_540.png",
+      "sha256": "5e0f568d5a59a569a4f12319e50f183b3ff68e313ec28b0307f2645fd31108c9"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_light_book_crate_intact_dry/full_1080.png",
+      "sha256": "94e2c37cd02892ac0a18c3f7420ee98347b31316b425081db10f0288d60ecb53"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_light_book_crate_intact_dry/full_540.png",
+      "sha256": "a36824683675805904fdbc48ec597ce6cb7dafe084f6e75c25e1e8c31e073f5d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_light_book_crate_intact_dry/neutral_light_1080.png",
+      "sha256": "209f0e6dda58f4e1bb6056c6e7aff9024a609969e32293c262faa5e27ca613eb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_light_book_crate_intact_dry/normal_only_1080.png",
+      "sha256": "db5da963ac3f2be4356b70c0bd90f4591469054160fe833d0373d1a3d2f453b3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_light_book_crate_intact_dry/result.json",
+      "sha256": "8443e6cea4329fe1180c17b531bd8baf93f6fad458ae6e4776dd743725c5e4ca"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_light_book_crate_intact_dry/rotated_light_1080.png",
+      "sha256": "95e2af5a388beb4afc7ff4f79c75fa218e966743b0968cb41f96a7465e171f29"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/academy_light_book_crate_intact_dry/surface_only_1080.png",
+      "sha256": "fb3917a0bf0af55e1eab560a8caa1215688df6c8b8d2a7aed45585797c40e70f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/normal_manifest.json.admission.json",
+      "sha256": "e3566b3a06430868d71e9287dfd6c6c520a3da027aabea01951d407ee131dc2f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_heavy_training_barricade_intact/roughness_manifest.json.admission.json",
+      "sha256": "e3566b3a06430868d71e9287dfd6c6c520a3da027aabea01951d407ee131dc2f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/normal_manifest.json.admission.json",
+      "sha256": "e3566b3a06430868d71e9287dfd6c6c520a3da027aabea01951d407ee131dc2f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_light_book_crate_intact/roughness_manifest.json.admission.json",
+      "sha256": "e3566b3a06430868d71e9287dfd6c6c520a3da027aabea01951d407ee131dc2f"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/admission_summary.json",
+      "sha256": "b47ef28d2f3d8d507d07cd3e080dc5be8b11bbd6ba8bccf410b40c3320f101a0"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": null,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 45,
+    "yaw": 0,
+    "wall_height": 0.65,
+    "unit_ground_angle": 45
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "overview",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "closest_legal_zoom",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "wall_contact_occlusion",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "range_ground",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "strongest_existing_emission",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_action_result_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_pan_zoom_resize",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": false,
+    "console_clear": false,
+    "interaction_pass": false,
+    "isolation_pass": true,
+    "resource_lifetime_pass": false,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/batch_state.json",
+      "sha256": "03b58a6a0394bf2411c58d473f56bc58524d6100967512eaff16808eb84f624e"
+    }
+  },
+  "performance": {
+    "device": null,
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": null,
+        "p95_budget_ms": null,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Only local sprite material probes verified; source-region alignment/human review, full scene density, game motion/flow and performance pending",
+    "New actual cover maps remain QA_PENDING; wood bench and training pad variants are not included"
+  ],
+  "local_prop_probe": {
+    "batch": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/probe/batch_state.json",
+      "sha256": "03b58a6a0394bf2411c58d473f56bc58524d6100967512eaff16808eb84f624e"
+    },
+    "metrics": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/render_metrics.json",
+      "sha256": "b5ee0d097b9412a13e2d572192160555285b60e8d535ab11f5f2c766da003520"
+    },
+    "material_count": 2,
+    "normal_entry": false,
+    "window_focus": false,
+    "play_mode": false
+  },
+  "local_live_capture": {
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/live/capture.json",
+      "sha256": "8b27239144c3df0edad21dcd570e56a272495504bcfac63502daafe3ad71acb5"
+    },
+    "capture": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/live/greenhouse_live.png",
+      "sha256": "10ac37fbe841806d4eb0975cacf199fcf05011c1bb3238726ebb452c70e83ca7"
+    },
+    "cleanup": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/live/cleanup.json",
+      "sha256": "6c8f0fa20f7222f56fcafa47aaffdfbcf5ba8e5b5e35eaec798fe6ddcac606e6"
+    },
+    "normal_entry": false,
+    "includes_hud": false
+  },
+  "local_academy_capture": {
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_live/capture.json",
+      "sha256": "5806132d3a9ef3d332bf21241c8c55ab5cca7326d793732372dfc940942d01f0"
+    },
+    "capture": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_live/academy_covers_live.png",
+      "sha256": "5110e8d1d99dfa6887ca2e0b728f1e1465e748737aba14c4b7f35fc66fab0149"
+    },
+    "cleanup": {
+      "path": "Worldbuilding/归档/2026-10-12_OCC实际掩体材质接入/academy_live/cleanup.json",
+      "sha256": "6c8f0fa20f7222f56fcafa47aaffdfbcf5ba8e5b5e35eaec798fe6ddcac606e6"
+    },
+    "normal_entry": false,
+    "includes_hud": false
+  }
+}

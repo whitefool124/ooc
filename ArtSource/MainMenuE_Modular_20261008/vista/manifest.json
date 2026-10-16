@@ -1,0 +1,98 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "ui.main_menu_e.modular.vista",
+  "role": "ui_scene_plate_native",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent Codex built-in imagegen asset. COMMUNITY_RECONSTRUCTION_REVIEW_ONLY",
+    "source_path": "ArtSource/MainMenuE_Modular_20261008/vista/source-r1.png",
+    "source_sha256": "830c5a850b83a1f817fa897d64010788bcd675990aa9f65545b1e2850107afb4"
+  },
+  "delivery": {
+    "output_path": "ArtSource/MainMenuE_Modular_20261008/vista/native.png",
+    "output_sha256": "d30af2dc8426a8860cbed6964ee9050ce770f2518f0328746dbd8525cb5e10da",
+    "native_output_path": null,
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 32,
+    "required_color_families": []
+  },
+  "display": {
+    "canonical_integer_scale": 6,
+    "canonical_at": [
+      1920,
+      1080
+    ],
+    "screen_px_per_native_px_at_canonical": 6,
+    "integer_only": true,
+    "fractional_scale_forbidden": true,
+    "uniform_pixel_size_with_siblings": true,
+    "note": "Single displayed pixel grid, 6 screen pixels per logical pixel at 1920x1080."
+  },
+  "application": {
+    "runtime_draw_rect": [
+      0,
+      0,
+      1920,
+      1080
+    ],
+    "default_integer_scale": 6,
+    "minimum_integer_scale": 1
+  },
+  "evidence": {
+    "one_x": "ArtSource/MainMenuE_Modular_20261008/vista/one_x.png",
+    "four_x": "ArtSource/MainMenuE_Modular_20261008/vista/four_x.png",
+    "grayscale": "ArtSource/MainMenuE_Modular_20261008/vista/grayscale.png",
+    "checker": "ArtSource/MainMenuE_Modular_20261008/vista/checker.png",
+    "application_contact": "UnityProject/ReviewEvidence/MainMenuE/menu-modular-room.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "silhouette": "PENDING",
+    "material": "PENDING",
+    "perspective": "PENDING",
+    "style": "PENDING",
+    "application": "PENDING",
+    "illumination": "PENDING",
+    "notes": "Empty room + independently generated composition asset; no human acceptance claimed."
+  },
+  "unity_import": {
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "atlas_padding": 0,
+    "atlas_rotation": false,
+    "atlas_tight_packing": false,
+    "atlas_extrude": 0,
+    "runtime_lattice": {
+      "tier": 6,
+      "pass": true,
+      "report": "UnityProject/ReviewEvidence/MainMenuE/pixel-grid-modular-room.json",
+      "scope": "shared rendered grid; not proof of lossless source decoding"
+    }
+  },
+  "processing": {
+    "cols": 281,
+    "rows": 151,
+    "step_x": 6.1585,
+    "step_y": 6.0293,
+    "consensus": "arbitrated",
+    "confidence": "medium",
+    "detect_s": 9.282,
+    "recon_s": 1.992,
+    "route": "COMMUNITY_RECONSTRUCTION_REVIEW_ONLY",
+    "lossless_pass": false,
+    "native_size": [
+      281,
+      151
+    ],
+    "arbitrary_target_resizing": false,
+    "human_acceptance": false
+  }
+}

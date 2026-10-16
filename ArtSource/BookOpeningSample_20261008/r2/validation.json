@@ -1,0 +1,19 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "ui.main_menu_e.book_opening_sample.r2",
+  "role": "ui_detail_adaptive",
+  "status": "FAIL",
+  "metrics": {},
+  "errors": [
+    "unknown status: REJECTED",
+    "delivery output_path is missing",
+    "application.runtime_draw_rect is required",
+    "application.default_integer_scale must be a positive integer",
+    "application.minimum_integer_scale must be a positive integer",
+    "required evidence missing: one_x",
+    "required evidence missing: four_x",
+    "required evidence missing: grayscale",
+    "required evidence missing: checker",
+    "required evidence missing: application_contact"
+  ]
+}

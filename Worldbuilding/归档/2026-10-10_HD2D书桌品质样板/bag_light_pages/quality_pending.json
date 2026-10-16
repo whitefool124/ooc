@@ -1,0 +1,1075 @@
+{
+  "schema": "occ-hd2d-quality-report-v1",
+  "policy_version": "2026-10-10.3",
+  "contract_sha256": "5f1b45719f50c7544ba5c901dd3eefbbc0a0181eeb86f039e5553c2a805d109b",
+  "scene_kind": "desk",
+  "baseline_id": "desk-v1",
+  "status": "QA_PENDING",
+  "changed_files": [
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+    "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Art.cs"
+  ],
+  "inputs": [
+    {
+      "path": "Tools/OCCArt/hd2d_baselines_v1.json",
+      "sha256": "296d00399e90e469d9f84bf3e44cee5d7074748a3243a1da9dc2412d5812ef42"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/Hd2DContent20261009/student_dossier.png",
+      "sha256": "7e7f529c83edc248a9f2baed25c426c8016a18a460d3514f428742634984adb5"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/Hd2DContentFrames/简洁纸边.asset",
+      "sha256": "c6edccb3948336c31e2528a569c03cb59b89b2379faf5c6fe2b9656afad8a16c"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Hd2D/HD2DAtmosphere.asset",
+      "sha256": "adf26689a7e80b22ef256d4a7c516929d51aea7f3af97bbe91cb136db3a685f0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/desk.png",
+      "sha256": "6151936c18cfde721a5590bcc7d5939a4c68c508d2c672387587a75f53c744ef"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Resources/Art/VictorBattle/victor_static.asset",
+      "sha256": "8ecf3ad3223f1841c9755365db02dd357608b8edad37a7433050ec14ae970087"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.Art.cs",
+      "sha256": "4311a83a7caf303e3534422a2cdddcd0a44309289d739104a69ed287a3ecf542"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DLoadoutScene.cs",
+      "sha256": "c0530d881c380523a2201262f532d5f3b83beab094b0050e239dd73d1369f5f0"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/Hd2DViewProfile.cs",
+      "sha256": "4569b0bcdbd4540a3defa4039ac711bb7f886554bfe96e3094aa886af6b1b538"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/MainMenuHd2DStage.cs",
+      "sha256": "cc14c25431840009bd15a534a7ae7d7e74196c347d5c5964bfee829dd6da35d6"
+    },
+    {
+      "path": "UnityProject/Assets/Game/Runtime/Presentation/PixelPerfectDisplayGuard.cs",
+      "sha256": "a3e19c8ccdf3e897e9c6c09cd508915afcbb56165e027180320f8796f812e396"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/bag_light_a5_1920.png",
+      "sha256": "61005dcd9ece9f999ce0a7f257b7fe5365a2a779cdc3f03f5a942c719b08f6ac"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/bag_light_a5_960.png",
+      "sha256": "8572ef22512513384a4d505a9ac2738671732940e0930f246c9abae57e5b74a5"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/bag_light_spell_a5_1920.png",
+      "sha256": "b70108076d237ff1d23c932b2f124cfa473339ec8a65b4bfff6e62ec5045ba16"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/bag_light_spell_a5_960.png",
+      "sha256": "e92f2aaf18b7df4e8fc683103a855b34ae0df3dd7d29ee38a588a2c2029afb3d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a4_capture.json",
+      "sha256": "bd109492bba4a9860c4a4f5d905b6724b483a6a272a9e368f105278547273203"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a4_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a4_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a4_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a4_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a4_open.json",
+      "sha256": "14273edce47284b437f1ea0f927f4e84eccefa13bbc8f242a92ed11f684638d3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a4_scope.json",
+      "sha256": "c811d42dc2d773bc011b5b8266f8dadc3eea8e8c502ee4ba08178a5779db7019"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a4_spell_capture.json",
+      "sha256": "52d3675ce2398c5097185f8b81244af819cd292119dd5d1bd6921977110f651e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a4_spell_open.json",
+      "sha256": "5f136df8cdd1fb6a6b4a1c0e68241452fbe4eae890d3a2307e3190af1063232e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_bag960.json",
+      "sha256": "54d0716e05b86f7e78b16baf8fc415997df80a002d89e7a7d0059fbc8e6eb3a7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_capture.json",
+      "sha256": "b038793e73687c59348317d90f03efa50fe9a0ce22636bc12a3f662845c71a67"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_compile.json",
+      "sha256": "59c410b5ce64f336e20ac654a5aa6d9eae5db30644c537b18248e8957a476dbb"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_console.json",
+      "sha256": "e7d6dcfdf2eaaa167922873cd2e5f5fd4100c1339c46efc898cf6b456f9b8c12"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_density.json",
+      "sha256": "56f6bc2a5b5f7e34632c018143822210e9541b8d68ecd8532b6b64b600965728"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_edit_preflight.json",
+      "sha256": "d1384d3be7643defa43ee8edde8643a0faaee32799d38b7739ba8d5888f30068"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_equipment_return.json",
+      "sha256": "af59276359c9094f854d1b625ee6d34107f67b65f8971d208fbe8a7ef3f27b23"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_lights.json",
+      "sha256": "6333f0e028aff1ac181fe1db918d260c0c7986af1cb7d1b59e7b927dfeb3ef64"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_open.json",
+      "sha256": "fe89b10d995d7eefaab66fd3b824adaabc011809255eea44f89c18106a40b08b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_ready.json",
+      "sha256": "00adad78a835de747e6ce0c5465e705f789030d8ec341f98fdf1e1d93e24f20b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_restore960.json",
+      "sha256": "c1aca7aac8649c6eb3d02f79c37b98727f816809d74e75b9a515a49e34b33a8b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_return_map.json",
+      "sha256": "e6dd51ee353b380d7ea235e01465f22a6ee0ca6bc1fa65c020a87c210245d810"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_return_map_state.json",
+      "sha256": "09e1311b4480c9e8a7e2e50fd785fa6fa05a089e11c18fde10287358e4ce8b06"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_return_reward.json",
+      "sha256": "146cf95361ddedad85bf324b858ba65f18518903b63f62691071de6107fda94b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_reward_after.json",
+      "sha256": "2b2abb271efdea79786bb06ff678a40f776ccef5b5090afe52879e48d10badc7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_reward_bag_buttons.json",
+      "sha256": "9bd5f95e53be861936809c1f31acd012170fa2aa3ffaf62cc8721052abba63cc"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_reward_bag_open.json",
+      "sha256": "14de0189067b3258b35cbf371271bc59cb4ab8c17fc4da7e6807d4c8326cc003"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_reward_before.json",
+      "sha256": "2b2abb271efdea79786bb06ff678a40f776ccef5b5090afe52879e48d10badc7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_reward_buttons.json",
+      "sha256": "afde2b5839061e9944cea1544e7a5ca89786079806d5a2f8cdd4452376e78d36"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_reward_local.json",
+      "sha256": "d2afd590fc038ced4f023ef006d3093160598c17ebd56ffb03bf2e3bf6eeb420"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_scope.json",
+      "sha256": "8c1dca49d58f0abb0e1f7b460f07f64972f79e14df854da08a31e50ce9d733c0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_select960.json",
+      "sha256": "95b6c75aba1d7f87047f60437567c7dfed727437ae3cca244a4e8f012febf834"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_select_spell.json",
+      "sha256": "4ef7d48b6484e40b7870653360f67c7c6b6d1c11a994a220f3c3e6b075212e42"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_spell960.json",
+      "sha256": "ebbb0a7328e115574565dad9d525f207e54d2c431f7afcb770457df5926003ca"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_spell_buttons.json",
+      "sha256": "c80ee6cf716351850c3c596562b836fb9d9e8e5d0820e1dfa72bd4c74d824a60"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_spell_capture.json",
+      "sha256": "00f086c4dc3f2be57c84b64da10b809921bcf855222f52194860b368eb5c5783"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_spell_open.json",
+      "sha256": "31dd8036ca3c4f5a1ec89677b615079200ced33057a23adb22dde473efe6d22a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_after_1920.json",
+      "sha256": "fba2aa40373cfd0fbe80254f1e19f2cad4b6864f9488a39f82ac9f7007c574a3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_after_buttons.json",
+      "sha256": "31368cc055c56c688db8caf6ddd71837432b2e336f3e2cb5a0d457da83fdbf35"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_before_capture.json",
+      "sha256": "2f4d864a239d5e3b5baca0a5cb1bbb0e3f43b93a848bd7e2b7494d215ac927f8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_chest_click.json",
+      "sha256": "2f9118151c5324b2deb5831cf049f830ffc990743653a08f82efd9a7408406b8"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_compile.json",
+      "sha256": "44eb0b45c2cd4dacd16a285382cc53343c0ec58b7741464d8de55efb0720a02c"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_compile_ready.json",
+      "sha256": "330d26180a1c6f78b16b0420691233e6beed426b4df987c40f227700dfae92c1"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_contact_compile.json",
+      "sha256": "4d53349e65044a3ee2c88db76c3113ec5cce05da0f1c95e4a4cda9b2d8ca430d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_contact_errors.json",
+      "sha256": "263c78df74bd6501ded1444c00175d77a9a9b70a0bd99bb53e0789cb93be1236"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_contact_final_compile.json",
+      "sha256": "74ae9573746eae9fe265042172cdbbc2516dab0b258ca843b1740b91309ea499"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_contact_final_ready.json",
+      "sha256": "b5dea9c207f6bef385175092ab83ca4b8d53ac8dcdd0fbd5fff4a5e5a8cdcd6e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_contact_status.json",
+      "sha256": "d7b3621e88fa96f88034d408962235557675c0cc76265478e5ffca689c3407b5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_density_after.json",
+      "sha256": "5d1704ced89717938e40c9bb7d7c1cd855a0c79d957521aa6a020a513f8ea36b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_density_before.json",
+      "sha256": "011bdba1760cd23fcd6ab55cf51deb909af76ebebdbd670e5310c8f78732faa6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_detail_buttons.json",
+      "sha256": "dd74d513b57184fdb94a66d016b49fae6fbb3e11e35c7cd8b4b3cc72bf221812"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_detail_initial.json",
+      "sha256": "4d141ebc92541a679e5498fd41dddb2a851f843473cc0cc0f60ef42949943236"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_edit_preflight.json",
+      "sha256": "d1384d3be7643defa43ee8edde8643a0faaee32799d38b7739ba8d5888f30068"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_entry_after.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_entry_after_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_exit_before.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_final_buttons.json",
+      "sha256": "ccfe57383c1041cf850690da6183bed6a22c2c0ad654962f829a5ec406b50d9d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_final_capture.json",
+      "sha256": "57b91ab11849e95ffbacbc0e2f649da06678d58fee0e5a5ddd3a80443affc43d"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_final_enter.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_final_entry.json",
+      "sha256": "4dcbb770e91d0a2b72d4736dcd93efd61cda9e09d78e9da8378c87e02144f51b"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_final_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_final_map.json",
+      "sha256": "da20d105804002f6cd25d0476719e4c5ad565f3d75094d1d6c200679b062d198"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_final_open.json",
+      "sha256": "accdc3f8f21b3fdc42be95e464347ecb9b74e08808e47a8221fbdaa9b3f89104"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_final_preflight.json",
+      "sha256": "81069f32ffa5c7df2d991725afde5a67a1d9c662ae7df604b34c3cf1590245c3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_final_scope.json",
+      "sha256": "407261fbda4ee988822982d2dcf8c08d69510cd5dff532c9f8df24329ea00258"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_final_spell_open.json",
+      "sha256": "2753f03f80e67b39a8e68fc8375007eb0a3d4f1d44f719eaed392a7ea4efafe3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_fix_edit.json",
+      "sha256": "48271181aa0965244b17df82a16463b8a5378f124dcaf4054721be31fed8577a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_fix_exit.json",
+      "sha256": "6228af9972e6c50fdd874c931bf775cd71a191a3e47ff2fcb8fce4a417c605e7"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_inventory_after.json",
+      "sha256": "31e19e74cc2799cb6795e43cdd763e1bf8b57a8f0f4c9896f5dfc76c7ad01255"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_inventory_buttons.json",
+      "sha256": "2484f8a202a305df06076b64ba0278456eb4242dbb6a112264bcf3439a9e7c2e"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_map_buttons.json",
+      "sha256": "aae45182c0dac4b0e33b2f42abc0c4e1ff6d80d83e53c7f4c38360c55c597b38"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_open.json",
+      "sha256": "72f80dcfe8bac63c6b02c70eba24e9a4cc05b094ec7be12436fafdd4e5e79d58"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_open_inventory.json",
+      "sha256": "99c77a0b871c4dd4023ae7e9b1a941664b1197832aa41cb805e6c4c7a8513042"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_play.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_play_after.json",
+      "sha256": "a035a017fb4111ae75be49725847f3f936e77e2f04d7903d9731301b9749c0f5"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_preflight.json",
+      "sha256": "81069f32ffa5c7df2d991725afde5a67a1d9c662ae7df604b34c3cf1590245c3"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_preview.json",
+      "sha256": "21823e9dd3644fe24732a10e36d16016668e5a02db21b9eddac52292422d1258"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_preview_capture.json",
+      "sha256": "f0f3748de631f9e4c28d9976b92f5b45ffd29408060a89e5c7f1f7644ccff201"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_readback_after.json",
+      "sha256": "ff15db1c1e3b713b2ea57c9742d7d9c8eb56012ef3e2d87fabf61a15d93da911"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_restore_scene.json",
+      "sha256": "21b89f082079496f11647493945e1ccc7928291f62cad9cc4d7776fc12a0c0a6"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_scope_after.json",
+      "sha256": "e231b9123843d8fe3b70229cfefa6c7af46f5d57675bb06ca00c7a640b2f3784"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_scope_before.json",
+      "sha256": "df74569741f92a4678f88ea16614f65875d1b35d20c6e7293efd2451c2eb55ad"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_spell_capture.json",
+      "sha256": "09afd8a527c70aae6738290cc2f419c70283fa7eba492c70a2ba4748632521d0"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_spell_density.json",
+      "sha256": "48c6512768742c2eacdf05186e29e9a76336863695b38c7ad36e612cfbb66b3a"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_spells_compile.json",
+      "sha256": "ce7f7ef7026c6492c16002b05ee0c758198f8c0c85eb4e5674c9b5037e0c1c74"
+    },
+    {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_spells_ready.json",
+      "sha256": "d652699e40bae4e1b8fdc876845ba47a6dc173f6bab4b1938ef0e125a36fa737"
+    },
+    {
+      "path": "Worldbuilding/策划案/OCC_项目总策划案_v1.0.md",
+      "sha256": "e3d411ed5c97764ebfd06659ab7dc4b12303319622a6401e6d59ee39b1fbf371"
+    }
+  ],
+  "configuration": {
+    "hdr": true,
+    "msaa": false,
+    "output_policy": null,
+    "tone_mapping": null,
+    "exposure": null,
+    "bloom": null,
+    "depth_of_field": null,
+    "shadows": null,
+    "main_light": null,
+    "fill_light": null,
+    "local_lights": null,
+    "material_profile": null,
+    "source_sampling": null,
+    "construction_manifest": null,
+    "pixel_density_manifest": null,
+    "pitch": 35,
+    "yaw": 0,
+    "field_of_view": 24
+  },
+  "evidence": [
+    {
+      "case": "default",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "default",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "no_post",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_0",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_40",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "lamp_100",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "reading_contact",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "pixel_density_same_frame",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "normal_entry_interaction_return",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    },
+    {
+      "case": "camera_focus_resize_page_switch",
+      "resolution": [
+        960,
+        540
+      ],
+      "path": null,
+      "sha256": null,
+      "verdict": "PENDING"
+    }
+  ],
+  "runtime": {
+    "project_path": "E:/数据库/OCC_Codex/UnityProject",
+    "normal_entry": true,
+    "console_clear": false,
+    "interaction_pass": true,
+    "isolation_pass": false,
+    "resource_lifetime_pass": false,
+    "record": {
+      "path": "Worldbuilding/归档/2026-10-10_HD2D书桌品质样板/bag_light_a5_entry_status.json",
+      "sha256": "5d78780c2d86d595c8e26b05802357b2ef4388b51b1949ff3c7593c8b9cdf344"
+    }
+  },
+  "performance": {
+    "device": "AMD Ryzen 7 5800H with Radeon Graphics  / NVIDIA GeForce RTX 3060 Laptop GPU",
+    "quality_tier": null,
+    "measurements": [
+      {
+        "resolution": [
+          1920,
+          1080
+        ],
+        "target_fps": 60,
+        "p95_budget_ms": 16.7,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      },
+      {
+        "resolution": [
+          960,
+          540
+        ],
+        "target_fps": 60,
+        "p95_budget_ms": 16.7,
+        "p95_frame_ms": null,
+        "cpu_frame_ms": null,
+        "gpu_frame_ms": null,
+        "memory_mb": null,
+        "switch_peak_mb": null
+      }
+    ],
+    "record": null
+  },
+  "human_review": {
+    "status": "PENDING",
+    "reviewer": null,
+    "reviewed_at": null,
+    "dimensions": {
+      "scene_pixel_size_consistency": "PENDING",
+      "space_contact": "PENDING",
+      "material_consistency": "PENDING",
+      "lighting_integration": "PENDING",
+      "reading_input": "PENDING",
+      "motion_stability": "PENDING",
+      "reference_direction": "PENDING",
+      "model_texture_2d_consistency": "PENDING"
+    },
+    "record": null
+  },
+  "blockers": [
+    "Populated/full backpack, drag/drop and save/reload require verification; not cleared for full preparation-page quality promotion.",
+    "Complete scene pixel density/construction inventory, motion/no-post/light extremes and genuine human approval are pending.",
+    "Unity QuickInstaller cached Editor exception remains unresolved.",
+    "Standalone Player 60 FPS / P95 <=16.7 ms at both resolutions is unmeasured."
+  ],
+  "local_implementation": {
+    "scope": "Existing equipment/backpack and spell preparation desk presentation; no new gameplay or formal asset replacement",
+    "world_pitch": 0.03125,
+    "lighting": {
+      "screen": [
+        1920,
+        1080
+      ],
+      "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+      "cpu": "AMD Ryzen 7 5800H with Radeon Graphics ",
+      "stageLayer": 29,
+      "lights": [
+        {
+          "name": "以太灯真实局部光",
+          "enabled": false,
+          "intensity": 2.3804903,
+          "color": [
+            0.55,
+            0.8,
+            1.0
+          ],
+          "shadows": "Soft",
+          "cullingMask": 536870912
+        },
+        {
+          "name": "窗外统一日光",
+          "enabled": true,
+          "intensity": 1.1,
+          "color": [
+            1.0,
+            0.97,
+            0.91
+          ],
+          "shadows": "Soft",
+          "cullingMask": 536870912
+        },
+        {
+          "name": "窗边柔和补光",
+          "enabled": true,
+          "intensity": 2.4,
+          "color": [
+            0.93,
+            0.97,
+            1.0
+          ],
+          "shadows": "None",
+          "cullingMask": 536870912
+        },
+        {
+          "name": "室内暖补光",
+          "enabled": true,
+          "intensity": 1.2,
+          "color": [
+            0.96,
+            0.98,
+            1.0
+          ],
+          "shadows": "None",
+          "cullingMask": 536870912
+        },
+        {
+          "name": "整备陈列柔光",
+          "enabled": true,
+          "intensity": 2.5,
+          "color": [
+            0.96,
+            0.98,
+            1.0
+          ],
+          "shadows": "None",
+          "cullingMask": 536870912
+        },
+        {
+          "name": "整备台灯暖光",
+          "enabled": true,
+          "intensity": 1.2,
+          "color": [
+            1.0,
+            0.95,
+            0.86
+          ],
+          "shadows": "None",
+          "cullingMask": 536870912
+        }
+      ],
+      "cellCasters": [
+        {
+          "name": "背包格_0_0 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_1_0 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_2_0 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_3_0 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_4_0 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_5_0 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_0_1 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_1_1 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_2_1 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_3_1 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_4_1 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_5_1 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_0_2 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_1_2 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_2_2 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_3_2 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_4_2 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_5_2 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_0_3 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_1_3 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_2_3 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_3_3 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_4_3 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_5_3 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_0_4 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_1_4 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_2_4 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_3_4 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_4_4 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_5_4 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_0_5 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_1_5 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_2_5 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_3_5 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_4_5 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_5_5 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_0_6 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_1_6 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_2_6 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_3_6 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_4_6 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_5_6 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_0_7 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_1_7 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_2_7 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_3_7 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_4_7 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_5_7 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_0_8 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_1_8 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_2_8 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_3_8 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_4_8 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_5_8 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_0_9 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_1_9 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_2_9 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_3_9 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_4_9 场景面",
+          "casts": "Off"
+        },
+        {
+          "name": "背包格_5_9 场景面",
+          "casts": "Off"
+        }
+      ],
+      "materials": [
+        {
+          "name": "桌面实体",
+          "texture": "desk",
+          "smoothness": 0.32,
+          "metallic": 0.0
+        }
+      ]
+    },
+    "changes": "Local window key light, reduced fills, matte paper, dielectric textured wood; flat grid guides do not cast shadows. Native-sized character, equipment, tactical symbols and dossier; compact text-only spell rows, native selected spell illustration; book/lamp/contact positioning repairs."
+  },
+  "validation_scope": {
+    "normal_entry": "PASS:entry and actual map > backpack > spells > select second spell > equipment > map clicks",
+    "reward": "Disposable B1 in-memory reward > organise inventory > return reward; pending state unchanged. Not a complete combat journey or full-backpack test.",
+    "density": "Visible simple Image sprite rectangles in the initial equipment page have 1/32 world pitch. Source cluster uniformity, model/environment completeness and populated backpack remain pending.",
+    "resolution": "Actual Game View/render framebuffer 1920x1080 and 960x540; static screenshots inspected. No standalone Player performance measurements.",
+    "console": "Compilation ready, no compilation errors. Cached error sample contains QuickInstaller ExecutionEngineException (illegal byte sequence in assembly CodeBase). Not resolved by this local presentation change.",
+    "cleanup": "Original Game View index 3 restored, verified temporary size removed; original EpicToonVfxShowcase clean, Edit Mode; no scene save. Audit verification slots restore on Play exit."
+  },
+  "current_screenshots": [
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/bag_light_a5_1920.png",
+      "sha256": "61005dcd9ece9f999ce0a7f257b7fe5365a2a779cdc3f03f5a942c719b08f6ac"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/bag_light_a5_960.png",
+      "sha256": "8572ef22512513384a4d505a9ac2738671732940e0930f246c9abae57e5b74a5"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/bag_light_spell_a5_1920.png",
+      "sha256": "b70108076d237ff1d23c932b2f124cfa473339ec8a65b4bfff6e62ec5045ba16"
+    },
+    {
+      "path": "UnityProject/ReviewEvidence/20261010_hd2d_desk/bag_light_spell_a5_960.png",
+      "sha256": "e92f2aaf18b7df4e8fc683103a855b34ae0df3dd7d29ee38a588a2c2029afb3d"
+    }
+  ]
+}

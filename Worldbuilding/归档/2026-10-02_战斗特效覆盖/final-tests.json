@@ -1,0 +1,174 @@
+{
+  "status": "completed",
+  "duration": 1.61,
+  "summary": {
+    "total": 23,
+    "passed": 23,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.ArtifactFeedbackTruthTests.NewFeedbackSemantics_ReuseExistingSpritesAndDoNotPlayFakeImpactVfx",
+      "Status": "Passed",
+      "Duration": 0.075954,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatPixelVfxCoverageTests.ProjectileDelivery_UsesTravelForFireAndNonFireWithoutPretendingImpactIsAStatus",
+      "Status": "Passed",
+      "Duration": 0.0201047,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatPixelVfxCoverageTests.ResolvedAbilities_HaveResultEffectsAboveNinetyPercent_IncludingShieldOnlyInDenominator",
+      "Status": "Passed",
+      "Duration": 0.6198611,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatPixelVfxCoverageTests.ShieldOnlySkills_KeepNumbersWithoutShellOrTravelingShieldEffects",
+      "Status": "Passed",
+      "Duration": 0.0023856,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.ArmedAttachment_DoesNotPlayItsFutureImpactBeforeTheWeaponTrigger",
+      "Status": "Passed",
+      "Duration": 0.0062492,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.EveryPreparedSpell_UsesAvailableFramesAndNonOverlappingStagesPerCell",
+      "Status": "Passed",
+      "Duration": 0.1907759,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.ReactionDoesNotEraseDeliveryImpactOrGroundStages",
+      "Status": "Passed",
+      "Duration": 0.011961,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.Renderer_SamplesFramesTracksViewportAndClearsAllPendingEffectsWhenAnimationIsDisabled",
+      "Status": "Passed",
+      "Duration": 0.0611279,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.RepeatedAbility_ReplacesOverlappingTracksWithoutBuildingAnUnboundedQueue",
+      "Status": "Passed",
+      "Duration": 0.0091954,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.ResetOrDisable_RemovesRenderedAndFutureStagesWithoutChangingCombat(False)",
+      "Status": "Passed",
+      "Duration": 0.0085437,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.ResetOrDisable_RemovesRenderedAndFutureStagesWithoutChangingCombat(True)",
+      "Status": "Passed",
+      "Duration": 0.0024628,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.TechnicalFeedback_DoesNotSubstituteDamageOrRecoverySprites(\"ether_utility\")",
+      "Status": "Passed",
+      "Duration": 0.0036866,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.TechnicalFeedback_DoesNotSubstituteDamageOrRecoverySprites(\"ether_attribute\")",
+      "Status": "Passed",
+      "Duration": 0.0014528,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.TechnicalFeedback_DoesNotSubstituteDamageOrRecoverySprites(\"ether_projectile\")",
+      "Status": "Passed",
+      "Duration": 0.0013599,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.TechnicalFeedback_DoesNotSubstituteDamageOrRecoverySprites(\"metal_projectile\")",
+      "Status": "Passed",
+      "Duration": 0.0013031,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatVfxPlaybackTests.ZeroDamageRecoveryAndGroundResults_DoNotClaimThoseEffectsOccurred",
+      "Status": "Passed",
+      "Duration": 0.0008756,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EpicToonVfxShowcaseTests.PlayAt_BuildsADeepCompositeParticleEffect",
+      "Status": "Passed",
+      "Duration": 0.0390765,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.EpicToonVfxShowcaseTests.PlayLightningAt_BuildsAStagedElectricStrike",
+      "Status": "Passed",
+      "Duration": 0.0075718,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FireSpellCatalogTests.Catalog_UsesOnlyExplicitReviewedExistingIconAndVfxPaths",
+      "Status": "Passed",
+      "Duration": 0.0396433,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FormalArtAssetAuditTests.EveryFormalVfx_HasSixIndependentFrames",
+      "Status": "Passed",
+      "Duration": 0.0778905,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.MA18AcademyCombatArtContractTests.FormalVfx32_ContainsFourteenSixFrameFireModules",
+      "Status": "Passed",
+      "Duration": 0.0163178,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.MA18AcademyCombatArtContractTests.RuntimeVfxRegistry_ContainsEveryM_A18FireModule",
+      "Status": "Passed",
+      "Duration": 0.0004207,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.MA18AcademyCombatArtContractTests.SameCellVfxPriority_PreservesMajorEffectsOverGroundAndCast",
+      "Status": "Passed",
+      "Duration": 0.0005829,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>E 分层像素渲染样板</title>
+<style>body{margin:0;background:#211e19;color:#f5ead1;font:16px system-ui}header{padding:16px 24px;display:flex;gap:12px;align-items:center}button{background:#eadfc5;color:#332d24;border:0;padding:10px 20px;cursor:pointer}img,video{display:block;max-width:100%;margin:auto}img{image-rendering:pixelated}video{width:100%}[hidden]{display:none}p{margin:0;padding:0 24px 12px;color:#cabfaa;font-size:13px}</style>
+<header><span>E 分层像素渲染样板 · Unity 实机</span><button onclick="show('still')">主界面</button><button onclick="play('pixel-stage-start.mp4')">开始游戏 · 开书</button><button onclick="play('pixel-stage-continue.mp4')">继续游戏 · 开书</button></header>
+<p>原生320×180光照场景 → 最近邻整数放大。素材原有烘焙明暗与简化法线仍需美术审阅。</p>
+<img id="still" src="pixel-stage-menu.png"><video id="film" controls hidden></video>
+<script>function show(id){film.pause();film.hidden=id!=='film';still.hidden=id!=='still'}function play(src){show('film');film.src=src;film.play()}</script></html>

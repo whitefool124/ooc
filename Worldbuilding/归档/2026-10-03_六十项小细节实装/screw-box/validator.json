@@ -1,0 +1,25 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "details60_screw_box",
+  "role": "ui_detail_adaptive",
+  "status": "FAIL",
+  "metrics": {
+    "size": [
+      96,
+      96
+    ],
+    "bounds": [
+      4,
+      31,
+      91,
+      95
+    ],
+    "hard_alpha": true,
+    "fully_opaque": false,
+    "visible_colors": 16,
+    "accent_pixels": {}
+  },
+  "errors": [
+    "required evidence missing: application_contact"
+  ]
+}

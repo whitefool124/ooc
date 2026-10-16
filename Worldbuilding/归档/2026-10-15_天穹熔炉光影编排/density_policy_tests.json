@@ -1,0 +1,28 @@
+[
+  {
+    "case": "vfx_allowed",
+    "passed": true,
+    "errors": []
+  },
+  {
+    "case": "scene_prop_stays_strict",
+    "passed": true,
+    "errors": [
+      "Pixel density smoke differs from scene target"
+    ]
+  },
+  {
+    "case": "missing_scale_evidence",
+    "passed": true,
+    "errors": [
+      "Pixel VFX smoke motion bounds missing/invalid"
+    ]
+  },
+  {
+    "case": "unapproved_exception",
+    "passed": true,
+    "errors": [
+      "Pixel density smoke differs from scene target"
+    ]
+  }
+]

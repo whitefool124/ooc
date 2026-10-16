@@ -1,0 +1,25 @@
+{
+  "schema": "occ-registered-prop-material-data-v1",
+  "status": "REVIEW_READY",
+  "source": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_light_wood_bench_intact/normal_raw.png",
+    "sha256": "708f440e3cdab509ce70f5f2efb8a03c07baafc8f15cf7f3227f77fcf7e48461"
+  },
+  "reference": {
+    "path": "UnityProject/Assets/Game/Resources/Art/AcademyCoverCandidates20260924/academy_light_wood_bench_intact.png",
+    "sha256": "9703c572881f815eee107a570040dff3454dbb0b8d7237d1bac396ca34f643c7"
+  },
+  "output": {
+    "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_light_wood_bench_intact/normal.png",
+    "sha256": "9a529b9f7c3c73bbb96bc4b6875e63753eb1577751ef1ebaa8fd9a7a7b5e2f11"
+  },
+  "native_grid": [
+    64,
+    32
+  ],
+  "source_macro_pitch": 27.71875,
+  "method": "Known UV central-cell observed RGB medoid, no geometric interpolation, new RGB, albedo inference or recolouring",
+  "max_cell_std": 38.284048471222825,
+  "human_registration_review": "PENDING",
+  "limitation": "Numeric-field registration is not Sprite grid-confidence PASS; exact region boundaries and material review remain pending"
+}

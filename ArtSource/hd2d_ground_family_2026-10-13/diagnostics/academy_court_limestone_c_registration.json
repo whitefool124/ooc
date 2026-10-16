@@ -1,0 +1,43 @@
+{
+  "status": "REGISTERED_GRID_CANDIDATE_HUMAN_PENDING",
+  "source_sha256": "b12558899b3453295e9274666e504975e7bfc25b1678d3887e5e501c44fafd36",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "automatic_inference": {
+    "pitch": 39,
+    "phase": [
+      4,
+      4
+    ],
+    "confidence": 1.0831133404105149
+  },
+  "registered_inference": {
+    "pitch": 39,
+    "phase": [
+      4,
+      4
+    ],
+    "confidence": 2.2191689856393295,
+    "confidence_metric": "registered single-pitch edge support, not generic winner/runner-up ratio"
+  },
+  "pitch_basis": "Measured coarse source blocks and one-cell frame, enlarged native32 reference",
+  "decoded_size": [
+    34,
+    34
+  ],
+  "window": [
+    1,
+    1,
+    33,
+    33
+  ],
+  "normalization": "lossless ground window",
+  "resizing": false,
+  "new_colours": false,
+  "all_output_colours_observed_in_source": true,
+  "original_generic_ambiguity_retained": true,
+  "human_pixel_registration": "PENDING",
+  "promotion_limit": "REVIEW_READY; no formal admission without real human registration/application review"
+}

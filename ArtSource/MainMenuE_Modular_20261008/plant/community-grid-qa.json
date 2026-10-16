@@ -1,0 +1,10 @@
+{
+  "cols": 62,
+  "rows": 80,
+  "step_x": 17.7742,
+  "step_y": 17.8375,
+  "consensus": "fast:ac+rl(S)",
+  "confidence": "high",
+  "detect_s": 0.705,
+  "recon_s": 1.693
+}

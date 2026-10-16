@@ -1,0 +1,17 @@
+{
+  "route": "reference-derived native card construction",
+  "source": "ArtSource/SkyFurnaceArrays_20261015/raw/seal_r1.png",
+  "source_sha256": "1aaca4662d9ca336140b7fbe971acc12a9641cf39693a490a1d8b6fe744dae08",
+  "script_sha256": "bf92c98a17370c1a3b07ec9abab44bebc1d136ade59e8857ed6d2b354e03f06c",
+  "source_grid_confidence_inherited": false,
+  "lossless_source_decode": false,
+  "geometric_resampling_performed": true,
+  "resampling": "explicit fixed152x152design on160x160canvas, nearest neighbour",
+  "new_colours_introduced": false,
+  "palette_limit": 12,
+  "hard_alpha_threshold": 192,
+  "background_speck_pixels_removed": 0,
+  "layer_partition": "Complementary source pixel allocation: outer radius.80; six medallions radius.225 at.60; remainder centre",
+  "world_pitch": 0.03125,
+  "human_review": "PENDING"
+}

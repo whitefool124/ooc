@@ -1,0 +1,58 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "background.academy.tree.hd2d",
+  "role": "hd2d_environment_module",
+  "status": "REVIEW_READY",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "ArtSource/HD2DAcademyCourtyard_20261008/tree-source-r1.png",
+    "source_sha256": "fe334ca5fae3a601a98ed785d85df434bc85892c889d31df732b8be9ffc77349",
+    "source_descriptor": "Independent native pixel environment module with neutral albedo; subject-grid lossless decode."
+  },
+  "delivery": {
+    "output_path": "ArtSource/HD2DAcademyCourtyard_20261008/tree-native-r1.png",
+    "output_sha256": "9978c0b532855042c823e461be21c7c5c6947aa693af3625aabcd063e531bf51",
+    "native_ppu": 32,
+    "logical_cells": null,
+    "palette_max": 24
+  },
+  "application": {
+    "rendering_mode": "battlefield_hd2d_environment",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "noninteractive courtyard plane; native 32 PPU",
+    "verification_status": "Unity native source preserved; front 45 degree courtyard runtime captured; human aesthetic acceptance pending"
+  },
+  "evidence": {
+    "one_x": "ArtSource/HD2DAcademyCourtyard_20261008/tree/one_x.png",
+    "four_x": "ArtSource/HD2DAcademyCourtyard_20261008/tree/four_x.png",
+    "grayscale": "ArtSource/HD2DAcademyCourtyard_20261008/tree/grayscale.png",
+    "checker": "ArtSource/HD2DAcademyCourtyard_20261008/tree/checker.png",
+    "application_contact": "ArtSource/HD2DAcademyCourtyard_20261008/application-shared-facing.png"
+  },
+  "human_review": {
+    "overall": "PENDING"
+  },
+  "processing": {
+    "reports": [
+      "ArtSource/HD2DAcademyCourtyard_20261008/tree-grid-r1.json"
+    ],
+    "geometric_component_resizing": false
+  },
+  "unity_import": {
+    "stable_guid": "e2b667ee7d89cb7409a0fbd40e9408d0",
+    "filter_mode": "Point",
+    "mesh_type": "Full Rect",
+    "compression": "None",
+    "mipmaps": false,
+    "wrap_mode": "Clamp",
+    "native_ppu": 32,
+    "importer_verified": true,
+    "runtime_verified": true,
+    "hd2d_runtime": {
+      "native_source_preserved": true,
+      "capture": "ArtSource/HD2DAcademyCourtyard_20261008/application-shared-facing.png",
+      "scope": "Technical sample: tree screen-facing with upright shadow and grounded depth; facade mounted to real building. Human aesthetic review pending."
+    }
+  }
+}

@@ -54,10 +54,17 @@ This section is managed by Funplay MCP for Unity. Everything between the begin a
 - CLI 操作先读取当前可用的 `unity:unity-cli` 技能，检查版本与目标工程连接状态，通过命令发现或帮助核实当前参数。所有 Editor 操作显式指定当前电脑主工程的 `--project-path`（原开发电脑 `E:/数据库/OCC_Codex/UnityProject`，UI 开发电脑 `D:/occart/OCC_latest/UnityProject`）；`unity command` 携带 `--caller plugin --skill <实际产生调用的技能名>`。无实例时先区分未启动、Pipeline 缺失与编译 Safe Mode，不盲目重装或回退。
 - 游戏中的力量来源、时代、制度、组织、地点、人物背景、技术边界和叙事因果以 [OC 世界观唯一参考](../Worldbuilding/OC世界观/README.md) 及其索引为准；OCC 总案负责玩法规则。实现不得从旧策划、归档或发布镜像恢复相冲突的世界设定。
 - 实际使用 Funplay 检查或编辑 Unity 时再读取 [Unity MCP Workflow](.codex/skills/funplay-unity-mcp-workflow/SKILL.md)；实际 uGUI 制作或审查按需读取 [Unity UI Composition](.codex/skills/funplay-unity-ui-composition/SKILL.md)。简单脚本或技能维护不预读整套 UI 流程。
+- OCC 战斗与战斗外界面像素特效迭代读取 [OCC Pixel VFX](../.codex/skills/occ-pixel-vfx/SKILL.md)，把实际验证的新知识持续收敛到该技能，过程证据进入归档；不将展示场或隔离内存旅程当作完整正式流程的完成证据。
+- OCC HD-2D真实光影、空间粒子、术式轨迹、爆发与局部折射使用 [OCC HD-2D VFX](../.codex/skills/occ-hd2d-vfx/SKILL.md)，与上方结果接线技能配合；社区技能只作技术参考，以工程锁定版本与真实场景验证为准。
 - 操作前核对主工程 `Application.dataPath`。技能例子中的对象名、Prefab 路径和数值仅是示例，不能当作 OCC 中已存在的事实。
 - “修改并保存场景”“进入 Play Mode 验证”等通用步骤仍以仓库规则为准：进入 Play Mode 已获项目级默认授权，保存场景仍需明确授权。只保存获准且本次涉及的场景或资产，避免用全局 SaveAssets 夹带无关修改。
 - 普通源码/资源修改优先通过 CLI 执行必要导入编译与 Console 检查；CLI 未覆盖时由 Funplay 补充。必须等待实际编译完成并确认 Editor 就绪，不能把进程启动、HTTP成功或命令派发当作完成。纯 Markdown/技能变更不重新编译；Funplay 身份、版本和当前状态只读核验可用 skip_refresh=true。明确通过后不重复刷新或扩大测试。
-- UI 保持 OCC 当前 PC 像素合同：1920×1080、左地图75%/右HUD25%，资产尺寸按总案与机器合同分层。移动端720×1559/1559×720、刘海安全区、全套手机/平板设备验证只在实际任务涉及对应平台时适用。
+- UI 保持 OCC 当前 PC 像素合同：1920×1080、全宽战场、左上人物状态、顶部偏右行动顺序与右侧悬停行动值浮层（2026-10-06用户确认），资产尺寸按总案与机器合同分层。移动端720×1559/1559×720、刘海安全区、全套手机/平板设备验证只在实际任务涉及对应平台时适用。
 - 稳定的界面结构优先落在 Prefab 或场景层级中，运行时只负责真实数据绑定、重复列表、瞬时反馈和必须按战局生成的内容；现有动态 UI 按可验收的完整样板逐步迁移，不要求一次性重构全部屏幕。文本组件和绑定方式沿用当前工程兼容口径。
 - 采用新版 TMP 规则：设计确需文本效果时控制局部材质作用范围，不影响无关标签。生图原料及正式资产仍遵守根目录的来源、manifest、人工审美和入库要求。
 - Funplay 托管块和生成技能由插件同步。持久项目修订写在本节或个人 funplay-unity-dev 技能；不要直接修改 Library/PackageCache 或手改托管文件来伪装升级。
+
+
+## OCC HD-2D 品质入口
+
+涉及场景表现、相机、材质、Shader、光照或后处理时，读取仓库根目录 `.codex/skills/occ-hd2d-quality/SKILL.md`，遵循总案A.2.4及根AGENTS的品质门槛。源Point采样与高清输出分开；旧像素守卫不得全局覆盖HD-2D相机HDR。共享改动验证书桌与战斗；配置或源文件变化使受影响旧证据失效。未完成真正样板批准时保持QA_PENDING。纯规范维护不启动Editor。

@@ -1,0 +1,57 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "desk_candidate_coarse_20261010_wood",
+  "role": "hd2d_library_display",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in generation; noncombat desk texture/card",
+    "source_path": "ArtSource/desk_candidate_coarse_20261010/wood/raw/source.png",
+    "source_sha256": "cb6dfb47b6177010504cb4d7128a6d1003e5aae883581568047a9f1fc3f1a2bf"
+  },
+  "delivery": {
+    "output_path": "ArtSource/desk_candidate_coarse_20261010/wood/delivery/wood.png",
+    "output_sha256": "e658133a72ffc76244078be67c2e04ee66ca4c932cf94d40e8f3553809a46cbc",
+    "native_ppu": null,
+    "logical_cells": null,
+    "palette_max": 1000000,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "real desk polygon material UV inset excluding safety border",
+    "verification_mode": "QA_PENDING in-memory real Game View preview; no Unity importer or formal assets",
+    "capture_sha256": "055b5972735bb6a26ef81543383a917a2c7c89c1e978a73e0af8e0dc4f584736"
+  },
+  "processing": {
+    "operations": [
+      "nearest delivery resize under noncombat library exception",
+      "transparent safety border"
+    ],
+    "pixel_repainting": false,
+    "original_size": [
+      1254,
+      1254
+    ],
+    "delivery_size": [
+      258,
+      258
+    ],
+    "modeling_policy": "2026-10-10 final user correction"
+  },
+  "evidence": {
+    "one_x": "ArtSource/desk_candidate_coarse_20261010/wood/qa/one_x.png",
+    "four_x": "ArtSource/desk_candidate_coarse_20261010/wood/qa/four_x.png",
+    "grayscale": "ArtSource/desk_candidate_coarse_20261010/wood/qa/grayscale.png",
+    "checker": "ArtSource/desk_candidate_coarse_20261010/wood/qa/checker.png",
+    "application_contact": "UnityProject/ReviewEvidence/20261010_hd2d_desk/coarse_final_menu_1920.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Application and human approval pending; not FORMAL."
+  }
+}

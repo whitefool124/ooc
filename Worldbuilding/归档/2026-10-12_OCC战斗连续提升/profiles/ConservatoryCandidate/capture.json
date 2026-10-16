@@ -1,0 +1,68 @@
+{
+  "status": "captured",
+  "source": "Unity Editor Play Mode, real selected academy battlefield camera RenderTexture; isolated preview entry, not player build or normal-entry journey",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "level": "first_battle_greenhouse_collection_room",
+  "environment": "Conservatory",
+  "play": true,
+  "width": 1888,
+  "height": 768,
+  "reflectionCaptures": 1,
+  "sourceRadianceRange": 1.35293055,
+  "diffuseStatus": "local_scene_irradiance_applied",
+  "diffuseUpdates": 1,
+  "diffuseSurfaces": 85,
+  "camera": "HD2D战场相机",
+  "postProcessing": true,
+  "mappedGroundMaterials": 9,
+  "mappedPropMaterials": 2,
+  "mappedGroundAttachments": [
+    {
+      "albedo": "academy_floor_maintenance_hatch",
+      "normal": "normal",
+      "surface": "surface"
+    },
+    {
+      "albedo": "academy_floor_service_hatch_square",
+      "normal": "normal",
+      "surface": "surface"
+    },
+    {
+      "albedo": "academy_floor_anchor_plate",
+      "normal": "normal",
+      "surface": "surface"
+    }
+  ],
+  "mappedProps": [
+    {
+      "albedo": "academy_aether_crystal_intact",
+      "normal": "normal",
+      "roughness": "UnityWhite"
+    },
+    {
+      "albedo": "academy_loot_chest_closed",
+      "normal": "normal",
+      "roughness": "roughness"
+    }
+  ],
+  "mappedFaces": [
+    {
+      "objectName": "物件_(5, 1)",
+      "albedo": "academy_aether_crystal_intact",
+      "cameraFacingDot": 0.9911419
+    },
+    {
+      "objectName": "战利品_(4, 3)",
+      "albedo": "academy_loot_chest_closed",
+      "cameraFacingDot": 0.998309731
+    },
+    {
+      "objectName": "物件_(5, 4)",
+      "albedo": "academy_aether_crystal_intact",
+      "cameraFacingDot": 0.991178453
+    }
+  ],
+  "noWindowCreated": true,
+  "focusRequested": false,
+  "uiExcluded": true
+}

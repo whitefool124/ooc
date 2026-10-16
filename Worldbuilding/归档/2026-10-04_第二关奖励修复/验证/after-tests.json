@@ -1,0 +1,181 @@
+{
+  "status": "completed",
+  "duration": 1.21,
+  "summary": {
+    "total": 24,
+    "passed": 24,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.BattleThreeAndEliteArena_MatchFrozenLayoutAndChargeCollision",
+      "Status": "Passed",
+      "Duration": 0.1324381,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.BattleTwoAi_CalibratedHeavyUsesTwoStrengthOnceAndG4IsOpen",
+      "Status": "Passed",
+      "Duration": 0.036195,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.BattleTwoAi_MaulerCalibratesThenChasesAfterItsCrystalBreaks",
+      "Status": "Passed",
+      "Duration": 0.0023362,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.BattleTwoAi_RaiderUsesVineEntranceAndHidesAfterEntering",
+      "Status": "Passed",
+      "Duration": 0.0103744,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.BattleTwoLayout_CrystalBurstAndShardMovementMatchFrozenContract",
+      "Status": "Passed",
+      "Duration": 0.1137535,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.EliteDefeat_SealsRunAndNeverOpensShop",
+      "Status": "Passed",
+      "Duration": 0.0708149,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.EliteRewardCanBeAbandonedAndShopExitHandsOffToTheRandomLayer",
+      "Status": "Passed",
+      "Duration": 0.0473972,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.EliteUnlocksAfterBattleThreeWithoutOptionalServiceCompletion",
+      "Status": "Passed",
+      "Duration": 0.0419215,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.EquipmentContract_HasExactlyNineActiveSlotsAndLegacyNamesNormalize",
+      "Status": "Passed",
+      "Duration": 0.0032364,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.FirstBattleBeforeOriginConfirmationExplainsPrerequisiteAndCanStartAfterConfirmation",
+      "Status": "Passed",
+      "Duration": 0.0275268,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.FirstExperienceSlotsRouteOnlyMapRunKeys",
+      "Status": "Passed",
+      "Duration": 0.0005838,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.FirstRunFlow_UnlocksServicesAndShopOnlyAfterEliteVictoryReward",
+      "Status": "Passed",
+      "Duration": 0.0877678,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.FirstRunSave_RoundTripsStableChoicesAndNewRunCoordinatorUsesFixedProgram",
+      "Status": "Passed",
+      "Duration": 0.0510784,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.FrontEndHandsEveryLegacyMapOrBattleStageToTheRealRuntime",
+      "Status": "Passed",
+      "Duration": 0.0006453,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.FrozenFirstRewardAndEvents_GrantRealContentAndUnlockBattleTwo",
+      "Status": "Passed",
+      "Duration": 0.0378994,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.FrozenSecondThirdRewardsAndEventThree_GrantRealContent",
+      "Status": "Passed",
+      "Duration": 0.0293712,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.IndividualLoot_OldSecondBattleSaveRepairsPreviousGroupSelectionWithoutReroll",
+      "Status": "Passed",
+      "Duration": 0.0691121,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.IndividualLoot_SecondBattleStartsWithItsOwnUnopenedReward",
+      "Status": "Passed",
+      "Duration": 0.0492434,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.IndividualLoot_ValidSecondBattleSelectionSurvivesReload",
+      "Status": "Passed",
+      "Duration": 0.0683736,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.LoadingAnOldLockedEliteFlagRecomputesTheCurrentGate",
+      "Status": "Passed",
+      "Duration": 0.0475162,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.MechanicContract_ExposesAllWindowsAndMovementUsesRealPath",
+      "Status": "Passed",
+      "Duration": 0.0050955,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.OrdinaryRewardCanBeAbandonedAndRoundTripsBeforeEventsUnlock",
+      "Status": "Passed",
+      "Duration": 0.0290607,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.PhaseAContract_HasTenContentNodesFourBattlesNoBossAndThreeMechanicPairs",
+      "Status": "Passed",
+      "Duration": 0.0034376,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.FirstRunExperienceTests.RogueSpellLoadout_AssignsReplacesAndRemovesOnlyMasteredUniqueSpells",
+      "Status": "Passed",
+      "Duration": 0.013279,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

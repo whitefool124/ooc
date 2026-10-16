@@ -15,10 +15,17 @@ namespace OCC.Combat
     public sealed class EnemyTurnPlanBook
     {
         private readonly Dictionary<string, CombatCommand> commands = new Dictionary<string, CombatCommand>(StringComparer.Ordinal);
+        private readonly Dictionary<string, CombatState> turnStartPreviews = new Dictionary<string, CombatState>(StringComparer.Ordinal);
         public EnemyIntentPresentation GetPublicIntent(CombatState state, UnitState enemy, UnitState hero)
         {
             if (state == null || enemy == null || hero == null) return null;
             CombatCommand command = GetOrCreate(state, enemy, hero);
+            if (turnStartPreviews.TryGetValue(enemy.Id, out CombatState previewState))
+            {
+                state = previewState;
+                enemy = state.GetUnit(enemy.Id);
+                hero = state.GetUnit(hero.Id);
+            }
             if (state.AcademyEnemyArea != null &&
                 (state.AcademyEnemyArea.HasPending(enemy.Id) || command.Type == CombatCommandType.UseSkill &&
                     (command.SlotIndex == AcademyEnemyAreaRuntime.PrepareSkillIndex || command.SlotIndex == AcademyEnemyAreaRuntime.ResolveSkillIndex)))
@@ -38,12 +45,24 @@ namespace OCC.Combat
             return intent?.WithMovementPreview(state, enemy, command).WithAttackPreview(state, enemy, command);
         }
         public CombatCommand GetExecutionCommand(CombatState state, UnitState enemy, UnitState hero) => GetOrCreate(state, enemy, hero);
-        public void Invalidate() => commands.Clear();
+        public void Invalidate() { commands.Clear(); turnStartPreviews.Clear(); }
         public bool HasPlanFor(string enemyId) => !string.IsNullOrEmpty(enemyId) && commands.ContainsKey(enemyId);
         private CombatCommand GetOrCreate(CombatState state, UnitState enemy, UnitState hero)
         {
             if (!commands.TryGetValue(enemy.Id, out CombatCommand command))
             {
+                // The legacy instructor raises its wall at turn start. Plan on the same
+                // resulting board, otherwise its advertised route can cross that new wall.
+                if (state.ActiveUnitId != enemy.Id && state.Ruleset == CombatRuleset.Roguelite &&
+                    state.AcademyEnemyArea == null && state.AcademyFieldEnemy != null &&
+                    enemy.EnemyArchetypeId == "elite_vanguard")
+                {
+                    state = state.Clone();
+                    enemy = state.GetUnit(enemy.Id);
+                    hero = state.GetUnit(hero.Id);
+                    CombatResolver.BeginTurn(state, enemy.Id);
+                    turnStartPreviews[enemy.Id] = state;
+                }
                 command = state.RainLanternCourt != null
                     ? state.RainLanternCourt.ChooseEnemyCommand(state, enemy, hero)
                     : state.GreenhouseCollectionRoom != null

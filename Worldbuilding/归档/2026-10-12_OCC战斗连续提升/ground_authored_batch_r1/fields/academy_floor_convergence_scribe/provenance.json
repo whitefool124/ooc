@@ -1,0 +1,26 @@
+{
+  "schema": "occ-authored-normal-field-v1",
+  "status": "QA_PENDING",
+  "asset_id": "academy_floor_convergence_scribe",
+  "source_type": "deterministic_numeric_bake_from_explicit_physical_heights",
+  "source_height_record": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_r1\\authored_heights.json",
+  "source_height_sha256": "3ddb5e654e03c4758787f77e6a9269997a87d66a0b5414db51b468a94b831eb9",
+  "albedo_reference": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_floor_convergence_scribe.png",
+    "sha256": "f012f4bf4a19012a80860e3b61fbc94797fb6a4a555e02827c7df8f6d58fe477"
+  },
+  "native_canvas": [
+    32,
+    32
+  ],
+  "world_pixel_pitch": 0.03125,
+  "normal_convention": "OpenGL +Y, image rows top-down",
+  "geometry_notes": "Explicit native32 coordinates and shallow physical height layers; structural candidate, source art unmodified. Fine shape registration still requires actual scene review.",
+  "normal_sha256": "bf11f3edbe44efe6e83fc4ce09e60fc58a895e19c0419e25b7a4deeb2bc20b7c",
+  "normal_path": "Worldbuilding\\归档\\2026-10-12_OCC战斗连续提升\\ground_authored_batch_r1\\fields\\academy_floor_convergence_scribe\\normal.png",
+  "albedo_pixels_read": false,
+  "interpolation": false,
+  "source_art_changed": false,
+  "human_registration_review": "PENDING",
+  "runtime_review": "PENDING"
+}

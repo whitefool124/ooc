@@ -1,0 +1,23 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "hd2d_pixel_library_tool_rack",
+  "role": "hd2d_library_display",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      1361,
+      1066
+    ],
+    "bounds": [
+      16,
+      16,
+      1345,
+      1050
+    ],
+    "hard_alpha": false,
+    "fully_opaque": false,
+    "visible_colors": 52413,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

@@ -1,0 +1,16 @@
+{
+  "status": "QA_PENDING",
+  "selected_round": 2,
+  "rejections": {
+    "1": "108x47主体超过同尺度犬类画布；整体颗粒加粗，不缩放。"
+  },
+  "subject_lattice_confidence": 1.2317,
+  "source_logical_size": [
+    60,
+    27
+  ],
+  "independent_source_each_round": true,
+  "geometric_resize": false,
+  "human_review": "PENDING",
+  "formal_registry_replaced": false
+}

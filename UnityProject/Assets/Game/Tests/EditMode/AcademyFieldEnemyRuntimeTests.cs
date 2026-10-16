@@ -246,6 +246,7 @@ namespace OCC.Combat.Tests
         public void Tracker_StrongWindClearsDeepTraceAndPreventsImmediateRecreation()
         {
             CombatState state = State("elder_tracker_hound", new GridPosition(7, 5), out _);
+            state.EnableWindMechanic();
             CombatResolver.BeginTurn(state, "hero");
             CombatResolver.BeginTurn(state, "hero");
             Assert.That(Tile(state, 1, 3).IsDeepTrace, Is.True);
@@ -383,12 +384,13 @@ namespace OCC.Combat.Tests
             UnitState hero = new UnitState("hero", true, new GridPosition(6, 1));
             hero.Equip(CombatCatalog.Rifle, CombatCatalog.Shield, CombatCatalog.FireBolt, CombatCatalog.FrostBind);
             UnitState mender = new UnitState("mender", false, new GridPosition(2, 1));
-            UnitState baseline = new UnitState("a_ally", false, new GridPosition(3, 3));
+            UnitState baseline = new UnitState("a_ally", false, new GridPosition(1, 1));
             UnitState wounded = new UnitState("z_ally", false, new GridPosition(3, 1));
             EnemyArchetypes.Get("barrier_mender").Apply(mender);
             GridMap map = new GridMap(8, 6);
-            map.SetTile(new GridPosition(2, 2), new TileState { Cover = CoverType.Heavy, Durability = TileState.HeavyDurability });
-            map.SetTile(new GridPosition(3, 2), new TileState { Cover = CoverType.Heavy, Durability = TileState.HeavyDurability });
+            map.SetTile(new GridPosition(1, 0), new TileState { Cover = CoverType.Heavy, Durability = TileState.HeavyDurability });
+            map.SetTile(new GridPosition(2, 0), new TileState { Cover = CoverType.Heavy, Durability = TileState.HeavyDurability });
+            map.SetTile(new GridPosition(3, 0), new TileState { Cover = CoverType.Heavy, Durability = TileState.HeavyDurability });
             CombatState state = new CombatState(map, new[] { hero, mender, baseline, wounded });
             state.ConfigureRuleset(CombatRuleset.Roguelite);
             state.AttachAcademyFieldEnemy(new AcademyFieldEnemyRuntime());

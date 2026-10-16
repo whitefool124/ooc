@@ -1,0 +1,16 @@
+{
+  "status": "CAPTURED_FOR_MANUAL_REVIEW",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "level": "first_b3_rain_prism_court",
+  "source": "Unity Editor Play Mode runtime battlefield and full HUD, isolated preview run; not a standalone Player or full journey acceptance",
+  "resolution": [
+    1920,
+    1080
+  ],
+  "captures": [
+    "day.png"
+  ],
+  "focusRequested": false,
+  "humanReview": "PENDING",
+  "suitesRun": false
+}

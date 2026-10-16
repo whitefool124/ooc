@@ -1,0 +1,65 @@
+{
+  "schema": "occ-hd2d-construction-v1",
+  "visible_models": [
+    {
+      "id": "courtyard_floors",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Two simple slabs establish intact floor/contact and7x7m spell scale.",
+      "instance_count": 2,
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "c88ac9e58aebec523237892275e2a5d5cc040bfb9019e1dbae8bd1cfdd353e64"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "c88ac9e58aebec523237892275e2a5d5cc040bfb9019e1dbae8bd1cfdd353e64"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+        "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee"
+      }
+    },
+    {
+      "id": "courtyard_walls_stairs",
+      "role": "environment_structure",
+      "style": "simple_polygonal",
+      "rationale": "Intact walls, two gateposts and five shallow stairs; pixel masonry owns visible detail.",
+      "instance_count": 11,
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "c88ac9e58aebec523237892275e2a5d5cc040bfb9019e1dbae8bd1cfdd353e64"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "c88ac9e58aebec523237892275e2a5d5cc040bfb9019e1dbae8bd1cfdd353e64"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png",
+        "sha256": "600006205fbf16204a98afcf272a2a420b618042e4f2d4cc18cef65d675f3d24"
+      }
+    },
+    {
+      "id": "intact_training_obstacles",
+      "role": "large_scene_prop",
+      "style": "simple_polygonal",
+      "rationale": "Three unchanged scale references; no fragment, collider, damage or trajectory system.",
+      "instance_count": 3,
+      "geometry": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "c88ac9e58aebec523237892275e2a5d5cc040bfb9019e1dbae8bd1cfdd353e64"
+      },
+      "material": {
+        "path": "UnityProject/Assets/Game/Runtime/Presentation/SkyFurnaceDirector.cs",
+        "sha256": "c88ac9e58aebec523237892275e2a5d5cc040bfb9019e1dbae8bd1cfdd353e64"
+      },
+      "pixel_texture": {
+        "path": "UnityProject/Assets/Game/Resources/Art/AcademyPermanentWallCandidates20260926/academy_permanent_wall_nesw_a.png",
+        "sha256": "600006205fbf16204a98afcf272a2a420b618042e4f2d4cc18cef65d675f3d24"
+      }
+    }
+  ],
+  "pixel_cards": "Character, trees, facade, planters, lamps, furnace fire/core, dust/ash and support flames are texture cards at32PPU.",
+  "curved_pixel_sheets": "Three furnace bands and one translating flame crown wrap native textures around a128-segment sheet; geometry is spell support, not a solid modeled vessel.",
+  "human_style_review": "PENDING"
+}

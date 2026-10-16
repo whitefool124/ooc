@@ -1,0 +1,46 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "sky_furnace_voxel_fire_material_20261015",
+  "role": "hd2d_environment_module",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent flat pixel energy material swatch for user-authorized voxel spell models; no programmatic painting or recolouring",
+    "source_path": "ArtSource/SkyFurnaceVoxel_20261015/raw/fire_material_r1.png",
+    "source_sha256": "9b4188d4496015787fc4955b1040945554ceaea5a576c79a6296214c61ce8e79"
+  },
+  "delivery": {
+    "output_path": "ArtSource/SkyFurnaceVoxel_20261015/delivery/fire_material.png",
+    "native_output_path": "ArtSource/SkyFurnaceVoxel_20261015/delivery/fire_material.png",
+    "output_sha256": "2585d30e51057990321fc8f74738f98c63b36dd13bc2ab3822f0acddd93858a3",
+    "native_ppu": 32,
+    "palette_max": 10,
+    "required_color_families": []
+  },
+  "application": {
+    "rendering_mode": "battlefield_hd2d_environment",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "Native face UV measured in metres. Opaque source window x9,y20,width108,height106 in Unity UV origin; one source texel per1/32metre. All source pixels retained in delivery.",
+    "default_integer_scale": 1,
+    "minimum_integer_scale": 1,
+    "integration_authorization": "User approved voxel effect geometry plus materials/textures on2026-10-15; scoped independent cinematic, no formal gameplay change"
+  },
+  "evidence": {
+    "one_x": "ArtSource/SkyFurnaceVoxel_20261015/qa/material/1x.png",
+    "four_x": "ArtSource/SkyFurnaceVoxel_20261015/qa/material/4x.png",
+    "grayscale": "ArtSource/SkyFurnaceVoxel_20261015/qa/material/grayscale.png",
+    "checker": "ArtSource/SkyFurnaceVoxel_20261015/qa/material/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-15_天穹熔炉体素重构/fixed_frames/frame_04.50.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Machine lattice PASS1.2178; real source/grid/style and current application review pending"
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/SkyFurnace/fire_material_voxel.png",
+    "formal_promotion": false
+  }
+}

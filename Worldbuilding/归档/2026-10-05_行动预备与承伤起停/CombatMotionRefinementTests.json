@@ -1,0 +1,48 @@
+{
+  "status": "completed",
+  "duration": 0.55,
+  "summary": {
+    "total": 5,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "OCC.Combat.Tests.CombatMotionRefinementTests.ActualRouteAcceleratesAndBrakesWithoutChangingArrivalTime",
+      "Status": "Passed",
+      "Duration": 0.0257052,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMotionRefinementTests.MixedShieldAndHealthContactKeepsHealthMotionInEitherOrder(True)",
+      "Status": "Passed",
+      "Duration": 0.163705,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMotionRefinementTests.MixedShieldAndHealthContactKeepsHealthMotionInEitherOrder(False)",
+      "Status": "Passed",
+      "Duration": 0.0030036,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMotionRefinementTests.PreparationUsesPublicFirstStepAndDoesNotReplaceAHit",
+      "Status": "Passed",
+      "Duration": 0.04041,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "OCC.Combat.Tests.CombatMotionRefinementTests.ZeroChangeCannotCreateDamageMotionAndShieldStaysLighterAndSilver",
+      "Status": "Passed",
+      "Duration": 0.0017727,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Command executed.\",\"data\":{\"compiler\":\"Roslyn\",\"logs\":[],\"created\":[],\"modified\":[\"568105589212167086\"],\"destroyed\":[],\"returnValue\":{\"strategy\":\"visible slider raycast plus EventSystem pointer down/up\",\"value\":0.4,\"hit\":\"晶灯亮度滑条\"}}}"
+      }
+    ]
+  }
+}

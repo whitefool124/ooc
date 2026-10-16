@@ -34,6 +34,12 @@ namespace OCC.Combat.Presentation
                 ? assets.FiregroundFrame(environmentFrame)
                 : tile.SmokeExpiresAt > state.CurrentTime ? assets.SmokeFrame(environmentFrame)
                 : tile.IsWater ? assets.Environment("rain_court_water") : null;
+            // These effect layers had hover text but no visible representation.
+            // Keep their names visible until dedicated artwork is admitted.
+            string fieldEffectLabel=hasFireground||tile.SmokeExpiresAt>state.CurrentTime||tile.IsWater?string.Empty:
+                tile.IsLoosePaper?"散页":tile.HasPaperScreen?"页幕":tile.IsBindingMark?"约束纹":tile.HasTrace?"痕迹":string.Empty;
+            if(environment==null)environment=assets.GroundEffect(tile);
+            bool environmentUpright=BattlefieldArtResources.Upright(environment);
             // The right-click menu previews an action before it is committed. While the menu is open its
             // preview replaces the committed action, so the board never mixes two actions' ranges; an
             // empty preview action means only the menu's anchor cell is marked.
@@ -94,7 +100,7 @@ namespace OCC.Combat.Presentation
                 basicTarget &= canCast;
             }
             GridPosition? previewCenter = menuPreview ? (GridPosition?)selection.MenuPreviewPosition
-                : selection.HasPreviewPosition ? selection.PreviewPosition : (GridPosition?)null;
+                : selection.HasPreviewPosition ? selection.PreviewPosition : selection.HasPointerSelection ? selection.PointerPosition : (GridPosition?)null;
             bool isPlayerEffectCell = false;
             bool isPreviewedUnit = false;
             bool isPreviewedObject = false;
@@ -195,12 +201,6 @@ namespace OCC.Combat.Presentation
                 objectLabel = tile.ObjectName();
                 objectLabelColor = new Color(.42f, .88f, 1f, .96f);
             }
-            else if (tile.IsCrystalShard)
-            {
-                objectTexture = assets.Academy("academy_light_planter_rubble");
-                objectLabel = "碎晶";
-                objectLabelColor = new Color(.52f, .9f, 1f, .9f);
-            }
             else if (tile.IsScorched)
             {
                 objectTexture = assets.Academy("academy_scorched_lamp_vine");
@@ -247,6 +247,17 @@ namespace OCC.Combat.Presentation
                 objectTexture = assets.Relay(tile.IsDestroyed ? "heavy_cover_rubble" : "heavy_cover_intact");
                 objectLabel = "设备";
             }
+            else if (tile.IsDeviceLike)
+            {
+                // QA devices have distinct silhouettes. Existing pillar states
+                // remain the fallback, including the shared destroyed residue.
+                objectTexture = assets.Device(tile) ?? assets.Academy(tile.IsDestroyed ? "academy_aether_pillar_rubble" :
+                    tile.Durability <= 6 ? "academy_aether_pillar_damaged" : "academy_aether_pillar_intact");
+                objectLabel = tile.IsTowerMechanism ? TowerMechanismName(tile.MechanismKind) : tile.ObjectName();
+            }
+            else if (tile.IsLootChest && (state.Loot == null || state.Loot.Position != position) &&
+                (state.LootSource == null || state.LootSource.Position != position))
+                objectTexture = assets.Academy("academy_loot_chest_closed");
             if (tile.IsWater)
             {
                 objectLabel = string.Empty;
@@ -266,9 +277,11 @@ namespace OCC.Combat.Presentation
                     ? "academy_loot_chest_empty" : "academy_loot_chest_closed") : null;
             bool selected = selection.IsKeyboardTargeting && selection.KeyboardPosition == position ||
                 unit != null && unit.Id == selection.TargetId ||
-                menuPreview && selection.MenuPreviewPosition == position;
+                menuPreview && selection.MenuPreviewPosition == position ||
+                !menuPreview && selection.HasPointerSelection && selection.PointerPosition == position;
             Texture2D selectionOverlay = selected ? OverlayFor(BattlefieldCellMarker.Focus) : null;
             string surfaceHover = BuildSurfaceHover(level, position);
+            if(tile.IsCrystalShard)surfaceHover="碎晶：进入消耗 2 移动距离。"+surfaceHover;
             string terrainEffectHover = BuildTerrainEffectHover(state, fireBattle, tile, position);
             if (pendingBlast) terrainEffectHover = JoinHoverSections(terrainEffectHover,
                 "公开爆破区：本回合结束时受到 12 点伤害；物块耐久伤害翻倍。可在引爆前撤离");
@@ -318,7 +331,8 @@ namespace OCC.Combat.Presentation
                 tile.IsPermanentWall ? 42 : tile.IsLampVine ? CombatObjectLayerLayout.LampVineFrontRows : 0,
                 surfaceHover, terrainEffectHover, objectHover, floorLow, objectTextureLow,
                 BattlefieldMarkerLadder.Alpha(skillMarker), moveMarker, attackMarker, skillMarker,
-                isPlayerEffectCell, isPreviewedUnit, isPreviewedObject);
+                isPlayerEffectCell, isPreviewedUnit, isPreviewedObject,fieldEffectLabel,environmentUpright,
+                assets.GroundMaterial(tile),tile.IsCrystalShard?"碎晶":null);
         }
 
         private const string OutOfRangeFailure = "超出射程";
@@ -491,10 +505,41 @@ namespace OCC.Combat.Presentation
             if (tile.IsLoosePaper)
                 effects.Add("散页：进入消耗 2 移动距离，可被风搬动或点燃");
             if (tile.HasTrace)
-                effects.Add("痕迹：供追踪单位读取");
+                effects.Add(tile.IsDeepTrace?"痕迹：气味已加深，供追踪单位读取":"痕迹：供追踪单位读取");
+            if (tile.HasPaperScreen)
+                effects.Add("页幕：截断穿过该格的攻击线，不影响移动");
             if (tile.IsBindingMark)
                 effects.Add("约束纹：进入者留在原格，本回合不能主动移动");
             return effects.Count == 0 ? string.Empty : string.Join("；", effects) + "。";
+        }
+
+        public static string TowerMechanismName(int kind)
+        {
+            switch(kind)
+            {
+                case 1:return "护障维护";
+                case 2:return "显影巡查";
+                case 3:return "冲压隔离";
+                default:return "塔内机关";
+            }
+        }
+
+        private static string TowerMechanismDescription(TileState tile)
+        {
+            string name=TowerMechanismName(tile.MechanismKind);
+            if(tile.IsDestroyed)return name+"：塔内机关已拆除，不再提供效果或维护护盾。";
+            string effect;
+            switch(tile.MechanismKind)
+            {
+                case 1:effect="升起临时重掩体";break;
+                case 2:effect="亮起 "+AcademyCoreBossRuntime.RevealLaneLength+" 格光带，清除线上单位护盾";break;
+                case 3:effect="公开 "+AcademyCoreBossRuntime.PressLineLength+" 格冲压线，回合结束时线上单位受到 "+AcademyCoreBossRuntime.PressLineDamage+" 点伤害";break;
+                default:effect=string.Empty;break;
+            }
+            return name+"：耐久 "+tile.Durability+
+                (tile.IsReleased?"，已放行，计入维护链":"，未放行，暂不提供效果")+"。"+
+                (effect.Length==0?string.Empty:"放行效果："+effect+"。")+
+                "已放行且完好时，塔之守卫自身回合开始获得 "+AcademyCoreBossRuntime.MaintenanceShieldPerMechanism+" 护盾；拆除可切断维护链。";
         }
 
         public static string BuildObjectHover(CombatState state, TileState tile, GridPosition position)
@@ -505,8 +550,6 @@ namespace OCC.Combat.Presentation
                 objects.Add("灯藤：进入消耗 2 移动距离，遮挡视线；藤内只能攻击相邻目标");
             else if (tile.IsAetherCrystal)
                 objects.Add(tile.ObjectName() + "：耐久 " + tile.Durability + "；摧毁波及正交四格，造成 8 点以太伤害");
-            else if (tile.IsCrystalShard)
-                objects.Add("碎晶：进入消耗 2 移动距离");
             else if (tile.IsObjective)
             {
                 bool protectedTarget = state.PressureTest?.HasProtection == true &&
@@ -532,8 +575,7 @@ namespace OCC.Combat.Presentation
                 objects.Add(tile.IsDestroyed ? "护罩发生器已损毁" :
                     "护罩发生器：耐久 " + tile.Durability + "；回合结束为相邻单位提供 4 点护盾");
             else if (tile.IsTowerMechanism)
-                objects.Add(tile.IsDestroyed ? "塔内机关已拆除" :
-                    "塔内机关：耐久 " + tile.Durability + "，放行后计入维护链");
+                objects.Add(TowerMechanismDescription(tile));
             else if (tile.IsDevice)
                 objects.Add(tile.IsDestroyed ? "战场设备已损毁" :
                     "战场设备：耐久 " + tile.Durability + "，可互动或破坏");

@@ -1,0 +1,33 @@
+{
+  "schema": "occ-runtime-pixel-grid-v1",
+  "capture": "Worldbuilding/归档/2026-10-03_战斗外尺寸放宽与热饮实装/animation-zero.png",
+  "capture_size": [
+    1920,
+    1080
+  ],
+  "expected_tier": 2,
+  "detected_tiers": [
+    2
+  ],
+  "uniform_across_regions": true,
+  "lattice_offset_zero": true,
+  "regions": {
+    "cup_body": {
+      "pitch": 2,
+      "uniform_fraction": 1.0,
+      "offset": [
+        0,
+        0
+      ],
+      "offset_uniform_fraction": 1.0,
+      "colors": 9,
+      "box": [
+        1084,
+        614,
+        1120,
+        646
+      ]
+    }
+  },
+  "pass": true
+}

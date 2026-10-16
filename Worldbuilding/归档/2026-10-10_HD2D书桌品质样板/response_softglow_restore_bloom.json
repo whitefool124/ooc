@@ -1,0 +1,12 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"success\":true,\"message\":\"Command executed.\",\"data\":{\"compiler\":\"Roslyn\",\"logs\":[],\"created\":[],\"modified\":[\"568105589211938752\"],\"destroyed\":[],\"returnValue\":{\"active\":true}}}"
+      }
+    ]
+  }
+}

@@ -26,6 +26,14 @@ namespace OCC.Combat.Presentation
             Image skin = FormalUiKit.SkinOverlay(image);
             if (skin != null) skin.gameObject.SetActive(false);
             HideOldChrome(panel.transform);
+            if(panel.GetComponentInParent<AcademyDeskBackdrop>()!=null)
+            {
+                // Desk documents use flat, quiet paper. This scope excludes the
+                // battle HUD and preserves semantic colours on smaller controls.
+                image.sprite=null;image.type=Image.Type.Simple;image.color=fill;
+                AcademyPaperDepth.Apply(image);
+                return;
+            }
             RectTransform rect = image.rectTransform;
             // Small cards and hover details keep their existing compact layout.
             if (frame && rect.rect.width >= 850f && rect.rect.height >= 340f)
@@ -143,6 +151,7 @@ namespace OCC.Combat.Presentation
                     new Color(.78f, .70f, .57f, 1f), normal, new Color(.75f, .72f, .66f, 1f)),
                 motion, feedback, disabledReason);
             foreach (Text label in button.GetComponentsInChildren<Text>()) label.color = Ink;
+            button.GetComponent<UiButtonFeedback>()?.SetSelectedState(selected);
             FocusRule(button.transform);
         }
 

@@ -1,0 +1,106 @@
+{
+  "status": "captured",
+  "source": "Unity Editor Play Mode, real selected academy battlefield camera RenderTexture; isolated preview entry, not player build or normal-entry journey",
+  "dataPath": "E:/数据库/OCC_Codex/UnityProject/Assets",
+  "level": "transmission_tower",
+  "environment": "AetherTower",
+  "play": true,
+  "width": 1888,
+  "height": 768,
+  "reflectionCaptures": 1,
+  "sourceRadianceRange": 0.7188361,
+  "diffuseStatus": "local_scene_irradiance_applied",
+  "diffuseUpdates": 1,
+  "diffuseSurfaces": 61,
+  "camera": "HD2D战场相机",
+  "postProcessing": true,
+  "mappedGroundMaterials": 12,
+  "mappedPropMaterials": 5,
+  "mappedEnvironment": [
+    {
+      "albedo": "academy_facade",
+      "shader": "Universal Render Pipeline/Lit",
+      "normal": "Assets/Game/Resources/HD2DMaterialData/RemainingSprites/academy_facade/normal.png",
+      "surface": "Assets/Game/Resources/HD2DMaterialData/RemainingSprites/academy_facade/metallic_gloss.png"
+    }
+  ],
+  "mappedGroundAttachments": [
+    {
+      "albedo": "academy_floor_maintenance_hatch",
+      "normal": "normal",
+      "surface": "surface"
+    },
+    {
+      "albedo": "academy_floor_service_hatch_square",
+      "normal": "normal",
+      "surface": "surface"
+    },
+    {
+      "albedo": "academy_floor_anchor_plate",
+      "normal": "normal",
+      "surface": "surface"
+    }
+  ],
+  "mappedProps": [
+    {
+      "albedo": "academy_light_training_pad_intact",
+      "normal": "normal",
+      "roughness": "roughness"
+    },
+    {
+      "albedo": "academy_heavy_training_barricade_intact",
+      "normal": "normal",
+      "roughness": "roughness"
+    },
+    {
+      "albedo": "academy_aether_pillar_intact",
+      "normal": "normal",
+      "roughness": "UnityWhite"
+    },
+    {
+      "albedo": "academy_light_wood_bench_intact",
+      "normal": "normal",
+      "roughness": "roughness"
+    },
+    {
+      "albedo": "academy_light_planter_cover_intact",
+      "normal": "normal",
+      "roughness": "roughness"
+    }
+  ],
+  "mappedFaces": [
+    {
+      "objectName": "物件_(2, 2)",
+      "albedo": "academy_light_training_pad_intact",
+      "cameraFacingDot": 0.999001
+    },
+    {
+      "objectName": "物件_(3, 2)",
+      "albedo": "academy_heavy_training_barricade_intact",
+      "cameraFacingDot": 0.999001
+    },
+    {
+      "objectName": "物件_(3, 3)",
+      "albedo": "academy_aether_pillar_intact",
+      "cameraFacingDot": 0.99954766
+    },
+    {
+      "objectName": "物件_(4, 3)",
+      "albedo": "academy_light_wood_bench_intact",
+      "cameraFacingDot": 0.996259153
+    },
+    {
+      "objectName": "物件_(2, 4)",
+      "albedo": "academy_light_planter_cover_intact",
+      "cameraFacingDot": 0.998489857
+    },
+    {
+      "objectName": "物件_(4, 4)",
+      "albedo": "academy_heavy_training_barricade_intact",
+      "cameraFacingDot": 0.9954618
+    }
+  ],
+  "noWindowCreated": true,
+  "focusRequested": false,
+  "uiExcluded": true
+}

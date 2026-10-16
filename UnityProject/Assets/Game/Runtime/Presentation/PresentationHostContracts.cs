@@ -250,8 +250,10 @@ namespace OCC.Combat.Presentation
     {
     }
 
-    public interface IBattlefieldViewHost
+    public interface IBattlefieldViewHost : IUiPreferenceHost
     {
+        CombatWaterRipples WaterRipples { get; }
+        CombatStopDust StopDust { get; }
         CombatState CurrentState { get; }
         string SelectedTargetId { get; }
         void ClearSelectedEnemyInspection();
@@ -262,6 +264,7 @@ namespace OCC.Combat.Presentation
         string CurrentLevelId { get; }
         BattlefieldCellPresentation PresentBattlefieldCell(GridPosition position);
         void SubmitBattlefieldCell(GridPosition position, bool inspection);
+        void PreviewBattlefieldCell(GridPosition position);
         bool CanQuickMoveTo(GridPosition position);
         bool ShouldDeferPrimaryClickForQuickMove(GridPosition position);
         void SubmitBattlefieldQuickMove(GridPosition position);

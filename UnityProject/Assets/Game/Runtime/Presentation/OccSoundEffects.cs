@@ -12,6 +12,12 @@ namespace OCC.Combat.Presentation
         private static int pageVariant;
         private static int magicVariant;
         private static int strikeVariant;
+        private static int footVariant;
+        private static float lastFootstep = -1;
+        private static bool lastFootstepWater;
+        private static float burstStarted=-1;
+        private static int burstCount;
+        public static event System.Action<string> Played;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void Reset()
@@ -20,6 +26,7 @@ namespace OCC.Combat.Presentation
             LastPlayed.Clear();
             source = null;
             pageVariant = magicVariant = strikeVariant = 0;
+            footVariant=0;lastFootstep=-1;lastFootstepWater=false;burstStarted=-1;burstCount=0;Played=null;
         }
 
         private static void Play(string path, float volume)
@@ -44,8 +51,19 @@ namespace OCC.Combat.Presentation
                 source.playOnAwake = false;
                 source.spatialBlend = 0f;
             }
-            source.PlayOneShot(clip, volume);
+            float gain=volume;
+            bool impact=path.Contains("/FreeProcessed/") && !path.Contains("/book_") || path.EndsWith("/object_hit") || path.EndsWith("/object_break") || path.EndsWith("/defeat");
+            if(impact)
+            {
+                if(Time.unscaledTime-burstStarted>.10f){burstStarted=Time.unscaledTime;burstCount=0;}
+                if(++burstCount>8)return;
+                gain/=Mathf.Sqrt(Mathf.Max(1,burstCount));
+            }
+            source.PlayOneShot(clip,gain);
+            Played?.Invoke(path);
         }
+
+        internal static void Detail(string name,float gain=.20f)=>Foley(name,gain);
 
         internal static void PageOpen()
         {
@@ -57,12 +75,13 @@ namespace OCC.Combat.Presentation
         internal static void NotePlace() => Play("Kenney/rpg-audio/bookPlace1", .42f);
         internal static void ScrollAction() => Play("Kenney/rpg-audio/bookFlip2", .64f);
         internal static void Button() => Play("Kenney/interface-sounds/click_001", .32f);
-        internal static void Rejected() => Play("Kenney/rpg-audio/bookClose", .28f);
+        internal static void Rejected() => Foley("reject", .30f);
         internal static void Footstep() => Play("Kenney/impact-sounds/footstep_concrete_000", .75f);
         internal static void Strike() => Free("blade_0" + (1 + strikeVariant++ % 3), .60f);
+        internal static void RangedRelease() => Free("metal_01", .48f);
         internal static void MetalImpact() => Play("Kenney/impact-sounds/impactMetal_medium_000", .8f);
         internal static void ShieldBlock() => Free("metal_02", .56f);
-        internal static void BreakObject() => Free("wood_01", .65f);
+        internal static void BreakObject() => Foley("object_break", .50f);
         internal static void Device() => Free("metal_01", .65f);
         internal static void Magic() => Free("magical_" + (1 + magicVariant++ % 7), .62f);
         internal static void Arcane() => Free("spell_0" + (1 + magicVariant++ % 2), .70f);
@@ -74,6 +93,57 @@ namespace OCC.Combat.Presentation
         internal static void Reward() { Free("item_gem_01", .32f); Cue("archive_reward", .50f); }
         internal static void Complete() => Cue("practicum_complete", .55f);
         internal static void Retry() => Cue("practicum_retry", .50f);
+        private static void Foley(string name,float volume)=>PlayResource("Audio/OCC/SFX/Foley/"+name,volume);
+        internal static string InventoryMaterial(string definitionId,string materialId)
+        {
+            if(materialId=="FORGE-CIRCUIT" || definitionId=="ACA-EQ-HD01")return "glass";
+            if(materialId=="FORGE-LOAD" || definitionId=="ACA-EQ-CH03")return "metal";
+            if(!string.IsNullOrEmpty(materialId) && materialId.StartsWith("SPEC-"))return "paper";
+            if(string.IsNullOrEmpty(definitionId))return "neutral";
+            if(definitionId.StartsWith("ACA-EQ-BP") || definitionId=="ACA-EQ-LG01")return "leather";
+            if(definitionId.StartsWith("ACA-EQ-CH"))return "cloth";
+            if(definitionId.StartsWith("ACA-EQ-"))return "metal";
+            if(definitionId.StartsWith("G-"))return "device";
+            return "neutral";
+        }
+        internal static string InventoryClip(string definitionId,string materialId,bool dropped,int weight=2)
+        {
+            string kind=InventoryMaterial(definitionId,materialId);
+            if(kind=="neutral")return "neutral_drop";
+            if(kind=="device")return "latch";
+            if(kind=="metal")return !dropped?"metal_pick":weight>=3?"metal_heavy":"metal_light";
+            return kind+(dropped?"_drop":"_pick");
+        }
+        internal static void Inventory(string definitionId,string materialId,bool dropped,int weight=2)
+            => Foley(InventoryClip(definitionId,materialId,dropped,weight),dropped?.42f:.26f);
+        internal static void GroundStep(bool water)
+        {
+            // Preserve the first wet contact after stone on short, fast routes.
+            if(Time.unscaledTime-lastFootstep<.04f && (!water || lastFootstepWater))return;
+            lastFootstep=Time.unscaledTime;lastFootstepWater=water;
+            Foley((water?"water_":"stone_")+(footVariant++%(water?2:3)),water?.36f:.42f);
+        }
+        internal static string ServiceClip(string subject)
+        {
+            switch(subject)
+            {
+                case "purchase":return "coins";
+                case "forge":return "forge";
+                case "specialize":return "paper_drop";
+                case "heal":return "heal";
+                case "meal":return "meal";
+                case "check":return "latch";
+                default:return null;
+            }
+        }
+        internal static void Meal(string id)=>Foley(id=="MEAL-AETHER"||id=="MEAL-SPELL" ? "meal_cup" :
+            id=="MEAL-POWER"||id=="MEAL-MOVE"||id=="MEAL-VITAL" ? "meal_plate" : "meal_bowl",.32f);
+        internal static void ServiceCommitted(string subject)
+        {
+            string clip=ServiceClip(subject);
+            if(clip=="heal")Free("magical_4",.38f);
+            else if(clip!=null)Foley(clip,subject=="forge"?.46f:.38f);
+        }
 
         internal static void Skill(SkillDefinition skill)
         {
@@ -86,6 +156,9 @@ namespace OCC.Combat.Presentation
         // Called only when a captured result is dispatched, alongside its visual impact.
         internal static void CombatFeedback(CombatFeedbackEvent feedback)
         {
+            if(feedback.Kind==CombatFeedbackKind.UnitDefeated){Foley("defeat",.40f);return;}
+            if(feedback.Kind==CombatFeedbackKind.DestructibleDamaged){Foley("object_hit",.42f);return;}
+            if(feedback.Kind==CombatFeedbackKind.DestructibleDestroyed){Foley("object_break",.50f);return;}
             string clip = CombatFeedbackClip(feedback.Kind);
             if (clip != null) Free(clip, feedback.Kind == CombatFeedbackKind.UnitDefeated ? .48f : .52f);
         }
@@ -120,7 +193,7 @@ namespace OCC.Combat.Presentation
             else if (title.Contains("返回") || title.Contains("关闭") || title.Contains("先不")) PageClose();
             else if (title.Contains("上一") || title.Contains("下一")) PageFlip();
             else if (title.Contains("百科") || title.Contains("档案") || title.Contains("背包") || title.Contains("设置") || title.Contains("整备")) PageOpen();
-            else if (title.Contains("购买") || title.Contains("商店")) Free("item_coins_01", .45f);
+            else if (title.Contains("购买") || title.Contains("商店")) Button();
             else if (title.Contains("锁定") || title.Contains("解锁")) Free("lock_01", .45f);
             else if (title.Contains("确认") || title.Contains("选择") || title.Contains("领取") || title.Contains("奖励") || title.Contains("装入")) NotePlace();
             else Button();

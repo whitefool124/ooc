@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6c28576b6ed3754cbb3c765a3f0df72, type: 3}
+  m_Name: sky_furnace_fire_light
+  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.Hd2DFireLightRecipe
+  fireColour: {r: 1, g: 0.38, b: 0.075, a: 1}
+  chamberEnergy: 18
+  compressedEnergy: 28
+  impactEnergy: 95
+  afterglowEnergy: 12
+  range: 9
+  impactDecay: 5
+  afterglowDecay: 1.25
+  daylightSuppression: 0.38
+  chargeStart: 3
+  chargeFull: 4.5
+  compressionStart: 5
+  compressionFull: 7
+  afterglowDuration: 6.6
+  daylightRecoveryStart: 1.6
+  daylightRecoveryEnd: 5.6
+  chamberHeight: 2.2
+  contactHeight: 0.85

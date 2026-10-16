@@ -1,0 +1,40 @@
+{
+  "schema": "occ-registered-prop-material-data-v1",
+  "id": "academy_aether_pillar_damaged",
+  "status": "QA_PENDING",
+  "source": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_aether_pillar_damaged/normal_raw.png",
+    "sha256": "90ef917c49a5ac9922aa6871c61cc9f668e3c267ce7ab52b0066e24b06efde97"
+  },
+  "panel": {
+    "path": "Worldbuilding/归档/2026-10-12_OCC战斗连续提升/academy_aether_pillar_damaged/normal_panel.png",
+    "sha256": "1de26f9f23be24c3e9fe1ed672a8d675c1876629878aff865215cd3f11338c62"
+  },
+  "source_albedo": {
+    "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_pillar_damaged.png",
+    "sha256": "c667e1cf0b47997269f8513b10f404d3822acbe39d50090af82b1b4ef0312c7c",
+    "dimensions": [
+      32,
+      32
+    ]
+  },
+  "normal": {
+    "path": "UnityProject/Assets/Game/Resources/HD2DMaterialData/Props/academy_aether_pillar_damaged/normal.png",
+    "sha256": "d41f2beac182202299fe6c7c1a08bbeeb581e5a67b4f98b5fcd6a91896b12264"
+  },
+  "method": "Independent built-in model field, exact full canvas or left atlas panel, observed RGB medoid on registered native UV; no albedo-derived height",
+  "native_grid": [
+    32,
+    32
+  ],
+  "world_pixel_pitch": 0.03125,
+  "normal_convention": "OpenGL +Y, no green flip",
+  "uniform_surface": {
+    "roughness": 0.88,
+    "metallic": 0,
+    "coat": 0,
+    "reason": "Explicit semantic material role, not grayscale conversion"
+  },
+  "human_registration_review": "PENDING",
+  "limitation": "Shared UV candidate; source/region aesthetics and whole-scene density pending"
+}

@@ -1,0 +1,32 @@
+{
+  "route": "technical_auxiliary_normal_data_from_declared_coarse_surface_proxies",
+  "albedo_changed": true,
+  "normal_authoring": "desktop horizontal plane; book top/front planes; cup/lantern three coarse surface bands",
+  "limitation": "proxy normals are not hand-authored final material normals; input albedos retain baked lighting",
+  "source": "ArtSource/MainMenuE_Native64_20261008",
+  "backdrop_split_y": 115,
+  "render_route": "URP2D Sprite-Lit scene > native320x180 RT with URP PixelPerfectCamera > point-filtered integer presentation; GUI is separate",
+  "shadow_route": "URP ShadowCaster2D ground footprint proxy, not vertical canvas silhouette; key shadow intensity0.14",
+  "albedo_baked_lighting_limit": "Background directional lighting removed by independent image generation. Existing separate prop albedos still retain authored material shading.",
+  "promotion": "REVIEW_ONLY; community reconstruction candidate, human acceptance pending",
+  "files": {
+    "backdrop.png": "a953c2ef2742d85129b78ecedf8f6f6a050a575bb06ec0df54b63180aa602472",
+    "backdrop_normal.png": "9ffe843886ed1ff7741c8a46d61984468d1d3877413fe49bf0fe9df9028ccff9",
+    "book_closed.png": "ec9f0527861ee13e83af7c982ae6e1ea11b29c0e9504265d69a766a4abe0981a",
+    "book_closed_normal.png": "d1dff9218b09ff818725acf56b04ac665cd5616462eb7864c93d607b95c9f9f1",
+    "book_open.png": "771dd25f8dd5029d960b69b12c333dc5df89e73c0edb76a390159ac8f391a99c",
+    "book_open_normal.png": "bdef568e288a67fe6b3dfd2a17fe9cfeb5d179a49e8844ad93aaa1c97ae3551f",
+    "cup.png": "4a54d6bccd850644e2fe92010437d32424429a414297f4343b1ded1ed18e9c4a",
+    "cup_normal.png": "f5100d5474df918d1d3f66d19fa1f5fa2c52b885c787fc8c9895ea0245f1be44",
+    "desktop.png": "eb21e68f061cf15da8c2257b739a3eb026cfc6ac755d5cbdc15f7546303e5292",
+    "desktop_normal.png": "c1692413963779bd1c8f148bc92b977c824021aff2ab0e8513277eaf9dd3484b",
+    "lamp.png": "42fe7d2c31da0fa4151d9f2447a083b98bb5581a1f1ad447ecd718d5858cb31c",
+    "lamp_normal.png": "7d97b138323c7f7d2be052f7917983d656a139f4857a519f8be378d8ce3dd412"
+  },
+  "background_source": "ArtSource/MainMenuE_Albedo_20261008/background/manifest.json",
+  "background_dimensions": [
+    282,
+    159
+  ],
+  "background_material": "Neutral regenerated base colors; room/backdrop and desktop receive shared Light2D."
+}

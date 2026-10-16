@@ -1,0 +1,23 @@
+{
+  "schema": "occ-art-validation-report-v1",
+  "asset_id": "hd2d_library_plaque",
+  "role": "hd2d_library_display",
+  "status": "PASS",
+  "metrics": {
+    "size": [
+      1667,
+      716
+    ],
+    "bounds": [
+      16,
+      16,
+      1651,
+      700
+    ],
+    "hard_alpha": false,
+    "fully_opaque": false,
+    "visible_colors": 65086,
+    "accent_pixels": {}
+  },
+  "errors": []
+}

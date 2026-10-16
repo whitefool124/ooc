@@ -88,7 +88,7 @@ namespace OCC.Combat.Presentation
             {
                 float target = i == active && !string.IsNullOrEmpty(requested) ? 1 : 0;
                 gains[i] = Mathf.MoveTowards(gains[i], target, Time.unscaledDeltaTime / 1.5f);
-                voices[i].volume = gains[i] * MusicGain(voices[i].clip == null ? "" : voices[i].clip.name);
+                voices[i].volume = gains[i] * OccDetailAudio.PriorityGain * MusicGain(voices[i].clip == null ? "" : voices[i].clip.name);
                 if (target == 0 && gains[i] == 0 && voices[i].isPlaying) voices[i].Stop();
             }
         }
@@ -129,6 +129,19 @@ namespace OCC.Combat.Presentation
                 case UiVisualEventKind.MapLocationChanged: OccSoundEffects.PageFlip(); break;
                 case UiVisualEventKind.BriefingOpened: OccSoundEffects.Ready(); break;
                 case UiVisualEventKind.RewardClaimed: OccSoundEffects.Reward(); break;
+                case UiVisualEventKind.ServiceCommitted:
+                    if((signal.Subject=="inventory-drop" || signal.Subject=="inventory-rotate") && !string.IsNullOrEmpty(signal.Origin) && host.CurrentMapRun?.RogueRunState!=null)
+                    {
+                        var runtime=host.IsDeveloperCombatActive && host.CurrentState?.RogueEquipment!=null ? host.CurrentState.RogueEquipment : OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(host.CurrentMapRun.RogueRunState);
+                        var definition=runtime.DefinitionFor(signal.Origin);
+                        string id=definition?.DefinitionId ?? runtime.TacticalItem(signal.Origin)?.DefinitionId;
+                        OccSoundEffects.Inventory(id,runtime.MaterialIdFor(signal.Origin),signal.Subject=="inventory-drop",definition?.BaseWeight??2);
+                    }
+                    else if(signal.Subject=="inventory-link") OccSoundEffects.ServiceCommitted("check");
+                    else if(signal.Subject=="meal") OccSoundEffects.Meal(host.CurrentMapRun?.CurrentMedicalService?.SelectedMealId);
+                    else OccSoundEffects.ServiceCommitted(signal.Subject);
+                    break;
+                case UiVisualEventKind.ConfirmationOpened: OccSoundEffects.PaperPlace(); break;
             }
         }
     }

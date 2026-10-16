@@ -174,6 +174,17 @@ namespace OCC.Combat.Presentation
         public static string[] CoverVisualAssetIds() =>
             LightCoverIds.Concat(HeavyCoverIds).ToArray();
 
+        // Restore existing thematic furniture outside the playable board. The
+        // old 12x9 placement coordinates remain excluded from tactical cells.
+        public static string[] PeripheralFixtureIds(string levelId)
+        {
+            if(levelId!="elite_foundry"&&levelId!="depot_wreck"&&levelId!="library_discipline"&&
+                levelId!="calibration_lockdown"&&levelId!="sealed_vault_certification")return Array.Empty<string>();
+            return Structures(levelId).Where(p=>p.AssetId=="academy_low_bookcase_2x1"||
+                p.AssetId=="academy_smithing_table_2x1"||p.AssetId=="academy_tool_cabinet_2x1")
+                .Select(p=>p.AssetId).Distinct().Take(2).ToArray();
+        }
+
         private static int StableSeed(string levelId)
         {
             int seed = 0;

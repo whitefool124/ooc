@@ -1,0 +1,209 @@
+[
+  {
+    "schema": "occ-authored-sprite-material-v1",
+    "status": "QA_PENDING",
+    "id": "academy_aether_crystal_intact",
+    "source": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_crystal_intact.png",
+      "sha256": "e3728c4b07c1e1dd16a00ba4f0d30ace06522161e6f3b616e04d43c6c8da24ca"
+    },
+    "recipe_sha256": "4001c3807bc30df7fc083df6c67d2edb6e8e368cc9762342cb6f28a24d9b0991",
+    "native_canvas": [
+      96,
+      64
+    ],
+    "world_pixel_pitch": 0.03125,
+    "height_basis": "explicit_authored_geometry",
+    "albedo_brightness_used_for_height": false,
+    "source_art_changed": false,
+    "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+    "fields": {
+      "normal.png": "d6dabc280d25f81985e8e96a78db2bfb446e83be8444c132c662e5d83350407a",
+      "regions.png": "14cab52433d196ef9b9d465543c93ddfdb85257a2d73c450e78eb189813cc6af"
+    },
+    "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+    "limitations": [
+      "Shallow-relief approximation; no physical transmission",
+      "Original albedo retains baked bright facets; numeric fields do not remove them"
+    ],
+    "runtime_review": "PENDING",
+    "human_registration_review": "PENDING"
+  },
+  {
+    "schema": "occ-authored-sprite-material-v1",
+    "status": "QA_PENDING",
+    "id": "academy_aether_crystal_damaged",
+    "source": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_aether_crystal_damaged.png",
+      "sha256": "fc3c48a06127f8e6d3aec41b8c03c83806e5940844f371c6fae874536fb1bf23"
+    },
+    "recipe_sha256": "4001c3807bc30df7fc083df6c67d2edb6e8e368cc9762342cb6f28a24d9b0991",
+    "native_canvas": [
+      96,
+      64
+    ],
+    "world_pixel_pitch": 0.03125,
+    "height_basis": "explicit_authored_geometry",
+    "albedo_brightness_used_for_height": false,
+    "source_art_changed": false,
+    "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+    "fields": {
+      "normal.png": "80988b4db66e66fd4f1779caf34c87dacfc4c74ea0fc7d1eb0772df466cc7760",
+      "regions.png": "1d9d08c26c426f55772b5133a2039a8f308b17c4f3ad34435df72b42bf1ebf56"
+    },
+    "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+    "limitations": [
+      "Shallow-relief approximation; no physical transmission",
+      "Original albedo retains baked bright facets; numeric fields do not remove them"
+    ],
+    "runtime_review": "PENDING",
+    "human_registration_review": "PENDING"
+  },
+  {
+    "schema": "occ-authored-sprite-material-v1",
+    "status": "QA_PENDING",
+    "id": "academy_pressure_crystal_intact",
+    "source": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_pressure_crystal_intact.png",
+      "sha256": "f129e12e7b355549698002a4e6187a594a9d75ec3b24e104c0995a99611cdbae"
+    },
+    "recipe_sha256": "4001c3807bc30df7fc083df6c67d2edb6e8e368cc9762342cb6f28a24d9b0991",
+    "native_canvas": [
+      96,
+      64
+    ],
+    "world_pixel_pitch": 0.03125,
+    "height_basis": "explicit_authored_geometry",
+    "albedo_brightness_used_for_height": false,
+    "source_art_changed": false,
+    "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+    "fields": {
+      "normal.png": "5a38ef3f9c9645f39057a25d98cc5cee0d17c156269cc0b65390a142970b7731",
+      "regions.png": "eb1f58fa29449830b561ad0df94de322ebd99f21860ceeda3eb4fe93fac8480d"
+    },
+    "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+    "limitations": [
+      "Shallow-relief approximation; no physical transmission",
+      "Original albedo retains baked bright facets; numeric fields do not remove them"
+    ],
+    "runtime_review": "PENDING",
+    "human_registration_review": "PENDING"
+  },
+  {
+    "schema": "occ-authored-sprite-material-v1",
+    "status": "QA_PENDING",
+    "id": "academy_pressure_crystal_damaged",
+    "source": {
+      "path": "UnityProject/Assets/Game/Resources/Art/FormalAcademyCombat32/academy_pressure_crystal_damaged.png",
+      "sha256": "e5776dccef6fbc34c8b17f939552e9310b3e80717e52690800c2fdc2f700b5d8"
+    },
+    "recipe_sha256": "4001c3807bc30df7fc083df6c67d2edb6e8e368cc9762342cb6f28a24d9b0991",
+    "native_canvas": [
+      96,
+      64
+    ],
+    "world_pixel_pitch": 0.03125,
+    "height_basis": "explicit_authored_geometry",
+    "albedo_brightness_used_for_height": false,
+    "source_art_changed": false,
+    "region_basis": "Exact per-source manually declared crystal/stone palette identities; never runtime hue classification",
+    "fields": {
+      "normal.png": "f0599c4cadb138872876343156661bb07a12d25aba9b58dfdb95eca083339abc",
+      "regions.png": "5feb04b7d6c257dd6bd0a3a7f7be780320b68f8a04f767fc567f91066f980766"
+    },
+    "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+    "limitations": [
+      "Shallow-relief approximation; no physical transmission",
+      "Original albedo retains baked bright facets; numeric fields do not remove them"
+    ],
+    "runtime_review": "PENDING",
+    "human_registration_review": "PENDING"
+  },
+  {
+    "schema": "occ-authored-sprite-material-v1",
+    "status": "QA_PENDING",
+    "id": "academy_facade",
+    "source": {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_facade.png",
+      "sha256": "f1705cf02ff32e1b1bc4d1161b4b659fb34a7c084f13ab74a9cee93fbca5b5ed"
+    },
+    "recipe_sha256": "4001c3807bc30df7fc083df6c67d2edb6e8e368cc9762342cb6f28a24d9b0991",
+    "native_canvas": [
+      224,
+      128
+    ],
+    "world_pixel_pitch": 0.03125,
+    "height_basis": "explicit_authored_geometry",
+    "albedo_brightness_used_for_height": false,
+    "source_art_changed": false,
+    "region_basis": "Explicit manually authored spatial material regions",
+    "fields": {
+      "normal.png": "ba8b6b7589d6986524207621b5f4965df7430970a67b0c489f203493d9ed412e",
+      "metallic_gloss.png": "441b325d337a49f53cdd71fefce1e7d6d71e1916ef0784c50312854f69b943ec"
+    },
+    "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+    "limitations": [
+      "Shallow-relief approximation; no physical transmission"
+    ],
+    "runtime_review": "PENDING",
+    "human_registration_review": "PENDING"
+  },
+  {
+    "schema": "occ-authored-sprite-material-v1",
+    "status": "QA_PENDING",
+    "id": "greenhouse_facade",
+    "source": {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyCandidates/greenhouse_facade.png",
+      "sha256": "b94bb42ebdd9587fcf31b24ace148cb8412c88f55482c9bb48cc6ec21d576034"
+    },
+    "recipe_sha256": "4001c3807bc30df7fc083df6c67d2edb6e8e368cc9762342cb6f28a24d9b0991",
+    "native_canvas": [
+      256,
+      96
+    ],
+    "world_pixel_pitch": 0.03125,
+    "height_basis": "explicit_authored_geometry",
+    "albedo_brightness_used_for_height": false,
+    "source_art_changed": false,
+    "region_basis": "Explicit manually authored spatial material regions",
+    "fields": {
+      "normal.png": "39006fb8ab052d1ff1432f7fd1a09e279b2694da3610da99d115decb7daa8dc7",
+      "metallic_gloss.png": "f7bb6442436b543121537e50840b93be4503931dccd0c7c007991c5d35633c2e"
+    },
+    "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+    "limitations": [
+      "Shallow-relief approximation; no physical transmission"
+    ],
+    "runtime_review": "PENDING",
+    "human_registration_review": "PENDING"
+  },
+  {
+    "schema": "occ-authored-sprite-material-v1",
+    "status": "QA_PENDING",
+    "id": "academy_tree",
+    "source": {
+      "path": "UnityProject/Assets/Game/Resources/Art/HD2DAcademyReview/academy_tree.png",
+      "sha256": "9978c0b532855042c823e461be21c7c5c6947aa693af3625aabcd063e531bf51"
+    },
+    "recipe_sha256": "4001c3807bc30df7fc083df6c67d2edb6e8e368cc9762342cb6f28a24d9b0991",
+    "native_canvas": [
+      96,
+      96
+    ],
+    "world_pixel_pitch": 0.03125,
+    "height_basis": "explicit_authored_geometry",
+    "albedo_brightness_used_for_height": false,
+    "source_art_changed": false,
+    "region_basis": "Explicit manually authored spatial material regions",
+    "fields": {
+      "normal.png": "fb7cefb646c8bb644cfcdcddf1cbf02014e0bfa0021a7ae0040c4354f99ceb9a",
+      "metallic_gloss.png": "137b3d356b6b8ded087be8ff2265b902a0ef8ceb5d1882cb71748c8dbcef92c6"
+    },
+    "normal_convention": "OpenGL +Y; top-to-bottom image rows",
+    "limitations": [
+      "Leaf canopy volume proxy only; no individual-leaf geometry or transmission"
+    ],
+    "runtime_review": "PENDING",
+    "human_registration_review": "PENDING"
+  }
+]
