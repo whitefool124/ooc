@@ -40,11 +40,17 @@ namespace OCC.Combat.Presentation
             if(stage.sceneVolume.profile.TryGet<DepthOfField>(out var depth))
                 depth.focusDistance.value=Vector3.Distance(stage.sceneCamera.transform.position,stage.transform.TransformPoint(new Vector3(0,1.48f,1)));
         }
-        private void OnDestroy()
+        private void OnDisable() => ReleasePresentation();
+        private void OnDestroy() => ReleasePresentation();
+        private void ReleasePresentation()
         {
-            foreach(var item in decorations)if(item.Key!=null)item.Key.SetActive(item.Value);
+            bool restore=backdrop!=null&&!backdrop.IsReleasingStage&&backdrop.Stage!=null;
+            if(restore)
+                foreach(var item in decorations)if(item.Key!=null)item.Key.SetActive(item.Value);
+            decorations.Clear();
             if(worktop!=null)Destroy(worktop);
-            if(backdrop!=null)backdrop.SetDocumentFraming(0,0);
+            worktop=null;
+            if(restore)backdrop.SetDocumentFraming(0,0);
         }
     }
 }

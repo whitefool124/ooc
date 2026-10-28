@@ -1,1 +1,0 @@
-Initial pixel audit: CH03 moving152 outside0 black0; CH01 moving0 outside0 black0; HD01 moving72 outside0 black2. Two black lens details lit by refraction. Not accepted; shader tightened before retest.

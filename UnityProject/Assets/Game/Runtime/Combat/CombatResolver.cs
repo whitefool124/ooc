@@ -103,6 +103,7 @@ namespace OCC.Combat
             {
                 case CombatCommandType.Move: execution = ResolveMove(state, unit, command); break;
                 case CombatCommandType.Attack: execution = ResolveWeaponAttack(state, unit, command.TargetUnitId, 0); break;
+                case CombatCommandType.AttackCell: execution = state.LampVines.Attack(state, unit, command.Destination, command.SlotIndex); break;
                 case CombatCommandType.Cast: execution = ResolveSkill(state, unit, CombatCatalog.FireBolt, command); break;
                 case CombatCommandType.UseSkill:
                     execution = !unit.IsHero && state.AcademyEnemyArea != null &&
@@ -243,6 +244,7 @@ namespace OCC.Combat
             attacker.ClearStatus(StatusType.Prepared);
             state.RogueEquipment?.AfterWeaponHit(state, attacker.Id);
             state.RogueSpells?.AfterWeaponHit(attacker.Id, state.GetUnit(targetId));
+            execution = CombatEffectExecution.Combine(execution, ResolveAdjacentCounter(state, state.GetUnit(targetId), attacker));
             ExhaustEnemyActionPoints(state, attacker);
             return execution;
         }
@@ -264,7 +266,9 @@ namespace OCC.Combat
                     FireSpellEngine.ReduceIncomingDamage(state.RogueSpells.FireBattle, target.Id, attacker.Id, skill.Damage);
             }
             List<CombatEffect> effects = new List<CombatEffect>();
-            if (skill.ManaCost > 0) effects.Add(CombatEffect.SpendMana(skill.ManaCost));
+            int adjustedManaCost = Math.Max(0, skill.ManaCost + attacker.StatusStrength(StatusType.SpellCost));
+            if (adjustedManaCost > 0) effects.Add(CombatEffect.SpendMana(adjustedManaCost));
+            if (attacker.HasStatus(StatusType.SpellCost)) effects.Add(CombatEffect.ClearStatus(attacker.Id, StatusType.SpellCost));
             effects.Add(CombatEffect.SpendActionPoints(BasicActionPointCost));
 
             for (int targetIndex = 0; targetIndex < targets.Count; targetIndex++)
@@ -284,12 +288,28 @@ namespace OCC.Combat
 
             CombatEffectExecution execution = CombatEffectExecutor.Execute(state, attacker.Id, effects.ToArray());
             attacker.SetCooldown(skill);
+            if (skill.Damage > 0)
+                foreach (UnitState target in targets)
+                    execution = CombatEffectExecution.Combine(execution, ResolveAdjacentCounter(state, target, attacker));
             LogSkillExecution(state, attacker, skill, execution);
             state.EvaluateOutcome();
             ExhaustEnemyActionPoints(state, attacker);
             return execution;
         }
 
+        internal static CombatEffectExecution ResolveAdjacentCounter(CombatState state, UnitState defender, UnitState attacker)
+        {
+            if (defender == null || attacker == null || !defender.IsAlive || !attacker.IsAlive ||
+                defender.IsHero == attacker.IsHero || defender.Position.ManhattanDistance(attacker.Position) != 1 ||
+                !defender.HasStatus(StatusType.Counter)) return CombatEffectExecution.Empty;
+            int damage = Math.Max(0, defender.StatusStrength(StatusType.Counter));
+            defender.ClearStatus(StatusType.Counter);
+            DamageParts parts = CalculateDamage(state, defender, attacker, damage, DamageType.Physical, 0);
+            var execution = CombatEffectExecutor.Execute(state, defender.Id,
+                CombatEffect.AbsorbShield(attacker.Id, parts.Shield), CombatEffect.DamageHealth(attacker.Id, parts.Final));
+            state.AddLog(defender.DisplayName + "的反击已触发并消耗。");
+            state.EvaluateOutcome(); return execution;
+        }
         internal static CombatEffectExecution ResolveConfiguredEnemySkill(CombatState state, UnitState enemy,
             SkillDefinition skill, CombatCommand command) => ResolveSkill(state, enemy, skill, command);
 
@@ -314,6 +334,9 @@ namespace OCC.Combat
                         target.Position != center) continue;
                     AppendSkillEffect(state, enemy, target, skill, definition, command, effects);
                 }
+            foreach (GridPosition cell in affectedCells.Where(cell => state.Map.GetTile(cell).IsDestructibleLoot && state.Map.GetTile(cell).Durability > 0))
+                foreach (SkillEffectDefinition definition in skill.Effects.Where(e => e.Type == SkillEffectType.Damage))
+                    effects.Add(CombatEffect.DamageObject(cell, definition.Amount));
             CombatEffectExecution result = CombatEffectExecutor.Execute(state, enemy.Id, effects.ToArray());
             enemy.SetCooldown(skill);
             LogSkillExecution(state, enemy, skill, result);
@@ -335,6 +358,8 @@ namespace OCC.Combat
             if (state == null || enemy == null || affectedCells == null)
                 throw new InvalidOperationException("转灯范围不可用。");
             var effects = new List<CombatEffect> { CombatEffect.SpendActionPoints(enemy.ActionPoints) };
+            foreach (GridPosition cell in affectedCells.Where(cell => state.Map.GetTile(cell).IsDestructibleLoot && state.Map.GetTile(cell).Durability > 0))
+                effects.Add(CombatEffect.DamageObject(cell, 1));
             foreach (UnitState target in state.Units.Values.Where(unit => unit.IsAlive && affectedCells.Contains(unit.Position))
                 .OrderBy(unit => unit.Id, StringComparer.Ordinal))
             {
@@ -357,6 +382,8 @@ namespace OCC.Combat
             }
 
             UnitState primary = GetUnit(state, command.TargetUnitId);
+            if (state.LampVines.IsHiddenFrom(state, attacker, primary)) throw new InvalidOperationException("目标真实格未公开，请对公开灯藤格搜查。");
+            if (skill.Damage > 0 && LampVineConcealment.Intact(state, attacker.Position) && attacker.Position.ManhattanDistance(primary.Position) > 1) throw new InvalidOperationException("藤内只能攻击正交相邻目标。");
             if (!primary.IsAlive || !MatchesTargetRule(attacker, primary, skill.TargetRule)) throw new InvalidOperationException("\u6280\u80fd\u76ee\u6807\u4e0d\u53ef\u7528\u3002");
             if (Manhattan(attacker.Position, primary.Position) < skill.MinimumRange) throw new InvalidOperationException("目标位于技能近身死区。");
             if (Manhattan(attacker.Position, primary.Position) > attacker.EffectiveRange(skill.Range)) throw new InvalidOperationException("\u76ee\u6807\u8d85\u51fa\u6280\u80fd\u5c04\u7a0b\u3002");
@@ -386,7 +413,7 @@ namespace OCC.Combat
             else
             {
                 TileState tile = state.Map.GetTile(destination);
-                if (tile.Cover == CoverType.None && !tile.IsObjective) throw new InvalidOperationException("\u76ee\u6807\u683c\u6ca1\u6709\u53ef\u7834\u574f\u7269\u4ef6\u3002");
+                if (tile.Cover == CoverType.None && !tile.IsObjective && !tile.IsDestructibleLoot) throw new InvalidOperationException("\u76ee\u6807\u683c\u6ca1\u6709\u53ef\u7834\u574f\u7269\u4ef6\u3002");
             }
         }
 
@@ -443,6 +470,8 @@ namespace OCC.Combat
         private static CombatEffectExecution ResolveDamageAction(CombatState state, UnitState attacker, string targetId, string sourceName, DamageType damageType, int baseDamage, int minimumRange, int range, int armorPierce, int initiativeDelay, int manaCost, StatusType? status, int statusDuration)
         {
             UnitState defender = GetUnit(state, targetId);
+            if (state.LampVines.IsHiddenFrom(state, attacker, defender)) throw new InvalidOperationException("目标真实格未公开，请对公开灯藤格搜查。");
+            if (LampVineConcealment.Intact(state, attacker.Position) && attacker.Position.ManhattanDistance(defender.Position) > 1) throw new InvalidOperationException("藤内只能攻击正交相邻目标。");
             if (!defender.IsAlive) throw new InvalidOperationException("\u76ee\u6807\u4e0d\u53ef\u7528\u3002");
             if (Manhattan(attacker.Position, defender.Position) < minimumRange) throw new InvalidOperationException("目标位于武器近身死区。");
             if (Manhattan(attacker.Position, defender.Position) > attacker.EffectiveRange(range)) throw new InvalidOperationException("\u76ee\u6807\u8d85\u51fa\u5c04\u7a0b\u3002");
@@ -514,6 +543,7 @@ namespace OCC.Combat
             if (Manhattan(unit.Position, loot.Position) != 1) throw new InvalidOperationException("只能搜索相邻的战利品容器。");
             CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost));
             ItemInstance revealed = loot.RevealNext(); if (revealed == null) throw new InvalidOperationException("容器已经搜索完成。");
+            if (loot.Tier != BattlefieldChestTier.Fixed) while (loot.RevealNext() != null) { }
             state.AddLog($"{unit.DisplayName}花费 1 行动点搜索容器：发现{ItemCatalog.Get(revealed.DefinitionId).DisplayName}（还有 {loot.HiddenCount} 件未知物品）。");
             return execution;
         }
@@ -524,6 +554,17 @@ namespace OCC.Combat
             if (loot == null) throw new InvalidOperationException("此处没有可搜刮的战利品。");
             if (Manhattan(unit.Position, loot.Position) != 1) throw new InvalidOperationException("只能拿取相邻容器中的物品。");
             ItemInstance revealed = loot.RevealedItems.FirstOrDefault(value => value.InstanceId == instanceId);
+            if (revealed != null && loot.Tier != BattlefieldChestTier.Fixed && state.RogueEquipment != null)
+            {
+                if (revealed.DefinitionId != AcademyLootCatalog.GoldBag && !revealed.DefinitionId.StartsWith(AcademyLootCatalog.ManuscriptPrefix, StringComparison.Ordinal) &&
+                    !state.RogueEquipment.TryAddContainerItem(instanceId, revealed.DefinitionId))
+                    throw new InvalidOperationException("背包空间不足，需要先整理。");
+                // Currency and manuscripts settle from the same taken-item receipt as physical items.
+                // This keeps command replay free of writes to the persistent run.
+                loot.ClaimRevealed(instanceId);
+                state.AddLog(unit.DisplayName + "拿取了" + ItemCatalog.Get(revealed.DefinitionId).DisplayName + "；不消耗行动点。");
+                return CombatEffectExecution.Empty;
+            }
             if (revealed != null && state.RogueEquipment != null &&
                 Roguelite.RogueContentCatalog.CreateAcademyV01().Equipment.Any(value => value.DefinitionId == revealed.DefinitionId))
             {
@@ -564,7 +605,7 @@ namespace OCC.Combat
             if (Manhattan(unit.Position, target) != 1) throw new InvalidOperationException("\u53ea\u80fd\u4e0e\u76f8\u90bb\u683c\u4ea4\u4e92\u3002");
             TileState tile = state.Map.GetTile(target);
             bool investigationTarget = state.Objectives.OfType<InvestigationObjective>().Any(objective => objective.Positions.Contains(target));
-            bool destructibleTarget = tile.Durability > 0 && (tile.IsObjective || tile.IsDevice || tile.IsLampVine || tile.Cover != CoverType.None);
+            bool destructibleTarget = tile.Durability > 0 && (tile.IsDestructibleLoot || tile.IsObjective || tile.IsDevice || tile.IsLampVine || tile.Cover != CoverType.None);
             if (!destructibleTarget && !investigationTarget) throw new InvalidOperationException("\u8be5\u683c\u6ca1\u6709\u53ef\u4ea4\u4e92\u76ee\u6807\u3002");
             CombatEffectExecution execution = destructibleTarget
                 ? CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.DamageObject(target, unit.BasicAttack?.Damage ?? 0))
@@ -618,11 +659,31 @@ namespace OCC.Combat
             IReadOnlyList<GridPosition> path = CombatMovementQuery.FindPath(state, unit, command.Destination);
             if (path.Count == 0) throw new InvalidOperationException("\u76ee\u6807\u683c\u6ca1\u6709\u53ef\u884c\u79fb\u52a8\u8def\u5f84\u6216\u8d85\u51fa\u79fb\u52a8\u8303\u56f4\u3002");
             path = CombatMovementQuery.StopAtBindingMark(state, path);
-            GridPosition destination = path[path.Count - 1];
-            CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id,
-                CombatEffect.SpendActionPoints(BasicActionPointCost), CombatEffect.Move(destination));
-            // The binding mark triggers on entry, before a later trace can replace its effect layer.
-            state.ResolveBindingMarkEntry(unit);
+            var traversed = new List<GridPosition> { unit.Position };
+            CombatEffectExecution execution = CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.SpendActionPoints(BasicActionPointCost));
+            for (int step = 1; step < path.Count; step++)
+            {
+                GridPosition next = path[step];
+                if (!unit.IsAlive || state.Map.IsBlocked(next) || state.IsOccupied(next, unit.Id)) break;
+                execution = CombatEffectExecution.Combine(execution,
+                    CombatEffectExecutor.Execute(state, unit.Id, CombatEffect.Move(next)));
+                traversed.Add(next);
+                // Entry reactions resolve before the following path step, and can invalidate the rest.
+                state.ResolveBindingMarkEntry(unit);
+                if (state.ArtifactBattle != null)
+                {
+                    string[] owners = CombatActionTimeline.Order(state, state.Units.Values.Where(candidate => candidate.IsAlive))
+                        .Select(candidate => candidate.Id).ToArray();
+                    foreach (string ownerId in owners)
+                    {
+                        if (!unit.IsAlive) break;
+                        ArtifactExecution reaction = state.ArtifactBattle.ResolveEnemyEntered(ownerId, unit.Id);
+                        if (reaction.Steps.Count > 0) state.AddLog("截击在标记格触发，剩余路径重新检查。");
+                    }
+                }
+                if (!unit.IsAlive || unit.Position != next || unit.HasStatus(StatusType.Bound)) break;
+            }
+            path = traversed;
             state.AcademyFieldEnemy?.AfterMove(state, unit, path);
             state.RainLanternCourt?.AfterMove(state, unit, path);
             state.GreenhouseCollectionRoom?.AfterMove(state, unit, path);
@@ -634,11 +695,7 @@ namespace OCC.Combat
                 state.AddLog(unit.DisplayName + "进入浅水，燃烧已移除。");
             }
             state.RogueEquipment?.AfterMove(unit.Id);
-            if (!unit.IsHero && state.ArtifactBattle != null)
-            {
-                ArtifactExecution reaction = state.ArtifactBattle.ResolveEnemyEntered("hero", unit.Id);
-                if (reaction.Steps.Count > 0) state.AddLog("截击铃在标记格触发，完成伤害与推离。");
-            }
+            unit.ClearStatus(StatusType.MoveBonus);
             CombatEffectExecution pressureReaction = unit.IsHero
                 ? state.PressureTest?.ResolveHeroMove(state, unit.Position) : null;
             return CombatEffectExecution.Combine(execution, pressureReaction);

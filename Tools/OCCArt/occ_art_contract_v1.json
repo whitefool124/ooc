@@ -1795,6 +1795,21 @@
       "transparent_border_min": 1,
       "application_scope": "noninteractive_hd2d_environment",
       "perspective_application": true
+    },
+    "application_icon": {
+      "logical_cells": null,
+      "palette_max": 1000000,
+      "alpha_policy": "transparent_soft_alpha",
+      "transparent_border_min": 16,
+      "strict_pixel_lattice_required": false,
+      "subject_lattice_confidence_required": false,
+      "geometric_resizing_allowed": true,
+      "application_scope": "operating_system_branding_only",
+      "scope": "以太总案1.1，2026-10-23；仅OS启动器与程序图标，不得当成游戏内功能图标或场景资产",
+      "delivery_size": [
+        512,
+        512
+      ]
     }
   },
   "color_families": {
@@ -2715,6 +2730,38 @@
           "scene_props",
           "functional_icons"
         ]
+      },
+      "ui_thumbnail_exception": {
+        "approved_at": "2026-10-23",
+        "role": "loadout_ui_thumbnail",
+        "allow_independent_integer_scaling": true,
+        "allowed_surfaces": [
+          "loadout.backpack",
+          "loadout.tactical_quickbar"
+        ],
+        "source_sampling": "Point",
+        "reference_resolution": [
+          1920,
+          1080
+        ],
+        "reference_source_pixel_scale": 2,
+        "half_resolution_source_pixel_scale": 1,
+        "preserve": [
+          "source_raster",
+          "full_silhouette",
+          "actual_footprint",
+          "rotation",
+          "remaining_charges"
+        ],
+        "does_not_apply_to": [
+          "characters",
+          "scene_props",
+          "battlefield_units",
+          "ground_tiles",
+          "battlefield_props",
+          "combat_ui",
+          "other_functional_icons"
+        ]
       }
     },
     "material_production_policy": {
@@ -2740,5 +2787,68 @@
       "effect_comparison": "independent toggles; fixed camera and environment phase; actual 1080 and 540",
       "outdoor_clouds": "attenuate daylight only; declared scale speed strength fade; no indoor source no activation"
     }
+  },
+  "stage_one_ui_system": {
+    "canonical_section": "A.18 第一阶段界面排版与九宫格边框",
+    "reference": [
+      1920,
+      1080
+    ],
+    "typography": {
+      "body": 24,
+      "title": 48,
+      "feedback": 72,
+      "single_line_height": 32,
+      "two_line_height": 64,
+      "best_fit": false
+    },
+    "spacing": {
+      "inset": [
+        8,
+        12
+      ],
+      "group": [
+        8,
+        16
+      ],
+      "outer": 24
+    },
+    "chrome_roles": [
+      "panel",
+      "card",
+      "button",
+      "tab",
+      "slot",
+      "tooltip",
+      "notice",
+      "focus"
+    ],
+    "sprite_resource": "Art/Hd2DContentFrames/简洁纸边",
+    "image_type": "Sliced",
+    "map_marker_exempt": true,
+    "turn_banner": {
+      "title": 48,
+      "body": 24,
+      "opaque": true,
+      "hero_hold_min_seconds": 1.4,
+      "blocks_input": false,
+      "anchor": "screen_center",
+      "layout": "horizontal",
+      "total_seconds": 1.8,
+      "travel_px": 16,
+      "static_equivalent": true
+    },
+    "map_top_bars": 1,
+    "spell_slot_content": [
+      "icon",
+      "name",
+      "direct_effect_or_cost"
+    ],
+    "loadout_regions": [
+      "character",
+      "equipment_and_tactical",
+      "backpack"
+    ],
+    "shop_layout": "shelf_display_with_selected_detail"
   }
 }

@@ -108,11 +108,14 @@ namespace OCC.Combat
         }
 
         public bool HasLineOfSight(GridPosition from, GridPosition to, int currentTime)
+            => HasLineOfSight(from, to, currentTime, false);
+
+        public bool HasLineOfSight(GridPosition from, GridPosition to, int currentTime, bool targetObject)
         {
             bool SmokeActive(GridPosition position) => GetTile(position).SmokeExpiresAt > currentTime;
             bool ScreenActive(GridPosition position) => GetTile(position).HasPaperScreen;
             if (from.ManhattanDistance(to) > 1 &&
-                (GetTile(from).IsLampVine || GetTile(to).IsLampVine || SmokeActive(from) || SmokeActive(to) ||
+                (GetTile(from).IsLampVine && GetTile(from).Durability > 0 || !targetObject && GetTile(to).IsLampVine && GetTile(to).Durability > 0 || SmokeActive(from) || SmokeActive(to) ||
                  ScreenActive(from) || ScreenActive(to))) return false;
             int x = from.X;
             int y = from.Y;

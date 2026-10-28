@@ -1,1 +1,0 @@
-20 actual Game View frames; timing from frame-times.txt; native screenshot crop only; last frame held 700ms for review; not 60fps recording.

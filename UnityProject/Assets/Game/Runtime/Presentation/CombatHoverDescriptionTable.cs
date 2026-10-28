@@ -87,6 +87,7 @@ namespace OCC.Combat.Presentation
             bool passive = !string.IsNullOrWhiteSpace(passiveEffect);
             string cost = passive ? "无主动消耗" : spell.ActionPointCost + " 行动点　" + spell.ManaCost + " 个人魔力";
             string cycle = passive ? "装备后持续生效" : spell.CooldownOwnTurns <= 0 ? "无冷却" : spell.CooldownOwnTurns + " 个自身回合";
+            if (!passive) cycle += "\n每战次数 " + (spell.BattleUseLimit == 0 ? "无限" : spell.BattleUseLimit.ToString());
             string target = passive ? "自身" : RogueliteSettlementPresentation.RogueSpellTargetSummary(spell);
             string condition = string.Empty;
             string effect = passive ? passiveEffect : RogueliteSettlementPresentation.RogueSpellPlayerSummary(spell);

@@ -16,6 +16,17 @@ namespace OCC.Combat.Presentation
         private int pendingLinkSlot = -1;
         private Vector2 pendingLinkSource;
 
+        private static void MarkLoadoutSelection(GameObject target,bool selected)
+        {
+            if(!selected)return;
+            var mark=new GameObject("整备选中标记",typeof(RectTransform),typeof(CanvasRenderer),typeof(Image));
+            mark.transform.SetParent(target.transform,false);
+            var rect=(RectTransform)mark.transform;
+            rect.anchorMin=new Vector2(0,0);rect.anchorMax=new Vector2(1,0);rect.pivot=new Vector2(.5f,0);
+            rect.offsetMin=new Vector2(8,6);rect.offsetMax=new Vector2(-8,12);
+            var image=mark.GetComponent<Image>();image.color=new Color(.13f,.44f,.49f,1);image.raycastTarget=false;
+        }
+
         private void CaptureCommittedLoadout(UiVisualEvent signal)
         {
             if(overlay!=UiOverlay.Loadout || loadoutSection!=LoadoutSection.Equipment || content==null ||
@@ -71,9 +82,9 @@ namespace OCC.Combat.Presentation
             Vector3 world=source.TransformPoint(local);
             if(canvas!=null&&canvas.renderMode==RenderMode.WorldSpace&&canvas.worldCamera!=null)
             {
-                Vector3 point=canvas.worldCamera.WorldToViewportPoint(world);
+                Vector3 point=Hd2DSceneGraphicRaycaster.ResolveEventCamera(canvas.worldCamera).WorldToScreenPoint(world);
                 RectTransformUtility.ScreenPointToLocalPointInRectangle((RectTransform)content.transform,
-                    new Vector2(point.x*Screen.width,point.y*Screen.height),null,out var result);
+                    point,null,out var result);
                 return result;
             }
             return content.transform.InverseTransformPoint(world);

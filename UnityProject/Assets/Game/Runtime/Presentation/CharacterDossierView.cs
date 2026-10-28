@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace OCC.Combat.Presentation
@@ -45,7 +45,7 @@ namespace OCC.Combat.Presentation
             {
                 var ability=Leaf(right.transform,"固定配置卡"+i,new Vector2(44+i*394,-634),new Vector2(378,106));ability.GetComponent<Image>().color=new Color(.92f,.89f,.80f);
                 Label(ability.transform,i==0?"就地接线":"维克多护幕",new Vector2(18,-12),new Vector2(342,38),24);
-                Label(ability.transform,i==0?"邻接掩体后回盾回魔":"自身获得 8 点普通护盾",new Vector2(18,-54),new Vector2(342,38),24);
+                Label(ability.transform,i==0?"邻接掩体后回盾回魔":"自身获得 6 点普通护盾",new Vector2(18,-54),new Vector2(342,38),24);
             }
             view.back=FormalUiKit.Button("按钮_返回角色选择","返回",root.transform,new Vector2(112,-974),new Vector2(240,72),ArchiveUiStyle.Paper);
             view.start=FormalUiKit.Button("按钮_以此角色开始","以此角色开始",root.transform,new Vector2(1332,-974),new Vector2(476,72),ArchiveUiStyle.Paper);

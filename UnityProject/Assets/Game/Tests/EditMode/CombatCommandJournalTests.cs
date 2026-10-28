@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using OCC.Combat.Roguelite;
@@ -37,8 +37,8 @@ namespace OCC.Combat.Tests
             RogueliteMapRun restored = RogueliteMapRun.FromRogue11(saved);
 
             Assert.That(restored.HasActiveCombat, Is.True);
-            Assert.That(restored.CombatJournalRows.Count, Is.EqualTo(2));
-            Assert.That(CombatJournalEntry.Decode(restored.CombatJournalRows[1]).Kind,
+            Assert.That(restored.CombatJournalRows.Count, Is.EqualTo(3));
+            Assert.That(CombatJournalEntry.Decode(restored.CombatJournalRows[2]).Kind,
                 Is.EqualTo(CombatJournalKind.EndEnemyTurn));
             Assert.That(RogueliteMapRunValidator.Validate(restored).IsValid, Is.True,
                 RogueliteMapRunValidator.Validate(restored).Summary);

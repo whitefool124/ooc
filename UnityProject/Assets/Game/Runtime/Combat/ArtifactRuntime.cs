@@ -23,6 +23,7 @@ namespace OCC.Combat
         public IReadOnlyList<string> UnitIds { get; }
         public bool FriendlyFireRisk { get; }
         public string Signature { get; }
+        public string ContainerWarning { get; internal set; } = string.Empty;
         internal ArtifactPreview(IEnumerable<string> failures, IEnumerable<GridPosition> cells, IEnumerable<string> units, bool friendlyFire, string signature)
         { Failures = failures.ToArray(); Cells = cells.ToArray(); UnitIds = units.ToArray(); FriendlyFireRisk = friendlyFire; Signature = signature; }
     }
@@ -111,6 +112,7 @@ namespace OCC.Combat
         }
         public void BeginUnitTurn(string unitId)
         {
+            Reactions.Remove(unitId);
             UnitState beginning = Combat.GetUnit(unitId);
             if (beginning?.IsHero == true)
                 foreach (GridPosition position in Decoys.Keys.ToArray()) RemoveDecoy(position);
@@ -260,7 +262,19 @@ namespace OCC.Combat
             string[] units = combat.Units.Values.Where(unit => unit.IsAlive && cells.Contains(unit.Position)).OrderBy(unit => unit.Id, StringComparer.Ordinal).Select(unit => unit.Id).ToArray();
             bool friendly = source != null && artifact.Effects.Any(effect => effect.AffectAllies) && units.Any(id => combat.GetUnit(id).IsHero == source.IsHero && id != source.Id);
             string signature = artifact.Id + "|" + sourceId + "|" + target.UnitId + "|" + target.SecondaryUnitId + "|" + target.Cell + "|" + string.Join(",", cells) + "|" + string.Join(",", failures);
-            return new ArtifactPreview(failures, cells, units, friendly, signature);
+            var preview = new ArtifactPreview(failures, cells, units, friendly, signature);
+            LootSourceState loot = combat.LootSource;
+            if (preview.CanCommit && loot != null && loot.Tier != BattlefieldChestTier.Fixed && !loot.IsDestroyed &&
+                artifact.Effects.Any(e => e.Kind == ArtifactEffectKind.DamageObject || e.Kind == ArtifactEffectKind.ForceMoveTarget ||
+                    e.Kind == ArtifactEffectKind.ForceMoveFromCell || e.Kind == ArtifactEffectKind.Damage && e.Scope == ArtifactEffectScope.Selection))
+            {
+                CombatState simulation = combat.Clone();
+                ExecuteAccepted(battle.Clone(simulation), sourceId, artifact, target, preview);
+                int remaining = simulation.LootSource.Durability;
+                if (remaining < loot.Durability) preview.ContainerWarning = loot.DisplayName + "预计剩余耐久 " + remaining +
+                    (remaining == 0 ? "；内容将销毁" : "");
+            }
+            return preview;
         }
 
         public static ArtifactPreview PreviewInventory(ArtifactBattleState battle, string sourceId, string instanceId, ArtifactTarget target)
@@ -282,6 +296,11 @@ namespace OCC.Combat
         public static ArtifactExecution Execute(ArtifactBattleState battle, string sourceId, ArtifactDefinition artifact, ArtifactTarget target, int remainingUses = 1)
         {
             ArtifactPreview preview = Preview(battle, sourceId, artifact, target, remainingUses); if (!preview.CanCommit) throw new InvalidOperationException(string.Join("；", preview.Failures));
+            return ExecuteAccepted(battle, sourceId, artifact, target, preview);
+        }
+
+        private static ArtifactExecution ExecuteAccepted(ArtifactBattleState battle, string sourceId, ArtifactDefinition artifact, ArtifactTarget target, ArtifactPreview preview)
+        {
             UnitState source = battle.Combat.GetUnit(sourceId), primary = string.IsNullOrEmpty(target.UnitId) ? battle.Combat.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == target.Cell) : battle.Combat.GetUnit(target.UnitId);
             Dictionary<string, int> heroEnemyVitals = source?.IsHero == true
                 ? AcademyFieldEnemyRuntime.CaptureEnemyVitals(battle.Combat) : null;
@@ -291,6 +310,8 @@ namespace OCC.Combat
             List<ArtifactStep> steps = new List<ArtifactStep>(); int sequence = 0;
             foreach (ArtifactEffectDefinition effect in artifact.Effects)
             {
+                if (effect.Kind == ArtifactEffectKind.Damage && effect.Scope == ArtifactEffectScope.Selection)
+                    foreach (GridPosition cell in preview.Cells) battle.Combat.DamageContainer(cell, effect.Amount);
                 IEnumerable<UnitState> targets = Targets(battle.Combat, source, primary, secondary, preview.Cells, effect);
                 if (effect.Kind == ArtifactEffectKind.MoveSource || effect.Kind == ArtifactEffectKind.CreateLightCover || effect.Kind == ArtifactEffectKind.CreateHeavyCover || effect.Kind == ArtifactEffectKind.DamageObject || effect.Kind == ArtifactEffectKind.DestroyLightCover || effect.Kind == ArtifactEffectKind.CreateFireground || effect.Kind == ArtifactEffectKind.CreateSmoke || effect.Kind == ArtifactEffectKind.ClearFireground || effect.Kind == ArtifactEffectKind.DeployDecoy)
                 { ApplyCellEffect(battle, source, artifact, target.Cell, preview.Cells, effect, steps, ref sequence); continue; }
@@ -314,7 +335,7 @@ namespace OCC.Combat
                 case ArtifactTargetRule.AllyOrSelf: if (primary == null || primary.IsHero != source?.IsHero) failures.Add("需要选择自身或友军"); break;
                 case ArtifactTargetRule.AnyUnit: if (primary == null) failures.Add("需要选择单位"); break;
                 case ArtifactTargetRule.EmptyCell: if (occupied || tile.BlocksMovement || tile.IsDevice || tile.IsObjective) failures.Add("需要选择可用空格"); break;
-                case ArtifactTargetRule.Destructible: if (tile.Cover == CoverType.None && !tile.IsDevice && !tile.IsObjective) failures.Add("需要选择可破坏物或设备"); break;
+                case ArtifactTargetRule.Destructible: if (tile.Cover == CoverType.None && !tile.IsDevice && !tile.IsObjective && !tile.IsDestructibleLoot) failures.Add("需要选择可破坏物或设备"); break;
                 case ArtifactTargetRule.Device: if (!tile.IsDevice) failures.Add("需要选择设备"); break;
                 case ArtifactTargetRule.TwoAllies:
                     UnitState second = combat.GetUnit(target.SecondaryUnitId); if (primary == null || second == null || primary.Id == second.Id || primary.IsHero != source?.IsHero || second.IsHero != source?.IsHero) failures.Add("需要选择两名不同友军"); break;

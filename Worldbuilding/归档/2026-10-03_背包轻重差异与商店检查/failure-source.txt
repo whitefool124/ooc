@@ -1,1 +1,0 @@
-sprite=True details=0 pointer=(1397.40, 777.60) mouse=(1397.40, 777.60)

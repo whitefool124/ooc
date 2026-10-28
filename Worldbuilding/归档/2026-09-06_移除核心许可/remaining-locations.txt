@@ -1,2 +1,0 @@
-.\UnityProject\Assets\Game\Tests\EditMode\AcademyMapProgressCleanupTests.cs
-.\UnityProject\Assets\Game\Runtime\Campaign\AcademyMapSaveMigration.cs

@@ -119,7 +119,7 @@ namespace OCC.Combat
                         "自身回合结束失去 " + strength + " 点生命。");
                 case StatusType.Slow:
                     return new CombatStatusPresentation(status, "slow", "迟缓", duration, strength,
-                        "速度降低 3，移动步数减少。");
+                        "生效期间，可移动步数最多为3格。");
                 case StatusType.Bound:
                     // 束缚在目标自身回合开始衰减：构造值比"实际受缚回合数"多 1，展示时按生效回合数给出。
                     int boundRounds = Math.Max(1, duration - 1);
@@ -153,6 +153,11 @@ namespace OCC.Combat
                 case StatusType.ShieldEfficiency: return Attribute(status, "shield_efficiency", "护盾效能", "自身每次获得护盾", strength, duration, "点");
                 case StatusType.ShieldGrant: return Attribute(status, "shield_grant", "护盾授予", "给予他人的护盾", strength, duration, "点");
                 case StatusType.Control: return Attribute(status, "control", "控制", "施加的束缚、敏捷与标记时长", strength, duration, "回合");
+                case StatusType.MoveBonus: return Attribute(status, "move_bonus", "行进强化", "下次主动移动步数", strength, duration, "格");
+                case StatusType.SpellCost: return Attribute(status, "spell_cost", "术式调律", "下次术式魔力成本", strength, duration, "点");
+                case StatusType.Counter:
+                    return new CombatStatusPresentation(status, "counter", "反击", duration, strength,
+                        "首次受到相邻敌人攻击后反击一次；下次自身行动开始时到期。");
                 case StatusType.Marked:
                     return new CombatStatusPresentation(status, "marked", "标记", duration, strength,
                         "藏身失效，可被标记效果读取。");
@@ -161,7 +166,7 @@ namespace OCC.Combat
                         "可使用架设攻击。");
                 case StatusType.Invulnerable:
                     return new CombatStatusPresentation(status, "invulnerable", "霸体", duration, strength,
-                        "不会被击倒、推离或阻挡。");
+                        "免疫伤害与推拉；仍遵守通行和占位，不免疫所有控制。");
                 default:
                     throw new ArgumentOutOfRangeException(nameof(status), status, "Unknown combat status.");
             }

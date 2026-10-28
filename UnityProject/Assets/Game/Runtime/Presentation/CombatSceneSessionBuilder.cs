@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -111,13 +111,16 @@ namespace OCC.Combat.Presentation
                     .GroupBy(value => value.SpecializedTargetId, StringComparer.Ordinal)
                     .ToDictionary(group => group.Key, group => group.Last().SpecializedMaterialId, StringComparer.Ordinal);
                 state.AttachRogueSpellRuntime(new RogueSpellCombatRuntime(state, loadout,
-                    additionalSpecializations: specializations));
+                    additionalSpecializations: specializations, legacyBasics: mapRun.UsesLegacyCombatBalance));
                 if (currentLevel != null) FirstRegionLevelBuilder.ApplyTimedTerrain(currentLevel, state);
                 state.AttachRogueEquipmentRuntime(mapRun.RogueRunState == null ? RogueEquipmentRuntime.CreateStarter(mapRun.Seed) : RogueEquipmentRuntime.FromDto(mapRun.RogueRunState));
             }
             if (mapRun == null || !mapRun.UsesRogue11) ConfigureCombatInventory(state, mapRun, developerRun);
             ApplyShortRunChoices(state, developerRun);
             mapRun?.ApplyBuild(state.GetUnit("hero"));
+            if (mapRun != null) state.ConfigureLampVineSeed(mapRun.Seed);
+            if (mapRun?.OpeningGift?.Resolved == true)
+                state.AttachLampkeeper(new LampkeeperBattleRuntime(mapRun.OpeningGift.SelectedId));
             ConfigureLoot(state, mapRun);
             return new CombatSceneSessionBuild(state, preparation, currentLevel);
         }
@@ -236,12 +239,23 @@ namespace OCC.Combat.Presentation
                 return;
             }
             GridPosition[] chests = state.Map.PositionsWith(tile => tile.IsLootChest).ToArray();
-            if (chests.Length == 0)
+            GridPosition lootPosition = chests.Length > 0 ? chests[0] : state.GetUnit("hero").Position + new GridPosition(-1, 0);
+            if (mapRun?.IsInAcademyLayerPhase == true && !mapRun.UsesLegacyCombatBalance &&
+                (!mapRun.HasActiveCombat ||
+                 mapRun.HasContainerSnapshot))
             {
-                state.SetLoot(null);
+                foreach (GridPosition chest in chests) state.Map.GetTile(chest).IsLootChest = false;
+                BattlefieldChestTier tier = AcademyLootCatalog.PlannedTier(mapRun);
+                if (tier == BattlefieldChestTier.Fixed) { state.SetLoot(null); return; }
+                GridPosition? safe = AcademyLootCatalog.SafePosition(state, lootPosition, tier);
+                if (!safe.HasValue) { state.SetLoot(null); return; }
+                LootSourceState container = AcademyLootCatalog.Create(mapRun.Seed, mapRun.CurrentNodeId, safe.Value,
+                    tier);
+                mapRun.RegisterContainer(container);
+                state.SetLoot(null); state.SetLootSource(container);
                 return;
             }
-            GridPosition lootPosition = chests[0];
+            if (chests.Length == 0) { state.SetLoot(null); return; }
             state.SetLoot(new LootContainer(lootPosition,
                 new InventoryItem("aether_core", "以太核心", 2, 1)));
             string lootKey = mapRun == null ? "relay-crate" : mapRun.CurrentNodeId + "-relay-crate";

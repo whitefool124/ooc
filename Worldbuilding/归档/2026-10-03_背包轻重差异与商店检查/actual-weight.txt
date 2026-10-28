@@ -1,2 +1,0 @@
-eq-content-7021-0 weight=1 lift=6
-starter-chest weight=2 lift=4

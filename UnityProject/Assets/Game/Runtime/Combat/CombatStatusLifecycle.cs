@@ -18,6 +18,7 @@ namespace OCC.Combat
 
         public static CombatEffectExecution ResolveTurnStart(CombatState state, UnitState unit)
         {
+            unit.ClearStatus(StatusType.Counter);
             List<CombatEffect> effects = new List<CombatEffect>();
             foreach (StatusType status in order)
             {
@@ -35,6 +36,8 @@ namespace OCC.Combat
         /// <summary>自身回合结束：燃烧按实例强度结算火焰伤害并扣一次持续量。</summary>
         public static CombatEffectExecution ResolveTurnEnd(CombatState state, UnitState unit)
         {
+            unit.ClearStatus(StatusType.MoveBonus);
+            unit.ClearStatus(StatusType.SpellCost);
             List<CombatEffect> effects = new List<CombatEffect>();
             if (unit.HasStatus(StatusType.Burning))
             {

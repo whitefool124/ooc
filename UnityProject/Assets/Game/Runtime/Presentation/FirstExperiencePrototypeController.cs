@@ -31,7 +31,9 @@ namespace OCC.Combat.Presentation
             public int coins = 8;
             public string reward1 = "", reward2 = "", reward3 = "";
             public bool shopPurchase, fixedExperienceComplete;
-            public bool tutorialAsked, tutorialEnabled;
+            public bool tutorialAsked, tutorialEnabled = true;
+            public bool configurationViewed, tutorialDefaultsViewed;
+            public bool fixedExperienceEnabled;
             public int tutorialPage;
         }
 
@@ -107,6 +109,8 @@ namespace OCC.Combat.Presentation
         public float PendingVolume { get => pendingVolume; set { pendingVolume = Mathf.Clamp01(value); AudioListener.volume = pendingVolume; combatBootstrap?.SyncMasterVolume(pendingVolume); } }
         public bool PendingFullscreen { get => displayPreferences.ModeIndex != 0; set => displayPreferences.ModeIndex = value ? 1 : 0; }
         public string DisplayModeLabel => displayPreferences.ModeLabel;
+        public int PendingDisplayModeIndex => displayPreferences.ModeIndex;
+        public int PendingFrameRateIndex => displayPreferences.FrameRateIndex;
         public bool PendingVSync => displayPreferences.VSync;
         public string FrameRateLabel => displayPreferences.FrameRateLabel;
         public bool IsConfirmingDisplay => displayConfirmationDeadline > 0f;
@@ -671,6 +675,10 @@ namespace OCC.Combat.Presentation
             PlayerPrefs.SetFloat(VolumeKey, pendingVolume);
             combatBootstrap?.SyncMasterVolume(pendingVolume);
             PlayerPrefs.SetInt(SettingsSeenKey, 1); PlayerPrefs.Save();
+            var restoredDisplay = PcDisplayPreferences.Load(Resolutions.Length);
+            if (restoredDisplay.ResolutionIndex == displayPreferences.ResolutionIndex && restoredDisplay.ModeIndex == displayPreferences.ModeIndex &&
+                restoredDisplay.VSync == displayPreferences.VSync && restoredDisplay.FrameRateIndex == displayPreferences.FrameRateIndex && PlayerPrefs.GetFloat(VolumeKey, -1) == pendingVolume)
+                AcademyTutorialStore.RecordDeviceSettingReadback();
             if (settingsFromLanding) { settingsFromLanding = false; data.stage = FlowStage.Landing; } else ContinueAfterSettings();
         }
 
@@ -854,7 +862,8 @@ namespace OCC.Combat.Presentation
         public void ConfirmConfiguration()
         {
             data.slot = selectedSlot;
-            data.stage = menuEntry && data.fixedExperienceComplete ? FlowStage.RunCreation : FlowStage.AcademyIntro;
+            data.stage = menuEntry && data.fixedExperienceComplete && !data.fixedExperienceEnabled
+                ? FlowStage.RunCreation : FlowStage.AcademyIntro;
             // The original completed run remains on disk until the new round is safely created.
             if (data.stage == FlowStage.RunCreation) { ConfirmSubsequentRound(); return; }
             Save();
@@ -875,26 +884,47 @@ namespace OCC.Combat.Presentation
             enabled = false;
         }
         public bool CombatTutorialEnabled => data != null && data.tutorialAsked && data.tutorialEnabled;
+        public bool FixedFirstExperienceEnabled => data != null && data.fixedExperienceEnabled;
+        public bool OperationTutorialSelected => data != null && (!data.tutorialAsked || data.tutorialEnabled);
+        public void RecordConfigurationViewed()
+        {
+            if (data?.stage != FlowStage.Configuration) return;
+            data.configurationViewed = true;
+            if (!data.fixedExperienceEnabled && OperationTutorialSelected) data.tutorialDefaultsViewed = true;
+        }
+        public void ToggleOperationTutorial()
+        {
+            if (data?.stage != FlowStage.Configuration) return;
+            data.tutorialEnabled = !OperationTutorialSelected;
+            data.tutorialAsked = true;
+        }
+        public void ToggleFixedFirstExperience()
+        {
+            if (data == null || data.stage != FlowStage.Configuration) return;
+            data.fixedExperienceEnabled = !data.fixedExperienceEnabled;
+        }
         public void DisableCombatTutorial()
         {
             if (data == null) return;
             data.tutorialEnabled = false;
+            AcademyTutorialStore.SetEnabled(false);
             Save();
         }
         public int TutorialPage => data == null ? 0 : Mathf.Clamp(data.tutorialPage, 0, 4);
         public void ChooseTutorial(bool enableTutorial)
         {
-            if (data.stage != FlowStage.TutorialChoice) return;
+            if (data == null) return;
             data.tutorialAsked = true;
             data.tutorialEnabled = enableTutorial;
             data.tutorialPage = 0;
-            data.stage = enableTutorial ? FlowStage.TutorialGuide : FlowStage.Map;
-            Save();
-            if (!enableTutorial)
+            AcademyTutorialStore.SetEnabled(enableTutorial);
+            if (data.stage == FlowStage.TutorialChoice || data.stage == FlowStage.TutorialGuide)
             {
+                data.stage = FlowStage.Map;
                 combatBootstrap?.SetFirstExperienceTutorialActive(false);
                 enabled = false;
             }
+            Save();
         }
         public void AdvanceTutorial()
         {
@@ -947,17 +977,28 @@ namespace OCC.Combat.Presentation
                 return;
             }
             FirstExperienceSaveRouting.SelectSlot(data.slot);
-            if (!combatBootstrap.EnterFirstExperienceFromOpening(continueSave))
+            if (!combatBootstrap.EnterFirstExperienceFromOpening(continueSave, data.fixedExperienceEnabled))
             {
-                handoffError = "真实首次体验运行态未能创建或读取。当前槽位数据仍保留，请返回入口或重试。";
+                handoffError = "学院轮次未能创建或读取。当前槽位数据仍保留，请返回入口或重试。";
                 return;
             }
-            // Preserve tutorial progress when resuming. Old saves are never retroactively prompted.
-            bool resumeTutorial = continueSave &&
-                (data.stage == FlowStage.TutorialChoice || data.stage == FlowStage.TutorialGuide);
-            if (!resumeTutorial)
-                data.stage = !continueSave && !data.tutorialAsked
-                    ? FlowStage.TutorialChoice : FlowStage.Map;
+            // New saves begin contextual teaching. Legacy guide pages migrate to the map.
+            if (!continueSave && !data.tutorialAsked)
+            {
+                data.tutorialAsked = true;
+                data.tutorialEnabled = true;
+                AcademyTutorialStore.SetEnabled(true);
+            }
+            else AcademyTutorialStore.SetEnabled(data.tutorialAsked && data.tutorialEnabled);
+            if (!continueSave)
+            {
+                AcademyTutorialStore.Record("A04", "slot-confirmed"); AcademyTutorialStore.Record("A04", "run-created");
+                AcademyTutorialStore.CopyDeviceSettingEvidence();
+                if (data.configurationViewed)
+                { AcademyTutorialStore.Record("A05", "switches-visible"); AcademyTutorialStore.Record("A05", "independent-choice"); }
+                if (data.tutorialDefaultsViewed) AcademyTutorialStore.Record("A05", "default-values");
+            }
+            data.stage = FlowStage.Map;
             pendingNewRunCreation = false;
             Save();
             handoffError = string.Empty;

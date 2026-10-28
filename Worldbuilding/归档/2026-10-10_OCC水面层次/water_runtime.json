@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"projection\\\":30,\\\"supported\\\":true,\\\"messages\\\":[],\\\"water\\\":[{\\\"name\\\":\\\"环境_(4, 3)\\\",\\\"depth\\\":0.12,\\\"wave\\\":0.028,\\\"smooth\\\":0.9,\\\"filter\\\":\\\"Point\\\"},{\\\"name\\\":\\\"环境_(2, 3)\\\",\\\"depth\\\":0.12,\\\"wave\\\":0.028,\\\"smooth\\\":0.9,\\\"filter\\\":\\\"Point\\\"},{\\\"name\\\":\\\"浅水面\\\",\\\"depth\\\":0.5,\\\"wave\\\":0.028,\\\"smooth\\\":0.9,\\\"filter\\\":\\\"Point\\\"},{\\\"name\\\":\\\"环境_(3, 3)\\\",\\\"depth\\\":0.12,\\\"wave\\\":0.028,\\\"smooth\\\":0.9,\\\"filter\\\":\\\"Point\\\"}]}\",\"compiler\":\"Roslyn\"}}"
-    }
-  ]
-}

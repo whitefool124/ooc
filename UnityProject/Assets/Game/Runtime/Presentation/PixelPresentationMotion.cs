@@ -15,6 +15,7 @@ namespace OCC.Combat.Presentation
         public static void EnterPage(Transform page, float intensity)
         {
             if (intensity <= .01f || !Application.isPlaying) return;
+            if(Hd2DContentGeometry.OwnsSceneLayout(page.gameObject))return;
             int index = 0;
             foreach (Transform child in page)
             {

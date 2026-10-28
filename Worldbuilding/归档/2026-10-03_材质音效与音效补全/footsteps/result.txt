@@ -1,1 +1,0 @@
-PASS: real map/departure clicks and actual default battle movement; stone and wet foot contact playback observed, no player-save writes. Not a full combat journey.

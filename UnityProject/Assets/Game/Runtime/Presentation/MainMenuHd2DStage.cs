@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 namespace OCC.Combat.Presentation
 {
@@ -14,7 +15,48 @@ namespace OCC.Combat.Presentation
         public Light lampLight;
         public Volume sceneVolume;
         public int rendererIndex=1;
+        [SerializeField] private Hd2DDeskLightingRig lighting;
+        public Hd2DDeskLightingRig Lighting=>lighting;
         private RenderTexture output;
+        private RawImage display;
+        private Camera inputCamera;
+        private readonly Vector3[] displayCorners=new Vector3[4];
+        internal void BindDisplay(RawImage image)=>display=image;
+        internal Camera InputCamera
+        {
+            get
+            {
+                if(inputCamera==null)
+                {
+                    var node=new GameObject("书桌输入投影",typeof(Camera));node.transform.SetParent(transform,false);
+                    inputCamera=node.GetComponent<Camera>();inputCamera.enabled=false;inputCamera.cullingMask=0;
+                }
+                // A non-rendering camera exposes the displayed viewport to
+                // standard uGUI controls too (Slider, ScrollRect, InputField).
+                inputCamera.transform.SetPositionAndRotation(sceneCamera.transform.position,sceneCamera.transform.rotation);
+                // Desk controls start at the 5.5m reading plane or farther.
+                // A 1m input near plane avoids ill-conditioned inverse matrices
+                // from the scene camera's .05m near plane at isolated origins.
+                inputCamera.nearClipPlane=Mathf.Max(1f,sceneCamera.nearClipPlane);inputCamera.farClipPlane=sceneCamera.farClipPlane;
+                inputCamera.orthographic=sceneCamera.orthographic;inputCamera.orthographicSize=sceneCamera.orthographicSize;
+                inputCamera.fieldOfView=sceneCamera.fieldOfView;
+                inputCamera.pixelRect=DisplayRect;inputCamera.aspect=sceneCamera.aspect;inputCamera.ResetProjectionMatrix();
+                return inputCamera;
+            }
+        }
+        internal Rect DisplayRect
+        {
+            get
+            {
+                if(display==null)return new Rect(0,0,Screen.width,Screen.height);
+                display.rectTransform.GetWorldCorners(displayCorners);
+                var canvas=display.canvas;
+                var view=canvas!=null&&canvas.renderMode!=RenderMode.ScreenSpaceOverlay?canvas.worldCamera:null;
+                var min=RectTransformUtility.WorldToScreenPoint(view,displayCorners[0]);
+                var max=RectTransformUtility.WorldToScreenPoint(view,displayCorners[2]);
+                return Rect.MinMaxRect(min.x,min.y,max.x,max.y);
+            }
+        }
         private DeskBookRig book;
         private DepthOfField depthOfField;
         private VolumeProfile runtimeProfile;
@@ -50,29 +92,9 @@ namespace OCC.Combat.Presentation
             clothRotation=cloth.localRotation;plantRotation=plant.localRotation;
             SetState(0,0,0,0);
             Hd2DDeskArtCandidate.Apply(this);
-        }
-        internal void ApplySoftDocumentLighting()
-        {
-            // Neutral daylight carries the document; the crystal is a small local accent.
-            foreach(var light in GetComponentsInChildren<Light>(true))
-            {
-                if(light.name=="窗外统一日光")
-                {light.color=new Color(1f,.98f,.94f);light.intensity=1.25f;}
-                else if(light.name=="窗边柔和补光")
-                {light.color=new Color(.93f,.97f,1f);light.intensity=6f;light.shadows=LightShadows.None;}
-                else if(light.name=="室内暖补光")
-                {light.color=new Color(.96f,.98f,1f);light.intensity=6f;light.shadows=LightShadows.None;}
-            }
-            if(runtimeProfile==null)return;
-            if(!runtimeProfile.TryGet<ColorAdjustments>(out var grade))grade=runtimeProfile.Add<ColorAdjustments>(true);
-            grade.postExposure.Override(-.15f);grade.contrast.Override(-5f);grade.saturation.Override(-8f);
-            grade.colorFilter.Override(Color.white);
-            if(runtimeProfile.TryGet<WhiteBalance>(out var balance))
-            {balance.temperature.Override(0);balance.tint.Override(0);}
-            if(runtimeProfile.TryGet<SplitToning>(out var split))split.active=false;
-            if(runtimeProfile.TryGet<Bloom>(out var bloom))
-            {bloom.intensity.Override(.02f);bloom.threshold.Override(1.8f);bloom.tint.Override(Color.white);}
-            if(runtimeProfile.TryGet<Tonemapping>(out var tone))tone.mode.Override(TonemappingMode.ACES);
+            if(lighting==null)throw new System.InvalidOperationException("Missing shared desk lighting prefab");
+            lighting.Apply(this);
+            lighting.RefreshEnvironment(this);
         }
         public void SetState(float opened,float focus,float clock,float motion)
         {

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace OCC.Combat
@@ -119,6 +120,14 @@ namespace OCC.Combat
                     commandTarget != null && deliverySource.ManhattanDistance(deliveryTarget) == 1 && fireBattle != null)
                     attackTriggers = FireSpellEngine.TriggerIncomingAdjacentAttack(fireBattle, commandUnit.Id, commandTarget.Id);
 
+                if (command.Type == CombatCommandType.Move && commandUnit != null)
+                {
+                    var actualPath = new List<GridPosition> { movementSource };
+                    actualPath.AddRange(execution.Results.Where(effect => effect.Kind == CombatEffectKind.Move && effect.TargetUnitId == command.UnitId)
+                        .Select(effect => effect.PositionAfter));
+                    if (actualPath[actualPath.Count - 1] != commandUnit.Position) actualPath.Add(commandUnit.Position);
+                    movementPath = actualPath;
+                }
                 IReadOnlyList<FireSpellExecution> movementTriggers = Array.Empty<FireSpellExecution>();
                 if (command.Type == CombatCommandType.Move && commandUnit != null && fireBattle != null)
                 {

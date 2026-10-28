@@ -1,9 +1,0 @@
-Successful AudioSource.PlayOneShot dispatches; not an acoustic recording.
-8.133 Audio/OCC/SFX/Foley/cloth_pick
-8.211 Audio/OCC/SFX/Foley/cloth_drop
-8.758 Audio/OCC/SFX/Foley/cloth_pick
-9.759 Audio/OCC/SFX/Foley/cloth_drop
-13.867 Audio/OCC/SFX/Foley/cloth_pick
-14.070 Audio/OCC/SFX/Foley/reject
-14.414 Audio/OCC/SFX/Foley/cloth_pick
-15.075 Audio/OCC/SFX/Foley/cloth_pick

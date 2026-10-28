@@ -53,8 +53,18 @@ namespace OCC.Combat.Roguelite
         }
 
         private static int StableKey(int seed, string id)
+            => SeededOrderKey(seed, id);
+
+        internal static int SeededOrderKey(int seed, string id)
         {
-            unchecked { int hash = seed * 397; foreach (char value in id ?? string.Empty) hash = hash * 31 + value; return hash; }
+            // A seeded polynomial prefix kept equal-length entries in nearly the same order.
+            unchecked
+            {
+                uint hash = 2166136261u ^ (uint)seed;
+                foreach (char value in id ?? string.Empty) { hash ^= value; hash *= 16777619u; }
+                hash ^= hash >> 16; hash *= 0x85ebca6bu; hash ^= hash >> 13; hash *= 0xc2b2ae35u; hash ^= hash >> 16;
+                return (int)(hash & 0x7fffffffu);
+            }
         }
     }
 

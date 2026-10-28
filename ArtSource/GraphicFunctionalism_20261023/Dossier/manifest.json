@@ -1,0 +1,75 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_workshop_dossier_20261023",
+  "role": "hd2d_library_display",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "ArtSource/GraphicFunctionalism_20261023/dossier-source.png",
+    "source_sha256": "739feee87edcb3ea967237e51a6b413c7c5d179a72a8ad18b2789ea11ca8cac2",
+    "source_descriptor": "Independent built-in generation; academy graphic functionalist physical carrier. See brief.md and generation conversation.",
+    "processing": {
+      "crop": [
+        92,
+        81,
+        1169,
+        1163
+      ],
+      "nearest_size": [
+        96,
+        96
+      ],
+      "transparent_border": 1,
+      "alpha_cleanup": "Solid carrier threshold128, exterior preserved",
+      "exterior_magenta_flood_key": true,
+      "recolouring": false
+    }
+  },
+  "delivery": {
+    "output_path": "ArtSource/GraphicFunctionalism_20261023/Dossier/delivery.png",
+    "output_sha256": "56f552971133a96c1a3a605fa21c1d26e424316dda7a0171c3b9e877318dac4e",
+    "logical_cells": null,
+    "native_ppu": 32,
+    "palette_max": 1000000,
+    "required_color_families": [],
+    "sprite_border": [
+      5,
+      5,
+      5,
+      5
+    ]
+  },
+  "application": {
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "Nine-sliced independent carrier, corners at1/32 world unit per authored delivery pixel; final same-frame density review pending.",
+    "integration_authorization": "User explicitly authorized production and integration of academy noncombat art, 2026-10-23",
+    "paired_material_data": "Albedo-only carrier candidate; no generated height/normal/metal/emission inference. Existing lit paper response retained."
+  },
+  "evidence": {
+    "one_x": "ArtSource/GraphicFunctionalism_20261023/Dossier/qa/1x.png",
+    "four_x": "ArtSource/GraphicFunctionalism_20261023/Dossier/qa/4x.png",
+    "grayscale": "ArtSource/GraphicFunctionalism_20261023/Dossier/qa/grayscale.png",
+    "checker": "ArtSource/GraphicFunctionalism_20261023/Dossier/qa/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-23_图形实用主义美术/final/normal_equipment.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "scene_pixel_size_consistency": "PENDING",
+    "notes": "Assistant source selection is not human approval."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/AcademyWorkshop20261023/Dossier.png",
+    "resource_path": "Art/AcademyWorkshop20261023/Dossier",
+    "stable_guid": "4fba3bde804d452438c610c813ab65ca",
+    "native_ppu": 32,
+    "filter": "Point",
+    "wrap": "Clamp",
+    "mipmaps": false,
+    "compression": "Uncompressed",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "formal_promotion": false
+  }
+}

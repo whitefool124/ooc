@@ -1,6 +1,0 @@
-按钮_重看开场 enabled=True | 重看世界观
-按钮_退出游戏 enabled=True | 退出游戏
-按钮_设置 enabled=True | 辅助设置
-按钮_百科 enabled=True | 战斗百科
-按钮_继续游戏 enabled=True | 继续档案
-按钮_开始新游戏 enabled=True | 新建档案

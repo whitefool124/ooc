@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"path\\\":\\\"E:/数据库/OCC_Codex/UnityProject/Assets\\\",\\\"play\\\":false,\\\"compiling\\\":false,\\\"resolutionIndex\\\":3,\\\"scenes\\\":[{\\\"path\\\":\\\"Assets/Scenes/CombatPrototype.unity\\\",\\\"dirty\\\":false}],\\\"waterMaterials\\\":0}\",\"compiler\":\"Roslyn\"}}"
-    }
-  ]
-}

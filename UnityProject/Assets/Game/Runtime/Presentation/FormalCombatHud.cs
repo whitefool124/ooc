@@ -18,10 +18,10 @@ namespace OCC.Combat.Presentation
         /// here rather than inline so the three zones can be checked for overlap.
         /// </summary>
         public static readonly Rect HeaderResourceZone = new Rect(16f, 10f, 540f, 36f);
-        public static readonly Rect HeaderActionsZone = new Rect(1340f, 4f, 516f, 48f);
+        public static readonly Rect HeaderActionsZone = new Rect(1536f, 4f, 328f, 48f);
         public const float HeaderPanelWidth = 1872f;
-        private const float HeaderActionWidth = 120f;
-        private const float HeaderActionGap = 12f;
+        private const float HeaderActionWidth = 48f;
+        private const float HeaderActionGap = 8f;
         private const float HeaderResourceIconSize = 36f;
         private const float HeaderResourceGap = 16f;
         // Keeps the packed row bounded even if a run accumulates very large numbers.
@@ -155,6 +155,21 @@ namespace OCC.Combat.Presentation
         private GameObject shieldBadge;
         private Text manaValue;
         private Button endTurnButton;
+        private Button autoCombatButton;
+        private GameObject autoCombatPanel;
+        private Button autoCombatPrimaryButton;
+        private readonly Button[] autoCombatStyleButtons = new Button[3];
+        private readonly Text[] autoCombatStyleSelected = new Text[3];
+        private Text autoCombatStyleSummary;
+        private readonly Text[] autoCombatItemNames = new Text[RogueRuntimeConstants.ItemQuickbarSize];
+        private readonly Text[] autoCombatItemCharges = new Text[RogueRuntimeConstants.ItemQuickbarSize];
+        private readonly Text[] autoCombatItemSpendable = new Text[RogueRuntimeConstants.ItemQuickbarSize];
+        private readonly Text[] autoCombatItemReserved = new Text[RogueRuntimeConstants.ItemQuickbarSize];
+        private readonly Image[] autoCombatItemIcons = new Image[RogueRuntimeConstants.ItemQuickbarSize];
+        private readonly Button[] autoCombatItemToggles = new Button[RogueRuntimeConstants.ItemQuickbarSize];
+        private readonly Button[] autoCombatReserveMinus = new Button[RogueRuntimeConstants.ItemQuickbarSize];
+        private readonly Button[] autoCombatReservePlus = new Button[RogueRuntimeConstants.ItemQuickbarSize];
+        private bool autoCombatPanelWasOpen;
         private Button restartButton;
         private Button pauseButton;
         private Button leaveButton;
@@ -173,6 +188,7 @@ namespace OCC.Combat.Presentation
         private bool wasVisible;
         private bool outcomeWasVisible;
         private bool hasPresentedModel;
+        private bool displayedAutoCombat;
         private CombatHudPresentationModel presentedModel;
         private bool presentedTargeting;
         private GridPosition presentedTargetPosition;
@@ -218,6 +234,7 @@ namespace OCC.Combat.Presentation
             if (root.activeSelf != visible) { root.SetActive(visible); refreshDirty = true; }
             if (!visible || bootstrap.CurrentState == null)
             {
+                autoCombatPanelWasOpen = false;
                 if (wasVisible)
                 {
                     ResetCardFlips();
@@ -239,6 +256,13 @@ namespace OCC.Combat.Presentation
                 Button defaultButton = outcomeRestartButton;
                 if (!bootstrap.IsCombatOutcomeVisible) defaultButton = endTurnButton;
                 if (defaultButton != null) RuntimeUiEventSystem.Select(defaultButton.gameObject);
+            }
+            RefreshAutoCombatPanel();
+            if (bootstrap.IsAutoCombatPanelOpen && RuntimeUiEventSystem.CancelPressedThisFrame())
+            {
+                bootstrap.CloseAutoCombatPanel();
+                RuntimeUiEventSystem.Select(autoCombatButton.gameObject);
+                return;
             }
             bool handledCardFlip = bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && HandleCardFlipShortcut();
             bool handledShortcut = !handledCardFlip && bootstrap.IsDeveloperCombatActive && !bootstrap.IsInteractionModalOpen && HandleSpellShortcutInput();
@@ -266,8 +290,10 @@ namespace OCC.Combat.Presentation
             refreshDirty = false;
             CombatHudPresentationModel nextModel = CombatHudPresentationModel.From(bootstrap.CurrentState, bootstrap.SelectedAction, bootstrap.SelectedTargetId, bootstrap.IsCombatOutcomeVisible);
             bool targetingChanged = presentedTargeting != bootstrap.IsKeyboardTargeting || presentedTargetPosition != bootstrap.KeyboardTargetPosition;
-            if (hasPresentedModel && presentedModel.Equals(nextModel) && !targetingChanged && !actionChanged) return;
+            bool autoCombatChanged = displayedAutoCombat != bootstrap.IsAutoCombatEnabled;
+            if (hasPresentedModel && presentedModel.Equals(nextModel) && !targetingChanged && !actionChanged && !autoCombatChanged) return;
             displayedActionVersion = actionVersion;
+            displayedAutoCombat = bootstrap.IsAutoCombatEnabled;
             presentedModel = nextModel;
             presentedTargeting = bootstrap.IsKeyboardTargeting;
             presentedTargetPosition = bootstrap.KeyboardTargetPosition;
@@ -393,16 +419,26 @@ namespace OCC.Combat.Presentation
                 button.onClick.AddListener(() => bootstrap.SelectHudAction(action)); actionButtons.Add(action, button);
                 BindTooltip(button.gameObject, () => BuildActionTooltip("技能" + (captured + 1)));
             }
-            endTurnButton = Button(endTurnGroup.transform, "结束行动", new Vector2(0, -18), new Vector2(204, 160), "结束回合\n行动点会清空", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Primary);
+            endTurnButton = Button(endTurnGroup.transform, "结束行动", new Vector2(0, -18), new Vector2(204, 160), "结束回合", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Primary);
             ArchiveUiStyle.PaperPanel(endTurnButton.gameObject, ArchiveUiStyle.LightPaper, true);
             endTurnButton.transform.Find("文字").GetComponent<Text>().color = ArchiveUiStyle.Ink;
             endTurnButton.onClick.AddListener(() => bootstrap.EndHeroTurn());
             BindTooltip(endTurnButton.gameObject, () => new FormalTooltipContent("结束回合", "剩余行动点会清空，然后轮到敌方。", line));
-            // Four header actions share one evenly spaced row at the panel's right end.
-            float actionX = HeaderActionsZone.x;
+            // Combat actions share one evenly spaced row at the panel's right end.
+            float actionStep = HeaderActionWidth + HeaderActionGap;
+            float actionX = HeaderActionsZone.x + actionStep * 2f;
             float actionY = -HeaderActionsZone.y;
             Vector2 actionSize = new Vector2(HeaderActionWidth, HeaderActionsZone.height);
-            float actionStep = HeaderActionWidth + HeaderActionGap;
+            autoCombatButton = Button(top.transform, "自动战斗", new Vector2(actionX - actionStep * 2f, actionY), actionSize, "自动",
+                FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
+            ConfigureCompactFrame(autoCombatButton);
+            autoCombatButton.onClick.AddListener(() =>
+            {
+                if (bootstrap.IsAutoCombatEnabled) bootstrap.ToggleAutoCombat();
+                bootstrap.OpenAutoCombatPanel();
+            });
+            BindTooltip(autoCombatButton.gameObject, () => new FormalTooltipContent("自动战斗",
+                bootstrap.IsAutoCombatEnabled ? "点击停止并打开战斗风格与道具设置。" : "设置战斗风格和可自动使用的战术道具。", FormalUiTheme.Cyan));
             pauseButton = Button(top.transform, "暂离并保存", new Vector2(actionX - actionStep, actionY), actionSize, "暂离",
                 FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
             ConfigureCompactFrame(pauseButton);
@@ -430,6 +466,16 @@ namespace OCC.Combat.Presentation
             leaveButton.transform.Find("文字").GetComponent<Text>().color = FormalUiTheme.OnInk;
             leaveButton.onClick.AddListener(bootstrap.RequestLeaveCombat);
             BindTooltip(leaveButton.gameObject, () => new FormalTooltipContent("主动放弃", "确认后进入本轮失败结算；若只想稍后继续，请使用“暂离”。", FormalUiTheme.Danger));
+            ToolIcon(pauseButton,FormalArtRegistry.NavigationPath("save"));
+            ToolIcon(encyclopediaButton,FormalArtRegistry.NavigationPath("archive"));
+            ToolIcon(inventoryButton,FormalArtRegistry.EquipmentSlotPath("Backpack"));
+            ToolIcon(restartButton,FormalArtRegistry.ItemPath("inventory_rotate"));
+            ToolIcon(leaveButton,FormalArtRegistry.NavigationPath("close"));
+            var endIcon=FormalUiKit.TopLeftIconSlot("结束回合图标",endTurnButton.transform,Resources.Load<Sprite>(FormalArtRegistry.NavigationPath("continue")),new Vector2(78,-30));
+            endIcon.rectTransform.sizeDelta=new Vector2(48,48);
+            var endLabel=endTurnButton.transform.Find("文字").GetComponent<Text>();
+            endLabel.rectTransform.anchorMin=endLabel.rectTransform.anchorMax=new Vector2(.5f,1);
+            endLabel.rectTransform.pivot=new Vector2(.5f,1);endLabel.rectTransform.anchoredPosition=new Vector2(0,-94);endLabel.rectTransform.sizeDelta=new Vector2(188,32);
             for (int i = 0; i < quickbarLabels.Length; i++)
             {
                 int slot = i;
@@ -450,6 +496,7 @@ namespace OCC.Combat.Presentation
                 BindTooltip(quick.gameObject, () => BuildQuickbarTooltip(slot));
             }
             CreateOutcomeOverlay();
+            CreateAutoCombatPanel();
         }
 
         private void LoadActionIcons()
@@ -489,6 +536,7 @@ namespace OCC.Combat.Presentation
             Image skin = FormalUiKit.SkinOverlay(surface);
             if (skin != null) skin.gameObject.SetActive(false);
             ArchiveUiStyle.TrimTab(button);
+            FormalUiKit.ApplySkin(surface,"button_idle",surface.color);
         }
 
         private static void ConfigureOutlinedPanel(GameObject target, Color background, Color stroke)
@@ -500,6 +548,14 @@ namespace OCC.Combat.Presentation
             Image skin = FormalUiKit.SkinOverlay(surface);
             if (skin != null) skin.gameObject.SetActive(false);
             ArchiveUiStyle.TrimPanel(target);
+            FormalUiKit.ApplySkin(surface,"panel",background);
+        }
+
+        private static void ToolIcon(Button button,string path)
+        {
+            var label=button.transform.Find("文字");if(label!=null)label.gameObject.SetActive(false);
+            var icon=FormalUiKit.TopLeftIconSlot("工具图标",button.transform,Resources.Load<Sprite>(path),new Vector2(8,-8));
+            icon.rectTransform.sizeDelta=new Vector2(32,32);icon.raycastTarget=false;
         }
 
         private static void ConfigureCommandRow(Button button, bool hasIcon)
@@ -537,7 +593,9 @@ namespace OCC.Combat.Presentation
             label.gameObject.SetActive(false);
             quickbarEmptyStates[slot].SetActive(!occupied);
             Image surface = quickbarButtons[slot].targetGraphic as Image ?? quickbarButtons[slot].GetComponent<Image>();
-            surface.color = occupied ? FormalUiTheme.SurfaceRaised : Color.Lerp(FormalUiTheme.Ink, FormalUiTheme.Surface, .38f);
+            surface.color = occupied ? FormalUiTheme.SurfaceRaised : Color.Lerp(FormalUiTheme.Panel, FormalUiTheme.Ink, .08f);
+            var rim=FormalUiKit.SkinOverlay(surface);if(rim!=null)rim.color=occupied?Color.white:new Color(.45f,.43f,.38f,.45f);
+            foreach(var image in quickbarEmptyStates[slot].GetComponentsInChildren<Image>(true))image.color=Color.clear;
         }
 
         private static GameObject ConsoleModule(string name, Transform parent, string layoutId)
@@ -642,7 +700,7 @@ namespace OCC.Combat.Presentation
                 if (card == null) card = orderCards.First(value => !used.Contains(value) && !order.Take(count).Any(u => u.Id == value.UnitId));
                 used.Add(card); visible.Add(card); card.gameObject.SetActive(true);
                 int previous = baseline.ToList().FindIndex(value => value.Id == unit.Id);
-                card.Bind(unit, i, projected ? previous - i : 0, bootstrap.SelectedTargetId == unit.Id, preview);
+                card.Bind(unit, i, projected ? previous - i : 0, bootstrap.SelectedTargetId == unit.Id, preview, state.ActiveUnitId==unit.Id);
                 card.MoveTo(i, UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity));
             }
             foreach (CombatPortraitCardView card in orderCards) if (!used.Contains(card)) card.gameObject.SetActive(false);
@@ -934,7 +992,7 @@ namespace OCC.Combat.Presentation
                 timelineRows[slot].gameObject.SetActive(true);
                 Color faction = entry.IsHero ? line : FormalUiTheme.Danger;
                 timelineNodes[slot].color = entry.IsActive ? faction : FormalUiTheme.WithAlpha(faction, .55f);
-                timelineRows[slot].color = entry.IsActive ? FormalUiTheme.WithAlpha(faction, .16f) : FormalUiTheme.WithAlpha(FormalUiTheme.Surface, .76f);
+                timelineRows[slot].color = entry.IsActive ? Color.Lerp(FormalUiTheme.Surface,faction,.24f) : FormalUiTheme.Surface;
                 CombatHudPortraitAssets.Bind(timelinePortraits[slot], state.GetUnit(entry.UnitId));
                 timelinePortraits[slot].color = entry.IsActive ? Color.white : FormalUiTheme.WithAlpha(Color.white, .72f);
                 timelineSpeedIcons[slot].color = entry.IsActive ? faction : muted;
@@ -988,7 +1046,9 @@ namespace OCC.Combat.Presentation
             }
             bool outcome = bootstrap.IsCombatOutcomeVisible;
             outcomeOverlay.SetActive(outcome);
-            if (outcome && !outcomeWasVisible && outcomeRestartButton != null) RuntimeUiEventSystem.Select(outcomeRestartButton.gameObject);
+            if (restartButton != null) restartButton.gameObject.SetActive(bootstrap.CanRetryCurrentCombat &&
+                (bootstrap.CurrentMapRun == null || bootstrap.CurrentMapRun.IsTutorialPhase));
+            if (outcome && !outcomeWasVisible && outcomeBackButton != null) RuntimeUiEventSystem.Select(outcomeBackButton.gameObject);
             outcomeWasVisible = outcome;
             if (outcome)
             {
@@ -1001,11 +1061,13 @@ namespace OCC.Combat.Presentation
                     summary?.Title ?? (bootstrap.CurrentState.IsVictory ? "任务完成" : "行动中止");
                 outcomeDetail.text = protectedSlot ? "写入校验失败，旧档和安全副本已保留；确认后可舍弃本次未保存进度并返回档案入口。" :
                     savingFailure ? "结算保存失败。当前结果仍在内存中，请重试保存，不要退出游戏。" :
-                    failedRun ? "可从本场开战前重试；确认返回入口后保存并关闭本轮。" :
+                    abandoned ? "已选择主动放弃。保存放弃结果后结束本轮，不能重试本场。" :
+                    failedRun ? "可恢复本场战前状态重新挑战；也可确认结束本轮并保存战败记录。" :
                     summary == null ? "请选择下一步" : summary.Reason + "\n" + summary.Consequence;
-                outcomeBackButton.GetComponentInChildren<Text>().text = protectedSlot ? "返回档案入口" : savingFailure ? "重试保存" : failedRun ? "结算并返回入口" :
+                outcomeBackButton.GetComponentInChildren<Text>().text = protectedSlot ? "返回档案入口" : savingFailure ? "重试保存" : abandoned ? "结算并返回入口" : failedRun ? "结束本轮" :
                     bootstrap.CurrentMapRun != null ? "返回地图" : "返回入口";
-                outcomeRestartButton.gameObject.SetActive(!savingFailure && (failedRun || bootstrap.CurrentMapRun == null));
+                outcomeRestartButton.gameObject.SetActive(!savingFailure && bootstrap.CanRetryCurrentCombat &&
+                    (bootstrap.CurrentMapRun == null || failedRun));
             }
             foreach (KeyValuePair<string, Button> pair in actionButtons)
             {
@@ -1191,14 +1253,11 @@ namespace OCC.Combat.Presentation
         private static void ConfigureSpellCardFrame(Button button)
         {
             if (button == null) return;
-            Color frameColor = FormalUiTheme.Rule;
-            RectTransform rect = button.GetComponent<RectTransform>();
-            float width = rect == null ? 268f : rect.rect.width;
-            float height = rect == null ? 76f : rect.rect.height;
-            CreateSpellFrameEdge(button.transform, "术式细框_上", Vector2.zero, new Vector2(width, 2f), frameColor);
-            CreateSpellFrameEdge(button.transform, "术式细框_下", new Vector2(0f, -height + 2f), new Vector2(width, 2f), frameColor);
-            CreateSpellFrameEdge(button.transform, "术式细框_左", Vector2.zero, new Vector2(2f, height), frameColor);
-            CreateSpellFrameEdge(button.transform, "术式细框_右", new Vector2(width - 2f, 0f), new Vector2(2f, height), frameColor);
+            foreach(string name in new[]{"术式细框_上","术式细框_下","术式细框_左","术式细框_右"})
+            {var old=button.transform.Find(name);if(old!=null)old.gameObject.SetActive(false);}
+            var rim=FormalUiKit.SkinOverlay(button.targetGraphic as Image,true);
+            FormalUiChrome.Apply(rim,UiChromeRole.Slot,false);rim.raycastTarget=false;
+
         }
 
         private static void CreateSpellFrameEdge(Transform parent, string name, Vector2 position, Vector2 size, Color color)
@@ -1369,6 +1428,146 @@ namespace OCC.Combat.Presentation
             outcomeBackButton = Button(outcomeOverlay.transform, "结果返回", new Vector2(380, -280), new Vector2(280, 64), "返回入口", FormalUiTheme.Interactive, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Warning);
             outcomeBackButton.onClick.AddListener(bootstrap.ReturnFromCombatOutcome);
             outcomeOverlay.SetActive(false);
+        }
+
+        private void CreateAutoCombatPanel()
+        {
+            autoCombatPanel = FormalUiKit.FlatPanel("自动战斗遮罩", root.transform,
+                Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, .68f));
+            autoCombatPanel.GetComponent<Image>().raycastTarget = true;
+            GameObject surface = FormalUiKit.AnchoredPanel("自动战斗面板", autoCombatPanel.transform,
+                new Vector2(.5f, .5f), new Vector2(.5f, .5f), Vector2.zero,
+                new Vector2(856, 640), FormalUiTheme.SurfaceRaised);
+            ConfigureOutlinedPanel(surface, FormalUiTheme.SurfaceRaised, FormalUiTheme.Rule);
+            Label("自动战斗标题", surface.transform, new Vector2(32, -22), new Vector2(420, 52),
+                36, text, TextAnchor.MiddleLeft).text = "自动战斗";
+            Label("设置范围", surface.transform, new Vector2(500, -28), new Vector2(324, 40),
+                20, muted, TextAnchor.MiddleRight).text = "本场设置，换物后重新授权";
+
+            AutoCombatStyle[] styles = { AutoCombatStyle.Aggressive, AutoCombatStyle.Balanced, AutoCombatStyle.Cautious };
+            string[] titles = { "进攻", "均衡", "稳健" };
+            for (int index = 0; index < styles.Length; index++)
+            {
+                int captured = index;
+                Button button = Button(surface.transform, "自动风格" + titles[index],
+                    new Vector2(32 + index * 264, -88), new Vector2(248, 64), titles[index],
+                    FormalUiTheme.Panel, FormalUiTheme.ButtonFontSize, FormalUiButtonTone.Neutral);
+                autoCombatStyleButtons[index] = button;
+                button.onClick.AddListener(() => bootstrap.SetAutoCombatStyle(styles[captured]));
+                autoCombatStyleSelected[index] = Label("当前风格", button.transform,
+                    new Vector2(184, -4), new Vector2(56, 26), 18, FormalUiTheme.Cyan, TextAnchor.MiddleRight);
+                autoCombatStyleSelected[index].text = "当前";
+            }
+            autoCombatStyleSummary = Label("风格效果", surface.transform,
+                new Vector2(32, -160), new Vector2(792, 40), 22, text, TextAnchor.MiddleLeft);
+            Label("自动道具标题", surface.transform, new Vector2(32, -208), new Vector2(232, 40),
+                28, text, TextAnchor.MiddleLeft).text = "战术道具";
+            Label("保留提示", surface.transform, new Vector2(344, -212), new Vector2(480, 36),
+                20, muted, TextAnchor.MiddleRight).text = "仅使用已允许且超过保留次数的道具";
+
+            for (int index = 0; index < autoCombatItemNames.Length; index++)
+            {
+                int slot = index;
+                GameObject row = FormalUiKit.FlatPanel("自动道具行" + (index + 1), surface.transform,
+                    new Vector2(0, 1), new Vector2(0, 1), new Vector2(32, -258 - index * 68),
+                    new Vector2(792, 60), index % 2 == 0 ? FormalUiTheme.Panel : FormalUiTheme.Surface);
+                autoCombatItemIcons[index] = FormalUiKit.TopLeftIconSlot("道具图标", row.transform, null, new Vector2(8, -6));
+                autoCombatItemIcons[index].rectTransform.sizeDelta = new Vector2(48, 48);
+                autoCombatItemNames[index] = Label("道具名称", row.transform, new Vector2(72, -5),
+                    new Vector2(240, 50), 22, text, TextAnchor.MiddleLeft);
+                autoCombatItemCharges[index] = Label("剩余次数", row.transform, new Vector2(318, -3),
+                    new Vector2(130, 26), 20, text, TextAnchor.MiddleLeft);
+                autoCombatItemSpendable[index] = Label("可自动次数", row.transform, new Vector2(318, -30),
+                    new Vector2(130, 26), 18, muted, TextAnchor.MiddleLeft);
+                autoCombatItemToggles[index] = Button(row.transform, "允许自动使用" + (index + 1),
+                    new Vector2(452, -6), new Vector2(136, 48), "不使用", FormalUiTheme.Panel,
+                    22, FormalUiButtonTone.Neutral);
+                autoCombatItemToggles[index].onClick.AddListener(() =>
+                    bootstrap.SetAutoCombatItemEnabled(slot, !bootstrap.AutoCombatSettings.IsEnabled(slot)));
+                BindTooltip(autoCombatItemToggles[index].gameObject, () => new FormalTooltipContent("自动使用道具",
+                    "开启后只会使用当前格的这件道具；更换物品后自动关闭。", FormalUiTheme.Cyan));
+                Label("保留标签", row.transform, new Vector2(598, -6), new Vector2(56, 48),
+                    20, muted, TextAnchor.MiddleCenter).text = "保留";
+                autoCombatReserveMinus[index] = Button(row.transform, "减少保留次数" + (index + 1),
+                    new Vector2(656, -6), new Vector2(36, 48), "−", FormalUiTheme.Panel, 24, FormalUiButtonTone.Neutral);
+                autoCombatReserveMinus[index].onClick.AddListener(() =>
+                    bootstrap.SetAutoCombatReservedUses(slot, bootstrap.AutoCombatSettings.ReservedUses(slot) - 1));
+                autoCombatItemReserved[index] = Label("保留次数", row.transform,
+                    new Vector2(704, -6), new Vector2(40, 48), 24, text, TextAnchor.MiddleCenter);
+                autoCombatReservePlus[index] = Button(row.transform, "增加保留次数" + (index + 1),
+                    new Vector2(754, -6), new Vector2(36, 48), "+", FormalUiTheme.Panel, 24, FormalUiButtonTone.Neutral);
+                autoCombatReservePlus[index].onClick.AddListener(() =>
+                    bootstrap.SetAutoCombatReservedUses(slot, bootstrap.AutoCombatSettings.ReservedUses(slot) + 1));
+            }
+            Button close = Button(surface.transform, "返回战场", new Vector2(32, -560),
+                new Vector2(184, 56), "返回战场", FormalUiTheme.Panel, 22, FormalUiButtonTone.Neutral);
+            close.onClick.AddListener(bootstrap.CloseAutoCombatPanel);
+            autoCombatPrimaryButton = Button(surface.transform, "开始或停止自动战斗",
+                new Vector2(628, -560), new Vector2(196, 56), "开始自动",
+                FormalUiTheme.Interactive, 24, FormalUiButtonTone.Primary);
+            autoCombatPrimaryButton.onClick.AddListener(() =>
+            {
+                bootstrap.ToggleAutoCombat();
+                bootstrap.CloseAutoCombatPanel();
+            });
+            autoCombatPanel.SetActive(false);
+        }
+
+        private void RefreshAutoCombatPanel()
+        {
+            if (autoCombatPanel == null) return;
+            bool open = bootstrap.IsAutoCombatPanelOpen;
+            if (autoCombatPanel.activeSelf != open) autoCombatPanel.SetActive(open);
+            if (!open) { autoCombatPanelWasOpen = false; return; }
+            if (!autoCombatPanelWasOpen && autoCombatPrimaryButton != null)
+                RuntimeUiEventSystem.Select(autoCombatPrimaryButton.gameObject);
+            autoCombatPanelWasOpen = true;
+            CombatState state = bootstrap.CurrentState;
+            AutoCombatSettings settings = bootstrap.AutoCombatSettings;
+            settings.BindQuickbar(state);
+            AutoCombatStyle style = settings.Style;
+            autoCombatStyleSummary.text = style == AutoCombatStyle.Aggressive ? "优先击杀与有效伤害" :
+                style == AutoCombatStyle.Cautious ? "优先避险与维持生命" : "兼顾目标推进、生存与资源";
+            for (int index = 0; index < autoCombatStyleButtons.Length; index++)
+            {
+                bool selected = (int)style == index;
+                autoCombatStyleSelected[index].gameObject.SetActive(selected);
+            }
+            string[] equipped = state.RogueEquipment?.ItemQuickbarInstanceIds ?? state.ItemQuickbar;
+            for (int slot = 0; slot < autoCombatItemNames.Length; slot++)
+            {
+                string id = slot < equipped.Length ? equipped[slot] : null;
+                RogueTacticalItemInstance tactical = state.RogueEquipment?.TacticalItem(id);
+                ItemInstance inventory = tactical == null ? state.ItemInventory.Get(id) : null;
+                string definitionId = tactical?.DefinitionId ?? inventory?.DefinitionId;
+                bool artifact = definitionId != "G-T13" && ArtifactCatalog.All.Any(value => value.Id == definitionId);
+                bool usable = artifact || definitionId == "medkit" || definitionId == "shield_cell";
+                ArtifactDefinition artifactDefinition = artifact ? ArtifactCatalog.Get(definitionId) : null;
+                ItemDefinition itemDefinition = inventory == null ? null : ItemCatalog.Get(inventory.DefinitionId);
+                int charges = tactical?.ChargesCurrent ?? inventory?.RemainingUses ?? 0;
+                int reserve = settings.ReservedUses(slot);
+                autoCombatItemNames[slot].text = artifactDefinition?.DisplayName ?? itemDefinition?.DisplayName ??
+                    (string.IsNullOrEmpty(id) ? "空槽" : "需手动使用");
+                autoCombatItemCharges[slot].text = string.IsNullOrEmpty(id) ? string.Empty : "剩余 " + charges;
+                autoCombatItemSpendable[slot].text = string.IsNullOrEmpty(id) ? string.Empty :
+                    "可自动 " + (usable && settings.IsEnabled(slot) ? Math.Max(0, charges - reserve) : 0);
+                Sprite sprite = Resources.Load<Sprite>(artifactDefinition?.IconPath ?? itemDefinition?.IconPath ?? string.Empty);
+                autoCombatItemIcons[slot].sprite = sprite;
+                autoCombatItemIcons[slot].gameObject.SetActive(sprite != null);
+                Text toggle = autoCombatItemToggles[slot].transform.Find("文字")?.GetComponent<Text>();
+                if (toggle != null) toggle.text = usable ? settings.IsEnabled(slot) ? "已允许" : "不使用" :
+                    definitionId == "G-T13" ? "被动触发" : "仅手动";
+                bool toggleAvailable = usable && charges > 0;
+                autoCombatItemToggles[slot].GetComponent<UiButtonFeedback>()?.SetAvailability(toggleAvailable,
+                    string.IsNullOrEmpty(id) ? "战术栏为空" : !usable ? "此物品目前需要手动使用" : "道具已耗尽");
+                autoCombatItemReserved[slot].text = string.IsNullOrEmpty(id) ? "—" : reserve.ToString();
+                autoCombatReserveMinus[slot].GetComponent<UiButtonFeedback>()?.SetAvailability(usable && reserve > 0,
+                    "已经不保留次数");
+                autoCombatReservePlus[slot].GetComponent<UiButtonFeedback>()?.SetAvailability(usable && reserve < charges,
+                    "已保留当前全部次数");
+            }
+            Text primary = autoCombatPrimaryButton.transform.Find("文字")?.GetComponent<Text>();
+            if (primary != null) primary.text = bootstrap.IsAutoCombatEnabled ? "停止自动" : "开始自动";
         }
 
         private FormalTooltipContent BuildActionTooltip(string action)
@@ -1780,7 +1979,9 @@ namespace OCC.Combat.Presentation
 
         private Image ResourceBar(Transform parent, string title, Vector2 position, Color fillColor, out Text valueLabel, float width = 384f)
         {
-            Label(title, parent, position, new Vector2(200, 32), FormalUiTheme.BodyFontSize, muted, TextAnchor.MiddleLeft);
+            var resourceIcon=FormalUiKit.TopLeftIconSlot(title+"图标",parent,
+                Resources.Load<Sprite>(FormalArtRegistry.ResourceMetricPath(title=="生命"?"health":"mana")),position);
+            resourceIcon.rectTransform.sizeDelta=new Vector2(24,24);
             valueLabel = Label(title + "数值", parent, position, new Vector2(width - 8, 32), CombatHudTypography.ResourceValueFontSize,
                 text, CombatHudTypography.ResourceValueAlignment);
             FormalUiKit.ConfigureNumericLabel(valueLabel);
@@ -1800,6 +2001,7 @@ namespace OCC.Combat.Presentation
             if (hero == null || state.RogueSpells == null) return "状态未就绪";
             if (string.Equals(spell.Role, "passive", StringComparison.Ordinal)) return "被动已生效，无需施放";
             if (state.ActiveUnitId != hero.Id) return "等待自身行动";
+            if (state.RogueSpells.BattleUsesRemaining(spell.DefinitionId) == 0) return "本场术式次数已用尽";
             int cooldown = state.RogueSpells.CooldownRemaining(spell.DefinitionId);
             if (cooldown > 0) return "冷却中，还需 " + cooldown + " 个自身回合";
             if (hero.ActionPoints < spell.ActionPointCost)
@@ -1972,6 +2174,14 @@ namespace OCC.Combat.Presentation
 
         private void RefreshAvailability(CombatState state, UnitState hero)
         {
+            if (autoCombatButton != null)
+            {
+                Text label = autoCombatButton.transform.Find("文字")?.GetComponent<Text>();
+                if (label != null) label.text = bootstrap.IsAutoCombatEnabled ? "停止" : "自动";
+                autoCombatButton.GetComponent<UiButtonFeedback>()?.SetAvailability(
+                    bootstrap.IsDeveloperCombatActive && !bootstrap.IsCombatOutcomeVisible && !bootstrap.IsTrainingRangeActive,
+                    bootstrap.IsTrainingRangeActive ? "训练演练由你操作" : "只在战斗中可切换");
+            }
             if (pauseButton != null) pauseButton.gameObject.SetActive(bootstrap.CurrentMapRun != null && bootstrap.IsDeveloperCombatActive);
             bool playing = (bootstrap as ICombatActionPresentationHost)?.IsCombatActionPlaying == true;
             bool heroTurn = !playing && state.ActiveUnitId == "hero" && hero.IsAlive;
@@ -1996,6 +2206,7 @@ namespace OCC.Combat.Presentation
                 if (available && skill != null && hero.Mana < skill.ManaCost) { available = false; reason = "以太不足：需要 " + skill.ManaCost; }
                 if (available && parsedSlot >= 0 && state.Ruleset == CombatRuleset.Roguelite && rogueSpell == null) { available = false; reason = "术式槽为空"; }
                 if (available && rogueSpell != null && state.RogueSpells.CooldownRemaining(rogueSpell.DefinitionId) > 0) { available = false; reason = "术式冷却中"; }
+                if (available && rogueSpell != null && state.RogueSpells.BattleUsesRemaining(rogueSpell.DefinitionId) == 0) { available = false; reason = "本场术式次数已用尽"; }
                 int rogueManaCost = rogueSpell == null ? 0 : state.RogueSpells.EffectiveManaCost(rogueSpell);
                 if (available && rogueSpell != null && hero.Mana < rogueManaCost) { available = false; reason = "个人魔力不足：需要 " + rogueManaCost; }
                 if (available && rogueSpell != null && hero.ActionPoints < rogueSpell.ActionPointCost) { available = false; reason = "行动点不足：需要 " + rogueSpell.ActionPointCost; }
@@ -2023,6 +2234,9 @@ namespace OCC.Combat.Presentation
             if (button == null || !button.name.StartsWith("技能", StringComparison.Ordinal)) return;
             bool shortage = actionShortage || manaShortage;
             bool empty = !string.IsNullOrEmpty(reason) && reason.Contains("空", StringComparison.Ordinal);
+            var rim=FormalUiKit.SkinOverlay(button.targetGraphic as Image);
+            if(rim!=null)rim.color=empty?new Color(.45f,.43f,.38f,.45f):Color.white;
+            if(button.targetGraphic is Image surface&&empty)surface.color=Color.Lerp(FormalUiTheme.Panel,FormalUiTheme.Ink,.10f);
             Text label = button.transform.Find("文字")?.GetComponent<Text>();
             if (label != null) label.color = shortage ? FormalUiTheme.Muted : available || selected ? FormalUiTheme.Text : FormalUiTheme.Muted;
             Image icon = button.transform.Find("正式图标")?.GetComponent<Image>();

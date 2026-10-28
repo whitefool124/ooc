@@ -58,3 +58,8 @@ Bind `configuration.construction_manifest` as a repository-relative path/SHA256 
 ## 2026-10-15 特效尺度例外
 
 特效例外（用户确认，2026-10-15）：像素特效允许不同像素大小，不受本条统一像素密度要求限制，但不得尺寸失调，必须对照角色、技能范围与场景记录单片及整体运动的世界尺寸并在实际镜头复核；该例外不适用于角色、地块、场景物件与功能图标。密度清单中用role: pixel_vfx标识该例外，记录world_scale_basis和actual_motion_bounds；不得给角色或场景资产错误标注该角色来绕过统一密度。当前特效仍以一像素厚图片、一像素粗长柱、一像素立方粒子为几何限制，像素的世界尺寸按所用特效资产登记。
+
+
+## 2026-10-23 整备二维缩略图例外
+
+用户批准仅整备背包与四格战术栏的二维物品缩略图使用独立整数像素倍率；密度清单以 `role: loadout_ui_thumbnail` 及 `ui_surface: loadout.backpack` 或 `loadout.tactical_quickbar` 标识，保留源图、Point采样、完整剪影、真实占格、旋转和次数。1920×1080参考2倍、960×540为1倍。以总案A.2.4和机器合同 `ui_thumbnail_exception` 为准，不扩展至人物、陈设、战场或其他功能图标；不免除追溯、实际应用与人工审美。

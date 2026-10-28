@@ -1,2 +1,0 @@
-PASS
-PASS hover delay, panel transit, pin/unpin, grace close, keyboard focus, no invisible raycast; no camera shift; status flip; size=1920x1080

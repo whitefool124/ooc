@@ -1,8 +1,0 @@
-{
-  "status": "PASS",
-  "scope": "Formula boundary check only; actual render checked separately",
-  "emptyAtZero": true,
-  "fullAtOneIncludingLastTexel": true,
-  "noEarlyDarkInk": true,
-  "nativeTexelAddressing": true
-}

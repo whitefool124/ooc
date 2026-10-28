@@ -4078,6 +4078,7 @@ Transform:
   - {fileID: 3633681873090982355}
   - {fileID: 7190295897269036550}
   - {fileID: 4473282450141085997}
+  - {fileID: 3733011366140609961}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7221106927638890920
@@ -4101,6 +4102,7 @@ MonoBehaviour:
   lampLight: {fileID: 3901124406122572503}
   sceneVolume: {fileID: 1269734405707753936}
   rendererIndex: 1
+  lighting: {fileID: 161713330497721102}
 --- !u!1 &5537114808286108199
 GameObject:
   m_ObjectHideFlags: 0
@@ -6846,3 +6848,76 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1001 &1889866485451228638
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 668950550677315890}
+    m_Modifications:
+    - target: {fileID: 445918130152564121, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_Name
+      value: DeskLighting
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+--- !u!114 &161713330497721102 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1730687260879197904, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+  m_PrefabInstance: {fileID: 1889866485451228638}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f1b6c3850160e94c9fab7fc5f01857e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.Hd2DDeskLightingRig
+--- !u!4 &3733011366140609961 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3023170447311241335, guid: 4f1364f0eeec08e40a9980b58f02d176, type: 3}
+  m_PrefabInstance: {fileID: 1889866485451228638}
+  m_PrefabAsset: {fileID: 0}

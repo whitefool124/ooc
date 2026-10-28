@@ -1,10 +1,133 @@
 ﻿using System;
 using NUnit.Framework;
+using OCC.Combat.Roguelite;
 
 namespace OCC.Combat.Tests
 {
     public sealed class CombatResolverTests
     {
+        [Test]
+        public void AutoCombatPlanner_ChoosesAnAcceptedAttackAgainstVisibleEnemy()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var enemy = new UnitState("enemy", false, new GridPosition(1, 0));
+            var state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
+            CombatResolver.BeginTurn(state, hero.Id);
+
+            CombatCommand command = AutoCombatPlanner.Choose(state);
+            int before = enemy.Health + enemy.Shield;
+            CombatCommandExecutionResult result = new CombatCommandExecutionService().Execute(state, null, command);
+
+            Assert.That(command.Type == CombatCommandType.Attack || command.Type == CombatCommandType.UseSkill, Is.True);
+            Assert.That(result.Accepted, Is.True, result.RejectionReason);
+            Assert.That(enemy.Health + enemy.Shield, Is.LessThan(before));
+        }
+
+        [Test]
+        public void AutoCombatPlanner_UsesARealRouteAroundCoverToCaptureObjective()
+        {
+            var map = new GridMap(5, 3);
+            map.SetTile(new GridPosition(1, 1), new TileState { Cover = CoverType.Heavy, Durability = 8 });
+            var hero = new UnitState("hero", true, new GridPosition(0, 1));
+            var state = new CombatState(map, new[] { hero },
+                new CombatObjective[] { new CaptureObjective(new GridPosition(4, 1)) });
+            CombatResolver.BeginTurn(state, hero.Id);
+
+            CombatCommand command = AutoCombatPlanner.Choose(state);
+            Assert.That(command.Type, Is.EqualTo(CombatCommandType.Move));
+            Assert.That(command.Destination, Is.Not.EqualTo(hero.Position));
+            Assert.That(CombatMovementQuery.PlayerTargetFailure(state, command.Destination), Is.Empty);
+            Assert.That(new CombatCommandExecutionService().Execute(state, null, command).Accepted, Is.True);
+        }
+
+        [Test]
+        public void AutoCombatPlanner_InteractsWithAnIncompleteInvestigationObjective()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var first = new GridPosition(1, 0);
+            var state = new CombatState(new GridMap(4, 2), new[] { hero },
+                new CombatObjective[] { new InvestigationObjective(new[] { first, new GridPosition(3, 0) }) });
+            CombatResolver.BeginTurn(state, hero.Id);
+
+            CombatCommand command = AutoCombatPlanner.Choose(state);
+            Assert.That(command.Type, Is.EqualTo(CombatCommandType.Interact));
+            Assert.That(command.Destination, Is.EqualTo(first));
+            Assert.That(new CombatCommandExecutionService().Execute(state, null, command).Accepted, Is.True);
+            Assert.That(state.IsInvestigated(first), Is.True);
+        }
+
+        [Test]
+        public void AutoCombatSettings_RequireConsentAgainAfterQuickbarReplacement()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var state = new CombatState(new GridMap(2, 2), new[] { hero });
+            var settings = new AutoCombatSettings();
+            state.ItemQuickbar[0] = "first";
+            settings.BindQuickbar(state);
+            settings.SetEnabled(0, true);
+            settings.SetReservedUses(0, 1, 3);
+
+            Assert.That(settings.MaySpend(0, "first", 2), Is.True);
+            Assert.That(settings.MaySpend(0, "first", 1), Is.False);
+            state.ItemQuickbar[0] = "replacement";
+            settings.BindQuickbar(state);
+
+            Assert.That(settings.IsEnabled(0), Is.False);
+            Assert.That(settings.ReservedUses(0), Is.EqualTo(1));
+            Assert.That(settings.MaySpend(0, "replacement", 3), Is.False);
+        }
+
+        [Test]
+        public void AutoCombatPlanner_UsesAllowedRecoveryOnlyWhenItHelps()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var enemy = new UnitState("enemy", false, new GridPosition(1, 0));
+            var state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
+            var inventory = new InventoryContainerState();
+            Assert.That(inventory.AddFirstFit(new ItemInstance("cell", "shield_cell", 0)).Success, Is.True);
+            state.ConfigureItemInventory(inventory, new[] { "cell" });
+            CombatResolver.BeginTurn(state, hero.Id);
+            var settings = new AutoCombatSettings();
+            settings.BindQuickbar(state);
+            settings.SetReservedUses(0, 0, 1);
+            settings.SetStyle(AutoCombatStyle.Cautious);
+            typeof(UnitState).GetProperty("Health").SetValue(hero, 2);
+
+            Assert.That(AutoCombatPlanner.ChooseDecision(state, settings).UsesArtifact, Is.False);
+            settings.SetEnabled(0, true);
+            AutoCombatDecision decision = AutoCombatPlanner.ChooseDecision(state, settings);
+            Assert.That(decision.Command.Type, Is.EqualTo(CombatCommandType.UseQuickbar));
+            Assert.That(decision.Command.SlotIndex, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void AutoCombatPlanner_PreventsUnapprovedArtifactSpendThenChoosesLegalProtection()
+        {
+            var hero = new UnitState("hero", true, new GridPosition(0, 0));
+            var enemy = new UnitState("enemy", false, new GridPosition(1, 0));
+            var state = new CombatState(new GridMap(4, 2), new[] { hero, enemy });
+            var equipment = new RogueEquipmentRuntime(42);
+            RogueTacticalItemInstance shield = equipment.CreateTacticalItem("shield", "G-T01", 0, "test");
+            Assert.That(equipment.AddTacticalToBackpack(shield), Is.True);
+            Assert.That(equipment.AssignQuickbar(0, shield.InstanceId), Is.True);
+            state.AttachRogueEquipmentRuntime(equipment);
+            CombatResolver.BeginTurn(state, hero.Id);
+            typeof(UnitState).GetProperty("Health").SetValue(hero, 2);
+            var settings = new AutoCombatSettings();
+            settings.BindQuickbar(state);
+            settings.SetStyle(AutoCombatStyle.Cautious);
+            settings.SetReservedUses(0, 0, shield.ChargesCurrent);
+
+            Assert.That(AutoCombatPlanner.ChooseDecision(state, settings).UsesArtifact, Is.False);
+            settings.SetEnabled(0, true);
+            AutoCombatDecision decision = AutoCombatPlanner.ChooseDecision(state, settings);
+            Assert.That(decision.UsesArtifact, Is.True);
+            Assert.That(decision.ArtifactSlot, Is.EqualTo(0));
+            Assert.That(decision.ArtifactInstanceId, Is.EqualTo(shield.InstanceId));
+            Assert.That(ArtifactEngine.Preview(new ArtifactBattleState(state), hero.Id,
+                ArtifactCatalog.Get("G-T01"), decision.ArtifactTarget, shield.ChargesCurrent).CanCommit, Is.True);
+        }
+
         [Test]
         public void Clone_AllowsASurvivorToOccupyADeadUnitsCell()
         {
@@ -69,7 +192,7 @@ namespace OCC.Combat.Tests
             hero.ApplyStatus(StatusType.Agility, 2, -1);
             CombatResolver.BeginTurn(state, hero.Id);
             Assert.That(hero.ActionPoints, Is.EqualTo(3));
-            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroSlowedMovementRange));
+            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(2));
         }
 
         [Test]
@@ -227,11 +350,11 @@ namespace OCC.Combat.Tests
                 CombatResolver.Resolve(state, CombatCommand.Attack(enemy.Id, hero.Id));
 
                 Assert.That(enemy.ActionPoints, Is.Zero, "敌方一次动作应耗尽本回合全部行动点");
-                Assert.That(preview.BaseDamage, Is.EqualTo(6));
-                Assert.That(preview.FinalDamage, Is.EqualTo(6));
+                Assert.That(preview.BaseDamage, Is.EqualTo(4));
+                Assert.That(preview.FinalDamage, Is.EqualTo(4));
                 Assert.That(skillPreview.BaseDamage, Is.EqualTo(5));
                 Assert.That(skillPreview.FinalDamage, Is.EqualTo(5));
-                Assert.That(hero.Health, Is.EqualTo(healthBefore - 6));
+                Assert.That(hero.Health, Is.EqualTo(healthBefore - 4));
             }
             finally
             {
@@ -255,7 +378,7 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void EquippedBackpack_MakesOnlyFirstInventoryOpenFreeEachBattle()
+        public void StarterBackpack_DoesNotGrantForgedInventoryOpenDiscount()
         {
             CombatState state = CreateHeroState();
             UnitState hero = state.GetUnit("hero");
@@ -264,9 +387,9 @@ namespace OCC.Combat.Tests
             CombatResolver.BeginTurn(state, hero.Id);
 
             CombatResolver.Resolve(state, CombatCommand.OpenInventory(hero.Id));
-            Assert.That(hero.ActionPoints, Is.EqualTo(3));
-            CombatResolver.Resolve(state, CombatCommand.OpenInventory(hero.Id));
             Assert.That(hero.ActionPoints, Is.EqualTo(2));
+            CombatResolver.Resolve(state, CombatCommand.OpenInventory(hero.Id));
+            Assert.That(hero.ActionPoints, Is.EqualTo(1));
         }
 
         [Test]

@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"entry\\\":\\\"PASS:second-battle-normal-entry\\\",\\\"level\\\":\\\"first_battle_greenhouse_collection_room\\\",\\\"node\\\":\\\"B2\\\",\\\"saved\\\":true,\\\"projection\\\":42,\\\"lights\\\":[{\\\"name\\\":\\\"蓄能晶簇局部光_(5, 4)\\\",\\\"enabled\\\":true,\\\"intensity\\\":1.8,\\\"range\\\":2.3,\\\"mask\\\":32768},{\\\"name\\\":\\\"蓄能晶簇局部光_(5, 1)\\\",\\\"enabled\\\":true,\\\"intensity\\\":1.8,\\\"range\\\":2.3,\\\"mask\\\":32768}]}\",\"compiler\":\"Roslyn\"}}"
-    }
-  ]
-}

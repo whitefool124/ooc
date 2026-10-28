@@ -9,7 +9,8 @@ namespace OCC.Combat
     {
         Burning, Slow, Bound, ArmorBreak, Dazzled, Revealed, BreakStance, FiregroundBoost, FiregroundVulnerable,
         Agility, Strength, SpellPower, Speed, Range, DamageTaken, ShieldEfficiency, ShieldGrant, Control,
-        Marked, Prepared, Invulnerable
+        Marked, Prepared, Invulnerable,
+        MoveBonus, SpellCost, Counter
     }
     public enum EquipmentSlot { MainHand, OffHand }
 

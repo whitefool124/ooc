@@ -63,8 +63,8 @@ namespace OCC.Combat.Presentation
         public const int FeedbackFontSize = 72;
         public const int ButtonFontSize = 24;
         public const int ButtonDetailFontSize = 24;
-        public const int BodyTextSlotHeight = 40;
-        public const int TwoLineTextSlotHeight = 72;
+        public const int BodyTextSlotHeight = 32;
+        public const int TwoLineTextSlotHeight = 64;
         public const int TitleTextSlotHeight = 72;
         public const int MinimumInteractiveHeight = 48;
         public const int SpaceSmall = 8;
@@ -290,30 +290,14 @@ namespace OCC.Combat.Presentation
             if (existingFrame != null) existingFrame.gameObject.SetActive(false);
 
             Image overlay = SkinOverlay(image, true);
-            if(image.GetComponentInParent<AcademyDeskBackdrop>()!=null &&
-               (id=="panel" || id=="panel_elevated") && image.rectTransform.rect.width>=600f)
-            {
-                overlay.sprite=null;overlay.color=Color.clear;overlay.raycastTarget=false;
+            overlay.gameObject.SetActive(true);
+            foreach(string edge in new[]{"细边_上","细边_下","细边_左","细边_右"})
+            {var old=image.transform.Find(edge);if(old!=null)old.gameObject.SetActive(false);}
+            FormalUiChrome.Apply(overlay,FormalUiChrome.Role(id),false);
+            overlay.raycastTarget=false;
+            overlay.color=id=="focus"?FormalUiTheme.Cyan:Color.white;
+            if(image.GetComponentInParent<AcademyDeskBackdrop>()!=null&&image.rectTransform.rect.width>=600f)
                 AcademyPaperDepth.Apply(image);
-                SetThinBorder(image.transform,new Color(.43f,.35f,.255f,.28f));
-                return;
-            }
-            if (UsesThinBorder(id))
-            {
-                overlay.sprite = null;
-                overlay.color = Color.clear;
-                overlay.raycastTarget = false;
-                Color border = id == "focus" ? FormalUiTheme.Cyan : ThinBorderColor(tint);
-                SetThinBorder(image.transform, border);
-                return;
-            }
-            Sprite sprite = SkinSprite(id);
-            overlay.sprite = sprite;
-            overlay.type = sprite.border.sqrMagnitude > 0f ? Image.Type.Sliced : Image.Type.Simple;
-            overlay.fillCenter = false;
-            overlay.preserveAspect = false;
-            overlay.color = Color.white;
-            overlay.raycastTarget = false;
         }
 
         private static bool UsesThinBorder(string id)
@@ -381,7 +365,7 @@ namespace OCC.Combat.Presentation
         public static bool IsStandardButtonSkin(Sprite sprite)
         {
             if (sprite == null) return false;
-            return sprite == SkinSprite("button_idle") || sprite == SkinSprite("button_hover") ||
+            return sprite == FormalUiChrome.Frame || sprite == SkinSprite("button_idle") || sprite == SkinSprite("button_hover") ||
                 sprite == SkinSprite("button_pressed") || sprite == SkinSprite("button_disabled") ||
                 sprite == SkinSprite("tab_active");
         }
@@ -389,7 +373,7 @@ namespace OCC.Combat.Presentation
         public static Sprite ButtonStateSprite(bool available, bool pressed, bool selected, bool hovered)
         {
             string id = !available ? "button_disabled" : pressed ? "button_pressed" : selected ? "tab_active" : hovered ? "button_hover" : "button_idle";
-            return SkinSprite(id);
+            return FormalUiChrome.Frame;
         }
 
         private static string PanelSkin(string name)
@@ -557,10 +541,11 @@ namespace OCC.Combat.Presentation
 
         public static void ThinFrame(Transform parent, Vector2 size, Color color, string prefix = "细框")
         {
-            ThinFrameEdge(parent, prefix + "_上", Vector2.zero, new Vector2(size.x, FormalUiTheme.InnerHighlightThickness), color);
-            ThinFrameEdge(parent, prefix + "_下", new Vector2(0f, -size.y + FormalUiTheme.InnerHighlightThickness), new Vector2(size.x, FormalUiTheme.InnerHighlightThickness), color);
-            ThinFrameEdge(parent, prefix + "_左", Vector2.zero, new Vector2(FormalUiTheme.InnerHighlightThickness, size.y), color);
-            ThinFrameEdge(parent, prefix + "_右", new Vector2(size.x - FormalUiTheme.InnerHighlightThickness, 0f), new Vector2(FormalUiTheme.InnerHighlightThickness, size.y), color);
+            var found=parent.Find(prefix+"_九宫格");
+            var frame=found==null?FlatPanel(prefix+"_九宫格",parent,new Vector2(0,1),new Vector2(0,1),Vector2.zero,size,Color.white).GetComponent<Image>():found.GetComponent<Image>();
+            frame.rectTransform.sizeDelta=size;
+            FormalUiChrome.Apply(frame,UiChromeRole.Card,false);frame.color=color;frame.raycastTarget=false;
+            foreach(string side in new[]{"_上","_下","_左","_右"}){var old=parent.Find(prefix+side);if(old!=null)old.gameObject.SetActive(false);}
         }
 
         private static void ThinFrameEdge(Transform parent, string name, Vector2 position, Vector2 size, Color color)

@@ -160,8 +160,8 @@ namespace OCC.Combat
             Combat = combat ?? throw new ArgumentNullException(nameof(combat));
             foreach (GridPosition cell in Combat.Map.PositionsWith(IsLiveObject)) intactObjects.Add(cell);
         }
-        private static bool IsLiveObject(TileState tile) => tile.Durability > 0 && !tile.IsLootChest && !tile.IsPermanentWall &&
-            (tile.Cover != CoverType.None || tile.IsObjective || tile.IsDeviceLike || tile.IsLampVine || tile.IsDecoy || tile.IsAetherCrystal);
+        private static bool IsLiveObject(TileState tile) => tile.Durability > 0 && !tile.IsPermanentWall &&
+            (tile.IsDestructibleLoot || tile.Cover != CoverType.None || tile.IsObjective || tile.IsDeviceLike || tile.IsLampVine || tile.IsDecoy || tile.IsAetherCrystal);
         private static string CooldownKey(string unitId, string spellId) => unitId + "|" + spellId;
         public int Cooldown(string unitId, string spellId) => cooldowns.TryGetValue(CooldownKey(unitId, spellId), out int value) ? value : 0;
         internal void SetCooldown(string unitId, string spellId, int turns) { if (turns > 0) cooldowns[CooldownKey(unitId, spellId)] = turns; }
@@ -191,6 +191,8 @@ namespace OCC.Combat
                 {
                     activeGround.Tick();
                     if (activeGround.RemainingTurns <= 0) firegrounds.Remove(position);
+                    else if (Combat.Map.GetTile(position).IsDestructibleLoot)
+                        CombatEffectExecutor.Execute(Combat, unitId, CombatEffect.DamageObject(position, activeGround.Damage));
                 }
             }
             RemoveExpiredEnvironment(Combat.CurrentTime);
@@ -498,6 +500,14 @@ namespace OCC.Combat
         internal static int ApplyRawDamage(UnitState source, UnitState target, int amount, DamageType damageType,
             string sourceEffectId, CombatState combat)
         {
+            int result = ApplyRawDamageWithoutCounter(source, target, amount, damageType, sourceEffectId, combat);
+            if (amount > 0 && combat != null && source != null && target != null && source.IsHero != target.IsHero) combat.LampVines.Reveal(target.Id);
+            if (combat != null) CombatResolver.ResolveAdjacentCounter(combat, target, source);
+            return result;
+        }
+        private static int ApplyRawDamageWithoutCounter(UnitState source, UnitState target, int amount, DamageType damageType,
+            string sourceEffectId, CombatState combat)
+        {
             if (damageType == DamageType.Fire)
                 return combat == null || combat.Ruleset != CombatRuleset.Roguelite
                     ? ApplyRawFireDamage(target, CombatDebugTuning.OutgoingDamageFor(source, amount, DamageType.Fire), combat?.Map)
@@ -543,6 +553,7 @@ namespace OCC.Combat
         public IReadOnlyList<GridPosition> ProjectedDestroyedObjects { get; }
         public IReadOnlyDictionary<string, GridPosition> ProjectedPushedUnits { get; }
         public IReadOnlyList<GridPosition> ReactionCells { get; }
+        public IReadOnlyDictionary<GridPosition, int> ProjectedContainerDurability { get; internal set; } = new Dictionary<GridPosition, int>();
         public bool FriendlyFireRisk { get; }
         public bool ConsumesBurning { get; }
         public FireSpellPreview(FireSpellDefinition spell, IEnumerable<string> failures, IEnumerable<GridPosition> cells,
@@ -660,7 +671,7 @@ namespace OCC.Combat
             GridPosition center = primary?.Position ?? (spell.TargetKind == FireTargetKind.Self ? source.Position : target.Cell);
             List<string> failures = new List<string>();
             if (source.ActionPoints < spell.ActionPointCost) failures.Add("行动点不足");
-            if (source.Mana < spell.ManaCost) failures.Add("魔力不足");
+            if (source.Mana < Math.Max(0, spell.ManaCost + source.StatusStrength(StatusType.SpellCost))) failures.Add("魔力不足");
             if (battle.Cooldown(sourceUnitId, spell.Id) > 0) failures.Add("冷却中");
             int selfLoss = spell.Rules.Where(rule => rule.Kind == FireRuleKind.LoseHealth).Select(rule => rule.Amount).DefaultIfEmpty(0).Max();
             if (selfLoss > 0 && source.Health <= selfLoss) failures.Add("你的生命太低，承受不了这次代价");
@@ -673,6 +684,8 @@ namespace OCC.Combat
             if (spell.TargetKind == FireTargetKind.Self && string.IsNullOrEmpty(target.UnitId) && target.Cell != source.Position)
                 failures.Add("只能选择自身");
             int distance = source.Position.ManhattanDistance(center);
+            if (primary != null && battle.Combat.LampVines.IsHiddenFrom(battle.Combat, source, primary)) failures.Add("目标真实格未公开，请搜查公开灯藤格");
+            if (distance > 1 && LampVineConcealment.Intact(battle.Combat, source.Position) && spell.Rules.Any(r => r.Kind == FireRuleKind.Damage || r.Kind == FireRuleKind.WeaponDamage)) failures.Add("藤内只能攻击正交相邻目标");
             if (distance < spell.MinimumRange && spell.TargetKind != FireTargetKind.Self)
                 failures.Add("目标位于近身死区（需至少 " + spell.MinimumRange + " 格）");
             if (distance > source.EffectiveRange(spell.Range) && spell.TargetKind != FireTargetKind.Self) failures.Add("超出射程");
@@ -709,21 +722,28 @@ namespace OCC.Combat
             bool consumes = spell.Rules.Any(rule => rule.Kind == FireRuleKind.ConsumeBurning || rule.Kind == FireRuleKind.ConsumeFireground);
             GridPosition[] projectedDestroyed = Array.Empty<GridPosition>();
             IReadOnlyDictionary<string, GridPosition> projectedPushes = null;
-            if (failures.Count == 0 && spell.Rules.Any(rule => rule.Kind == FireRuleKind.AdvanceIntoBreach || rule.Kind == FireRuleKind.PushFromDestroyedObjects ||
-                (spell.Shape == FireSelectionShape.FirstHitLine && rule.Kind == FireRuleKind.Push)))
+            IReadOnlyDictionary<GridPosition, int> containerDurability = new Dictionary<GridPosition, int>();
+            LootSourceState container = battle.Combat.LootSource;
+            bool affectsContainer = container != null && container.Tier != BattlefieldChestTier.Fixed && !container.IsDestroyed &&
+                (cells.Contains(container.Position) || spell.Rules.Any(rule => rule.Kind == FireRuleKind.Push) ||
+                 cells.Any(cell => cell.ManhattanDistance(container.Position) == 1 &&
+                     (battle.Combat.Map.GetTile(cell).IsAetherCrystal || battle.Combat.Map.GetTile(cell).IsOverloadDevice)));
+            if (failures.Count == 0 && (affectsContainer || spell.Rules.Any(rule => rule.Kind == FireRuleKind.AdvanceIntoBreach || rule.Kind == FireRuleKind.PushFromDestroyedObjects ||
+                (spell.Shape == FireSelectionShape.FirstHitLine && rule.Kind == FireRuleKind.Push))))
                 ForecastDestructionPush(battle, source, primary, center, target.Direction, spell, cells, units,
-                    out projectedDestroyed, out projectedPushes);
+                    out projectedDestroyed, out projectedPushes, out containerDurability);
             GridPosition[] reactionCells = spell.Shape == FireSelectionShape.FoldedPath
                 ? cells.Where(cell => battle.IsThreatenedByEnemy(source, cell)).ToArray()
                 : Array.Empty<GridPosition>();
             return new FireSpellPreview(spell, failures, cells, units, objects, friendly, consumes,
-                projectedDestroyed, projectedPushes, reactionCells);
+                projectedDestroyed, projectedPushes, reactionCells) { ProjectedContainerDurability = containerDurability };
         }
 
         private static void ForecastDestructionPush(FireBattleState battle, UnitState source, UnitState primary,
             GridPosition center, CardinalDirection direction, FireSpellDefinition spell,
             IReadOnlyList<GridPosition> selectedCells, IReadOnlyList<string> selectedUnits,
-            out GridPosition[] destroyed, out IReadOnlyDictionary<string, GridPosition> pushed)
+            out GridPosition[] destroyed, out IReadOnlyDictionary<string, GridPosition> pushed,
+            out IReadOnlyDictionary<GridPosition, int> containerDurability)
         {
             FireBattleState simulation = battle.Clone();
             UnitState simulatedSource = simulation.Combat.GetUnit(source.Id);
@@ -738,6 +758,9 @@ namespace OCC.Combat
                 ApplyRule(simulation, simulatedSource, simulatedPrimary, center, spell, rule, cells, units,
                     direction, projectedSteps);
             }
+            containerDurability = battle.Combat.Map.PositionsWith(tile => tile.IsDestructibleLoot && tile.Durability > 0)
+                .Where(cell => simulation.Combat.Map.GetTile(cell).Durability < battle.Combat.Map.GetTile(cell).Durability)
+                .ToDictionary(cell => cell, cell => simulation.Combat.Map.GetTile(cell).Durability);
             destroyed = projectedSteps.Where(step => step.Kind == FireRuleKind.DamageDurability &&
                     battle.Combat.Map.GetTile(step.Cell).Durability > 0 && simulation.Combat.Map.GetTile(step.Cell).IsDestroyed)
                 .Select(step => step.Cell).Distinct().ToArray();
@@ -761,8 +784,10 @@ namespace OCC.Combat
             GridPosition center = primary?.Position ?? (spell.TargetKind == FireTargetKind.Self ? source.Position : target.Cell);
             List<FireSpellResultStep> steps = new List<FireSpellResultStep>();
             source.SpendActionPoint(spell.ActionPointCost); Add(steps, spell, FireRuleKind.SpendActionPoints, source.Id, source.Position, spell.ActionPointCost, spell.ActionPointCost, "spend_ap");
-            source.SpendMana(spell.ManaCost); Add(steps, spell, FireRuleKind.SpendMana, source.Id, source.Position, spell.ManaCost, spell.ManaCost, "spend_mana");
-            battle.Combat.RogueEquipment?.OnPersonalSpellPaid(battle.Combat, source.Id, spell.ManaCost);
+            int actualManaCost = Math.Max(0, spell.ManaCost + source.StatusStrength(StatusType.SpellCost));
+            source.SpendMana(actualManaCost); Add(steps, spell, FireRuleKind.SpendMana, source.Id, source.Position, actualManaCost, actualManaCost, "spend_mana");
+            source.ClearStatus(StatusType.SpellCost);
+            battle.Combat.RogueEquipment?.OnPersonalSpellPaid(battle.Combat, source.Id, actualManaCost);
             foreach (FireSpellRule rule in spell.Rules.Where(rule => rule.Timing == FireRuleTiming.OnCast))
             {
                 if (rule.Kind == FireRuleKind.RestoreMovement)
@@ -807,7 +832,7 @@ namespace OCC.Combat
                 throw new InvalidOperationException("可选移动的落点已失效");
             battle.TakeOptionalMove(sourceUnitId, destination);
             GridPosition origin = source.Position;
-            source.MoveTo(destination);
+            battle.Combat.MoveUnit(source, destination);
             battle.Combat.ResolveDisplacementLanding(source, origin);
             CombatEffectExecution pressureReaction = source.IsHero
                 ? battle.Combat.PressureTest?.ResolveHeroMove(battle.Combat, source.Position) : null;
@@ -978,7 +1003,7 @@ namespace OCC.Combat
                 FirePursuitPreview pursuit = PreviewMarkedTargetMove(battle, effect, previousPosition);
                 GridPosition sourceOrigin = source.Position;
                 List<FireSpellResultStep> steps = new List<FireSpellResultStep>();
-                if (pursuit.WillMove) source.MoveTo(pursuit.Destination);
+                if (pursuit.WillMove) battle.Combat.MoveUnit(source, pursuit.Destination);
                 Add(steps, effect.Spell, FireRuleKind.MoveSource, source.Id, pursuit.Destination, 1,
                     pursuit.WillMove ? 1 : 0, pursuit.DetailCode);
                 battle.Combat.AddLog(effect.Spell.DisplayName + "：" + pursuit.Reason);
@@ -1091,7 +1116,7 @@ namespace OCC.Combat
                     GridPosition before = source.Position;
                     if (legal)
                     {
-                        source.MoveTo(destination);
+                        battle.Combat.MoveUnit(source, destination);
                         battle.Combat.ResolveDisplacementLanding(source, before);
                     }
                     Add(steps, effect.Spell, rule.Kind, source.Id, destination, rule.Amount, legal ? before.ManhattanDistance(destination) : 0,
@@ -1572,7 +1597,7 @@ namespace OCC.Combat
                 if (battle.Combat.Map.IsInside(destination) && !battle.Combat.Map.IsBlocked(destination) &&
                     !battle.Combat.IsOccupied(destination, source.Id))
                 {
-                    source.MoveTo(destination);
+                    battle.Combat.MoveUnit(source, destination);
                     battle.Combat.ResolveDisplacementLanding(source, before);
                 }
                 Add(steps, spell, rule.Kind, source.Id, destination, 1, source.Position == destination ? 1 : 0, "cross_behind");
@@ -1609,7 +1634,7 @@ namespace OCC.Combat
                         GridPosition step = track[index];
                         if (battle.Combat.Map.IsBlocked(step) || battle.Combat.IsOccupied(step, source.Id)) break;
                         GridPosition previous = source.Position;
-                        source.MoveTo(step);
+                        battle.Combat.MoveUnit(source, step);
                         battle.Combat.ResolveDisplacementLanding(source, previous);
                     }
                     Add(steps, spell, rule.Kind, source.Id, source.Position, rule.Amount,
@@ -1619,7 +1644,7 @@ namespace OCC.Combat
                 if (destination != before && battle.Combat.Map.IsInside(destination) && !battle.Combat.Map.IsBlocked(destination) &&
                     !battle.Combat.IsOccupied(destination, source.Id))
                 {
-                    source.MoveTo(destination);
+                    battle.Combat.MoveUnit(source, destination);
                     battle.Combat.ResolveDisplacementLanding(source, before);
                 }
                 Add(steps, spell, rule.Kind, source.Id, destination, rule.Amount, source.Position == destination ? 1 : 0, "reposition");
@@ -1690,7 +1715,7 @@ namespace OCC.Combat
                     {
                         GridPosition previous = source.Position;
                         if (!source.IsAlive || battle.Combat.IsOccupied(step, source.Id) || battle.Combat.Map.IsBlocked(step)) break;
-                        source.MoveTo(step);
+                        battle.Combat.MoveUnit(source, step);
                         battle.Combat.ResolveDisplacementLanding(source, previous);
                         Add(steps, spell, rule.Kind, source.Id, step, 1, 1, "folded_step");
                     }
@@ -1724,7 +1749,7 @@ namespace OCC.Combat
                         if (source.Position == destination || !source.IsAlive || battle.Combat.IsOccupied(step, source.Id) ||
                             battle.Combat.Map.IsBlocked(step)) break;
                         GridPosition previous = source.Position;
-                        source.MoveTo(step);
+                        battle.Combat.MoveUnit(source, step);
                         if (recordsCharge) battle.RecordChargeStep(source.Id, step);
                         if (!ignoresFiregroundLanding) battle.Combat.ResolveDisplacementLanding(source, previous);
                     }
@@ -1733,7 +1758,7 @@ namespace OCC.Combat
                 {
                     if (battle.Combat.Map.IsInside(destination) && !battle.Combat.IsOccupied(destination, source.Id) && !battle.Combat.Map.IsBlocked(destination))
                     {
-                        source.MoveTo(destination);
+                        battle.Combat.MoveUnit(source, destination);
                         if (recordsCharge) battle.RecordChargeStep(source.Id, destination);
                     }
                     if (!ignoresFiregroundLanding) battle.Combat.ResolveDisplacementLanding(source, before);
@@ -1752,7 +1777,7 @@ namespace OCC.Combat
                 if (wasObject && breached.Durability <= 0 && before.ManhattanDistance(center) == 1 &&
                     !battle.Combat.Map.IsBlocked(center) && !battle.Combat.IsOccupied(center, source.Id))
                 {
-                    source.MoveTo(center);
+                    battle.Combat.MoveUnit(source, center);
                     battle.Combat.ResolveDisplacementLanding(source, before);
                 }
                 Add(steps, spell, rule.Kind, source.Id, center, 1, source.Position == center ? 1 : 0,
@@ -1762,7 +1787,7 @@ namespace OCC.Combat
             if (rule.Kind == FireRuleKind.SwapUnits && primary != null)
             {
                 GridPosition sourceBefore = source.Position, targetBefore = primary.Position;
-                source.MoveTo(targetBefore); primary.MoveTo(sourceBefore);
+                battle.Combat.MoveUnit(source, targetBefore); battle.Combat.MoveUnit(primary, sourceBefore);
                 battle.Combat.ResolveDisplacementLanding(source, sourceBefore);
                 battle.Combat.ResolveDisplacementLanding(primary, targetBefore);
                 Add(steps, spell, rule.Kind, primary.Id, targetBefore, 1, 1, "swap"); return;
@@ -1950,7 +1975,7 @@ namespace OCC.Combat
         private static bool MatchesObject(TileState tile, FireDestructibleMask mask)
         {
             if (tile == null || tile.Durability <= 0) return false;
-            FireDestructibleMask kind = tile.IsLampVine ? FireDestructibleMask.Plant : tile.IsDevice || tile.IsObjective ? FireDestructibleMask.Device : tile.Cover == CoverType.Light ? FireDestructibleMask.LightCover : tile.Cover == CoverType.Heavy ? FireDestructibleMask.HeavyCover : FireDestructibleMask.None;
+            FireDestructibleMask kind = tile.IsDestructibleLoot ? FireDestructibleMask.Container : tile.IsLampVine ? FireDestructibleMask.Plant : tile.IsDevice || tile.IsObjective ? FireDestructibleMask.Device : tile.Cover == CoverType.Light ? FireDestructibleMask.LightCover : tile.Cover == CoverType.Heavy ? FireDestructibleMask.HeavyCover : FireDestructibleMask.None;
             return kind != FireDestructibleMask.None && (mask & kind) != 0;
         }
 
@@ -1959,3 +1984,4 @@ namespace OCC.Combat
                 spell.DeliveryMode, spell.TriggerWindow, spell.ConsumptionRule));
     }
 }
+

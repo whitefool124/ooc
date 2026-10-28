@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "{\"success\":true,\"message\":\"Console logs (1 entries, filter: error, source: console):\\n[ERROR] FAIL: System.InvalidOperationException: Pointer blocked at (498.69, 506.80) expected=按钮_开始游戏 hit=none\\r\\n      at OCC.Combat.EditorTools.Hd2DCombatReviewAudit+<Pointer>d__27.MoveNext () [0x000b9] in E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Assets\\\\Game\\\\Editor\\\\Hd2DCombatReviewAudit.cs:59 \\n      at OCC.Combat.EditorTools.Hd2DCombatReviewAudit+<Guard>d__24.MoveNext () [0x00067] in E:\\\\数据库\\\\OCC_Codex\\\\UnityProject\\\\Assets\\\\Game\\\\Editor\\\\Hd2DCombatReviewAudit.cs:38 \\n    UnityEngine.Debug:LogError (object)\\n    OCC.Combat.EditorTools.Hd2DCombatReviewAudit/<Guard>d__24:MoveNext () (at Assets/Game/Editor/Hd2DCombatReviewAudit.cs:39)\\n    UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr)\\r\\n\"}"
-    }
-  ]
-}

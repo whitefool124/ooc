@@ -250,6 +250,7 @@ namespace OCC.Combat
             bool rare = nodeType == RogueliteMapNodeType.Elite || nodeType == RogueliteMapNodeType.Treasure || nodeType == RogueliteMapNodeType.Finale;
             RogueliteReward scroll = Rewards.First(reward => reward.Id == ItemCatalog.FirelineScroll.Id);
             ArtifactDefinition artifact = ArtifactRewardPool.Roll(seed, completedCombatCount, nodeType, ownedDefinitionIds);
+            if (artifact == null) return new[] { scroll };
             RogueliteReward artifactReward = Rewards.First(reward => reward.Id == artifact.Id);
             if (!rare) return new[] { artifactReward };
             return new[] { scroll, artifactReward };
@@ -263,9 +264,7 @@ namespace OCC.Combat
             HashSet<string> owned = new HashSet<string>(ownedDefinitionIds ?? Array.Empty<string>(), StringComparer.Ordinal);
             ArtifactDefinition[] eligible = ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id))
                 .Where(artifact => IsPoolEligible(artifact, nodeType) && IsTierEligible(artifact.Rarity, nodeType) && !owned.Contains(artifact.Id)).ToArray();
-            if (eligible.Length == 0) eligible = ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id) && IsPoolEligible(artifact, nodeType) && !owned.Contains(artifact.Id)).ToArray();
-            if (eligible.Length == 0) eligible = ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id) && !owned.Contains(artifact.Id)).ToArray();
-            if (eligible.Length == 0) eligible = ArtifactCatalog.All.Where(artifact => ArtifactCatalog.IsCurrentlyUsable(artifact.Id)).ToArray();
+            if (eligible.Length == 0) return null;
             string key = seed + "|" + progress + "|" + nodeType;
             return eligible.OrderBy(artifact => StableKey(key, artifact.Id)).ThenBy(artifact => artifact.Id, StringComparer.Ordinal).First();
         }
@@ -348,7 +347,7 @@ namespace OCC.Combat
         }
     }
 
-    public sealed class RogueliteMapRun
+    public sealed partial class RogueliteMapRun
     {
         private readonly HashSet<string> visited = new HashSet<string>(StringComparer.Ordinal) { "start" };
         private readonly List<string> routeHistory = new List<string> { "start" };
@@ -494,6 +493,7 @@ namespace OCC.Combat
             return tactical == null ? null : new RogueliteReward(tactical, "战斗奖励");
         }
         public bool IsInAcademyLayerPhase => IsInAcademyLayer;
+        public bool HasGeneratedAcademyMap => generatedAcademyMapNodes.Count > 0;
         public IReadOnlyList<RogueliteMapNode> AcademyLayerNodes => generatedAcademyMapNodes.Count > 0
             ? generatedAcademyMapNodes : RogueliteAcademyLayerCatalog.LayerNodes;
         public IReadOnlyList<RogueliteMapNode> MapNodes => IsTutorialPhase
@@ -525,6 +525,18 @@ namespace OCC.Combat
         public bool HasActiveCombat => !string.IsNullOrEmpty(rogueRunDto?.ActiveCombatNodeId);
         public AcademyResourceReceipt PendingResourceReceipt =>
             string.IsNullOrEmpty(rogueRunDto?.PendingResourceReceipt) ? null : AcademyResourceReceipt.Decode(rogueRunDto.PendingResourceReceipt);
+        public bool UsesLegacyCombatBalance
+        {
+            get
+            {
+                if (!HasActiveCombat) return false;
+                if (rogueRunDto.CombatJournalRows.Count == 0) return true;
+                var first = CombatJournalEntry.Decode(rogueRunDto.CombatJournalRows[0]);
+                if (first.Kind != CombatJournalKind.BalanceVersion) return true;
+                if (first.Payload != CombatJournalEntry.CurrentBalanceVersion) throw new InvalidOperationException("Unknown combat balance version.");
+                return false;
+            }
+        }
         public IReadOnlyList<string> CombatJournalRows => rogueRunDto?.CombatJournalRows ?? (IReadOnlyList<string>)Array.Empty<string>();
 
         public void BeginCombatJournal()
@@ -537,12 +549,30 @@ namespace OCC.Combat
             if (HasActiveCombat) return;
             rogueRunDto.ActiveCombatNodeId = CurrentNodeId;
             rogueRunDto.CombatJournalRows.Clear();
+            rogueRunDto.CombatJournalRows.Add(CombatJournalEntry.BalanceVersion().Encode());
+            BattlefieldChestTier tier = AcademyLootCatalog.PlannedTier(this);
+            if (tier != BattlefieldChestTier.Fixed)
+                RegisterContainer(AcademyLootCatalog.Create(Seed, CurrentNodeId, default, tier));
+        }
+
+        public void RestartCombatJournalPreservingBalance()
+        {
+            if (!HasActiveCombat || IsComplete || AwaitingReward || rogueRunDto.ActiveCombatNodeId != CurrentNodeId)
+                throw new InvalidOperationException("No unresolved battle to restart.");
+            bool legacy = UsesLegacyCombatBalance;
+            rogueRunDto.CombatJournalRows.Clear();
+            if (!legacy) rogueRunDto.CombatJournalRows.Add(CombatJournalEntry.BalanceVersion().Encode());
         }
 
         public void AppendCombatJournal(CombatJournalEntry entry)
         {
             if (!HasActiveCombat || rogueRunDto.ActiveCombatNodeId != CurrentNodeId)
                 throw new InvalidOperationException("Combat journal is not active for this node.");
+            if (entry.Kind == CombatJournalKind.BalanceVersion)
+            {
+                if (rogueRunDto.CombatJournalRows.Count == 1 && rogueRunDto.CombatJournalRows[0] == entry.Encode()) return;
+                throw new InvalidOperationException("Combat balance header must appear once at battle start.");
+            }
             if (rogueRunDto.CombatJournalRows.Count >= 2000)
                 throw new InvalidOperationException("Combat journal has reached its safety limit.");
             rogueRunDto.CombatJournalRows.Add(entry.Encode());
@@ -904,6 +934,7 @@ namespace OCC.Combat
             {
                 UnitState rogueHero = combat.GetUnit("hero");
                 if (rogueHero != null) { CurrentHealth = rogueRunDto.CurrentHealth = rogueHero.Health; CurrentMana = rogueRunDto.CurrentMana = rogueHero.Mana; CurrentShield = 0; HasCombatSnapshot = true; }
+                CaptureContainerReceipts(combat.LootSource);
                 combat.RogueEquipment?.WriteToDto(rogueRunDto);
                 if (combat.LootSource != null)
                 {
@@ -925,6 +956,58 @@ namespace OCC.Combat
             if (loot == null) return;
             if (IsTutorialPhase && FirstRunExperience.LootProgress.TryGetValue(loot.Id, out string firstRunProgress)) loot.RestoreProgress(firstRunProgress);
             else if (lootProgress.TryGetValue(loot.Id, out string progress)) loot.RestoreProgress(progress);
+        }
+
+        public void RegisterContainer(LootSourceState loot)
+        {
+            if (rogueRunDto == null || loot == null || loot.Tier == BattlefieldChestTier.Fixed) return;
+            string key = loot.Id + ":initial";
+            string saved = ContainerRecord(key);
+            if (saved != null) loot.RestoreProgress(saved);
+            else SetContainerRecord(key, loot.ToProgressString());
+        }
+
+        public bool HasContainerSnapshot => ContainerRecord("academy-chest-v1:" + Seed + ":" + CurrentNodeId + ":initial") != null;
+
+        private string ContainerRecord(string key)
+        {
+            string row = rogueRunDto?.BattlefieldContainerRows.FirstOrDefault(value => value.StartsWith(key + "=", StringComparison.Ordinal));
+            return row == null ? null : row.Substring(key.Length + 1);
+        }
+
+        private void SetContainerRecord(string key, string value)
+        {
+            rogueRunDto.BattlefieldContainerRows.RemoveAll(row => row.StartsWith(key + "=", StringComparison.Ordinal));
+            rogueRunDto.BattlefieldContainerRows.Add(key + "=" + value);
+        }
+
+        private void CaptureContainerReceipts(LootSourceState loot)
+        {
+            if (loot == null || loot.Tier == BattlefieldChestTier.Fixed) return;
+            string receiptKey = loot.Id + ":settled";
+            var settled = new HashSet<string>((ContainerRecord(receiptKey) ?? "")
+                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries), StringComparer.Ordinal);
+            foreach (ItemInstance item in loot.TakenItems.Where(item => !settled.Contains(item.InstanceId)))
+            {
+                if (item.DefinitionId == AcademyLootCatalog.GoldBag) rogueRunDto.Gold = checked(rogueRunDto.Gold + 2);
+                else if (item.DefinitionId.StartsWith(AcademyLootCatalog.ManuscriptPrefix, StringComparison.Ordinal))
+                {
+                    string id = item.DefinitionId.Substring(AcademyLootCatalog.ManuscriptPrefix.Length);
+                    if (!rogueRunDto.MasteredSpellIds.Contains(id)) rogueRunDto.MasteredSpellIds.Add(id);
+                }
+                else if (AcademyLootCatalog.IsMaterial(item.DefinitionId))
+                {
+                    string prefix = item.DefinitionId + "=";
+                    string row = rogueRunDto.MaterialStockRows.FirstOrDefault(value => value.StartsWith(prefix, StringComparison.Ordinal));
+                    int count = row == null ? 0 : int.Parse(row.Substring(prefix.Length));
+                    rogueRunDto.MaterialStockRows.RemoveAll(value => value.StartsWith(prefix, StringComparison.Ordinal));
+                    rogueRunDto.MaterialStockRows.Add(prefix + (count + 1));
+                    if (item.DefinitionId.StartsWith("FORGE-", StringComparison.Ordinal)) rogueRunDto.ForgeMaterialCount++;
+                    else rogueRunDto.SpecializationMaterialCount++;
+                }
+                settled.Add(item.InstanceId);
+            }
+            SetContainerRecord(receiptKey, string.Join(",", settled.OrderBy(id => id, StringComparer.Ordinal)));
         }
 
         public bool IsAdjacentToCurrent(string nodeId)
@@ -1001,10 +1084,13 @@ namespace OCC.Combat
             completed.Add(CurrentNodeId);
         }
 #endif
-        public static RogueliteMapRun CreateSubsequentAcademyRun(int seed)
+        public static RogueliteMapRun CreateSubsequentAcademyRun(int seed, bool includeOpeningGift = true)
         {
-            RogueliteMapRun run = new RogueliteMapRun(seed, FireRogueliteStarterCatalog.Universal)
+            // Formal academy rounds use the character's fixed four spells. The generic
+            // Universal prototype also grants two build spells and must not seed a new slot.
+            RogueliteMapRun run = new RogueliteMapRun(seed)
             {
+                StarterId = FireRogueliteStarterCatalog.Universal,
                 IsInAcademyLayer = true,
                 CurrentNodeId = "academy_gate",
                 RegionBossId = "core_overseer",
@@ -1024,12 +1110,17 @@ namespace OCC.Combat
             OCC.Combat.Roguelite.RogueEquipmentRuntime.CreateStarter(seed).WriteToDto(run.rogueRunDto);
             run.rogueRunDto.RunProgramId = RogueliteRunProgram.EvergreenAcademy.ToString();
             run.rogueRunDto.DeparturePending = true;
+            if (includeOpeningGift)
+                run.rogueRunDto.OpeningGift = LampkeeperGiftState.Create(seed,
+                    FireSpellCatalog.All.Where(s => FireSpellCatalog.IsWeaponCompatible(s,
+                        string.IsNullOrEmpty(run.EquippedWeaponId) ? CombatCatalog.Hammer : run.EquippedWeapon))
+                        .Select(s => s.Id).Where(id => !run.rogueRunDto.MasteredSpellIds.Contains(id)));
             run.SyncAcademyLayerProjection();
             return run;
         }
         public void ConfirmAcademyDeparture()
         {
-            if (!IsInAcademyLayer || !DeparturePending || IsComplete)
+            if (!IsInAcademyLayer || !DeparturePending || IsComplete || OpeningGiftPending)
                 throw new InvalidOperationException("There is no academy departure to confirm.");
             OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(rogueRunDto);
             rogueRunDto.DeparturePending = false;
@@ -1930,6 +2021,8 @@ namespace OCC.Combat
             if (!string.IsNullOrEmpty(normalized) && !rogueRunDto.MasteredSpellIds.Contains(normalized)) return false;
             if (!string.IsNullOrEmpty(normalized) && rogueRunDto.EquippedSpellIds.Where((value, index) => index != slot).Contains(normalized)) return false;
             rogueRunDto.EquippedSpellIds[slot] = normalized;
+            rogueEquippedSpellIds[slot] = normalized;
+            if (slot >= 4 && slot - 4 < equippedFireSpells.Length) equippedFireSpells[slot - 4] = normalized;
             return true;
         }
         public void EquipReward(string rewardId)
@@ -2379,11 +2472,9 @@ namespace OCC.Combat
                 case AcademyBattleRewardCatalog.SpecEfficient:
                     GrantAcademyMaterial(resourceId, 1); break;
                 case AcademyBattleRewardCatalog.ForgePair:
-                    GrantAcademyMaterial(AcademyBattleRewardCatalog.ForgeLoad, 1);
-                    GrantAcademyMaterial(AcademyBattleRewardCatalog.ForgeCircuit, 1); break;
+                    GrantAcademyMaterial(AcademyBattleRewardCatalog.ForgeLoad, 2); break;
                 case AcademyBattleRewardCatalog.SpecPair:
-                    GrantAcademyMaterial(AcademyBattleRewardCatalog.SpecAmplify, 1);
-                    GrantAcademyMaterial(AcademyBattleRewardCatalog.SpecEfficient, 1); break;
+                    GrantAcademyMaterial(AcademyBattleRewardCatalog.SpecAmplify, 2); break;
                 case AcademyBattleRewardCatalog.MixedPair:
                     GrantAcademyMaterial(AcademyBattleRewardCatalog.ForgeLoad, 1);
                     GrantAcademyMaterial(AcademyBattleRewardCatalog.SpecAmplify, 1); break;
@@ -2876,13 +2967,15 @@ namespace OCC.Combat
             if (rogueRunDto != null)
             {
                 int forgeManaBonus = OCC.Combat.Roguelite.RogueEquipmentRuntime.FromDto(rogueRunDto).ForgeManaCapacityBonus;
-                hero.ConfigureMana(12 + forgeManaBonus+(ActiveMealId=="MEAL-AETHER"?2:0),ActiveMealId=="MEAL-AETHER"?-1:rogueRunDto.CurrentMana);
+                // Existing legacy journals replay from their saved entry mana; new battles always refill.
+                int entryMana = HasActiveCombat && UsesLegacyCombatBalance ? rogueRunDto.CurrentMana : -1;
+                hero.ConfigureMana(12 + forgeManaBonus+(ActiveMealId=="MEAL-AETHER"?2:0), entryMana);
                 hero.ConfigureVitality(RogueHealthCapacity);
                 int health=Math.Min(RogueHealthCapacity,rogueRunDto.CurrentHealth+(ActiveMealId=="MEAL-VITAL"?4:0));
                 if (hero.Health > health) hero.TakeDamage(hero.Health - health);
                 hero.ClearShield();if(ActiveMealId=="MEAL-GUARD")hero.GrantShield(6);return;
             }
-            hero.ConfigureMana(12, HasCombatSnapshot ? CurrentMana : 12);
+            hero.ConfigureMana(12);
             if (!string.IsNullOrEmpty(EquippedWeaponId)) hero.Equip(RogueliteMapCatalog.Rewards.First(item => item.Id == EquippedWeaponId).Weapon, CombatCatalog.Shield, hero.SkillOne, hero.SkillTwo);
             if (!string.IsNullOrEmpty(EquippedSpellId)) hero.Equip(hero.MainHand, CombatCatalog.Shield, RogueliteMapCatalog.Rewards.First(item => item.Id == EquippedSpellId).Spell, hero.SkillTwo);
             if (HasCombatSnapshot)

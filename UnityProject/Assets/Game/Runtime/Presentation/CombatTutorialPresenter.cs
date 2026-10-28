@@ -33,12 +33,12 @@ namespace OCC.Combat.Presentation
         {
             var run = host == null ? null : host.CurrentMapRun;
             bool eligible = opening != null && !opening.enabled && opening.CombatTutorialEnabled &&
-                run?.IsTutorialPhase == true && run.CurrentNodeId == "B1" && host.IsDeveloperCombatActive &&
+                run != null && AcademyTutorialStore.Load().enabled && host.IsDeveloperCombatActive &&
                 !host.IsCombatEntryBlocking && !host.IsCombatActionPlaying;
             if (!eligible) { Hide(); return; }
             var state = host.CurrentState;
             if (state == null || state.IsVictory || state.IsDefeat) { Hide(); return; }
-            progress = run.FirstRunExperience;
+            progress = AcademyTutorialStore.LegacyProgress(run.FirstRunExperience);
             if (!string.IsNullOrEmpty(activeId)) return;
             if (host.IsInteractionModalOpen) return;
             string id = progress.PendingTutorialId;
@@ -72,23 +72,23 @@ namespace OCC.Combat.Presentation
             progress.CompletedTutorialIds.Add(activeId);
             progress.PendingTutorialId = string.Empty;
             progress.TutorialActionReady = false;
+            AcademyTutorialStore.SaveLegacy();
             Hide();
         }
 
-        // Cancelling a preview completes B1-05; cancelling movement never substitutes for moving.
+        // Cancelling is free, but does not count as having submitted an action.
         public bool CancelOperation()
         {
             if (string.IsNullOrEmpty(activeId)) return false;
             if (!waiting) return true;
             string id = activeId;
-            if (id == "B1-05" && !Complete()) return true;
-            if (id == "B1-04")
+            if (id == "B1-04" || id == "B1-05")
             {
                 progress.PendingTutorialId = string.Empty;
                 progress.TutorialActionReady = false;
                 if (!host.SaveCombatTutorialProgress())
                 { progress.PendingTutorialId = id; progress.TutorialActionReady = true; return true; }
-                moveDeferred = true;
+                moveDeferred = id == "B1-04";
                 Hide();
             }
             // The teaching button cancels an action, including the default move mode; it never requests abandonment.
@@ -111,6 +111,8 @@ namespace OCC.Combat.Presentation
         private bool Complete()
         {
             string id = activeId;
+            if (id == "B1-01" && !string.IsNullOrWhiteSpace(host.CombatObjectiveSummary))
+                host.GetComponent<AcademyTutorialPresenter>()?.Evidence("C01", "objective-view");
             progress.CompletedTutorialIds.Add(id);
             progress.PendingTutorialId = string.Empty;
             progress.TutorialActionReady = false;
@@ -162,14 +164,14 @@ namespace OCC.Combat.Presentation
             int number = int.Parse(activeId.Substring(3));
             string[] titles = { "认识战场", "敌人的公开意图", "你的行动点", "试着完成一次移动", "检查行动预览", "轮到敌人行动" };
             string[] instructions = {
-                "本场目标：击倒两名敌人。\n\n亮框内是战场。右侧显示人物与行动序列；底部是术式和结束回合。",
-                "已为你展开一名敌人的详情。公开意图对应它的一个完整回合；先看目标与结果，再决定站位。",
+                "本场目标：" + host.CombatObjectiveSummary + "\n底部选择动作或结束回合。",
+                "这是敌人的公开意图。\n查看目标与预计结果；战场变化后预览会更新。",
                 "亮框内是当前行动点。资源允许时，你可以连续移动或施法；结束回合会清空剩余行动点。",
                 "双击亮起的可达格，完成一次移动。先看路径与费用；只有成功移动才会完成此步骤。",
-                "先查看目标、费用与结果。确认后提交合法动作，也可以取消预览。",
+                "查看目标、费用与结果，再提交一次合法动作。取消预览不会消耗。",
                 "亮框内的行动序列会显示轮到谁。敌人执行公开意图后结束回合；点击继续后再播放它的行动。"
             };
-            title.text = "首战教学　" + number + " / 6\n" + titles[number - 1];
+            title.text = "首战教学　第" + number + "步　共6步\n" + titles[number - 1];
             body.text = instructions[number - 1];
             if (activeId == "B1-03") body.text += "\n\n当前行动点：" + host.CurrentState.GetUnit("hero").ActionPoints;
             if (activeId == "B1-02")

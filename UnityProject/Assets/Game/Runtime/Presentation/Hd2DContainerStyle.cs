@@ -17,11 +17,14 @@ namespace OCC.Combat.Presentation
         {
             foreach(var button in page.GetComponentsInChildren<Button>(true))
             {
+                // Map markers already have state-specific art and remain in the
+                // chart's ordered Canvas layer, rather than becoming paper buttons.
+                if(button.GetComponent<OccMapNodeDetails>()!=null||button.name.StartsWith("货架商品_"))continue;
                 var image=button.targetGraphic as Image;
                 if(image==null)continue;
                 Tray(image);
                 foreach(var skin in button.GetComponentsInChildren<Image>(true))
-                    if(skin.name=="正式皮肤")skin.color=Color.clear;
+                    if(skin.name=="正式皮肤"&&skin.transform.parent==button.transform)skin.color=Color.clear;
                 var colors=button.colors;
                 colors.normalColor=Color.white;
                 colors.highlightedColor=new Color(1f,.97f,.9f);

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using System.Text;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using OCC.Combat.Roguelite;
 
 namespace OCC.Combat
 {
-    public enum CombatJournalKind { Command, EndEnemyTurn, PresentationTurnStart, Equipment, Artifact, OptionalMove }
+    public enum CombatJournalKind { Command, EndEnemyTurn, PresentationTurnStart, Equipment, Artifact, OptionalMove, BalanceVersion }
 
     /// <summary>A completed, deterministic combat transition. Rejected commands are never recorded.</summary>
     public readonly struct CombatJournalEntry
@@ -18,6 +18,9 @@ namespace OCC.Combat
 
         private CombatJournalEntry(CombatJournalKind kind, CombatCommand command, string payload = "")
         { Kind = kind; Command = command; Payload = payload ?? string.Empty; }
+
+        public const string CurrentBalanceVersion = "academy-basics-20261021";
+        public static CombatJournalEntry BalanceVersion() => new CombatJournalEntry(CombatJournalKind.BalanceVersion, CombatCommand.EndTurn("hero"), CurrentBalanceVersion);
 
         public static CombatJournalEntry Accepted(CombatCommand command) =>
             new CombatJournalEntry(CombatJournalKind.Command, command);
@@ -77,6 +80,8 @@ namespace OCC.Combat
             string payload = fields.Length == 10 ? UntText(fields[9]) : string.Empty;
             if ((kind == CombatJournalKind.Equipment || kind == CombatJournalKind.Artifact) && string.IsNullOrEmpty(payload))
                 throw new InvalidOperationException("Missing combat journal payload.");
+            if (kind == CombatJournalKind.BalanceVersion && (payload != CurrentBalanceVersion || command.UnitId != "hero"))
+                throw new InvalidOperationException("Unsupported combat balance version.");
             return new CombatJournalEntry(kind, command, payload);
         }
 
@@ -106,9 +111,16 @@ namespace OCC.Combat
             FireBattleState fireBattle = new FireBattleState(state);
             ArtifactBattleState artifactBattle = null;
             string observedUnitId = null;
+            int rowIndex = 0;
             foreach (string row in rows)
             {
                 CombatJournalEntry entry = CombatJournalEntry.Decode(row);
+                if (entry.Kind == CombatJournalKind.BalanceVersion)
+                {
+                    if (rowIndex++ != 0 || entry.Payload != CombatJournalEntry.CurrentBalanceVersion) throw new InvalidOperationException("Unsupported combat balance journal header.");
+                    continue;
+                }
+                rowIndex++;
                 CombatCommand command = entry.Command;
                 UnitState unit = state.GetUnit(command.UnitId);
                 if (unit == null || state.ActiveUnitId != unit.Id || state.IsVictory || state.IsDefeat)

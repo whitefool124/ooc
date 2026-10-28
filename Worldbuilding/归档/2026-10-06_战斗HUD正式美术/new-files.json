@@ -1,9 +1,0 @@
-[
-  "UnityProject/Assets/Game/Runtime/Presentation/CombatPortraitCardView.cs",
-  "UnityProject/Assets/Game/Runtime/Presentation/CombatHudPortraitAssets.cs",
-  "UnityProject/Assets/Game/Editor/CombatPortraitHudAuthoring.cs",
-  "UnityProject/Assets/Game/Resources/UI/Prefabs/FormalCombatPortraitCard.prefab",
-  "UnityProject/Assets/Game/Resources/Art/CombatHudPortraits64/hero.png",
-  "UnityProject/Assets/Game/Resources/Art/CombatHudPortraits64/tether_hound.png",
-  "UnityProject/Assets/Game/Resources/Art/CombatHudChrome/portrait_frame.png"
-]

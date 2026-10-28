@@ -124,7 +124,7 @@ namespace OCC.Combat.Tests
         public void RandomRewardEnvelope_OpeningAndChoiceSurviveSaveWithoutGrantingEarly()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
             RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
             int gold = run.Gold;
@@ -149,7 +149,7 @@ namespace OCC.Combat.Tests
         public void EliteReward_HasFixedMaterialAndOneIndependentSeededDrop()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             run.SelectNode("dorm_watch");
             run.CompleteCurrentCombat();
             run.AbandonCurrentReward();
@@ -183,7 +183,7 @@ namespace OCC.Combat.Tests
         public void BossRewardChoice_PersistsUntilRoundSettlement()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
             int forgeBeforeBoss = run.ForgeMaterialCount;
             int specBeforeBoss = run.SpecializationMaterialCount;
@@ -223,7 +223,7 @@ namespace OCC.Combat.Tests
         public void LootScreen_ClaimsFixedRowsSeparatelyAndForfeitsOnlyTheRemainderOnLeave()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
             RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
             int goldBefore = run.Gold;
@@ -256,7 +256,7 @@ namespace OCC.Combat.Tests
         public void LootScreen_BossChoiceIsCollectedBeforeLeaving()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
             RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
             string choiceId = run.CurrentRewards[1].Id;
@@ -317,7 +317,7 @@ namespace OCC.Combat.Tests
         public void BossEquipmentReward_CanBeDismantledIntoSavedForgeMaterial()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4308);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
             RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
             RogueliteReward equipment = run.CurrentRewards.Single(value => value.Kind == RogueliteRewardKind.Equipment);
@@ -338,7 +338,7 @@ namespace OCC.Combat.Tests
         public void BossSpellChoice_DoesNotRequireExtraMaterialSpace()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4314);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
             RogueEquipmentRuntime inventory = RogueEquipmentRuntime.FromDto(run.RogueRunState);
             int fill = 0;
@@ -385,7 +385,7 @@ namespace OCC.Combat.Tests
 
             RogueliteMapRun restored = saves.TryStart(true, FireRogueliteStarterCatalog.Universal, 0).Run;
             Assert.That(restored.DeparturePending, Is.True);
-            restored.ConfirmAcademyDeparture();
+            ConfirmDeparture(restored);
             Assert.That(saves.Save(restored), Is.True, gateway.LastError);
             RogueliteMapRun departed = saves.TryStart(true, FireRogueliteStarterCatalog.Universal, 0).Run;
             Assert.That(departed.DeparturePending, Is.False);
@@ -418,7 +418,7 @@ namespace OCC.Combat.Tests
         public void SubsequentRound_CanFinishAndCreateAnotherRoundWithoutTutorial()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
             Assert.That(RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run).RoundSettled, Is.True);
             Assert.That(run.RunEndReason, Is.EqualTo("victory"));
@@ -438,7 +438,7 @@ namespace OCC.Combat.Tests
         public void SubsequentShop_PreservesSoldOffersAcrossSaveAndReturn()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4310);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             TravelToService(run, "layer_shop");
             run.PurchaseFirstRunOffer("LAYER-SHOP-WEDGE");
             MemoryStore store = new MemoryStore();
@@ -459,9 +459,13 @@ namespace OCC.Combat.Tests
         public void SubsequentMedical_PreservesItsSeparateServiceLimits()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4311);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             TravelToService(run, "layer_medical");
-            run.ChooseFirstRunMeal("MEAL-POWER");
+            // Normal academy meals are seeded, not the old fixed tutorial menu.
+            string mealId = run.CurrentMedicalService.MealCandidateIds.First();
+            run.RogueRunState.StageContribution = 1;
+            run.RogueRunState.AcademyFoodCount = 1;
+            run.ChooseFirstRunMeal(mealId);
             MemoryStore store = new MemoryStore();
             RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
             RogueliteMapSaveCoordinator saves = new RogueliteMapSaveCoordinator(gateway);
@@ -470,15 +474,15 @@ namespace OCC.Combat.Tests
             RogueliteMapRun restored = saves.TryStart(true, FireRogueliteStarterCatalog.Universal, 0).Run;
             Assert.That(restored.CurrentMedicalService.HealthCheckCompleted, Is.False);
             Assert.That(restored.CurrentMedicalService.MealUsed, Is.True);
-            Assert.That(restored.CurrentMedicalService.SelectedMealId, Is.EqualTo("MEAL-POWER"));
-            Assert.Throws<InvalidOperationException>(() => restored.ChooseFirstRunMeal("MEAL-POWER"));
+            Assert.That(restored.CurrentMedicalService.SelectedMealId, Is.EqualTo(mealId));
+            Assert.Throws<InvalidOperationException>(() => restored.ChooseFirstRunMeal(mealId));
         }
 
         [Test]
         public void SubsequentWorkshop_PreservesBothCompletedOperations()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4312);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             run.RogueRunState.ForgeMaterialCount = 1;
             run.RogueRunState.SpecializationMaterialCount = 1;
             Assert.That(run.RogueRunState.EquipmentInstances, Is.Not.Empty);
@@ -504,7 +508,7 @@ namespace OCC.Combat.Tests
         public void SubsequentWorkshop_PreservesCircuitAndEfficientMaterialIdentity()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4313);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             Assert.That(run.RogueRunState.EquipmentInstances, Is.Not.Empty);
             run.RogueRunState.ForgeMaterialCount = 1;
             run.RogueRunState.SpecializationMaterialCount = 1;
@@ -530,7 +534,7 @@ namespace OCC.Combat.Tests
         public void AcademyMaterialDiscard_FreesBackpackCellAndPersists()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4315);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             run.RogueRunState.ForgeMaterialCount = 1;
             run.RogueRunState.MaterialStockRows.Add(AcademyBattleRewardCatalog.ForgeCircuit + "=1");
             RogueEquipmentRuntime before = RogueEquipmentRuntime.FromDto(run.RogueRunState);
@@ -1211,6 +1215,13 @@ namespace OCC.Combat.Tests
             Assert.That(restored.CompletedNodes, Does.Not.Contain("core_approach"));
             Assert.That(RogueliteMapRunValidator.Validate(restored).IsValid, Is.True,
                 RogueliteMapRunValidator.Validate(restored).Summary);
+        }
+
+        private static void ConfirmDeparture(RogueliteMapRun run)
+        {
+            if (run.OpeningGiftPending)
+                run.ChooseOpeningGift(run.OpeningGift.CandidateIds.First(id => id != "LK-05" && id != "LK-06"));
+            run.ConfirmAcademyDeparture();
         }
 
         private sealed class MemoryStore : IRogueliteSaveStore

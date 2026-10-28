@@ -1,4 +1,0 @@
-hero=(2, 3) AP=2 modal=False action=移动 ripples=0
-water=(2, 3) reachable=False
-water=(3, 3) reachable=True
-water=(4, 3) reachable=False

@@ -1,0 +1,67 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "asset_id": "lampkeeper-LK-04",
+  "status": "QA_PENDING",
+  "role": "hd2d_library_display",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent built-in image generation; blue-gold academy lamp pixel/material reference; noncombat gift display object",
+    "source_path": "ArtSource/Lampkeeper_20261021/raw/LK-04.png",
+    "source_sha256": "59168227bcb1b7c6dadcf0c3607e11af8e01714add7bb1718666a7ca89ed2de0"
+  },
+  "delivery": {
+    "output_path": "ArtSource/Lampkeeper_20261021/delivery/LK-04.png",
+    "output_sha256": "eddac4bc8c3b39258fa5424a65d31152549a7967403ee3cf2adc42a66bca9fb8",
+    "logical_cells": null,
+    "palette_max": 1000000
+  },
+  "application": {
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "keeper 256x384 / gift 256x256 at 1920 reference; all images 4x native delivery texels",
+    "pixel_density_reference": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/lamp.png"
+  },
+  "evidence": {
+    "one_x": "ArtSource/Lampkeeper_20261021/evidence/LK-04/1x.png",
+    "four_x": "ArtSource/Lampkeeper_20261021/evidence/LK-04/4x.png",
+    "grayscale": "ArtSource/Lampkeeper_20261021/evidence/LK-04/grayscale.png",
+    "checker": "ArtSource/Lampkeeper_20261021/evidence/LK-04/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-21_守灯人赠礼实现/ui/art-seed-1-1920.png",
+    "application_contact_960": "Worldbuilding/归档/2026-10-21_守灯人赠礼实现/ui/art-seed-1-960.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "reviewer": "",
+    "date": "",
+    "notes": "Candidate generation and agent visual inspection do not establish genuine human aesthetic approval."
+  },
+  "unity_import": {
+    "asset_path": "UnityProject/Assets/Game/Resources/Art/Lampkeeper/LK-04.png",
+    "guid": "22f11b0f6e88b444b9e3a4d3cbd9945f",
+    "pixels_per_unit": 32,
+    "filter": "Point",
+    "compression": "Uncompressed",
+    "mipmaps": false,
+    "status": "Imported candidate; no formal promotion",
+    "prefab": "UnityProject/Assets/Game/Resources/UI/HD2D/lampkeeper.prefab"
+  },
+  "placement_semantics": {
+    "application_scope": "runtime_layout",
+    "mount_type": "tabletop",
+    "logical_cell": null,
+    "native_anchor": [
+      32,
+      50
+    ],
+    "visible_contact_line": {
+      "axis": "y",
+      "native_px": 50
+    },
+    "depth_sort_baseline": 50,
+    "allowed_occlusion_direction": "clipped only by parent card, never by labels or buttons",
+    "screen_axis": "horizontal_vertical_locked",
+    "support_asset": "Assets/Game/Resources/UI/HD2D/lampkeeper.prefab",
+    "notes": "Printed illustration on paper; native subject baseline is not battlefield collision. All art uses 4x delivery texels; authored cluster consistency still pending genuine review."
+  },
+  "contract_version": 1
+}

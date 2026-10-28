@@ -1,7 +1,0 @@
-按钮_餐食_MEAL-AETHER hit=按钮_餐食_MEAL-AETHER
-按钮_餐食_MEAL-AETHER hit=按钮_餐食_MEAL-AETHER
-按钮_返回地图 hit=按钮_返回地图
-按钮_餐食_MEAL-AETHER hit=按钮_餐食_MEAL-AETHER
-按钮_返回地图 hit=按钮_返回地图
-按钮_餐食_MEAL-AETHER hit=按钮_餐食_MEAL-AETHER
-按钮_返回地图 hit=按钮_返回地图

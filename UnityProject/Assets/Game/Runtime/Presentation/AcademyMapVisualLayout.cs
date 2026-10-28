@@ -60,6 +60,21 @@ namespace OCC.Combat.Presentation
             return source;
         }
 
+        public static Vector2 SourcePositionFor(RogueliteMapRun run, RogueliteMapNode node)
+        {
+            bool continuation = run != null && run.IsInAcademyLayer && run.IsFirstRunExperience;
+            if (run == null || !run.IsInAcademyLayer || !run.HasGeneratedAcademyMap)
+                return SourcePositionFor(node, continuation);
+            if (node == null) throw new ArgumentNullException(nameof(node));
+            // Generated coordinates are region/row pairs, not the legacy 8x5 atlas.
+            // Fit every saved row without dropping nodes or changing graph authority.
+            if (node.GridX < 0 || node.GridX > 6 || node.GridY < 0 || node.GridY > 8)
+                throw new ArgumentOutOfRangeException(nameof(node), "Invalid generated academy coordinate.");
+            int lastRow = Math.Max(4, run.AcademyLayerNodes.Where(n => n.GridX == node.GridX).Max(n => n.GridY));
+            return new Vector2(68f + 200f * node.GridX + (continuation ? AcademyLayerSourceOffsetX : 0f),
+                64f + 736f * node.GridY / lastRow);
+        }
+
         public static Vector2 LogicalPositionFor(RogueliteMapNode node)
         {
             Vector2 source = AnchorFor(node).SourcePosition;

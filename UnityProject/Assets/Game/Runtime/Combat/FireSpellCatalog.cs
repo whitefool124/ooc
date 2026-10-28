@@ -39,7 +39,7 @@ namespace OCC.Combat
     }
     public enum FireSourceConsumption { None, BurningFirstThenGround, BurningOnly, GroundOnly, BurningAndGround }
     [Flags]
-    public enum FireDestructibleMask { None = 0, LightCover = 1, HeavyCover = 2, Device = 4, Plant = 8, All = LightCover | HeavyCover | Device | Plant }
+    public enum FireDestructibleMask { None = 0, LightCover = 1, HeavyCover = 2, Device = 4, Plant = 8, Container = 16, All = LightCover | HeavyCover | Device | Plant | Container }
 
     public readonly struct FireSpellRule
     {

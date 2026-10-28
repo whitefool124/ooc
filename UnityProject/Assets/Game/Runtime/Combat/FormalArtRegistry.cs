@@ -93,6 +93,8 @@ namespace OCC.Combat
             new FormalArtEntry("feedback.damage", "damage", "Art/FormalFeedbackIcons32/damage"),
             new FormalArtEntry("feedback.shield_absorb", "shield_absorb", "Art/FormalFeedbackIcons32/shield_absorb"),
             new FormalArtEntry("feedback.armor_break", "armor_break", "Art/FormalFeedbackIcons32/armor_break"),
+            new FormalArtEntry("feedback.break_stance", "break_stance", "Art/FormalFeedbackIcons32/armor_break"),
+            new FormalArtEntry("feedback.attribute", "attribute", "Art/FormalResourceIcons32/notice"),
             new FormalArtEntry("feedback.burning", "burning", "Art/FormalFeedbackIcons32/burning"),
             new FormalArtEntry("feedback.bound", "bound", "Art/FormalFeedbackIcons32/bound"),
             new FormalArtEntry("feedback.slow", "slow", "Art/FormalFeedbackIcons32/slow"),

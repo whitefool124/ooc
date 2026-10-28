@@ -1,1 +1,0 @@
-PASS: GraphicRaycaster hit paper -> parent new archive button; actual Input System hover, left press/release entered SaveSelection; actual return click returned Landing; no slot chosen or save written.

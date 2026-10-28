@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"{\\\"status\\\":\\\"PASS:click:离开战利品\\\",\\\"node\\\":\\\"B2\\\",\\\"map\\\":true,\\\"saved\\\":true,\\\"rewardB2\\\":\\\"F-P-U04\\\",\\\"lights\\\":0}\",\"compiler\":\"Roslyn\"}}"
-    }
-  ]
-}

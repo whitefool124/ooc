@@ -1,5 +1,0 @@
-工坊卡_ACA-EQ-CH01 hit=工坊卡_ACA-EQ-CH01
-按钮_确认安装 hit=按钮_确认安装
-按钮_返回地图 hit=按钮_返回地图
-页签_术式专精 hit=页签_术式专精
-工坊卡_BASE-FIRE-RANGED hit=工坊卡_BASE-FIRE-RANGED

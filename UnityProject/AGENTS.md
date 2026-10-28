@@ -68,3 +68,7 @@ This section is managed by Funplay MCP for Unity. Everything between the begin a
 ## OCC HD-2D 品质入口
 
 涉及场景表现、相机、材质、Shader、光照或后处理时，读取仓库根目录 `.codex/skills/occ-hd2d-quality/SKILL.md`，遵循总案A.2.4及根AGENTS的品质门槛。源Point采样与高清输出分开；旧像素守卫不得全局覆盖HD-2D相机HDR。共享改动验证书桌与战斗；配置或源文件变化使受影响旧证据失效。未完成真正样板批准时保持QA_PENDING。纯规范维护不启动Editor。
+
+## 产品正式命名（2026-10-23 用户确认）
+
+产品名为《以太》，Windows 启动文件为 `以太.exe`。托管区 `My project` 是旧生成记录；以 PlayerSettings 当前产品名为准。OCC 命名空间、主工作树及既有存档键保留兼容；旧产品名的玩家数据只读导入，已有新版键优先，不删除旧数据。

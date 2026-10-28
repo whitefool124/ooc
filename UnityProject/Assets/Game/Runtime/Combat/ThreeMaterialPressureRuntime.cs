@@ -54,6 +54,10 @@ namespace OCC.Combat
             for (int index = 1; index < path.Count; index++)
             {
                 GridPosition cell = path[index];
+                TileState tile = state.Map.GetTile(cell);
+                bool blocked = state.Map.IsBlocked(cell);
+                if (!tile.IsPermanentWall && tile.Durability > 0)
+                    CombatEffectExecutor.Execute(state, ram.Id, CombatEffect.DamageObject(cell, 8));
                 UnitState collided = state.Units.Values.FirstOrDefault(value => value.IsAlive && value.Id != ram.Id && value.Position == cell);
                 if (collided != null)
                 {
@@ -62,21 +66,17 @@ namespace OCC.Combat
                     state.AddLog("楔角冲压命中" + collided.DisplayName + "，造成 8 点物理伤害并尝试推离。 ");
                     break;
                 }
-                TileState tile = state.Map.GetTile(cell);
-                if (state.Map.IsBlocked(cell))
+                if (blocked)
                 {
                     if (tile.IsPermanentWall)
                     {
                         state.AddLog("楔角撞上 " + Cell(cell) + " 的永久墙体，冲压中止。 ");
                         break;
                     }
-                    int before = tile.Durability;
-                    tile.Durability = Math.Max(0, tile.Durability - 8);
-                    state.ResolveAetherCrystalDamage(cell, before);
                     state.AddLog("楔角撞击 " + Cell(cell) + " 的物块，造成 8 点耐久伤害。 ");
                     break;
                 }
-                ram.MoveTo(cell);
+                state.MoveUnit(ram, cell);
                 final = cell;
             }
             chargeCooldown = 2;
@@ -149,6 +149,7 @@ namespace OCC.Combat
             target.AbsorbShield(damage.ShieldAbsorbed);
             state.RecordRogueliteShieldAbsorption(target.Id, source, damage.ShieldAbsorbed);
             target.TakeDamage(damage.HealthDamage);
+            state.LampVines.Reveal(target.Id);
         }
 
         private static void TryPush(CombatState state, UnitState target, GridPosition previous, GridPosition collision)

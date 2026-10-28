@@ -1,1 +1,0 @@
-Assets/Game/Resources/Art/FormalMedicalDetails/hot_drink.png GUID=a4218bd00f8ade9498af106aa0b13658

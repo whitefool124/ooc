@@ -1,3 +1,0 @@
-{
-  "error": "System.InvalidOperationException: No actual encounter contains requested profile Prism\r\n  at OCC.Combat.EditorTools.Hd2DContinuousBattleCapture.Tick () [0x00317] in E:\\数据库\\OCC_Codex\\UnityProject\\Assets\\Game\\Editor\\Hd2DContinuousBattleCapture.cs:86 "
-}

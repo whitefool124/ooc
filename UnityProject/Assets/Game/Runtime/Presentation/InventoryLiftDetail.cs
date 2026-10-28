@@ -40,7 +40,8 @@ namespace OCC.Combat.Presentation
             var rect=(RectTransform)transform.parent;
             float available=Mathf.Min(rect.rect.width,rect.rect.height)-10;
             int size=FormalUiKit.IntegerSpriteSize(icon.sprite,available);
-            icon.rectTransform.sizeDelta=shadow.rectTransform.sizeDelta=Vector2.one*size;
+            icon.rectTransform.sizeDelta=shadow.rectTransform.sizeDelta=rect.name=="战外背包拖拽预览"
+                ?icon.sprite.rect.size*2:Vector2.one*size;
             icon.rectTransform.localEulerAngles=shadow.rectTransform.localEulerAngles=rotated?new Vector3(0,0,-90):Vector3.zero;
             Sample();
         }

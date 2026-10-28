@@ -144,6 +144,8 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<string, Sprite> semanticIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite[]> vfxFrames = new Dictionary<string, Sprite[]>();
         private readonly CombatVfxPlayback vfxPlayback = new CombatVfxPlayback();
+        private CombatWorldParticles worldParticles;
+        private readonly List<GridPosition> particleFireground = new List<GridPosition>();
         private readonly Dictionary<CombatVfxSlot, Image> activeVfx = new Dictionary<CombatVfxSlot, Image>();
         private readonly Dictionary<CombatVfxSlot, CombatPixelVfxGraphic> pixelVfx = new Dictionary<CombatVfxSlot, CombatPixelVfxGraphic>();
         private readonly HashSet<CombatVfxSlot> visibleVfx = new HashSet<CombatVfxSlot>();
@@ -160,6 +162,7 @@ namespace OCC.Combat.Presentation
         private string activeUnitId;
         private string focusedEnemyId;
         private GameObject enemyActionBanner;
+        private GameObject retiringTurnBanner;
         private int damagePopupSerial;
         private static readonly Vector2 FloatingTextSize = new Vector2(240f, 48f);
         private static readonly Vector2 DamageTextSize = new Vector2(168f, 104f);
@@ -326,75 +329,51 @@ namespace OCC.Combat.Presentation
             if ((bootstrap?.UiPreferences.AnimationIntensity ?? 1f) > .01f)
                 PulseCell(enemy.Position, new Color(.98f, .42f, .28f), .62f);
 
-            ShowTurnBanner("敌方行动　" + enemy.DisplayName, intent?.CompactText ?? "正在行动", FormalUiTheme.Danger, visibleSeconds);
+            ShowTurnBanner("敌方行动", enemy.DisplayName+"\n"+(intent?.CompactText ?? "正在行动"), FormalUiTheme.Danger, visibleSeconds);
         }
 
         public void BeginHeroAction(UnitState hero, int turnSequence)
         {
             if (hero == null) return;
             CancelEnemyAction();
-            ShowTurnBanner("你的行动　第 " + turnSequence + " 回合", hero.ActionPoints + " 行动点　" + hero.Mana + " 个人魔力", FormalUiTheme.Cyan, .92f);
+            ShowTurnBanner("你的行动", "第 " + turnSequence + " 回合", FormalUiTheme.Cyan, 1.8f, hero);
         }
 
-        // The turn banner rides under the header and to the right of the docked mission goal, so
-        // it never tucks behind the header strip or collides with the goal card. Values are
-        // screen-space in the 1920x1080 reference canvas.
-        private const float TurnBannerLeft = 512f;
-        private const float TurnBannerTop = 80f;
-        private const float TurnBannerWidth = 320f;
+        // A transient central ribbon is presentation only; it never advances a turn.
+        private const float TurnBannerWidth = 720f;
         private const float TurnBannerHeight = 112f;
-
-        // Both factions use this one banner lifecycle. The enemy-only method above merely adds
-        // intent focus before it enters the shared visual path.
-        private void ShowTurnBanner(string title, string detail, Color accent, float visibleSeconds)
+        private void ShowTurnBanner(string title, string detail, Color accent, float visibleSeconds, UnitState hero = null)
         {
             EnsureCanvas();
-            // Anchored top-centre so the scale-in grows from the middle, then offset to the
-            // intended left edge.
-            float centerOffsetX = TurnBannerLeft + TurnBannerWidth * .5f - UiLayoutContract.ReferenceWidth * .5f;
-            enemyActionBanner = FormalUiKit.AnchoredPanel("回合行动提示", canvas.transform,
-                new Vector2(.5f, 1f), new Vector2(.5f, 1f), new Vector2(centerOffsetX, -TurnBannerTop),
-                new Vector2(TurnBannerWidth, TurnBannerHeight), FormalUiTheme.Panel);
-            Image panel = enemyActionBanner.GetComponent<Image>();
-            if (panel != null) panel.raycastTarget = false;
-            Text titleLabel = FormalUiKit.Label("行动提示标题", title, enemyActionBanner.transform,
-                new Vector2(16f, -12f), new Vector2(TurnBannerWidth - 32f, 40f), 24, accent, TextAnchor.MiddleLeft);
-            float titleHeight = Mathf.Max(40f, Mathf.Ceil(titleLabel.preferredHeight + 4f));
-            titleLabel.rectTransform.sizeDelta = new Vector2(TurnBannerWidth - 32f, titleHeight);
-            Text detailLabel = FormalUiKit.Label("行动提示内容", detail, enemyActionBanner.transform,
-                new Vector2(16f, -20f - titleHeight), new Vector2(TurnBannerWidth - 32f, 40f), 24, FormalUiTheme.Ink, TextAnchor.MiddleLeft);
-            float detailHeight = Mathf.Max(40f, Mathf.Ceil(detailLabel.preferredHeight + 4f));
-            detailLabel.rectTransform.sizeDelta = new Vector2(TurnBannerWidth - 32f, detailHeight);
-            enemyActionBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(TurnBannerWidth, titleHeight + detailHeight + 32f);
-
-            RectTransform rect = enemyActionBanner.GetComponent<RectTransform>();
-            CanvasGroup group = enemyActionBanner.AddComponent<CanvasGroup>();
-            group.alpha = 0f;
-            rect.localScale = Vector3.one;
-            Vector2 bannerRest = rect.anchoredPosition;
-            if (!AnimationsEnabled)
+            enemyActionBanner=FormalUiKit.AnchoredPanel("回合行动提示",canvas.transform,
+                new Vector2(.5f,.5f),new Vector2(.5f,.5f),Vector2.zero,
+                new Vector2(TurnBannerWidth,TurnBannerHeight),FormalUiTheme.Ink);
+            var ownedBanner=enemyActionBanner;
+            var panel=ownedBanner.GetComponent<Image>();panel.raycastTarget=false;
+            FormalUiKit.ApplySkin(panel,"reward",FormalUiTheme.Ink);
+            var strip=FormalUiKit.FlatPanel("阵营色标",ownedBanner.transform,new Vector2(0,1),new Vector2(0,1),
+                new Vector2(12,-12),new Vector2(4,88),accent);strip.GetComponent<Image>().raycastTarget=false;
+            FormalUiKit.Label("行动提示标题",title,ownedBanner.transform,new Vector2(36,-22),
+                new Vector2(304,64),48,FormalUiTheme.OnInk,TextAnchor.MiddleLeft);
+            string subtitle=detail??string.Empty;
+            FormalUiKit.Label("行动提示内容",subtitle,ownedBanner.transform,new Vector2(356,-20),
+                new Vector2(336,80),24,FormalUiTheme.OnInk,TextAnchor.MiddleLeft);
+            var rect=ownedBanner.GetComponent<RectTransform>();var group=ownedBanner.AddComponent<CanvasGroup>();
+            group.alpha=1;group.blocksRaycasts=false;group.interactable=false;
+            float duration=1.8f;
+            if(!AnimationsEnabled)
             {
-                group.alpha = 1f;
-                rect.localScale = Vector3.one;
-                DOVirtual.DelayedCall(Mathf.Max(.4f, visibleSeconds), () =>
-                {
-                    if (enemyActionBanner != null) DestroyFeedbackObject(enemyActionBanner);
-                    enemyActionBanner = null;
-                }).SetUpdate(true).SetTarget(enemyActionBanner);
+                DOVirtual.DelayedCall(duration,()=>{if(ownedBanner!=null)RetireTurnBanner(ownedBanner);
+                    if(enemyActionBanner==ownedBanner)enemyActionBanner=null;}).SetUpdate(true).SetTarget(ownedBanner);
                 return;
             }
-            float stay = Mathf.Max(.4f, visibleSeconds - .32f);
-            DOTween.Sequence().SetUpdate(true).SetTarget(enemyActionBanner)
-                .Join(DOTween.To(() => group.alpha, value => group.alpha = value, 1f, .16f))
-                .Join(DOTween.To(() => 12f, value => rect.anchoredPosition = bannerRest +
-                    PixelPresentationMotion.Snap(Vector2.down * value), 0f, .20f).SetEase(Ease.OutCubic))
-                .AppendInterval(stay)
-                .Append(DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .16f))
-                .OnComplete(() =>
-                {
-                    if (enemyActionBanner != null) DestroyFeedbackObject(enemyActionBanner);
-                    enemyActionBanner = null;
-                });
+            DOTween.Sequence().SetUpdate(true).SetTarget(ownedBanner)
+                .Append(DOTween.To(()=>-16f,y=>rect.anchoredPosition=PixelPresentationMotion.Snap(new Vector2(0,y)),0f,.16f).SetEase(Ease.OutCubic))
+                .AppendInterval(1.48f)
+                .Append(DOTween.To(()=>0f,y=>rect.anchoredPosition=PixelPresentationMotion.Snap(new Vector2(0,y)),8f,.16f).SetEase(Ease.InCubic))
+                .Join(DOTween.To(()=>group.alpha,a=>group.alpha=a,0f,.16f))
+                .OnComplete(()=>{if(ownedBanner!=null)RetireTurnBanner(ownedBanner);
+                    if(enemyActionBanner==ownedBanner)enemyActionBanner=null;});
         }
 
         public void CompleteEnemyAction(string enemyId)
@@ -403,11 +382,12 @@ namespace OCC.Combat.Presentation
             if (enemyActionBanner == null) return;
             GameObject banner = enemyActionBanner;
             enemyActionBanner = null;
+            retiringTurnBanner=banner;
             DOTween.Kill(banner);
             CanvasGroup group = banner.GetComponent<CanvasGroup>();
-            if (group == null) { DestroyFeedbackObject(banner); return; }
+            if (group == null) { RetireTurnBanner(banner); return; }
             DOTween.To(() => group.alpha, value => group.alpha = value, 0f, .14f).SetUpdate(true).SetTarget(banner)
-                .OnComplete(() => DestroyFeedbackObject(banner));
+                .OnComplete(() => {RetireTurnBanner(banner);if(retiringTurnBanner==banner)retiringTurnBanner=null;});
         }
 
         public void CancelEnemyAction()
@@ -415,11 +395,15 @@ namespace OCC.Combat.Presentation
             if (focusedEnemyId != null && unitMotions.TryGetValue(focusedEnemyId, out UnitMotion motion) &&
                 IsPreparation(motion.Kind)) unitMotions.Remove(focusedEnemyId);
             focusedEnemyId = null;
+            if(retiringTurnBanner!=null){DOTween.Kill(retiringTurnBanner);RetireTurnBanner(retiringTurnBanner);retiringTurnBanner=null;}
             if (enemyActionBanner == null) return;
             DOTween.Kill(enemyActionBanner);
-            DestroyFeedbackObject(enemyActionBanner);
+            RetireTurnBanner(enemyActionBanner);
             enemyActionBanner = null;
         }
+
+        private static void RetireTurnBanner(GameObject value)
+        {if(value==null)return;value.SetActive(false);DestroyFeedbackObject(value);}
 
         public int UnitShakeOffset(UnitState unit)
         {
@@ -684,6 +668,17 @@ namespace OCC.Combat.Presentation
             if (effect != null) PlayDeliveryVfx(source, target, effect, CombatPixelVfxPolicy.Travels(skill));
         }
 
+        public void NotifyRogueSpellDelivery(string spellId, GridPosition source, GridPosition target, FireSpellExecution personalFire)
+        {
+            if (personalFire != null) { NotifyFireSpell(personalFire); return; }
+            // Basic resource changes already publish their real results. A shield never gets a body.
+            if (spellId != "BASE-FIRE-RANGED" && spellId != "BASE-FIRE-MELEE") return;
+            UnitState actor = bootstrap.CurrentState?.GetUnit("hero");
+            if (actor != null) PlayUnitMotion(actor, UnitMotionKind.Cast, .34f, GridDirection(source, target), Vector2.zero);
+            if (actionCapture != null) actionCapture.AddDelivery(OccSoundEffects.Magic); else OccSoundEffects.Magic();
+            PlayDeliveryVfx(source, target, spellId == "BASE-FIRE-RANGED" ? "fire_projectile" : "fire_melee_arc", spellId == "BASE-FIRE-RANGED");
+        }
+
         private void PlayDeliveryVfx(GridPosition source, GridPosition target, string effect, bool travels = false)
         {
             if (actionCapture != null)
@@ -799,6 +794,27 @@ namespace OCC.Combat.Presentation
         {
             if (!AnimationsEnabled) { ClearVfx(); unitMotions.Clear(); return; }
             IReadOnlyList<CombatVfxSample> samples = vfxPlayback.Sample(now);
+            var preview = feedbackBattlefield?.Hd2DPreview;
+            bool worldVisible = preview != null && preview.isActiveAndEnabled;
+            if (worldVisible)
+            {
+                var next = preview.EnsureWorldParticles();
+                if (worldParticles != next && worldParticles != null) worldParticles.Clear();
+                worldParticles = next;
+                float strength = bootstrap?.UiPreferences.AnimationIntensity ?? 1f;
+                worldParticles?.Sample(samples, strength);
+                particleFireground.Clear();
+                var fire = (bootstrap as ICombatHudHost)?.CurrentFireBattle;
+                var map = bootstrap?.CurrentState?.Map;
+                if (map != null)
+                    for (int y = 0; y < map.Height; y++) for (int x = 0; x < map.Width; x++)
+                    {
+                        var cell = new GridPosition(x, y);
+                        if (PresentedFireground(cell, fire?.HasFireground(cell) == true)) particleFireground.Add(cell);
+                    }
+                worldParticles?.SampleFields(particleFireground, now, strength);
+            }
+            else if (worldParticles != null) worldParticles.Clear();
             if (samples.Count > 0)
             {
                 EnsureCanvas();
@@ -814,6 +830,9 @@ namespace OCC.Combat.Presentation
             visibleVfx.Clear();
             foreach (CombatVfxSample sample in samples)
             {
+                // HD2D owns the main effect; retain Canvas numbers, unit motion and the legacy fallback.
+                if (worldVisible && worldParticles != null && worldParticles.enabled &&
+                    CombatParticleRecipe.TryGet(sample.Cue.Effect, out _)) continue;
                 visibleVfx.Add(sample.Slot);
                 if (!activeVfx.TryGetValue(sample.Slot, out Image view) || view == null)
                 {
@@ -887,6 +906,8 @@ namespace OCC.Combat.Presentation
 
         private void ClearVfx()
         {
+            if (worldParticles != null) worldParticles.Clear();
+            particleFireground.Clear();
             WaterRipples.Clear();
             StopDust.Clear();
             vfxPlayback.Clear();

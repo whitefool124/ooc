@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -15,7 +15,7 @@ namespace OCC.Combat.Tests
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
 
             RogueliteMapStartResult result = coordinator.TryStart(false,
-                FireRogueliteStarterCatalog.Universal, 301);
+                FireRogueliteStarterCatalog.Universal, 301, enableFixedFirstExperience: true);
 
             Assert.That(result.Success, Is.False);
             Assert.That(result.Run, Is.Null);
@@ -30,7 +30,7 @@ namespace OCC.Combat.Tests
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
 
             RogueliteMapStartResult created = coordinator.TryStart(false,
-                FireRogueliteStarterCatalog.Universal, 314, acknowledgeOriginOnCreate: true);
+                FireRogueliteStarterCatalog.Universal, 314, acknowledgeOriginOnCreate: true, enableFixedFirstExperience: true);
 
             Assert.That(created.Success, Is.True);
             Assert.That(created.Run.FirstRunExperience.Origin.Acknowledged, Is.True);
@@ -46,12 +46,12 @@ namespace OCC.Combat.Tests
         {
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
-            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 312).Success, Is.True);
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 312, enableFixedFirstExperience: true).Success, Is.True);
             string original = store.Values[RogueliteSaveGateway.MapRunKey];
             Assert.That(coordinator.PrepareSlotForReplacement(), Is.True);
             store.FailWrites = true;
 
-            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 313).Success, Is.False);
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 313, enableFixedFirstExperience: true).Success, Is.False);
             Assert.That(coordinator.LastSaveSucceeded, Is.False);
             Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo(original));
             store.FailWrites = false;
@@ -81,7 +81,7 @@ namespace OCC.Combat.Tests
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
             RogueliteMapStartResult created = coordinator.TryStart(false,
-                starterId, 303);
+                starterId, 303, enableFixedFirstExperience: true);
 
             RogueliteMapStartResult loaded = coordinator.TryStart(true,
                 FireRogueliteStarterCatalog.Universal, 999);
@@ -100,7 +100,7 @@ namespace OCC.Combat.Tests
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
             RogueliteMapStartResult created = coordinator.TryStart(false,
-                FireRogueliteStarterCatalog.Melee, 307);
+                FireRogueliteStarterCatalog.Melee, 307, enableFixedFirstExperience: true);
             Assert.That(created.Success, Is.True);
             created.Run.AcknowledgeFirstRunOrigin();
             created.Run.SelectNode("B1");
@@ -128,7 +128,7 @@ namespace OCC.Combat.Tests
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
             RogueliteMapRun run = coordinator.TryStart(false,
-                FireRogueliteStarterCatalog.Universal, 308).Run;
+                FireRogueliteStarterCatalog.Universal, 308, enableFixedFirstExperience: true).Run;
             run.AcknowledgeFirstRunOrigin();
             run.SelectNode("B1");
             Assert.That(coordinator.Save(run), Is.True);
@@ -156,7 +156,7 @@ namespace OCC.Combat.Tests
         {
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
-            RogueliteMapRun run = coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 7646).Run;
+            RogueliteMapRun run = coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 7646, enableFixedFirstExperience: true).Run;
             run.AcknowledgeFirstRunOrigin();
             run.SelectNode("B1");
             run.BeginCombatJournal();
@@ -181,7 +181,7 @@ namespace OCC.Combat.Tests
             RogueliteMapRun reloaded = coordinator.TryStart(true,
                 FireRogueliteStarterCatalog.Universal, 999).Run;
             Assert.That(reloaded.HasActiveCombat, Is.True);
-            Assert.That(reloaded.CombatJournalRows.Count, Is.EqualTo(1));
+            Assert.That(reloaded.CombatJournalRows.Count, Is.EqualTo(2));
             CombatState restored = builder.Build(reloaded, null, Array.Empty<CombatSceneMarker>()).State;
             CombatResolver.AdvanceToNextTurn(restored);
             CombatJournalReplayer.ReplayAfterActivation(restored, reloaded.CombatJournalRows);
@@ -200,7 +200,7 @@ namespace OCC.Combat.Tests
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
             RogueliteMapStartResult created = coordinator.TryStart(false,
-                FireRogueliteStarterCatalog.Melee, 911);
+                FireRogueliteStarterCatalog.Melee, 911, enableFixedFirstExperience: true);
             created.Run.AcknowledgeFirstRunOrigin();
             created.Run.SelectNode("B1");
 
@@ -229,7 +229,7 @@ namespace OCC.Combat.Tests
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
             RogueliteMapStartResult created = coordinator.TryStart(false,
-                FireRogueliteStarterCatalog.Melee, 912);
+                FireRogueliteStarterCatalog.Melee, 912, enableFixedFirstExperience: true);
             created.Run.AcknowledgeFirstRunOrigin();
             created.Run.SelectNode("B1");
             Assert.That(coordinator.Save(created.Run), Is.True, "战斗开始前先写入可重试快照。");
@@ -260,7 +260,7 @@ namespace OCC.Combat.Tests
         {
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
-            RogueliteMapRun run = coordinator.TryStart(false, FireRogueliteStarterCatalog.Melee, 913).Run;
+            RogueliteMapRun run = coordinator.TryStart(false, FireRogueliteStarterCatalog.Melee, 913, enableFixedFirstExperience: true).Run;
             run.AcknowledgeFirstRunOrigin();
             run.SelectNode("B1");
             Assert.That(coordinator.Save(run), Is.True);
@@ -284,7 +284,7 @@ namespace OCC.Combat.Tests
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
             RogueliteMapStartResult first = coordinator.TryStart(false,
-                FireRogueliteStarterCatalog.Ranged, 305);
+                FireRogueliteStarterCatalog.Ranged, 305, enableFixedFirstExperience: true);
             Assert.That(first.Success, Is.True);
 
             first.Run.AcknowledgeFirstRunOrigin();
@@ -294,7 +294,7 @@ namespace OCC.Combat.Tests
             Assert.That(coordinator.Save(first.Run), Is.True);
 
             RogueliteMapStartResult replacement = coordinator.TryStart(false,
-                FireRogueliteStarterCatalog.Melee, 306);
+                FireRogueliteStarterCatalog.Melee, 306, enableFixedFirstExperience: true);
 
             Assert.That(replacement.Success, Is.True);
             Assert.That(replacement.Run.Seed, Is.EqualTo(306));
@@ -321,10 +321,10 @@ namespace OCC.Combat.Tests
                 Is.EqualTo("broken"));
 
             store.FailWrites = true;
-            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 305).Success, Is.False);
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 305, enableFixedFirstExperience: true).Success, Is.False);
             Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo("broken"));
             store.FailWrites = false;
-            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 305).Success, Is.True);
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 305, enableFixedFirstExperience: true).Success, Is.True);
         }
 
         [Test]
@@ -332,7 +332,7 @@ namespace OCC.Combat.Tests
         {
             MemoryStore store = new MemoryStore();
             RogueliteMapSaveCoordinator coordinator = Coordinator(store);
-            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 310).Success, Is.True);
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 310, enableFixedFirstExperience: true).Success, Is.True);
             string original = store.Values[RogueliteSaveGateway.MapRunKey];
             store.Values[RogueliteSaveGateway.WriteLockKey(RogueliteSaveGateway.MapRunKey)] = "protected-v1";
             store.Values[RogueliteSaveGateway.CorruptBackupKey(RogueliteSaveGateway.MapRunKey)] = "failed-write";
@@ -347,7 +347,7 @@ namespace OCC.Combat.Tests
             Assert.That(store.Values[RogueliteSaveGateway.MapRunKey], Is.EqualTo(original));
             Assert.That(coordinator.IsWriteProtected, Is.False);
             Assert.That(store.Values[RogueliteSaveGateway.CorruptBackupKey(RogueliteSaveGateway.MapRunKey)], Is.EqualTo("failed-write"));
-            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 311).Success, Is.True);
+            Assert.That(coordinator.TryStart(false, FireRogueliteStarterCatalog.Universal, 311, enableFixedFirstExperience: true).Success, Is.True);
         }
 
         private static RogueliteMapSaveCoordinator Coordinator(MemoryStore store) =>

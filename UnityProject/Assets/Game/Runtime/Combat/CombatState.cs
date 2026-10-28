@@ -32,12 +32,19 @@ namespace OCC.Combat
         public LootSourceState LootSource { get; private set; }
         public string[] ItemQuickbar { get; } = new string[Roguelite.RogueRuntimeConstants.ItemQuickbarSize];
         public IReadOnlyList<CombatObjective> Objectives { get; private set; }
-        internal ArtifactBattleState ArtifactBattle { get; private set; }
+        public ArtifactBattleState ArtifactBattle { get; private set; }
         public Roguelite.RogueSpellCombatRuntime RogueSpells { get; private set; }
         public Roguelite.RogueEquipmentRuntime RogueEquipment { get; private set; }
         public CombatPassiveRuntime PassiveEffects { get; private set; } = new CombatPassiveRuntime();
         public RainLanternCourtRuntime RainLanternCourt { get; private set; }
         public GreenhouseCollectionRoomRuntime GreenhouseCollectionRoom { get; private set; }
+        public LampVineConcealment LampVines { get; private set; } = new LampVineConcealment();
+        public void ConfigureLampVineSeed(int seed) => LampVines = new LampVineConcealment(seed);
+        internal void MoveUnit(UnitState unit, GridPosition destination, IReadOnlyList<GridPosition> path = null)
+        {
+            var origin = unit.Position; unit.MoveTo(destination);
+            LampVines.AfterMove(this, unit, path ?? new[] { origin, destination });
+        }
         public ThreeMaterialPressureRuntime ThreeMaterialPressure { get; private set; }
         public AcademyCoreBossRuntime AcademyCoreBoss { get; private set; }
         /// <summary>通用场地敌人的公开条件反应（老寻、灯台值守）。</summary>
@@ -149,7 +156,7 @@ namespace OCC.Combat
                 cursor = next;
             }
 
-            unit.MoveTo(cursor);
+            MoveUnit(unit, cursor, Enumerable.Range(0, distance + 1).Select(i => origin + new GridPosition(dx * i, dy * i)).ToArray());
             ResolveDisplacementLanding(unit, origin);
             return ForcedMoveResult.Moved;
         }
@@ -180,6 +187,7 @@ namespace OCC.Combat
         internal void BeginRogueliteTurn(UnitState unit)
         {
             if (unit == null) return;
+            Lampkeeper?.BeforeTurn(unit);
             if (unit.HasStatus(StatusType.BreakStance)) rogueBreakStanceSeenThisTurn.Add(unit.Id);
             if (Ruleset != CombatRuleset.Roguelite) return;
             if (unit.IsHero)
@@ -204,6 +212,7 @@ namespace OCC.Combat
                 TryGrantRogueliteShield(unit.Id, "shieldguard-turn-brace", 2);
 
             RogueEquipment?.OnTurnStart(this, unit.Id);
+            Lampkeeper?.AfterTurnStart(this, unit);
             RainLanternCourt?.BeginTurn(unit);
             ThreeMaterialPressure?.BeginTurn(this, unit);
             AcademyCoreBoss?.BeginTurn(this, unit);
@@ -319,9 +328,20 @@ namespace OCC.Combat
             if (unit.IsHero && unit.Shield > shieldBefore && AcademyEnemyArea != null)
                 AcademyFieldEnemy?.NoteHeroCoverAnchor(this, unit);
             // 护罩发生器：为邻接单位额外提供结构护盾，来源独立、可与掩体护盾叠加；装置被摧毁即不再提供。
-            bool wardAdjacent = adjacent.Any(position => Map.IsInside(position) &&
-                Map.GetTile(position).IsWardGenerator && !Map.GetTile(position).IsDestroyed);
-            if (wardAdjacent) TryGrantRogueliteShield(unit.Id, "ward-generator", 4);
+            var wards = adjacent.Where(position => Map.IsInside(position) && Map.GetTile(position).IsWardGenerator && !Map.GetTile(position).IsDestroyed).OrderBy(p => p.X).ThenBy(p => p.Y).ToArray();
+            if (wards.Length > 0) TryGrantRogueliteShield(unit.Id, "ward-generator:" + wards[0].X + ":" + wards[0].Y, 4);
+        }
+        internal void RefreshDestroyedWardShields()
+        {
+            foreach (var unit in units.Values) foreach (string source in unit.ShieldSourceIds.Where(id => id.StartsWith("ward-generator:", StringComparison.Ordinal)).ToArray())
+            {
+                var parts = source.Split(':');
+                if (parts.Length != 3 || !int.TryParse(parts[1], out int x) || !int.TryParse(parts[2], out int y)) continue;
+                var cell = new GridPosition(x, y);
+                if (Map.IsInside(cell) && Map.GetTile(cell).IsWardGenerator && !Map.GetTile(cell).IsDestroyed) continue;
+                int removed = unit.RemoveShieldFrom(source);
+                if (removed > 0) { AddRogueShieldEvent(new Roguelite.ShieldSourceRecord(source, removed, Roguelite.ShieldEventKind.Wasted, RogueTurn(unit.Id))); AddLog(unit.DisplayName + "的发生器护盾随装置损毁移除，其余来源保留。"); }
+            }
         }
         public bool TryGrantRogueliteShield(string unitId, string sourceId, int amount)
         {
@@ -346,7 +366,7 @@ namespace OCC.Combat
             if (rogueShieldSourceTurns.TryGetValue(key, out int claimed) && claimed == turn) return false;
             rogueShieldSourceTurns[key] = turn;
             int shieldBefore = unit.Shield;
-            unit.GrantShield(amount);
+            unit.GrantShield(amount, sourceId);
             int granted = unit.Shield - shieldBefore;
             AddRogueShieldEvent(new Roguelite.ShieldSourceRecord(sourceId, granted,
                 Roguelite.ShieldEventKind.Granted, turn));
@@ -429,11 +449,20 @@ namespace OCC.Combat
         { AcademyEnemyArea = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
         public void AttachPressureTest(CombatPressureTestRuntime runtime)
         { PressureTest = runtime ?? throw new ArgumentNullException(nameof(runtime)); }
+        public LampkeeperBattleRuntime Lampkeeper { get; private set; }
+        public void AttachLampkeeper(LampkeeperBattleRuntime runtime)
+        {
+            if (Lampkeeper != null) throw new InvalidOperationException("Opening gift already attached.");
+            Lampkeeper = runtime ?? throw new ArgumentNullException(nameof(runtime));
+            Lampkeeper.Initialize(this);
+        }
         internal void RecordInventoryOpened() { InventoryOpenCount++; }
-        public void SetLootSource(LootSourceState loot) => LootSource = loot;
+        public void SetLootSource(LootSourceState loot) { LootSource = loot; loot?.Bind(Map); }
         /// <summary>解析物件被摧毁后的结果。当前覆盖蓄能晶簇爆裂与过载装置引爆。</summary>
         public bool ResolveAetherCrystalDamage(GridPosition position, int durabilityBefore, string sourceUnitId = null)
         {
+            if (Map.IsInside(position) && Map.GetTile(position).IsDestructibleLoot && durabilityBefore > 0 && Map.GetTile(position).Durability <= 0)
+                AddLog((LootSource?.DisplayName ?? "容器") + "已损毁，未取内容已销毁。");
             if (Map.IsInside(position) && durabilityBefore > 0)
             {
                 TileState changed = Map.GetTile(position);
@@ -462,6 +491,7 @@ namespace OCC.Combat
                 TileState shard = Map.GetTile(cell).Clone();
                 shard.IsCrystalShard = true;
                 Map.SetTile(cell, shard);
+                DamageContainer(cell, 8);
             }
             foreach (UnitState unit in units.Values.Where(value => value.IsAlive && value.Position.ManhattanDistance(position) == 1))
             {
@@ -495,6 +525,7 @@ namespace OCC.Combat
                 position + new GridPosition(0, -1),
                 position + new GridPosition(-1, 0)
             };
+            foreach (GridPosition cell in blast.Where(Map.IsInside)) DamageContainer(cell, 8);
             foreach (UnitState unit in units.Values.Where(value => value.IsAlive && blast.Contains(value.Position)))
             {
                 Roguelite.DamagePacket packet = new Roguelite.DamagePacket("overload-device", string.Empty, unit.Id,
@@ -537,8 +568,19 @@ namespace OCC.Combat
         internal void RecordTurnStart() => TurnSequence++;
         internal void SetCurrentTime(int time) => CurrentTime = time;
         public void AddLog(string message) { EventLog.Insert(0, message); if (EventLog.Count > 8) EventLog.RemoveAt(8); }
+        public void DamageContainer(GridPosition position, int amount)
+        {
+            if (!Map.IsInside(position) || amount <= 0) return;
+            TileState tile = Map.GetTile(position);
+            if (!tile.IsDestructibleLoot || tile.Durability <= 0) return;
+            int before = tile.Durability;
+            tile.Durability = Math.Max(0, before - amount);
+            ResolveAetherCrystalDamage(position, before);
+        }
+
         internal void EvaluateOutcome()
         {
+            LampVines.Refresh(this);
             AcademyCoreBoss?.RefreshPhase(this);
             IsDefeat = !units.Values.Any(unit => unit.IsHero && unit.IsAlive) ||
                 Objectives != null && Objectives.Any(objective => objective.IsFailed(this));
@@ -564,7 +606,8 @@ namespace OCC.Combat
             // Deployment validation belongs to battle creation, not snapshotting.
             CombatState clone = new CombatState(Map.Clone(), units.Values.OrderBy(unit => FixedTurnOrder(unit.Id)).Select(unit => unit.Clone()), Objectives.Select(objective => objective.Clone()), false);
             clone.ActiveUnitId = ActiveUnitId; clone.CurrentTime = CurrentTime; clone.TurnSequence = TurnSequence; clone.IsVictory = IsVictory; clone.IsDefeat = IsDefeat; clone.Ruleset = Ruleset; clone.InventoryOpenCount = InventoryOpenCount; clone.WindMechanicEnabled = WindMechanicEnabled;
-            clone.Backpack = Backpack.Clone(); clone.ItemInventory = ItemInventory.Clone(); clone.Loot = Loot?.Clone(); clone.LootSource = LootSource?.Clone(); Array.Copy(ItemQuickbar, clone.ItemQuickbar, ItemQuickbar.Length);
+            clone.LampVines = LampVines.Clone();
+            clone.Backpack = Backpack.Clone(); clone.ItemInventory = ItemInventory.Clone(); clone.Loot = Loot?.Clone(); clone.SetLootSource(LootSource?.Clone()); Array.Copy(ItemQuickbar, clone.ItemQuickbar, ItemQuickbar.Length);
             foreach (GridPosition position in investigated) clone.investigated.Add(position);
             foreach (KeyValuePair<string, int> pair in rogueTurnSequences) clone.rogueTurnSequences[pair.Key] = pair.Value;
             foreach (KeyValuePair<string, int> pair in rogueShieldSourceTurns) clone.rogueShieldSourceTurns[pair.Key] = pair.Value;
@@ -581,6 +624,7 @@ namespace OCC.Combat
             if (PressureTest != null) clone.PressureTest = PressureTest.Clone();
             if (RogueSpells != null) clone.RogueSpells = RogueSpells.Clone(clone);
             if (RogueEquipment != null) clone.RogueEquipment = RogueEquipment.Clone(clone);
+            if (Lampkeeper != null) clone.Lampkeeper = Lampkeeper.Clone();
             if (ArtifactBattle != null) ArtifactBattle.Clone(clone);
             // Runtime constructors may register definitions; the source's passive state
             // (including per-turn limits and armed effects) remains authoritative.

@@ -51,7 +51,7 @@ namespace OCC.Combat
         public int EntryCost(UnitState unit, GridPosition position)
         {
             TileState tile = unit == null ? TileState.Empty : combatMap.GetTile(position);
-            if (tile.IsLampVine) return 2;
+            if (tile.IsLampVine && tile.Durability > 0) return 2;
             if (tile.IsWater && unit.IsHero) return 2;
             return 1;
         }

@@ -316,7 +316,6 @@ GameObject:
   - component: {fileID: 1392180037009671609}
   - component: {fileID: 1408479021683433065}
   - component: {fileID: 3635632933446541529}
-  - component: {fileID: 3993656930757715395}
   m_Layer: 0
   m_Name: "\u88C5\u5907\u69FD_Backpack"
   m_TagString: Untagged
@@ -443,18 +442,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3993656930757715395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 143492804684538222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &189348448607586138
 GameObject:
   m_ObjectHideFlags: 0
@@ -768,7 +755,6 @@ GameObject:
   - component: {fileID: 7622955823076285843}
   - component: {fileID: 2532497267281849106}
   - component: {fileID: 8243428993857161380}
-  - component: {fileID: 345130380274724400}
   m_Layer: 0
   m_Name: "\u88C5\u5907\u69FD_Ring1"
   m_TagString: Untagged
@@ -895,18 +881,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &345130380274724400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 298915753923443265}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &299287291357151826
 GameObject:
   m_ObjectHideFlags: 0
@@ -1977,7 +1951,6 @@ GameObject:
   - component: {fileID: 6797222246081426412}
   - component: {fileID: 4881802523371338091}
   - component: {fileID: 5739259608882542527}
-  - component: {fileID: 7754603737137492794}
   m_Layer: 0
   m_Name: "\u88C5\u5907\u69FD_Feet"
   m_TagString: Untagged
@@ -2104,18 +2077,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7754603737137492794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 594898314026504487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &606273896413023574
 GameObject:
   m_ObjectHideFlags: 0
@@ -6081,7 +6042,6 @@ GameObject:
   - component: {fileID: 7302506095248913128}
   - component: {fileID: 1806807564371642736}
   - component: {fileID: 8351866100955471249}
-  - component: {fileID: 9083214861786177202}
   m_Layer: 0
   m_Name: "\u6218\u672F\u69FD_3"
   m_TagString: Untagged
@@ -6209,18 +6169,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &9083214861786177202
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2170600656947924796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &2191179597186309686
 GameObject:
   m_ObjectHideFlags: 0
@@ -8355,7 +8303,6 @@ GameObject:
   - component: {fileID: 7146201361419398220}
   - component: {fileID: 6147044300737528261}
   - component: {fileID: 2045465849036261654}
-  - component: {fileID: 1373730001310486886}
   m_Layer: 0
   m_Name: "\u88C5\u5907\u69FD_Head"
   m_TagString: Untagged
@@ -8482,18 +8429,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1373730001310486886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2871628253370513743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &2884587221879205549
 GameObject:
   m_ObjectHideFlags: 0
@@ -9190,7 +9125,6 @@ GameObject:
   - component: {fileID: 1802292326217553019}
   - component: {fileID: 6728959770783099560}
   - component: {fileID: 888077466735867901}
-  - component: {fileID: 9003848510975169368}
   m_Layer: 0
   m_Name: "\u6218\u672F\u69FD_1"
   m_TagString: Untagged
@@ -9318,18 +9252,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &9003848510975169368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3130429816266205394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &3133190990121005908
 GameObject:
   m_ObjectHideFlags: 0
@@ -10528,7 +10450,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 4775613822258829007}
     button: {fileID: 4335363201704987771}
     canvasGroup: {fileID: 6268149773210409327}
-    dragHandler: {fileID: 587876590856487790}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 0}
     quantity: {fileID: 0}
   - root: {fileID: 6931908129370750928}
@@ -10541,7 +10463,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 5039526931283325233}
     button: {fileID: 2045465849036261654}
     canvasGroup: {fileID: 6147044300737528261}
-    dragHandler: {fileID: 1373730001310486886}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 0}
     quantity: {fileID: 0}
   - root: {fileID: 5879658208115011398}
@@ -10554,7 +10476,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 4198447842063250762}
     button: {fileID: 992200693002488925}
     canvasGroup: {fileID: 60021728579412220}
-    dragHandler: {fileID: 6149902855883260487}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 0}
     quantity: {fileID: 0}
   - root: {fileID: 5127857736431527931}
@@ -10567,7 +10489,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 8200807212771771793}
     button: {fileID: 8243428993857161380}
     canvasGroup: {fileID: 2532497267281849106}
-    dragHandler: {fileID: 345130380274724400}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 0}
     quantity: {fileID: 0}
   - root: {fileID: 3929424863525142997}
@@ -10580,7 +10502,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 8569510713970186132}
     button: {fileID: 7767132533301489972}
     canvasGroup: {fileID: 2946509993704294444}
-    dragHandler: {fileID: 1902002970452270487}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 0}
     quantity: {fileID: 0}
   - root: {fileID: 8348065997138003027}
@@ -10593,7 +10515,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 5729356244943455958}
     button: {fileID: 5624016025112266293}
     canvasGroup: {fileID: 4878494837590466457}
-    dragHandler: {fileID: 6317723652999612811}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 0}
     quantity: {fileID: 0}
   - root: {fileID: 4357295677485251578}
@@ -10606,7 +10528,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 7344046041039562280}
     button: {fileID: 542115126398351594}
     canvasGroup: {fileID: 267555283854150123}
-    dragHandler: {fileID: 7437510687981726988}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 0}
     quantity: {fileID: 0}
   - root: {fileID: 3208996170446303516}
@@ -10619,7 +10541,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 8986140310134582692}
     button: {fileID: 3635632933446541529}
     canvasGroup: {fileID: 1408479021683433065}
-    dragHandler: {fileID: 3993656930757715395}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 0}
     quantity: {fileID: 0}
   - root: {fileID: 585389511636249282}
@@ -10632,7 +10554,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 3830933568343216402}
     button: {fileID: 5739259608882542527}
     canvasGroup: {fileID: 4881802523371338091}
-    dragHandler: {fileID: 7754603737137492794}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 0}
     quantity: {fileID: 0}
   tacticalSlots:
@@ -10646,7 +10568,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 0}
     button: {fileID: 888077466735867901}
     canvasGroup: {fileID: 6728959770783099560}
-    dragHandler: {fileID: 9003848510975169368}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 7382374510238668717}
     quantity: {fileID: 635793701684662955}
   - root: {fileID: 2578202270730772119}
@@ -10659,7 +10581,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 0}
     button: {fileID: 3872225512391554195}
     canvasGroup: {fileID: 4369442760746809962}
-    dragHandler: {fileID: 5422654051357045833}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 1023133563632899764}
     quantity: {fileID: 285091947616043454}
   - root: {fileID: 3999553549633307900}
@@ -10672,7 +10594,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 0}
     button: {fileID: 8351866100955471249}
     canvasGroup: {fileID: 1806807564371642736}
-    dragHandler: {fileID: 9083214861786177202}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 7485591773476905886}
     quantity: {fileID: 2485394274354497490}
   - root: {fileID: 7120015682915595542}
@@ -10685,7 +10607,7 @@ MonoBehaviour:
     dropOverlay: {fileID: 0}
     button: {fileID: 1318772188441778327}
     canvasGroup: {fileID: 2053549468186575974}
-    dragHandler: {fileID: 1603500752356259562}
+    dragHandler: {fileID: 0}
     slotNumber: {fileID: 5664531287451322882}
     quantity: {fileID: 2255881940274106793}
   tacticalStatus: {fileID: 7922645231701858080}
@@ -11309,7 +11231,6 @@ GameObject:
   - component: {fileID: 3083120917956914729}
   - component: {fileID: 2053549468186575974}
   - component: {fileID: 1318772188441778327}
-  - component: {fileID: 1603500752356259562}
   m_Layer: 0
   m_Name: "\u6218\u672F\u69FD_4"
   m_TagString: Untagged
@@ -11437,18 +11358,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1603500752356259562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3694563325889788697}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &3721065635580298468
 GameObject:
   m_ObjectHideFlags: 0
@@ -14267,7 +14176,6 @@ GameObject:
   - component: {fileID: 4539053304884949568}
   - component: {fileID: 4369442760746809962}
   - component: {fileID: 3872225512391554195}
-  - component: {fileID: 5422654051357045833}
   m_Layer: 0
   m_Name: "\u6218\u672F\u69FD_2"
   m_TagString: Untagged
@@ -14395,18 +14303,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &5422654051357045833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4553983563331263279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &4588866900915146131
 GameObject:
   m_ObjectHideFlags: 0
@@ -15922,7 +15818,6 @@ GameObject:
   - component: {fileID: 624851429494368586}
   - component: {fileID: 4878494837590466457}
   - component: {fileID: 5624016025112266293}
-  - component: {fileID: 6317723652999612811}
   m_Layer: 0
   m_Name: "\u88C5\u5907\u69FD_Ring2"
   m_TagString: Untagged
@@ -16049,18 +15944,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6317723652999612811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4922766006822969665}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &4955220770679372121
 GameObject:
   m_ObjectHideFlags: 0
@@ -18796,7 +18679,6 @@ GameObject:
   - component: {fileID: 7177225476131719812}
   - component: {fileID: 2946509993704294444}
   - component: {fileID: 7767132533301489972}
-  - component: {fileID: 1902002970452270487}
   m_Layer: 0
   m_Name: "\u88C5\u5907\u69FD_Chest"
   m_TagString: Untagged
@@ -18923,18 +18805,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1902002970452270487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5868676295377523948}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &5869323812614685905
 GameObject:
   m_ObjectHideFlags: 0
@@ -23072,7 +22942,6 @@ GameObject:
   - component: {fileID: 7182402762773570742}
   - component: {fileID: 6268149773210409327}
   - component: {fileID: 4335363201704987771}
-  - component: {fileID: 587876590856487790}
   m_Layer: 0
   m_Name: "\u88C5\u5907\u69FD_Weapon"
   m_TagString: Untagged
@@ -23199,18 +23068,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &587876590856487790
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7476908731193870274}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &7498217084882701837
 GameObject:
   m_ObjectHideFlags: 0
@@ -24591,7 +24448,6 @@ GameObject:
   - component: {fileID: 9162593970973806487}
   - component: {fileID: 60021728579412220}
   - component: {fileID: 992200693002488925}
-  - component: {fileID: 6149902855883260487}
   m_Layer: 0
   m_Name: "\u88C5\u5907\u69FD_CastingUnit"
   m_TagString: Untagged
@@ -24718,18 +24574,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6149902855883260487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8018947957710979111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &8047890680345929173
 GameObject:
   m_ObjectHideFlags: 0
@@ -24968,7 +24812,6 @@ GameObject:
   - component: {fileID: 1985510715606589017}
   - component: {fileID: 267555283854150123}
   - component: {fileID: 542115126398351594}
-  - component: {fileID: 7437510687981726988}
   m_Layer: 0
   m_Name: "\u88C5\u5907\u69FD_Necklace"
   m_TagString: Untagged
@@ -25095,18 +24938,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7437510687981726988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8066631159116352807}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: OCC.Combat.Presentation::OCC.Combat.Presentation.RogueLoadoutDragHandler
 --- !u!1 &8071838270590613870
 GameObject:
   m_ObjectHideFlags: 0

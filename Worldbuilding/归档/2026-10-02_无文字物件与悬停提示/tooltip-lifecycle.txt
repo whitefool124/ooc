@@ -1,2 +1,0 @@
-Pointer exit: tooltip hidden.
-Settings entered while quit hint open: tooltip hidden.

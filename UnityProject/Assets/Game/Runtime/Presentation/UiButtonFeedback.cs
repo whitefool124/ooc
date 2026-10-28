@@ -30,6 +30,30 @@ namespace OCC.Combat.Presentation
         private bool usesFormalButtonSkin;
         private bool sceneSpace;
 
+        internal void UseQuietNavigation()
+        {
+            // Prefab instances do not retain Configure's nonserialized bindings.
+            // Quiet navigation still needs an actual pointer/keyboard state owner.
+            if(button==null)button=GetComponent<Button>();
+            if(image==null)image=button.targetGraphic as Image;
+            if(image==null)return;
+            if(motionProfile==null)motionProfile=()=>UiMotionProfile.FromIntensity(0);
+            focusFrame=transform.Find("像素焦点框")?.GetComponent<Image>()??FormalUiKit.FocusFrame(transform);
+            var focusSkin=FormalUiKit.SkinOverlay(focusFrame);if(focusSkin!=null)focusSkin.gameObject.SetActive(false);
+            focusFrame.sprite=null;focusFrame.type=Image.Type.Simple;focusFrame.color=FormalUiTheme.Cyan;
+            focusFrame.raycastTarget=false;
+            focusFrame.rectTransform.anchorMin=Vector2.zero;focusFrame.rectTransform.anchorMax=new Vector2(1,0);
+            focusFrame.rectTransform.offsetMin=new Vector2(20,4);focusFrame.rectTransform.offsetMax=new Vector2(-20,6);
+            focusFrame.gameObject.SetActive(focused);
+            skinOverlay=FormalUiKit.SkinOverlay(image);
+            if(skinOverlay!=null)skinOverlay.gameObject.SetActive(false);
+            button.transition=Selectable.Transition.None;usesFormalButtonSkin=false;sceneSpace=true;
+            basePosition=((RectTransform)transform).anchoredPosition;
+            normal=Color.clear;hover=new Color(.15f,.55f,.6f,.14f);
+            pressed=new Color(.15f,.55f,.6f,.24f);selected=hover;disabled=Color.clear;
+            ApplyImmediate();
+        }
+
         internal void UseSceneSpaceFeedback()
         {
             var rect=transform as RectTransform;
@@ -41,7 +65,7 @@ namespace OCC.Combat.Presentation
             {
                 normal=image.color;hover=Color.Lerp(normal,Color.white,.12f);
                 pressed=new Color(normal.r*.85f,normal.g*.85f,normal.b*.85f,normal.a);
-                selected=hover;disabled=new Color(normal.r*.5f,normal.g*.5f,normal.b*.5f,normal.a);
+                selected=hover;disabled=new Color(normal.r*.86f,normal.g*.86f,normal.b*.86f,normal.a);
             }
         }
 

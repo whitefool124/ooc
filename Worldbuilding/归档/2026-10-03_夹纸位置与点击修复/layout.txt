@@ -1,1 +1,0 @@
-screen=1920x1080 target=(192.00, 705.00) paperRect=(x:-112.00, y:-68.00, width:224.00, height:136.00) parentRect=(x:0.00, y:-90.00, width:520.00, height:90.00) filter=True module=EventSystem (UnityEngine.InputSystem.UI.InputSystemUIInputModule) raycasters=1 paperDepth=17 parent=按钮_开始新游戏

@@ -12,7 +12,9 @@ namespace OCC.Combat.Presentation
         private FirstExperiencePrototypeController flow;
         private Canvas canvas;
         private GameObject page;
-        private string signature = string.Empty;
+        private (int stage, int tutorial, int resolution, int mode, int frameRate, int slot, int brand, int flags, string error) signature;
+        private bool hasSignature;
+        private int displayedVolume = -1, displayedCountdown = -1;
         private FirstExperiencePrototypeController.FlowStage? animatedStage;
         private Slider volumeSlider;
         private Text volumeValue;
@@ -33,7 +35,7 @@ namespace OCC.Combat.Presentation
         private void Update()
         {
             if (flow == null || canvas == null) return;
-            bool visible = flow.enabled;
+            bool visible = flow.enabled && !flow.IsEncyclopediaOpen && !flow.IsArchiveOpen;
             if (canvas.gameObject.activeSelf != visible)
             {
                 if(!visible)Hd2DContentGeometry.PrepareToHide(canvas.gameObject);
@@ -41,14 +43,18 @@ namespace OCC.Combat.Presentation
             }
             if (!visible) return;
             if ((flow.IsEncyclopediaOpen || flow.IsArchiveOpen) && hoverTooltip != null && hoverTooltip.IsVisible) hoverTooltip.HideAll();
-            string next = PageSignature();
-            if (next != signature) Rebuild();
-            if (confirmationCountdown != null)
-                confirmationCountdown.text = flow.DisplayConfirmationSeconds + " 秒后自动恢复原设置";
+            var next = PageSignature();
+            if (!hasSignature || !next.Equals(signature)) Rebuild();
+            if (confirmationCountdown != null && displayedCountdown != flow.DisplayConfirmationSeconds)
+            {
+                displayedCountdown = flow.DisplayConfirmationSeconds;
+                confirmationCountdown.text = displayedCountdown + " 秒后自动恢复原设置";
+            }
             if (volumeSlider != null && volumeValue != null)
             {
                 volumeSlider.SetValueWithoutNotify(flow.PendingVolume);
-                volumeValue.text = Mathf.RoundToInt(flow.PendingVolume * 100f) + "%";
+                int volume = Mathf.RoundToInt(flow.PendingVolume * 100f);
+                if (volume != displayedVolume) { displayedVolume = volume; volumeValue.text = volume + "%"; }
             }
             if (!flow.IsEncyclopediaOpen && !flow.IsArchiveOpen && (deskScene == null || !deskScene.IsOpening) && Keyboard.current?.escapeKey.wasPressedThisFrame == true) flow.GoBack();
         }
@@ -57,10 +63,16 @@ namespace OCC.Combat.Presentation
         {
             if (flow == null || canvas == null) return;
             if (hoverTooltip != null) hoverTooltip.HideAll();
-            if (page != null) Destroy(page);
+            if (page != null)
+            {
+                Hd2DContentGeometry.PrepareToHide(page);
+                page.SetActive(false);
+                Destroy(page);
+            }
             volumeSlider = null;
             volumeValue = null;
             confirmationCountdown = null;
+            displayedVolume = displayedCountdown = -1;
             buttons.Clear();
             deskScene = null;
             page = FormalUiKit.Create("页面_" + flow.CurrentStage, canvas.transform);
@@ -83,26 +95,34 @@ namespace OCC.Combat.Presentation
                 default: BuildHandoff(); break;
             }
             LinkNavigation();
-            if(flow.CurrentStage!=FirstExperiencePrototypeController.FlowStage.FirstSettings &&
-                flow.CurrentStage!=FirstExperiencePrototypeController.FlowStage.Branding)
+            if(flow.CurrentStage!=FirstExperiencePrototypeController.FlowStage.Branding)
                 Hd2DContentGeometry.Attach(page);
             if (buttons.Count > 0) RuntimeUiEventSystem.Select(buttons[0].gameObject);
             signature = PageSignature();
+            hasSignature = true;
             if (animatedStage != flow.CurrentStage &&
                 flow.CurrentStage != FirstExperiencePrototypeController.FlowStage.Branding &&
                 flow.CurrentStage != FirstExperiencePrototypeController.FlowStage.WorldOpening &&
                 flow.CurrentStage != FirstExperiencePrototypeController.FlowStage.Landing)
-                PixelPresentationMotion.EnterPage(page.transform, flow.AnimationIntensity);
+                if(!Hd2DContentGeometry.OwnsSceneLayout(page))
+                    PixelPresentationMotion.EnterPage(page.transform, flow.AnimationIntensity);
             animatedStage = flow.CurrentStage;
         }
 
-        private string PageSignature()
+        private (int, int, int, int, int, int, int, int, string) PageSignature()
         {
-            return flow.CurrentStage + "|" + flow.TutorialPage + "|" + flow.IsSelectingContinue + "|" + flow.IsPendingOverwrite + "|" +
-                flow.ResolutionIndex + "|" + flow.DisplayModeLabel + "|" + flow.PendingVSync + "|" + flow.FrameRateLabel + "|" +
-                flow.IsConfirmingDisplay + "|" +
-                flow.DebugSelectedSlot + "|" + flow.DebugOpeningBrandMarkIndex + "|" + flow.HasUnfinishedRun + "|" +
-                flow.HandoffError + "|" + flow.IsSlotWriteProtected(0) + flow.IsSlotWriteProtected(1) + flow.IsSlotWriteProtected(2);
+            int flags = (flow.IsSelectingContinue ? 1 : 0) | (flow.IsPendingOverwrite ? 2 : 0) |
+                (flow.PendingVSync ? 4 : 0) | (flow.IsConfirmingDisplay ? 8 : 0) |
+                (flow.HasUnfinishedRun ? 16 : 0) | (flow.FixedFirstExperienceEnabled ? 32 : 0) |
+                (flow.OperationTutorialSelected ? 64 : 0);
+            // Slot protection only affects the archive-selection pages. Do not query
+            // native PlayerPrefs on every idle menu/settings frame.
+            if (flow.CurrentStage == FirstExperiencePrototypeController.FlowStage.SaveSelection ||
+                flow.CurrentStage == FirstExperiencePrototypeController.FlowStage.SaveConfirmation)
+                for (int i = 0; i < 3; i++) if (flow.IsSlotWriteProtected(i)) flags |= 128 << i;
+            return ((int)flow.CurrentStage, flow.TutorialPage, flow.ResolutionIndex,
+                flow.PendingDisplayModeIndex, flow.PendingFrameRateIndex, flow.DebugSelectedSlot,
+                flow.DebugOpeningBrandMarkIndex, flags, flow.HandoffError);
         }
 
         private static void BuildBackground(Transform parent, FirstExperiencePrototypeController.FlowStage stage)
@@ -115,7 +135,9 @@ namespace OCC.Combat.Presentation
                     stage == FirstExperiencePrototypeController.FlowStage.AcademyIntro ||
                     stage == FirstExperiencePrototypeController.FlowStage.TutorialGuide)
                     background.GetComponent<AcademyDeskBackdrop>().SetDocumentFraming(-2f, .22f);
-                background.raycastTarget=stage==FirstExperiencePrototypeController.FlowStage.FirstSettings;
+                // The controls now live on their own world Canvas. An overlay
+                // blocker here would intercept every projected settings control.
+                background.raycastTarget=false;
                 return;
             }
             string id = stage == FirstExperiencePrototypeController.FlowStage.Landing || stage == FirstExperiencePrototypeController.FlowStage.SaveSelection || stage == FirstExperiencePrototypeController.FlowStage.Configuration
@@ -307,10 +329,17 @@ namespace OCC.Combat.Presentation
 
         private void BuildConfiguration()
         {
+            flow.RecordConfigurationViewed();
             var template=Resources.Load<CharacterDossierView>(CharacterDossierView.ResourcePath);
             if(template==null)throw new InvalidOperationException("Missing character dossier prefab");
             var dossier=Instantiate(template,page.transform,false);
             buttons.AddRange(dossier.Bind(flow));
+            AddButton("固定首次体验开关", flow.FixedFirstExperienceEnabled
+                ? "固定首次体验：开启（11个固定节点）"
+                : "固定首次体验：关闭（正常肉鸽开局）", page.transform,
+                new Vector2(112, -84), new Vector2(820, 64), flow.ToggleFixedFirstExperience);
+            AddButton("操作教学开关", flow.OperationTutorialSelected ? "操作教学：开启（随操作提示）" : "操作教学：关闭（可随时恢复）",
+                page.transform, new Vector2(960, -84), new Vector2(820, 64), flow.ToggleOperationTutorial);
         }
         private void BuildAcademyIntro()
         {
@@ -330,7 +359,7 @@ namespace OCC.Combat.Presentation
         {
             GameObject card = CenterPanel(new Vector2(1160, 580));
             Label("教程标题", "需要操作教程吗？", card.transform, new Vector2(60, -50), new Vector2(1040, 80), 46, ArchiveUiStyle.Ink, TextAnchor.MiddleCenter);
-            Label("教程说明", "初次来到学院？先了解地图，再在首战中跟随高亮练习移动与施法。\n\n选择会保存在当前档案中，也可随时跳过后续教学。无需教程仍可体验学院入门关卡。", card.transform,
+            Label("教程说明", "初次来到学院？可以先了解地图、行动点与术式预览。\n\n选择会保存在当前档案中，也可随时跳过后续教学。此选项不改变建档时的固定首次体验开关。", card.transform,
                 new Vector2(80, -180), new Vector2(1000, 190), 28, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
             AddButton("开启教程", "开启教程", card.transform, new Vector2(640, -430), new Vector2(430, 90), () => flow.ChooseTutorial(true), FormalUiTheme.Cyan);
             AddButton("不需要教程", "不需要教程", card.transform, new Vector2(80, -430), new Vector2(430, 90), () => flow.ChooseTutorial(false));
@@ -338,24 +367,11 @@ namespace OCC.Combat.Presentation
 
         private void BuildTutorialGuide()
         {
-            string[] titles = { "从学院地图出发", "先看敌人的公开意图", "移动也需要行动点", "施法前检查结果预览", "主动结束回合与保存" };
-            string[] text = {
-                "学院地图连接着战斗、事件、工坊、医务室与商店。\n\n先阅读出发节点，再选择已开放的战斗节点，查看遭遇说明后进入战斗。战后完成奖励选择，才能继续探索。",
-                "在战场上选择敌人，查看右侧的公开意图。\n\n留意它准备攻击的位置、路径与范围，再决定站位。公开意图描述敌人的一个完整回合；尽量离开危险区域或提前处理威胁。",
-                "获得操作权后，选择移动，查看可达格与路径。\n\n确认落点之前先检查行动点费用；地形可能改变路径成本。资源允许时可以连续行动，取消预览可以重新选择。",
-                "选择底部术式，再选择合法目标或位置。\n\n确认前检查效果预览、行动点、魔力与冷却。右侧术式说明和战斗百科可以帮助你理解术式；取消预览后可换一个方案。",
-                "行动完成后，用结束回合推进战斗，留意行动条与敌人意图。\n\n地图选择、战果和奖励等完成操作会保存。退出后使用继续档案返回；战斗失败时按结算界面的重试入口继续。"
-            };
-            int index = flow.TutorialPage;
-            GameObject card = FormalUiKit.AnchoredPanel("教程文件", page.transform, new Vector2(0, 1), new Vector2(0, 1), new Vector2(64, -140), new Vector2(1120, 820), ArchiveUiStyle.LightPaper);
-            ArchiveUiStyle.PaperPanel(card, ArchiveUiStyle.LightPaper, true);
-            Label("教程进度", "入门操作教程　第 " + (index + 1) + " 页　共 5 页", card.transform, new Vector2(70, -38), new Vector2(980, 48), 24, ArchiveUiStyle.Brass, TextAnchor.MiddleLeft);
-            Label("教程标题", titles[index], card.transform, new Vector2(70, -110), new Vector2(980, 88), 44, ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
-            FormalUiKit.Line(card.transform, new Vector2(70, -220), new Vector2(980, 2), ArchiveUiStyle.Rule, "教程分隔");
-            Label("教程内容", text[index], card.transform, new Vector2(80, -270), new Vector2(960, 350), 32, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
-            AddButton("教程下一页", index == 4 ? "开始探索" : "下一页", card.transform, new Vector2(750, -676), new Vector2(300, 86), flow.AdvanceTutorial, FormalUiTheme.Cyan);
-            if (index > 0) AddButton("教程上一页", "上一页", card.transform, new Vector2(80, -676), new Vector2(260, 86), flow.PreviousTutorialPage);
-            AddButton("结束教程", "结束教程", card.transform, new Vector2(380, -676), new Vector2(260, 86), flow.FinishTutorial);
+            GameObject card = CenterPanel(new Vector2(1160, 480));
+            Label("教程标题", "教学随操作出现", card.transform, new Vector2(60, -50), new Vector2(1040, 80), 46, ArchiveUiStyle.Ink, TextAnchor.MiddleCenter);
+            Label("教程说明", "每次只提示当前一步。\n可从百科的教学册暂停、恢复或重看。", card.transform,
+                new Vector2(80, -170), new Vector2(1000, 160), 28, ArchiveUiStyle.QuietInk, TextAnchor.UpperLeft);
+            AddButton("进入地图", "进入地图", card.transform, new Vector2(640, -350), new Vector2(430, 90), flow.FinishTutorial, FormalUiTheme.Cyan);
         }
 
         private void BuildRunCreation()
@@ -416,7 +432,7 @@ namespace OCC.Combat.Presentation
             Label("名称", name, row.transform, new Vector2(18, -30), new Vector2(260, 58), 26,
                 ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
             Label("值", value, row.transform, new Vector2(290, -30), new Vector2(330, 58), 26,
-                ArchiveUiStyle.Brass, TextAnchor.MiddleCenter);
+                ArchiveUiStyle.Ink, TextAnchor.MiddleCenter);
             if (left != null)
                 ArchiveUiStyle.TabButton(AddButton("设置_" + name + "_左", leftLabel, row.transform,
                     new Vector2(660, -28), new Vector2(right == null ? 328 : 150, 70), left), false,
@@ -436,7 +452,7 @@ namespace OCC.Combat.Presentation
             Label("名称", "主音量", row.transform, new Vector2(18, -30), new Vector2(230, 58), 26,
                 ArchiveUiStyle.Ink, TextAnchor.MiddleLeft);
             volumeValue = Label("值", string.Empty, row.transform, new Vector2(890, -30), new Vector2(100, 58), 26,
-                ArchiveUiStyle.Brass, TextAnchor.MiddleRight);
+                ArchiveUiStyle.Ink, TextAnchor.MiddleRight);
             GameObject sliderObject = FormalUiKit.Panel("主音量滑动条", row.transform, new Vector2(0, 1), new Vector2(0, 1),
                 new Vector2(270, -32), new Vector2(600, 62), Color.clear);
             Image background = FormalUiKit.Panel("轨道", sliderObject.transform, new Vector2(0, 1), new Vector2(0, 1),

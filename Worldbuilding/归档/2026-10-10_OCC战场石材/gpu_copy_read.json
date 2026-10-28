@@ -1,8 +1,0 @@
-{
-  "content": [
-    {
-      "type": "text",
-      "text": "{\"success\":true,\"message\":\"Executed (legacy Run()).\",\"data\":{\"result\":\"output=1920x1080|projection=30|copies=2\",\"compiler\":\"Roslyn\"}}"
-    }
-  ]
-}

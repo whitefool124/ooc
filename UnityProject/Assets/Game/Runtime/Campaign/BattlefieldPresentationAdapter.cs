@@ -275,7 +275,9 @@ namespace OCC.Combat
             UnitState target = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && unit.Position == position);
             if (action == "攻击")
             {
+                if (LampVineConcealment.Intact(state, position)) return state.LampVines.AttackFailure(state, hero, position);
                 if (target == null || target.IsHero) return "当前格没有可攻击目标";
+                if (state.LampVines.IsHiddenFrom(state, hero, target)) return "真实目标格尚未公开，请选择公开灯藤格搜查";
                 if (distance < hero.MainHand.MinimumRange) return "目标位于武器近身死区";
                 if (distance > hero.EffectiveRange(hero.MainHand.Range)) return "目标超出武器射程";
                 if (!state.HasLineOfSight(hero.Position, position)) return "重掩体或烟幕挡住了视线";
@@ -428,7 +430,7 @@ namespace OCC.Combat
         private static bool HasInteractionTarget(CombatState state, GridPosition position)
         {
             TileState tile = state.Map.GetTile(position);
-            return (tile.Durability > 0 && (tile.IsObjective || tile.IsDevice || tile.IsLampVine || tile.Cover != CoverType.None)) ||
+            return (tile.Durability > 0 && (tile.IsDestructibleLoot || tile.IsObjective || tile.IsDevice || tile.IsLampVine || tile.Cover != CoverType.None)) ||
                 state.Objectives.OfType<InvestigationObjective>().Any(objective => objective.Positions.Contains(position));
         }
 
@@ -474,6 +476,7 @@ namespace OCC.Combat
         {
             if (state == null || state.ActiveUnitId != "hero") return false;
             UnitState hero = state.GetUnit("hero");
+            if (LampVineConcealment.Intact(state, position)) return state.LampVines.AttackFailure(state, hero, position) == "";
             int distance = Distance(hero.Position, position);
             return distance >= Math.Max(1, hero.MainHand.MinimumRange) && distance <= hero.EffectiveRange(hero.MainHand.Range) && state.HasLineOfSight(hero.Position, position);
         }

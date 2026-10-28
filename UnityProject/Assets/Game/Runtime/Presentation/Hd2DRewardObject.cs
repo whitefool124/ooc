@@ -25,11 +25,7 @@ namespace OCC.Combat.Presentation
             rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
             rect.pivot = new Vector2(.5f, .5f);
             rect.anchoredPosition = new Vector2(0, -20);
-            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,
-                source.sprite.rect.width / (Hd2DDeskArtCandidate.ScenePixelsPerUnit * Mathf.Abs(scale.x)));
-            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
-                source.sprite.rect.height / (Hd2DDeskArtCandidate.ScenePixelsPerUnit * Mathf.Abs(scale.y)));
-            source.preserveAspect = true;
+            Hd2DUiIconSizing.Apply(source);
             // Refresh the canvas mesh before shared geometry observes the new rect.
             Canvas.ForceUpdateCanvases();
             sized = true;
