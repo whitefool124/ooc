@@ -16,6 +16,13 @@ namespace OCC.Combat.Presentation
         private readonly Dictionary<Texture2D,Material> textured=new Dictionary<Texture2D,Material>();
         private readonly Dictionary<Texture2D,Material> billboardTextured=new Dictionary<Texture2D,Material>();
         private GameObject world;
+        public CombatWorldParticles WorldParticles { get; private set; }
+        public CombatWorldParticles EnsureWorldParticles()
+        {
+            if (world == null) return null;
+            if (WorldParticles == null) WorldParticles = CombatWorldParticles.Create(world.transform);
+            return WorldParticles;
+        }
         private Camera cameraView;
         private RenderTexture output;
         private VolumeProfile profile;
@@ -391,7 +398,12 @@ namespace OCC.Combat.Presentation
         }
         private void LateUpdate()
         {
-            if(host==null||host.CurrentState==null||world==null)return;
+            if(host==null||world==null)return;
+            if(host.CurrentState==null||!ReferenceEquals(host.CurrentState,boundState)||
+                host.CurrentFlowPhase==CombatFlowPhase.DeveloperMenu||host.CurrentFlowPhase==CombatFlowPhase.Briefing)
+            {world.SetActive(false);return;}
+            if(!world.activeSelf)
+            {world.SetActive(true);localLighting.EnsureLease(cameraView,world.transform,width,height,rendering);}
             var viewRect=((RectTransform)transform).rect;float scale=GetComponentInParent<Canvas>().rootCanvas.scaleFactor;
             int rw=Mathf.Max(1,Mathf.RoundToInt(viewRect.width*scale)),rh=Mathf.Max(1,Mathf.RoundToInt(viewRect.height*scale));
             if(output.width!=rw||output.height!=rh)
@@ -604,7 +616,12 @@ namespace OCC.Combat.Presentation
             label.rectTransform.anchorMin=label.rectTransform.anchorMax=Vector2.zero;label.rectTransform.pivot=new Vector2(.5f,0);
             label.rectTransform.anchoredPosition=new Vector2(v.x*rect.rect.width,v.y*rect.rect.height+6);
         }
-        private void OnEnable(){if(world!=null)world.SetActive(true);}
+        private void OnEnable()
+        {
+            if(world==null)return;
+            world.SetActive(true);
+            if(localLighting!=null)localLighting.EnsureLease(cameraView,world.transform,width,height,rendering);
+        }
         private void OnDisable(){OnPointerExit(null);if(world!=null)world.SetActive(false);}
         private void OnDestroy()
         {

@@ -460,7 +460,7 @@ namespace OCC.Combat.Tests
             MemoryStore store = new MemoryStore();
             RogueliteSaveGateway gateway = new RogueliteSaveGateway(store);
             RogueliteMapSaveCoordinator coordinator = new RogueliteMapSaveCoordinator(gateway);
-            RogueliteMapStartResult start = coordinator.TryStart(false, FireRogueliteStarterCatalog.Ranged, 42);
+            RogueliteMapStartResult start = coordinator.TryStart(false, FireRogueliteStarterCatalog.Ranged, 42, enableFixedFirstExperience: true);
 
             Assert.That(start.Success, Is.True, start.FailureMessage + " | " + gateway.LastError);
             Assert.That(start.Run.IsFirstRunExperience, Is.True);

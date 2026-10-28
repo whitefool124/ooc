@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 
 namespace OCC.Combat.Tests
@@ -29,7 +29,7 @@ namespace OCC.Combat.Tests
             Assert.That(hero.Shield, Is.EqualTo(2), "Burning preserves the existing direct-health rule.");
             Assert.That(hero.StatusDuration(StatusType.Agility), Is.EqualTo(1));
             Assert.That(hero.HasStatus(StatusType.Bound), Is.True);
-            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(UnitState.HeroSlowedMovementRange));
+            Assert.That(hero.MovementRangeThisTurn, Is.EqualTo(2));
             Assert.That(hero.EffectiveSpeed, Is.EqualTo(10));
             Assert.That(hero.EffectiveArmor, Is.EqualTo(1));
 

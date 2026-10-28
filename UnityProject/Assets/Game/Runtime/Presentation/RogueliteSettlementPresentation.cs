@@ -331,7 +331,7 @@ namespace OCC.Combat.Presentation
             string amount = chosen == null ? "?" : "✓";
             AddScavengeEntry(parent, row, title, amount, rewardIcon, true, () =>
             {
-                if (unopened) bootstrap.OpenMapRewardChoices();
+                if (unopened) { choiceWindowSuppressed = false; bootstrap.OpenMapRewardChoices(); }
                 else if (chosen != null) TryClaim(run.SelectedRewardId);
                 else { choiceWindowSuppressed = false; Show(run); }
             }, firstElite);
@@ -341,6 +341,14 @@ namespace OCC.Combat.Presentation
                 FormalHoverTooltipTrigger trigger = rewardRow.AddComponent<FormalHoverTooltipTrigger>();
                 trigger.Configure(tooltip, () => new FormalTooltipContent("待领取", chosen.DisplayName,
                     RewardEffect(chosen), FormalUiTheme.Amber, rewardIcon));
+                if (run.CanDismantleReward(chosen))
+                {
+                    Button dismantle = FormalUiKit.Button("拆解_" + chosen.Id, "拆解为材料", rewardRow.transform,
+                        new Vector2(130, -105), new Vector2(240, 36), FormalUiTheme.Interactive);
+                    dismantle.onClick.AddListener(() => TryClaim("dismantle:" + chosen.Id));
+                    FormalUiKit.ConfigureButtonFeedback(dismantle, FormalUiTheme.ButtonPalette(FormalUiButtonTone.Neutral),
+                        () => UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity), bootstrap.ShowUiFeedback);
+                }
             }
             float paneWidth = parent.GetComponent<RectTransform>().sizeDelta.x;
             AddLabel(parent, "收集提示", chosen == null ? "" : "↓", new Vector2(paneWidth - 120, -570), new Vector2(52, 44),
@@ -409,8 +417,8 @@ namespace OCC.Combat.Presentation
             AddLabel(window.transform, "选择提示", choices.Count == 1 ? "◇" : "◇  ◇  ◇", new Vector2(1340, -38), new Vector2(270, 44),
                 27, FormalUiTheme.Amber, TextAnchor.MiddleRight);
             for (int i = 0; i < choices.Count; i++) AddRevealCard(window.transform, choices[i], i, run);
-            Button back = FormalUiKit.Button("返回清点", "返回", window.transform, new Vector2(674, -820),
-                new Vector2(316, 64), FormalUiTheme.Interactive);
+            Button back = FormalUiKit.Button("返回清点", "返回清点 · 保留未领取奖励", window.transform, new Vector2(524, -820),
+                new Vector2(616, 80), FormalUiTheme.Interactive);
             back.onClick.AddListener(() => { choiceWindowSuppressed = true; Show(run); });
         }
 
@@ -426,7 +434,7 @@ namespace OCC.Combat.Presentation
             if(!Application.isPlaying)AddRewardCardFrame(card.transform, rect.sizeDelta);
             if(!Application.isPlaying)FormalUiKit.Line(card.transform, new Vector2(16, -16), new Vector2(456, 4), FormalUiTheme.Amber, "卡牌顶光");
             GameObject portrait = FormalUiKit.FlatPanel("奖励画像底", card.transform, new Vector2(0, 1), new Vector2(0, 1),
-                new Vector2(24, -60), new Vector2(440, 300), FormalUiTheme.Panel);
+                new Vector2(24, -116), new Vector2(440, 254), FormalUiTheme.Panel);
             Image objectIcon=AddLootIcon(portrait.transform, "奖励大图标_" + reward.Id, iconPath, new Vector2(108, -38), 224);
             if(Application.isPlaying)
             {
@@ -438,14 +446,15 @@ namespace OCC.Combat.Presentation
                 ArchiveUiStyle.PaperContent(description);
                 Hd2DRewardObject.Attach(card,objectIcon,!UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity).IsImmediate);
             }
-            AddLabel(card.transform, "奖励类别", RewardCategory(reward), new Vector2(28, Application.isPlaying ? 38 : -18), new Vector2(432, 40),
-                22, FormalUiTheme.Muted, TextAnchor.MiddleCenter);
+            AddLabel(card.transform, "奖励类别", RewardCategory(reward), new Vector2(48, -88), new Vector2(392, 40),
+                24, FormalUiTheme.Text, TextAnchor.MiddleCenter);
             if (!Application.isPlaying)
                 FormalUiKit.Line(card.transform, new Vector2(24, -400), new Vector2(440, 2), FormalUiTheme.Amber, "卡牌分隔");
-            AddLabel(card.transform, "名称", reward.DisplayName, new Vector2(72, -444), new Vector2(344, 50),
-                34, FormalUiTheme.Text, TextAnchor.MiddleCenter);
-            AddLabel(card.transform, "关键效果", RewardEffect(reward), new Vector2(64, -508), new Vector2(360, 104),
+            AddLabel(card.transform, "名称", reward.DisplayName, new Vector2(48, -28), new Vector2(392, 56),
+                24, FormalUiTheme.Text, TextAnchor.MiddleCenter);
+            AddLabel(card.transform, "关键效果", RewardEffect(reward), new Vector2(48, -404), new Vector2(392, 144),
                 20, FormalUiTheme.Text, TextAnchor.UpperLeft);
+            AddLabel(card.transform,"选择操作","选择此项 → 查看领取去向",new Vector2(48,-564),new Vector2(392,48),24,FormalUiTheme.Text,TextAnchor.MiddleCenter);
             Button button = card.AddComponent<Button>();
             button.targetGraphic = background;
             button.transition = Selectable.Transition.None;
@@ -886,8 +895,8 @@ namespace OCC.Combat.Presentation
             {
                 case "BASE-FIRE-MELEE": return "对单位或物件造成 8 点火焰伤害";
                 case "BASE-FIRE-RANGED": return "对单位或物件造成 6 点火焰伤害";
-                case "BASE-AETHER-SHIELD": return "自身获得 8 点普通盾";
-                case "BASE-MANA-RECOVER": return "恢复 2 点个人魔力，最多恢复至 12";
+                case "BASE-AETHER-SHIELD": return "自身获得 " + (spell.Rules.Contains("grant_shield:8") ? "8" : "6") + " 点普通盾";
+                case "BASE-MANA-RECOVER": return "恢复 2 点个人魔力，不超过当前上限";
                 default: return "依照术式说明生效";
             }
         }
@@ -1021,12 +1030,24 @@ namespace OCC.Combat.Presentation
         {
             if (claimPending || bootstrap == null) return;
             claimPending = true;
+            int beforeRefresh = RefreshCount;
             try { bootstrap.ClaimMapFixedLoot(lootId); }
             catch (System.InvalidOperationException exception)
             {
                 claimPending = false;
                 bootstrap.ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "没能拿走这件东西：" + exception.Message));
             }
+            finally { FinishClaim(beforeRefresh); }
+        }
+
+        private void FinishClaim(int beforeRefresh)
+        {
+            claimPending = false;
+            // A failed save reloads the identical model. Restore input even when
+            // presentation deduplication correctly skipped that notification.
+            if (RefreshCount != beforeRefresh) return;
+            hasPresentedModel = false;
+            RefreshNow();
         }
 
         private void TryClaim(string rewardId)
@@ -1056,6 +1077,7 @@ namespace OCC.Combat.Presentation
                 return;
             }
             claimPending = true;
+            int beforeRefresh = RefreshCount;
             foreach (RewardCardInput card in rewardCards)
                 card.Button?.GetComponent<UiButtonFeedback>()?.SetAvailability(false, "正在收好奖励");
             try
@@ -1070,6 +1092,7 @@ namespace OCC.Combat.Presentation
                     card.Button?.GetComponent<UiButtonFeedback>()?.SetAvailability(card.CanClaim, card.CanClaim ? string.Empty : "现在不能拿走这件东西");
                 bootstrap.ShowUiFeedback(new UiActionFeedback(UiFeedbackKind.Rejected, "没能拿走这件东西：" + exception.Message));
             }
+            finally { FinishClaim(beforeRefresh); }
         }
 
         private static RogueliteReward AsReward(FireSpellDefinition spell)

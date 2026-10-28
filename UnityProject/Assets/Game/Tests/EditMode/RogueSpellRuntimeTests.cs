@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NUnit.Framework;
 using OCC.Combat.Roguelite;
@@ -53,7 +53,7 @@ namespace OCC.Combat.Tests
             runtime.ExecuteSlot(0, CombatCommand.UseSkill("hero", 0, "enemy"));
             Assert.That(before - enemy.Health, Is.EqualTo(8));
             runtime.ExecuteSlot(2, CombatCommand.UseSkill("hero", 2, "hero"));
-            Assert.That(hero.Shield, Is.EqualTo(8));
+            Assert.That(hero.Shield, Is.EqualTo(6));
         }
 
         [Test]

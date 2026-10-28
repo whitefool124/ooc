@@ -1,0 +1,191 @@
+[
+  {
+    "asset_id": "keeper",
+    "source_path": "ArtSource/Lampkeeper_20261021/raw/keeper.png",
+    "source_sha256": "022b14297ed6837e2c3eb0d26d63c8132f1a8a3f1b7ce2f6dff5d67676c21ece",
+    "source_size": [
+      965,
+      1629
+    ],
+    "alpha_bounds": [
+      0,
+      23,
+      947,
+      1629
+    ],
+    "subject_delivery_size": [
+      50,
+      84
+    ],
+    "delivery_canvas": [
+      64,
+      96
+    ],
+    "processing": "Crop transparent margin; uniform nearest-neighbor scaling for noncombat HD2D display role; center with safe border. No repaint, recolor, palette creation or synthetic details.",
+    "reference": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/lamp.png",
+    "ui_display_scale": 4,
+    "density_review": "PENDING: authored cluster comparison and actual scene review; delivery texel equality is not proof of source pixel consistency"
+  },
+  {
+    "asset_id": "LK-01",
+    "source_path": "ArtSource/Lampkeeper_20261021/raw/LK-01.png",
+    "source_sha256": "6afc81b60ead2872b237f28ab105ac264b123e41852dc65991bd4451d131be35",
+    "source_size": [
+      1144,
+      1375
+    ],
+    "alpha_bounds": [
+      65,
+      45,
+      1126,
+      1375
+    ],
+    "subject_delivery_size": [
+      35,
+      44
+    ],
+    "delivery_canvas": [
+      64,
+      64
+    ],
+    "processing": "Crop transparent margin; uniform nearest-neighbor scaling for noncombat HD2D display role; center with safe border. No repaint, recolor, palette creation or synthetic details.",
+    "reference": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/lamp.png",
+    "ui_display_scale": 4,
+    "density_review": "PENDING: authored cluster comparison and actual scene review; delivery texel equality is not proof of source pixel consistency"
+  },
+  {
+    "asset_id": "LK-02",
+    "source_path": "ArtSource/Lampkeeper_20261021/raw/LK-02.png",
+    "source_sha256": "5f772742eeac3baa93192f6055313c7ec22e14cadfa4911caba19569f508c4d7",
+    "source_size": [
+      1312,
+      1199
+    ],
+    "alpha_bounds": [
+      0,
+      23,
+      1272,
+      1199
+    ],
+    "subject_delivery_size": [
+      44,
+      41
+    ],
+    "delivery_canvas": [
+      64,
+      64
+    ],
+    "processing": "Crop transparent margin; uniform nearest-neighbor scaling for noncombat HD2D display role; center with safe border. No repaint, recolor, palette creation or synthetic details.",
+    "reference": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/lamp.png",
+    "ui_display_scale": 4,
+    "density_review": "PENDING: authored cluster comparison and actual scene review; delivery texel equality is not proof of source pixel consistency"
+  },
+  {
+    "asset_id": "LK-03",
+    "source_path": "ArtSource/Lampkeeper_20261021/raw/LK-03.png",
+    "source_sha256": "85cf2346e6582fee8d942872ebb96c61596cf9a905b192c8cef9e74fd8e8bc2d",
+    "source_size": [
+      1245,
+      1263
+    ],
+    "alpha_bounds": [
+      0,
+      39,
+      1201,
+      1263
+    ],
+    "subject_delivery_size": [
+      43,
+      44
+    ],
+    "delivery_canvas": [
+      64,
+      64
+    ],
+    "processing": "Crop transparent margin; uniform nearest-neighbor scaling for noncombat HD2D display role; center with safe border. No repaint, recolor, palette creation or synthetic details.",
+    "reference": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/lamp.png",
+    "ui_display_scale": 4,
+    "density_review": "PENDING: authored cluster comparison and actual scene review; delivery texel equality is not proof of source pixel consistency"
+  },
+  {
+    "asset_id": "LK-04",
+    "source_path": "ArtSource/Lampkeeper_20261021/raw/LK-04.png",
+    "source_sha256": "59168227bcb1b7c6dadcf0c3607e11af8e01714add7bb1718666a7ca89ed2de0",
+    "source_size": [
+      1145,
+      1374
+    ],
+    "alpha_bounds": [
+      49,
+      21,
+      1107,
+      1358
+    ],
+    "subject_delivery_size": [
+      35,
+      44
+    ],
+    "delivery_canvas": [
+      64,
+      64
+    ],
+    "processing": "Crop transparent margin; uniform nearest-neighbor scaling for noncombat HD2D display role; center with safe border. No repaint, recolor, palette creation or synthetic details.",
+    "reference": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/lamp.png",
+    "ui_display_scale": 4,
+    "density_review": "PENDING: authored cluster comparison and actual scene review; delivery texel equality is not proof of source pixel consistency"
+  },
+  {
+    "asset_id": "LK-05",
+    "source_path": "ArtSource/Lampkeeper_20261021/raw/LK-05.png",
+    "source_sha256": "11be6f02a448c3f69c13162257d9ce0471106155d85b5cc62a590433770568f7",
+    "source_size": [
+      1327,
+      1185
+    ],
+    "alpha_bounds": [
+      0,
+      32,
+      1291,
+      1185
+    ],
+    "subject_delivery_size": [
+      44,
+      39
+    ],
+    "delivery_canvas": [
+      64,
+      64
+    ],
+    "processing": "Crop transparent margin; uniform nearest-neighbor scaling for noncombat HD2D display role; center with safe border. No repaint, recolor, palette creation or synthetic details.",
+    "reference": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/lamp.png",
+    "ui_display_scale": 4,
+    "density_review": "PENDING: authored cluster comparison and actual scene review; delivery texel equality is not proof of source pixel consistency"
+  },
+  {
+    "asset_id": "LK-06",
+    "source_path": "ArtSource/Lampkeeper_20261021/raw/LK-06.png",
+    "source_sha256": "2b3e8f8a26168619ee8fdc946d712f64ebd54e3d162ff7f2614207640db6c13e",
+    "source_size": [
+      1243,
+      1265
+    ],
+    "alpha_bounds": [
+      0,
+      81,
+      1223,
+      1265
+    ],
+    "subject_delivery_size": [
+      44,
+      43
+    ],
+    "delivery_canvas": [
+      64,
+      64
+    ],
+    "processing": "Crop transparent margin; uniform nearest-neighbor scaling for noncombat HD2D display role; center with safe border. No repaint, recolor, palette creation or synthetic details.",
+    "reference": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/lamp.png",
+    "ui_display_scale": 4,
+    "density_review": "PENDING: authored cluster comparison and actual scene review; delivery texel equality is not proof of source pixel consistency"
+  }
+]

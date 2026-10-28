@@ -9,7 +9,7 @@ namespace OCC.Combat
     {
         public static int Budget(CombatState state, UnitState unit) =>
             state.RainLanternCourt == null
-                ? MovementRange(state, unit) + (state.RogueEquipment?.MovementBonus(unit.Id) ?? 0) + (state.AcademyFieldEnemy?.MovementBonus(state, unit) ?? 0)
+                ? Math.Max(0, MovementRange(state, unit) + unit.StatusStrength(StatusType.MoveBonus) + (state.RogueEquipment?.MovementBonus(unit.Id) ?? 0) + (state.AcademyFieldEnemy?.MovementBonus(state, unit) ?? 0))
                 : state.RainLanternCourt.MovementBudget(unit);
 
         private static int MovementRange(CombatState state, UnitState unit)
@@ -38,7 +38,7 @@ namespace OCC.Combat
         {
             if (state.RainLanternCourt != null) return state.RainLanternCourt.EntryCost(unit, position);
             TileState tile = state.Map.GetTile(position);
-            int cost = tile.IsWater || tile.IsLampVine || tile.IsCrystalShard || tile.IsLoosePaper ? 2 : 1;
+            int cost = tile.IsWater || tile.IsLampVine && tile.Durability > 0 || tile.IsCrystalShard || tile.IsLoosePaper ? 2 : 1;
             return state.AcademyFieldEnemy?.EntryCost(state, unit, position, cost) ?? cost;
         }
 

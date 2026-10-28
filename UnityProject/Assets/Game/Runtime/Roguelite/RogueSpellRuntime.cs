@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -56,16 +56,20 @@ namespace OCC.Combat.Roguelite
 
     public sealed class RogueSpellCombatRuntime
     {
+        // Presentation readback only; never serialized, cloned into combat decisions or used by rules.
+        public RogueSpellExecution LastExecution { get; private set; }
         public static readonly SpellDefinition FirstBattleOriginSpell = new SpellDefinition(
             RainLanternCourtRuntime.OriginSpellId, "借障导流", "aether", "defense", SpellRarity.Basic,
             1, 1, 0, "self_when_adjacent_cover", 0, "not_required",
             new[] { "first_b1_borrow_cover:shield4:next_move2" }, Array.Empty<string>(),
             new[] { "first_battle" }, false, string.Empty, "first-run-v1-b1", true);
         private readonly Dictionary<string, int> ownTurnSequences = new Dictionary<string, int>(StringComparer.Ordinal);
+        private readonly Dictionary<string, int> battleUses = new Dictionary<string, int>(StringComparer.Ordinal);
         private readonly Dictionary<string, int> availableAtTurn = new Dictionary<string, int>(StringComparer.Ordinal);
         private readonly HashSet<string> temperingTriggeredThisTurn = new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> momentumTriggeredThisTurn = new HashSet<string>(StringComparer.Ordinal);
         private readonly RogueContentCatalog catalog;
+        private readonly bool legacyBasics;
         private readonly string specializedSpellId;
         private readonly string specializationMaterialId;
         private readonly Dictionary<string, string> academySpecializations = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -74,13 +78,14 @@ namespace OCC.Combat.Roguelite
         public FireBattleState FireBattle { get; private set; }
 
         public RogueSpellCombatRuntime(CombatState combat, RogueSpellLoadout combatSnapshot, string specializedSpellId = "",
-            string specializationMaterialId = "SPEC-AMPLIFY", IReadOnlyDictionary<string, string> additionalSpecializations = null)
+            string specializationMaterialId = "SPEC-AMPLIFY", IReadOnlyDictionary<string, string> additionalSpecializations = null, bool legacyBasics = false, RogueContentCatalog contentCatalog = null)
         {
             Combat = combat ?? throw new ArgumentNullException(nameof(combat));
             if (combat.Ruleset != CombatRuleset.Roguelite) throw new InvalidOperationException("Rogue spell runtime requires roguelite rules.");
             Loadout = combatSnapshot ?? throw new ArgumentNullException(nameof(combatSnapshot));
             if (!Loadout.IsCombatLocked) throw new InvalidOperationException("Combat requires a locked spell snapshot.");
-            catalog = RogueContentCatalog.CreateAcademyV01(); FireBattle = new FireBattleState(combat);
+            this.legacyBasics = legacyBasics;
+            catalog = contentCatalog ?? (legacyBasics ? RogueContentCatalog.CreateLegacyBasics() : RogueContentCatalog.CreateAcademyV01()); FireBattle = new FireBattleState(combat);
             this.specializedSpellId = specializedSpellId ?? string.Empty;
             this.specializationMaterialId = specializationMaterialId ?? "SPEC-AMPLIFY";
             if (!string.IsNullOrEmpty(this.specializedSpellId)) academySpecializations[this.specializedSpellId] = this.specializationMaterialId;
@@ -93,7 +98,8 @@ namespace OCC.Combat.Roguelite
         internal RogueSpellCombatRuntime Clone(CombatState combat)
         {
             RogueSpellCombatRuntime clone = new RogueSpellCombatRuntime(combat, Loadout.CreateCombatSnapshot(),
-                specializedSpellId, specializationMaterialId, academySpecializations);
+                specializedSpellId, specializationMaterialId, academySpecializations, legacyBasics, catalog);
+            foreach (var pair in battleUses) clone.battleUses[pair.Key] = pair.Value;
             foreach (var pair in ownTurnSequences) clone.ownTurnSequences[pair.Key] = pair.Value;
             foreach (var pair in availableAtTurn) clone.availableAtTurn[pair.Key] = pair.Value;
             foreach (string id in temperingTriggeredThisTurn) clone.temperingTriggeredThisTurn.Add(id);
@@ -121,6 +127,7 @@ namespace OCC.Combat.Roguelite
 
         public void AfterMove(string unitId, IReadOnlyList<GridPosition> path)
         {
+            Combat.Lampkeeper?.AfterActiveMove(Combat, unitId, Math.Max(0, (path?.Count ?? 0) - 1));
             UnitState unit = Combat.GetUnit(unitId);
             if (unit != null && unit.IsHero && HasEquipped("PASSIVE-ELITE-02") &&
                 !momentumTriggeredThisTurn.Contains(unitId) && path != null && path.Count >= 4)
@@ -173,8 +180,15 @@ namespace OCC.Combat.Roguelite
 
         public bool IsReady(string spellId, string unitId = "hero")
         {
+            if (BattleUsesRemaining(spellId, unitId) == 0) return false;
             int turn = ownTurnSequences.TryGetValue(unitId, out int value) ? value : 0;
             return !availableAtTurn.TryGetValue(unitId + "|" + spellId, out int available) || turn >= available;
+        }
+        public int BattleUsesRemaining(string spellId, string unitId = "hero")
+        {
+            int limit = catalog.Spells.FirstOrDefault(s => s.DefinitionId == spellId)?.BattleUseLimit ?? 0;
+            if (limit == 0) return -1;
+            return Math.Max(0, limit - (battleUses.TryGetValue(unitId + "|" + spellId, out int used) ? used : 0));
         }
 
         public SpellDefinition DefinitionAtSlot(int slot)
@@ -199,6 +213,7 @@ namespace OCC.Combat.Roguelite
             string spellId = Loadout.EquippedSpellIds[slot];
             if (string.IsNullOrEmpty(spellId)) throw new InvalidOperationException("Spell slot is empty.");
             if (Combat.ActiveUnitId != command.UnitId) throw new InvalidOperationException("Only the active unit can cast.");
+            if (BattleUsesRemaining(spellId, command.UnitId) == 0) throw new InvalidOperationException("本场术式次数已用尽。");
             if (!IsReady(spellId, command.UnitId)) throw new InvalidOperationException("Spell is cooling down.");
             SpellDefinition spell = spellId == RainLanternCourtRuntime.OriginSpellId
                 ? FirstBattleOriginSpell
@@ -208,7 +223,30 @@ namespace OCC.Combat.Roguelite
             int manaCost = EffectiveManaCost(spell, source.Id);
             if (source.ActionPoints < spell.ActionPointCost || source.Mana < manaCost) throw new InvalidOperationException("Insufficient action points or personal mana.");
 
+            var beforeFire = Combat.Lampkeeper?.GiftId == "LK-01" ? new HashSet<GridPosition>(FireBattle.Firegrounds.Keys) : null;
+            var beforeObjects = Combat.Lampkeeper?.GiftId == "LK-03"
+                ? Combat.Map.PositionsWith(t => t.Durability > 0).ToDictionary(p => p, p => Combat.Map.GetTile(p).Durability) : null;
+            GridPosition beforeMove = source.Position;
             RogueSpellExecution execution = spell.IsBasic ? ExecuteBasic(spell, source, command) : ExecuteFire(spell, source, command);
+            if (beforeFire != null && execution.FireEffects != null && execution.FireEffects.Steps.Any(s =>
+                s.Applied > 0 && (s.Kind == FireRuleKind.CreateFireground || s.Kind == FireRuleKind.ExpandFireground) &&
+                !beforeFire.Contains(s.Cell) && FireBattle.HasFireground(s.Cell)))
+                Combat.Lampkeeper.AfterNewFireground(Combat, source.Id);
+            if (execution.FireEffects != null)
+            {
+                if (beforeObjects != null)
+                    foreach (var step in execution.FireEffects.Steps.Where(s => s.Applied > 0 &&
+                        (s.Kind == FireRuleKind.DamageDurability || s.Kind == FireRuleKind.DestroyLightCover)))
+                        if (beforeObjects.TryGetValue(step.Cell, out int durability))
+                            Combat.Lampkeeper.AfterDirectObjectDamage(Combat, source.Id, durability, Combat.Map.GetTile(step.Cell).Durability);
+                int travelled = 0; var previous = beforeMove;
+                foreach (var step in execution.FireEffects.Steps.Where(s => s.Applied > 0 && s.TargetId == source.Id &&
+                    (s.Kind == FireRuleKind.MoveSource || s.Kind == FireRuleKind.MoveAfterAttack ||
+                     s.Kind == FireRuleKind.MoveBeyondTarget || s.Kind == FireRuleKind.ReturnAlongCharge ||
+                     s.Kind == FireRuleKind.AdvanceIntoBreach)))
+                { travelled += previous.ManhattanDistance(step.Cell); previous = step.Cell; }
+                Combat.Lampkeeper?.AfterActiveMove(Combat, source.Id, travelled);
+            }
             if (command.UnitId == "hero" && Combat.RogueEquipment?.FirstForgeSpellDiscountAvailable == true)
                 Combat.RogueEquipment.ConsumeFirstForgeSpellDiscount();
             if(command.UnitId=="hero"&&Combat.RogueEquipment?.MealSpellDiscountAvailable==true)
@@ -216,7 +254,7 @@ namespace OCC.Combat.Roguelite
             FireBattle.ResolveMarkedDestructions(source.Id);
             bool dealtPersonalFireDamage = execution.FireEffects != null
                 ? execution.FireEffects.Steps.Any(step => step.Kind == FireRuleKind.Damage && step.Applied > 0)
-                : spell.DefinitionId == "BASE-FIRE-RANGED" && execution.CombatEffects.Results.Any(result =>
+                : (spell.DefinitionId == "BASE-FIRE-RANGED" || spell.DefinitionId == "BASE-FIRE-MELEE") && execution.CombatEffects.Results.Any(result =>
                     (result.Kind == CombatEffectKind.AbsorbShield || result.Kind == CombatEffectKind.DamageHealth) && result.AppliedAmount > 0);
             if (spell.Element == "fire" && dealtPersonalFireDamage &&
                 HasEquipped("PASSIVE-ELITE-01") && temperingTriggeredThisTurn.Add(source.Id))
@@ -230,6 +268,9 @@ namespace OCC.Combat.Roguelite
                 int turn = ownTurnSequences.TryGetValue(source.Id, out int value) ? value : 0;
                 availableAtTurn[source.Id + "|" + spellId] = turn + cooldown + 1;
             }
+            LastExecution = execution;
+            string useKey = source.Id + "|" + spellId;
+            battleUses[useKey] = battleUses.TryGetValue(useKey, out int used) ? used + 1 : 1;
             return execution;
         }
 
@@ -243,11 +284,12 @@ namespace OCC.Combat.Roguelite
             List<CombatEffect> effects = new List<CombatEffect> { CombatEffect.SpendActionPoints(spell.ActionPointCost) };
             int manaCost = EffectiveManaCost(spell, source.Id);
             if (manaCost > 0) effects.Add(CombatEffect.SpendMana(manaCost));
+            if (source.HasStatus(StatusType.SpellCost)) effects.Add(CombatEffect.ClearStatus(source.Id, StatusType.SpellCost));
             if (spell.DefinitionId == "BASE-MANA-RECOVER") effects.Add(CombatEffect.RestoreMana(source.Id, IsAmplified(spell.DefinitionId) ? 3 : 2));
             if (spell.DefinitionId == "BASE-AETHER-SHIELD")
             {
                 CombatEffectExecution cost = CombatEffectExecutor.Execute(Combat, source.Id, effects.ToArray());
-                Combat.TryGrantRogueliteShield(source.Id, spell.DefinitionId, IsAmplified(spell.DefinitionId) ? 10 : 8);
+                Combat.TryGrantRogueliteShield(source.Id, spell.DefinitionId, IsAmplified(spell.DefinitionId) ? (legacyBasics ? 10 : 8) : (legacyBasics ? 8 : 6));
                 return new RogueSpellExecution(cost);
             }
             if (spell.DefinitionId == "BASE-FIRE-MELEE" || spell.DefinitionId == "BASE-FIRE-RANGED")
@@ -255,18 +297,22 @@ namespace OCC.Combat.Roguelite
                 UnitState target = string.IsNullOrEmpty(command.TargetUnitId) ? null : Combat.GetUnit(command.TargetUnitId);
                 GridPosition targetCell = target?.Position ?? command.Destination;
                 TileState targetTile = Combat.Map.GetTile(targetCell);
-                bool objectTarget = target == null && targetTile.Durability > 0 && (targetTile.Cover != CoverType.None || targetTile.IsDevice || targetTile.IsObjective || targetTile.IsLampVine);
+                bool objectTarget = target == null && targetTile.Durability > 0 && (targetTile.IsDestructibleLoot || targetTile.Cover != CoverType.None || targetTile.IsDevice || targetTile.IsObjective || targetTile.IsLampVine);
                 int distance = source.Position.ManhattanDistance(targetCell);
+                if (Combat.LampVines.IsHiddenFrom(Combat, source, target)) throw new InvalidOperationException("目标真实格未公开，请搜查公开灯藤格。");
+                if (LampVineConcealment.Intact(Combat, source.Position) && distance > 1) throw new InvalidOperationException("藤内只能攻击正交相邻目标。");
                 if ((!objectTarget && (target == null || source.IsHero == target.IsHero)) || distance > source.EffectiveRange(spell.Range) ||
-                    (distance > 1 && !Combat.HasLineOfSight(source.Position, targetCell))) throw new InvalidOperationException("Spell target is not legal.");
-                int raw = CombatDebugTuning.OutgoingDamageFor(source, (spell.DefinitionId == "BASE-FIRE-MELEE" ? 8 : 6) + (IsAmplified(spell.DefinitionId) ? 2 : 0), DamageType.Fire);
-                if (objectTarget) effects.Add(CombatEffect.DamageObject(targetCell, raw));
-                else
+                    (distance > 1 && !Combat.Map.HasLineOfSight(source.Position, targetCell, Combat.CurrentTime, objectTarget))) throw new InvalidOperationException("Spell target is not legal.");
+                int raw = BasicObjectDamage(spell.DefinitionId, source.Id);
+                bool vine = LampVineConcealment.Intact(Combat, targetCell);
+                if (objectTarget || vine) effects.Add(CombatEffect.DamageObject(targetCell, raw));
+                var victims = objectTarget ? Combat.Units.Values.Where(u => vine && u.IsAlive && u.IsHero != source.IsHero && u.Position == targetCell).ToArray() : new[] { target };
+                foreach (var victim in victims)
                 {
-                    DamageResolution damage = RogueDamageResolver.Resolve(new DamagePacket("basic-" + spell.DefinitionId, source.Id, target.Id, spell.DefinitionId,
+                    DamageResolution damage = RogueDamageResolver.Resolve(new DamagePacket("basic-" + spell.DefinitionId, source.Id, victim.Id, spell.DefinitionId,
                         new[] { new DamageComponent(DamageComponentKind.Fire,
-                            Math.Max(0, raw + target.StatusStrength(StatusType.DamageTaken))) }), target.Shield, target.Health);
-                    effects.Add(CombatEffect.AbsorbShield(target.Id, damage.ShieldAbsorbed)); effects.Add(CombatEffect.DamageHealth(target.Id, damage.HealthDamage));
+                            Math.Max(0, raw + victim.StatusStrength(StatusType.DamageTaken))) }), victim.Shield, victim.Health);
+                    effects.Add(CombatEffect.AbsorbShield(victim.Id, damage.ShieldAbsorbed)); effects.Add(CombatEffect.DamageHealth(victim.Id, damage.HealthDamage));
                 }
             }
             return new RogueSpellExecution(CombatEffectExecutor.Execute(Combat, source.Id, effects.ToArray()));
@@ -280,6 +326,9 @@ namespace OCC.Combat.Roguelite
                 : FireSpellTarget.At(command.Destination, command.AimDirection);
             return new RogueSpellExecution(CombatEffectExecution.Empty, FireSpellEngine.Execute(FireBattle, source.Id, old, target));
         }
+
+        public int BasicObjectDamage(string spellId, string sourceId = "hero") => CombatDebugTuning.OutgoingDamageFor(
+            Combat.GetUnit(sourceId), (spellId == "BASE-FIRE-MELEE" ? 8 : 6) + (IsAmplified(spellId) ? 2 : 0), DamageType.Fire);
 
         public FireSpellDefinition EffectiveFireDefinition(string spellId, string unitId = "hero")
         {
@@ -300,7 +349,7 @@ namespace OCC.Combat.Roguelite
                 ? Math.Max(0, spell.ManaCost - 1) : spell.ManaCost;
             int discount=unitId=="hero"?((Combat.RogueEquipment?.FirstForgeSpellDiscountAvailable==true?1:0)+
                 (Combat.RogueEquipment?.MealSpellDiscountAvailable==true?1:0)):0;
-            return Math.Max(0,cost-discount);
+            return Math.Max(0,cost-discount + (Combat.GetUnit(unitId)?.StatusStrength(StatusType.SpellCost) ?? 0));
         }
         private int EffectiveCooldown(SpellDefinition spell) => IsThrottled(spell.DefinitionId) &&
             spell.DefinitionId == "BASE-MANA-RECOVER" ? Math.Max(0, spell.CooldownOwnTurns - 1) : spell.CooldownOwnTurns;

@@ -21,6 +21,8 @@ namespace OCC.Combat
         private int nextStatusOrder;
         private int firstNegativeStatusReductionRemaining;
         private readonly Dictionary<string, int> cooldowns = new Dictionary<string, int>(StringComparer.Ordinal);
+        private readonly List<KeyValuePair<string, int>> shieldLayers = new List<KeyValuePair<string, int>> { new KeyValuePair<string, int>("initial", 2) };
+        internal IReadOnlyList<string> ShieldSourceIds => shieldLayers.Select(layer => layer.Key).Distinct().ToArray();
 
         public string Id { get; }
         public bool IsHero { get; }
@@ -97,7 +99,15 @@ namespace OCC.Combat
         public static bool IsAttributeStatus(StatusType type) => type == StatusType.Agility || type == StatusType.Strength ||
             type == StatusType.SpellPower || type == StatusType.Speed || type == StatusType.Range ||
             type == StatusType.DamageTaken || type == StatusType.ShieldEfficiency || type == StatusType.ShieldGrant ||
-            type == StatusType.Control;
+            type == StatusType.Control || type == StatusType.MoveBonus || type == StatusType.SpellCost;
+        public int AdjustCooldown(string skillId, int delta)
+        {
+            if (string.IsNullOrWhiteSpace(skillId)) throw new ArgumentException("A skill is required.", nameof(skillId));
+            int current = cooldowns.TryGetValue(skillId, out int value) ? value : 0;
+            int next = (int)Math.Max(0, Math.Min(int.MaxValue, (long)current + delta));
+            if (next == 0) cooldowns.Remove(skillId); else cooldowns[skillId] = next;
+            return next;
+        }
         public bool IsSkillReady(SkillDefinition skill) => skill != null && (!cooldowns.TryGetValue(skill.Id, out int turns) || turns <= 0);
         public int Cooldown(SkillDefinition skill) => skill != null && cooldowns.TryGetValue(skill.Id, out int turns) ? turns : 0;
         public void Equip(WeaponDefinition mainHand, WeaponDefinition offHand, SkillDefinition skillOne, SkillDefinition skillTwo)
@@ -155,18 +165,35 @@ namespace OCC.Combat
             if (DamageAbsorptions > 0) { DamageAbsorptions--; return; }
             Health = Math.Max(0, Health - amount);
         }
-        internal int AbsorbShield(int amount) { int absorbed = Math.Min(Shield, amount); Shield -= absorbed; return absorbed; }
-        internal void ClearShield() => Shield = 0;
-        internal void Heal(int amount) => Health = Math.Min(MaxHealth, Health + amount);
-        internal void RestoreShield(int amount)
+        internal int AbsorbShield(int amount)
         {
-            if (HasStatus(StatusType.BreakStance)) return;
-            Shield = Math.Min(MaxShield, Shield + Math.Max(0, amount + StatusStrength(StatusType.ShieldEfficiency)));
+            int absorbed = Math.Min(Shield, Math.Max(0, amount)), remaining = absorbed;
+            while (remaining > 0 && shieldLayers.Count > 0)
+            {
+                var layer = shieldLayers[0]; int spent = Math.Min(layer.Value, remaining); remaining -= spent;
+                if (spent == layer.Value) shieldLayers.RemoveAt(0); else shieldLayers[0] = new KeyValuePair<string, int>(layer.Key, layer.Value - spent);
+            }
+            Shield -= absorbed; return absorbed;
         }
-        internal void GrantShield(int amount)
+        internal void ClearShield() { Shield = 0; shieldLayers.Clear(); }
+        internal int RemoveShieldFrom(string sourceId)
+        {
+            int removed = shieldLayers.Where(layer => layer.Key == sourceId).Sum(layer => layer.Value);
+            shieldLayers.RemoveAll(layer => layer.Key == sourceId); Shield -= removed; return removed;
+        }
+        internal void Heal(int amount) => Health = Math.Min(MaxHealth, Health + amount);
+        internal void RestoreShield(int amount, string sourceId = "ordinary")
         {
             if (HasStatus(StatusType.BreakStance)) return;
-            Shield += Math.Max(0, amount + StatusStrength(StatusType.ShieldEfficiency));
+            int next = Math.Min(MaxShield, Shield + Math.Max(0, amount + StatusStrength(StatusType.ShieldEfficiency)));
+            if (next < Shield) AbsorbShield(Shield - next);
+            else if (next > Shield) { shieldLayers.Add(new KeyValuePair<string, int>(sourceId, next - Shield)); Shield = next; }
+        }
+        internal void GrantShield(int amount, string sourceId = "ordinary")
+        {
+            if (HasStatus(StatusType.BreakStance)) return;
+            int granted = Math.Max(0, amount + StatusStrength(StatusType.ShieldEfficiency));
+            if (granted > 0) { shieldLayers.Add(new KeyValuePair<string, int>(sourceId, granted)); Shield += granted; }
         }
         internal void SpendMana(int amount) { if (amount < 0 || amount > Mana) throw new InvalidOperationException("\u4ee5\u592a\u4e0d\u8db3\u3002"); Mana -= amount; }
         internal void RestoreMana(int amount) => Mana = Math.Min(MaxMana, Mana + amount);
@@ -204,7 +231,7 @@ namespace OCC.Combat
         private static bool IsNegativeStatus(StatusType type, int strength) =>
             type == StatusType.Burning || type == StatusType.Slow || type == StatusType.Bound ||
             type == StatusType.ArmorBreak || type == StatusType.Dazzled || type == StatusType.BreakStance ||
-            type == StatusType.FiregroundVulnerable ||
+            type == StatusType.FiregroundVulnerable || type == StatusType.MoveBonus && strength < 0 || type == StatusType.SpellCost && strength > 0 ||
             (type == StatusType.Agility || type == StatusType.Strength || type == StatusType.SpellPower ||
              type == StatusType.Speed || type == StatusType.Range || type == StatusType.ShieldEfficiency ||
              type == StatusType.ShieldGrant || type == StatusType.Control) && strength < 0;
@@ -268,6 +295,7 @@ namespace OCC.Combat
             clone.Health = Health; clone.Mana = Mana; clone.ActionPoints = ActionPoints; clone.ActionValue = ActionValue; clone.MovementRangeThisTurn = MovementRangeThisTurn;
             clone.MaxHealth = MaxHealth; clone.MaxMana = MaxMana; clone.IsSuperArmored = IsSuperArmored; clone.DamageAbsorptions = DamageAbsorptions;
             clone.firstNegativeStatusReductionRemaining = firstNegativeStatusReductionRemaining;
+            clone.shieldLayers.Clear(); clone.shieldLayers.AddRange(shieldLayers);
             foreach (KeyValuePair<StatusType, int> entry in statuses) clone.statuses[entry.Key] = entry.Value;
             foreach (KeyValuePair<StatusType, int> entry in statusStrengths) clone.statusStrengths[entry.Key] = entry.Value;
             foreach (KeyValuePair<StatusType, string> entry in statusSources) clone.statusSources[entry.Key] = entry.Value;

@@ -403,6 +403,7 @@ namespace OCC.Combat
         {
             if (state == null) return null;
             UnitState enemy = state.Units.Values.FirstOrDefault(unit => unit.IsAlive && !unit.IsHero && unit.Position == position);
+            if (state.LampVines.IsHiddenFrom(state, state.GetUnit("hero"), enemy)) return null;
             return enemy?.Id;
         }
 
@@ -494,7 +495,7 @@ namespace OCC.Combat
             if (command.Type == CombatCommandType.UseSkill && source?.IsHero == true &&
                 state.Ruleset == CombatRuleset.Roguelite && state.RogueSpells != null)
                 configuredSkill = state.RogueSpells.DefinitionAtSlot(command.SlotIndex)?.DisplayName;
-            string action = command.Type == CombatCommandType.Attack ? source?.BasicAttack?.DisplayName ?? "攻击" :
+            string action = command.Type == CombatCommandType.AttackCell ? "普通攻击搜查" : command.Type == CombatCommandType.Attack ? source?.BasicAttack?.DisplayName ?? "攻击" :
                 command.Type == CombatCommandType.UseSkill ? (configuredSkill ?? (command.SlotIndex == 0 ? source?.SkillOne : source?.SkillTwo)?.DisplayName ?? "技能") :
                 command.Type == CombatCommandType.Move ? "移动" : command.Type == CombatCommandType.Interact ? "互动" : command.Type.ToString();
             List<string> changes = new List<string>();
@@ -577,7 +578,7 @@ namespace OCC.Combat
             return "预计造成 " + total + " 点生命伤害";
         }
 
-        private static string StatusLabel(StatusType status)
+        public static string StatusLabel(StatusType status)
         {
             switch (status)
             {
@@ -598,6 +599,9 @@ namespace OCC.Combat
                 case StatusType.Marked: return "标记";
                 case StatusType.Prepared: return "架设";
                 case StatusType.Invulnerable: return "霸体";
+                case StatusType.MoveBonus: return "行进强化";
+                case StatusType.SpellCost: return "术式调律";
+                case StatusType.Counter: return "反击";
                 case StatusType.FiregroundBoost: return "火势";
                 case StatusType.FiregroundVulnerable: return "助燃";
                 default: return status.ToString();

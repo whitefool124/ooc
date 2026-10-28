@@ -1,0 +1,22 @@
+{
+  "channel": "codex_builtin_imagegen",
+  "reference": "UnityProject/Assets/Game/Resources/Art/MainMenuE/Stage/lamp.png",
+  "keeper_identity": "old blue-gold academy memory lantern, subtle remembered face, not human body or supernatural deity",
+  "family_reference": "raw/keeper.png",
+  "subjects": {
+    "LK-01": "an old golden brass lamp-wick cartridge with a single small ember-orange crystal flame, no lantern body, compact socket and intact silhouette",
+    "LK-02": "one stout old copper walking boot-nail talisman, shaped as a broad square nail head and short sturdy shank, cobalt inset in its head, a tiny attached pale cord, clearly one complete object",
+    "LK-03": "an ivory broken-wall inscription seal: a compact palm-sized stone wedge stamped with one simple geometric brass fracture motif (not letters), clean deliberate chipped silhouette, dark blue inset",
+    "LK-04": "one old protective pendant, an ivory and brass shield-shaped charm with a cobalt center and small metal loop, confident readable silhouette, no chain extending beyond the object",
+    "LK-05": "one beautiful blank folded ivory annotation leaf, brass binding clip and small cobalt wax seal, an inviting completely clean blank writing area, no text or symbols",
+    "LK-06": "one closed compact navy-blue fabric coin pouch, warm brass clasp and ivory cord, a few clearly readable golden coins at its foot, stable compact grouping"
+  },
+  "locks": "32-bit-era coarse square clusters, stepped complete silhouette, cobalt/ivory/brass material family, three-quarter desk-object view, upper-left light, generous transparent border",
+  "exclusions": "text, labels, UI/card layouts, duplicate views, scenery, photographic/3D-render style, opaque ground or halo",
+  "role": "noncombat HD2D display illustrations; never battlefield functional icons",
+  "generation_parameters": {
+    "transparent_background": true,
+    "independent_call_per_asset": true
+  },
+  "density_reference": "same blue-gold crystal lamp authored pixel clusters; actual source-to-scene match remains pending review"
+}

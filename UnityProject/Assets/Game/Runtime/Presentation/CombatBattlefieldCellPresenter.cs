@@ -91,7 +91,7 @@ namespace OCC.Combat.Presentation
                     (distance == 1 || state.HasLineOfSight(hero.Position, position));
                 basicUnitTarget = occupant != null && !occupant.IsHero;
                 basicObjectTarget = tile.Durability > 0 &&
-                    (tile.Cover != CoverType.None || tile.IsDevice || tile.IsObjective || tile.IsLampVine);
+                    (tile.IsDestructibleLoot || tile.Cover != CoverType.None || tile.IsDevice || tile.IsObjective || tile.IsLampVine);
                 basicTarget = inReach && (basicUnitTarget || basicObjectTarget);
                 bool canCast = state.ActiveUnitId == hero.Id && hero.ActionPoints >= basicSpell.ActionPointCost &&
                     hero.Mana >= basicSpell.ManaCost && state.RogueSpells.IsReady(basicSpell.DefinitionId);
@@ -104,6 +104,7 @@ namespace OCC.Combat.Presentation
             bool isPlayerEffectCell = false;
             bool isPreviewedUnit = false;
             bool isPreviewedObject = false;
+            int? projectedContainerDurability = null;
             if (rangeAction == "攻击" && previewCenter.HasValue && previewCenter.Value == position &&
                 battlefield.IsLegalTarget(state, "攻击", position))
             {
@@ -113,6 +114,8 @@ namespace OCC.Combat.Presentation
             if (fireSpell != null && previewCenter.HasValue)
             {
                 FireSpellPreview selectedPreview = firePreviewAt(fireSpell, previewCenter.Value);
+                if (selectedPreview?.CanCommit == true && selectedPreview.ProjectedContainerDurability.TryGetValue(position, out int durability))
+                    projectedContainerDurability = durability;
                 if (selectedPreview?.CanCommit == true && selectedPreview.Cells.Contains(position))
                 {
                     isPlayerEffectCell = true;
@@ -137,6 +140,7 @@ namespace OCC.Combat.Presentation
                 isPlayerEffectCell = true;
                 isPreviewedUnit = basicUnitTarget;
                 isPreviewedObject = basicObjectTarget;
+                if (tile.IsDestructibleLoot) projectedContainerDurability = Math.Max(0, tile.Durability - state.RogueSpells.BasicObjectDamage(basicSpell.DefinitionId));
             }
             if (fireBattle?.OptionalMoves.Any(offer => offer.SourceUnitId == "hero" && offer.Destination == position) == true)
                 skillMarker = BattlefieldCellMarker.SkillSelectable;
@@ -150,7 +154,7 @@ namespace OCC.Combat.Presentation
 
             UnitState unit = state.Units.Values.Select(candidate => feedback?.PresentedUnit(candidate) ?? candidate).FirstOrDefault(candidate =>
                 candidate.IsAlive && candidate.Position == position);
-            if (state.GreenhouseCollectionRoom?.IsRaiderHidden(state, unit) == true) unit = null;
+            if (state.LampVines.IsHiddenFrom(state, state.GetUnit("hero"), unit)) unit = null;
             Texture2D unitTexture = assets.Unit(unit);
             Vector2 unitOffset = Vector2.zero;
             CombatMovementPose travel = feedback != null ? feedback.UnitTravelPose(unit) :
@@ -185,11 +189,10 @@ namespace OCC.Combat.Presentation
             Texture2D objectTextureLow = null;
             string objectLabel = string.Empty;
             Color objectLabelColor = FormalUiTheme.Text;
-            if (tile.IsLampVine)
+            if (tile.IsLampVine && tile.Durability > 0)
             {
                 objectTexture = assets.Environment("lamp_vine");
-                objectLabel = state.GreenhouseCollectionRoom?.HasHiddenRaider(state) == true &&
-                    state.GreenhouseCollectionRoom.RaiderLastKnownPosition == position ? "侧锋踪迹" : string.Empty;
+                objectLabel = state.LampVines.KnownCells(state, state.GetUnit("hero")).Contains(position) ? "已知灯藤格" : string.Empty;
                 objectLabelColor = new Color(.94f, .69f, .28f, .95f);
             }
             else if (tile.IsAetherCrystal)
@@ -270,7 +273,7 @@ namespace OCC.Combat.Presentation
             }
 
             bool legacyLootHere = state.Loot != null && state.Loot.Position == position;
-            bool searchableLootHere = state.LootSource != null && state.LootSource.Position == position;
+            bool searchableLootHere = state.LootSource != null && !state.LootSource.IsDestroyed && state.LootSource.Position == position;
             Texture2D loot = legacyLootHere
                 ? assets.Academy(state.Loot.IsLooted ? "academy_loot_chest_empty" : "academy_loot_chest_closed")
                 : searchableLootHere ? assets.Academy(state.LootSource.State == LootSearchState.Emptied
@@ -286,6 +289,20 @@ namespace OCC.Combat.Presentation
             if (pendingBlast) terrainEffectHover = JoinHoverSections(terrainEffectHover,
                 "公开爆破区：本回合结束时受到 12 点伤害；物块耐久伤害翻倍。可在引爆前撤离");
             string objectHover = BuildObjectHover(state, tile, position);
+            if (searchableLootHere)
+            {
+                objectLabel = state.LootSource.PublicTitle;
+                objectLabelColor = state.LootSource.Tier == BattlefieldChestTier.Cache ? new Color(1f, .74f, .32f) : Color.white;
+            }
+            if (projectedContainerDurability.HasValue)
+                objectHover += "\n预计剩余耐久：" + projectedContainerDurability.Value + (projectedContainerDurability.Value == 0 ? "；内容将销毁" : "");
+            if (searchableLootHere && state.LootSource.Tier != BattlefieldChestTier.Fixed)
+                foreach (EnemyIntentPresentation threat in state.Units.Values.Where(e => !e.IsHero && e.IsAlive)
+                    .Select(enemyIntent).Where(e => e != null && e.ExpectedDamage > 0 && e.AffectedCells.Contains(position)))
+                {
+                    int remaining = Math.Max(0, tile.Durability - threat.ExpectedDamage);
+                    objectHover += "\n敌方公开范围：预计剩余耐久 " + remaining + (remaining == 0 ? "；内容将销毁" : "");
+                }
             string reactionHover = pressureReaction?.WillTrigger == true
                 ? "警戒反应\n" + pressureReaction.Summary : string.Empty;
             string terrainHover = JoinHoverSections(surfaceHover, terrainEffectHover, objectHover, reactionHover);
@@ -332,7 +349,9 @@ namespace OCC.Combat.Presentation
                 surfaceHover, terrainEffectHover, objectHover, floorLow, objectTextureLow,
                 BattlefieldMarkerLadder.Alpha(skillMarker), moveMarker, attackMarker, skillMarker,
                 isPlayerEffectCell, isPreviewedUnit, isPreviewedObject,fieldEffectLabel,environmentUpright,
-                assets.GroundMaterial(tile),tile.IsCrystalShard?"碎晶":null);
+                assets.GroundMaterial(tile),tile.IsCrystalShard?"碎晶":null)
+            { ContainerCategoryTextures = searchableLootHere && state.LootSource.Tier != BattlefieldChestTier.Fixed
+                ? state.LootSource.PublicCategoryIcons.Select(path => Resources.Load<Texture2D>(path)).ToArray() : Array.Empty<Texture2D>() };
         }
 
         private const string OutOfRangeFailure = "超出射程";
@@ -582,8 +601,9 @@ namespace OCC.Combat.Presentation
             if (state.Loot != null && state.Loot.Position == position)
                 objects.Add(state.Loot.IsLooted ? "战利品箱已清空" : "战利品箱：相邻位置可打开");
             else if (state.LootSource != null && state.LootSource.Position == position)
-                objects.Add(state.LootSource.State == LootSearchState.Emptied ? "检修备件箱已清空" :
-                    "检修备件箱：正交相邻可消耗 1 AP 搜刮");
+                objects.Add(state.LootSource.IsDestroyed ? state.LootSource.DisplayName + "已损毁；未取内容已销毁" :
+                    state.LootSource.State == LootSearchState.Emptied ? state.LootSource.DisplayName + "已清空" :
+                    state.LootSource.PublicSummary + "\n正交相邻消耗 1 行动点搜索，拿取免费");
             return objects.Count == 0 ? string.Empty : string.Join("；", objects) + "。";
         }
 

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OCC · 第一阶段界面审核</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#review-table">跳到审核表</a>
+  <header class="topbar">
+    <a class="brand" href="#">OCC <span>界面审核</span></a>
+    <div class="top-actions"><span id="save-state" role="status">正在读取审核记录…</span><button id="export-csv">导出审核表</button><button id="export-json" class="secondary">备份 JSON</button><button id="import-button" class="secondary">导入记录</button><input type="file" id="import-file" accept="application/json,.json" hidden></div>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div><h1 id="page-title">第一阶段，逐页过审。</h1><p id="overall-critique"></p><p class="evidence-note" id="basis"></p></div>
+      <aside class="audit-progress"><strong id="progress-label">0 / 16 已审核</strong><progress id="progress" max="16" value="0" aria-label="审核进度"></progress><p>我的自评只是起点。<br>你的分数、意见与结论独立保留。</p></aside>
+    </section>
+    <section class="workspace" aria-label="截图与当前页面审核">
+      <div class="visual-column">
+        <div class="section-heading"><div><h2 id="selected-name">读取页面…</h2><p id="selected-meta"></p></div><nav class="page-navigation" aria-label="逐页浏览"><button id="previous" aria-label="上一页">上一页</button><button id="next" aria-label="下一页">下一页</button></nav></div>
+        <div class="image-toolbar"><label>截图 <select id="source"><option value="current">交付版本</option><option value="before">修订前参照</option></select></label><label>输出 <select id="resolution"><option value="960">960 × 540</option><option value="1920">1920 × 1080</option></select></label><button id="zoom" aria-pressed="false">查看原始像素</button><label class="checkbox-label"><input type="checkbox" id="markers" checked>问题标记</label><a id="original-link" target="_blank" rel="noopener">单独打开截图</a></div>
+        <div class="image-viewport" id="image-viewport"><div class="image-stage" id="image-stage"><img id="screenshot" src="/evidence/current/map_960.png" alt="学院地图，交付版本截图" draggable="false"><div id="annotations"></div></div></div>
+        <p id="image-note" class="image-note"></p>
+        <div id="image-error" class="error" hidden>截图读取失败。请刷新页面；历史参照不存在时请切回交付版本。</div>
+        <div class="issue-heading"><h3>我看到的具体问题</h3><span>标记位置对应交付版本</span></div>
+        <div id="issues"></div>
+        <p class="keep-note" id="keep-note"></p>
+      </div>
+      <aside class="review-column" aria-labelledby="your-review-title">
+        <div class="self-assessment"><div><span>我的自评</span><strong id="self-score"></strong></div><span class="badge" id="self-verdict"></span><p id="self-critique"></p></div>
+        <form id="review-form">
+          <h2 id="your-review-title">你的审核</h2>
+          <p class="form-help">可以推翻我的判断，不必跟着打分。</p>
+          <div class="form-pair"><label for="user-score">你的评分 / 10<select id="user-score"><option value="">暂不评分</option></select></label><label for="user-verdict">审核结论<select id="user-verdict"><option value="pending">待审核</option><option value="reject">退回重做</option><option value="revise">修改后再看</option><option value="pass">通过</option></select></label></div>
+          <label for="user-agreement">对我的锐评<select id="user-agreement"><option value="">暂不表态</option><option value="agree">基本认同</option><option value="partial">部分认同</option><option value="disagree">不认同</option></select></label>
+          <label for="user-notes">你的意见<textarea id="user-notes" rows="6" maxlength="10000" placeholder="哪里不好、哪里可以保留、你希望怎样改，都写在这里。"></textarea></label>
+          <label for="user-priority">你希望先改<select id="user-priority"><option value="">暂不指定</option><option value="P0">P0 · 阻断使用，先处理</option><option value="P1">P1 · 明显影响体验</option><option value="P2">P2 · 后续打磨</option></select></label>
+          <p class="autosave-help">输入后自动保存；审核以你的结论为准。</p>
+          <button type="button" id="next-pending" class="primary">下一张待审核</button>
+        </form>
+        <details class="rubric"><summary>分数怎么来的？</summary><p id="rubric"></p><p>P0：缺少关键内容，无法验收。P1：明显的层级、可读性或布局问题。P2：局部成立，仍需打磨或补证据。</p></details>
+      </aside>
+    </section>
+    <section class="table-section" aria-labelledby="table-title">
+      <div class="section-heading"><div><h2 id="table-title">我的锐评表，你的最终意见</h2><p>点击页面名称查看大图。表格保留全部自评，不用测试通过掩盖画面问题。</p></div><span id="visible-count"></span></div>
+      <div class="filters"><div id="filter-buttons" class="filter-buttons" aria-label="筛选审核表"><button data-filter="all" aria-pressed="true">全部</button><button data-filter="reject" aria-pressed="false">我建议退回</button><button data-filter="pending" aria-pressed="false">待你审核</button><button data-filter="reviewed" aria-pressed="false">已审核</button></div><label class="search-label">搜索<input id="search" type="search" placeholder="页面、问题或你的意见"></label><label>排序<select id="sort"><option value="priority">问题优先</option><option value="flow">流程顺序</option><option value="score">自评分从低到高</option></select></label></div>
+      <div class="table-scroll"><table id="review-table"><caption class="sr-only">第一阶段 16 个界面与反馈状态的自评及用户审核</caption><thead><tr><th scope="col">页面 / 证据</th><th scope="col">我的锐评</th><th scope="col">自评 / 建议</th><th scope="col">你的审核</th><th scope="col">你的意见</th></tr></thead><tbody id="table-body"></tbody></table></div>
+      <p id="empty-state" hidden>没有符合条件的页面。试试清空搜索或切回“全部”。</p>
+    </section>
+    <section class="overall-review"><label for="overall-notes">你对这一版的整体意见</label><textarea id="overall-notes" rows="3" maxlength="10000" placeholder="这一轮最应该先解决什么？有哪些整体方向不对？"></textarea></section>
+    <footer><p id="storage-note">审核记录保存在本机；可随时导出备份。</p><button id="export-md" class="secondary">导出 Markdown 表</button><p>证据：2026-10-22 · OCC_Stage1_20261022_UiFinal · 未修改游戏或母版策划。</p></footer>
+  </main>
+  <div id="notice" role="status" hidden></div>
+  <script src="app.js" defer></script>
+</body>
+</html>

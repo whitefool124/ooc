@@ -17,7 +17,8 @@ namespace OCC.Combat
         Interact,
         EndTurn,
         OpenInventory,
-        BreachCharge
+        BreachCharge,
+        AttackCell
     }
 
     public readonly struct CombatCommand
@@ -57,6 +58,7 @@ namespace OCC.Combat
         public static CombatCommand UseInventoryItem(string unitId, string instanceId) => new CombatCommand(CombatCommandType.UseInventoryItem, unitId, default, default, instanceId);
         public static CombatCommand Loot(string unitId) => new CombatCommand(CombatCommandType.Loot, unitId, default, default);
         public static CombatCommand Interact(string unitId, GridPosition target) => new CombatCommand(CombatCommandType.Interact, unitId, target, default);
+        public static CombatCommand AttackCell(string unitId, GridPosition target, int skillSlot = -1) => new CombatCommand(CombatCommandType.AttackCell, unitId, target, default, slotIndex: skillSlot);
         public static CombatCommand EndTurn(string unitId) => new CombatCommand(CombatCommandType.EndTurn, unitId, default, default);
         public static CombatCommand OpenInventory(string unitId) => new CombatCommand(CombatCommandType.OpenInventory, unitId, default, default);
         public static CombatCommand BreachCharge(string unitId, GridPosition lockedTarget) =>

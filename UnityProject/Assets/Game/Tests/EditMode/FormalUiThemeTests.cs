@@ -121,7 +121,7 @@ namespace OCC.Combat.Tests
                 Assert.That(target.GetComponent<Outline>(), Is.Null);
                 Assert.That(image.sprite, Is.Null);
                 Image overlay = target.transform.Find("正式皮肤").GetComponent<Image>();
-                Assert.That(overlay.sprite, Is.SameAs(FormalUiKit.SkinSprite("panel")));
+                Assert.That(overlay.sprite, Is.SameAs(FormalUiChrome.Frame));
                 Assert.That(overlay.type, Is.EqualTo(Image.Type.Sliced));
                 Assert.That(overlay.fillCenter, Is.False);
                 Assert.That(overlay.sprite.border, Is.EqualTo(new Vector4(4f, 4f, 4f, 4f)));
@@ -680,7 +680,7 @@ namespace OCC.Combat.Tests
                 Assert.That(focus.sprite, Is.Null);
                 Assert.That(focus.color, Is.EqualTo(Color.clear));
                 Image overlay = focus.transform.Find("正式皮肤").GetComponent<Image>();
-                Assert.That(overlay.sprite, Is.SameAs(FormalUiKit.SkinSprite("focus")));
+                Assert.That(overlay.sprite, Is.SameAs(FormalUiChrome.Frame));
                 Assert.That(overlay.type, Is.EqualTo(Image.Type.Sliced));
                 Assert.That(focus.transform.Find("像素框架"), Is.Null);
             }
@@ -824,24 +824,29 @@ namespace OCC.Combat.Tests
         }
 
         [Test]
-        public void FormalButtonFeedback_SwapsApprovedStateSkins()
+        public void FormalButtonFeedback_PreservesNineSliceAndChangesSemanticStateColours()
         {
             GameObject parent = new GameObject("formal-button-parent", typeof(RectTransform));
             GameObject eventSystemObject = new GameObject("formal-button-events", typeof(EventSystem));
             try
             {
                 Button button = FormalUiKit.Button("状态按钮", "出发", parent.transform, Vector2.zero, new Vector2(180, 64), FormalUiTheme.Interactive);
-                UiButtonFeedback feedback = FormalUiKit.ConfigureButtonFeedback(button, FormalUiTheme.ButtonPalette(FormalUiButtonTone.Primary),
+                var palette=FormalUiTheme.ButtonPalette(FormalUiButtonTone.Primary);
+                UiButtonFeedback feedback = FormalUiKit.ConfigureButtonFeedback(button, palette,
                     () => UiMotionProfile.FromIntensity(0f), null);
                 Image image = FormalUiKit.SkinOverlay(button.targetGraphic as Image);
                 EventSystem events = eventSystemObject.GetComponent<EventSystem>();
-                Assert.That(image.sprite, Is.SameAs(FormalUiKit.SkinSprite("button_idle")));
+                Assert.That(image.sprite, Is.SameAs(FormalUiChrome.Frame));
+                Assert.That(button.targetGraphic.color,Is.EqualTo(palette.Normal));
                 feedback.OnPointerEnter(new PointerEventData(events));
-                Assert.That(image.sprite, Is.SameAs(FormalUiKit.SkinSprite("button_hover")));
+                Assert.That(image.sprite, Is.SameAs(FormalUiChrome.Frame));
+                Assert.That(button.targetGraphic.color,Is.EqualTo(palette.Hover));
                 feedback.OnPointerDown(new PointerEventData(events) { button = PointerEventData.InputButton.Left });
-                Assert.That(image.sprite, Is.SameAs(FormalUiKit.SkinSprite("button_pressed")));
+                Assert.That(image.sprite, Is.SameAs(FormalUiChrome.Frame));
+                Assert.That(button.targetGraphic.color,Is.EqualTo(palette.Pressed));
                 feedback.SetAvailability(false, "暂时不能出发");
-                Assert.That(image.sprite, Is.SameAs(FormalUiKit.SkinSprite("button_disabled")));
+                Assert.That(image.sprite, Is.SameAs(FormalUiChrome.Frame));
+                Assert.That(button.targetGraphic.color,Is.EqualTo(palette.Disabled));
             }
             finally
             {

@@ -41,61 +41,57 @@ namespace OCC.Combat.Presentation
                 {image.sprite=null;image.color=Color.clear;continue;}
                 // Complete card artwork owns both paper and continuous rim.
                 // Keep one intact corner size for every role; do not crop corner brackets.
-                image.sprite=frame;image.type=Image.Type.Tiled;image.fillCenter=true;
+                var currentFrame=image.GetComponent<Button>()!=null?AetherPaperChrome.ButtonFrame:frame;
+                image.sprite=currentFrame;image.type=Image.Type.Sliced;image.fillCenter=true;
                 // Compensate for the authored container scale so edge pixels and
                 // corner widths remain identical across every rectangle in the scene.
                 var canvas=image.GetComponentInParent<Canvas>();
                 if(canvas==null)continue;
                 image.pixelsPerUnitMultiplier=canvas.referencePixelsPerUnit*Mathf.Abs(image.transform.lossyScale.x)*
-                    Hd2DDeskArtCandidate.ScenePixelsPerUnit/frame.pixelsPerUnit;
+                    Hd2DDeskArtCandidate.ScenePixelsPerUnit/currentFrame.pixelsPerUnit;
                 image.color=Color.white;
                 if(image.GetComponent<Button>()!=null&&image.rectTransform.rect.height*Mathf.Abs(image.transform.lossyScale.y)<
-                    (frame.border.y+frame.border.w+4)/Hd2DDeskArtCandidate.ScenePixelsPerUnit)
+                    (currentFrame.border.y+currentFrame.border.w+4)/Hd2DDeskArtCandidate.ScenePixelsPerUnit)
                 {image.sprite=null;image.type=Image.Type.Simple;image.color=ArchiveUiStyle.Paper;}
                 image.GetComponent<UiButtonFeedback>()?.UseSceneSpaceFeedback();
                 if(image.GetComponent<Button>()!=null&&image.rectTransform.rect.height<=70)
                 {
+                    // Navigation uses the same quiet document controls as the
+                    // settings and service pages; inventory slots keep their art.
+                    image.sprite=null;image.type=Image.Type.Simple;
+                    image.color=Color.Lerp(ArchiveUiStyle.Paper,FormalUiTheme.Cyan,.08f);
+                    image.GetComponent<UiButtonFeedback>()?.UseSceneSpaceFeedback();
                     int textIndex=0;
                     foreach(var label in image.GetComponentsInChildren<Text>(true))
                     {
                         if(string.IsNullOrEmpty(label.text))continue;
                         if(textIndex++>0){label.gameObject.SetActive(false);continue;}
                         label.rectTransform.anchorMin=Vector2.zero;label.rectTransform.anchorMax=Vector2.one;
-                        label.rectTransform.offsetMin=new Vector2(8,4);label.rectTransform.offsetMax=new Vector2(-8,-4);
-                        label.alignment=TextAnchor.MiddleCenter;label.fontSize=16;
-                        label.resizeTextForBestFit=true;label.resizeTextMinSize=12;label.resizeTextMaxSize=16;
+                        label.rectTransform.offsetMin=new Vector2(2,4);label.rectTransform.offsetMax=new Vector2(-2,-4);
+                        label.alignment=TextAnchor.MiddleCenter;label.fontSize=24;
+                        label.resizeTextForBestFit=false;
                     }
                 }
             }
+            Hd2DPaperSkin.FitFrames(sceneRoot);
         }
         private void AddTaskLamp(MainMenuHd2DStage stage)
         {
-            var native=Resources.Load<Sprite>("Art/MainMenuE/Stage/lamp");
-            if(native==null)throw new System.InvalidOperationException("Missing imported scene pixel-density reference lamp.");
-            var sprite=Sprite.Create(native.texture,new Rect(25,2,14,34),new Vector2(.5f,0),
-                Hd2DDeskArtCandidate.ScenePixelsPerUnit,0,SpriteMeshType.FullRect);
-            ownedArtwork.Add(sprite);
-            var lamp=new GameObject("独立2D以太晶灯",typeof(SpriteRenderer));lamp.layer=stage.gameObject.layer;
-            lamp.transform.SetParent(sceneRoot.transform,false);
-            lamp.transform.position=stage.transform.TransformPoint(new Vector3(-4.50f,1.425f,-.05f));
-            lamp.transform.localScale=Vector3.one;
-            lamp.transform.rotation=stage.transform.rotation*Hd2DViewProfile.DioramaRotation;
-            var renderer=lamp.GetComponent<SpriteRenderer>();renderer.sprite=sprite;
-            var material=Hd2DSurfaceProfile.Create(sprite.texture,Color.white,Hd2DSurfaceRole.CrystalBrass,true);
-            materials.Add(material);renderer.sharedMaterial=material;
-            renderer.shadowCastingMode=ShadowCastingMode.On;renderer.receiveShadows=true;
-            var lightObject=new GameObject("整备台灯暖光",typeof(Light));lightObject.transform.SetParent(sceneRoot.transform,false);
-            lightObject.transform.position=lamp.transform.TransformPoint(new Vector3(0,sprite.rect.height/32*.72f,-.12f));
-            var light=lightObject.GetComponent<Light>();light.color=new Color(.38f,.82f,1);
-            light.type=LightType.Spot;light.spotAngle=65;light.innerSpotAngle=40;
-            lightObject.transform.rotation=Quaternion.LookRotation(stage.transform.TransformPoint(new Vector3(-2.5f,1.45f,-.3f))-lightObject.transform.position,Vector3.up);
-            light.intensity=1.2f;light.range=3.5f;light.cullingMask=1<<stage.gameObject.layer;
-            light.shadows=LightShadows.Soft;light.shadowStrength=.75f;light.shadowBias=.035f;light.shadowNormalBias=.12f;
+            var lamp=sceneRoot.transform.Find("独立2D以太晶灯");
+            var lightHost=sceneRoot.transform.Find("整备台灯暖光");
+            if(lamp==null||lightHost==null)throw new System.InvalidOperationException("Missing authored loadout lamp or light");
+            var renderer=lamp.GetComponent<SpriteRenderer>();
+            var light=lightHost.GetComponent<Light>();
+            if(renderer==null||light==null)throw new System.InvalidOperationException("Invalid loadout lamp prefab");
+            var material=new Material(renderer.sharedMaterial);materials.Add(material);renderer.sharedMaterial=material;
+            light.cullingMask=1<<stage.gameObject.layer;
             var reference=GetComponentInChildren<Text>(true);
             if(reference==null)reference=sceneRoot.GetComponentInChildren<Text>(true);
             if(reference!=null)
             {
-                var control=new GameObject("以太晶灯亮度调节",typeof(RectTransform));control.transform.SetParent(sceneRoot.transform,false);
+                var authoredControl=sceneRoot.transform.Find("以太晶灯亮度调节");
+                if(authoredControl==null)throw new System.InvalidOperationException("Missing authored lamp control");
+                var control=authoredControl.gameObject;
                 control.AddComponent<Hd2DDeskLampControl>().Initialize(stage,light,material,reference.font,RequestDeskReflection);
             }
         }

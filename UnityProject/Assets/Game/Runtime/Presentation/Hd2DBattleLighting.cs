@@ -12,6 +12,9 @@ namespace OCC.Combat.Presentation
     internal sealed class Hd2DBattleLighting : MonoBehaviour
     {
         private static Hd2DBattleLighting active;
+        internal static void ReleaseActive(){if(active!=null)active.Release();}
+        internal void EnsureLease(Camera camera,Transform root,int width,int height,Hd2DBattlefieldProfile profile)
+        {if(active!=this||released)Initialize(camera,root,width,height,profile);}
         private RenderPipelineAsset previous;
         private UniversalRenderPipelineAsset pipeline;
         private ScriptableRendererData renderer;
@@ -46,6 +49,7 @@ namespace OCC.Combat.Presentation
 
         internal void Initialize(Camera camera,Transform root,int width,int height,Hd2DBattlefieldProfile profile)
         {
+            Hd2DDeskContactLighting.ReleaseActive();
             if(active==this)throw new InvalidOperationException("Battle lighting lease already initialized");
             stage=root;visualProfile=profile;surfaceBlock=new MaterialPropertyBlock();
             if(active!=null)active.Release();
@@ -258,6 +262,7 @@ namespace OCC.Combat.Presentation
                 surface.lightProbeUsage=LightProbeUsage.CustomProvided;surface.SetPropertyBlock(surfaceBlock);BoundSurfaces++;
             }
         }
+        private void OnDisable()=>Release();
         private void OnDestroy()=>Release();
         private void Release()
         {

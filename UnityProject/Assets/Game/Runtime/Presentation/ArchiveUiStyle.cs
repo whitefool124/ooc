@@ -26,31 +26,15 @@ namespace OCC.Combat.Presentation
             Image skin = FormalUiKit.SkinOverlay(image);
             if (skin != null) skin.gameObject.SetActive(false);
             HideOldChrome(panel.transform);
-            if(panel.GetComponentInParent<AcademyDeskBackdrop>()!=null)
+            image.color=fill;
+            if(frame)
             {
-                // Desk documents use flat, quiet paper. This scope excludes the
-                // battle HUD and preserves semantic colours on smaller controls.
-                image.sprite=null;image.type=Image.Type.Simple;image.color=fill;
-                AcademyPaperDepth.Apply(image);
-                return;
+                bool hit=image.raycastTarget;
+                FormalUiChrome.Apply(image,UiChromeRole.Panel);
+                image.raycastTarget=hit;
             }
-            RectTransform rect = image.rectTransform;
-            // Small cards and hover details keep their existing compact layout.
-            if (frame && rect.rect.width >= 850f && rect.rect.height >= 340f)
-            {
-                Sprite page = Resources.Load<Sprite>(PagePath);
-                if (page != null)
-                {
-                    image.sprite = page;
-                    image.type = Image.Type.Sliced;
-                    image.color = Color.white;
-                    return;
-                }
-                Debug.LogError("Archive page art is missing: " + PagePath);
-            }
-            image.sprite = null;
-            image.type = Image.Type.Simple;
-            image.color = fill;
+            else {image.sprite=null;image.type=Image.Type.Simple;}
+
         }
 
         // Content written on an archive page should not look like a second sheet pasted on top.
@@ -75,6 +59,7 @@ namespace OCC.Combat.Presentation
             HideOldChrome(panel.transform);
             image.sprite = note;
             image.type = Image.Type.Sliced;
+            FormalUiChrome.Apply(image,UiChromeRole.Button);
             image.color = Color.white;
             image.raycastTarget = false;
         }
@@ -93,11 +78,12 @@ namespace OCC.Combat.Presentation
         {
             if (button == null) return;
             Image image = button.GetComponent<Image>();
-            Sprite tab = Resources.Load<Sprite>(TabPath);
+            Sprite tab = FormalUiChrome.Frame;
             if (image == null || tab == null) return;
             HideOldChrome(button.transform);
             image.sprite = tab;
             image.type = Image.Type.Sliced;
+            FormalUiChrome.Apply(image,UiChromeRole.Button);
             image.color = Color.white;
         }
 
@@ -105,7 +91,7 @@ namespace OCC.Combat.Presentation
             Action<UiActionFeedback> feedback = null, string disabledReason = null)
         {
             if (button == null) return;
-            Sprite scroll = Resources.Load<Sprite>(ScrollPath);
+            Sprite scroll = FormalUiChrome.Frame;
             Image image = button.GetComponent<Image>();
             if (scroll == null || image == null)
             {
@@ -117,6 +103,7 @@ namespace OCC.Combat.Presentation
             HideOldChrome(button.transform);
             image.sprite = scroll;
             image.type = Image.Type.Sliced;
+            FormalUiChrome.Apply(image,UiChromeRole.Button);
             image.color = Color.white;
             button.targetGraphic = image;
             FormalUiKit.ConfigureButtonFeedback(button,
@@ -132,7 +119,7 @@ namespace OCC.Combat.Presentation
             Action<UiActionFeedback> feedback = null, string disabledReason = null)
         {
             if (button == null) return;
-            Sprite tab = Resources.Load<Sprite>(TabPath);
+            Sprite tab = FormalUiChrome.Frame;
             Image image = button.GetComponent<Image>();
             if (tab == null || image == null)
             {
@@ -174,7 +161,7 @@ namespace OCC.Combat.Presentation
             image.color = FormalUiTheme.Cyan;
         }
 
-        private static void HideOldChrome(Transform parent)
+        internal static void HideOldChrome(Transform parent)
         {
             HideThinBorder(parent);
             HideLayer(parent, "纸页视觉层");

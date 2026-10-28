@@ -107,6 +107,18 @@ def validate_pixel_density(config, policy, root, input_paths, errors):
             errors.append(f"Pixel density {identity} source uses mixed/pending pixel pitch")
         pitch = asset.get("effective_world_pitch_xy")
         vfx_exception = asset.get("role") == "pixel_vfx" and policy["pixel_density_policy"].get("vfx_exception", {}).get("allow_different_effect_pixel_pitch") is True
+        thumbnail_policy = policy["pixel_density_policy"].get("ui_thumbnail_exception", {})
+        ui_thumbnail = asset.get("role") == "loadout_ui_thumbnail"
+        thumbnail_exception = ui_thumbnail and thumbnail_policy.get("allow_independent_integer_scaling") is True
+        if ui_thumbnail:
+            if not thumbnail_exception or asset.get("ui_surface") not in thumbnail_policy.get("allowed_surfaces", []):
+                errors.append(f"UI thumbnail {identity} outside approved loadout scope")
+                thumbnail_exception = False
+            if asset.get("sampling") != "Point":
+                errors.append(f"UI thumbnail {identity} must preserve Point sampling")
+            scales = asset.get("source_pixel_scales")
+            if not isinstance(scales, list) or len(scales) != 2 or any(type(value) is not int or value <= 0 for value in scales):
+                errors.append(f"UI thumbnail {identity} needs two positive integer pixel scales (1080/540)")
         if vfx_exception:
             if not isinstance(asset.get("world_scale_basis"), str) or not asset["world_scale_basis"].strip():
                 errors.append(f"Pixel VFX {identity} missing world-scale derivation")
@@ -115,7 +127,7 @@ def validate_pixel_density(config, policy, root, input_paths, errors):
                 errors.append(f"Pixel VFX {identity} motion bounds missing/invalid")
         if not isinstance(pitch, list) or len(pitch) != 2 or any(not positive(v) for v in pitch):
             errors.append(f"Pixel density {identity} effective pitch missing/invalid")
-        elif not vfx_exception and positive(target) and any(not math.isclose(v, target, rel_tol=1e-6, abs_tol=0) for v in pitch):
+        elif not (vfx_exception or thumbnail_exception) and positive(target) and any(not math.isclose(v, target, rel_tol=1e-6, abs_tol=0) for v in pitch):
             # Floating-point serialization tolerance, not permission for aesthetic density differences.
             errors.append(f"Pixel density {identity} differs from scene target")
     if not isinstance(manifest.get("reference_asset_id"), str) or manifest["reference_asset_id"] not in ids:

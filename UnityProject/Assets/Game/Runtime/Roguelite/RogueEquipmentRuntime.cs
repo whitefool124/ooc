@@ -229,15 +229,34 @@ namespace OCC.Combat.Roguelite
         public bool AddToBackpack(RogueEquipmentInstance instance) => instance != null && equipment.ContainsKey(instance.InstanceId) && AddFirstFit(instance.InstanceId);
         public bool AddTacticalToBackpack(RogueTacticalItemInstance instance) => instance != null && tactical.ContainsKey(instance.InstanceId) && AddFirstFit(instance.InstanceId);
 
-        public bool TryAddEquipmentFromLoot(string instanceId, string definitionId, string sourceType)
+        public bool TryAddEquipmentFromLoot(string instanceId, string definitionId, string sourceType, EquipmentRarity? rarity = null)
         {
             EquipmentDefinition definition = catalog.Equipment.FirstOrDefault(value => value.DefinitionId == definitionId);
             if (definition == null || equipment.ContainsKey(instanceId) || tactical.ContainsKey(instanceId)) return false;
-            RogueEquipmentInstance instance = CreateInstance(instanceId, definitionId, definition.AllowedRarities[0],
+            RogueEquipmentInstance instance = CreateInstance(instanceId, definitionId, rarity ?? definition.AllowedRarities[0],
                 equipment.Count + tactical.Count, sourceType);
             if (AddToBackpack(instance)) return true;
             equipment.Remove(instanceId);
             return false;
+        }
+
+        public bool TryAddContainerItem(string instanceId, string definitionId)
+        {
+            if (catalog.Equipment.Any(e => e.DefinitionId == definitionId))
+                return TryAddEquipmentFromLoot(instanceId, definitionId, "battlefield-container", EquipmentRarity.Uncommon);
+            if (AcademyLootCatalog.IsMaterial(definitionId))
+            {
+                int index = 0;
+                while (materials.ContainsKey("material:" + definitionId + ":" + index)) index++;
+                string id = "material:" + definitionId + ":" + index;
+                materials.Add(id, definitionId);
+                if (AddFirstFit(id)) return true;
+                materials.Remove(id); return false;
+            }
+            if (!catalog.TacticalItems.Any(t => t.DefinitionId == definitionId) || tactical.ContainsKey(instanceId)) return false;
+            RogueTacticalItemInstance item = CreateTacticalItem(instanceId, definitionId, equipment.Count + tactical.Count, "battlefield-container");
+            if (AddTacticalToBackpack(item)) return true;
+            tactical.Remove(instanceId); return false;
         }
 
         public bool MoveBackpack(string instanceId, int x, int y, bool rotated)

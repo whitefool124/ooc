@@ -354,7 +354,7 @@ namespace OCC.Combat
             iconPath: "Art/FormalAcademyEquipmentIcons32/aca_eq_cr01", inventoryArtPath: "Art/FormalAcademyEquipmentFootprints/aca_eq_cr01");
         public static readonly IReadOnlyList<ItemDefinition> All = new[] { Medkit, ShieldCell, FirelineScroll, AetherCore, NurseryReturnCore, AcademyStorageCore }
             .Concat(ArtifactCatalog.All.Select(artifact => artifact.ToItemDefinition())).ToArray();
-        public static ItemDefinition Get(string id) => All.FirstOrDefault(item => item.Id == id) ?? throw new InvalidOperationException("Unknown item definition: " + id);
+        public static ItemDefinition Get(string id) => All.FirstOrDefault(item => item.Id == id) ?? AcademyLootCatalog.FindItem(id) ?? throw new InvalidOperationException("Unknown item definition: " + id);
 
         public static ItemFootprintSize LegacyMap9Footprint(string id)
         {
@@ -395,45 +395,78 @@ namespace OCC.Combat
         public int NextValue => next;
     }
 
-    public enum LootSearchState { Unsearched, Searching, Searched, Emptied }
+    public enum LootSearchState { Unsearched, Searching, Searched, Emptied, Destroyed }
 
     public sealed class LootSourceState
     {
         private readonly List<ItemInstance> contents;
         private readonly HashSet<string> revealed = new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> taken = new HashSet<string>(StringComparer.Ordinal);
+        private GridMap map;
+        private TileState tile => map?.GetTile(Position);
+        private int remainingDurability;
+        public BattlefieldChestTier Tier { get; private set; }
+        public string DisplayName => AcademyLootCatalog.Name(Tier);
+        public int Durability => tile?.Durability ?? remainingDurability;
+        public bool IsDestroyed => Tier != BattlefieldChestTier.Fixed && Durability <= 0;
+        public IReadOnlyList<ItemInstance> Contents => contents.Select(item => item.Clone()).ToArray();
+        public IReadOnlyList<ItemInstance> TakenItems => contents.Where(item => taken.Contains(item.InstanceId)).Select(item => item.Clone()).ToArray();
+        public IReadOnlyList<string> PublicCategoryIcons => contents.Select(item =>
+            item.DefinitionId == AcademyLootCatalog.GoldBag ? "Art/FormalResourceIcons12/gold" :
+            AcademyLootCatalog.IsMaterial(item.DefinitionId) ? "Art/FormalItemIcons32/category_material" :
+            item.DefinitionId.StartsWith(AcademyLootCatalog.ManuscriptPrefix, StringComparison.Ordinal) ? "Art/FormalItemIcons32/fire_bolt_reward" :
+            "Art/FormalItemIcons32/category_" + ItemCatalog.Get(item.DefinitionId).Category.ToString().ToLowerInvariant()).ToArray();
+        public string PublicTitle => DisplayName + (Tier == BattlefieldChestTier.Fixed ? "" : " " + Durability +
+            (Tier == BattlefieldChestTier.Common ? "" : "\n最高" + RarityName(contents.Max(item => ItemCatalog.Get(item.DefinitionId).Rarity)))) +
+            (Tier == BattlefieldChestTier.Cache ? "\n保底：构筑" : "");
+        public string PublicSummary => DisplayName + (Tier == BattlefieldChestTier.Fixed ? "（不可破坏）" : "　耐久 " + Durability + "/" + AcademyLootCatalog.Durability(Tier)) +
+            "\n类别：" + string.Join("、", contents.Select(item => CategoryName(ItemCatalog.Get(item.DefinitionId)))) +
+            (Tier == BattlefieldChestTier.Refined || Tier == BattlefieldChestTier.Cache ? "\n最高稀有度：" + RarityName(contents.Max(item => ItemCatalog.Get(item.DefinitionId).Rarity)) : "") +
+            (Tier == BattlefieldChestTier.Cache ? "\n保底：罕见以上构筑、锻造材料、专精材料" : "");
+        public void Bind(GridMap value)
+        {
+            map = value;
+            if (Tier == BattlefieldChestTier.Fixed) return;
+            TileState bound = map.GetTile(Position).Clone();
+            bound.IsLootChest = true; bound.IsDestructibleLoot = true; bound.ResetDurability(remainingDurability);
+            map.SetTile(Position, bound);
+        }
+        private static string RarityName(ItemRarity rarity) => rarity == ItemRarity.Common ? "普通" : rarity == ItemRarity.Uncommon ? "罕见" : rarity == ItemRarity.Rare ? "稀有" : "卓越";
+        private static string CategoryName(ItemDefinition item) => item.Id == AcademyLootCatalog.GoldBag ? "金币" : AcademyLootCatalog.IsMaterial(item.Id) ? "强化材料" :
+            item.Id.StartsWith(AcademyLootCatalog.ManuscriptPrefix, StringComparison.Ordinal) ? "术式抄本" : item.Category == ItemCategory.Artifact ? "法宝" : item.Category == ItemCategory.Scroll ? "卷轴" : item.Category == ItemCategory.Armor ? "装备" : "恢复工具";
         public string Id { get; }
         public GridPosition Position { get; }
-        public LootSearchState State => taken.Count == contents.Count && contents.Count > 0 ? LootSearchState.Emptied : revealed.Count == contents.Count ? LootSearchState.Searched : revealed.Count == 0 ? LootSearchState.Unsearched : LootSearchState.Searching;
-        public IReadOnlyList<ItemInstance> RevealedItems => contents.Where(item => revealed.Contains(item.InstanceId) && !taken.Contains(item.InstanceId)).Select(item => item.Clone()).ToArray();
-        public int HiddenCount => contents.Count - revealed.Count;
+        public LootSearchState State => IsDestroyed ? LootSearchState.Destroyed : taken.Count == contents.Count && contents.Count > 0 ? LootSearchState.Emptied : revealed.Count == contents.Count ? LootSearchState.Searched : revealed.Count == 0 ? LootSearchState.Unsearched : LootSearchState.Searching;
+        public IReadOnlyList<ItemInstance> RevealedItems => IsDestroyed ? Array.Empty<ItemInstance>() : contents.Where(item => revealed.Contains(item.InstanceId) && !taken.Contains(item.InstanceId)).Select(item => item.Clone()).ToArray();
+        public int HiddenCount => IsDestroyed ? 0 : contents.Count - revealed.Count;
         public int RevealedCount => revealed.Count;
         public IReadOnlyCollection<string> TakenInstanceIds => taken.OrderBy(id => id, StringComparer.Ordinal).ToArray();
-        public bool IsComplete => revealed.Count == contents.Count;
+        public bool IsComplete => IsDestroyed || revealed.Count == contents.Count;
 
-        public LootSourceState(string id, GridPosition position, IEnumerable<ItemInstance> items)
+        public LootSourceState(string id, GridPosition position, IEnumerable<ItemInstance> items, BattlefieldChestTier tier = BattlefieldChestTier.Fixed)
         {
             if (string.IsNullOrWhiteSpace(id)) throw new ArgumentException("Loot source identity is required.");
-            Id = id; Position = position; contents = (items ?? throw new ArgumentNullException(nameof(items))).Select(item => item.Clone()).OrderBy(item => item.AcquiredOrder).ThenBy(item => item.InstanceId, StringComparer.Ordinal).ToList();
+            Id = id; Position = position; Tier = tier; remainingDurability = AcademyLootCatalog.Durability(tier); contents = (items ?? throw new ArgumentNullException(nameof(items))).Select(item => item.Clone()).OrderBy(item => item.AcquiredOrder).ThenBy(item => item.InstanceId, StringComparer.Ordinal).ToList();
             if (contents.Select(item => item.InstanceId).Distinct(StringComparer.Ordinal).Count() != contents.Count) throw new ArgumentException("Duplicate loot instance.");
         }
 
         public ItemInstance RevealNext()
         {
+            if (IsDestroyed) return null;
             ItemInstance next = contents.FirstOrDefault(item => !revealed.Contains(item.InstanceId));
             if (next == null) return null; revealed.Add(next.InstanceId); return next.Clone();
         }
 
         public InventoryResult Take(string instanceId, InventoryContainerState destination)
         {
-            if (!revealed.Contains(instanceId) || taken.Contains(instanceId)) return new InventoryResult(InventoryError.MissingInstance, instanceId);
+            if (IsDestroyed || !revealed.Contains(instanceId) || taken.Contains(instanceId)) return new InventoryResult(InventoryError.MissingInstance, instanceId);
             ItemInstance item = contents.First(value => value.InstanceId == instanceId).Clone(); InventoryResult result = destination.AddFirstFit(item);
             if (result.Success) taken.Add(instanceId); return result;
         }
 
         public ItemInstance ClaimRevealed(string instanceId)
         {
-            if (!revealed.Contains(instanceId) || taken.Contains(instanceId)) return null;
+            if (IsDestroyed || !revealed.Contains(instanceId) || taken.Contains(instanceId)) return null;
             ItemInstance item = contents.First(value => value.InstanceId == instanceId).Clone();
             taken.Add(instanceId);
             return item;
@@ -446,12 +479,37 @@ namespace OCC.Combat
 
         public LootSourceState Clone()
         {
-            LootSourceState clone = new LootSourceState(Id, Position, contents);
+            LootSourceState clone = new LootSourceState(Id, Position, contents, Tier) { remainingDurability = Durability };
             foreach (string id in revealed) clone.revealed.Add(id); foreach (string id in taken) clone.taken.Add(id); return clone;
         }
-        public string ToProgressString() => revealed.Count + ":" + string.Join(",", TakenInstanceIds);
+        public string ToProgressString() => Tier == BattlefieldChestTier.Fixed ? revealed.Count + ":" + string.Join(",", TakenInstanceIds) : "chest1:" + Convert.ToBase64String(Encoding.UTF8.GetBytes(
+            string.Join("|", (int)Tier, Durability, revealed.Count, string.Join(",", TakenInstanceIds),
+                string.Join(";", contents.Select(item => item.InstanceId + "=" + item.DefinitionId + "=" + item.AcquiredOrder)))));
         public void RestoreProgress(string data)
         {
+            if (data != null && data.StartsWith("chest1:", StringComparison.Ordinal))
+            {
+                string[] fields = Encoding.UTF8.GetString(Convert.FromBase64String(data.Substring(7))).Split('|');
+                if (fields.Length != 5 || !int.TryParse(fields[0], out int tier) || tier < 1 || tier > 3 ||
+                    !int.TryParse(fields[1], out int durability) || durability < 0 || durability > AcademyLootCatalog.Durability((BattlefieldChestTier)tier) ||
+                    !int.TryParse(fields[2], out int revealCount)) throw new InvalidOperationException("Invalid container snapshot.");
+                var restored = fields[4].Split(';').Select(row => row.Split('=')).ToArray();
+                if (restored.Length != tier + 1 || restored.Any(item => item.Length != 3) || revealCount < 0 || revealCount > restored.Length ||
+                    restored.Select(item => item[0]).Distinct(StringComparer.Ordinal).Count() != restored.Length)
+                    throw new InvalidOperationException("Invalid container contents.");
+                var restoredItems = restored.Select(item => new ItemInstance(item[0], item[1], int.Parse(item[2]))).ToArray();
+                string[] takenIds = fields[3].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (takenIds.Distinct(StringComparer.Ordinal).Count() != takenIds.Length ||
+                    takenIds.Any(id => !restoredItems.Take(revealCount).Any(item => item.InstanceId == id)))
+                    throw new InvalidOperationException("Invalid container receipt.");
+                Tier = (BattlefieldChestTier)tier; remainingDurability = durability;
+                contents.Clear(); revealed.Clear(); taken.Clear();
+                contents.AddRange(restoredItems);
+                for (int i = 0; i < revealCount; i++) revealed.Add(contents[i].InstanceId);
+                foreach (string id in takenIds) taken.Add(id);
+                if (map != null) Bind(map);
+                return;
+            }
             if (string.IsNullOrEmpty(data)) return; string[] parts = data.Split(':'); int count = Math.Min(contents.Count, int.Parse(parts[0]));
             for (int i = 0; i < count; i++) revealed.Add(contents[i].InstanceId);
             if (parts.Length > 1) foreach (string id in parts[1].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) if (contents.Any(item => item.InstanceId == id)) { revealed.Add(id); taken.Add(id); }

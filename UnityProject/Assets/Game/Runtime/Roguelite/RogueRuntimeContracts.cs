@@ -171,6 +171,8 @@ namespace OCC.Combat.Roguelite
         public int ActionPointCost { get; }
         public int ManaCost { get; }
         public int CooldownOwnTurns { get; }
+        /// <summary>Zero means unlimited. Successful casts consume a use independently of cooldown.</summary>
+        public int BattleUseLimit { get; }
         public string Targeting { get; }
         public int Range { get; }
         public string LineOfSightRule { get; }
@@ -185,10 +187,12 @@ namespace OCC.Combat.Roguelite
         public SpellDefinition(string definitionId, string displayName, string element, string role, SpellRarity rarity,
             int actionPointCost, int manaCost, int cooldownOwnTurns, string targeting, int range, string lineOfSightRule,
             IEnumerable<string> rules, IEnumerable<string> compatibilityTags, IEnumerable<string> rewardSources,
-            bool rewardEligible, string equivalenceGroupId, string catalogVersion, bool isBasic = false)
+            bool rewardEligible, string equivalenceGroupId, string catalogVersion, bool isBasic = false, int battleUseLimit = 0)
         {
             DefinitionId = definitionId; DisplayName = displayName; Element = element; Role = role; Rarity = rarity;
             ActionPointCost = actionPointCost; ManaCost = manaCost; CooldownOwnTurns = cooldownOwnTurns;
+            if (battleUseLimit < 0) throw new ArgumentOutOfRangeException(nameof(battleUseLimit));
+            BattleUseLimit = battleUseLimit;
             Targeting = targeting; Range = range; LineOfSightRule = lineOfSightRule;
             Rules = (rules ?? Array.Empty<string>()).ToArray(); CompatibilityTags = (compatibilityTags ?? Array.Empty<string>()).ToArray();
             RewardSources = (rewardSources ?? Array.Empty<string>()).ToArray(); RewardEligible = rewardEligible;

@@ -35,6 +35,7 @@ namespace OCC.Combat.Presentation
         private void DrawEncyclopedia()
         {
             Header("战斗百科", "术式　装备　法宝　战斗档案");
+            ActionButton("教学册", string.Empty, content.transform, new Vector2(1580, -12), new Vector2(260, 56), cyan, true, () => Teaching?.OpenReview());
             GameObject heading = content.transform.Find("页眉")?.gameObject;
             if (heading != null)
             {
@@ -139,6 +140,10 @@ namespace OCC.Combat.Presentation
         private void RefreshEncyclopediaGallery()
         {
             if (encyclopediaGallery == null) return;
+            // Search replaces the live list without rebuilding the page. Return
+            // its layout before replacement and prepare its new lit faces and
+            // clear-reading labels together before exposing the next frame.
+            content.GetComponent<Hd2DContentGeometry>()?.RebuildContents();
             if(encyclopediaScroll!=null && !string.IsNullOrEmpty(displayedGalleryKey))
                 rememberedGalleryPositions[displayedGalleryKey]=encyclopediaScroll.verticalNormalizedPosition;
             displayedGalleryKey=encyclopediaSection+"|"+encyclopediaBuildFilter+"|"+encyclopediaQuery;
@@ -161,15 +166,16 @@ namespace OCC.Combat.Presentation
             bool fullCards = encyclopediaSection == "术式" || encyclopediaSection == "装备" || encyclopediaSection == "法宝";
             int columns = 3;
             float stepX = 508f;
-            float stepY = fullCards ? encyclopediaSection == "术式" ? 480f : 500f : 154f;
+            float rowY=24,rowHeight=0;
             for (int i = 0; i < entries.Count; i++)
             {
-                Vector2 position = new Vector2(26 + (i % columns) * stepX, -24 - (i / columns) * stepY);
-                if (fullCards) DrawEncyclopediaContentCard(entries[i], position);
-                else DrawEncyclopediaRuleCard(entries[i], position);
+                if(i>0&&i%columns==0){rowY+=rowHeight+28;rowHeight=0;}
+                Vector2 position = new Vector2(26 + (i % columns) * stepX, -rowY);
+                float height=fullCards?DrawEncyclopediaContentCard(entries[i], position):DrawEncyclopediaRuleCard(entries[i], position);
+                rowHeight=Mathf.Max(rowHeight,height);
             }
             RectTransform rect = encyclopediaGallery as RectTransform;
-            if (rect != null) rect.sizeDelta = new Vector2(1552, Math.Max(860f, 48f + (float)Math.Ceiling(entries.Count / (double)columns) * stepY));
+            if (rect != null) rect.sizeDelta = new Vector2(1552, Math.Max(860f,rowY+rowHeight+24));
             if (encyclopediaScroll != null)
             {
                 Canvas.ForceUpdateCanvases();
@@ -177,59 +183,90 @@ namespace OCC.Combat.Presentation
             }
         }
 
-        private void DrawEncyclopediaContentCard(EncyclopediaEntry entry, Vector2 position)
+        private float DrawEncyclopediaContentCard(EncyclopediaEntry entry, Vector2 position)
         {
             FormalTooltipContent info = entry.Card;
             bool isSpell = entry.Category == "术式";
             float cardHeight = isSpell ? 450f : 470f;
-            float detailsOffset = isSpell ? 20f : 0f;
             GameObject card = Panel("百科卡_" + entry.Name, encyclopediaGallery, new Vector2(0, 1), new Vector2(0, 1),
                 position, new Vector2(480, cardHeight), FormalUiTheme.SurfaceRaised);
-            Line(card.transform, Vector2.zero, new Vector2(4, cardHeight), info.Accent);
-            Label("类别", info.Category, card.transform, new Vector2(20, -14), new Vector2(220, 28), 16, info.Accent, TextAnchor.MiddleLeft);
+            // The native paper rim is physical space, not a writing surface.
+            // Keep every label inside one clipped inset, including the cloned
+            // high-resolution reading text used by the HD2D page.
+            var writing=Create("百科书写区",card.transform);
+            var writingRect=writing.AddComponent<RectTransform>();
+            writingRect.anchorMin=writingRect.anchorMax=writingRect.pivot=new Vector2(0,1);
+            writingRect.anchoredPosition=new Vector2(64,-64);writingRect.sizeDelta=new Vector2(352,cardHeight-128);
+            writing.AddComponent<RectMask2D>();
+            Transform body=writing.transform;
+            Label("类别", info.Category, body, Vector2.zero, new Vector2(160, 40), 16, info.Accent, TextAnchor.MiddleLeft);
             if (!isSpell)
-                Label("状态", info.Status, card.transform, new Vector2(256, -14), new Vector2(204, 28), 15, muted, TextAnchor.MiddleRight);
+                Label("状态", info.Status, body, new Vector2(170, 0), new Vector2(182, 40), 15, muted, TextAnchor.MiddleRight);
             Sprite sprite = Resources.Load<Sprite>(info.IconPath);
-            Image icon = FormalUiKit.TopLeftIconSlot("内容图标", card.transform, sprite, new Vector2(24, -54));
+            Image icon = FormalUiKit.TopLeftIconSlot("内容图标", body, sprite, new Vector2(0, -48));
             icon.rectTransform.sizeDelta = new Vector2(64, 64);
             OccItemSurface.AttachByIcon(card,icon,()=>bootstrap.UiPreferences.AnimationIntensity);
-            Label("名称", info.Title, card.transform, new Vector2(104, -50), new Vector2(350, 40), 24, text, TextAnchor.MiddleLeft);
+            Label("名称", info.Title, body, new Vector2(80, -48), new Vector2(272, 44), 24, text, TextAnchor.MiddleLeft);
             if (!isSpell)
-                Label("身份", info.Identity, card.transform, new Vector2(104, -92), new Vector2(350, 36), 16, muted, TextAnchor.MiddleLeft);
+                Label("身份", info.Identity, body, new Vector2(80, -96), new Vector2(272, 40), 16, muted, TextAnchor.MiddleLeft);
             string[] metrics = { info.MetricA, info.MetricB, info.MetricC };
+            float metricsY=isSpell?-128:-152;
             for (int i = 0; i < metrics.Length; i++)
             {
-                Label("指标" + i, metrics[i], card.transform, new Vector2(20 + i * 150, -150 + detailsOffset),
-                    new Vector2(140, 40), 15, text, TextAnchor.MiddleLeft);
+                Label("指标" + i, metrics[i], body, new Vector2(i * 117, metricsY),
+                    new Vector2(114, 40), 15, text, TextAnchor.MiddleLeft);
             }
-            for (int i = 0; i < Math.Min(6, info.Tags.Count); i++)
-            {
-                Label("词条_" + i, info.Tags[i], card.transform, new Vector2(20 + i * 74, -200 + detailsOffset),
-                    new Vector2(68, 30), 13, info.Accent, TextAnchor.MiddleCenter);
-            }
-            Line(card.transform, new Vector2(20, -244 + detailsOffset), new Vector2(440, 2), muted);
-            Text effect = Label("效果", info.Effect, card.transform, new Vector2(20, -258 + detailsOffset),
-                new Vector2(440, 156), 17, text, TextAnchor.UpperLeft);
+            var tags=Label("词条",string.Join(" · ",info.Tags.Take(6)),body,new Vector2(0,metricsY-46),new Vector2(352,44),13,info.Accent,TextAnchor.UpperLeft);
+            FormalUiKit.ConfigureParagraph(tags);
+            float tagsHeight=FitEncyclopediaParagraph(tags,40);
+            float effectY=metricsY-46-tagsHeight-28;
+            Line(body, new Vector2(0, effectY+14), new Vector2(352, 2), muted);
+            Text effect = Label("效果", info.Effect, body, new Vector2(0,effectY),
+                new Vector2(352, 84), 24, text, TextAnchor.UpperLeft);
             FormalUiKit.ConfigureParagraph(effect);
-            effect.verticalOverflow = VerticalWrapMode.Truncate;
-            Line(card.transform, new Vector2(20, -420 + detailsOffset), new Vector2(440, 2), muted);
-            Label("简介", info.Summary, card.transform, new Vector2(20, -428 + detailsOffset), new Vector2(440, 34), 14, muted, TextAnchor.UpperLeft);
+            float effectHeight=FitEncyclopediaParagraph(effect,64);
+            float footerY=effectY-effectHeight-28;
+            Line(body, new Vector2(0,footerY+14), new Vector2(352, 2), muted);
+            var summary=Label("简介", info.Summary, body, new Vector2(0,footerY), new Vector2(352,40), 24, muted, TextAnchor.UpperLeft);
+            FormalUiKit.ConfigureParagraph(summary);
+            float summaryHeight=FitEncyclopediaParagraph(summary,40);
+            cardHeight=64-footerY+summaryHeight+64;
+            ((RectTransform)card.transform).sizeDelta=new Vector2(480,cardHeight);
+            writingRect.sizeDelta=new Vector2(352,cardHeight-128);
             BindContentHover(card, info.Category, info.Title, info.Body, info.Accent, info.IconPath, info.Tags);
+            return cardHeight;
         }
 
-        private void DrawEncyclopediaRuleCard(EncyclopediaEntry entry, Vector2 position)
+        private static float FitEncyclopediaParagraph(Text label,float minimum)
+        {
+            // Reserve actual line height plus projection/leading safety; resize
+            // the carrier and following rows instead of shrinking long rules.
+            label.resizeTextForBestFit=false;
+            float width=label.rectTransform.sizeDelta.x;
+            // The reading plane is projected at .95 of the authored width.
+            // Measure that narrower line before deciding the paper's height.
+            label.rectTransform.sizeDelta=new Vector2(width*.94f,label.rectTransform.sizeDelta.y);
+            float height=Mathf.Max(minimum,Mathf.Ceil(label.preferredHeight/.94f/8)*8+12);
+            label.rectTransform.sizeDelta=new Vector2(width,height);
+            label.verticalOverflow=VerticalWrapMode.Truncate;
+            return height;
+        }
+
+        private float DrawEncyclopediaRuleCard(EncyclopediaEntry entry, Vector2 position)
         {
             FormalTooltipContent info = entry.Card;
             GameObject card = Panel("百科条目_" + entry.Name, encyclopediaGallery, new Vector2(0, 1), new Vector2(0, 1),
                 position, new Vector2(480, 132), FormalUiTheme.SurfaceRaised);
             ArchiveUiStyle.PaperPanel(card, ArchiveUiStyle.LightPaper, false);
-            Line(card.transform, Vector2.zero, new Vector2(4, 132), info.Accent);
-            Label("名称", info.Title, card.transform, new Vector2(20, -14), new Vector2(440, 32), 22, info.Accent, TextAnchor.MiddleLeft);
-            Text body = Label("正文", info.Effect, card.transform, new Vector2(20, -54),
-                new Vector2(440, 68), 17, text, TextAnchor.UpperLeft);
+            Label("名称", info.Title, card.transform, new Vector2(32, -24), new Vector2(416,44), 24, info.Accent, TextAnchor.MiddleLeft);
+            Text body = Label("正文", info.Effect, card.transform, new Vector2(32, -80),
+                new Vector2(416,68), 24, text, TextAnchor.UpperLeft);
             FormalUiKit.ConfigureParagraph(body);
-            body.verticalOverflow = VerticalWrapMode.Truncate;
+            float height=80+FitEncyclopediaParagraph(body,64)+24;
+            ((RectTransform)card.transform).sizeDelta=new Vector2(480,height);
+            Line(card.transform, Vector2.zero, new Vector2(4,height), info.Accent);
             BindContentHover(card, info.Category, info.Title, info.Body, info.Accent, info.IconPath);
+            return height;
         }
 
         private static List<EncyclopediaEntry> BuildEncyclopediaEntries()

@@ -66,7 +66,7 @@ namespace OCC.Combat.Presentation
             Vector2 delta=eventData.delta/scale;
             if(world)
             {
-                var camera=activeCanvas.worldCamera;
+                var camera=Hd2DSceneGraphicRaycaster.ResolveEventCamera(activeCanvas.worldCamera);
                 Vector2 now=WorldPointer(eventData.position,camera),before=WorldPointer(eventData.position-eventData.delta,camera);
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(viewport,now,camera,out var a);
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(viewport,before,camera,out var b);
@@ -90,7 +90,7 @@ namespace OCC.Combat.Presentation
             int next = Mathf.Clamp(zoomIndex + (eventData.scrollDelta.y > 0 ? 1 : -1), 0, zoomLevels.Length - 1);
             if (next == zoomIndex) return;
             var activeCanvas=viewport.GetComponentInParent<Canvas>();
-            var camera=activeCanvas!=null&&activeCanvas.renderMode==RenderMode.WorldSpace?activeCanvas.worldCamera:eventData.pressEventCamera;
+            var camera=activeCanvas!=null&&activeCanvas.renderMode==RenderMode.WorldSpace?Hd2DSceneGraphicRaycaster.ResolveEventCamera(activeCanvas.worldCamera):eventData.pressEventCamera;
             RectTransformUtility.ScreenPointToLocalPointInRectangle(viewport, WorldPointer(eventData.position,camera), camera, out Vector2 pointer);
             float previous = Zoom;
             zoomIndex = next;

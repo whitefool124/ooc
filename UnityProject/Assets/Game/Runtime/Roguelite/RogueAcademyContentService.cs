@@ -80,6 +80,6 @@ namespace OCC.Combat.Roguelite
         }
 
         private static int StableKey(int seed, string id)
-        { unchecked { int hash = seed * 397; foreach (char value in id ?? string.Empty) hash = hash * 31 + value; return hash; } }
+        { return RogueRewardPool.SeededOrderKey(seed, id); }
     }
 }

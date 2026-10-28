@@ -1,0 +1,39 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "story_quest_duty_room_concept_20261026",
+  "role": "ui_concept_reference",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_descriptor": "Independent concept generation for browser design preview",
+    "original_source_path": "C:/Users/FNHF/.codex/generated_images/01a171a6-9e10-7be0-b936-3589c51d2f77/exec-3c5eb206-2518-4111-afbe-5a87414c2a5e.png",
+    "source_path": "Tools/StoryQuestPrototype/assets/duty-room-concept.png",
+    "prompt": "Use case: stylized-concept. Create ONE wide 16:9 environment concept illustration for an interactive web prototype of OCC, a magical-industrial academy tactical RPG. This is a presentation concept plate only, not a game-ready modular asset. Subject: a shared work-study duty room where ordinary students prepare, hand over maintenance work, talk and depart. No people. Straight-on elevated view at about 30 degrees looking into an inviting compact room, no sideways isometric angle; all five usable spots clearly visible. At left a wide tall window with a simple bench beneath and a small lunch tin. In the center a modest shared wooden handover table with two stools, a few papers and an understated blue-and-brass crystal lamp. Right rear: orderly archive shelves and a wooden door; a practical route board pinned beside the door with abstract lines but no readable text. Foreground right: a sturdy tools table, a canvas satchel, a rolled maintenance toolkit. Space between furniture is open and traversable; each surface has clean readable silhouette and believable support/contact. Palette follows OCC: warm paper ivory plaster, walnut and honey wood, understated brass, slate blue-gray cloth; small cold cyan only inside the working crystal lamp. Architecture is early modern magical engineering academy with restrained Japanese fantasy adventure character, not medieval tavern, not steampunk gears. Afternoon soft neutral window light, calm readable values, no orange blanket cast, no dramatic bloom or lens blur. Medium: deliberate 32-bit-era pixel art concept with visible crisp stepped edges and coherent square pixel clusters. Use one consistent pixel-grain scale across the room, bench, papers, lamp, shelves and tools; uniform medium-coarse grain equivalent to roughly a 480x270 scene shown at 4x. Never mix tiny high-detail brush pixels with big blocks. Rich but controlled material clusters, no photographic noise, no smooth painting. Full-bleed illustration only. No lettering, no UI, no icons, no logos, no caption, no vignette frame. Compose the working objects mostly in the middle and right so a slim translucent UI sidebar can overlay the far-left margin later without covering important objects.",
+    "source_sha256": "be1b2e24550e59da3cc9f8c89ff5ba84a89d456ee2a0b27ba7ac0c4ce3d1cb88"
+  },
+  "delivery": {
+    "output_path": "Tools/StoryQuestPrototype/assets/duty-room-concept.png",
+    "native_ppu": null,
+    "logical_cells": null,
+    "output_sha256": "be1b2e24550e59da3cc9f8c89ff5ba84a89d456ee2a0b27ba7ac0c4ce3d1cb88"
+  },
+  "application": {
+    "use": "browser-prototype concept plate only",
+    "unity_imported": false
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "notes": "Layout and readability inspected in the browser; no human art approval or game-production promotion."
+  },
+  "reused_assets": [
+    {
+      "output": "assets/victor.png",
+      "source": "UnityProject/Assets/Game/Resources/Art/FormalUICharacterPortraits/victor_portrait.png"
+    },
+    {
+      "output": "assets/fusion-pixel.ttf",
+      "source": "UnityProject/Assets/Game/Resources/Fonts/FusionPixel12ProportionalZhHans.ttf"
+    }
+  ]
+}

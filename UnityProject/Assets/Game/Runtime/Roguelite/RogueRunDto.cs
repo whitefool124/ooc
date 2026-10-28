@@ -84,6 +84,7 @@ namespace OCC.Combat.Roguelite
         public List<string> NodeContentAssignments { get; } = new List<string>();
         public List<string> GeneratedAcademyMapRows { get; } = new List<string>();
         public bool DeparturePending { get; set; }
+        public OCC.Combat.LampkeeperGiftState OpeningGift { get; set; }
         public int AcademyFoodCount { get; set; }
         public int ForgeMaterialCount { get; set; }
         public int SpecializationMaterialCount { get; set; }
@@ -93,6 +94,7 @@ namespace OCC.Combat.Roguelite
         public int PendingRewardGold { get; set; }
         public int PendingRewardContribution { get; set; }
         public List<string> MaterialPlacementRows { get; } = new List<string>();
+        public List<string> BattlefieldContainerRows { get; } = new List<string>();
         public List<string> LayerServiceRows { get; } = new List<string>();
         public string ActiveMealId { get; set; } = string.Empty;
         public int MealBattlesRemaining { get; set; }
@@ -154,13 +156,14 @@ namespace OCC.Combat.Roguelite
                 "|" + dto.PendingRewardGold + "|" + dto.PendingRewardContribution +
                 "|" + B(JoinStrings(dto.MaterialPlacementRows)) + "|" + B(dto.SelectedRewardId) +
                 "|" + (dto.RewardChoicesOpened ? "1" : "0") +
-                "|" + (dto.LootPendingExit ? "1" : "0") + "|" + B(dto.ActiveMealId) + "|" + dto.MealBattlesRemaining;
+                "|" + (dto.LootPendingExit ? "1" : "0") + "|" + B(dto.ActiveMealId) + "|" + dto.MealBattlesRemaining +
+                "|" + B(dto.OpeningGift?.Serialize() ?? string.Empty) + "|" + B(JoinStrings(dto.BattlefieldContainerRows));
         }
 
         public static RogueRunDto Deserialize(string data)
         {
             string[] fields = (data ?? string.Empty).Split('|');
-            if ((fields.Length < 28 || fields.Length > 58) || fields[0] != RogueRuntimeConstants.SaveVersion) throw new InvalidOperationException("Unsupported or invalid rogue11 save.");
+            if ((fields.Length < 28 || fields.Length > 60) || fields[0] != RogueRuntimeConstants.SaveVersion) throw new InvalidOperationException("Unsupported or invalid rogue11 save.");
             RogueRunDto dto = new RogueRunDto
             {
                 RunId = U(fields[1]), Seed = I(fields[2]), StageId = U(fields[3]), StageTime = I(fields[4]), Gold = I(fields[5]),
@@ -217,6 +220,8 @@ namespace OCC.Combat.Roguelite
             if (fields.Length >= 56) dto.LootPendingExit = fields[55] == "1";
             if (fields.Length >= 57) dto.ActiveMealId = U(fields[56]);
             if (fields.Length >= 58) dto.MealBattlesRemaining = I(fields[57]);
+            if (fields.Length >= 59) dto.OpeningGift = OCC.Combat.LampkeeperGiftState.Deserialize(U(fields[58]));
+            if (fields.Length >= 60) dto.BattlefieldContainerRows.AddRange(SplitStrings(U(fields[59])));
             if(dto.MealBattlesRemaining<0||dto.MealBattlesRemaining>3||(dto.MealBattlesRemaining>0&&string.IsNullOrEmpty(dto.ActiveMealId)))throw new InvalidOperationException("Invalid meal duration.");
             if(!string.IsNullOrEmpty(dto.ActiveMealId))OCC.Combat.AcademyMealCatalog.Get(dto.ActiveMealId);
             OCC.Combat.AcademyMapSaveMigration.Normalize(dto);
@@ -269,6 +274,15 @@ namespace OCC.Combat.Roguelite
 
         private static void ValidateShape(RogueRunDto dto)
         {
+            if (dto.OpeningGift != null)
+            {
+                OCC.Combat.LampkeeperGiftState.Deserialize(dto.OpeningGift.Serialize());
+                if (dto.RunProgramId != "EvergreenAcademy") throw new InvalidOperationException("Gift belongs to regular academy rounds only.");
+                if (!dto.OpeningGift.Resolved && (!dto.DeparturePending || !string.IsNullOrEmpty(dto.ActiveCombatNodeId)))
+                    throw new InvalidOperationException("Unresolved opening gift cannot leave departure.");
+                if (!string.IsNullOrEmpty(dto.OpeningGift.SelectedSpellId) && !dto.MasteredSpellIds.Contains(dto.OpeningGift.SelectedSpellId))
+                    throw new InvalidOperationException("Opening spell selection is not owned.");
+            }
             if (dto.SaveVersion != RogueRuntimeConstants.SaveVersion || string.IsNullOrWhiteSpace(dto.RunId)) throw new InvalidOperationException("Invalid rogue11 identity.");
             if (dto.EquippedSpellIds.Length != RogueRuntimeConstants.SpellSlotCount || dto.ItemQuickbarInstanceIds.Length != RogueRuntimeConstants.ItemQuickbarSize) throw new InvalidOperationException("Invalid rogue11 slot count.");
             if (dto.EquipmentSlotInstanceIds.Count != EquipmentSlotRules.ActiveSlots.Count || dto.EquipmentSlotInstanceIds.Keys.Any(value => !EquipmentSlotRules.IsActive(value)))
@@ -280,6 +294,19 @@ namespace OCC.Combat.Roguelite
                 throw new InvalidOperationException("Invalid rogue11 run end reason.");
             if (dto.CombatJournalRows.Count > 2000)
                 throw new InvalidOperationException("Combat journal is too large.");
+            if (dto.BattlefieldContainerRows.Count > 128 || dto.BattlefieldContainerRows.Any(row => string.IsNullOrEmpty(row) || row.IndexOf('=') <= 0) ||
+                dto.BattlefieldContainerRows.Select(row => row.Substring(0, row.IndexOf('='))).Distinct(StringComparer.Ordinal).Count() != dto.BattlefieldContainerRows.Count)
+                throw new InvalidOperationException("Invalid battlefield container records.");
+            foreach (string row in dto.BattlefieldContainerRows)
+            {
+                int separator = row.IndexOf('='); string key = row.Substring(0, separator);
+                if (key.EndsWith(":initial", StringComparison.Ordinal))
+                {
+                    if (!row.Substring(separator + 1).StartsWith("chest1:", StringComparison.Ordinal)) throw new InvalidOperationException("Invalid container snapshot version.");
+                    new OCC.Combat.LootSourceState(key, default, Array.Empty<OCC.Combat.ItemInstance>()).RestoreProgress(row.Substring(separator + 1));
+                }
+                else if (!key.EndsWith(":settled", StringComparison.Ordinal)) throw new InvalidOperationException("Unknown container record.");
+            }
             if (dto.RolledRewardChoiceIds.Count > 3 ||
                 dto.RolledRewardChoiceIds.Distinct(StringComparer.Ordinal).Count() != dto.RolledRewardChoiceIds.Count)
                 throw new InvalidOperationException("Invalid rolled reward choices.");

@@ -1,0 +1,1909 @@
+{
+  "version": 20261025,
+  "lessons": [
+    {
+      "id": "A01",
+      "category": "入口与辅助",
+      "title": "画面与音量",
+      "phase": "P00",
+      "prompt": "调整到看得清、听得清。",
+      "goal": "画面、音量和显示模式可在设置中调整。确认后才保存新的显示配置。",
+      "criterion": "保存后读回同值",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "settings-saved",
+        "settings-readback"
+      ],
+      "operation": "调整一项并保存；已配置设备只定位入口"
+    },
+    {
+      "id": "A02",
+      "category": "入口与辅助",
+      "title": "舒适设置",
+      "phase": "P00",
+      "prompt": "不舒服时，可在这里调整。",
+      "goal": "动效、震动、文字和键位提示可随时调整。",
+      "criterion": "找到设置并完成一次预览；未上线项单列缺口",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "settings-preview",
+        "settings-return"
+      ],
+      "operation": "展开设置，指出可减少动画与增大文字；不强迫切换全部开关"
+    },
+    {
+      "id": "A03",
+      "category": "入口与辅助",
+      "title": "查看与确认",
+      "phase": "P01",
+      "prompt": "选中查看；取消可返回。",
+      "goal": "选中只会查看；确认才提交。取消可回到上一层。",
+      "criterion": "一次查看、确认/取消；替代输入被明确展示",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "inspect",
+        "confirm",
+        "cancel"
+      ],
+      "operation": "先用当前输入完成查看/关闭；另一输入由控制页同屏示范"
+    },
+    {
+      "id": "A04",
+      "category": "入口与辅助",
+      "title": "建立档案",
+      "phase": "P00",
+      "prompt": "确认后创建这份档案。",
+      "goal": "先核对角色、模式和档案，再确认建立。",
+      "criterion": "确认对象正确；未开放模式/角色不虚构可选",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "slot-confirmed",
+        "run-created"
+      ],
+      "operation": "预览角色与固定配置，取消一次未提交选择，再自行确认"
+    },
+    {
+      "id": "A05",
+      "category": "入口与辅助",
+      "title": "两个开关",
+      "phase": "P00",
+      "prompt": "路线与操作教学分别选择。",
+      "goal": "固定路线与操作教学分别控制。操作教学可随时暂停和恢复。",
+      "criterion": "两种入口均可触发教学；默认值不暗改",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "switches-visible",
+        "default-values",
+        "independent-choice"
+      ],
+      "operation": "用两个具体结果预览开关作用，教学开启可走两条入口"
+    },
+    {
+      "id": "A06",
+      "category": "入口与辅助",
+      "title": "查看规则",
+      "phase": "P04",
+      "prompt": "忘了规则，可在这里查看。",
+      "goal": "行程与行囊保存本轮记录；百科和教学册可随时重看。",
+      "criterion": "找到一条已学规则并返回原位置",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "archive-open",
+        "encyclopedia-open",
+        "return"
+      ],
+      "operation": "在想找已获物品时打开记录，跳转该物品/规则"
+    },
+    {
+      "id": "A07",
+      "category": "入口与辅助",
+      "title": "确认后果",
+      "phase": "P04",
+      "prompt": "确认前，先看对象和后果。",
+      "goal": "确认框会说明受影响的对象和不可逆结果。",
+      "criterion": "识别不可逆动作且取消不变状态",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "consequence-preview",
+        "cancel-unchanged"
+      ],
+      "operation": "高风险确认只演示后果与取消；绝不真删档或丢贵重物"
+    },
+    {
+      "id": "A08",
+      "category": "入口与辅助",
+      "title": "安全保存",
+      "phase": "P07",
+      "prompt": "保存失败，原进度仍保留。",
+      "goal": "保存成功后可继续；失败时留在当前页，原记录受保护。",
+      "criterion": "真实成功读回；失败演练只用于教学",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "save-readback",
+        "failed-save-preserved"
+      ],
+      "operation": "看一次真实成功保存；失败路径在不写真实档的演练中展示"
+    },
+    {
+      "id": "A09",
+      "category": "入口与辅助",
+      "title": "继续与放弃",
+      "phase": "P07",
+      "prompt": "返回首页会保存；放弃会结算。",
+      "goal": "暂停或返回首页保留本轮；主动放弃会结束本轮。",
+      "criterion": "可继续原状态；放弃仅预览不提交",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "resume-unchanged",
+        "abandon-preview"
+      ],
+      "operation": "在服务间隙完成一次自愿退出续档；演练放弃确认后取消"
+    },
+    {
+      "id": "G01",
+      "category": "赠礼",
+      "title": "开局赠礼",
+      "phase": "P01",
+      "prompt": "选一份赠礼，本轮生效。",
+      "goal": "赠礼只选一份，本轮有效。选择后可在来源记录中找到。",
+      "criterion": "完成选择/效果预览并找到赠礼记录",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "gift-chosen",
+        "gift-source"
+      ],
+      "operation": "查看任意候选并自主选择；固定段用明示演练不真发赠礼"
+    },
+    {
+      "id": "G02",
+      "category": "赠礼",
+      "title": "掌握与装备",
+      "phase": "P01",
+      "prompt": "掌握后，还需装入术式槽。",
+      "goal": "掌握是获得使用资格，装入槽位才进入当前配置。",
+      "criterion": "掌握、配置两状态区别可见",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "mastered",
+        "equipped"
+      ],
+      "operation": "遇到LK-05时真实教学；没遇到用同规则隔离演练"
+    },
+    {
+      "id": "M01",
+      "category": "地图",
+      "title": "地图连接",
+      "phase": "P02",
+      "prompt": "先看摘要，再决定出发。",
+      "goal": "地图区分当前位置、可达地点和已完成地点。",
+      "criterion": "确认后才更新位置",
+      "practiceKind": "map",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "node-preview",
+        "node-entered"
+      ],
+      "operation": "点可达与不可达节点，预览后取消一次"
+    },
+    {
+      "id": "M02",
+      "category": "地图",
+      "title": "出发摘要",
+      "phase": "P02",
+      "prompt": "这里是目标、危险与耗时。",
+      "goal": "出发前可查看目标、危险、奖励和成本。",
+      "criterion": "能找到目标与成本并取消/出发",
+      "practiceKind": "map",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "briefing-open",
+        "briefing-cancel"
+      ],
+      "operation": "在一个摘要内依次关注本次所需字段，不展示攻略"
+    },
+    {
+      "id": "M03",
+      "category": "地图",
+      "title": "行程耗时",
+      "phase": "P02",
+      "prompt": "结果确认后结算耗时。",
+      "goal": "耗时按实际确认结果结算，取消预览不收费。",
+      "criterion": "资源变更匹配真实提交点",
+      "practiceKind": "map",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "cost-before",
+        "cost-after"
+      ],
+      "operation": "比较进入前/结果确认后的时序与资源"
+    },
+    {
+      "id": "M04",
+      "category": "地图",
+      "title": "事件选择",
+      "phase": "P05",
+      "prompt": "先看费用和结果。",
+      "goal": "事件的条件、费用和结果在提交前公开。",
+      "criterion": "确认才结算，返回不扣费",
+      "practiceKind": "map",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "event-preview",
+        "event-cancel",
+        "event-commit"
+      ],
+      "operation": "对比可用/不可用选项，自主选择一个"
+    },
+    {
+      "id": "M05",
+      "category": "地图",
+      "title": "领取与复访",
+      "phase": "P05",
+      "prompt": "已领取的内容不会重复发放。",
+      "goal": "已领取的内容不会因复访再次发放。",
+      "criterion": "无重发且已获物去向正确",
+      "practiceKind": "map",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "event-claimed",
+        "revisit-no-duplicate"
+      ],
+      "operation": "领取实际交付，回看完成摘要"
+    },
+    {
+      "id": "M06",
+      "category": "地图",
+      "title": "学院时序",
+      "phase": "P11",
+      "prompt": "这是学院时序，不是现实倒计时。",
+      "goal": "学院时序按节点行动推进，不是现实时间倒计时。",
+      "criterion": "读懂节点成本和进入首领原因；不推荐路线",
+      "practiceKind": "map",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "time-preview",
+        "boss-gate"
+      ],
+      "operation": "首个常规节点结算后高亮实际增量；门槛条展开一次"
+    },
+    {
+      "id": "M07",
+      "category": "地图",
+      "title": "首领入口",
+      "phase": "P13",
+      "prompt": "进入首领阶段后，普通路线关闭。",
+      "goal": "进入首领阶段会关闭普通路线，确认前可取消。",
+      "criterion": "找到资格、确认或取消；不强迫提前挑战",
+      "practiceKind": "map",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "gate-preview",
+        "transition-confirm"
+      ],
+      "operation": "入口真实可用时预览资格/后果；另一入口隔离演示"
+    },
+    {
+      "id": "C01",
+      "category": "战斗",
+      "title": "战斗目标",
+      "phase": "P03",
+      "prompt": "查看目标与敌人的意图。",
+      "goal": "战场目标与敌人意图在原界面中持续可查。",
+      "criterion": "打开真实目标/意图；撤提示后可再次找到",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "objective-view",
+        "intent-view"
+      ],
+      "operation": "选敌人查看当前目标和胜利条件"
+    },
+    {
+      "id": "C02",
+      "category": "战斗",
+      "title": "公开意图",
+      "phase": "P03",
+      "prompt": "战场改变后，以新预览为准。",
+      "goal": "位置、阻挡或状态改变后，公开预览会更新。",
+      "criterion": "打开新预览；不指定躲避位置",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "intent-before",
+        "intent-after"
+      ],
+      "operation": "看当前意图；合法动作改变位置后看预览更新"
+    },
+    {
+      "id": "C03",
+      "category": "战斗",
+      "title": "行动点",
+      "phase": "P03",
+      "prompt": "行动点允许时，可以继续行动。",
+      "goal": "资源允许时可连续行动；结束回合会清空剩余行动点。",
+      "criterion": "执行动作与结束回合；不规定最优动作数",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "action-paid",
+        "end-turn"
+      ],
+      "operation": "自己选动作消耗AP，再主动结束一次"
+    },
+    {
+      "id": "C04",
+      "category": "战斗",
+      "title": "移动路径",
+      "phase": "P03",
+      "prompt": "双击可达格，沿预览路径移动。",
+      "goal": "路径显示步数与地形代价。无效移动不会扣费。",
+      "criterion": "实际移动完成；非法预览不消耗",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "move-preview",
+        "move-accepted",
+        "illegal-unchanged"
+      ],
+      "operation": "预览两条合法/非法路径，执行自己选的合法移动"
+    },
+    {
+      "id": "C05",
+      "category": "战斗",
+      "title": "武器动作",
+      "phase": "P03",
+      "prompt": "武器动作按武器标示结算。",
+      "goal": "武器按标示费用和作用结算，与个人魔力分开。",
+      "criterion": "实际结算与费用预览一致",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "weapon-preview",
+        "weapon-accepted"
+      ],
+      "operation": "使用一次当前武器动作，观察AP与魔力"
+    },
+    {
+      "id": "C06",
+      "category": "战斗",
+      "title": "主动术式",
+      "phase": "P03",
+      "prompt": "先看费用；取消不消耗。",
+      "goal": "提交合法术式才支付费用；取消预览不消耗。",
+      "criterion": "实际施法成功且取消前后资源不变",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "spell-preview",
+        "spell-accepted",
+        "cancel-unchanged"
+      ],
+      "operation": "真实施放一次；另预览/取消一次"
+    },
+    {
+      "id": "C07",
+      "category": "战斗",
+      "title": "魔力恢复",
+      "phase": "P06",
+      "prompt": "恢复不会超过魔力上限。",
+      "goal": "回魔不超过上限。进入新战斗时恢复当前魔力上限。",
+      "criterion": "一次实际回魔不超上限；每场入战读回当前魔力上限",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "mana-restored",
+        "mana-cap",
+        "battle-full"
+      ],
+      "operation": "观察一次回魔与上限；跨战读回对比"
+    },
+    {
+      "id": "C08",
+      "category": "战斗",
+      "title": "冷却与次数",
+      "phase": "P06",
+      "prompt": "冷却按标示的回合减少。",
+      "goal": "自身回合冷却、每战次数和物品总次数分别计算。",
+      "criterion": "施放后冷却扣减和解禁正确；主动术式每战上限入战重置，法宝总次数不补满",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "cooldown-spent",
+        "cooldown-ready",
+        "battle-uses-reset",
+        "artifact-uses-retained"
+      ],
+      "operation": "施放后观察自己下一轮冷却；限次由P06衔接"
+    },
+    {
+      "id": "C09",
+      "category": "战斗",
+      "title": "行动顺序",
+      "phase": "P06",
+      "prompt": "留意标示的是谁的回合。",
+      "goal": "自身回合与公共计数不同，以界面标示的计时对象为准。",
+      "criterion": "识别一个自身窗口与公共计数；不讲排序算式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "own-turn",
+        "public-turn"
+      ],
+      "operation": "一次行动交接只强调谁行动；P08再显示不同计时窗口"
+    },
+    {
+      "id": "C10",
+      "category": "战斗",
+      "title": "查看战场",
+      "phase": "P03",
+      "prompt": "拖动画面查看；可随时回到主角。",
+      "goal": "拖动、缩放和回到主角不消耗行动点。",
+      "criterion": "镜头操作不消耗AP、不误移动",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "camera-pan",
+        "camera-zoom",
+        "camera-return"
+      ],
+      "operation": "仅在目标不在画面内时提示当前输入的镜头操作；P11间隙补齐缩放与回主角，不打断首个行动"
+    },
+    {
+      "id": "C11",
+      "category": "战斗",
+      "title": "位置菜单",
+      "phase": "P06",
+      "prompt": "右键可查看此处可执行的操作。",
+      "goal": "右键可查看位置操作，键盘也能选格与确认。",
+      "criterion": "打开并取消菜单；替代入口可发现",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "context-open",
+        "context-cancel",
+        "alternate-entry-view"
+      ],
+      "operation": "当前位置菜单在真实需要时展示；P11间隙补齐替代输入，不在首战要求同时练两套按键"
+    },
+    {
+      "id": "C12",
+      "category": "战斗",
+      "title": "无效目标",
+      "phase": "P03",
+      "prompt": "红色原因说明为何不能执行。",
+      "goal": "无效原因会说明是范围、资源、阻挡还是目标限制。",
+      "criterion": "找到原因并返回合法预览",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "illegal-reason",
+        "cancel",
+        "legal-preview"
+      ],
+      "operation": "在安全状态预览一个不合法目标再取消"
+    },
+    {
+      "id": "C13",
+      "category": "战斗",
+      "title": "伤害与护盾",
+      "phase": "P06",
+      "prompt": "伤害先由护盾承受。",
+      "goal": "伤害先消耗护盾，再影响生命，结果按声明顺序结算。",
+      "criterion": "受击结果可核对；不强迫主线挨打",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "damage-preview",
+        "shield-damage",
+        "health-damage"
+      ],
+      "operation": "护盾动作后看一次真实受击；多段在P12演示"
+    },
+    {
+      "id": "C14",
+      "category": "战斗",
+      "title": "护盾刷新",
+      "phase": "P08",
+      "prompt": "护盾在标示时机刷新。",
+      "goal": "护盾按所示来源和时间刷新；破势会阻止获得护盾。",
+      "criterion": "观察一次刷新；主线不改路则间隙补演练",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "shield-refresh",
+        "source-view",
+        "cover-light-shield",
+        "cover-heavy-shield"
+      ],
+      "operation": "预览掩体条件，下一自身回合看旧盾清除/新盾"
+    },
+    {
+      "id": "C15",
+      "category": "战斗",
+      "title": "自动触发",
+      "phase": "P06",
+      "prompt": "就地接线生效：查看本次变化。",
+      "goal": "天赋、装备和被动按条件自动触发，详情保留来源与次数。",
+      "criterion": "打开来源并看到一次真实触发",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "passive-source",
+        "passive-trigger"
+      ],
+      "operation": "就地接线真实触发或隔离演练；只显示触发来源与增量"
+    },
+    {
+      "id": "I01",
+      "category": "整备与背包",
+      "title": "穿戴装备",
+      "phase": "P05",
+      "prompt": "放入对应栏位，查看属性变化。",
+      "goal": "九个装备位只接受对应部位。穿戴前后可以比较变化。",
+      "criterion": "一次穿戴与可撤销卸下；保留自主选择",
+      "practiceKind": "inventory",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "equip",
+        "unequip",
+        "comparison"
+      ],
+      "operation": "拖入合法栏位，读回属性；另一件只比较不逼换"
+    },
+    {
+      "id": "I02",
+      "category": "整备与背包",
+      "title": "物品占格",
+      "phase": "P05",
+      "prompt": "旋转物品，调整摆放。",
+      "goal": "物品保留真实占格和方向，重叠或越界不会提交。",
+      "criterion": "成功摆放，非法落位不丢物",
+      "practiceKind": "inventory",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "move",
+        "rotate",
+        "illegal-unchanged"
+      ],
+      "operation": "交付物旋转后放入空位；无空间时练习盘补"
+    },
+    {
+      "id": "I03",
+      "category": "整备与背包",
+      "title": "背包容量",
+      "phase": "P05",
+      "prompt": "容量不足，原装备与摆放保留。",
+      "goal": "换包后装不下时，保留原装备和原摆放。",
+      "criterion": "失败前后物品/装备不变",
+      "practiceKind": "inventory",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "capacity-failure",
+        "preserved"
+      ],
+      "operation": "预览小容量背包失败，再取消；不强迫卸真包"
+    },
+    {
+      "id": "I04",
+      "category": "整备与背包",
+      "title": "四格战术栏",
+      "phase": "P06",
+      "prompt": "装入战术栏，战斗中才可使用。",
+      "goal": "战术栏关联背包中的物品。取回再装入不恢复次数。",
+      "criterion": "合法关联、取回/重新装入不刷新次数",
+      "practiceKind": "inventory",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "link",
+        "unlink",
+        "relink",
+        "charges-retained"
+      ],
+      "operation": "装入事件法宝至自选空格，再核对次数"
+    },
+    {
+      "id": "I05",
+      "category": "整备与背包",
+      "title": "卷轴与法宝",
+      "phase": "P06",
+      "prompt": "提交后才扣次数；其他代价见预览。",
+      "goal": "卷轴一次性消耗；法宝按物品实例保存剩余总次数。",
+      "criterion": "实际扣次/卷轴消耗；不消耗真实稀有物作学费",
+      "practiceKind": "inventory",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "scroll-consumed",
+        "artifact-paid",
+        "artifact-consumed"
+      ],
+      "operation": "观察一件法宝和卷轴的成功提交/取消；稀有分支补练"
+    },
+    {
+      "id": "I06",
+      "category": "整备与背包",
+      "title": "战斗中整理",
+      "phase": "P06",
+      "prompt": "战斗中整理会消耗行动点。",
+      "goal": "战斗中整理按费用扣行动点，术式配置锁定。",
+      "criterion": "扣费与费用预览一致；关闭不返还，战斗中不能修改术式配置",
+      "practiceKind": "inventory",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "inventory-ap",
+        "spell-config-locked"
+      ],
+      "operation": "一次真实开包前显示费用；练习盘演示例外来源"
+    },
+    {
+      "id": "I07",
+      "category": "整备与背包",
+      "title": "配置术式",
+      "phase": "P04",
+      "prompt": "掌握不等于装备。",
+      "goal": "八个槽位保存当前术式配置，掌握与装备分开。",
+      "criterion": "成功装入、替换/移除后可恢复，不代选",
+      "practiceKind": "inventory",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "learn",
+        "equip",
+        "replace",
+        "remove"
+      ],
+      "operation": "把新术式装入自选空槽，再预览替换/移除"
+    },
+    {
+      "id": "I08",
+      "category": "整备与背包",
+      "title": "被动术式",
+      "phase": "P10",
+      "prompt": "被动占一槽，按条件自动生效。",
+      "goal": "被动也占一槽，按条件自动触发。",
+      "criterion": "配置与一次条件触发；不推荐某个被动",
+      "practiceKind": "inventory",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "passive-equip",
+        "passive-trigger"
+      ],
+      "operation": "装入自选被动，看占槽与下一战来源效果"
+    },
+    {
+      "id": "I09",
+      "category": "整备与背包",
+      "title": "搜索与筛选",
+      "phase": "P05",
+      "prompt": "搜名称或筛选类别。",
+      "goal": "搜索和筛选只改变列表显示，不改变物品。",
+      "criterion": "定位目标并恢复全部物品视图",
+      "practiceKind": "inventory",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "search",
+        "filter",
+        "reset-filter"
+      ],
+      "operation": "物品增多时找一次实际物品并清筛选"
+    },
+    {
+      "id": "I10",
+      "category": "整备与背包",
+      "title": "丢弃与待领取",
+      "phase": "P04",
+      "prompt": "放不下时，可先整理或放弃该项。",
+      "goal": "丢弃会失去原物品，容量不足可先返回整理。",
+      "criterion": "自选合法去向；不用删真实物强迫过关",
+      "practiceKind": "inventory",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "discard-preview",
+        "discard-cancel",
+        "overflow-choice"
+      ],
+      "operation": "容量演练中移动待领取物与放弃确认取消"
+    },
+    {
+      "id": "R01",
+      "category": "奖励",
+      "title": "查看战果",
+      "phase": "P04",
+      "prompt": "战果已保存，奖励还需领取。",
+      "goal": "战果页只读。奖励要在领取清单中逐项处理。",
+      "criterion": "从结果进入领取且资源状态正确",
+      "practiceKind": "reward",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "settlement-view",
+        "reward-view"
+      ],
+      "operation": "看一个实际结果，关闭后再进入领取"
+    },
+    {
+      "id": "R02",
+      "category": "奖励",
+      "title": "选择与领取",
+      "phase": "P04",
+      "prompt": "选定后，点击条目领取。",
+      "goal": "选定候选和实际领取是两次不同提交。",
+      "criterion": "候选选择、领取分别记录",
+      "practiceKind": "reward",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "candidate-select",
+        "reward-claim"
+      ],
+      "operation": "自主选任一候选，返回清单再点领取"
+    },
+    {
+      "id": "R03",
+      "category": "奖励",
+      "title": "物品去向",
+      "phase": "P04",
+      "prompt": "领取后，可在这里找到。",
+      "goal": "资源、装备、法宝、术式和材料各有明确去向。",
+      "criterion": "六类去向由真实所得或隔离练习覆盖",
+      "practiceKind": "reward",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "gold",
+        "contribution",
+        "equipment",
+        "artifact",
+        "spell",
+        "material"
+      ],
+      "operation": "逐项领取真实奖励，只高亮本次去向"
+    },
+    {
+      "id": "R04",
+      "category": "奖励",
+      "title": "未领取的奖励",
+      "phase": "P04",
+      "prompt": "离开会放弃尚未领取的条目。",
+      "goal": "容量不足时不吞物；离开前会提示未领取的条目。",
+      "criterion": "取消留在清单；重开同候选不重发",
+      "practiceKind": "reward",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "overflow-preserved",
+        "leave-cancel",
+        "reload-same"
+      ],
+      "operation": "一次满包演练＋首次漏领提醒；自主继续整理或确认放弃"
+    },
+    {
+      "id": "R05",
+      "category": "奖励",
+      "title": "拆解与材料",
+      "phase": "P11",
+      "prompt": "拆解后失去原物品，获得所示材料。",
+      "goal": "拆解失去原内容，换得所示的锻造或专精材料。",
+      "criterion": "预览/演练提交与材料入账一致",
+      "practiceKind": "reward",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "dismantle-preview",
+        "dismantle-commit",
+        "forge-material",
+        "specialization-material"
+      ],
+      "operation": "有重复内容时实际预览拆解；没有则补练，不强制拆真物"
+    },
+    {
+      "id": "R06",
+      "category": "奖励",
+      "title": "品质与详情",
+      "phase": "P04",
+      "prompt": "品质在这里；完整效果见详情。",
+      "goal": "品质与完整效果可在详情中查看；重开界面不会重抽。",
+      "criterion": "找到品质与效果，不教强弱排行",
+      "practiceKind": "reward",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "rarity-view",
+        "detail-view"
+      ],
+      "operation": "只指出品质和详细效果入口；重看同候选"
+    },
+    {
+      "id": "S01",
+      "category": "服务",
+      "title": "装备锻造",
+      "phase": "P07",
+      "prompt": "确认前，查看前后变化和消耗。",
+      "goal": "锻造展示目标部位、完整消耗、唯一结果和本次额度。",
+      "criterion": "实际加工或等价隔离操作；不强迫真消费",
+      "practiceKind": "service",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "forge-preview",
+        "forge-cost",
+        "forge-commit",
+        "forge-result"
+      ],
+      "operation": "选任一合法目标、部位和材料，预览前后；支付可取消"
+    },
+    {
+      "id": "S02",
+      "category": "服务",
+      "title": "术式专精",
+      "phase": "P07",
+      "prompt": "专精结果固定，确认后不能更换。",
+      "goal": "专精结果固定，确认后本轮不能更换。",
+      "criterion": "唯一合法结果正确保存/练习完成",
+      "practiceKind": "service",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "specialize-preview",
+        "specialize-commit",
+        "specialize-result"
+      ],
+      "operation": "自主选术式预览，再确认或在练习盘完成"
+    },
+    {
+      "id": "S03",
+      "category": "服务",
+      "title": "医疗",
+      "phase": "P09",
+      "prompt": "生命会保留到下一场战斗。",
+      "goal": "生命跨战保留，治疗按公开的恢复量、上限和费用结算。",
+      "criterion": "看到恢复量/上限/费用；主线不故意受伤",
+      "practiceKind": "service",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "health-retained",
+        "heal-preview",
+        "heal-commit",
+        "heal-cap"
+      ],
+      "operation": "利用真实战损看恢复预览；满血用隔离例子"
+    },
+    {
+      "id": "S04",
+      "category": "服务",
+      "title": "餐食",
+      "phase": "P09",
+      "prompt": "餐食不占槽，按战斗场数消耗。",
+      "goal": "餐食不占槽，只能保留一种，按结算战斗场数消耗。",
+      "criterion": "效果/扣费/场次读回；没买则练习盘覆盖",
+      "practiceKind": "service",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "meal-preview",
+        "meal-commit",
+        "meal-battle-count",
+        "single-meal"
+      ],
+      "operation": "自选预览一餐，观察已有效果/剩余场次；可不买"
+    },
+    {
+      "id": "S05",
+      "category": "服务",
+      "title": "商店",
+      "phase": "P10",
+      "prompt": "点击可购买商品会直接购买。",
+      "goal": "可购买商品点击后直接购买；库存和售罄状态会保存。",
+      "criterion": "一次购买操作或隔离演练；复访不刷新",
+      "practiceKind": "service",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "price-view",
+        "purchase",
+        "sold-out",
+        "revisit-stock"
+      ],
+      "operation": "查看任一商品，自主购买或取消；不足/满包补练"
+    },
+    {
+      "id": "S06",
+      "category": "服务",
+      "title": "材料与额度",
+      "phase": "P07",
+      "prompt": "本次额度与材料消耗都在这里。",
+      "goal": "免费只指金币，材料和服务额度仍会消耗。",
+      "criterion": "复访不补额度、不退款、不重抽",
+      "practiceKind": "service",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "quota-view",
+        "material-cost",
+        "revisit-quota"
+      ],
+      "operation": "交易后回访读额度/材料，对照完整费用"
+    },
+    {
+      "id": "E01",
+      "category": "空间",
+      "title": "阻挡与占位",
+      "phase": "P03",
+      "prompt": "阻挡格不能通过或停留。",
+      "goal": "单位互相占位，永久阻挡不能通过或停留。",
+      "criterion": "预览与实际通行一致",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "blocked-preview",
+        "legal-path"
+      ],
+      "operation": "同一可达预览点明一处阻挡和一处合法落点"
+    },
+    {
+      "id": "E02",
+      "category": "空间",
+      "title": "视野与攻击线",
+      "phase": "P06",
+      "prompt": "看得见，不代表攻击线畅通。",
+      "goal": "看得见不代表攻击线畅通，轻重掩体规则不同。",
+      "criterion": "分别识别可见/射程/阻挡原因",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "visibility-view",
+        "attack-line-view",
+        "cover-light",
+        "cover-heavy"
+      ],
+      "operation": "两种攻击预览对照，观察阻挡原因"
+    },
+    {
+      "id": "E03",
+      "category": "空间",
+      "title": "攻击方式",
+      "phase": "P06",
+      "prompt": "看预览中实际会命中的目标。",
+      "goal": "攻击方式决定拦截、遮挡和实际命中对象。",
+      "criterion": "三类预览与实际示范一致；不推荐攻击对象",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "melee-preview",
+        "launched-preview",
+        "projected-preview",
+        "intercept-result"
+      ],
+      "operation": "用同规则三份单步预览，只比较真实命中对象"
+    },
+    {
+      "id": "E04",
+      "category": "空间",
+      "title": "落点与作用范围",
+      "phase": "P06",
+      "prompt": "落点与实际作用范围分别看。",
+      "goal": "可选落点与实际作用范围分别标示，也会提示友方风险。",
+      "criterion": "合法锚点、边界裁切与受影响对象对应",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "anchor-preview",
+        "area-preview",
+        "clipped-area",
+        "friendly-fire"
+      ],
+      "operation": "拖动一个区域预览，区分锚点与被影响格"
+    },
+    {
+      "id": "E05",
+      "category": "空间",
+      "title": "浅水",
+      "phase": "P03",
+      "prompt": "经过浅水时，查看路径费用。",
+      "goal": "浅水改变路径成本，并可解除燃烧。",
+      "criterion": "代价预览；灭火另记U01，不一次灌两条",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "water-cost",
+        "water-step"
+      ],
+      "operation": "首次路径差异只教代价；P08再教灭火"
+    },
+    {
+      "id": "E06",
+      "category": "空间",
+      "title": "藏身与显形",
+      "phase": "P06",
+      "prompt": "灯藤内藏身；对方保留已知入口。",
+      "goal": "藏身、已知入口、搜查和显形是不同状态。",
+      "criterion": "看一次搜索/显形，禁止教躲藏套路",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "hidden",
+        "search",
+        "revealed"
+      ],
+      "operation": "预览藤内/外可见变化，观察已知格搜索一次"
+    },
+    {
+      "id": "E07",
+      "category": "空间",
+      "title": "破坏物件",
+      "phase": "P06",
+      "prompt": "破坏后，通路与攻击线会变化。",
+      "goal": "耐久归零后，通行和攻击线会重新计算。",
+      "criterion": "看见耐久归零与新合法格",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "durability-view",
+        "object-destroyed",
+        "path-updated"
+      ],
+      "operation": "一次任意合法破坏，观察通路/攻击线立即更新"
+    },
+    {
+      "id": "E08",
+      "category": "空间",
+      "title": "晶簇与碎晶",
+      "phase": "P06",
+      "prompt": "爆裂范围与生成地面见预览。",
+      "goal": "晶簇爆裂范围和留下的碎晶可分别查看。",
+      "criterion": "查看并核对实际结果；不要求炸敌",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "crystal-preview",
+        "crystal-burst",
+        "shards-view",
+        "aether-crystal",
+        "pressure-crystal"
+      ],
+      "operation": "破坏预览同时画邻格伤害和生成地面，取消或提交"
+    },
+    {
+      "id": "E09",
+      "category": "空间",
+      "title": "搜索与拿取",
+      "phase": "P06",
+      "prompt": "搜索消耗行动点，拿取不再重复收费。",
+      "goal": "搜索支付一次费用，揭示后的拿取不重复收费。",
+      "criterion": "实际搜索、揭示、拿取、关闭均正确",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "search-paid",
+        "reveal",
+        "take-no-charge"
+      ],
+      "operation": "搜一次固定容器并拿两条，观察只收一次搜索费"
+    },
+    {
+      "id": "E10",
+      "category": "空间",
+      "title": "容器损毁",
+      "phase": "P11",
+      "prompt": "容器被毁，未取出的内容一并失去。",
+      "goal": "容器损毁会失去未取出的内容，固定箱与随机箱规则不同。",
+      "criterion": "攻击预览显示损毁，演练后果可见",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "common-container",
+        "refined-container",
+        "cache-container",
+        "fixed-container"
+      ],
+      "operation": "真实箱首次出现说明档次；毁箱在隔离演练，不毁真实箱"
+    },
+    {
+      "id": "E11",
+      "category": "空间",
+      "title": "场地覆盖",
+      "phase": "P08",
+      "prompt": "覆盖结果与费用，以预览为准。",
+      "goal": "同格场地按覆盖规则结算，无效生成不收费。",
+      "criterion": "一次覆盖＋一次非法生成预览不扣费",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "field-preview",
+        "field-overwrite",
+        "illegal-no-cost"
+      ],
+      "operation": "同一格先后生成两效果，显示覆盖/失败和费用"
+    },
+    {
+      "id": "E12",
+      "category": "空间",
+      "title": "环境变化",
+      "phase": "P12",
+      "prompt": "查看这片场地现在改变了什么。",
+      "goal": "每次只查看一种环境变化，并核对实际作用。",
+      "criterion": "23项元素字典均分配，不能靠随机碰到",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "loose-paper",
+        "paper-screen",
+        "trace",
+        "binding-mark",
+        "smoke",
+        "wind",
+        "light-lane"
+      ],
+      "operation": "首遇一项只教该项；随机未遇到者在间隙逐例补练"
+    },
+    {
+      "id": "E13",
+      "category": "空间",
+      "title": "装置互动",
+      "phase": "P12",
+      "prompt": "先看触发条件与改变的结果。",
+      "goal": "装置公开触发条件、耐久和改变的结果。",
+      "criterion": "查看→互动/破坏→结果；不告诉先处理谁",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "overload-device",
+        "ward-generator",
+        "tower-mechanism",
+        "task-interaction"
+      ],
+      "operation": "与可交互对象完成一次真实互动，核对公开开关/耐久"
+    },
+    {
+      "id": "U01",
+      "category": "状态",
+      "title": "状态与地面",
+      "phase": "P08",
+      "prompt": "这是身上的状态；地面效果另算。",
+      "goal": "单位身上的状态与格子上的效果分开显示。",
+      "criterion": "实际获得/预览/解除三状态对上",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "status-source",
+        "status-preview",
+        "status-remove",
+        "ground-separated"
+      ],
+      "operation": "先看实际燃烧来源，再看浅水预览，再核对解除"
+    },
+    {
+      "id": "U02",
+      "category": "状态",
+      "title": "移动限制",
+      "phase": "P08",
+      "prompt": "不能执行的原因，在这里查看。",
+      "goal": "步数与不能执行的原因都可以就地查看。",
+      "criterion": "迟缓/敏捷/束缚/破势分别核对步数、禁用原因和护盾变化",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "slow",
+        "agility",
+        "bound",
+        "break-stance"
+      ],
+      "operation": "用同一状态查看方式逐项对照步数、禁用原因、护盾变化"
+    },
+    {
+      "id": "U03",
+      "category": "状态",
+      "title": "数值与来源",
+      "phase": "P12",
+      "prompt": "查看数值变化的来源与持续时间。",
+      "goal": "状态记录来源、正负数值、强度和持续窗口。",
+      "criterion": "各类状态来源与预览对应；不用背27个名字",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "status_fireground_boost",
+        "status_fireground_vulnerable",
+        "status_strength",
+        "status_spell_power",
+        "status_shield_efficiency",
+        "status_shield_grant",
+        "status_control",
+        "status_range",
+        "status_speed",
+        "status_damage_taken",
+        "status_move_bonus",
+        "status_spell_cost",
+        "status_cooldown_delta",
+        "status_invulnerable"
+      ],
+      "operation": "选择单位展开一个来源，观察属性前后与伤害预览"
+    },
+    {
+      "id": "U04",
+      "category": "状态",
+      "title": "待触发的标记",
+      "phase": "P12",
+      "prompt": "标记表示待触发；触发后才生效。",
+      "goal": "标记先等待，达到声明窗口才触发并消耗。",
+      "criterion": "一次触发一次消耗/到期；不教连招",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "status_next_weapon_damage",
+        "status_next_weapon_fire",
+        "status_pending_mana",
+        "status_pending_ap",
+        "status_pending_shield",
+        "status_marked",
+        "status_prepared",
+        "status_counter",
+        "passive-not-dispellable"
+      ],
+      "operation": "预置一效果，看待触发标记，再核对触发/到期"
+    },
+    {
+      "id": "U05",
+      "category": "状态",
+      "title": "战后保留",
+      "phase": "P08",
+      "prompt": "战后保留什么，分别看对应标记。",
+      "goal": "普通状态和护盾战后清除，餐食战数和物品总次数另算。",
+      "criterion": "跨战清除普通状态与护盾，保留餐食剩余战数和法宝剩余总次数",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "status-cleared",
+        "shield-cleared",
+        "meal-retained",
+        "artifact-retained"
+      ],
+      "operation": "跨战看状态/护盾/餐食分别保留或清除"
+    },
+    {
+      "id": "P01",
+      "category": "反应与意图",
+      "title": "反应窗口",
+      "phase": "P12",
+      "prompt": "这次行动会触发所示反应。",
+      "goal": "反应在所示窗口触发，并有公开次数或期限。",
+      "criterion": "来源、触发格、次数与结果一致",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "reaction-preview",
+        "reaction-trigger",
+        "reaction-limit"
+      ],
+      "operation": "预览有反应与无反应两操作，演练一次触发"
+    },
+    {
+      "id": "P02",
+      "category": "反应与意图",
+      "title": "多个反应",
+      "phase": "P12",
+      "prompt": "请看全部反应与最终落点。",
+      "goal": "多个来源按公开顺序依次结算，后续条件失效会取消。",
+      "criterion": "合计结果、顺序和实际终点吻合",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "multi-preview",
+        "reaction-order",
+        "final-position"
+      ],
+      "operation": "分两次单步演示，最后才组合两个来源"
+    },
+    {
+      "id": "P03",
+      "category": "反应与意图",
+      "title": "临时成长",
+      "phase": "P12",
+      "prompt": "这是本场增益，来源见详情。",
+      "goal": "临时层数来自真实战场结果，消费与战后清除可追溯。",
+      "criterion": "生成/消费/清除三节点可追溯",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "growth-source",
+        "growth-gain",
+        "growth-consume",
+        "growth-clear"
+      ],
+      "operation": "观察一次公开成长和一次消费，来源通过详情定位"
+    },
+    {
+      "id": "P04",
+      "category": "反应与意图",
+      "title": "锁定格与路线",
+      "phase": "P10",
+      "prompt": "锁定格不变，路线随战场更新。",
+      "goal": "锁定目标格不变，路线随阻挡和站位更新。",
+      "criterion": "新旧路线与碰撞结果可核对，不教诱撞路线",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "locked-cell",
+        "route-before",
+        "route-after",
+        "collision-result"
+      ],
+      "operation": "看楔角当前锁格；任意合法改变后刷新路线"
+    },
+    {
+      "id": "P05",
+      "category": "反应与意图",
+      "title": "首领阶段",
+      "phase": "P13",
+      "prompt": "阶段已变化，先查看新的目标。",
+      "goal": "阶段变化时查看新目标和公开机制。",
+      "criterion": "每阶段目标/机制各有真实预览，不教击破顺序",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "all-boss-phases"
+      ],
+      "operation": "先看本阶段目标，再于真实阶段变化只介绍新增规则"
+    },
+    {
+      "id": "P06",
+      "category": "反应与意图",
+      "title": "临场委托",
+      "phase": "P11",
+      "prompt": "临场委托尚未开放。",
+      "goal": "后续预留系统，当前首局不显示任务或发放奖励。",
+      "criterion": "当前未开放，不计首局必教",
+      "practiceKind": "combat",
+      "required": false,
+      "enabled": false,
+      "evidence": [
+        "commission-preview",
+        "base-independent",
+        "success-reward-choice",
+        "failure-base-unchanged"
+      ],
+      "operation": "首个真实委托只说明主目标与可选加奖区别；不强制完成"
+    },
+    {
+      "id": "F01",
+      "category": "结算与下一局",
+      "title": "本轮总结",
+      "phase": "P14",
+      "prompt": "这是本轮总结。",
+      "goal": "待领取项处理完后才能关闭本轮。总结不会再次改动数值。",
+      "criterion": "待领解决后才能关闭本轮；总结不改数值",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "pending-resolved",
+        "run-summary"
+      ],
+      "operation": "首领胜利后自行领取、处理去向，再核对已保存总结"
+    },
+    {
+      "id": "F02",
+      "category": "结算与下一局",
+      "title": "失败与重试",
+      "phase": "P14",
+      "prompt": "战败可从战前重试；明确放弃会结束本轮。",
+      "goal": "战败后可恢复本场战前状态重新挑战；明确放弃不能重试，失败页确认结束本轮才关闭本轮。普通暂停或返回标题只保存中断。",
+      "criterion": "常规普通战／精英战／事件附加战／首领战与固定首次体验均可恢复本场战前快照；明确放弃或失败页确认结束本轮才关闭本轮；暂停／返回标题仅中断",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "fixed-retry",
+        "normal-retry",
+        "normal-defeat",
+        "normal-abandon",
+        "pause-resume"
+      ],
+      "operation": "真实发生时就地教；顺利通关者做可撤销失败页演练"
+    },
+    {
+      "id": "F03",
+      "category": "结算与下一局",
+      "title": "固定段之后",
+      "phase": "P11",
+      "prompt": "当前资源保留，地图继续展开。",
+      "goal": "固定段结束后仍是同一轮，已有资源与次数继续保留。",
+      "criterion": "一轮ID/资源/次数保留，无重复发奖",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "same-run",
+        "inherited",
+        "random-layer"
+      ],
+      "operation": "离店后对照资源与已完成地图，发现新节点"
+    },
+    {
+      "id": "F04",
+      "category": "结算与下一局",
+      "title": "下一轮",
+      "phase": "P15",
+      "prompt": "新轮次重新开始，长期记录保留。",
+      "goal": "新轮次重置本轮内容，长期记录保留。",
+      "criterion": "识别保留/重置；只有自主确认才建新轮",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "reset-preview",
+        "preserve-preview",
+        "new-round-choice"
+      ],
+      "operation": "总结后预览新轮重置项与保留记录；是否开局由玩家决定"
+    },
+    {
+      "id": "F05",
+      "category": "结算与下一局",
+      "title": "保护已有档案",
+      "phase": "P15",
+      "prompt": "还有未完成轮次，确认前先核对。",
+      "goal": "有未完成轮次时，先核对对象，取消不会覆盖。",
+      "criterion": "取消不覆盖、不删原档",
+      "practiceKind": "flow",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "unfinished-warning",
+        "cancel-preserved"
+      ],
+      "operation": "有活动轮次时只预览覆盖对象并取消"
+    },
+    {
+      "id": "F06",
+      "category": "范围边界",
+      "title": "尚未开放",
+      "phase": "P15",
+      "prompt": "未开放内容会在开放时补充教学。",
+      "goal": "开放新内容前会补充对应教学。",
+      "criterion": "未开放内容不标已教，开放前须补入规则与教学",
+      "practiceKind": "flow",
+      "required": false,
+      "enabled": false,
+      "evidence": [
+        "unreleased"
+      ],
+      "operation": "明确列为未开放/未定义，不编造系统教学"
+    },
+    {
+      "id": "X01",
+      "category": "直接效果规则",
+      "title": "伤害",
+      "phase": "P03",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "按声明几何处理单位伤害和物块耐久。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用E03/E04/C13的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X02",
+      "category": "直接效果规则",
+      "title": "获得护盾",
+      "phase": "P08",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "声明单位获得所示普通护盾。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用C13/C14的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X03",
+      "category": "直接效果规则",
+      "title": "恢复魔力",
+      "phase": "P06",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "恢复个人魔力，不超过当前上限。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用C07的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X04",
+      "category": "直接效果规则",
+      "title": "推离",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "沿声明方向逐格推离，遇不合法格停止。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P12的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X05",
+      "category": "直接效果规则",
+      "title": "牵引",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "朝施放者方向逐格牵引，遇不合法格停止。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P12的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X06",
+      "category": "直接效果规则",
+      "title": "换位",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "双方交换所在格，两个落点都须合法。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P12的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X07",
+      "category": "直接效果规则",
+      "title": "震步",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "突进完成后，对落点正交相邻目标结算所示伤害。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P12的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X08",
+      "category": "直接效果规则",
+      "title": "续步",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "声明结算后额外移动，仍遵守正常阻挡规则。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P12的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X09",
+      "category": "直接效果规则",
+      "title": "获得行动点",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "在标示时点获得所示行动点。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P12的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X10",
+      "category": "直接效果规则",
+      "title": "调整行动条",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "行动条即时改变，并按新数值重新排序。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P12的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X11",
+      "category": "直接效果规则",
+      "title": "施加状态",
+      "phase": "P08",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "状态按所示强度和持续窗口生效。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P08的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X12",
+      "category": "直接效果规则",
+      "title": "清除状态",
+      "phase": "P08",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "只移除声明的一种状态。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P08的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X13",
+      "category": "直接效果规则",
+      "title": "缩短冷却",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "另一项已冷却主动术式减少1个自身回合冷却，最低为0。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P12的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X14",
+      "category": "直接效果规则",
+      "title": "生成场地",
+      "phase": "P08",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "声明格生成指定场地，并保留来源与持续时间。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用E11的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X15",
+      "category": "直接效果规则",
+      "title": "清除场地",
+      "phase": "P08",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "移除声明格的指定场地。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用E11的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X16",
+      "category": "直接效果规则",
+      "title": "预置法阵",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "法阵生成时不触发，达到公开条件后才结算。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P12的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X17",
+      "category": "直接效果规则",
+      "title": "延迟结算",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "在声明的准确时点结算，保留来源与目标。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用U04的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X18",
+      "category": "直接效果规则",
+      "title": "格挡",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "首次指定受击前先获得护盾，再结算这次伤害。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P12的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X19",
+      "category": "直接效果规则",
+      "title": "反击",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "首次受到相邻敌方攻击后反击，随后消耗标记。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P01的单步实际规则演练；已真实体验则不重复"
+    },
+    {
+      "id": "X20",
+      "category": "直接效果规则",
+      "title": "截击",
+      "phase": "P12",
+      "prompt": "查看这次动作将改变什么。",
+      "goal": "第一名敌人进入标记格时结算伤害与推离。",
+      "criterion": "该效果的合法预览与一次实际规则结算相符；不要求主线获得或装备某术式",
+      "practiceKind": "combat",
+      "required": true,
+      "enabled": true,
+      "evidence": [
+        "effect-preview",
+        "effect-commit",
+        "effect-result"
+      ],
+      "operation": "复用P01的单步实际规则演练；已真实体验则不重复"
+    }
+  ]
+}

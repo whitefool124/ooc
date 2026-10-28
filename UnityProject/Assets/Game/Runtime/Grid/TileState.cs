@@ -41,6 +41,7 @@ namespace OCC.Combat
         public bool IsPressureCrystal { get; set; }
         /// <summary>地图配置中的宝箱位置；内容仍由遭遇与奖励系统提供。</summary>
         public bool IsLootChest { get; set; }
+        public bool IsDestructibleLoot { get; set; }
         public bool IsDecoy { get; set; }
         public bool IsCrystalShard { get; set; }
         public bool IsPermanentWall { get; set; }
@@ -74,15 +75,15 @@ namespace OCC.Combat
         /// <summary>是否为任一可破坏装置（含机关）。</summary>
         public bool IsDeviceLike => IsDevice || IsOverloadDevice || IsWardGenerator || IsTowerMechanism;
         public bool IsDestroyed => !IsPermanentWall && Durability <= 0 && (Cover != CoverType.None || IsObjective || IsDevice
-            || IsLampVine || IsDecoy || IsScorched || IsOverloadDevice || IsWardGenerator || IsTowerMechanism);
-        public bool BlocksMovement => IsPermanentWall || IsLootChest || (Cover == CoverType.Heavy && !IsDestroyed) || (IsAetherCrystal && Durability > 0)
+            || IsLampVine || IsDecoy || IsScorched || IsOverloadDevice || IsWardGenerator || IsTowerMechanism || IsDestructibleLoot);
+        public bool BlocksMovement => IsPermanentWall || (IsLootChest && (!IsDestructibleLoot || Durability > 0)) || (Cover == CoverType.Heavy && !IsDestroyed) || (IsAetherCrystal && Durability > 0)
             || (IsDecoy && Durability > 0)
             || ((IsOverloadDevice || IsWardGenerator) && Durability > 0)
             || (IsTowerMechanism && Durability > 0);
         public bool BlocksLineOfSight => IsPermanentWall || (Cover == CoverType.Heavy && !IsDestroyed) || (IsLampVine && Durability > 0);
         public int DamageReduction => IsDestroyed ? 0 : Cover == CoverType.Light ? 1 : Cover == CoverType.Heavy ? 2 : 0;
         public TileState Clone() => new TileState { Cover = Cover, Durability = Durability, MaxDurability = MaxDurability, StructureOwnerUnitId = StructureOwnerUnitId, IsObjective = IsObjective, IsDevice = IsDevice,
-            IsWater = IsWater, IsLampVine = IsLampVine, IsAetherCrystal = IsAetherCrystal, IsPressureCrystal = IsPressureCrystal, IsLootChest = IsLootChest, IsDecoy = IsDecoy, IsCrystalShard = IsCrystalShard,
+            IsWater = IsWater, IsLampVine = IsLampVine, IsAetherCrystal = IsAetherCrystal, IsPressureCrystal = IsPressureCrystal, IsLootChest = IsLootChest, IsDestructibleLoot = IsDestructibleLoot, IsDecoy = IsDecoy, IsCrystalShard = IsCrystalShard,
             IsPermanentWall = IsPermanentWall,
             IsScorched = IsScorched, SmokeExpiresAt = SmokeExpiresAt, SmokePublicRoundsRemaining = SmokePublicRoundsRemaining,
             IsLoosePaper = IsLoosePaper, HasTrace = HasTrace, IsDeepTrace = IsDeepTrace, IsBindingMark = IsBindingMark,

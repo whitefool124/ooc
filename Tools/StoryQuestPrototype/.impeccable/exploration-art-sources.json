@@ -1,0 +1,72 @@
+[
+  {
+    "output": "assets/exploration/hero.png",
+    "source": "E:/数据库/OCC_Codex/ArtSource/victor_existing_20261009/asset/victor_static.png",
+    "sha256": "d980065c4121eb03aa6aca8e55aa2a77b88d9e4e442f8fc2037b1677e259f213"
+  },
+  {
+    "output": "assets/exploration/lise-proxy.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/wind_librarian.png",
+    "sha256": "95e14b207f97a1ee14a11384490129da8ce2d4d529b97b659b861e9a2148702b"
+  },
+  {
+    "output": "assets/exploration/nata-proxy.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/shieldguard.png",
+    "sha256": "cb23be21b30b35a9439d895d64add1999a4432f29cd432cb5a4831268ac910f3"
+  },
+  {
+    "output": "assets/exploration/veil-proxy.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/legacy_storekeeper.png",
+    "sha256": "0cb32511f86de45fe8bac1206246c43d6895874784b2f875bb3d42080a1c9348"
+  },
+  {
+    "output": "assets/exploration/cassian-proxy.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalUnits64/pyromancer.png",
+    "sha256": "d826c048290a40dc80336df73f74d5c11a30cc0414ca38b7528dc776088a860a"
+  },
+  {
+    "output": "assets/exploration/floor.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalAcademyIndependentFloors32/academy_block_court_a.png",
+    "sha256": "7666f668b1bb8038a09abbd7b09054fd9d87992683d840f803f504fb7364ddee"
+  },
+  {
+    "output": "assets/exploration/desk.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_teaching_desk_2x1.png",
+    "sha256": "8b436764f675620f20719f05f530deb6552eca782ab13a4e6a4a743961287e35"
+  },
+  {
+    "output": "assets/exploration/tools.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_repair_bench_2x1.png",
+    "sha256": "5631ccbf4d78b268e2cae5d07500b5c706bf7f27d4c741ea11ab478b731329d6"
+  },
+  {
+    "output": "assets/exploration/cabinet.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_archive_cabinet_2x1.png",
+    "sha256": "2e75e1d4373f2b060e8b006ffcbec22eb1d8dbd09918b368d62134a2101edb72"
+  },
+  {
+    "output": "assets/exploration/map-table.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_map_table_2x1.png",
+    "sha256": "80ed4adb59910a4e72d758510d1bcbf287ca6336b0fc99adf4e1c2f8696507c9"
+  },
+  {
+    "output": "assets/exploration/books.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_low_bookcase_2x1.png",
+    "sha256": "812da51bc08b6e469f5ce5c56d49905fe9700c3865d36ac60c53d932c7b3107d"
+  },
+  {
+    "output": "assets/exploration/planter.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_prop_stone_planter.png",
+    "sha256": "42172164a84c59b185aaea62f304e83837cd60db5bf3288d1ad25dd4b4758227"
+  },
+  {
+    "output": "assets/exploration/wall.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_cloister_wall_4x1.png",
+    "sha256": "2d57cdb23d700cbc6ac65f784bbfd72d5cfe9042f9d871f0f9a873e089ecf18c"
+  },
+  {
+    "output": "assets/exploration/crate.png",
+    "source": "UnityProject/Assets/Game/Resources/Art/FormalAcademyStructures32/academy_prop_wood_crate.png",
+    "sha256": "335421c64f163176476c0a4c65fd37785935231b8a29c4a2f1dff69311850357"
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "scope": "Tools/StoryQuestPrototype",
+  "stage": "interactive-web-prototype",
+  "colors": { "ground": "#e9e4d7", "paper": "#f5f1e7", "ink": "#302e29", "muted": "#686052", "brass": "#786132", "action": "#235c62" },
+  "fonts": { "heading": "OCC Pixel", "body": "Microsoft YaHei" },
+  "viewportsReviewed": [[1920, 1080], [960, 540]],
+  "review": "Actual browser inspection; prototype only, no Unity acceptance."
+}

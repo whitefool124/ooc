@@ -6,7 +6,7 @@ namespace OCC.Combat.Presentation
     public sealed class MainMenuDeskScene : MonoBehaviour
     {
         public const string ResourceRoot = "Art/MainMenuE/", PrefabPath = "UI/MainMenuEDesk";
-        public const float OpenDuration = 1.3f;
+        public const float OpenDuration = .55f;
         public static bool HasCompleteSceneArt => Resources.Load<GameObject>(PrefabPath) != null;
         [SerializeField] private RawImage sceneImage;
         [SerializeField] private CanvasGroup menuGroup;
@@ -47,14 +47,14 @@ namespace OCC.Combat.Presentation
             if(Application.isPlaying && hdPrefab!=null && scene.sceneImage!=null)
             {
                 scene.hdStage=Instantiate(hdPrefab,new Vector3(500,500,500),Quaternion.identity);
-                scene.hdStage.Initialize();scene.sceneImage.texture=scene.hdStage.Output;
+                scene.hdStage.Initialize();scene.hdStage.BindDisplay(scene.sceneImage);scene.sceneImage.texture=scene.hdStage.Output;
                 scene.sceneImage.material=null;
                 if(scene.sceneMaterial!=null)Destroy(scene.sceneMaterial);
                 scene.sceneMaterial=null;
                 foreach(var title in scene.GetComponentsInChildren<Text>())
                     if(title.name=="游戏标题")
                     {
-                        title.color=new Color(.94f,.88f,.72f);title.fontSize=80;
+                        title.color=ArchiveUiStyle.Ink;title.fontSize=72;
                         title.rectTransform.anchoredPosition=new Vector2(112,-100);
                         var shadow=title.GetComponent<Shadow>()??title.gameObject.AddComponent<Shadow>();
                         shadow.effectColor=new Color(.1f,.08f,.05f,.8f);
@@ -78,14 +78,20 @@ namespace OCC.Combat.Presentation
         public Button[] Configure(bool resume, Action start, Action keepGoing, Action archive, Action settings, Action quit)
         {
             continueButton.gameObject.SetActive(resume);
-            sheet.anchoredPosition = new Vector2(112, resume ? -368 : -464);
-            sheet.sizeDelta = new Vector2(424, resume ? 520 : 424);
+            sheet.anchoredPosition = new Vector2(112, -204);
+            sheet.sizeDelta = new Vector2(560, resume ? 700 : 596);
+            AetherPaperChrome.ApplyOverlay(sheet.GetComponent<Image>(),false);
+            foreach(var title in GetComponentsInChildren<Text>(true))if(title.name=="游戏标题"){title.transform.SetAsLastSibling();title.rectTransform.anchoredPosition=new Vector2(144,-232);title.rectTransform.sizeDelta=new Vector2(496,112);title.alignment=TextAnchor.MiddleLeft;}
             Button[] active = resume ? new[] { continueButton, startButton, archiveButton, settingsButton, quitButton } : new[] { startButton, archiveButton, settingsButton, quitButton };
             for (int i = 0; i < active.Length; i++)
             {
                 var rect=(RectTransform)active[i].transform;
-                rect.anchoredPosition = new Vector2(28, -24 - i * 96);
-                rect.sizeDelta = new Vector2(368,80);
+                rect.anchoredPosition = new Vector2(32, -152 - i * 100);
+                rect.sizeDelta = new Vector2(496,96);
+                AetherPaperChrome.ApplyOverlay(active[i].GetComponent<Image>(),true);
+                if(i>0)AetherPaperChrome.Quiet(active[i]);
+                foreach(var label in active[i].GetComponentsInChildren<Text>(true)){label.fontSize=24;label.fontStyle=FontStyle.Normal;label.resizeTextForBestFit=false;label.color=ArchiveUiStyle.Ink;label.alignment=TextAnchor.MiddleCenter;label.rectTransform.anchorMin=Vector2.zero;label.rectTransform.anchorMax=Vector2.one;label.rectTransform.offsetMin=new Vector2(36,20);label.rectTransform.offsetMax=new Vector2(-36,-20);}
+                if(i==0){active[i].GetComponent<Image>().color=Color.Lerp(ArchiveUiStyle.Paper,FormalUiTheme.Cyan,.15f);FormalUiKit.FlatPanel("主入口标记",active[i].transform,new Vector2(0,1),new Vector2(0,1),new Vector2(24,-20),new Vector2(4,56),FormalUiTheme.Cyan);}
             }
             Bind(startButton, () => BeginOpen(start)); Bind(continueButton, () => BeginOpen(keepGoing));
             Bind(archiveButton, archive); Bind(settingsButton, settings); Bind(quitButton, quit);
@@ -155,7 +161,7 @@ namespace OCC.Combat.Presentation
         }
         private void FinishOpen() { if (!opening) return; opening = false; handedOff = true; Action callback = handoff; handoff = null; callback?.Invoke(); }
         private void OnEnable(){if(pixelStage!=null)pixelStage.gameObject.SetActive(true);if(hdStage!=null)hdStage.gameObject.SetActive(true);}
-        private void OnDisable(){GetComponentInParent<Hd2DContentGeometry>()?.RestoreLayout();CancelOpen();if(pixelStage!=null)pixelStage.gameObject.SetActive(false);if(hdStage!=null)hdStage.gameObject.SetActive(false);}
+        private void OnDisable(){CancelOpen();if(pixelStage!=null)pixelStage.gameObject.SetActive(false);if(hdStage!=null)hdStage.gameObject.SetActive(false);}
         private void CancelOpen()
         {
             opening = false; handoff = null; elapsed = 0; handedOff = false;

@@ -18,6 +18,7 @@ namespace OCC.Combat.Presentation
 
     public sealed class BattlefieldCellPresentation
     {
+        public IReadOnlyList<Texture2D> ContainerCategoryTextures { get; internal set; } = Array.Empty<Texture2D>();
         public GridPosition Position { get; }
         public Texture2D FloorTexture { get; }
         public Texture2D FloorTextureLow { get; }

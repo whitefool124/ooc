@@ -54,10 +54,15 @@ namespace OCC.Combat.Presentation
         string SelectedTargetId { get; }
         bool IsCombatOutcomeVisible { get; }
         bool IsMapRunAbandonPending { get; }
+        bool CanRetryCurrentCombat { get; }
         bool IsMapRunSaved { get; }
         bool IsMapRunWriteProtected { get; }
         bool IsDeveloperCombatActive { get; }
         bool IsInteractionModalOpen { get; }
+        bool IsAutoCombatEnabled { get; }
+        bool IsAutoCombatPanelOpen { get; }
+        AutoCombatSettings AutoCombatSettings { get; }
+        bool IsTrainingRangeActive { get; }
         bool IsKeyboardTargeting { get; }
         GridPosition KeyboardTargetPosition { get; }
         int TrainingRangeArtifactUsesRemaining { get; }
@@ -71,6 +76,12 @@ namespace OCC.Combat.Presentation
         bool TryOpenCombatInventory();
         void ActivateInventoryQuickbar(int slot);
         void EndHeroTurn();
+        void ToggleAutoCombat();
+        void OpenAutoCombatPanel();
+        void CloseAutoCombatPanel();
+        void SetAutoCombatStyle(AutoCombatStyle style);
+        void SetAutoCombatItemEnabled(int slot, bool enabled);
+        void SetAutoCombatReservedUses(int slot, int uses);
         bool BeginKeyboardTargeting();
         void MoveKeyboardTarget(int deltaX, int deltaY);
         void CommitKeyboardTarget();
@@ -112,6 +123,8 @@ namespace OCC.Combat.Presentation
         void PurchaseFirstRunOffer(string offerId);
         void CompleteFirstRunExperience();
         bool ConfirmAcademyDeparture();
+        bool ChooseOpeningGift(string id);
+        bool ChooseOpeningGiftSpell(string id);
         void CompleteCurrentServiceNode();
         void SelectMapNode(string nodeId);
         void StartMapNodeCombat(string nodeId);

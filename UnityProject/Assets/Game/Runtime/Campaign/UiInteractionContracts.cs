@@ -117,6 +117,22 @@ namespace OCC.Combat
         }
     }
 
+    public sealed class UiConfirmationSession
+    {
+        private Action pending;
+        public UiConfirmationRequest Request { get; private set; }
+        public bool IsOpen => Request != null;
+        public bool Open(UiConfirmationRequest request, Action onConfirm)
+        {
+            if (request == null || onConfirm == null) throw new ArgumentNullException();
+            if (IsOpen) return false;
+            Request = request; pending = onConfirm; return true;
+        }
+        public void Cancel() { Request = null; pending = null; }
+        public Action TakeConfirmedAction()
+        { Action action = pending; Cancel(); return action; }
+    }
+
     public sealed class UiActionFeedback
     {
         public UiFeedbackKind Kind { get; }

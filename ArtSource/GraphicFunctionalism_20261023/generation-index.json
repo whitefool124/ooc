@@ -1,0 +1,25 @@
+{
+  "schema": "aether-independent-generation-index-v1",
+  "channel": "codex_builtin_imagegen",
+  "conversation": "01a1679a-4020-7bf1-af62-fa544143ece3",
+  "date": "2026-10-23",
+  "status": "QA_PENDING",
+  "concepts": [
+    {"id":"70d32c19-0fc0-44d9-9a29-19d6c2bdaca1", "direction":"A inspection workstation", "selection":"functional material separation only; reject excess wear and fine noise"},
+    {"id":"578534d4-7c7a-4fa6-9407-b6337666b21e", "direction":"B field dossier", "selection":"primary structural reference; separate personnel, equipment and packing carriers"},
+    {"id":"19cb4cbe-d3ad-4a9b-9528-3086349db097", "direction":"C spell calibration folio", "selection":"occupied/empty hierarchy; retain existing actual spell data"}
+  ],
+  "production": [
+    {"id":"8025c9e9-1986-4fdd-a153-d049a34987cf", "source":"folio-source.png", "role":"independent navy linen rigid support, quiet centre, nine-slice corners", "alpha_request":true},
+    {"id":"e05296b2-a085-4b03-89e7-0bb96104a2d5", "source":"canvas-source.png", "role":"independent inventory canvas organizer backing, no baked grid", "alpha_request":true},
+    {"id":"2ecee42d-1702-4c21-9f00-a277f8ce5a00", "source":"dossier-rejected-central-shadow-source.png", "role":"clipped personnel paper", "result":"REJECTED: central dark region and partial alpha reduce readability"},
+    {"id":"678c0547-de21-458c-a7f2-969fbfee88e9", "source":"dossier-rejected-alpha-hole-source.png", "role":"targeted uniform-writing-area retry", "result":"REJECTED: matting removed opaque centre; preserve independently"},
+    {"id":"89d33d45-5043-4440-bf0a-ed6e4695bc6b", "source":"dossier-source.png", "role":"opaque uniform ivory dossier pad; exterior magenta separation resolves matting failure", "alpha_request":false},
+    {"id":"2b48d69c-b203-4892-b46d-1f31824f3089", "source":"socket-source.png", "role":"ivory enamel instrument socket; four corner retainers; no icon baked in", "alpha_request":false},
+    {"id":"b2eb90c0-f078-4bb1-ad53-d048b07a35a0", "source":"clamp-source.png", "role":"independent brass spring document clamp", "alpha_request":false},
+    {"id":"a98cc405-1ff9-4c44-92c3-360ea3afa968", "source":"toolroll-source.png", "role":"independent canvas quick-item support roll; endcaps only, no baked slots", "alpha_request":false},
+    {"id":"531b23d9-8606-49c3-8b68-5f1dd96d1ca6", "source":"empty-socket-source.png", "role":"independent dark recessed empty spell socket; source colour survives interaction feedback resets", "alpha_request":false}
+  ],
+  "processing": "prepare.py records crop, delivery dimensions, nearest sampling, exterior-only key for solid carriers and key including loop openings for clamp/tool roll; no visible-pixel recolouring or drawn replacement art.",
+  "review": "Assistant source selection and technical checks are not human aesthetic approval. No FORMAL or APPROVED_BASELINE promotion."
+}

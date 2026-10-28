@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using NUnit.Framework;
 using OCC.Combat.Presentation;
@@ -174,7 +174,7 @@ namespace OCC.Combat.Tests
         [Test]
         public void SubsequentAcademyBattle_AttachesGrowthRuntimeThroughFormalSessionBuilder()
         {
-            RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4362);
+            RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4362, includeOpeningGift: false);
             run.ConfirmAcademyDeparture();
             RogueliteMapNode combat = run.AvailableNodes.FirstOrDefault(node => node.IsCombat);
             Assert.That(combat, Is.Not.Null);

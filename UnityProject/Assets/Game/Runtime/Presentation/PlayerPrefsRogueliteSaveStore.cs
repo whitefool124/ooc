@@ -7,9 +7,8 @@ namespace OCC.Combat.Presentation
         public const string ActiveSlotKey = "OCC.FirstExperiencePrototype.activeSlot.v2";
         private const string SlotMapPrefix = "occ.first_experience.map_run.slot.";
 
-#if UNITY_EDITOR
         private static string verificationPrefix = string.Empty;
-        // Editor acceptance uses the production disk store without overwriting a player's occupied slots.
+        // Explicit acceptance probes use the production store without overwriting player slots.
         public static System.IDisposable BeginVerificationScope(string id)
         {
             if (string.IsNullOrWhiteSpace(id) || id.IndexOfAny(new[] { '.', '/', '\\' }) >= 0)
@@ -22,14 +21,9 @@ namespace OCC.Combat.Presentation
         {
             public void Dispose() { verificationPrefix = string.Empty; }
         }
-#endif
         public static string ResolveFrontEndKey(string key)
         {
-#if UNITY_EDITOR
             return verificationPrefix + key;
-#else
-            return key;
-#endif
         }
 
         public static int ActiveSlot => Mathf.Clamp(PlayerPrefs.GetInt(ResolveFrontEndKey(ActiveSlotKey), -1), -1, 2);

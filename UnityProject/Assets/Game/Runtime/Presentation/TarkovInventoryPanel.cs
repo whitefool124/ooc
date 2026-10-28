@@ -650,7 +650,7 @@ namespace OCC.Combat.Presentation
         private void DrawRogueLootGrid(CombatState state, Rect rect)
         {
             LootSourceState loot = state.LootSource;
-            Box(rect, "检修备件箱");
+            Box(rect, loot?.PublicTitle.Replace("\n", "　") ?? "战场容器");
             if (loot == null)
             {
                 DrawIcon(new Rect(rect.center.x - 128, rect.y + 180, 256, 256),
@@ -692,7 +692,7 @@ namespace OCC.Combat.Presentation
                 if (current != null && itemRect.Contains(current.mousePosition))
                 {
                     contentHover = new FormalTooltipContent("搜刮物", definition.DisplayName,
-                        "左键拿取\n" + definition.Width + "×" + definition.Height, FormalUiTheme.Amber, definition.IconPath);
+                        "左键免费拿取\n" + ContainerItemDetail(item), FormalUiTheme.Amber, definition.IconPath);
                     contentHoverPointer = current.mousePosition;
                 }
                 if (ClickButton(itemRect, GUIContent.none, GUIStyle.none)) bootstrap.TakeCurrentLoot(item.InstanceId);
@@ -702,13 +702,37 @@ namespace OCC.Combat.Presentation
                 if (!RogueInventoryGridSystem.TryFindFirstFit(occupied, 1, 1, out RogueLoadoutGridPoint origin)) break;
                 Rect unknown = new Rect(gridX + origin.X * cell, gridY + origin.Y * cell, cell - 3f, cell - 3f);
                 DrawRogueGridFrame(unknown, FormalUiTheme.Muted);
-                DrawIcon(new Rect(unknown.x + 10f, unknown.y + 10f, 32f, 32f), "Art/FormalItemIcons32/loot_unknown");
+                string categoryIcon = loot.Tier == BattlefieldChestTier.Fixed ? "Art/FormalItemIcons32/loot_unknown" : loot.PublicCategoryIcons[hidden];
+                DrawIcon(new Rect(unknown.x + 10f, unknown.y + 10f, 32f, 32f), categoryIcon);
             }
 
             GUI.color = Muted;
-            string status = loot.IsComplete ? "容器已清空" : !adjacent ? "移动至容器相邻格后搜索" : hero.ActionPoints < 1 ? "行动点不足" : loot.RevealedItems.Count > 0 ? "已揭示物品可直接拿取" : "未发现物品";
+            string status = loot.IsDestroyed ? "容器已毁，未取内容已销毁" : loot.State == LootSearchState.Emptied ? "容器已清空" : loot.IsComplete ? "搜索完成，物品可免费拿取" : !adjacent ? "移动至容器相邻格后搜索" : hero.ActionPoints < 1 ? "行动点不足" : "搜索后揭示全部内容";
             GUI.Label(new Rect(rect.x + 22f, rect.yMax - 46f, rect.width - 44f, 28f), status);
             GUI.color = Color.white;
+        }
+
+        public static string ContainerItemDetail(ItemInstance item)
+        {
+            ItemDefinition definition = ItemCatalog.Get(item.DefinitionId);
+            if (item.DefinitionId.StartsWith(AcademyLootCatalog.ManuscriptPrefix, StringComparison.Ordinal))
+            {
+                string id = item.DefinitionId.Substring(AcademyLootCatalog.ManuscriptPrefix.Length);
+                SpellDefinition spell = RogueContentCatalog.CreateAcademyV01().Spells.Single(s => s.DefinitionId == id);
+                return RogueliteSettlementPresentation.RogueSpellTargetSummary(spell) + "\n" +
+                    RogueliteSettlementPresentation.RogueSpellPlayerSummary(spell) + "\n消耗 " + spell.ActionPointCost + " 行动点／" + spell.ManaCost +
+                    " 魔力；冷却 " + spell.CooldownOwnTurns + " 自身回合\n领取后掌握，不自动装备，不占背包。";
+            }
+            EquipmentDefinition equipment = RogueContentCatalog.CreateAcademyV01().Equipment.FirstOrDefault(e => e.DefinitionId == item.DefinitionId);
+            if (equipment != null)
+            {
+                var preview = new RogueEquipmentRuntime(0);
+                preview.CreateInstance("container-preview", item.DefinitionId, EquipmentRarity.Uncommon, 0, "container-preview");
+                return FormalRogueliteUi.RogueEquipmentDetailBody(preview, "container-preview", false);
+            }
+            ArtifactDefinition artifact = ArtifactCatalog.All.Concat(new[] { ArtifactCatalog.FirelineScroll }).FirstOrDefault(a => a.Id == item.DefinitionId);
+            if (artifact != null) return CombatHoverDescriptionTable.ArtifactBody(artifact, item.RemainingUses, item.MaximumUses);
+            return definition.Description + (item.DefinitionId == AcademyLootCatalog.GoldBag ? "\n直接结算，不占背包。" : "\n占格 " + definition.Width + "×" + definition.Height);
         }
 
         private void DrawQuickbar(CombatState state, Rect rect)
@@ -823,7 +847,7 @@ namespace OCC.Combat.Presentation
         }
         private static string CategoryIcon(ItemCategory? value) => "Art/FormalItemIcons32/category_" + (value?.ToString().ToLowerInvariant() ?? "container");
         private static ItemCategory? NextCategory(ItemCategory? value) { if (!value.HasValue) return ItemCategory.Consumable; int next = (int)value.Value + 1; return next > (int)ItemCategory.Container ? (ItemCategory?)null : (ItemCategory)next; }
-        private static string StateName(LootSearchState state) => state == LootSearchState.Unsearched ? "未搜索" : state == LootSearchState.Searching ? "搜索中" : state == LootSearchState.Searched ? "已搜索" : "已清空";
+        private static string StateName(LootSearchState state) => state == LootSearchState.Destroyed ? "已损毁" : state == LootSearchState.Unsearched ? "未搜索" : state == LootSearchState.Searching ? "搜索中" : state == LootSearchState.Searched ? "已搜索" : "已清空";
         private static int NumberSlot(KeyCode key)
         {
             int value = (int)key;

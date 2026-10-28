@@ -37,7 +37,7 @@ namespace OCC.Combat
         }
 
         public RogueliteMapStartResult TryStart(bool continueSave, string starterId, int seed,
-            bool acknowledgeOriginOnCreate = false)
+            bool acknowledgeOriginOnCreate = false, bool enableFixedFirstExperience = false)
         {
             RogueliteMapRun run;
             if (continueSave)
@@ -53,11 +53,13 @@ namespace OCC.Combat
             }
             else
             {
-                run = RogueliteMapRun.CreateFirstRunV1(seed);
+                run = enableFixedFirstExperience
+                    ? RogueliteMapRun.CreateFirstRunV1(seed)
+                    : RogueliteMapRun.CreateSubsequentAcademyRun(seed);
                 // The formal front end opens directly on the map. Include this transition
                 // in the first verified write so a later write failure cannot report a
                 // failed replacement after the previous slot was already overwritten.
-                if (acknowledgeOriginOnCreate) run.AcknowledgeFirstRunOrigin();
+                if (enableFixedFirstExperience && acknowledgeOriginOnCreate) run.AcknowledgeFirstRunOrigin();
                 if (!gateway.SaveNewMapRun(run))
                 {
                     LastSaveSucceeded = false;

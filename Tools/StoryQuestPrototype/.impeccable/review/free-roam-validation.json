@@ -1,0 +1,23 @@
+{
+  "stage": "free-exploration-web-prototype",
+  "newMovementTests": { "total": 7, "passed": 7, "failed": 0 },
+  "previousStoryStateTests": { "total": 11, "passed": 11, "note": "prior task evidence, story reducer unchanged in this change" },
+  "browserChecks": {
+    "heldWKeyMovesPlayer": true,
+    "sharedTableBlocksPlayerAtY298": true,
+    "clickNpcWalksToTargetBeforeDialogue": true,
+    "eKeyOpensNearbyDialogue": true,
+    "dialoguePausesMovement": true,
+    "escapeReturnsToScene": true,
+    "walkToToolsOpensLoadout": true,
+    "southDoorConnectsToRoute": true,
+    "resultClaimReturnsToWalkableBase": true,
+    "returnPhaseShowsLiseAndCassian": true,
+    "width960HasNoHorizontalOverflow": true,
+    "npcNamesVisibleAt960AfterCameraAdjustment": true,
+    "consoleErrors": 0,
+    "testDataIsolatedFromNormalEntry": true
+  },
+  "viewports": [[1920, 1080], [960, 540]],
+  "scope": "Browser prototype only. Reused pixel assets and temporary NPC proxy appearances. No Unity changes."
+}

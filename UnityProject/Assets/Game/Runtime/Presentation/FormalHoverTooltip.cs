@@ -195,7 +195,7 @@ namespace OCC.Combat.Presentation
         }
     }
 
-    public sealed class FormalHoverTooltip : MonoBehaviour
+    public sealed partial class FormalHoverTooltip : MonoBehaviour
     {
         public const string ResourcePath = "UI/Prefabs/FormalHoverTooltip";
         private const float MinimumWidth = 220f;
@@ -325,6 +325,7 @@ namespace OCC.Combat.Presentation
             background.type = Image.Type.Simple;
             background.color = FormalUiTheme.SurfaceRaised;
             background.raycastTarget = false;
+            FormalUiKit.ApplySkin(background,"tooltip",FormalUiTheme.SurfaceRaised);
 
             titleLabel = FixedLabel("悬浮标题", string.Empty, panel, new Vector2(HorizontalPadding, -TopPadding),
                 new Vector2(MaximumWidth - HorizontalPadding * 2f, TitleHeight), 20, FormalUiTheme.Amber, TextAnchor.MiddleLeft);
@@ -394,6 +395,11 @@ namespace OCC.Combat.Presentation
         public void Show(object source, FormalTooltipContent content, Vector2 screenPosition)
         {
             if (panel == null || source == null || (string.IsNullOrWhiteSpace(content.Title) && string.IsNullOrWhiteSpace(content.Body))) return;
+            RestoreLoadoutChrome();
+            var component=source as Component;
+            var structure=component==null?null:component.GetComponentInParent<Hd2DPageStructure>();
+            loadoutContent=structure!=null&&structure.name.StartsWith("loadout-",StringComparison.Ordinal);
+            foreach(var metric in metricCells)if(metric!=null)metric.gameObject.SetActive(true);
             owner = source;
             bool categorized = !string.IsNullOrWhiteSpace(content.Category);
             cardRoot.gameObject.SetActive(categorized);
@@ -445,6 +451,7 @@ namespace OCC.Combat.Presentation
             }
 
             FormalUiKit.ThinFrame(panel, panel.sizeDelta, FormalUiTheme.Ink, "内容卡描边");
+            if(loadoutContent)ApplyLoadoutChrome();
             layer.SetAsLastSibling();
             panel.SetAsLastSibling();
             panel.gameObject.SetActive(true);
@@ -547,6 +554,7 @@ namespace OCC.Combat.Presentation
         /// </summary>
         private void MeasureMetricRow()
         {
+            if(loadoutContent){MeasureLoadoutMetrics();return;}
             float height = MetricCellHeight;
             for (int i = 0; i < metricLabels.Length; i++)
             {

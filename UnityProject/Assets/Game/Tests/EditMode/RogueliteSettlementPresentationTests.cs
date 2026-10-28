@@ -21,6 +21,20 @@ namespace OCC.Combat.Tests
             public int RewardClaims { get; private set; }
             public int FixedClaims { get; private set; }
             public int LeaveRequests { get; private set; }
+            public int InventoryRequests { get; private set; }
+            public bool FailNextSave { get; set; }
+
+            private void Transaction(System.Action action)
+            {
+                string checkpoint = SaveSnapshot(CurrentMapRun);
+                action();
+                if (FailNextSave)
+                {
+                    FailNextSave = false;
+                    CurrentMapRun = RogueliteMapRun.FromRogue11(Rogue11Serializer.Deserialize(checkpoint));
+                }
+                UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+            }
 
             public void ClaimMapFireSpell(string spellId)
             {
@@ -33,11 +47,11 @@ namespace OCC.Combat.Tests
             }
             public void ClaimMapLootChoice(string rewardId)
             {
-                RewardClaims++; CurrentMapRun.ClaimLootChoice(rewardId); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+                RewardClaims++; Transaction(() => CurrentMapRun.ClaimLootChoice(rewardId));
             }
             public void ClaimMapFixedLoot(string lootId)
             {
-                FixedClaims++; CurrentMapRun.ClaimFixedLoot(lootId); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+                FixedClaims++; Transaction(() => CurrentMapRun.ClaimFixedLoot(lootId));
             }
             public void RequestLeaveMapLoot()
             {
@@ -54,7 +68,7 @@ namespace OCC.Combat.Tests
                 CurrentMapRun.ConfirmResourceReceipt(); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
             }
 
-            public void OpenRewardInventory() { }
+            public void OpenRewardInventory() { InventoryRequests++; }
             public void SelectMapReward(string rewardId)
             {
                 CurrentMapRun.SelectPendingReward(rewardId); UiPresentationVersions.Mark(UiPresentationArea.Settlement);
@@ -72,7 +86,7 @@ namespace OCC.Combat.Tests
         public void Rogue11FireSpellCard_UsesUnifiedRewardClaimInsteadOfLegacyFireClaim()
         {
             RogueRunDto dto = RogueRunDto.CreateNew("settlement-route", 620);
-            dto.CurrentNodeId = "rail_patrol"; dto.CompletedNodeIds.Add("rail_patrol"); dto.AwaitingReward = true;
+            dto.CurrentNodeId = "rail_patrol"; dto.VisitedNodeIds.Add("rail_patrol"); dto.CompletedNodeIds.Add("rail_patrol"); dto.AwaitingReward = true;
             Host host = new Host { CurrentMapRun = RogueliteMapRun.FromRogue11(dto) };
             GameObject root = new GameObject("settlement-route-test");
             try
@@ -121,7 +135,7 @@ namespace OCC.Combat.Tests
         public void SettlementLabels_WrapAndTruncateInsideTheirAssignedCards()
         {
             RogueRunDto dto = RogueRunDto.CreateNew("settlement-wrap", 620);
-            dto.CurrentNodeId = "rail_patrol"; dto.CompletedNodeIds.Add("rail_patrol"); dto.AwaitingReward = true;
+            dto.CurrentNodeId = "rail_patrol"; dto.VisitedNodeIds.Add("rail_patrol"); dto.CompletedNodeIds.Add("rail_patrol"); dto.AwaitingReward = true;
             Host host = new Host { CurrentMapRun = RogueliteMapRun.FromRogue11(dto) };
             GameObject root = new GameObject("settlement-wrap-test");
             try
@@ -141,7 +155,7 @@ namespace OCC.Combat.Tests
         public void RewardRows_ShowIconAndShortEffectBesideBackpack()
         {
             RogueRunDto dto = RogueRunDto.CreateNew("settlement-layout", 621);
-            dto.CurrentNodeId = "rail_patrol"; dto.CompletedNodeIds.Add("rail_patrol"); dto.AwaitingReward = true;
+            dto.CurrentNodeId = "rail_patrol"; dto.VisitedNodeIds.Add("rail_patrol"); dto.CompletedNodeIds.Add("rail_patrol"); dto.AwaitingReward = true;
             Host host = new Host { CurrentMapRun = RogueliteMapRun.FromRogue11(dto) };
             GameObject root = new GameObject("settlement-layout-test");
             try
@@ -170,7 +184,7 @@ namespace OCC.Combat.Tests
         public void RandomRewardEnvelope_OpensSavedThreeChoiceScreenWithoutClaiming()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
             RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
             Host host = new Host { CurrentMapRun = run };
@@ -242,7 +256,7 @@ namespace OCC.Combat.Tests
         public void FixedLootRow_ClaimsOnClickAndLeaveIsTheOnlyBottomRightAction()
         {
             RogueliteMapRun run = RogueliteMapRun.CreateSubsequentAcademyRun(4306);
-            run.ConfirmAcademyDeparture();
+            ConfirmDeparture(run);
             Assert.That(RogueliteDeveloperRunPolicy.AdvanceToFinale(run).ReachedFinale, Is.True);
             RogueliteDeveloperRunPolicy.ForceWinCurrentCombat(run, false);
             int goldBefore = run.Gold;
@@ -266,6 +280,201 @@ namespace OCC.Combat.Tests
                 leave.onClick.Invoke();
                 Assert.That(host.LeaveRequests, Is.EqualTo(1));
                 Assert.That(run.AwaitingReward, Is.False);
+            }
+            finally { Object.DestroyImmediate(root); DestroyCanvases(); }
+        }
+
+        private sealed class MemoryStore : IRogueliteSaveStore
+        {
+            public readonly System.Collections.Generic.Dictionary<string, string> Values = new System.Collections.Generic.Dictionary<string, string>();
+            public bool HasKey(string key) => Values.ContainsKey(key);
+            public string GetString(string key, string fallback = "") => Values.TryGetValue(key, out string value) ? value : fallback;
+            public void SetString(string key, string value) => Values[key] = value;
+            public void DeleteKey(string key) => Values.Remove(key);
+            public void Flush() { }
+        }
+
+        private static string SaveSnapshot(RogueliteMapRun run)
+        {
+            var store = new MemoryStore(); var gateway = new RogueliteSaveGateway(store);
+            Assert.That(gateway.SaveMapRun(run), Is.True, gateway.LastError);
+            return store.GetString(RogueliteSaveGateway.MapRunKey);
+        }
+
+        private static void ConfirmDeparture(RogueliteMapRun run)
+        {
+            if (run.OpeningGiftPending) run.ChooseOpeningGift(run.OpeningGift.CandidateIds.First(id => id != "LK-05" && id != "LK-06"));
+            run.ConfirmAcademyDeparture();
+        }
+
+        private static RogueliteMapRun BattleReward(string nodeId, int seed = 4306)
+        {
+            var run = RogueliteMapRun.CreateSubsequentAcademyRun(seed);
+            ConfirmDeparture(run);
+            var dto = Rogue11Serializer.Deserialize(SaveSnapshot(run));
+            dto.CurrentNodeId = nodeId;
+            if (nodeId == "core_finale") dto.StageTime = AcademyMapTuning.TransitionProgress;
+            dto.CompletedNodeIds.Remove(nodeId);
+            if (!dto.VisitedNodeIds.Contains(nodeId)) dto.VisitedNodeIds.Add(nodeId);
+            run = RogueliteMapRun.FromRogue11(dto);
+            run.CompleteCurrentCombat();
+            Assert.That(run.AwaitingReward, Is.True);
+            return run;
+        }
+
+        private static Button LootButton(string name) => Object.FindObjectsByType<Button>(FindObjectsInactive.Exclude)
+            .Single(button => button.name == name && button.transform.root.name == "肉鸽结算UI");
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void FailedSave_RestoresRewardAndAllowsRetry(bool fixedLoot)
+        {
+            var host = new Host { CurrentMapRun = BattleReward("core_finale"), FailNextSave = true };
+            var root = new GameObject("reward-save-rollback");
+            try
+            {
+                var view = root.AddComponent<RogueliteSettlementPresentation>(); view.Initialize(host);
+                string choice = host.CurrentMapRun.CurrentRewards.First(r => r.RogueSpell != null).Id;
+                int gold = host.CurrentMapRun.Gold;
+                if (fixedLoot) LootButton("固定战利品_0").onClick.Invoke(); else InvokeClaim(view, choice);
+                Assert.That(host.CurrentMapRun.AwaitingReward, Is.True);
+                Assert.That(host.CurrentMapRun.Gold, Is.EqualTo(gold));
+                if (fixedLoot) LootButton("固定战利品_0").onClick.Invoke(); else InvokeClaim(view, choice);
+                Assert.That(fixedLoot ? host.FixedClaims : host.RewardClaims, Is.EqualTo(2), "Saving rollback must unlock the same visible action");
+                if (fixedLoot) Assert.That(host.CurrentMapRun.Gold, Is.EqualTo(gold + 10));
+                else Assert.That(host.CurrentMapRun.PendingRewardStepId, Is.EqualTo("collected"));
+            }
+            finally { Object.DestroyImmediate(root); DestroyCanvases(); }
+        }
+
+        [Test]
+        public void SelectedEquipment_HasWorkingDismantleButton()
+        {
+            var host = new Host { CurrentMapRun = BattleReward("core_finale") };
+            var root = new GameObject("reward-dismantle");
+            try
+            {
+                var view = root.AddComponent<RogueliteSettlementPresentation>(); view.Initialize(host);
+                string equipment = host.CurrentMapRun.CurrentRewards.Single(r => r.Kind == RogueliteRewardKind.Equipment).Id;
+                host.OpenMapRewardChoices(); host.SelectMapReward(equipment);
+                int materials = host.CurrentMapRun.ForgeMaterialCount;
+                LootButton("拆解_" + equipment).onClick.Invoke();
+                Assert.That(host.CurrentMapRun.ForgeMaterialCount, Is.EqualTo(materials + 1));
+                Assert.That(host.CurrentMapRun.PendingRewardStepId, Is.EqualTo("collected"));
+            }
+            finally { Object.DestroyImmediate(root); DestroyCanvases(); }
+        }
+
+        [Test]
+        public void ReturningFromReveal_DoesNotSuppressNextRewardWindow()
+        {
+            var host = new Host { CurrentMapRun = BattleReward("dorm_drill") };
+            var root = new GameObject("reward-next-envelope");
+            try
+            {
+                var view = root.AddComponent<RogueliteSettlementPresentation>(); view.Initialize(host);
+                LootButton("战后奖励封套").onClick.Invoke();
+                LootButton("返回清点").onClick.Invoke();
+                host.CurrentMapRun = BattleReward("core_finale"); host.UiPresentationVersions.Mark(UiPresentationArea.Settlement);
+                LootButton("战后奖励封套").onClick.Invoke();
+                Assert.That(CardIds(view), Has.Length.EqualTo(3));
+            }
+            finally { Object.DestroyImmediate(root); DestroyCanvases(); }
+        }
+
+        public static System.Collections.IEnumerable BattleBranches()
+        {
+            foreach (var node in RogueliteAcademyMapGenerator.Generate(4306).Where(n => n.IsCombat))
+                for (int choice = 0; choice < 3; choice++) yield return new TestCaseData(node.Id, choice);
+        }
+
+        [TestCaseSource(nameof(BattleBranches))]
+        public void EveryBattleReward_ClaimEachChoiceFixedAndFollowupThenLeave(string node, int choiceIndex)
+        {
+            var host = new Host { CurrentMapRun = BattleReward(node) };
+            var root = new GameObject("reward-branch-" + node);
+            try
+            {
+                var view = root.AddComponent<RogueliteSettlementPresentation>(); view.Initialize(host);
+                int goldBefore = host.CurrentMapRun.Gold;
+                int promisedGold = host.CurrentMapRun.RogueRunState.PendingRewardGold;
+                for (int step = 0; step < 3 && host.CurrentMapRun.PendingRewardStepId != "collected"; step++)
+                {
+                    if (!host.CurrentMapRun.RewardChoicesOpened) LootButton("战后奖励封套").onClick.Invoke();
+                    var candidates = host.CurrentMapRun.CurrentRewards.Select(r => r.Id).ToArray();
+                    int index = step == 0 ? choiceIndex : 0;
+                    LootButton("揭晓卡牌_" + index).onClick.Invoke();
+                    string selected = host.CurrentMapRun.SelectedRewardId;
+                    // Restore the selected candidates through the production codec before collection.
+                    host.CurrentMapRun = RogueliteMapRun.FromRogue11(Rogue11Serializer.Deserialize(SaveSnapshot(host.CurrentMapRun)));
+                    Assert.That(host.CurrentMapRun.SelectedRewardId, Is.EqualTo(selected));
+                    Assert.That(host.CurrentMapRun.CurrentRewards.Select(r => r.Id), Is.EqualTo(candidates));
+                    view.HideForInventory(); view.RefreshNow();
+                    LootButton("战后奖励封套").onClick.Invoke();
+                }
+                Assert.That(host.CurrentMapRun.PendingRewardStepId, Is.EqualTo("collected"));
+                while (Object.FindObjectsByType<Button>(FindObjectsInactive.Exclude).Any(b => b.name.StartsWith("固定战利品_")))
+                    Object.FindObjectsByType<Button>(FindObjectsInactive.Exclude).First(b => b.name.StartsWith("固定战利品_")).onClick.Invoke();
+                Assert.That(host.CurrentMapRun.Gold, Is.EqualTo(goldBefore + promisedGold));
+                Assert.That(host.CurrentMapRun.HasUnclaimedLoot, Is.False);
+                LootButton("离开战利品").onClick.Invoke();
+                Assert.That(host.CurrentMapRun.AwaitingReward || host.CurrentMapRun.LootPendingExit, Is.False);
+                Assert.That(host.CurrentMapRun.IsComplete, Is.EqualTo(node == "core_finale"));
+            }
+            finally { Object.DestroyImmediate(root); DestroyCanvases(); }
+        }
+
+        [Test]
+        public void FullBackpack_RejectsItemWithoutConsumingChoiceAndCanReturnFromInventory()
+        {
+            var run = BattleReward("core_finale");
+            var inventory = RogueEquipmentRuntime.FromDto(run.RogueRunState);
+            int count = 0;
+            while (count < 100 && inventory.TryAddContainerItem("fill-" + count, AcademyBattleRewardCatalog.ForgeLoad)) count++;
+            run.RogueRunState.ForgeMaterialCount += count;
+            inventory.WriteToDto(run.RogueRunState);
+            var host = new Host { CurrentMapRun = run };
+            var root = new GameObject("reward-full-backpack");
+            try
+            {
+                var view = root.AddComponent<RogueliteSettlementPresentation>(); view.Initialize(host);
+                host.OpenMapRewardChoices();
+                string equipment = run.CurrentRewards.Single(r => r.Kind == RogueliteRewardKind.Equipment).Id;
+                host.SelectMapReward(equipment);
+                LootButton("战后奖励封套").onClick.Invoke();
+                Assert.That(host.RewardClaims, Is.Zero);
+                Assert.That(host.LastFeedback.Kind, Is.EqualTo(UiFeedbackKind.Rejected));
+                LootButton("整理行囊").onClick.Invoke();
+                Assert.That(host.InventoryRequests, Is.EqualTo(1));
+                view.HideForInventory(); view.RefreshNow();
+                Assert.That(run.SelectedRewardId, Is.EqualTo(equipment));
+                LootButton("离开战利品").onClick.Invoke();
+                Assert.That(run.IsComplete, Is.True);
+            }
+            finally { Object.DestroyImmediate(root); DestroyCanvases(); }
+        }
+
+        [Test]
+        public void OwnedSpell_DismantlesOnceAndPartialLeaveKeepsCollectedGold()
+        {
+            var run = BattleReward("core_finale");
+            string spell = run.CurrentRewards.First(r => r.RogueSpell != null).Id;
+            run.RogueRunState.MasteredSpellIds.Add(spell);
+            var host = new Host { CurrentMapRun = run };
+            var root = new GameObject("reward-duplicate-spell");
+            try
+            {
+                var view = root.AddComponent<RogueliteSettlementPresentation>(); view.Initialize(host);
+                int gold = run.Gold;
+                LootButton("固定战利品_0").onClick.Invoke();
+                host.OpenMapRewardChoices(); host.SelectMapReward(spell);
+                int materials = run.SpecializationMaterialCount;
+                LootButton("拆解_" + spell).onClick.Invoke();
+                Assert.That(run.SpecializationMaterialCount, Is.EqualTo(materials + 1));
+                LootButton("离开战利品").onClick.Invoke();
+                Assert.That(run.Gold, Is.EqualTo(gold + 10));
+                Assert.That(run.StageContribution, Is.Zero, "Unclaimed contribution must not be granted on exit");
+                Assert.That(run.IsComplete, Is.True);
             }
             finally { Object.DestroyImmediate(root); DestroyCanvases(); }
         }

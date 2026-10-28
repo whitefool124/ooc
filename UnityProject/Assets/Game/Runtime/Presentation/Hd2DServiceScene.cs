@@ -24,11 +24,11 @@ namespace OCC.Combat.Presentation
         private readonly List<Face> faces=new List<Face>();
         private readonly List<Object> owned=new List<Object>();
         private GameObject world;
+        private Hd2DPageStructure structure;
         private MainMenuHd2DStage stage;
         private bool built;
-        private float readyAt;
         private string kind;
-        private Sprite tray,clipboard;
+        private Sprite tray;
         private Hd2DServiceReadingText reading;
         internal static bool TryAttach(GameObject page)
         {
@@ -38,17 +38,23 @@ namespace OCC.Combat.Presentation
                 page.GetComponentsInChildren<RectTransform>(true).Any(x=>x.name=="商店页眉")?"shop":
                 page.GetComponentsInChildren<RectTransform>(true).Any(x=>x.name=="全屏节点房间")?"event":null;
             if(type==null)return false;
+            Hd2DPageVisibility.Begin(page);
             var scene=page.AddComponent<Hd2DServiceScene>();scene.kind=type;return true;
         }
-        private void OnEnable(){readyAt=Time.unscaledTime+.48f;}
+        private void OnEnable(){Canvas.willRenderCanvases+=HideSourceGraphics;}
+        private void OnDisable(){Canvas.willRenderCanvases-=HideSourceGraphics;}
+        private void HideSourceGraphics()
+        {
+            foreach(var face in faces)if(face.Source!=null)face.Source.canvasRenderer.SetAlpha(0);
+        }
         private void LateUpdate()
         {
             if(!built)
             {
-                if(Time.unscaledTime<readyAt)return;
                 var backdrop=GetComponent<AcademyDeskBackdrop>();if(backdrop==null||backdrop.Stage==null)return;
                 stage=backdrop.Stage;Canvas.ForceUpdateCanvases();Build(backdrop);
                 reading=gameObject.AddComponent<Hd2DServiceReadingText>();reading.Configure(world,stage.sceneCamera);built=true;
+                Hd2DPageVisibility.Complete(gameObject);
             }
             foreach(var face in faces)
             {
@@ -64,14 +70,9 @@ namespace OCC.Combat.Presentation
             (world==null?null:world.GetComponentsInChildren<RectTransform>(true).FirstOrDefault(x=>x.name==name));
         private void Build(AcademyDeskBackdrop backdrop)
         {
-            backdrop.SetDocumentFraming(.15f,.28f);
-            foreach(var item in stage.GetComponentsInChildren<Transform>(true))
-                if(item.name=="桌面实体"||item.name.StartsWith("桌面木板"))
-                    item.localScale=new Vector3(item.name=="桌面实体"?7.8f:7.75f,item.localScale.y,item.localScale.z);
-            stage.GetComponent<Hd2DDeskArtCandidate>()?.RefreshModelUvs();
-            world=new GameObject("独立物件服务桌面 "+kind);world.transform.SetParent(stage.transform,false);
+            structure=Hd2DPageStructure.Create(kind,stage);world=structure.gameObject;
+            structure.ApplyBackdrop(backdrop,stage);
             tray=Hd2DPaperSkin.Load();
-            clipboard=LoadArtwork("记录夹",new Vector4(3,3,4,6));
             Hd2DContainerStyle.PrepareControls(gameObject);
             foreach(var image in GetComponentsInChildren<Image>(true))
             {
@@ -82,12 +83,12 @@ namespace OCC.Combat.Presentation
                     Hd2DContainerStyle.Tray(image);
                 foreach(var shadow in image.GetComponents<Shadow>())shadow.enabled=false;
             }
-            Hd2DPaperSkin.Apply(gameObject);
+            Hd2DPaperSkin.Apply(gameObject,false);
             var shell=GetComponentInChildren<FormalRogueliteServiceShellView>();
             if(shell!=null)
             {
                 Clear(shell.GetComponent<Image>());
-                var header=shell.TopBar.GetComponent<Image>();if(header!=null)header.color=Color.white;
+                var header=shell.TopBar.GetComponent<Image>();if(header!=null)Hd2DContainerStyle.Tray(header);
                 Clear(shell.Body.GetComponent<Image>());Clear(shell.Footer.GetComponent<Image>());
                 // Header stays a small readable paper sign, not a wall-sized backdrop.
                 Place(shell.TopBar,new Vector3(0,4.15f,.40f),1.05f);
@@ -136,6 +137,11 @@ namespace OCC.Combat.Presentation
                         }
                     }
                 }
+            // Service content is created after the initial skin pass. Give its
+            // final carriers the same warm, engraved surface as other pages.
+            foreach(var paper in world.GetComponentsInChildren<Image>(true))
+                if(paper.color.a>=.85f&&paper.sprite==Hd2DPaperSkin.Load())Hd2DContainerStyle.Tray(paper);
+            Hd2DPaperSkin.FitFrames(world);
             Canvas.ForceUpdateCanvases();
             foreach(var text in world.GetComponentsInChildren<Text>(true))
             {
@@ -150,7 +156,7 @@ namespace OCC.Combat.Presentation
                 var generated=image.canvasRenderer.GetMesh();if(generated==null||generated.vertexCount==0)continue;
                 var mesh=Instantiate(generated);owned.Add(mesh);mesh.RecalculateNormals();
                 var colors=new Color32[mesh.vertexCount];for(int i=0;i<colors.Length;i++)colors[i]=new Color32(255,255,255,255);mesh.colors32=colors;
-                var node=new GameObject(image.name+" 原生受光面",typeof(MeshFilter),typeof(MeshRenderer));
+                var node=Hd2DPageStructure.CreateSurface(image.transform,image.name+" 原生受光面");
                 node.layer=stage.gameObject.layer;node.transform.SetParent(image.transform,false);
                 // Distinct nested surfaces need a real depth interval. Tiny
                 // global offsets fight at the isolated stage's world position.
@@ -158,8 +164,9 @@ namespace OCC.Combat.Presentation
                 for(var p=image.transform.parent;p!=null&&p.GetComponent<Canvas>()==null;p=p.parent)depth++;
                 node.transform.localPosition=new Vector3(0,0,-2-depth*4);
                 node.GetComponent<MeshFilter>().sharedMesh=mesh;
-                var material=new Material(stage.bookLitMaterial){mainTexture=image.mainTexture,color=image.color};
+                var material=Hd2DSurfaceProfile.Create(image.mainTexture,image.color,Hd2DSurfaceRole.Paper,true);
                 material.SetFloat("_Smoothness",.04f);owned.Add(material);
+                Hd2DDeskReadability.Current.Apply(material,image);
                 var renderer=node.GetComponent<MeshRenderer>();renderer.sharedMaterial=material;
                 renderer.shadowCastingMode=ShadowCastingMode.On;renderer.receiveShadows=true;
                 var face=new Face{Source=image,Renderer=renderer,Material=material,Mesh=mesh,Group=image.GetComponentInParent<CanvasGroup>()};
@@ -258,7 +265,7 @@ namespace OCC.Combat.Presentation
         {
             if(region==null||tray==null)return;
             ClearCarrier(region.GetComponent<Image>());
-            var go=new GameObject("独立原生工作托盘",typeof(RectTransform),typeof(Image));owned.Add(go);go.transform.SetParent(region,false);
+            var go=Hd2DPageStructure.CreateContent("PaperContent",region,"独立原生工作托盘");owned.Add(go);
             var r=(RectTransform)go.transform;r.anchorMin=r.anchorMax=new Vector2(.5f,1);r.pivot=new Vector2(.5f,1);
             r.anchoredPosition=new Vector2(0,6);r.sizeDelta=new Vector2(region.rect.width,110);
             var image=go.GetComponent<Image>();image.sprite=tray;image.type=Image.Type.Tiled;
@@ -319,8 +326,7 @@ namespace OCC.Combat.Presentation
                 if(line.rectTransform.rect.width<=5)Clear(line);
             // The description is a small note. Each original action and price
             // has a separate desk position, keeping hover and callbacks intact.
-            var note=new GameObject("餐食说明纸签",typeof(RectTransform),typeof(Image));owned.Add(note);
-            note.transform.SetParent(meals,false);
+            var note=Hd2DPageStructure.CreateContent("PaperContent",meals,"餐食说明纸签");owned.Add(note);
             var r=(RectTransform)note.transform;r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);
             r.sizeDelta=new Vector2(840,124);r.anchoredPosition=Vector2.zero;
             Surface(r,Hd2DPaperSkin.Load());
@@ -357,10 +363,10 @@ namespace OCC.Combat.Presentation
             var groups=new List<RectTransform>();
             for(int i=0;i<3;i++)
             {
-                var go=new GameObject("商品陈列台_"+i,typeof(RectTransform));owned.Add(go);go.transform.SetParent(shell.Body,false);
+                var go=Hd2DPageStructure.CreateContent("PaperContent",shell.Body,"商品陈列台_"+i);owned.Add(go);
                 var r=(RectTransform)go.transform;r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);
                 r.sizeDelta=new Vector2(460,640);r.anchoredPosition=new Vector2(236+i*492,-228);groups.Add(r);
-                var pad=go.AddComponent<Image>();pad.sprite=Hd2DPaperSkin.Load();pad.type=Image.Type.Tiled;
+                var pad=go.GetComponent<Image>();pad.sprite=Hd2DPaperSkin.Load();pad.type=Image.Type.Tiled;
                 pad.pixelsPerUnitMultiplier=.6f;pad.color=Color.white;pad.raycastTarget=false;
             }
             foreach(var item in candidates)
@@ -390,9 +396,17 @@ namespace OCC.Combat.Presentation
                 foreach(var label in group.GetComponentsInChildren<Text>(true))
                     if(label.name=="内容标题"||label.name=="内容身份")
                     {Remember(label.rectTransform);var p=label.rectTransform.anchoredPosition;p.x=24;
-                     label.rectTransform.anchoredPosition=p;label.rectTransform.sizeDelta=new Vector2(348,label.rectTransform.sizeDelta.y);}
+                     label.rectTransform.anchoredPosition=p;label.rectTransform.sizeDelta=new Vector2(360,label.rectTransform.sizeDelta.y);}
                     else if(label.name=="效果内容")
                     {Remember(label.rectTransform);label.rectTransform.sizeDelta=new Vector2(360,label.rectTransform.sizeDelta.y);}
+                    else if(label.name.StartsWith("内容指标")&&!label.name.StartsWith("内容指标描边"))
+                    {
+                        // The final 24px glyphs need more writing width than
+                        // the source tooltip's 108px cell after projection.
+                        Remember(label.rectTransform);
+                        label.rectTransform.sizeDelta=new Vector2(128,label.rectTransform.sizeDelta.y);
+                        label.horizontalOverflow=HorizontalWrapMode.Overflow;
+                    }
                 foreach(var support in group.GetComponentsInChildren<Image>(true))
                     if(support.name.StartsWith("商品托盘_")&&tray!=null)
                     {
@@ -455,8 +469,8 @@ namespace OCC.Combat.Presentation
             {
                 // A note, individual choices and the return plaque replace the
                 // old wall-sized blank decision sheet. Keep all existing actions.
-                var note=new GameObject("节点说明便笺",typeof(RectTransform),typeof(Image));owned.Add(note);
-                note.transform.SetParent(decisions,false);note.transform.SetAsFirstSibling();
+                var note=Hd2DPageStructure.CreateContent("PaperContent",decisions,"节点说明便笺");owned.Add(note);
+                note.transform.SetAsFirstSibling();
                 var rect=(RectTransform)note.transform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(0,1);
                 rect.anchoredPosition=new Vector2(24,-20);rect.sizeDelta=new Vector2(1080,180);
                 noteRect=rect;
@@ -501,25 +515,15 @@ namespace OCC.Combat.Presentation
                 Place((RectTransform)returns[i].transform,new Vector3(2.75f,1.28f,-1.58f),1.30f);
             }
         }
-        private Sprite LoadArtwork(string name,Vector4 border)
-        {
-            var formal=Resources.Load<Sprite>("Art/Hd2DServiceObjects/"+name);if(formal!=null)return formal;
-            // Production screens must use imported resources in both Editor and Player.
-            // Archive-only candidates remain outside the running interface.
-            string resource=name=="记录夹"?"Art/Hd2DContent20261009/student_dossier":
-                name=="药剂提箱"?"Art/FormalAcademyStructures32/academy_prop_potion_case":null;
-            return resource==null?null:Resources.Load<Sprite>(resource);
-        }
         private void Place(RectTransform region,Vector3 position,float scale)
         {
             if(region==null)return;
             Remember(region);
             Vector2 size=region.rect.size;
-            var go=new GameObject(region.name+" 独立场景层",typeof(RectTransform),typeof(Canvas),typeof(Hd2DSceneGraphicRaycaster));
-            go.transform.SetParent(world.transform,false);go.layer=stage.gameObject.layer;
-            var r=(RectTransform)go.transform;r.sizeDelta=size;
+            bool authored;var r=structure.AcquireCarrier(region.name,out authored);
+            var go=r.gameObject;go.layer=stage.gameObject.layer;r.sizeDelta=size;
             bool heading=region.name=="页眉"||region.name=="页面标题"||region.name=="医务室页眉"||(size.x>1500&&size.y<120);
-            if(!heading)
+            if(!authored&&!heading)
             {
                 // Anchor the near edge on the desk. Authoring Y selects the back/
                 // front row; it must not leave the carrier suspended over the table.
@@ -531,9 +535,12 @@ namespace OCC.Combat.Presentation
                 if(region.name=="按钮_返回地图"||region.name=="按钮_离开商店"||region.name=="按钮_打开行囊")
                 {position.y=1.63f;position.z=-1.55f;}
             }
-            r.position=stage.transform.TransformPoint(position);
-            r.rotation=stage.sceneCamera.transform.rotation;
-            r.localScale=Vector3.one*(.0032f*scale*.95f/r.parent.lossyScale.x);
+            if(!authored)
+            {
+                r.position=stage.transform.TransformPoint(position);
+                r.rotation=stage.sceneCamera.transform.rotation;
+                r.localScale=Vector3.one*(.0032f*scale*.95f/r.parent.lossyScale.x);
+            }
             var canvas=go.GetComponent<Canvas>();canvas.renderMode=RenderMode.WorldSpace;canvas.worldCamera=stage.sceneCamera;
             canvas.overrideSorting=true;canvas.sortingOrder=GetComponentInParent<Canvas>().sortingOrder;
             region.SetParent(r,false);region.anchorMin=region.anchorMax=region.pivot=new Vector2(.5f,.5f);
@@ -555,7 +562,7 @@ namespace OCC.Combat.Presentation
         {
             var shader=Shader.Find("OCC/HD2D/ContactShadow");if(shader==null)return;
             var source=face.Source;
-            var go=new GameObject(source.name+" 接触影",typeof(MeshFilter),typeof(MeshRenderer));
+            var go=Hd2DPageStructure.CreateSurface(source.transform.parent,source.name+" 接触影");
             go.layer=stage.gameObject.layer;go.transform.SetParent(source.transform.parent,false);
             go.transform.localPosition=source.transform.localPosition+new Vector3(5,-9,18);
             go.transform.localRotation=source.transform.localRotation;go.transform.localScale=source.transform.localScale;
@@ -579,14 +586,14 @@ namespace OCC.Combat.Presentation
                 vertices[i]=p;
             }
             mesh.vertices=vertices;mesh.RecalculateBounds();
-            var go=new GameObject(face.Source.name+" 桌面承接投影",typeof(MeshFilter),typeof(MeshRenderer));
+            var go=Hd2DPageStructure.CreateSurface(world.transform,face.Source.name+" 桌面承接投影");
             go.layer=stage.gameObject.layer;go.transform.SetParent(world.transform,false);go.GetComponent<MeshFilter>().sharedMesh=mesh;
             var material=new Material(shader){mainTexture=face.Source.mainTexture,color=new Color(.04f,.05f,.06f,.22f)};owned.Add(material);
             face.Shadow=go.GetComponent<MeshRenderer>();face.Shadow.sharedMaterial=material;
             face.Shadow.shadowCastingMode=ShadowCastingMode.Off;face.Shadow.receiveShadows=false;
             if(face.Source.sprite!=Hd2DPaperSkin.Load())return;
             // A second native paper silhouette exposes the physical page edge.
-            var edge=new GameObject(face.Source.name+" 纸页厚度",typeof(MeshFilter),typeof(MeshRenderer));
+            var edge=Hd2DPageStructure.CreateSurface(face.Source.transform,face.Source.name+" 纸页厚度");
             edge.layer=stage.gameObject.layer;edge.transform.SetParent(face.Source.transform,false);
             edge.transform.localPosition=new Vector3(0,-5,10);edge.GetComponent<MeshFilter>().sharedMesh=face.Mesh;
             var edgeMaterial=new Material(face.Material){color=new Color(.72f,.73f,.70f,1)};owned.Add(edgeMaterial);
@@ -594,61 +601,20 @@ namespace OCC.Combat.Presentation
         }
         private void BuildLighting()
         {
+            // The original desk lamp is hidden on service counters; its light
+            // must leave with it, rather than create an unexplained bright pool.
             stage.lampLight.enabled=false;
             foreach(string name in new[]{"独立桌边植物","独立以太灯","灯内晶体","实体茶碟","实体杯身","杯中茶面","杯把外侧","杯把接头","桌上固定书脊","独立像素杯碟候选"})
             {var prop=stage.transform.Find(name);if(prop!=null)prop.gameObject.SetActive(false);}
-            var go=new GameObject("服务桌面中性窗光",typeof(Light));go.transform.SetParent(world.transform,false);
-            go.transform.position=stage.transform.TransformPoint(new Vector3(0,5,-1));
-            var light=go.GetComponent<Light>();light.type=LightType.Point;light.intensity=10;light.range=10;
-            light.intensity=14;light.range=12;
-            light.color=new Color(.96f,.98f,1);light.cullingMask=1<<stage.gameObject.layer;light.shadows=LightShadows.None;
-            if(kind=="medical")
-                PlaceArtwork("医务室药剂提箱",LoadArtwork("药剂提箱",Vector4.zero),new Vector3(-3.6f,3.2f,1),.95f);
-            if(kind=="shop")
-                PlaceArtwork("学院市集计价天平",LoadArtwork("市集天平",Vector4.zero),new Vector3(-3.35f,1.85f,-.6f),.36f);
-            if(kind=="workshop")
-                PlaceArtwork("工坊随身工具包",Resources.Load<Sprite>("Art/FormalAcademyStructures32/academy_prop_tool_satchel"),new Vector3(-3.6f,3.2f,1),.95f);
-            if(clipboard!=null&&kind=="event")
-            {
-                // Adaptive objects retain their natural pixel density. A small
-                // native clipboard accompanies the larger readable dossier.
-                var note=new GameObject("原生记录夹桌面物件",typeof(SpriteRenderer));note.layer=stage.gameObject.layer;
-                note.transform.SetParent(world.transform,false);note.transform.position=stage.transform.TransformPoint(new Vector3(-2.75f,1.63f,-1.0f));
-                note.transform.rotation=stage.transform.rotation*Quaternion.Euler(58,0,0);
-                note.transform.localScale=Vector3.one*(clipboard.pixelsPerUnit/Hd2DDeskArtCandidate.ScenePixelsPerUnit);
-                var renderer=note.GetComponent<SpriteRenderer>();renderer.sprite=clipboard;
-                var material=new Material(stage.bookLitMaterial){mainTexture=clipboard.texture};owned.Add(material);renderer.sharedMaterial=material;
-                renderer.shadowCastingMode=ShadowCastingMode.On;renderer.receiveShadows=true;
-            }
-            // Existing approved native book adds a physical foreground anchor without a new model.
-            var sprite=Resources.Load<Sprite>("Art/Hd2DContent20261009/student_dossier");
-            if(sprite!=null&&kind=="event"&&clipboard==null)
-            {
-                var prop=new GameObject("服务记录册前景",typeof(SpriteRenderer));prop.transform.SetParent(world.transform,false);prop.layer=stage.gameObject.layer;
-                prop.transform.position=stage.transform.TransformPoint(new Vector3(-3.1f,1.63f,-.98f));
-                prop.transform.rotation=stage.transform.rotation*Quaternion.Euler(58,0,0);
-                prop.transform.localScale=Vector3.one*(sprite.pixelsPerUnit/Hd2DDeskArtCandidate.ScenePixelsPerUnit);
-                var renderer=prop.GetComponent<SpriteRenderer>();renderer.sprite=sprite;
-                var material=new Material(stage.bookLitMaterial){mainTexture=sprite.texture};owned.Add(material);renderer.sharedMaterial=material;
-                renderer.shadowCastingMode=ShadowCastingMode.On;renderer.receiveShadows=true;
-            }
+            // Fixed props and the shared lighting rig belong to the page prefab.
+            structure.Lighting.RefreshEnvironment(stage);
         }
-        private void PlaceArtwork(string name,Sprite sprite,Vector3 position,float scale)
-        {
-            if(sprite==null)return;
-            var go=new GameObject(name,typeof(RectTransform),typeof(Image));owned.Add(go);go.transform.SetParent(world.transform,false);
-            var rect=(RectTransform)go.transform;
-            rect.sizeDelta=sprite.rect.size/(Hd2DDeskArtCandidate.ScenePixelsPerUnit*.0032f*scale*.95f);
-            var image=go.GetComponent<Image>();image.sprite=sprite;image.type=Image.Type.Simple;
-            image.preserveAspect=true;image.raycastTarget=false;image.color=Color.white;
-            Place(rect,position,scale);
-        }
-        internal void RestoreLayout()
+        internal void RestoreLayout(bool restoreLayout=true)
         {
             if(reading!=null){reading.Restore();Destroy(reading);reading=null;}
-            bool restore=true;
+            bool restore=restoreLayout;
 #if UNITY_EDITOR
-            restore=UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode;
+            restore=restore&&UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode;
 #endif
             if(restore)foreach(var pose in poses)
             {
@@ -659,8 +625,8 @@ namespace OCC.Combat.Presentation
             }
             foreach(var face in faces)if(face.Source!=null)face.Source.canvasRenderer.SetAlpha(1);
             if(world!=null){world.SetActive(false);Destroy(world);}world=null;
-            foreach(var item in owned)if(item!=null)Destroy(item);owned.Clear();faces.Clear();poses.Clear();built=false;readyAt=Time.unscaledTime+.48f;
+            foreach(var item in owned)if(item!=null)Destroy(item);owned.Clear();faces.Clear();poses.Clear();built=false;
         }
-        private void OnDestroy()=>RestoreLayout();
+        private void OnDestroy()=>RestoreLayout(false);
     }
 }

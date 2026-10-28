@@ -1,0 +1,75 @@
+{
+  "schema": "occ-art-manifest-v1",
+  "contract_version": 1,
+  "asset_id": "academy_workshop_canvas_20261023",
+  "role": "hd2d_library_display",
+  "status": "QA_PENDING",
+  "provenance": {
+    "source_channel": "codex_builtin_imagegen",
+    "source_path": "ArtSource/GraphicFunctionalism_20261023/canvas-source.png",
+    "source_sha256": "458621325541fd6c4c528f697d79072d045529aa85dfdf271b0309ad2667ab65",
+    "source_descriptor": "Independent built-in generation; academy graphic functionalist physical carrier. See brief.md and generation conversation.",
+    "processing": {
+      "crop": [
+        43,
+        44,
+        1253,
+        1167
+      ],
+      "nearest_size": [
+        96,
+        96
+      ],
+      "transparent_border": 1,
+      "alpha_cleanup": "Solid carrier threshold128, exterior preserved",
+      "exterior_magenta_flood_key": false,
+      "recolouring": false
+    }
+  },
+  "delivery": {
+    "output_path": "ArtSource/GraphicFunctionalism_20261023/Canvas/delivery.png",
+    "output_sha256": "4020031689ba9a3f507b914f6e11c224c5d31916b39f95207a6bb54655cd0a0d",
+    "logical_cells": null,
+    "native_ppu": 32,
+    "palette_max": 1000000,
+    "required_color_families": [],
+    "sprite_border": [
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  "application": {
+    "rendering_mode": "noncombat_hd2d_layered_sprite",
+    "camera_projection": "perspective",
+    "runtime_draw_rect": "Nine-sliced independent carrier, corners at1/32 world unit per authored delivery pixel; final same-frame density review pending.",
+    "integration_authorization": "User explicitly authorized production and integration of academy noncombat art, 2026-10-23",
+    "paired_material_data": "Albedo-only carrier candidate; no generated height/normal/metal/emission inference. Existing lit paper response retained."
+  },
+  "evidence": {
+    "one_x": "ArtSource/GraphicFunctionalism_20261023/Canvas/qa/1x.png",
+    "four_x": "ArtSource/GraphicFunctionalism_20261023/Canvas/qa/4x.png",
+    "grayscale": "ArtSource/GraphicFunctionalism_20261023/Canvas/qa/grayscale.png",
+    "checker": "ArtSource/GraphicFunctionalism_20261023/Canvas/qa/checker.png",
+    "application_contact": "Worldbuilding/归档/2026-10-23_图形实用主义美术/final/normal_equipment.png"
+  },
+  "human_review": {
+    "overall": "PENDING",
+    "scene_pixel_size_consistency": "PENDING",
+    "notes": "Assistant source selection is not human approval."
+  },
+  "unity_import": {
+    "asset_path": "Assets/Game/Resources/Art/AcademyWorkshop20261023/Canvas.png",
+    "resource_path": "Art/AcademyWorkshop20261023/Canvas",
+    "stable_guid": "a0b5cc95e765f0c47bec54fc52a7afb8",
+    "native_ppu": 32,
+    "filter": "Point",
+    "wrap": "Clamp",
+    "mipmaps": false,
+    "compression": "Uncompressed",
+    "importer_verified": true,
+    "runtime_verified": true,
+    "formal_promotion": false
+  }
+}

@@ -512,6 +512,7 @@ namespace OCC.Combat.Presentation
                 // sibling floors from covering the prop's top and right edges.
                 Object = Layer("地形物件", objectLayerRect),
                 Loot = Layer("战利品", rect),
+                ContainerIcons = Enumerable.Range(0, 4).Select(i => Layer("容器类别" + i, rect)).ToArray(),
                 Unit = Layer("单位", unitLayerRect),
                 Selection = Layer("选中覆盖", overlayRect),
                 ObjectLabel = Label("地形标签", rect),
@@ -708,6 +709,12 @@ namespace OCC.Combat.Presentation
 
             cell.ObjectLabel.gameObject.SetActive(!string.IsNullOrEmpty(model.ObjectLabel));
             cell.ObjectLabel.text = model.ObjectLabel;
+            for (int i = 0; i < cell.ContainerIcons.Length; i++)
+            {
+                Set(cell.ContainerIcons[i], i < model.ContainerCategoryTextures.Count ? model.ContainerCategoryTextures[i] : null, Color.white);
+                float iconSize = Mathf.Clamp(cellSize / 5f, 12f, 20f);
+                SetTopLeft(cell.ContainerIcons[i].rectTransform, 2f + i * iconSize, cellSize - iconSize - 2f, iconSize, iconSize);
+            }
             cell.ObjectLabel.color = model.ObjectLabelColor;
             SetTopLeft(cell.ObjectLabel.rectTransform, 2f, 12f * cellSize / 128f, cellSize - 4f, 40f);
             cell.FieldEffectLabel.gameObject.SetActive(!string.IsNullOrEmpty(model.GroundLabel));
@@ -1302,6 +1309,8 @@ namespace OCC.Combat.Presentation
             float scale = canvas != null && canvas.scaleFactor > 0f ? canvas.scaleFactor : 1f;
             HideTooltip();
             host.BattlefieldViewport.Pan(eventData.delta.x / scale, -eventData.delta.y / scale);
+            if (eventData.delta.sqrMagnitude > 0f)
+                (host as Component)?.GetComponent<AcademyTutorialPresenter>()?.Evidence("C10", "camera-pan");
             eventData.Use();
         }
 
@@ -1341,6 +1350,7 @@ namespace OCC.Combat.Presentation
             int direction = eventData.scrollDelta.y > 0f ? 1 : -1;
             HideTooltip();
             host.BattlefieldViewport.ZoomAt(bounds.X + local.x, bounds.Y - local.y, direction);
+            (host as Component)?.GetComponent<AcademyTutorialPresenter>()?.Evidence("C10", "camera-zoom");
             eventData.Use();
         }
 
@@ -2006,6 +2016,7 @@ namespace OCC.Combat.Presentation
             public RawImage ObjectFront;
             public Vector2 ObjectFoot;
             public RawImage Loot;
+            public RawImage[] ContainerIcons;
             public RawImage Unit;
             public Vector2 VisualFoot;
             public string PresentedUnitId;

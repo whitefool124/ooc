@@ -38,8 +38,9 @@ namespace OCC.Combat.Presentation
         public CombatVfxSlot Slot { get; }
         public CombatVfxCue Cue { get; }
         public float Progress { get; }
-        public CombatVfxSample(CombatVfxSlot slot, CombatVfxCue cue, float progress)
-        { Slot = slot; Cue = cue; Progress = progress; }
+        public float StartedAt { get; }
+        public CombatVfxSample(CombatVfxSlot slot, CombatVfxCue cue, float progress, float startedAt = 0f)
+        { Slot = slot; Cue = cue; Progress = progress; StartedAt = startedAt; }
     }
 
     // Owns presentation time only. It has no CombatState, resolver, RNG or save-store reference.
@@ -83,7 +84,7 @@ namespace OCC.Combat.Presentation
                 foreach (CombatVfxCue cue in track.Cues)
                     if (elapsed >= cue.Start && elapsed < cue.End)
                     {
-                        samples.Add(new CombatVfxSample(entry.Key, cue, (elapsed - cue.Start) / cue.Duration));
+                        samples.Add(new CombatVfxSample(entry.Key, cue, (elapsed - cue.Start) / cue.Duration, track.Started + cue.Start));
                         break;
                     }
             }

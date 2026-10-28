@@ -13,7 +13,7 @@ namespace OCC.Combat.Presentation
         private GameObject modalRoot;
         private GameObject toastRoot;
         private string toastLayoutId;
-        private Action confirmAction;
+        private readonly UiConfirmationSession confirmation = new UiConfirmationSession();
         private GameObject previousFocus;
         private bool submitting;
 
@@ -74,7 +74,7 @@ namespace OCC.Combat.Presentation
             EnsureCanvas();
             bootstrap?.PublishUiVisual(new UiVisualEvent(UiVisualEventKind.ConfirmationOpened, request.Kind.ToString()));
             previousFocus = EventSystem.current == null ? null : EventSystem.current.currentSelectedGameObject;
-            confirmAction = onConfirm;
+            confirmation.Cancel(); confirmation.Open(request, onConfirm);
             submitting = false;
 
             modalRoot = Panel("正式确认层", canvas.transform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, FormalUiTheme.Overlay);
@@ -214,6 +214,7 @@ namespace OCC.Combat.Presentation
         public void CancelConfirmation()
         {
             if (modalRoot == null || submitting) return;
+            (bootstrap as Component)?.GetComponent<AcademyTutorialPresenter>()?.ObserveConfirmationCancelled();
             GameObject focusToRestore = previousFocus;
             CloseModal();
             if (focusToRestore != null && focusToRestore.activeInHierarchy) RuntimeUiEventSystem.Select(focusToRestore);
@@ -224,7 +225,7 @@ namespace OCC.Combat.Presentation
         {
             if (modalRoot == null || submitting) return;
             submitting = true;
-            Action action = confirmAction;
+            Action action = confirmation.TakeConfirmedAction();
             CloseModal();
             previousFocus = null;
             action?.Invoke();
@@ -241,7 +242,7 @@ namespace OCC.Combat.Presentation
                 Destroy(modalRoot);
             }
             modalRoot = null;
-            confirmAction = null;
+            confirmation.Cancel();
             submitting = false;
         }
 

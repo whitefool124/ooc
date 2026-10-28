@@ -1,0 +1,44 @@
+/* Headless local checks. Always uses a separate server/store from user review. */
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'C:/Users/FNHF/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const root=path.resolve(__dirname,'../..'),audit=path.join(root,'Worldbuilding/归档/2026-10-22_界面人工审核'),base=`http://127.0.0.1:${process.env.OCC_REVIEW_TEST_PORT||8877}`;
+(async()=>{let browser;try{
+  browser=await chromium.launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
+  const context=await browser.newContext({viewport:{width:1440,height:1000},acceptDownloads:true}),page=await context.newPage(),errors=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  await page.goto(base);await page.locator('[data-page="map"]').waitFor();
+  assert.equal(await page.locator('#table-body tr').count(),16);
+  assert.equal(await page.locator('#selected-name').textContent(),'学院地图');
+  assert.equal(await page.locator('#user-score').inputValue(),'');
+  assert.equal(await page.locator('#user-verdict').inputValue(),'pending');
+  const data=await (await context.request.get(base+'/data.json')).json();
+  for(const p of data.pages){for(const suffix of ['','_960']){const response=await context.request.get(`${base}/evidence/current/${p.id}${suffix}.png`);assert.equal(response.status(),200);assert.ok((await response.body()).length>1000);}assert.ok(p.issues.length>=2);}
+  await page.locator('.marker[data-issue="1"]').click();assert.equal(await page.locator('#issue-1').getAttribute('open'),'');
+  await page.locator('#resolution').selectOption('1920');await page.locator('#zoom').click();assert.equal(await page.locator('#zoom').getAttribute('aria-pressed'),'true');await page.locator('#zoom').click();await page.locator('#resolution').selectOption('960');
+  await page.evaluate(async()=>{await Promise.all(Array.from(document.images).map(i=>i.decode().catch(()=>{})));window.scrollTo(0,0);});await page.waitForTimeout(150);await page.screenshot({path:path.join(audit,'front-desktop.png'),fullPage:true});
+  const note='<script>不得执行</script>：地图空白，请先退回；“你说的”和我的判断分别保存。';
+  await page.locator('#user-score').selectOption('0');await page.locator('#user-verdict').selectOption('reject');await page.locator('#user-agreement').selectOption('partial');await page.locator('#user-priority').selectOption('P0');await page.locator('#user-notes').fill(note);
+  await page.locator('#overall-notes').fill('测试记录：请勿当成人工审核。');
+  await page.waitForFunction(()=>document.querySelector('#save-state').textContent==='已保存到本机');
+  const saved=await (await context.request.get(base+'/api/review')).json();assert.equal(saved.review.pages.map.score,0);assert.equal(saved.review.pages.map.notes,note);assert.equal(saved.review.pages.map.agreement,'partial');
+  await page.evaluate(()=>localStorage.clear());await page.reload();await page.locator('#user-notes').waitFor();await page.waitForFunction(()=>document.querySelector('#user-notes').value.includes('不得执行'));assert.equal(await page.locator('#user-score').inputValue(),'0');assert.equal(await page.locator('#user-verdict').inputValue(),'reject');
+  await page.locator('[data-filter="reviewed"]').click();assert.equal(await page.locator('#table-body tr').count(),1);
+  await page.locator('[data-filter="pending"]').click();assert.equal(await page.locator('#table-body tr').count(),15);
+  await page.locator('[data-filter="all"]').click();await page.locator('#search').fill('不存在的页面');assert.equal(await page.locator('#table-body tr').count(),0);assert.equal(await page.locator('#empty-state').isVisible(),true);await page.locator('#search').fill('');
+  await page.locator('[data-page="gift"]').click();assert.equal(await page.locator('#selected-name').textContent(),'守灯人的赠礼');assert.equal(await page.locator('#user-verdict').inputValue(),'pending');
+  await page.locator('#source').selectOption('before');assert.equal(await page.locator('.marker').count(),0);await page.waitForFunction(()=>document.querySelector('#screenshot').complete&&document.querySelector('#screenshot').naturalWidth>0);await page.locator('#source').selectOption('current');
+  const downloadEvent=page.waitForEvent('download');await page.locator('#export-csv').click();const download=await downloadEvent;await download.saveAs(path.join(audit,'test','export.csv'));const csv=fs.readFileSync(path.join(audit,'test','export.csv'),'utf8');assert.ok(csv.includes('退回重做'));assert.ok(csv.includes(note.replace(/"/g,'""')));
+  const invalid={...saved.review,version:'wrong-version'};await page.locator('#import-file').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(invalid))});await page.waitForFunction(()=>document.querySelector('#notice').textContent.includes('记录版本不符'));assert.equal(await page.locator('#selected-name').textContent(),'守灯人的赠礼');
+  await page.setViewportSize({width:390,height:844});await page.locator('#notice').evaluate(e=>e.hidden=true);await page.evaluate(()=>window.scrollTo(0,0));await page.waitForTimeout(150);await page.screenshot({path:path.join(audit,'front-mobile.png'),fullPage:true});
+  const dims=await page.evaluate(()=>({body:document.body.scrollWidth,viewport:innerWidth}));assert.ok(dims.body<=dims.viewport+1,JSON.stringify(dims));
+  await page.locator('#user-verdict').selectOption('revise');await page.locator('#user-notes').fill('窄屏操作测试');await page.waitForFunction(()=>document.querySelector('#save-state').textContent==='已保存到本机');
+  await page.setViewportSize({width:1280,height:900});await page.locator('[data-page="loadout"]').click();await page.evaluate(()=>window.scrollTo(0,0));await page.waitForTimeout(150);await page.screenshot({path:path.join(audit,'front-tablet.png'),fullPage:true});
+  const valid=await (await context.request.get(base+'/api/review')).json();valid.review.pages.map.notes='有效导入恢复测试';await page.locator('#import-file').setInputFiles({name:'valid.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(valid.review))});await page.waitForFunction(()=>document.querySelector('#save-state').textContent==='已保存到本机');await page.locator('[data-page="map"]').click();assert.equal(await page.locator('#user-notes').inputValue(),'有效导入恢复测试');
+  await page.locator('[data-page="turn_static"]').click();await page.waitForFunction(()=>document.querySelector('#selected-name').textContent==='关闭动画后的行动提示');assert.equal(await page.locator('#source option[value="before"]').evaluate(e=>e.disabled&&e.matches(':disabled')),true);
+  const current=await (await context.request.get(base+'/api/review')).json();const conflict=await context.request.post(base+'/api/review',{headers:{'Content-Type':'application/json','If-Match':'0'},data:current.review});assert.equal(conflict.status(),409);
+  const foreign=await context.request.post(base+'/api/review',{headers:{'Content-Type':'application/json','If-Match':String(current.revision),'Origin':'https://example.com'},data:current.review});assert.equal(foreign.status(),403);
+  const traversal=await context.request.get(base+'/evidence/current/server.py');assert.equal(traversal.status(),404);
+  assert.deepEqual(errors,[]);
+  const result={status:'PASS',headless:true,viewports:[[1440,1000],[1280,900],[390,844]],pages:16,issues:data.pages.reduce((n,p)=>n+p.issues.length,0),checks:['32 screenshot assets','page selection and issue markers','original-pixel view','server autosave and reload without localStorage','zero score preserved','literal user text','filters and empty state','CSV download','invalid import rejection','valid import restore','missing historical state handled','narrow screen layout and editing','concurrent-write conflict','foreign origin rejection','asset allowlist'],userStoreTouched:false,errors};
+  fs.writeFileSync(path.join(audit,'frontend-check.json'),JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));
+}catch(error){console.error(error);process.exitCode=1;}finally{if(browser)await browser.close();}})();

@@ -1,0 +1,22 @@
+{
+  "stage": "interactive-web-prototype",
+  "stateTests": { "total": 11, "passed": 11, "failed": 0 },
+  "browserChecks": {
+    "openingConversation": true,
+    "loadoutSelection": true,
+    "taskAndCharacterViews": true,
+    "skipScene": true,
+    "failureRetryRestores100HpAnd6Mana": true,
+    "reloadPreservesUnclaimedReward": true,
+    "claimedRewardReturnsToNextBasePhase": true,
+    "fourNodeSummaryShows4CompletedAnd40DemoGold": true,
+    "closingConversation": true,
+    "consoleErrors": 0,
+    "width960HasNoHorizontalOverflow": true,
+    "dialogueFits960x540": true,
+    "modalCloseReturnsToConversationEntry": true,
+    "imageLoads": true
+  },
+  "limits": ["Demonstration outcomes, not actual battle", "960x540 page uses vertical scrolling", "No Unity or formal art acceptance"],
+  "mechanicalReview": { "finding": "cream-palette", "decision": "retained per existing OCC academy art specification" }
+}

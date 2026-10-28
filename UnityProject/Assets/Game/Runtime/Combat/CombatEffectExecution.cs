@@ -232,12 +232,14 @@ namespace OCC.Combat
                     applied = target.AbsorbShield(effect.Amount);
                     after = target.Shield;
                     state.RecordRogueliteShieldAbsorption(target.Id, source.Id, applied);
+                    if (applied > 0 && source.IsHero != target.IsHero) state.LampVines.Reveal(target.Id);
                     break;
                 case CombatEffectKind.DamageHealth:
                     before = target.Health;
                     target.TakeDamage(effect.Amount);
                     after = target.Health;
                     applied = before - after;
+                    if (applied > 0 && source.IsHero != target.IsHero) state.LampVines.Reveal(target.Id);
                     if (before > 0 && after == 0) state.AddLog(EnemyResolutionSemantics.DefeatLog(target));
                     break;
                 case CombatEffectKind.RestoreHealth:
@@ -302,7 +304,7 @@ namespace OCC.Combat
                     break;
                 case CombatEffectKind.Move:
                     before = 0;
-                    target.MoveTo(effect.Destination);
+                    state.MoveUnit(target, effect.Destination);
                     after = 0;
                     applied = 0;
                     positionAfter = target.Position;
@@ -310,10 +312,13 @@ namespace OCC.Combat
                 case CombatEffectKind.DamageObject:
                     TileState tile = state.Map.GetTile(effect.Destination);
                     before = tile.Durability;
-                    tile.Durability = Math.Max(0, tile.Durability - effect.Amount);
+                    tile.Durability = tile.IsPermanentWall ? before : Math.Max(0, tile.Durability - effect.Amount);
                     after = tile.Durability;
                     applied = before - after;
+                    state.Lampkeeper?.AfterDirectObjectDamage(state, source.Id, before, state.Map.GetTile(effect.Destination).Durability);
                     state.ResolveAetherCrystalDamage(effect.Destination, before, source.Id);
+                    state.RefreshDestroyedWardShields();
+                    state.LampVines.AfterCellDamaged(state, effect.Destination);
                     positionBefore = effect.Destination;
                     positionAfter = effect.Destination;
                     break;

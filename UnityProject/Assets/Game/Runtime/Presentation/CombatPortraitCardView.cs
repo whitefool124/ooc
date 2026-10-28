@@ -52,23 +52,23 @@ namespace OCC.Combat.Presentation
             }
             ApplyFocus();
         }
-        public void Bind(UnitState value, int ordinal, int movement, bool targetSelected, CombatActionPreview preview = null)
+        public void Bind(UnitState value, int ordinal, int movement, bool targetSelected, CombatActionPreview preview = null, bool? actualActive = null)
         {
             if (unitId != value.Id && (pointerOver || keyboardFocused)) hover?.Invoke(null);
             unit = value; unitId = value.Id; selected = targetSelected;
             projection = preview != null && preview.CanSubmit ? preview : null;
             CombatHudPortraitAssets.Bind(portrait, unit, orderStrip, !orderStrip && unit.IsHero);
             if (placeholder != null) { placeholder.gameObject.SetActive(!portrait.enabled); placeholder.text = orderStrip ? "?" : unit.DisplayName; }
-            bool current = ordinal == 0;
+            bool current = actualActive ?? ordinal == 0;
             activeMark.gameObject.SetActive(current);
-            activeMark.color = FormalUiTheme.Cyan;
+            activeMark.color = unit.IsHero ? FormalUiTheme.Cyan : FormalUiTheme.Danger;
             factionMark.color = unit.IsHero ? FormalUiTheme.Cyan : FormalUiTheme.Danger;
             string name = unit.DisplayName ?? "未识别";
             if (name.Length > 3) name = name.Substring(0, 3);
             caption.text = orderStrip ? (movement > 0 ? "↑" : movement < 0 ? "↓" : "") : current ? "当前" : (movement > 0 ? "↑" : movement < 0 ? "↓" : "") + (ordinal + 1) + " " + name;
-            if (orderStrip) caption.gameObject.SetActive(movement != 0);
-            if (orderStrip) button.targetGraphic.color = Color.clear;
-            caption.color = current ? FormalUiTheme.Cyan : movement > 0 ? FormalUiTheme.Safe : movement < 0 ? FormalUiTheme.Danger : FormalUiTheme.Ink;
+            if (orderStrip){caption.gameObject.SetActive(current||movement!=0);if(current)caption.text="行动中";}
+            if (orderStrip) button.targetGraphic.color = current ? Color.Lerp(FormalUiTheme.Panel,unit.IsHero?FormalUiTheme.Cyan:FormalUiTheme.Danger,.16f) : FormalUiTheme.Panel;
+            caption.color = current ? (unit.IsHero?FormalUiTheme.Cyan:FormalUiTheme.Danger) : movement > 0 ? FormalUiTheme.Safe : movement < 0 ? FormalUiTheme.Danger : FormalUiTheme.Ink;
             ApplyFocus();
         }
         public void MoveTo(int ordinal, UiMotionProfile motion)

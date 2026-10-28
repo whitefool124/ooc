@@ -15,40 +15,8 @@ namespace OCC.Combat.Presentation
         }
         private void ConfigureRealisticLighting(MainMenuHd2DStage stage)
         {
-            stage.gameObject.AddComponent<Hd2DDeskContactLighting>().Initialize();
-            // The stage owns this runtime profile; never alter the authored asset.
-            var profile=stage.sceneVolume.profile;
-            if(profile.TryGet<ColorAdjustments>(out var grade))
-            {
-                grade.postExposure.Override(.85f);
-                grade.contrast.Override(4f);
-                grade.saturation.Override(-4f);
-            }
-            // Content geometry finishes after the page's LateUpdate build.
-            // Keep it sharp until bounds are ready, then protect the complete surface.
-            if(profile.TryGet<DepthOfField>(out var depth))depth.active=false;
+            reflectionRefresh=structure.Lighting.RefreshEnvironment(stage);
             StartCoroutine(ConfigureReadingFocusWhenReady(stage));
-            if(profile.TryGet<Bloom>(out var bloom))
-            {bloom.intensity.Override(.45f);bloom.threshold.Override(1.3f);bloom.scatter.Override(.6f);}
-
-            var host=new GameObject("整备台局部环境反射",typeof(ReflectionProbe));
-            host.layer=stage.gameObject.layer;
-            host.transform.SetParent(sceneRoot.transform,false);
-            host.transform.localPosition=new Vector3(0,2,0);
-            var probe=host.GetComponent<ReflectionProbe>();
-            probe.mode=ReflectionProbeMode.Realtime;
-            probe.refreshMode=ReflectionProbeRefreshMode.ViaScripting;
-            probe.timeSlicingMode=ReflectionProbeTimeSlicingMode.IndividualFaces;
-            probe.resolution=256;probe.hdr=true;
-            probe.size=new Vector3(12,7,9);probe.center=Vector3.zero;
-            probe.boxProjection=true;probe.blendDistance=1f;
-            probe.cullingMask=1<<stage.gameObject.layer;
-            probe.nearClipPlane=.1f;probe.farClipPlane=20;
-            probe.clearFlags=ReflectionProbeClearFlags.SolidColor;
-            probe.backgroundColor=new Color(.16f,.19f,.23f);
-            probe.intensity=1f;
-            reflectionRefresh=host.AddComponent<Hd2DDeskReflectionRefresh>();
-            reflectionRefresh.Initialize(probe,stage.transform);
         }
         private IEnumerator ConfigureReadingFocusWhenReady(MainMenuHd2DStage stage)
         {
@@ -80,12 +48,19 @@ namespace OCC.Combat.Presentation
     internal sealed class Hd2DDeskContactLighting : MonoBehaviour
     {
         private static Hd2DDeskContactLighting active;
+        internal static void ReleaseActive(){if(active!=null)active.Release();}
         private RenderPipelineAsset originalQuality;
         private UniversalRenderPipelineAsset localPipeline;
         private ScriptableRendererData localRenderer;
         private ScreenSpaceAmbientOcclusion occlusion;
+        private bool initialized;
         internal void Initialize()
         {
+            initialized=true;
+            if(localPipeline!=null)return;
+            // A desk must never copy a battle pipeline whose renderer is about
+            // to be disposed during the same page transition.
+            Hd2DBattleLighting.ReleaseActive();
             var pipeline=GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
             if(pipeline==null)return;
             var flags=System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Public;
@@ -124,6 +99,8 @@ namespace OCC.Combat.Presentation
             list[1]=localRenderer;listField.SetValue(localPipeline,list);
             QualitySettings.renderPipeline=localPipeline;
         }
+        private void OnEnable(){if(initialized)Initialize();}
+        private void OnDisable()=>Release();
         private void OnDestroy()=>Release();
         private void Release()
         {
@@ -170,7 +147,8 @@ namespace OCC.Combat.Presentation
                 if(surfaces.ContainsKey(renderer))continue;
                 bool lit=false;
                 foreach(var material in renderer.sharedMaterials)
-                    if(material!=null&&material.shader!=null&&material.shader.name=="OCC/HD2D/Surface")lit=true;
+                    if(material!=null&&material.shader!=null&&
+                        (material.shader.name=="OCC/HD2D/Surface"||material.shader.name=="OCC/HD2D/DeskSurface"))lit=true;
                 if(!lit)continue;
                 var original=new MaterialPropertyBlock();renderer.GetPropertyBlock(original);
                 surfaces.Add(renderer,new ProbeState{Usage=renderer.lightProbeUsage,Original=original});

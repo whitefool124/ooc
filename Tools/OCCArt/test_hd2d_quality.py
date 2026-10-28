@@ -105,6 +105,28 @@ class Hd2DQualityTests(unittest.TestCase):
         self.write_density()
         self.assertTrue(any("differs from scene target" in e for e in self.errors()))
 
+    def thumbnail_density_errors(self, surface="loadout.backpack", scales=None):
+        asset = self.density["assets"][0]
+        asset.update(role="loadout_ui_thumbnail", ui_surface=surface, sampling="Point",
+            source_pixel_scales=[2, 1] if scales is None else scales,
+            effective_world_pitch_xy=[.01, .01])
+        self.write_density()
+        errors = []
+        gate.validate_pixel_density(self.report["configuration"], self.policy, self.root,
+            {item["path"] for item in self.report["inputs"]}, errors)
+        return errors
+
+    def test_loadout_thumbnail_integer_exception(self):
+        self.assertEqual(self.thumbnail_density_errors(), [])
+
+    def test_thumbnail_exception_cannot_cover_battlefield(self):
+        errors = self.thumbnail_density_errors("battlefield")
+        self.assertTrue(any("outside approved loadout scope" in value for value in errors))
+        self.assertTrue(any("differs from scene target" in value for value in errors))
+
+    def test_thumbnail_fractional_scale_blocks(self):
+        self.assertTrue(any("positive integer" in value for value in self.thumbnail_density_errors(scales=[2, .5])))
+
     def test_pixel_density_mixed_source_blocks(self):
         self.density["assets"][0]["source_uniformity"] = "PENDING"
         self.write_density()

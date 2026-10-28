@@ -58,7 +58,7 @@ namespace OCC.Combat
             string mobility = node.Type == RogueliteMapNodeType.Combat && StableKey(seed, nodeId + "|mobility") % 3 != 0
                 ? StableKey(seed, nodeId + "|mobility") % 3 == 1 ? ScrollPack :
                     ForgeNodes.Contains(contentId) ? ForgePair : SpecPair
-                : artifact.Id;
+                : artifact?.Id ?? (ForgeNodes.Contains(contentId) ? ForgePair : SpecPair);
             main.Add(mobility);
 
             string[] fixedMaterials = node.Type == RogueliteMapNodeType.Elite
@@ -106,8 +106,8 @@ namespace OCC.Combat
                 case ForgeCircuit: return new RogueliteReward(id, "导能晶片", id, 1, "装备锻造材料");
                 case SpecAmplify: return new RogueliteReward(id, "增幅刻墨", id, 1, "术式专精材料");
                 case SpecEfficient: return new RogueliteReward(id, "节流刻墨", id, 1, "术式专精材料");
-                case ForgePair: return new RogueliteReward(id, "锻造材料两件", id, 2, "承力合金×1＋导能晶片×1");
-                case SpecPair: return new RogueliteReward(id, "专精材料两件", id, 2, "增幅刻墨×1＋节流刻墨×1");
+                case ForgePair: return new RogueliteReward(id, "承力合金两件", id, 2, "承力合金×2");
+                case SpecPair: return new RogueliteReward(id, "增幅刻墨两件", id, 2, "增幅刻墨×2");
                 case MixedPair: return new RogueliteReward(id, "强化材料包", id, 2, "承力合金×1＋增幅刻墨×1");
                 case ScrollPack: return new RogueliteReward(id, "火线卷轴", id, 1, "火线卷轴×1");
                 default: return null;
@@ -124,10 +124,10 @@ namespace OCC.Combat
                 .Select(value => value.DefinitionId).FirstOrDefault();
             string equipment = service.Roll(seed + 1, equipmentSource, spellRarity, equipmentRarity, 0, 1, ownedIds)
                 .Select(value => value.DefinitionId).FirstOrDefault();
-            if (spell == null) spell = service.Roll(seed, source, SpellRarity.Common, equipmentRarity, 1, 0, null)
+            if (spell == null) spell = service.Roll(seed, source, spellRarity, equipmentRarity, 1, 0, null)
                 .Select(value => value.DefinitionId).FirstOrDefault();
             if (equipment == null) equipment = service.Roll(seed + 1, equipmentSource, spellRarity,
-                EquipmentRarity.Common, 0, 1, null).Select(value => value.DefinitionId).FirstOrDefault();
+                equipmentRarity, 0, 1, null).Select(value => value.DefinitionId).FirstOrDefault();
             return new[] { spell, equipment }.Where(value => value != null).ToList();
         }
 

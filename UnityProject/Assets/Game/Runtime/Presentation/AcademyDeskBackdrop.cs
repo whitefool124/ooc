@@ -13,13 +13,21 @@ namespace OCC.Combat.Presentation
         private bool book;
         private float frameOffset;
         private float frameFocus = -1f;
+        private float readingCameraDistanceOffset;
         internal MainMenuHd2DStage Stage => stage;
+        internal void SetReadingCameraDistanceOffset(float distance)
+        {
+            readingCameraDistanceOffset=Mathf.Max(0,distance);
+            Update();
+        }
+        internal bool IsReleasingStage { get; private set; }
         public void SetDocumentFraming(float horizontalOffset, float focus)
         {
             frameOffset = horizontalOffset;
             frameFocus = Mathf.Clamp01(focus);
+            // Projection must use the final camera pose in this same frame.
+            Update();
         }
-        private static int stageSerial;
         private static readonly HashSet<int> occupiedLayers=new HashSet<int>();
         public static void Attach(Image image,bool openBook)
         {
@@ -32,16 +40,19 @@ namespace OCC.Combat.Presentation
         }
         private void EnsureStage()
         {
-            if(stage!=null||plate==null)return;
+            if(!Application.isPlaying||stage!=null||plate==null)return;
             var prefab=Resources.Load<MainMenuHd2DStage>("UI/MainMenuEHD2DStage");
             if(prefab==null){Debug.LogError("Missing HD2D desk stage");return;}
             // Main menu owns 31; academy map owns 30. Visible pages own 16..29.
             for(int layer=29;layer>=16;layer--)
                 if(occupiedLayers.Add(layer)){isolatedLayer=layer;break;}
             if(isolatedLayer<0){Debug.LogError("HD2D backdrop layer capacity exceeded");return;}
-            stage=Instantiate(prefab,new Vector3(500+64*++stageSerial,500,500),Quaternion.identity);
-            stage.Initialize(isolatedLayer);stage.ApplySoftDocumentLighting();plate.texture=stage.Output;plate.material=null;
-            plate.color=new Color(.88f,.88f,.88f,1);Update();
+            // Reuse the isolated layer's bounded slot. A monotonic page counter
+            // eventually put tiny UI transforms kilometres from the origin and
+            // lost enough float precision to shift drag/drop coordinates.
+            stage=Instantiate(prefab,new Vector3(500+64*(29-isolatedLayer),500,500),Quaternion.identity);
+            stage.Initialize(isolatedLayer);stage.BindDisplay(plate);plate.texture=stage.Output;plate.material=null;
+            plate.color=Color.white;Update();
         }
         private void Update()
         {
@@ -49,15 +60,19 @@ namespace OCC.Combat.Presentation
             {
                 stage.SetState(book?1:0,frameFocus>=0 ? frameFocus : book?.35f:0,Time.unscaledTime,.25f);
                 stage.sceneCamera.transform.localPosition += new Vector3(frameOffset, 0, 0);
+                stage.sceneCamera.transform.position-=stage.sceneCamera.transform.forward*readingCameraDistanceOffset;
             }
         }
-        private void OnEnable()=>EnsureStage();
-        private void OnDisable()=>ReleaseStage();
+        internal void SetStageVisible(bool visible)
+        {
+            if(stage!=null)stage.gameObject.SetActive(visible);
+        }
+        private void OnEnable(){EnsureStage();SetStageVisible(true);}
+        private void OnDisable()=>SetStageVisible(false);
         private void OnDestroy()=>ReleaseStage();
         private void ReleaseStage()
         {
-            GetComponent<Hd2DContentGeometry>()?.RestoreLayout();
-            GetComponent<Hd2DServiceScene>()?.RestoreLayout();
+            IsReleasingStage=true;
             if(stage!=null){stage.gameObject.SetActive(false);Destroy(stage.gameObject);stage=null;}
             if(plate!=null)plate.texture=null;
             if(isolatedLayer>=0){occupiedLayers.Remove(isolatedLayer);isolatedLayer=-1;}

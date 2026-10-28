@@ -21,12 +21,21 @@ namespace OCC.Combat.Presentation
             CombatEffectExecution execution, IReadOnlyList<GridPosition> movementPath = null)
         {
             if (state == null || sink == null || execution == null) return;
+            var routedUnits = new HashSet<string>(StringComparer.Ordinal);
             foreach (CombatEffectResult result in execution.Results)
             {
                 UnitState source = state.GetUnit(result.SourceUnitId);
                 GridPosition sourcePosition = source == null ? result.PositionBefore : source.Position;
                 if (result.Kind == CombatEffectKind.Move && result.Changed)
-                    sink.NotifyMovement(result.TargetUnitId, result.PositionBefore, result.PositionAfter, movementPath);
+                {
+                    if (routedUnits.Contains(result.TargetUnitId)) continue;
+                    if (movementPath != null && movementPath.Count > 1 && movementPath[0] == result.PositionBefore)
+                    {
+                        sink.NotifyMovement(result.TargetUnitId, movementPath[0], movementPath[movementPath.Count - 1], movementPath);
+                        routedUnits.Add(result.TargetUnitId);
+                    }
+                    else sink.NotifyMovement(result.TargetUnitId, result.PositionBefore, result.PositionAfter, null);
+                }
                 else if (result.Kind == CombatEffectKind.AbsorbShield && result.AppliedAmount > 0)
                     sink.Publish(new CombatFeedbackEvent(CombatFeedbackKind.ShieldAbsorb,
                         sourcePosition, result.PositionAfter, result.AppliedAmount));
