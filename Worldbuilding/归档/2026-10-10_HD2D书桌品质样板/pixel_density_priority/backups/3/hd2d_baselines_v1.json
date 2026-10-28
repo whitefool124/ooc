@@ -1,0 +1,34 @@
+{
+  "schema": "occ-hd2d-baselines-v1",
+  "baselines": {
+    "desk-v1": {
+      "scene_kind": "desk",
+      "status": "QA_PENDING",
+      "configuration": {},
+      "reason": "QA_PENDING: current stage source contains untextured visible primitive furniture and modeled cup; rebuild/review card and textured polygon construction before sample promotion.",
+      "performance_budget": {
+        "device": "current_computer_2026-10-10",
+        "quality_tier": "pending_actual_configuration",
+        "approved_by": "user",
+        "approved_at": "2026-10-10",
+        "resolutions": {
+          "1920x1080": {
+            "target_fps": 60,
+            "p95_budget_ms": 16.7
+          },
+          "960x540": {
+            "target_fps": 60,
+            "p95_budget_ms": 16.7
+          }
+        },
+        "measurement_policy": "record actual hardware and tier; Editor and standalone Player separately; current labels require measured device identity before promotion"
+      }
+    },
+    "battlefield-v1": {
+      "scene_kind": "battlefield",
+      "status": "QA_PENDING",
+      "configuration": {},
+      "reason": "Current normal-entry validation and human review are not available for this new quality policy."
+    }
+  }
+}

@@ -1,0 +1,17 @@
+Octopath_Traveler/Content/Map/Resource/BG/Material/M_BGMaterial
+Octopath_Traveler/Content/Map/Resource/BP/_Common/Material/MI_MapChip_Combined_Common
+Octopath_Traveler/Content/Map/Resource/BP/_Common/Material/MI_MapChip_Combined_Slant
+Octopath_Traveler/Content/Map/Resource/BP/_Common/Material/MI_MapChip_Sub
+Octopath_Traveler/Content/Map/Resource/BP/_Common/Material/MI_MapWall
+Octopath_Traveler/Content/Map/Resource/BP/_Common/Material/MI_MapWall_UsgInstance
+Octopath_Traveler/Content/Map/Resource/Environment/CloudShadow/CloudShadow3
+Octopath_Traveler/Content/Object/Resource/_Common/Material/MI_KSObject
+Octopath_Traveler/Content/Object/Resource/_Common/Material/MI_KSObject_DoorAnim
+Octopath_Traveler/Content/Object/Resource/_Common/Material/MI_KSObject_Gradation
+Octopath_Traveler/Content/Object/Resource/_Common/Material/MI_KSObject_Gradation_Emissive
+Octopath_Traveler/Content/Object/Resource/_Common/Material/MI_KSObject_LOD_Masked_Sway
+Octopath_Traveler/Content/Object/Resource/_Common/Material/MI_KSObject_Wind
+Octopath_Traveler/Content/Object/Resource/_Common/Material/MI_KSObject_WindLeaf
+Octopath_Traveler/Content/Object/Resource/_Common/Material/MI_KSObject_WindLeaf_UsgInstance
+Octopath_Traveler/Content/Object/Resource/_Common/Material/MI_KSObject_Wind_UsgInstance
+Octopath_Traveler/Content/Object/Resource/_Common/Material/M_KSObject

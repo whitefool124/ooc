@@ -1,0 +1,217 @@
+--- Hd2DRewardGallery.before.cs
++++ Hd2DRewardGallery.cs
+@@ -9,7 +9,6 @@
+     {
+         private AcademyDeskBackdrop backdrop;
+         private GameObject worktop;
+-        private Material material;
+         private readonly Dictionary<GameObject,bool> decorations = new Dictionary<GameObject,bool>();
+         private float started;
+         private bool animated;
+@@ -25,17 +24,12 @@
+             var stage=backdrop.Stage;
+             if(worktop==null)
+             {
+-                foreach(string name in new[]{"独立桌边植物","独立以太灯","灯内晶体","实体茶碟","实体杯身","杯中茶面","杯把外侧","杯把接头","桌上固定书脊"})
++                foreach(string name in new[]{"独立桌边植物","独立以太灯","灯内晶体","实体茶碟","实体杯身","杯中茶面","杯把外侧","杯把接头","桌上固定书脊","独立像素杯碟候选"})
+                     foreach(Transform item in stage.transform)
+                         if(item.name==name){decorations[item.gameObject]=item.gameObject.activeSelf;item.gameObject.SetActive(false);}
+-                worktop=GameObject.CreatePrimitive(PrimitiveType.Cube);worktop.name="实体奖励陈列工作台";
++                // Reuse the textured dielectric wood desk already owned by the stage.
++                worktop=new GameObject("奖励揭晓补光");
+                 worktop.layer=stage.gameObject.layer;worktop.transform.SetParent(stage.transform,false);
+-                worktop.transform.localPosition=new Vector3(0,1.37f,1);
+-                worktop.transform.localScale=new Vector3(8.2f,.1f,2);
+-                Destroy(worktop.GetComponent<Collider>());
+-                material=new Material(stage.bookLitMaterial){name="奖励台暖木",mainTexture=null,color=new Color(.34f,.21f,.12f)};
+-                material.DisableKeyword("_ALPHATEST_ON");material.SetFloat("_AlphaClip",0);
+-                worktop.GetComponent<MeshRenderer>().sharedMaterial=material;
+                 var go=new GameObject("候选物件柔和补光",typeof(Light));go.transform.SetParent(worktop.transform,false);
+                 go.transform.position=stage.transform.TransformPoint(new Vector3(0,3.5f,-2));
+                 var light=go.GetComponent<Light>();light.type=LightType.Point;light.color=new Color(1,.91f,.78f);
+@@ -50,7 +44,6 @@
+         {
+             foreach(var item in decorations)if(item.Key!=null)item.Key.SetActive(item.Value);
+             if(worktop!=null)Destroy(worktop);
+-            if(material!=null)Destroy(material);
+             if(backdrop!=null)backdrop.SetDocumentFraming(0,0);
+         }
+     }
+--- Hd2DRewardObject.before.cs
++++ Hd2DRewardObject.cs
+@@ -1,123 +1,38 @@
+ using UnityEngine;
+-using UnityEngine.EventSystems;
+-using UnityEngine.Rendering;
+ using UnityEngine.UI;
+ 
+ namespace OCC.Combat.Presentation
+ {
+-    // A real lit cutout on a solid display stand. The existing UI rectangle remains
+-    // the authoritative pointer/focus target; no second camera or physics input.
+-    internal sealed class Hd2DRewardObject : MonoBehaviour, IPointerEnterHandler,
+-        IPointerExitHandler, ISelectHandler, IDeselectHandler
++    // Shared scene-paper geometry supplies lighting and thickness. Keep the image
++    // enabled so it is not hidden behind a second renderer's paper depth layers.
++    internal sealed class Hd2DRewardObject : MonoBehaviour
+     {
+         private Image source;
+-        private AcademyDeskBackdrop backdrop;
+-        private GameObject display;
+-        private Transform cutout, stand;
+-        private Mesh mesh;
+-        private Material objectMaterial, standMaterial, trimMaterial;
+-        private readonly Vector3[] corners = new Vector3[4];
+-        private float emphasis, revealTime;
+-        private bool focused, animated;
+-
++        private bool sized;
+         internal static void Attach(GameObject target, Image icon, bool animated)
+         {
+             if (!Application.isPlaying || icon == null || icon.sprite == null) return;
+-            var component = target.AddComponent<Hd2DRewardObject>();
+-            component.source = icon;
+-            component.backdrop = target.GetComponentInParent<AcademyDeskBackdrop>();
+-            component.revealTime = Time.unscaledTime;
+-            component.animated=animated;
++            target.AddComponent<Hd2DRewardObject>().source = icon;
+         }
+-
+-        private void Build(MainMenuHd2DStage stage)
+-        {
+-            display = new GameObject("HD2D奖励实体展示台");
+-            display.transform.SetParent(stage.transform, false);
+-            display.layer = stage.gameObject.layer;
+-            standMaterial = new Material(stage.bookLitMaterial) { name = "奖励台哑光织物", mainTexture = null, color = new Color(.11f,.17f,.19f) };
+-            standMaterial.DisableKeyword("_ALPHATEST_ON");standMaterial.SetFloat("_AlphaClip",0);
+-            trimMaterial = new Material(standMaterial) { name = "奖励台黄铜", color = new Color(.65f,.44f,.16f) };
+-            stand = Box("有厚度的陈列底座", display.transform, Vector3.zero, Vector3.one, standMaterial).transform;
+-            for (int i=0;i<4;i++)
+-            {
+-                var edge=Box("黄铜镶边"+i,stand,Vector3.zero,Vector3.one,trimMaterial);
+-                edge.transform.localPosition=i<2?new Vector3(i==0?-.48f:.48f,.56f,0):new Vector3(0,.56f,i==2?-.48f:.48f);
+-                edge.transform.localScale=i<2?new Vector3(.035f,.06f,1):new Vector3(1,.06f,.035f);
+-            }
+-            var face = new GameObject("受光像素物件",typeof(MeshFilter),typeof(MeshRenderer));
+-            face.layer=display.layer;face.transform.SetParent(display.transform,false);cutout=face.transform;
+-            var sprite=source.sprite;var rect=sprite.textureRect;var texture=sprite.texture;
+-            mesh=new Mesh {name="奖励像素面片"};
+-            mesh.vertices=new[]{new Vector3(-.5f,0,0),new Vector3(.5f,0,0),new Vector3(.5f,1,0),new Vector3(-.5f,1,0)};
+-            mesh.uv=new[]{new Vector2(rect.xMin/texture.width,rect.yMin/texture.height),new Vector2(rect.xMax/texture.width,rect.yMin/texture.height),new Vector2(rect.xMax/texture.width,rect.yMax/texture.height),new Vector2(rect.xMin/texture.width,rect.yMax/texture.height)};
+-            mesh.triangles=new[]{0,2,1,0,3,2};mesh.RecalculateNormals();mesh.RecalculateBounds();
+-            face.GetComponent<MeshFilter>().sharedMesh=mesh;
+-            objectMaterial=new Material(stage.bookLitMaterial){name="奖励像素受光材质",mainTexture=texture,color=Color.white};
+-            var renderer=face.GetComponent<MeshRenderer>();renderer.sharedMaterial=objectMaterial;
+-            renderer.shadowCastingMode=ShadowCastingMode.On;renderer.receiveShadows=true;
+-            source.enabled=false;
+-        }
+-
+-        private static GameObject Box(string name,Transform parent,Vector3 position,Vector3 scale,Material material)
+-        {
+-            var box=GameObject.CreatePrimitive(PrimitiveType.Cube);box.name=name;box.layer=parent.gameObject.layer;
+-            box.transform.SetParent(parent,false);box.transform.localPosition=position;box.transform.localScale=scale;
+-            Destroy(box.GetComponent<Collider>());box.GetComponent<MeshRenderer>().sharedMaterial=material;return box;
+-        }
+-
+         private void LateUpdate()
+         {
+-            if (source==null || backdrop==null || backdrop.Stage==null) return;
+-            var stage=backdrop.Stage;
+-            if(display==null)Build(stage);
+-            var camera=stage.sceneCamera;
+-            source.rectTransform.GetWorldCorners(corners);
+-            var canvas=source.GetComponentInParent<Canvas>();
+-            var uiCamera=canvas!=null && canvas.renderMode==RenderMode.WorldSpace?canvas.worldCamera:null;
+-            Vector2 min=RectTransformUtility.WorldToScreenPoint(uiCamera,corners[0]);
+-            Vector2 max=RectTransformUtility.WorldToScreenPoint(uiCamera,corners[2]);
+-            if(uiCamera!=null)
+-            {
+-                min=new Vector2(min.x*Screen.width/uiCamera.pixelWidth,min.y*Screen.height/uiCamera.pixelHeight);
+-                max=new Vector2(max.x*Screen.width/uiCamera.pixelWidth,max.y*Screen.height/uiCamera.pixelHeight);
+-            }
+-            Vector2 foot=new Vector2((min.x+max.x)*.5f,min.y);
+-            var ray=camera.ViewportPointToRay(new Vector3(foot.x/Screen.width,foot.y/Screen.height,0));
+-            var table=new Plane(stage.transform.up,stage.transform.TransformPoint(new Vector3(0,1.48f,0)));
+-            if(!table.Raycast(ray,out float distance))return;
+-            Vector3 position=ray.GetPoint(distance);
+-            float depth=Vector3.Dot(position-camera.transform.position,camera.transform.forward);
+-            float worldPixel=2*depth*Mathf.Tan(camera.fieldOfView*Mathf.Deg2Rad*.5f)/Screen.height;
+-            float width=(max.x-min.x)*worldPixel,height=(max.y-min.y)*worldPixel;
+-            float motion=animated?1:0;
+-            emphasis=Mathf.MoveTowards(emphasis,focused?1:0,Time.unscaledDeltaTime*6);
+-            float enter=animated?Mathf.Clamp01((Time.unscaledTime-revealTime)/.32f):1;
+-            display.transform.position=position;
+-            stand.localScale=new Vector3(width*1.28f,.075f,width*.82f);
+-            stand.localPosition=new Vector3(0,-.04f,0);
+-            cutout.rotation=camera.transform.rotation;
+-            cutout.localPosition=new Vector3(0,Mathf.Lerp(-.14f,0,Mathf.SmoothStep(0,1,enter))+.06f*emphasis*motion,0);
+-            float aspect=source.sprite.rect.width/source.sprite.rect.height;
+-            if(aspect>1)height=width/aspect;else width=height*aspect;
+-            cutout.localScale=new Vector3(width,height,1);
+-            trimMaterial.color=Color.Lerp(new Color(.65f,.44f,.16f),new Color(1,.78f,.32f),emphasis);
+-        }
+-
+-        public void OnPointerEnter(PointerEventData e)=>focused=true;
+-        public void OnPointerExit(PointerEventData e)=>focused=false;
+-        public void OnSelect(BaseEventData e)=>focused=true;
+-        public void OnDeselect(BaseEventData e)=>focused=false;
+-        private void OnDisable(){if(display!=null)display.SetActive(false);}
+-        private void OnEnable(){if(display!=null)display.SetActive(true);}
+-        private void OnDestroy()
+-        {
+-            if(source!=null)source.enabled=true;
+-            if(display!=null)Destroy(display);
+-            if(mesh!=null)Destroy(mesh);
+-            if(objectMaterial!=null)Destroy(objectMaterial);
+-            if(standMaterial!=null)Destroy(standMaterial);
+-            if(trimMaterial!=null)Destroy(trimMaterial);
++            if (sized || source == null || source.sprite == null) return;
++            var canvas = source.GetComponentInParent<Canvas>();
++            if (canvas == null || canvas.renderMode != RenderMode.WorldSpace) return;
++            var rect = source.rectTransform;
++            Vector3 scale = rect.lossyScale;
++            if (Mathf.Abs(scale.x) < .00001f || Mathf.Abs(scale.y) < .00001f) return;
++            rect.anchorMin = rect.anchorMax = new Vector2(.5f, .5f);
++            rect.pivot = new Vector2(.5f, .5f);
++            rect.anchoredPosition = new Vector2(0, -20);
++            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,
++                source.sprite.rect.width / (Hd2DDeskArtCandidate.ScenePixelsPerUnit * Mathf.Abs(scale.x)));
++            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,
++                source.sprite.rect.height / (Hd2DDeskArtCandidate.ScenePixelsPerUnit * Mathf.Abs(scale.y)));
++            source.preserveAspect = true;
++            // Refresh the canvas mesh before shared geometry observes the new rect.
++            Canvas.ForceUpdateCanvases();
++            sized = true;
+         }
+     }
+ }
+--- RogueliteSettlementPresentation.before.cs
++++ RogueliteSettlementPresentation.cs
+@@ -433,18 +433,18 @@
+                 ArchiveUiStyle.PaperContent(card);
+                 background.raycastTarget=true;
+                 ArchiveUiStyle.PaperContent(portrait);
+-                var description=FormalUiKit.FlatPanel("实体物件说明纸签",card.transform,new Vector2(0,1),new Vector2(0,1),new Vector2(24,-380),new Vector2(440,244),ArchiveUiStyle.LightPaper);
+-                ArchiveUiStyle.PaperPanel(description,ArchiveUiStyle.LightPaper,false);
++                var description=FormalUiKit.FlatPanel("实体物件说明纸签",card.transform,new Vector2(0,1),new Vector2(0,1),new Vector2(24,-400),new Vector2(440,224),ArchiveUiStyle.LightPaper);
++                // Write on the card itself; a second native rim occludes Chinese glyphs.
++                ArchiveUiStyle.PaperContent(description);
+                 Hd2DRewardObject.Attach(card,objectIcon,!UiMotionProfile.FromIntensity(bootstrap.UiPreferences.AnimationIntensity).IsImmediate);
+-                var categoryPaper=FormalUiKit.FlatPanel("物件类别纸签",card.transform,new Vector2(0,1),new Vector2(0,1),new Vector2(130,-16),new Vector2(228,48),ArchiveUiStyle.Paper);
+-                ArchiveUiStyle.PaperPanel(categoryPaper,ArchiveUiStyle.Paper,false);
+-            }
+-            AddLabel(card.transform, "奖励类别", RewardCategory(reward), new Vector2(28, -18), new Vector2(432, 40),
++            }
++            AddLabel(card.transform, "奖励类别", RewardCategory(reward), new Vector2(28, Application.isPlaying ? 38 : -18), new Vector2(432, 40),
+                 22, FormalUiTheme.Muted, TextAnchor.MiddleCenter);
+-            FormalUiKit.Line(card.transform, new Vector2(24, -380), new Vector2(440, 2), FormalUiTheme.Amber, "卡牌分隔");
+-            AddLabel(card.transform, "名称", reward.DisplayName, new Vector2(24, -394), new Vector2(440, 72),
++            if (!Application.isPlaying)
++                FormalUiKit.Line(card.transform, new Vector2(24, -400), new Vector2(440, 2), FormalUiTheme.Amber, "卡牌分隔");
++            AddLabel(card.transform, "名称", reward.DisplayName, new Vector2(72, -444), new Vector2(344, 50),
+                 34, FormalUiTheme.Text, TextAnchor.MiddleCenter);
+-            AddLabel(card.transform, "关键效果", RewardEffect(reward), new Vector2(36, -480), new Vector2(416, 126),
++            AddLabel(card.transform, "关键效果", RewardEffect(reward), new Vector2(64, -508), new Vector2(360, 104),
+                 20, FormalUiTheme.Text, TextAnchor.UpperLeft);
+             Button button = card.AddComponent<Button>();
+             button.targetGraphic = background;

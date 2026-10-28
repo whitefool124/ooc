@@ -1,0 +1,367 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
+using UnityEditor;
+using UnityEngine;
+using OCC.Combat.Presentation;
+
+namespace OCC.Combat.Tests
+{
+    public sealed class EnemyPackTests
+    {
+        [Test]
+        public void EnemyAttack_IsIntrinsicAndUsesTheSamePreviewAsResolution()
+        {
+            UnitState hero = new UnitState("hero", true, new GridPosition(1, 0));
+            UnitState enemy = new UnitState("hound", false, new GridPosition(0, 0));
+            EnemyArchetypes.Get("tether_hound").Apply(enemy);
+            Assert.That(enemy.MainHand, Is.Null);
+            Assert.That(enemy.BasicAttack, Is.SameAs(enemy.EnemyAttack));
+
+            CombatState state = new CombatState(new GridMap(3, 1), new[] { hero, enemy });
+            CombatResolver.BeginTurn(state, enemy.Id);
+            CombatResolver.AttackPreview preview = CombatResolver.PreviewAttack(state, enemy.Id, hero.Id, false);
+            int healthBefore = hero.Health;
+            FireSpellEngine.ResolveWeaponAttack(new FireBattleState(state), enemy.Id, hero.Id);
+            Assert.That(hero.Health, Is.EqualTo(healthBefore - preview.FinalDamage));
+        }
+
+        private static readonly string[] PackIds =
+        {
+            "shieldguard", "pyromancer", "raider", "elite_vanguard", "sigil_mauler",
+            "barrier_mender", "tether_hound", "stone_snare", "lantern_revealer", "rune_arbalist"
+        };
+        private static readonly string[] EncounterIds =
+        {
+            "rail_patrol", "depot_wreck", "relay_raid", "signal_hub", "gatehouse",
+            "transmission_tower", "elite_foundry", "core_approach", "core_finale"
+        };
+
+        [Test]
+        public void FinalArchetypes_HaveStableEraCorrectContracts()
+        {
+            EnemyArchetype mauler = EnemyArchetypes.Get("sigil_mauler");
+            EnemyArchetype mender = EnemyArchetypes.Get("barrier_mender");
+            EnemyArchetype hound = EnemyArchetypes.Get("tether_hound");
+
+            Assert.That((mauler.DisplayName, mauler.MaxHealth, mauler.Armor, mauler.Shield, mauler.Speed),
+                Is.EqualTo(("替身偶", 16, 1, 0, 8)));
+            Assert.That((mender.DisplayName, mender.MaxHealth, mender.Armor, mender.Shield, mender.Speed),
+                Is.EqualTo(("补盾助教", 16, 0, 4, 7)));
+            Assert.That((hound.DisplayName, hound.MaxHealth, hound.Armor, hound.Shield, hound.Speed),
+                Is.EqualTo(("寻迹兽", 12, 0, 0, 10)));
+            Assert.That(hound.Attack.Damage, Is.EqualTo(3));
+
+            Assert.That((mauler.PrimarySkill.Id, mauler.PrimarySkill.Range, mauler.PrimarySkill.ManaCost, mauler.PrimarySkill.Cooldown),
+                Is.EqualTo(("enemy_sundering_sigil", 1, 0, 0)));
+            Assert.That((mender.PrimarySkill.Id, mender.PrimarySkill.Range, mender.PrimarySkill.ManaCost, mender.PrimarySkill.Cooldown),
+                Is.EqualTo(("enemy_ward_mend", 4, 0, 1)));
+            Assert.That((hound.PrimarySkill.Id, hound.PrimarySkill.Range, hound.PrimarySkill.ManaCost, hound.PrimarySkill.Cooldown),
+                Is.EqualTo(("enemy_tether_pounce", 1, 0, 0)));
+            Assert.That(hound.PrimarySkill.Damage, Is.EqualTo(3));
+            Assert.That(EnemyArchetypes.Get("pyromancer").PrimarySkill.ManaCost, Is.Zero);
+            foreach (EnemyArchetype archetype in EnemyArchetypes.All)
+            {
+                if (archetype.PrimarySkill == null) continue;
+                Assert.That(archetype.PrimarySkill.ManaCost, Is.Zero, archetype.Id + " 主技能按敌人技能表花费0点以太");
+            }
+        }
+
+        [Test]
+        public void AcademyIdentities_KeepStableIdsAndUseNonLethalResolutionSemantics()
+        {
+            var expected = new Dictionary<string, (string Name, EnemyResolutionKind Kind, string Resolution)>
+            {
+                ["shieldguard"] = ("盾术生", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["pyromancer"] = ("火矢生", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["raider"] = ("侧锋生", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["rune_arbalist"] = ("背弩生", EnemyResolutionKind.Student, "认输并退出考核"),
+                ["barrier_mender"] = ("补盾助教", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["stone_snare"] = ("拴索助教", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["lantern_revealer"] = ("提灯巡查", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["elite_vanguard"] = ("划线教官", EnemyResolutionKind.Staff, "失去战斗能力并退出冲突"),
+                ["tether_hound"] = ("寻迹兽", EnemyResolutionKind.Beast, "被制服并重新约束"),
+                ["sigil_mauler"] = ("替身偶", EnemyResolutionKind.Construct, "停机、封签并回收校准")
+            };
+
+            foreach (KeyValuePair<string, (string Name, EnemyResolutionKind Kind, string Resolution)> pair in expected)
+            {
+                EnemyArchetype archetype = EnemyArchetypes.Get(pair.Key);
+                Assert.That(archetype.DisplayName, Is.EqualTo(pair.Value.Name), pair.Key);
+                Assert.That(archetype.ResolutionKind, Is.EqualTo(pair.Value.Kind), pair.Key);
+                UnitState unit = new UnitState("enemy", false, new GridPosition(1, 0));
+                archetype.Apply(unit);
+                string log = EnemyResolutionSemantics.DefeatLog(unit);
+                Assert.That(log, Does.Contain(pair.Value.Resolution), pair.Key);
+                if (pair.Value.Kind != EnemyResolutionKind.Construct)
+                    Assert.That(log, Does.Not.Contain("摧毁").And.Not.Contain("击杀").And.Not.Contain("死亡"), pair.Key);
+
+                UnitState hero = new UnitState("hero", true, new GridPosition(0, 0));
+                CombatState combat = new CombatState(new GridMap(2, 1), new[] { hero, unit });
+                CombatEffectExecutor.Execute(combat, hero.Id, CombatEffect.DamageHealth(unit.Id, 99));
+                Assert.That(combat.EventLog.Last(), Does.Contain(pair.Value.Resolution), pair.Key + " combat log");
+            }
+        }
+
+        [Test]
+        public void FormalVisualLoader_RequiresEveryResolvedUnitTextureAndSixFrameAction()
+        {
+            var visuals = new CombatFormalVisualAssets();
+            Assert.DoesNotThrow(visuals.LoadRuntime);
+            foreach (string id in PackIds)
+            {
+                UnitState unit = new UnitState("enemy_" + id, false, new GridPosition(1, 0));
+                EnemyArchetypes.Get(id).Apply(unit);
+                Assert.That(visuals.Unit(unit), Is.Not.Null, id + " static");
+                for (int frame = 0; frame < 6; frame++) Assert.That(visuals.Unit(unit, frame), Is.Not.Null, id + " frame " + frame);
+            }
+        }
+
+        [Test]
+        public void ExpansionPack_HasTenDistinctClosedLoopContracts()
+        {
+            Assert.That(PackIds.Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(10));
+            EnemyArchetype[] pack = PackIds.Select(EnemyArchetypes.Get).ToArray();
+            Assert.That(pack.Select(enemy => enemy.ArtId).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(10));
+            Assert.That(pack.Select(enemy => enemy.PrimarySkill.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(10));
+            Assert.That(EnemyAbilityCatalog.All.Select(skill => skill.Id).Distinct(StringComparer.Ordinal).Count(), Is.EqualTo(18),
+                "The ten reusable pack skills are joined by the boss's sunder maul and tower press plus the six field-enemy abilities.");
+            Assert.That(EnemyAbilityCatalog.All.Select(skill => skill.Id),
+                Does.Contain(EnemyAbilityCatalog.BossSunderMaul.Id).And.Contain(EnemyAbilityCatalog.BossTowerPress.Id)
+                    .And.Contain(EnemyAbilityCatalog.TrackerSnap.Id).And.Contain(EnemyAbilityCatalog.TrackerMaul.Id)
+                    .And.Contain(EnemyAbilityCatalog.SpotlightMirror.Id).And.Contain(EnemyAbilityCatalog.WindScrollEdge.Id)
+                    .And.Contain(EnemyAbilityCatalog.LegacyPulse.Id).And.Contain(EnemyAbilityCatalog.PrototypeDeploy.Id));
+            Assert.That(pack.All(enemy => enemy.MaxHealth >= 10 && enemy.MaxHealth <= 24), Is.True);
+        }
+
+        [Test]
+        public void RetiredDraftAndModernFirearmArchetypes_AreNotRuntimeReachable()
+        {
+            string[] retired = { "rifleman", "sniper", "aether_sapper", "barrier_engineer", "relay_hound" };
+            foreach (string id in retired)
+                Assert.Throws<KeyNotFoundException>(() => EnemyArchetypes.Get(id), id);
+
+            string[] forbidden = { "rifle", "sniper", "sapper", "engineer", "步枪", "狙击", "工兵", "爆破" };
+            string enemySurface = string.Join("|", EnemyArchetypes.All.SelectMany(archetype => new[]
+            {
+                archetype.Id, archetype.DisplayName, archetype.Attack.Id, archetype.Attack.DisplayName,
+                archetype.PrimarySkill?.Id ?? string.Empty, archetype.PrimarySkill?.DisplayName ?? string.Empty
+            })).ToLowerInvariant();
+            foreach (string term in forbidden) Assert.That(enemySurface, Does.Not.Contain(term.ToLowerInvariant()), term);
+        }
+
+        [Test]
+        public void EveryActiveEncounter_ResolvesAndContainsNoRetiredModernRole()
+        {
+            string[] forbiddenIds = { "rifleman", "sniper", "aether_sapper", "barrier_engineer", "relay_hound" };
+            foreach (string encounterId in EncounterIds)
+            {
+                RogueliteEncounterDefinition encounter = RogueliteEncounterCatalog.For(encounterId);
+                Assert.That(encounter.EnemyArchetypeIds, Is.Not.Empty, encounterId);
+                Assert.That(encounter.EnemyArchetypeIds.Intersect(forbiddenIds), Is.Empty, encounterId);
+                foreach (string archetypeId in encounter.EnemyArchetypeIds)
+                    Assert.DoesNotThrow(() => EnemyArchetypes.Get(archetypeId), encounterId + ":" + archetypeId);
+            }
+            string[] active = EncounterIds.SelectMany(id => RogueliteEncounterCatalog.For(id).EnemyArchetypeIds).Distinct(StringComparer.Ordinal).ToArray();
+            Assert.That(PackIds.Except(active), Is.Empty, "Every pack enemy must be reachable through an active first-region encounter.");
+        }
+
+        [Test]
+        public void SigilMauler_UsesSunderingSigilOnceThenFallsBackToWeapon()
+        {
+            CombatState state = CreateState("sigil_mauler", new GridPosition(1, 0), out UnitState enemy, out UnitState hero);
+            CombatCommand first = EnemyTactics.Choose(state, enemy, hero);
+            Assert.That(first.Type, Is.EqualTo(CombatCommandType.UseSkill));
+            CombatResolver.BeginTurn(state, enemy.Id);
+            CombatResolver.Resolve(state, first);
+            Assert.That(hero.HasStatus(StatusType.BreakStance), Is.True);
+
+            CombatCommand second = EnemyTactics.Choose(state, enemy, hero);
+            Assert.That(second.Type, Is.EqualTo(CombatCommandType.Attack));
+        }
+
+        [Test]
+        public void BarrierMender_SelectsLargestShieldGapWithStableIdTieBreakAndRestoresShield()
+        {
+            GridMap map = new GridMap(7, 3);
+            UnitState hero = new UnitState("hero", true, new GridPosition(6, 1));
+            UnitState mender = new UnitState("mender", false, new GridPosition(0, 1));
+            UnitState allyA = new UnitState("ally_a", false, new GridPosition(1, 1));
+            UnitState allyB = new UnitState("ally_b", false, new GridPosition(2, 1));
+            EnemyArchetypes.Get("barrier_mender").Apply(mender);
+            EnemyArchetypes.Get("shieldguard").Apply(allyA);
+            EnemyArchetypes.Get("shieldguard").Apply(allyB);
+            CombatState state = new CombatState(map, new[] { hero, mender, allyB, allyA });
+            CombatEffectExecutor.Execute(state, mender.Id, CombatEffect.AbsorbShield(allyA.Id, 4), CombatEffect.AbsorbShield(allyB.Id, 4));
+
+            CombatCommand command = EnemyTactics.Choose(state, mender, hero);
+            Assert.That(command.Type, Is.EqualTo(CombatCommandType.UseSkill));
+            Assert.That(command.TargetUnitId, Is.EqualTo("ally_a"));
+            int before = allyA.Shield;
+            CombatResolver.BeginTurn(state, mender.Id);
+            CombatResolver.Resolve(state, command);
+            Assert.That(allyA.Shield, Is.EqualTo(before + 4));
+        }
+
+        [Test]
+        public void BarrierMender_SkipsABreakStanceRecipientInRogueliteCombat()
+        {
+            GridMap map = new GridMap(7, 3);
+            UnitState hero = new UnitState("hero", true, new GridPosition(6, 1));
+            UnitState mender = new UnitState("mender", false, new GridPosition(0, 1));
+            UnitState frontline = new UnitState("frontline", false, new GridPosition(2, 1));
+            EnemyArchetypes.Get("barrier_mender").Apply(mender);
+            EnemyArchetypes.Get("shieldguard").Apply(frontline);
+            CombatState state = new CombatState(map, new[] { hero, mender, frontline });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+            state.ApplyRogueliteBreakStance(frontline.Id);
+
+            CombatCommand command = EnemyTactics.Choose(state, mender, hero);
+
+            Assert.That(command.Type, Is.EqualTo(CombatCommandType.UseSkill));
+            Assert.That(command.TargetUnitId, Is.EqualTo(mender.Id),
+                "The support must visibly redirect its ward instead of promising shield that Break Stance will reject.");
+        }
+
+        [Test]
+        public void Shieldguard_BracesForTwoShieldAtRogueliteTurnStartAndBreakStanceBlocksIt()
+        {
+            GridMap map = new GridMap(5, 3);
+            UnitState hero = new UnitState("hero", true, new GridPosition(4, 1));
+            UnitState shieldguard = new UnitState("shieldguard", false, new GridPosition(1, 1));
+            EnemyArchetypes.Get("shieldguard").Apply(shieldguard);
+            CombatState state = new CombatState(map, new[] { hero, shieldguard });
+            state.ConfigureRuleset(CombatRuleset.Roguelite);
+
+            CombatResolver.BeginTurn(state, shieldguard.Id);
+            Assert.That(shieldguard.Shield, Is.EqualTo(2));
+            CombatEffectExecutor.Execute(state, shieldguard.Id, CombatEffect.AbsorbShield(shieldguard.Id, 2));
+            state.ApplyRogueliteBreakStance(shieldguard.Id);
+            CombatResolver.BeginTurn(state, shieldguard.Id);
+
+            Assert.That(shieldguard.Shield, Is.Zero);
+            Assert.That(state.RogueShieldEvents.Any(record =>
+                record.SourceId == "shieldguard-turn-brace" &&
+                record.EventKind == OCC.Combat.Roguelite.ShieldEventKind.PreventedByBreakStance), Is.True);
+        }
+
+        [Test]
+        public void TetherHound_BindsOnlyWhenHeroIsNotAlreadyBound()
+        {
+            CombatState state = CreateState("tether_hound", new GridPosition(1, 0), out UnitState enemy, out UnitState hero);
+            CombatCommand first = EnemyTactics.Choose(state, enemy, hero);
+            Assert.That(first.Type, Is.EqualTo(CombatCommandType.UseSkill));
+            CombatResolver.BeginTurn(state, enemy.Id);
+            CombatResolver.Resolve(state, first);
+            Assert.That(hero.HasStatus(StatusType.Bound), Is.True);
+            Assert.That(EnemyTactics.Choose(state, enemy, hero).Type, Is.EqualTo(CombatCommandType.Attack));
+        }
+
+        [TestCase("shieldguard", StatusType.Agility, 1)]
+        [TestCase("pyromancer", StatusType.Burning, 4)]
+        [TestCase("raider", StatusType.Bound, 1)]
+        [TestCase("elite_vanguard", StatusType.BreakStance, 1)]
+        [TestCase("stone_snare", StatusType.Bound, 3)]
+        [TestCase("lantern_revealer", StatusType.BreakStance, 3)]
+        public void StatusSpecialists_UseSkillOnlyWhenStatusWindowIsOpen(string archetypeId, StatusType status, int distance)
+        {
+            CombatState state = CreateState(archetypeId, new GridPosition(distance, 0), out UnitState enemy, out UnitState hero);
+            Assert.That(EnemyTactics.Choose(state, enemy, hero).Type, Is.EqualTo(CombatCommandType.UseSkill));
+            hero.ApplyStatus(status, 2, status == StatusType.Agility ? -1 : 0);
+            Assert.That(EnemyTactics.Choose(state, enemy, hero).Type, Is.Not.EqualTo(CombatCommandType.UseSkill));
+        }
+
+        [Test]
+        public void RuneArbalist_UsesHeavyBoltAtFiveCellsThenFallsBackDuringCooldown()
+        {
+            CombatState state = CreateState("rune_arbalist", new GridPosition(5, 0), out UnitState enemy, out UnitState hero);
+            CombatCommand first = EnemyTactics.Choose(state, enemy, hero);
+            Assert.That(first.Type, Is.EqualTo(CombatCommandType.UseSkill));
+            CombatResolver.BeginTurn(state, enemy.Id);
+            CombatResolver.Resolve(state, first);
+            Assert.That(hero.Health, Is.LessThan(hero.MaxHealth));
+            Assert.That(EnemyTactics.Choose(state, enemy, hero).Type, Is.EqualTo(CombatCommandType.Move));
+        }
+
+        [Test]
+        public void RuneArbalist_ExposesAdjacentDeadzoneAndRetreatsBeforeFiringAgain()
+        {
+            CombatState state = CreateState("rune_arbalist", new GridPosition(1, 0), out UnitState enemy, out UnitState hero);
+            EnemyTurnPlanBook plans = new EnemyTurnPlanBook();
+
+            CombatCommand retreat = plans.GetExecutionCommand(state, enemy, hero);
+            EnemyIntentPresentation intent = plans.GetPublicIntent(state, enemy, hero);
+
+            Assert.That(EnemyAbilityCatalog.HeavyCrossbow.MinimumRange, Is.EqualTo(2));
+            Assert.That(EnemyAbilityCatalog.WindlassBolt.MinimumRange, Is.EqualTo(2));
+            Assert.That(retreat.Type, Is.EqualTo(CombatCommandType.Move));
+            Assert.That(retreat.Destination.ManhattanDistance(hero.Position), Is.EqualTo(2));
+            Assert.That(intent.ActionName, Is.EqualTo("背弩生退距"));
+            Assert.That(intent.ResultSummary, Does.Contain("近身死区"));
+
+            CombatResolver.BeginTurn(state, enemy.Id);
+            Assert.Throws<System.InvalidOperationException>(() => CombatResolver.Resolve(state,
+                CombatCommand.UseSkill(enemy.Id, 0, hero.Id)));
+            Assert.Throws<System.InvalidOperationException>(() => CombatResolver.Resolve(state,
+                CombatCommand.Attack(enemy.Id, hero.Id)));
+        }
+
+        [Test]
+        public void BoundEnemy_AttacksWhenLegalButOtherwisePublishesAStationaryIntent()
+        {
+            CombatState distant = CreateState("tether_hound", new GridPosition(4, 0), out UnitState bound, out UnitState hero);
+            bound.ApplyStatus(StatusType.Bound, 2);
+            EnemyTurnPlanBook plans = new EnemyTurnPlanBook();
+
+            CombatCommand stationary = plans.GetExecutionCommand(distant, bound, hero);
+            EnemyIntentPresentation publicIntent = plans.GetPublicIntent(distant, bound, hero);
+
+            Assert.That(stationary.Type, Is.EqualTo(CombatCommandType.EndTurn));
+            Assert.That(publicIntent.ActionName, Is.EqualTo("受缚驻留"));
+            Assert.That(publicIntent.ResultSummary, Does.Contain("无法移动"));
+            Assert.That(publicIntent.ExpectedDamage, Is.Zero);
+
+            CombatState adjacent = CreateState("tether_hound", new GridPosition(1, 0), out UnitState adjacentBound, out UnitState adjacentHero);
+            adjacentBound.ApplyStatus(StatusType.Bound, 2);
+            Assert.That(EnemyTactics.Choose(adjacent, adjacentBound, adjacentHero).Type,
+                Is.EqualTo(CombatCommandType.UseSkill), "Binding stops movement, not an already legal adjacent attack.");
+        }
+
+        [TestCase("shieldguard")]
+        [TestCase("pyromancer")]
+        [TestCase("raider")]
+        [TestCase("elite_vanguard")]
+        [TestCase("sigil_mauler")]
+        [TestCase("barrier_mender")]
+        [TestCase("tether_hound")]
+        [TestCase("stone_snare")]
+        [TestCase("lantern_revealer")]
+        [TestCase("rune_arbalist")]
+        public void FinalUnitArt_LoadsWithRequiredPixelImporter(string id)
+        {
+            Sprite sprite = Resources.Load<Sprite>(FormalArtRegistry.UnitPath(id));
+            Assert.That(sprite, Is.Not.Null, id);
+            Assert.That(sprite.texture.width, Is.GreaterThanOrEqualTo(32), id);
+            Assert.That(sprite.texture.height, Is.GreaterThanOrEqualTo(32), id);
+            Assert.That(sprite.texture.width % 32, Is.Zero, id);
+            Assert.That(sprite.texture.height % 32, Is.Zero, id);
+            TextureImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as TextureImporter;
+            Assert.That(importer, Is.Not.Null, id);
+            Assert.That(importer.textureType, Is.EqualTo(TextureImporterType.Sprite), id);
+            Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point), id);
+            Assert.That(importer.wrapMode, Is.EqualTo(TextureWrapMode.Clamp), id);
+            Assert.That(importer.mipmapEnabled, Is.False, id);
+            Assert.That(importer.spritePixelsPerUnit, Is.EqualTo(32f), id);
+        }
+
+        private static CombatState CreateState(string archetypeId, GridPosition enemyPosition, out UnitState enemy, out UnitState hero)
+        {
+            GridMap map = new GridMap(6, 3);
+            hero = new UnitState("hero", true, new GridPosition(0, 0));
+            enemy = new UnitState("enemy", false, enemyPosition);
+            EnemyArchetypes.Get(archetypeId).Apply(enemy);
+            return new CombatState(map, new[] { hero, enemy });
+        }
+    }
+}

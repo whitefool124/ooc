@@ -1,0 +1,148 @@
+--- E:\数据库\OCC_Codex\Worldbuilding\策划案\OCC_项目总策划案_v1.0.md:before
++++ E:\数据库\OCC_Codex\Worldbuilding\策划案\OCC_项目总策划案_v1.0.md:after
+@@ -2011,7 +2011,7 @@
+ 
+ ### A.2.4 HD-2D 技术表现与品质门槛
+ 
+-适用与输出。 本条适用于剧情与肉鸽共用的已迁移HD-2D主界面、战斗外内容、学院地图与战斗。未迁移场景沿用A.2旧像素输出；已迁移场景使用高清输出，不受整帧320×180、六倍整数显示和全局关闭HDR约束。源像素采样、资产画布、PPU、玩法占格与输出分辨率分别登记。源Point采样不等于整帧Point输出；不得以整帧低清放大替代真实空间。系统设置页保留清晰二维控件。
++适用与输出。 本条适用于剧情与肉鸽共用的已迁移HD-2D主界面、战斗外内容、学院地图与战斗。未迁移场景沿用A.2旧像素输出；已迁移场景使用高清输出，不受整帧320×180、六倍整数显示和全局关闭HDR约束。源像素采样、资产画布、PPU、玩法占格与输出分辨率分别登记。源Point采样不等于整帧Point输出；不得以整帧低清放大替代真实空间。系统设置页保留清晰二维控件。 同场景像素大小统一（用户确认，2026-10-10，最高优先级）：同一场景的全部可见像素资产必须使用同一像素密度基准，包含角色、纸板、厚纸板、模型贴图、环境、陈设、场景内装饰和像素特效；美观、细节丰富度、画布自适应及战斗外素材库例外均不得放宽此要求。先选定场景颗粒参照，记录主体像素单元、世界尺寸、显示缩放及模型UV密度，再生成或复用素材；不能只凭图片尺寸、Point采样或粗像素提示词判断一致。以实际游戏镜头验收，相同深度与投影条件下可见像素大小必须统一；远近和斜面只允许同一密度经真实投影产生的变化，不得以透视为逐物件改密度的借口。源图中混用粗细格、同场景杯碟与灯等陈设颗粒不一致，均为最高优先级阻断项，先修复再扩量。书桌当前颗粒参照为咖啡杯右侧蓝金晶灯，只认可其像素大小与色簇表现，不等于批准整个场景。正文和系统文字保持既定清晰度，真实光照、阴影及后处理仍按高清空间表现配置，不强制整帧低清；它们不替代像素资产的一致性检查。入库与样板晋升必须提交全部可见像素资产的密度清单、源与缩放/UV追溯、1920×1080及960×540实际同框对比、运动/缩放检查和真实人工复核；缺失、待定或不一致时保持QA_PENDING。更换资产、尺寸、相机、UV或采样使相关证据失效，重新验证受影响范围，不用旧截图或机器PASS代替场景审核。
+ 
+ 相机与真实空间。 书桌沿用俯角35°、水平偏角0°、纵向视野24°；战斗沿用俯角45°、水平偏角0°及永久墙0.65世界单位。上述是OCC已批准样板参数，不是参考游戏公布参数。相机距离、目标、裁剪与合法缩放范围随配置记录。单位、独立战场物件和树木沿用同相机朝向面片、底部锚点及独立直立深度/投影代理；地面、地表效果和范围位于实际水平面。可见颜色和深度必须一致，不能横切角色、浮地或让点击与格位错位。 建模与贴图（用户确认，2026-10-10）：尽量少用建模，常规内容优先使用不同角度的独立像素纸板、厚纸板及分层组合。建模以简洁的多边形结构为主，主要用于场景本身和大型场景物件；每个可见模型必须配套强化2D感觉的像素贴图，贴图承担材质、色簇与主要细节，不用纯色模型、几何堆叠或高密度曲面代替像素美术。房间、地面、墙体和大型书桌可按此范围使用模型；杯碟、灯具、纸页等常规小物件优先使用独立像素纸板或厚纸板。真实相机、光照、深度和阴影服务于统一的2D像素表现。每个样板提交可见模型清单、使用理由、对应贴图与实际应用证据；无配套贴图、模型细节主导画面或与纸板画风不一致均阻断品质晋升。
+ 
+--- E:\数据库\OCC_Codex\Worldbuilding\数据表\OCC_美术与界面规格表_v1.0.csv:before
++++ E:\数据库\OCC_Codex\Worldbuilding\数据表\OCC_美术与界面规格表_v1.0.csv:after
+@@ -113,3 +113,4 @@
+ ART-HD2D-QUALITY-20261010,共用表现,HD2D正式技术品质门槛,总案A.2.4；书桌与战斗两套批准样板；1920×1080和960×540,共用配置／版本／文件指纹／静态及运动证据／目标设备预算／人工审美,共享渲染变更验收两套样板；局部改动验证受影响配置；旧证据指纹改变即失效；阻断项不得平均抵消；现有样板QA_PENDING
+ ART-HD2D-MODELING-20261010,共用表现,建模与2D质感,独立像素纸板厚纸板优先；简洁多边形模型主要用于场景本身及大型场景物件,可见模型必须配套统一像素贴图；材质色簇主要细节由贴图承担,样板须提交模型清单使用理由对应贴图及应用证据；纯色模型几何细节主导或画风不一致阻断批准；书桌可建模但不自动通过；杯碟灯具纸页优先纸板厚纸板
+ ART-HD2D-DESK-PERF-20261010,性能验收,首个书桌样板预算,当前电脑；1920×1080与960×540；60 FPS；P95≤16.7ms,记录实际设备及质量档,用户确认2026-10-10；Editor与正式试玩包分别测量；未测量不记通过
++ART-HD2D-PIXEL-DENSITY-P0-20261010,共用表现,同场景像素大小统一：最高优先级,所有可见像素资产共享场景密度；同深度投影颗粒一致,书桌以杯右侧蓝金晶灯颗粒为参照；不等于整场景批准,生成前锁定像素单元与缩放UV；全资产清单和两档实际同框及运动证据；真实人工复核；未通过禁止入库晋升；战外例外不放宽密度
+--- E:\数据库\OCC_Codex\Tools\OCCArt\occ_art_contract_v1.json:before
++++ E:\数据库\OCC_Codex\Tools\OCCArt\occ_art_contract_v1.json:after
+@@ -2552,7 +2552,7 @@
+   },
+   "hd2d_quality_policy": {
+     "schema": "occ-hd2d-quality-policy-v1",
+-    "version": "2026-10-10.2",
++    "version": "2026-10-10.3",
+     "canonical_section": "A.2.4 HD-2D 技术表现与品质门槛",
+     "baseline_registry": "Tools/OCCArt/hd2d_baselines_v1.json",
+     "validator": "Tools/OCCArt/validate_hd2d_quality.py",
+@@ -2569,6 +2569,7 @@
+       ]
+     ],
+     "dimensions": [
++      "scene_pixel_size_consistency",
+       "space_contact",
+       "material_consistency",
+       "lighting_integration",
+@@ -2609,7 +2610,8 @@
+           "lamp_0",
+           "lamp_40",
+           "lamp_100",
+-          "reading_contact"
++          "reading_contact",
++          "pixel_density_same_frame"
+         ],
+         "motion_cases": [
+           "normal_entry_interaction_return",
+@@ -2640,7 +2642,8 @@
+           "closest_legal_zoom",
+           "wall_contact_occlusion",
+           "range_ground",
+-          "strongest_existing_emission"
++          "strongest_existing_emission",
++          "pixel_density_same_frame"
+         ],
+         "motion_cases": [
+           "normal_entry_action_result_return",
+@@ -2662,7 +2665,8 @@
+       "local_lights",
+       "material_profile",
+       "source_sampling",
+-      "construction_manifest"
++      "construction_manifest",
++      "pixel_density_manifest"
+     ],
+     "construction_policy": {
+       "priority": "pixel_cards_and_thick_cards",
+@@ -2679,6 +2683,21 @@
+         "large_scene_prop"
+       ],
+       "outside_primary_scope": "document exception rationale and include in bound human model/card consistency review; primarily is not a blanket ban"
++    },
++    "pixel_density_policy": {
++      "priority": "highest",
++      "scope": "all_visible_pixel_assets_in_same_scene",
++      "comparison": "one effective world pixel pitch; compare equal depth/projection and verify actual screen clusters; natural projection only",
++      "noncombat_exception_waives_density": false,
++      "desk_reference": "blue_gold_lantern_right_of_coffee_cup; pixel scale endorsed only, scene QA_PENDING",
++      "blockers": [
++        "mixed_source_pixel_pitch",
++        "inconsistent_scene_pixel_size",
++        "missing_density_inventory_or_actual_comparison"
++      ],
++      "record_schema": "occ-hd2d-pixel-density-v1",
++      "configuration_binding": "pixel_density_manifest",
++      "machine_limit": "checks bound declared pitches and evidence completeness, not actual image segmentation or inventory completeness; genuine human review required"
+     }
+   }
+ }
+--- E:\数据库\OCC_Codex\Tools\OCCArt\hd2d_baselines_v1.json:before
++++ E:\数据库\OCC_Codex\Tools\OCCArt\hd2d_baselines_v1.json:after
+@@ -22,13 +22,15 @@
+           }
+         },
+         "measurement_policy": "record actual hardware and tier; Editor and standalone Player separately; current labels require measured device identity before promotion"
+-      }
++      },
++      "pixel_density_review": "PENDING: require complete bound scene inventory and two-resolution same-frame evidence under highest priority density policy"
+     },
+     "battlefield-v1": {
+       "scene_kind": "battlefield",
+       "status": "QA_PENDING",
+       "configuration": {},
+-      "reason": "Current normal-entry validation and human review are not available for this new quality policy."
++      "reason": "Current normal-entry validation and human review are not available for this new quality policy.",
++      "pixel_density_review": "PENDING: require complete bound scene inventory and two-resolution same-frame evidence under highest priority density policy"
+     }
+   }
+ }
+--- E:\数据库\OCC_Codex\AGENTS.md:before
++++ E:\数据库\OCC_Codex\AGENTS.md:after
+@@ -90,3 +90,10 @@
+ - 品质回退保留上一批准配置，关键失败先修原因，不批量扩展候选。现有接入记录不证明新规范验收通过；首套样板需真实正常流程、运动、性能预算与人工审核。
+ 
+ - **HD-2D建模口径（用户最终修正，2026-10-10）**：尽量少用建模，优先不同角度的像素纸板和厚纸板；模型以简洁多边形为主，主要用于场景本身与大型场景物件，且必须配套像素贴图强化2D感觉。书桌可在此范围建模，小物件优先纸板；可见模型清单、用途、贴图及应用效果纳入A.2.4验收，不把建模本身判错，也不以纯色模型或几何堆叠代替像素美术。
++
++
++## 同场景像素大小：最高优先级（用户确认，2026-10-10）
++
++同场景像素大小统一（用户确认，2026-10-10，最高优先级）：同一场景的全部可见像素资产必须使用同一像素密度基准，包含角色、纸板、厚纸板、模型贴图、环境、陈设、场景内装饰和像素特效；美观、细节丰富度、画布自适应及战斗外素材库例外均不得放宽此要求。先选定场景颗粒参照，记录主体像素单元、世界尺寸、显示缩放及模型UV密度，再生成或复用素材；不能只凭图片尺寸、Point采样或粗像素提示词判断一致。以实际游戏镜头验收，相同深度与投影条件下可见像素大小必须统一；远近和斜面只允许同一密度经真实投影产生的变化，不得以透视为逐物件改密度的借口。源图中混用粗细格、同场景杯碟与灯等陈设颗粒不一致，均为最高优先级阻断项，先修复再扩量。书桌当前颗粒参照为咖啡杯右侧蓝金晶灯，只认可其像素大小与色簇表现，不等于批准整个场景。正文和系统文字保持既定清晰度，真实光照、阴影及后处理仍按高清空间表现配置，不强制整帧低清；它们不替代像素资产的一致性检查。入库与样板晋升必须提交全部可见像素资产的密度清单、源与缩放/UV追溯、1920×1080及960×540实际同框对比、运动/缩放检查和真实人工复核；缺失、待定或不一致时保持QA_PENDING。更换资产、尺寸、相机、UV或采样使相关证据失效，重新验证受影响范围，不用旧截图或机器PASS代替场景审核。
++
++执行时先查总案A.2.4与机器合同pixel_density_policy。每个场景只用一个有效世界像素间距；完整清单将源主体像素单元、显示缩放或UV换算到此基准，再检查同框实际颗粒。生成与复用简报必须提供颗粒参照，不能只写coarse/pixel art。机器声明一致不证明图片真实一致；旧证据不得继承为批准。
+--- E:\数据库\OCC_Codex\.codex\skills\occ-hd2d-quality\SKILL.md:before
++++ E:\数据库\OCC_Codex\.codex\skills\occ-hd2d-quality\SKILL.md:after
+@@ -34,3 +34,10 @@
+ OCC modeling policy (final user correction, 2026-10-10): minimize modeling; prefer pixel cards/thick cards. Simple polygonal models mainly serve environments and large scene props, and every visible model needs matching pixel textures reinforcing the 2D style. Before promoting a sample, bind a construction manifest listing model rationale, geometry/material/texture inputs and application evidence; review model/card consistency. A table is not rejected merely for being modeled; untextured visible primitives or geometry-driven detail are quality failures.
+ 
+ Bind `configuration.construction_manifest` as a repository-relative path/SHA256 record. Its JSON schema is `occ-hd2d-construction-v1`; `visible_models` lists each model's unique `id`, `role`, `style: simple_polygonal`, `rationale`, and bound `geometry`, `material`, `pixel_texture` files, also included in report inputs. Use an empty list for card-only scenes. The primary roles are `environment_structure` and `large_scene_prop`; other roles require `exception_rationale` and the same genuine human style review. “Mainly” does not forbid every small modeled component. Completeness of the inventory and actual 2D appearance still require scene inspection and human review; file bindings alone cannot establish them.
++
++
++## 同场景像素大小：最高优先级（用户确认，2026-10-10）
++
++同场景像素大小统一（用户确认，2026-10-10，最高优先级）：同一场景的全部可见像素资产必须使用同一像素密度基准，包含角色、纸板、厚纸板、模型贴图、环境、陈设、场景内装饰和像素特效；美观、细节丰富度、画布自适应及战斗外素材库例外均不得放宽此要求。先选定场景颗粒参照，记录主体像素单元、世界尺寸、显示缩放及模型UV密度，再生成或复用素材；不能只凭图片尺寸、Point采样或粗像素提示词判断一致。以实际游戏镜头验收，相同深度与投影条件下可见像素大小必须统一；远近和斜面只允许同一密度经真实投影产生的变化，不得以透视为逐物件改密度的借口。源图中混用粗细格、同场景杯碟与灯等陈设颗粒不一致，均为最高优先级阻断项，先修复再扩量。书桌当前颗粒参照为咖啡杯右侧蓝金晶灯，只认可其像素大小与色簇表现，不等于批准整个场景。正文和系统文字保持既定清晰度，真实光照、阴影及后处理仍按高清空间表现配置，不强制整帧低清；它们不替代像素资产的一致性检查。入库与样板晋升必须提交全部可见像素资产的密度清单、源与缩放/UV追溯、1920×1080及960×540实际同框对比、运动/缩放检查和真实人工复核；缺失、待定或不一致时保持QA_PENDING。更换资产、尺寸、相机、UV或采样使相关证据失效，重新验证受影响范围，不用旧截图或机器PASS代替场景审核。
++
++执行时先查总案A.2.4与机器合同pixel_density_policy。每个场景只用一个有效世界像素间距；完整清单将源主体像素单元、显示缩放或UV换算到此基准，再检查同框实际颗粒。生成与复用简报必须提供颗粒参照，不能只写coarse/pixel art。机器声明一致不证明图片真实一致；旧证据不得继承为批准。
+--- C:\Users\FNHF\.codex\skills\occ-art-direction\SKILL.md:before
++++ C:\Users\FNHF\.codex\skills\occ-art-direction\SKILL.md:after
+@@ -33,3 +33,10 @@
+ 
+ 
+ OCC modeling policy (final user correction, 2026-10-10): minimize modeling; prefer pixel cards/thick cards. Simple polygonal models mainly serve environments and large scene props, and every visible model needs matching pixel textures reinforcing the 2D style. Before promoting a sample, bind a construction manifest listing model rationale, geometry/material/texture inputs and application evidence; review model/card consistency. A table is not rejected merely for being modeled; untextured visible primitives or geometry-driven detail are quality failures.
++
++
++## 同场景像素大小：最高优先级（用户确认，2026-10-10）
++
++同场景像素大小统一（用户确认，2026-10-10，最高优先级）：同一场景的全部可见像素资产必须使用同一像素密度基准，包含角色、纸板、厚纸板、模型贴图、环境、陈设、场景内装饰和像素特效；美观、细节丰富度、画布自适应及战斗外素材库例外均不得放宽此要求。先选定场景颗粒参照，记录主体像素单元、世界尺寸、显示缩放及模型UV密度，再生成或复用素材；不能只凭图片尺寸、Point采样或粗像素提示词判断一致。以实际游戏镜头验收，相同深度与投影条件下可见像素大小必须统一；远近和斜面只允许同一密度经真实投影产生的变化，不得以透视为逐物件改密度的借口。源图中混用粗细格、同场景杯碟与灯等陈设颗粒不一致，均为最高优先级阻断项，先修复再扩量。书桌当前颗粒参照为咖啡杯右侧蓝金晶灯，只认可其像素大小与色簇表现，不等于批准整个场景。正文和系统文字保持既定清晰度，真实光照、阴影及后处理仍按高清空间表现配置，不强制整帧低清；它们不替代像素资产的一致性检查。入库与样板晋升必须提交全部可见像素资产的密度清单、源与缩放/UV追溯、1920×1080及960×540实际同框对比、运动/缩放检查和真实人工复核；缺失、待定或不一致时保持QA_PENDING。更换资产、尺寸、相机、UV或采样使相关证据失效，重新验证受影响范围，不用旧截图或机器PASS代替场景审核。
++
++执行时先查总案A.2.4与机器合同pixel_density_policy。每个场景只用一个有效世界像素间距；完整清单将源主体像素单元、显示缩放或UV换算到此基准，再检查同框实际颗粒。生成与复用简报必须提供颗粒参照，不能只写coarse/pixel art。机器声明一致不证明图片真实一致；旧证据不得继承为批准。

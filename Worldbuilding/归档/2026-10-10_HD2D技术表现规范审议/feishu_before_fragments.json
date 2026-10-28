@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "document": {
+      "content": "<fragment mode=\"keyword\" keyword=\"HD-2D 全项目制作口径|像素显示管线第一阶段|E 主菜单像素制作规则|A.2.3|A.2.2\"><checkbox id=\"doxcnOVd7ybhVJcwxwKL9j64pGb\" done=\"true\">【美术表现线】像素显示管线第一阶段：全局像素基础守卫（关闭 MSAA 与相机 HDR、纹理采样统一 Point／关 Mipmap／关压缩、预留固定内部分辨率与整数倍输出入口）</checkbox><checkbox id=\"doxcnHq3q3e4FJ0HD3eaPZdfAsk\" done=\"false\">【美术表现线】像素显示管线第一阶段验收：在实际运行入口检查 1×/2×/4× 输出、窗口缩放与镜头移动</checkbox><p id=\"doxcnSvzeb3LEnJ3xUlr2fLlVLc\">人物单位与透明背景的战场物件在解码到主体自身原生像素格并放入最终自适应画布后，将其现有不透明剪影的最外侧一圈像素直接替换为纯黑，形成一个原生像素宽的连续外轮廓；不得向外扩张 Alpha、叠加第二圈深色边或给内部材质缝逐层描黑。铺满逻辑格的地面底图不描整圈黑边，避免每格呈现为按钮框。生图必须从提示词阶段采用明显的32px级粗颗粒信息密度和大像素簇；后处理只允许确定性的背景移除、主体像素格解码、硬 Alpha、源色聚类、锚点与单像素轮廓处理，不得几何缩放、插值、抖色、添加新噪点。除A.2.2已授权的学院永久墙拼接图块外，不得以人工或程序重绘修补生图主体结构。</p><h3 id=\"doxcnZ7bEo2NDwesaoYx9sgxhUd\">A.2.2 统一像素资产生产流程</h3><p id=\"doxcn1Y4qOhQXzauj3Q2t7iUX5c\">E 主菜单像素制作规则（用户确认，2026-10-08）：取消整张绘画缩小到240×135再放大的制作路线。桌面书本、杯碟与以太灯以64×64原生画布容纳完整主体和安全边；开书状态允许横向扩展画布，但不得缩小封面或改变像素密度。背景与每项物件分别使用独立 Codex 内置生图原料，按原料实际网格诊断、解码或明确标记的网格重建生成候选，禁止为凑固定尺寸而任意缩放主体。背景采用较大的原生画布，场景合成按同一原生像素密度和整数位置布置；整场景及技术美术共用整数显示倍率。可研究社区网格恢复工具，但须记录工具版本、原生尺寸、置信度、轮廓和颜色改动，不能将网格重建冒充无损解码，不能将机器检查代替实际显示与人工审美。保留独立原料、manifest、1×／4×／灰阶／棋盘格／应用接触与运行证据；原有主体网格解码置信度1.2门槛保持不变。该规则仅适用于E主菜单，不扩展到战场、人物或其他页面。</p><h3 id=\"doxcnrvnGtKsT4LmoxAy45LTyTd\">A.2.3 资产职责、锚点与场景组合</h3></fragment>",
+      "document_id": "Y1KydFPjMocJjYxMmFEcTblcnLf",
+      "revision_id": 2715
+    }
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.94",
+      "latest": "1.0.97",
+      "message": "lark-cli 1.0.97 available, current 1.0.94, run: lark-cli update"
+    }
+  }
+}

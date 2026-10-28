@@ -1,0 +1,25 @@
+{
+  "status": "QA_PENDING",
+  "project": "E:/数据库/OCC_Codex/UnityProject",
+  "unity": "6000.5.2f1",
+  "rendered_mesh_components": 948,
+  "unique_meshes": 235,
+  "used_materials": 72,
+  "normal_map_materials": 68,
+  "missing_used_materials": 0,
+  "shader_messages": 0,
+  "actual_render_resolution": [1920, 1080],
+  "preview_resolution": [960, 540],
+  "preview_is_downsample_of_1080_render": true,
+  "input_D_observed_target_z_change": true,
+  "input_F_observed_postprocessing_false_then_true": true,
+  "formal_assets_replaced": false,
+  "saved_authored_scene": false,
+  "full_scene_recovered": false,
+  "reference_quality_100_percent_passed": false,
+  "performance_60fps_p95_16_7ms_passed": null,
+  "console_unrelated_errors_observed": [
+    "ParticleSystem duration changed while playing in EpicToonVfxShowcase",
+    "Editor ExecutionEngineException Illegal byte sequence"
+  ]
+}

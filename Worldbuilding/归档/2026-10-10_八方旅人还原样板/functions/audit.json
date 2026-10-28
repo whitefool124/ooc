@@ -1,0 +1,1621 @@
+{
+  "status": "QA_PENDING",
+  "packages": 59,
+  "failed_packages": [],
+  "export_types": {
+    "Texture2D": 12,
+    "MaterialFunction": 24,
+    "MaterialExpressionMaterialFunctionCall": 50,
+    "MaterialExpressionTextureObject": 1,
+    "MaterialExpressionTextureSample": 2,
+    "Material": 7,
+    "MaterialExpressionScalarParameter": 34,
+    "MaterialExpressionTextureSampleParameter2D": 26,
+    "MaterialExpressionCollectionParameter": 17,
+    "MaterialExpressionStaticSwitchParameter": 24,
+    "MaterialExpressionVectorParameter": 11,
+    "MaterialInstanceConstant": 14,
+    "MaterialParameterCollection": 2,
+    "MaterialExpressionTextureObjectParameter": 1
+  },
+  "functions": [
+    {
+      "name": "ExponentialDensity",
+      "slots": 15,
+      "null_slots": 15
+    },
+    {
+      "name": "LinearGradient",
+      "slots": 6,
+      "null_slots": 6
+    },
+    {
+      "name": "RadialGradientExponential",
+      "slots": 24,
+      "null_slots": 22
+    },
+    {
+      "name": "SimpleGrassWind",
+      "slots": 64,
+      "null_slots": 64
+    },
+    {
+      "name": "CustomRotator",
+      "slots": 17,
+      "null_slots": 17
+    },
+    {
+      "name": "FlipBook",
+      "slots": 33,
+      "null_slots": 31
+    },
+    {
+      "name": "ScreenAlignedPixelToPixelUVs",
+      "slots": 7,
+      "null_slots": 7
+    },
+    {
+      "name": "BreakOutFloat3Components",
+      "slots": 7,
+      "null_slots": 7
+    },
+    {
+      "name": "DitherTemporalAA",
+      "slots": 17,
+      "null_slots": 14
+    },
+    {
+      "name": "MakeFloat2",
+      "slots": 4,
+      "null_slots": 4
+    },
+    {
+      "name": "Round",
+      "slots": 11,
+      "null_slots": 10
+    },
+    {
+      "name": "Sign",
+      "slots": 7,
+      "null_slots": 7
+    },
+    {
+      "name": "MatLayerBlend_Simple",
+      "slots": 11,
+      "null_slots": 11
+    },
+    {
+      "name": "MF_APGradient",
+      "slots": 16,
+      "null_slots": 11
+    },
+    {
+      "name": "MF_MapChip_MaskTex",
+      "slots": 13,
+      "null_slots": 9
+    },
+    {
+      "name": "MF_MapChip_MaterialSetting",
+      "slots": 18,
+      "null_slots": 17
+    },
+    {
+      "name": "MF_MapGroudWP",
+      "slots": 9,
+      "null_slots": 8
+    },
+    {
+      "name": "MF_AddZMask_PN",
+      "slots": 6,
+      "null_slots": 5
+    },
+    {
+      "name": "MF_CameraDistance",
+      "slots": 8,
+      "null_slots": 6
+    },
+    {
+      "name": "MF_DitherMask",
+      "slots": 18,
+      "null_slots": 15
+    },
+    {
+      "name": "MF_M_Object",
+      "slots": 123,
+      "null_slots": 68
+    },
+    {
+      "name": "MF_ObjecSwayX",
+      "slots": 12,
+      "null_slots": 9
+    },
+    {
+      "name": "MF_ObjectDither",
+      "slots": 6,
+      "null_slots": 3
+    },
+    {
+      "name": "MF_ObjectSwayY",
+      "slots": 12,
+      "null_slots": 9
+    }
+  ],
+  "parameters": [
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BG\\Material\\M_BGMaterial.json",
+      "name": "BG_EmissiveValue",
+      "default": 5.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BG\\Material\\M_BGMaterial.json",
+      "name": "ColorMap",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "MetallicValue",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "SpecularValue",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "RoughnessValue",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "EmissivePower",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "NormalPower",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "MaskTexAspect",
+      "default": 1.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "OutLineRoughness",
+      "default": 0.5,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "FadeParam",
+      "default": 1.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "DitherSwitch",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "UseSubTexture",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "UseSlantTexture",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "RoomWallFade",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "SlantNormal",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "SlantTexture",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "MapChipMask",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "SubTexture",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "SubNormal",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "BaseTexture",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "BaseNormal",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "OutLineColor",
+      "default": {
+        "R": 0.254,
+        "G": 0.127,
+        "B": 0.051,
+        "A": 1.0,
+        "Hex": "8A6440"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "MapChipPattern",
+      "default": {
+        "R": 0.75,
+        "G": 0.75,
+        "B": 0.25,
+        "A": 0.0,
+        "Hex": "E1E189"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "RoadEmissive_Sub",
+      "default": {
+        "R": 0.0,
+        "G": 0.0,
+        "B": 0.0,
+        "A": 1.0,
+        "Hex": "000000"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "name": "RoadEmissive_Main",
+      "default": {
+        "R": 0.0,
+        "G": 0.0,
+        "B": 0.0,
+        "A": 1.0,
+        "Hex": "000000"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "MetallicValue",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "SpecularValue",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "RoughnessValue",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "EmissivePower",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "NormalPower",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "OutLineRoughness",
+      "default": 0.5,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "DitherSwitch",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "UseSubTexture",
+      "default": true,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "UseSlantTexture",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "BaseNormal",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "SlantNormal",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "SlantTexture",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "SubTexture",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "SubNormal",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "CombinedColor",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "BaseTexture",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "OutLineColor",
+      "default": {
+        "R": 0.254,
+        "G": 0.127,
+        "B": 0.051,
+        "A": 1.0,
+        "Hex": "8A6440"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "RoadEmissive_Sub",
+      "default": {
+        "R": 0.0,
+        "G": 0.0,
+        "B": 0.0,
+        "A": 1.0,
+        "Hex": "000000"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "name": "RoadEmissive_Main",
+      "default": {
+        "R": 0.0,
+        "G": 0.0,
+        "B": 0.0,
+        "A": 1.0,
+        "Hex": "000000"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_APGradient.json",
+      "name": "GradientScale",
+      "default": 200.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_APGradient.json",
+      "name": "GradientPos",
+      "default": -0.7,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_APGradient.json",
+      "name": "BottomColor",
+      "default": {
+        "R": 1.0,
+        "G": 0.0,
+        "B": 0.150549,
+        "A": 1.0,
+        "Hex": "FF006C"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_APGradient.json",
+      "name": "TopColor",
+      "default": {
+        "R": 0.030357,
+        "G": 1.0,
+        "B": 0.0,
+        "A": 1.0,
+        "Hex": "30FF00"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_MapGroudWP.json",
+      "name": "ColorUVScale",
+      "default": 200.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\Environment\\CloudShadow\\CloudShadow3.json",
+      "name": "EmissivePower",
+      "default": 6.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\Environment\\CloudShadow\\CloudShadow3.json",
+      "name": "Speed",
+      "default": 1.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "name": "EmissiveValue",
+      "default": null,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "name": "G.WindSpeed",
+      "default": 1.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "name": "G.WindWeight",
+      "default": 0.2,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "name": "G.WindIntensity",
+      "default": 0.2,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "name": "SwaySwitch",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "name": "AlphaMask",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "name": "ColorMap",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_AddZMask_PN.json",
+      "name": "AddZMask",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_CameraDistance.json",
+      "name": "DitherScale",
+      "default": 10.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_CameraDistance.json",
+      "name": "DitherDistance",
+      "default": 3400.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_DitherMask.json",
+      "name": "MaskOffsetU",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_DitherMask.json",
+      "name": "MaskOffsetV",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "MetallicValue",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "SpecularValue",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "NormalPower",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "RoughnessValue",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "RoughnessValue",
+      "default": null,
+      "type": "MaterialExpressionCollectionParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "EmissiveMax",
+      "default": 10.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "EmissiveMin",
+      "default": 1.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "MetallicValue",
+      "default": 0.1,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "EmissiveMaskSpeed",
+      "default": 0.2,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "EmissiveMaskValue",
+      "default": 100.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "G.WindSpeed",
+      "default": 1.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "G.WindWeight",
+      "default": 0.2,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "G.WindIntensity",
+      "default": 0.2,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "AddZEmmisiveValue",
+      "default": 10.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "FadeParam",
+      "default": 1.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "AnimDeltaTime",
+      "default": null,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "GradationSwitch",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "DoorAnim",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "AddZVector",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "AddZVector",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "AddZVector",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "SwaySwitch",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "EmissiveSwitch",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "GradationSwitch",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "MapEditorSetting",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "LeafEmisive",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "DitherSwitch",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "GradationAlpha",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "DoorAnim",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "DoorAnim",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "DoorAnim",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "DoorAnim",
+      "default": null,
+      "type": "MaterialExpressionStaticSwitchParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "DoorTexture",
+      "default": null,
+      "type": "MaterialExpressionTextureObjectParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "NormalMap",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "EmissiveMask",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "NormalMap",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "ColorMap",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "BaseNormal",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "MaskTexture",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "BaseColor",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "AddZVectorColor",
+      "default": null,
+      "type": "MaterialExpressionTextureSampleParameter2D"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "EmmisiveColor",
+      "default": {
+        "R": 0.921582,
+        "G": 0.715694,
+        "B": 0.296138,
+        "A": 1.0,
+        "Hex": "F6DC94"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "name": "EmissiveColorAdd",
+      "default": {
+        "R": 1.0,
+        "G": 1.0,
+        "B": 1.0,
+        "A": 1.0,
+        "Hex": "FFFFFF"
+      },
+      "type": "MaterialExpressionVectorParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_ObjecSwayX.json",
+      "name": "B.SpeedX",
+      "default": 1.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_ObjecSwayX.json",
+      "name": "B.LargeWaveScaleX",
+      "default": 1024.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_ObjecSwayX.json",
+      "name": "B.WaveAmplitudeX",
+      "default": 1.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_ObjectDither.json",
+      "name": "DitherLeave",
+      "default": null,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_ObjectSwayY.json",
+      "name": "R.SpeedY",
+      "default": 0.2,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_ObjectSwayY.json",
+      "name": "R.WaveAmplitudeY",
+      "default": 5.0,
+      "type": "MaterialExpressionScalarParameter"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_ObjectSwayY.json",
+      "name": "R.LargeWaveScaleY",
+      "default": 512.0,
+      "type": "MaterialExpressionScalarParameter"
+    }
+  ],
+  "unresolved_named_connections": [
+    {
+      "package": "Engine\\Content\\Functions\\Engine_MaterialFunctions01\\Gradient\\RadialGradientExponential.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_37",
+      "unresolved_expression": "MaterialExpressionDivide_1"
+    },
+    {
+      "package": "Engine\\Content\\Functions\\Engine_MaterialFunctions01\\Gradient\\RadialGradientExponential.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_37",
+      "unresolved_expression": "MaterialExpressionFunctionInput_32"
+    },
+    {
+      "package": "Engine\\Content\\Functions\\Engine_MaterialFunctions01\\Gradient\\RadialGradientExponential.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_38",
+      "unresolved_expression": "MaterialExpressionOneMinus_0"
+    },
+    {
+      "package": "Engine\\Content\\Functions\\Engine_MaterialFunctions01\\Gradient\\RadialGradientExponential.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_38",
+      "unresolved_expression": "MaterialExpressionFunctionInput_32"
+    },
+    {
+      "package": "Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Utility\\DitherTemporalAA.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_23",
+      "unresolved_expression": "MaterialExpressionConstant2Vector_2"
+    },
+    {
+      "package": "Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Utility\\DitherTemporalAA.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_24",
+      "unresolved_expression": "MaterialExpressionConstant2Vector_3"
+    },
+    {
+      "package": "Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Utility\\Round.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_4",
+      "unresolved_expression": "MaterialExpressionFunctionInput_0"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BG\\Material\\M_BGMaterial.json",
+      "owner": "M_BGMaterial",
+      "unresolved_expression": "MaterialExpressionMultiply_5"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_2",
+      "unresolved_expression": "MaterialExpressionMultiply_1"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_5",
+      "unresolved_expression": "MaterialExpressionMultiply_0"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_77",
+      "unresolved_expression": "MaterialExpressionMakeMaterialAttributes_2"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_77",
+      "unresolved_expression": "MaterialExpressionIf_5"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_78",
+      "unresolved_expression": "MaterialExpressionOneMinus_4"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_12",
+      "unresolved_expression": "MaterialExpressionConstant_4"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_1",
+      "unresolved_expression": "MaterialExpressionMultiply_0"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_2",
+      "unresolved_expression": "MaterialExpressionMultiply_2"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_77",
+      "unresolved_expression": "MaterialExpressionMakeMaterialAttributes_2"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_77",
+      "unresolved_expression": "MaterialExpressionIf_5"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_78",
+      "unresolved_expression": "MaterialExpressionOneMinus_4"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_12",
+      "unresolved_expression": "MaterialExpressionConstant_4"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "owner": "MaterialExpressionTextureSampleParameter2D_13",
+      "unresolved_expression": "MaterialExpressionTextureCoordinate_4"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "owner": "MaterialExpressionTextureSampleParameter2D_14",
+      "unresolved_expression": "MaterialExpressionTextureCoordinate_4"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_APGradient.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_15",
+      "unresolved_expression": "MaterialExpressionSubtract_3"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_MapChip_MaskTex.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_11",
+      "unresolved_expression": "MaterialExpressionTextureCoordinate_2"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_MapChip_MaskTex.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_11",
+      "unresolved_expression": "MaterialExpressionConstant2Vector_2"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_MapChip_MaskTex.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_11",
+      "unresolved_expression": "MaterialExpressionFunctionInput_4"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_MapChip_MaskTex.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_27",
+      "unresolved_expression": "MaterialExpressionFunctionInput_5"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_MapChip_MaskTex.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_9",
+      "unresolved_expression": "MaterialExpressionMultiply_6"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_MapChip_MaterialSetting.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_1",
+      "unresolved_expression": "MaterialExpressionFunctionInput_6"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\Environment\\CloudShadow\\CloudShadow3.json",
+      "owner": "CloudShadow3",
+      "unresolved_expression": "MaterialExpressionPower_3"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Map\\Resource\\Environment\\CloudShadow\\CloudShadow3.json",
+      "owner": "MaterialExpressionTextureSample_1",
+      "unresolved_expression": "MaterialExpressionPanner_0"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "owner": "M_KSObject_LOD_Masked",
+      "unresolved_expression": "MaterialExpressionConstant_0"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "owner": "M_KSObject_LOD_Masked",
+      "unresolved_expression": "MaterialExpressionConstant_0"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "owner": "M_KSObject_LOD_Masked",
+      "unresolved_expression": "MaterialExpressionMultiply_0"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_65",
+      "unresolved_expression": "MaterialExpressionConstant3Vector_6"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_56",
+      "unresolved_expression": "MaterialExpressionMultiply_51"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_56",
+      "unresolved_expression": "MaterialExpressionConstant_51"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_DitherMask.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_13",
+      "unresolved_expression": "MaterialExpressionAppendVector_1"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_DitherMask.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_13",
+      "unresolved_expression": "MaterialExpressionAppendVector_2"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_DitherMask.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_13",
+      "unresolved_expression": "MaterialExpressionConstant_11"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_65",
+      "unresolved_expression": "MaterialExpressionConstant3Vector_6"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_81",
+      "unresolved_expression": "MaterialExpressionConstant_59"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionMaterialFunctionCall_81",
+      "unresolved_expression": "MaterialExpressionConstant_59"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_0",
+      "unresolved_expression": "MaterialExpressionAdd_0"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_5",
+      "unresolved_expression": "MaterialExpressionMultiply_5"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_52",
+      "unresolved_expression": "MaterialExpressionLinearInterpolate_69"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_52",
+      "unresolved_expression": "MaterialExpressionReroute_78"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_53",
+      "unresolved_expression": "MaterialExpressionLinearInterpolate_70"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_53",
+      "unresolved_expression": "MaterialExpressionReroute_77"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_54",
+      "unresolved_expression": "MaterialExpressionLinearInterpolate_71"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_56",
+      "unresolved_expression": "MaterialExpressionMultiply_51"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_56",
+      "unresolved_expression": "MaterialExpressionConstant_51"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_57",
+      "unresolved_expression": "MaterialExpressionMultiply_6"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_57",
+      "unresolved_expression": "MaterialExpressionMultiply_1"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_58",
+      "unresolved_expression": "MaterialExpressionLinearInterpolate_60"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_58",
+      "unresolved_expression": "MaterialExpressionConstant_50"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_59",
+      "unresolved_expression": "MaterialExpressionConstant_53"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_60",
+      "unresolved_expression": "MaterialExpressionLinearInterpolate_68"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_60",
+      "unresolved_expression": "MaterialExpressionConstant_55"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_68",
+      "unresolved_expression": "MaterialExpressionConstant_62"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_71",
+      "unresolved_expression": "MaterialExpressionConstant3Vector_7"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_71",
+      "unresolved_expression": "MaterialExpressionReroute_76"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_72",
+      "unresolved_expression": "MaterialExpressionReroute_1"
+    },
+    {
+      "package": "Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "owner": "MaterialExpressionStaticSwitchParameter_72",
+      "unresolved_expression": "MaterialExpressionConstant_56"
+    }
+  ],
+  "inputs": [
+    {
+      "file": "packages\\Engine\\Content\\EngineMaterials\\Good64x64TilingNoiseHighFreq.json",
+      "sha256": "222bb37729c82e92814c813636643e75f0e6825bfacd0a25bdf420c560e5c4a0"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions01\\Density\\ExponentialDensity.json",
+      "sha256": "26e06ef4a3dc6733015915b921fe1248d685d9bf3842a49301115ae1390a1c4a"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions01\\Gradient\\LinearGradient.json",
+      "sha256": "29b17cb8b3814b03faf79b650573d495efaf26170dca8a8940a4768d0edbd77b"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions01\\Gradient\\RadialGradientExponential.json",
+      "sha256": "063cb6700dca9e9ef24717bff71abc1ea9475484b6617c50f5903a492f4d1f85"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions01\\WorldPositionOffset\\SimpleGrassWind.json",
+      "sha256": "0fa91d1e053cbb46bbc122fc6fd8d04e1dbd864e64df43a48e629e7227e83cb7"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions02\\ExampleContent\\Textures\\flipbook.json",
+      "sha256": "0241c27d48549e13160c04e01680166555032d6c4b273d29d3a24f31ddf35d67"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Texturing\\CustomRotator.json",
+      "sha256": "57c3742c4c08106cbd506786daff624724e374b046b0a7b24fa9898cb53af848"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Texturing\\FlipBook.json",
+      "sha256": "fa89aead35293083441e3aaa6b15536e5ccd4ce273e220f65571b9a283372715"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Texturing\\ScreenAlignedPixelToPixelUVs.json",
+      "sha256": "b9adcef7b9663066c2374ec8690b362215a7ee50d7c11388bfabe5f176a3c2ad"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Utility\\BreakOutFloat3Components.json",
+      "sha256": "9a9b37d5529ed357fb10769d791582feae2ca399f8de857dca9adb1937258ea1"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Utility\\DitherTemporalAA.json",
+      "sha256": "3e8cdcdb2cfe4cf9014270780853303154aba9502ff67ba1fd59663e957106f1"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Utility\\MakeFloat2.json",
+      "sha256": "cc6336b163348285d969f949dfa4155c8e04abba609033b2ccddd9eed5d2c719"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Utility\\Round.json",
+      "sha256": "dc52919c22ccc93f32edea3665d797a93ceb9a89034a55f39314492ea4f96461"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\Engine_MaterialFunctions02\\Utility\\Sign.json",
+      "sha256": "5f9ba4d31d09e3c95a5b769a7ed78398a4f6e1ddcb1722881c5cd45ffea6249f"
+    },
+    {
+      "file": "packages\\Engine\\Content\\Functions\\MaterialLayerFunctions\\MatLayerBlend_Simple.json",
+      "sha256": "b9e2d1aa1af21e8756ced59865ec730e2f5ed7f6f8e57a0cb8915429f5a77644"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BG\\Material\\M_BGMaterial.json",
+      "sha256": "2ed1b85989d06049754e74368ac21fbf45b8ebdd100f8744f40ec3bef07b1175"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip.json",
+      "sha256": "90d966745f043cc4d664b21d44d44f54a89bd39d099ed099ca91c07becde9530"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\M_MapChip_Combined.json",
+      "sha256": "2fc05698fa8a46a6dc1e4bc34744c65913ced41e397128b475c9ceaa14654e76"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_APGradient.json",
+      "sha256": "5a45ac2a3686e30350b76f7266d9d7c33a2a5eaf5806c9abbad72a27fe27aa08"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_MapChip_MaskTex.json",
+      "sha256": "e137e19d250ce6f74e0ecb06528f92d98a1a6b6c6bc3fbe12e5805ef4a39a23c"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_MapChip_MaterialSetting.json",
+      "sha256": "eb79787d9188b3b710c570f2c7c2b96970388249dcd594e600cb94bdfd5fcc2a"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MF_MapGroudWP.json",
+      "sha256": "51504a1212c630bf90e6b0b202321f9c05599564c48179ad9e38da3e69d8a38d"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MI_MapChip_Combined_Common.json",
+      "sha256": "98da83fef126bbc9ee41a197e8e54bdda914ce51a8b6f99a3d2cef64cb481e92"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MI_MapChip_Combined_Slant.json",
+      "sha256": "79e8f51e3311a0a31588bcfe80af11fd8e0846855ce35807a16cc2158e232f6e"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MI_MapChip_Sub.json",
+      "sha256": "cf1c8065a39428174a5434570c5675b9014ff1674bfe82b80bd4797685033b8a"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MI_MapWall.json",
+      "sha256": "bc2e9b7ba5e6b8ad5787662b8fb754a5ed77192d793903bff9842d62dfb27c63"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Material\\MI_MapWall_UsgInstance.json",
+      "sha256": "27c7c6e3a3aa21e06ebb6f4ce80cb7e33329cbfae9c120e022e8c65dc28b9e27"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Texture\\maptx_test_proc_ground_cl_02.json",
+      "sha256": "736ec23db77a0371754f6914527a4e35dc30bad482e9f5f8521a2cae965192af"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Texture\\maptx_test_proc_ground_no_01.json",
+      "sha256": "54a948083d9a079be90274a2312ee51cb097768012083441882dda97d48dde6a"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Texture\\MmeTX_Com_Grd_Mask_mk_01.json",
+      "sha256": "6dd58d1194f038a88a069d120c80dd0ff3d504408b05c098e6883e24a723b64a"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\BP\\_Common\\Texture\\Tex_Black.json",
+      "sha256": "3a323dfa03d420513a25e98ff6bb496fbe09cc375a5d96aabc4639562a7e69b5"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\Environment\\CloudShadow\\CloudShadow3.json",
+      "sha256": "357e5d3a7b7d4319a5d4738f5c15bc937b6d789e2e76de7d16bc3d6b422c2d66"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Map\\Resource\\Environment\\CloudShadow\\envtx_cloudshadow.json",
+      "sha256": "7ad9f78581e0c8efb45db6ab9e681913a9316814e42799266288538f8e1435de"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject.json",
+      "sha256": "46be248948cca0989a1ef160f38004b7b8987c2b8f5966854c1b2f582dc86c8f"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_LOD_Masked.json",
+      "sha256": "ea263a2e728d0350cde8381fa724b74b415e44e741d95435b34633d0a1f27d0e"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\M_KSObject_UsgInstance.json",
+      "sha256": "a3681ed5d1b6911a7717c9732e7548235dfeb2cc1d1eb3ee8fc4a30706dc87e7"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_AddZMask_PN.json",
+      "sha256": "9172c8af1c84feb0628c84b1a2b95d586ea7ea5f365df5246d9c00c9c75abc5c"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_CameraDistance.json",
+      "sha256": "acaec62c52e1df476058523270a21b168cc1046a39759774dc2dae24d09a98d3"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_DitherMask.json",
+      "sha256": "85a0ce2d9835d7f58e904586053cfa56e3f39681cc867cc1a3a59f3b23670c87"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_DitherMaskParam.json",
+      "sha256": "7406ef4f36f0502d1c03ac72ecac25a6a66ea29a0794aff29b99941b7c8bd894"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_M_Object.json",
+      "sha256": "6b3ca71fe07c2868c33c0019e107ecf7549920a3cab458a7058c9e1e291c956d"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_ObjecSwayX.json",
+      "sha256": "9d1defb310823672422cd25ed42e5ca377310ca644747bda1f4d75fc19da359d"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_ObjectDither.json",
+      "sha256": "cfa413c6b50df6523388365ce09dc8b5b23e36ce52e0de15ede8f7aa187ab68f"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MF_ObjectSwayY.json",
+      "sha256": "d3da42b8b2b7b9b493b44bb92f2b4e8528fa07628b1fc48c06d146c5ddb6994a"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MI_KSObject.json",
+      "sha256": "d5f876ddae6af08afa8fad9922f926ffed783017f91791dd575d751d16119fe1"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MI_KSObject_DoorAnim.json",
+      "sha256": "2eafce86c5a60f97bb5e09fda4b6259d1686ac4b1c335d95a65050bce88929c3"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MI_KSObject_Gradation.json",
+      "sha256": "7ce174bd9ecef9c0074e0ada0bcf045a586c14de1edaac33b5402efaa85c5351"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MI_KSObject_Gradation_Emissive.json",
+      "sha256": "919215224cb6a7efec1b629a6f59c9ea76afea9ac0dc60e1486476899b6da696"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MI_KSObject_LOD_Masked_Sway.json",
+      "sha256": "103a9e5efd186872dafe718101f416ea5194d32a502d8e21824b23407d9d19fb"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MI_KSObject_Wind.json",
+      "sha256": "498574508593ac52ddb3f526b4e5e91b46be39dcb5a34cab8c83f068f449edfb"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MI_KSObject_Wind_UsgInstance.json",
+      "sha256": "ed304f85e3ba1c2765d3a0053decd7a78b1320f3f4a2fa26a93b8352311582b2"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MI_KSObject_WindLeaf.json",
+      "sha256": "46edb178b0be41749e52c2d8ea892cdb8f4badb581afdcfd96f02dc57ec14e4d"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MI_KSObject_WindLeaf_UsgInstance.json",
+      "sha256": "dedf134413281bf89a1c888063ec70d5197802ecba5f94572edefdb7f2ae9a8f"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Material\\MPC_Object.json",
+      "sha256": "66ea36966b20c48adf6540d6e7011561be9f87f6a9ca642fc986e3ebe7672ccd"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Texture\\T_DummyColor.json",
+      "sha256": "4131f6262d8671ecab392bfa770b0258eb4404397adaf598a57d6fbe4844ca56"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Texture\\T_DummyMask.json",
+      "sha256": "e3150fa09deaba1e1bead64f274a72205b5c950e05e0c822a409b0882c52fefb"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Texture\\T_DummyNormal.json",
+      "sha256": "25438427b2c0bec9944ea0b4a7ac371a141b684245a4c9892e570fae60ab3dc2"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\_Common\\Texture\\TC_DummyNormal.json",
+      "sha256": "b794cd2ab2d256d835f7bc11f7e91909c75bca5b1afaea2a1dacca1d290f306f"
+    },
+    {
+      "file": "packages\\Octopath_Traveler\\Content\\Object\\Resource\\Obj\\Obj_grass\\Texture\\ObjTX_Grass_A_mk.json",
+      "sha256": "74f37ce5abaac9ef996734589d990bd3e1b55ccfad8c0b6d6d87d8d746656444"
+    }
+  ],
+  "source_sun": {
+    "DynamicShadowDistanceMovableLight": 8000.0,
+    "LightmassSettings": {
+      "IndirectLightingSaturation": 4.0
+    },
+    "bUsedAsAtmosphereSunLight": true,
+    "LightFunctionMaterial": {
+      "ObjectName": "Material'CloudShadow3'",
+      "ObjectPath": "Octopath_Traveler/Content/Map/Resource/Environment/CloudShadow/CloudShadow3.0"
+    },
+    "LightFunctionScale": {
+      "X": 2687.0,
+      "Y": 3836.7756,
+      "Z": 1024.0
+    },
+    "LightFunctionFadeDistance": 10000.0,
+    "LightGuid": "26D8C13A-4DC233E8-915D0FA1-29CD50E3",
+    "Intensity": 30.0,
+    "LightColor": {
+      "B": 250,
+      "G": 255,
+      "R": 255,
+      "A": 255,
+      "Hex": "FFFFFA"
+    },
+    "RelativeLocation": {
+      "X": -1000.0,
+      "Y": 0.0,
+      "Z": 2500.0
+    },
+    "RelativeRotation": {
+      "Pitch": -32.0,
+      "Yaw": 35.0,
+      "Roll": 92.0
+    },
+    "RelativeScale3D": {
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 1.0
+    },
+    "Mobility": "EComponentMobility::Movable"
+  },
+  "source_postprocess": {
+    "bOverride_WhiteTemp": true,
+    "bOverride_ColorSaturation": true,
+    "bOverride_ColorContrast": true,
+    "bOverride_ColorGamma": true,
+    "bOverride_ColorGain": true,
+    "bOverride_ColorGammaShadows": true,
+    "bOverride_ColorGammaMidtones": true,
+    "bOverride_AmbientCubemapIntensity": true,
+    "bOverride_BloomIntensity": true,
+    "bOverride_BloomThreshold": true,
+    "bOverride_BloomSizeScale": true,
+    "bOverride_VignetteIntensity": true,
+    "bOverride_DepthOfFieldFocalDistance": true,
+    "bOverride_DepthOfFieldFocalRegion": true,
+    "bOverride_DepthOfFieldNearTransitionRegion": true,
+    "bOverride_DepthOfFieldFarTransitionRegion": true,
+    "bOverride_DepthOfFieldScale": true,
+    "bOverride_DepthOfFieldMaxBokehSize": true,
+    "bOverride_DepthOfFieldMethod": true,
+    "bOverride_ScreenSpaceReflectionIntensity": true,
+    "WhiteTemp": 8000.0,
+    "ColorSaturation": {
+      "X": 0.9,
+      "Y": 0.9,
+      "Z": 0.9,
+      "W": 1.0
+    },
+    "ColorContrast": {
+      "X": 0.8,
+      "Y": 0.8,
+      "Z": 0.8,
+      "W": 1.0
+    },
+    "ColorGamma": {
+      "X": 0.6,
+      "Y": 0.6,
+      "Z": 0.6,
+      "W": 1.0
+    },
+    "ColorGain": {
+      "X": 1.2,
+      "Y": 1.2,
+      "Z": 1.2,
+      "W": 1.0
+    },
+    "ColorOffset": {
+      "X": 1.0,
+      "Y": 1.0,
+      "Z": 0.0,
+      "W": 0.0
+    },
+    "ColorGammaShadows": {
+      "X": 1.5,
+      "Y": 1.07925,
+      "Z": 1.005,
+      "W": 1.0
+    },
+    "FilmWhitePoint": {
+      "R": 1.0,
+      "G": 1.0,
+      "B": 1.0,
+      "A": 0.0,
+      "Hex": "FFFFFF"
+    },
+    "BloomIntensity": 0.5,
+    "BloomThreshold": 1.0,
+    "BloomSizeScale": 50.0,
+    "AmbientCubemapIntensity": 0.3,
+    "AmbientCubemap": {
+      "ObjectName": "TextureCube'EnTX_Sky_Plain_Town'",
+      "ObjectPath": "Octopath_Traveler/Content/Map/Resource/Environment/CubeMap/EnTX_Sky_Plain_Town.0"
+    },
+    "AutoExposureMethod": "AEM_Basic",
+    "LensFlareIntensity": 2.0,
+    "LensFlareBokehSize": 10.0,
+    "LensFlareThreshold": 15.0,
+    "LensFlareBokehShape": {
+      "ObjectName": "Texture2D'FxTX_Env_LensFlaresShape_01'",
+      "ObjectPath": "Octopath_Traveler/Content/Map/Resource/Environment/LensFlares/Texture/FxTX_Env_LensFlaresShape_01.0"
+    },
+    "VignetteIntensity": 1.3,
+    "AmbientOcclusionIntensity": 1.0,
+    "AmbientOcclusionRadius": 45.0,
+    "AmbientOcclusionRadiusInWS": true,
+    "AmbientOcclusionPower": 8.0,
+    "AmbientOcclusionBias": 0.5,
+    "DepthOfFieldFocalDistance": 3500.0,
+    "DepthOfFieldNearTransitionRegion": 0.0,
+    "DepthOfFieldFarTransitionRegion": 0.0,
+    "DepthOfFieldScale": 0.5,
+    "DepthOfFieldMaxBokehSize": 5.0,
+    "ScreenSpaceReflectionIntensity": 0.0
+  },
+  "verification": {
+    "unity": "6000.5.2f1",
+    "urp": "17.6.0",
+    "shader_messages": 0,
+    "rendered_mesh_components": 948,
+    "used_materials": 72,
+    "object_collection_candidates": 68,
+    "actual_resolutions": [
+      [
+        1920,
+        1080
+      ],
+      [
+        960,
+        540
+      ]
+    ],
+    "material_key_1": "True -> False -> True observed",
+    "keys_2_3_4": "AO=False, cloud=False, sourceGrade=True observed after real keyboard taps; defaults reset",
+    "cleanup": "Play=False; scene dirty=False; original UniversalRP and Flat ambient restored; research roots=0",
+    "ao": "Depth reconstruction, 0.45m radius, intensity 1, direct contribution 0; visually rendered",
+    "cloud": "Original linear mask; power 6 hypothesis; original projection size; animated offset observed",
+    "grade_candidate": "Gamma .6 maps URP W=-.4; Gain1.2 maps W=.2; too dark in actual view, default unchanged",
+    "editor_performance": "NOT_MEASURED",
+    "player_performance": "NOT_MEASURED"
+  },
+  "limitations": [
+    "Null expression slots and unresolved named connections prevent a complete material graph recovery.",
+    "MPC defaults are recovered; lost arithmetic and runtime collection overrides are not verified.",
+    "SSAO is contact ambient occlusion, not a recovered UE contact shadow ray march.",
+    "Cloud output exponent and panner XY rates are not fully connected in the exported cooked graph.",
+    "Cloud projection coordinate convention, 100m light-function fade, and shadowmap filtering remain approximate.",
+    "URP SSAO does not reproduce UE AO Power8/Bias0.5.",
+    "UE Basic auto exposure, shadow/midtone grading, filmic transform, DOF and bloom kernel remain unconverted.",
+    "Cubemap face orientation and diffuse convolution are still approximate."
+  ]
+}

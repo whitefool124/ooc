@@ -1,0 +1,14 @@
+# Local extracted source data and downloaded/build tooling are reproducible.
+/extracted/
+/scene_data/
+/tools_source/
+/parser/bin/
+/parser/obj/
+/cue4parse_source.zip
+/pak_index.json
+/functions/packages/
+/functions/cloud.json
+/functions/ksobject.json
+/functions/ksobject_master.json
+/functions/object_function.json
+/functions/collection.json

@@ -1,0 +1,3 @@
+FAIL System.InvalidOperationException: Missing button map.node.B1
+  at OCC.Combat.EditorTools.CombatHudRedesignVerification+<Click>d__19.MoveNext () [0x000b3] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\CombatHudRedesignVerification.cs:96 
+  at OCC.Combat.EditorTools.CombatHudRedesignVerification+<Guard>d__14.MoveNext () [0x0005c] in E:\数据库\OCC_Codex\UnityProject\Assets\Game\Editor\CombatHudRedesignVerification.cs:74 

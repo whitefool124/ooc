@@ -1,0 +1,178 @@
+--- E:\数据库\OCC_Codex\Worldbuilding\策划案\OCC_项目总策划案_v1.0.md:before
++++ E:\数据库\OCC_Codex\Worldbuilding\策划案\OCC_项目总策划案_v1.0.md:after
+@@ -1971,13 +1971,13 @@
+ 
+ ### A.2.2 统一像素资产生产流程
+ 
+-战斗外HD-2D内容制作补充（用户确认，2026-10-09）：除设置等系统页面外，游戏内容、容器和按钮位于场景中的实际空间，以独立2D像素资产按前景边沿、承载面、内容物、标签和后景组合，使用同一场景相机形成前后遮挡与深度。不得将旧全屏界面贴图换成受光网格后仍逐帧锁在屏幕坐标上，冒充场景改造；该条覆盖旧版信息页面控件常驻屏幕平面的制作口径。减少建模，优先生产独立的容器、纸页、翻盖、边沿和按钮贴片，少量几何只用于承载、遮挡和光影代理，不为每个格子建立实体盒模型。文字使用清晰的平面文字，并随实际承载物件布置；必要的悬停详情和系统提示可保留屏幕浮层，不能借场景透视牺牲正文阅读或点击命中。非战斗展示物件沿用完整主体加安全边的自适应画布、统一像素簇和来源审核，不能套用战场占格尺寸。玩法、装备拖放、页面操作和存档结果保持不变。
++战斗外HD-2D内容制作补充（用户确认，2026-10-09）：除设置等系统页面外，游戏内容、容器和按钮位于场景中的实际空间，以独立2D像素资产按前景边沿、承载面、内容物、标签和后景组合，使用同一场景相机形成前后遮挡与深度。不得将旧全屏界面贴图换成受光网格后仍逐帧锁在屏幕坐标上，冒充场景改造；该条覆盖旧版信息页面控件常驻屏幕平面的制作口径。尽量少用建模，优先生产独立的容器、纸页、翻盖、边沿和按钮贴片，不为每个格子建立实体盒模型。场景结构与大型场景物件可使用简洁多边形模型，但必须配套强化2D感觉的像素贴图；可见模型和代理均须与像素纸板的画风一致。文字使用清晰的平面文字，并随实际承载物件布置；必要的悬停详情和系统提示可保留屏幕浮层，不能借场景透视牺牲正文阅读或点击命中。非战斗展示物件沿用完整主体加安全边的自适应画布、统一像素簇和来源审核，不能套用战场占格尺寸。玩法、装备拖放、页面操作和存档结果保持不变。
+ 
+ HD-2D 学院庭院样板补充（用户确认，2026-10-08）：战斗采用正面水平偏角0°、俯角45°；永久墙视觉高度为0.65世界单位，逻辑占格与阻挡不变。场景面片统一口径（用户要求所有相关对象一起调整并学习已有游戏，2026-10-08）：单位、独立战场物件、战利品与树木使用同一相机朝向的面片，夹角由90°减相机俯角计算，当前45°俯视对应45°面片地面夹角；脚底或物件底部锚定。此前75°单位单独样板由此规则替代。地面、地表效果与范围保持水平，建筑立面贴合真实楼体，屋顶、墙、台阶、水庭保持真实几何。视觉面片与直立投影面分离：可见面片保持绘制比例，直立面仅投射阴影，不渲染额外颜色。可见面片的深度使用脚底锚定的直立代理，颜色与深度通道采用同一修正，避免面片后倾与墙相交造成横向切断。源纹理不变形，信息标签按实际面片顶点投影。该角度为OCC样板实现选择，并非已有游戏公布参数。背景采用独立学院立面、树木与真实庭院铺地、台阶、水庭组合，共享场景照明，不把整张带烘焙光线的背景作为场景。新增 hd2d_environment_module 仅供非交互环境模块：32 PPU、完整主体加至少1px透明边、画布向32倍数取整、硬Alpha、最多24色；原料仍须内置独立生图、主体网格置信度至少1.2与无几何缩放解码。透视应用验证接触、遮挡、照明与清晰度，源像素检查不变，普通战场物件与未迁移场景的既有门槛不变。
+ 
+ HD-2D 全项目制作口径（用户确认，2026-10-08）：开场主界面、全部战斗外界面、学院地图及战斗场景统一迁移至像素主体与真实3D空间结合的HD-2D方向。此前仅主菜单的HD-2D范围扩展为全项目目标；保留E窗边书桌、独立物件组合、桌面开书流程，以及所有既定玩法、页面内容和存档结果。主菜单与战斗外书桌采用正面俯视、长焦弱透视的微缩场景构图，首个相机样板为俯角35°、水平偏角0°、纵向视野24°；用户补充确认保留旧版正面俯视阅读方向，不采用左右侧偏；开书推进保持相机轴向，不从低机位仰拍或改变物件朝向。战斗镜头另以能辨认所有格子、足点、前后遮挡和目标范围的正面俯视制作样板，不套用侧视回合制的左右站队构图；四向相邻、射程、占格、32 PPU源资产及完整主体规格保持。战斗的地面须铺在真实水平面，单位使用脚底锚定的像素面片，庭院样板夹角以同日补充口径为准，墙与掩体以真实高度和可控遮挡组合；先完成地面投影、射线选格、单位点击、范围提示及反馈位置的同一相机验证，再迁移正式战斗入口。学院路线图保留既定节点与进入操作，信息页面保留清晰的1920×1080二维文字与控件，HD-2D用于其场景承载、物件与动画，不把正文投影为难读的3D文字。
+ 
+-房间、桌面、书本厚度与投影使用实际几何和统一3D光源；像素物件保留独立原料、原生像素、Point采样和现行资产画布，不重采样原料。高清场景输出允许克制景深、发光和环境动态，主要可交互内容保持清晰。景深和光照与场景相机绑定；同时打开的页面必须隔离渲染层、光源影响层和Volume层，隐藏页面释放离屏场景。源资产网格、Alpha、调色板、Importer、原生主体和人工审美门槛不降低。已迁移的场景不再要求整帧等距像素或固定六倍网格，以实际相机中的清晰度、接触、遮挡、一致光照及操作命中验证取代；未迁移场景保留原有检查，不用新口径绕过旧实现的失败。此口径优先于旧有整场景整数显示及仅主菜单例外的表述。主菜单和共用战斗外书桌先建立可玩样板；学院地图与战斗的资产、输入和反馈迁移未完成前，不报告全项目转换完成。
++房间、桌面等场景结构与大型物件按简洁多边形模型加配套像素贴图制作，书本与小物件优先采用像素纸板、厚纸板及分层组合；厚度、投影与统一3D光源服务于2D像素感觉，不以实体建模细节代替贴图；像素物件保留独立原料、原生像素、Point采样和现行资产画布，不重采样原料。高清场景输出允许克制景深、发光和环境动态，主要可交互内容保持清晰。景深和光照与场景相机绑定；同时打开的页面必须隔离渲染层、光源影响层和Volume层，隐藏页面释放离屏场景。源资产网格、Alpha、调色板、Importer、原生主体和人工审美门槛不降低。已迁移的场景不再要求整帧等距像素或固定六倍网格，以实际相机中的清晰度、接触、遮挡、一致光照及操作命中验证取代；未迁移场景保留原有检查，不用新口径绕过旧实现的失败。此口径优先于旧有整场景整数显示及仅主菜单例外的表述。主菜单和共用战斗外书桌先建立可玩样板；学院地图与战斗的资产、输入和反馈迁移未完成前，不报告全项目转换完成。
+ 
+ 除战斗外 HD2D 素材库例外外，OCC 后续像素资产统一使用“独立内置生图原料→主体像素格自动诊断→无缩放解码→角色规格画布→机器与人工审核”的生产方案。图片原料只使用 Codex 内置 `image_gen`，每项资产独立生成；提示词明确物品或人物身份、游戏用途、视角、材质故事和统一大像素簇语言，但不微观规定部件数量、部件位置或生成图的精确目标尺寸。生成图必须让完整主体使用同一套方形宏像素格；背景棋盘格或透明底不得参与主体像素间距判断。
+ 
+@@ -2013,7 +2013,7 @@
+ 
+ 适用与输出。 本条适用于剧情与肉鸽共用的已迁移HD-2D主界面、战斗外内容、学院地图与战斗。未迁移场景沿用A.2旧像素输出；已迁移场景使用高清输出，不受整帧320×180、六倍整数显示和全局关闭HDR约束。源像素采样、资产画布、PPU、玩法占格与输出分辨率分别登记。源Point采样不等于整帧Point输出；不得以整帧低清放大替代真实空间。系统设置页保留清晰二维控件。
+ 
+-相机与真实空间。 书桌沿用俯角35°、水平偏角0°、纵向视野24°；战斗沿用俯角45°、水平偏角0°及永久墙0.65世界单位。上述是OCC已批准样板参数，不是参考游戏公布参数。相机距离、目标、裁剪与合法缩放范围随配置记录。单位、独立战场物件和树木沿用同相机朝向面片、底部锚点及独立直立深度/投影代理；地面、地表效果和范围位于实际水平面。可见颜色和深度必须一致，不能横切角色、浮地或让点击与格位错位。
++相机与真实空间。 书桌沿用俯角35°、水平偏角0°、纵向视野24°；战斗沿用俯角45°、水平偏角0°及永久墙0.65世界单位。上述是OCC已批准样板参数，不是参考游戏公布参数。相机距离、目标、裁剪与合法缩放范围随配置记录。单位、独立战场物件和树木沿用同相机朝向面片、底部锚点及独立直立深度/投影代理；地面、地表效果和范围位于实际水平面。可见颜色和深度必须一致，不能横切角色、浮地或让点击与格位错位。 建模与贴图（用户确认，2026-10-10）：尽量少用建模，常规内容优先使用不同角度的独立像素纸板、厚纸板及分层组合。建模以简洁的多边形结构为主，主要用于场景本身和大型场景物件；每个可见模型必须配套强化2D感觉的像素贴图，贴图承担材质、色簇与主要细节，不用纯色模型、几何堆叠或高密度曲面代替像素美术。房间、地面、墙体和大型书桌可按此范围使用模型；杯碟、灯具、纸页等常规小物件优先使用独立像素纸板或厚纸板。真实相机、光照、深度和阴影服务于统一的2D像素表现。每个样板提交可见模型清单、使用理由、对应贴图与实际应用证据；无配套贴图、模型细节主导画面或与纸板画风不一致均阻断品质晋升。
+ 
+ 像素资产分类。 战场单位、地块、战场物件及功能图标保留现行原生规格与审核；战斗外HD2D文字载体和场景陈设按2026-10-09素材库例外制作，不强制固定宏像素格、1.2置信度、16色、硬Alpha或无缩放。每项保留独立内置生图原料、处理记录和来源。禁止烘焙外部窗影、光束、光晕或场景投影；资产自身柔和体积明暗允许保留，但实际主光不得形成相反的第二套方向性照明。
+ 
+@@ -2029,7 +2029,7 @@
+ 
+ 批准样板。 第一套沿用正式入口的整备书桌，覆盖装备/术式查看、悬停、灯光调节和返回；第二套沿用正常配置的雨后灯庭战斗，覆盖选格、移动、攻击/施术、敌人详情、战果和返回。1920×1080及960×540均检查，记录全景、近景、默认图、无后处理对照和运动证据。固定机位、实际状态与配置版本，不能用内部方法或临时状态代替主流程。未通过人工审美与正常流程前，样板仍为QA_PENDING。
+ 
+-运行稳定与性能。 验证静止、平移/缩放、动作、切页与窗口变化，检查纹理爬动、边缘闪烁、重影、阴影跳变、曝光跳变、失焦和信息漂移。相机、灯和Volume影响层隔离，隐藏页面释放离屏资源。测量目标设备、分辨率、质量档、CPU/GPU帧时间、P95帧时间、内存及切换峰值；目标设备、帧率和P95预算先登记再判定，不凭平均帧率宣称稳定。性能预算未锁定时不得晋升批准配置。
++运行稳定与性能。 验证静止、平移/缩放、动作、切页与窗口变化，检查纹理爬动、边缘闪烁、重影、阴影跳变、曝光跳变、失焦和信息漂移。相机、灯和Volume影响层隔离，隐藏页面释放离屏资源。测量目标设备、分辨率、质量档、CPU/GPU帧时间、P95帧时间、内存及切换峰值；目标设备、帧率和P95预算先登记再判定，不凭平均帧率宣称稳定。性能预算未锁定时不得晋升批准配置。 首个书桌样板性能基准已由用户确认（2026-10-10）：当前电脑，1920×1080与960×540，目标60 FPS，P95帧时间不超过16.7ms；登记实际硬件与质量档，Editor和正式试玩包分开测量与报告，Editor结果不能代替试玩包性能验收。
+ 
+ 两类独立验收。 机器检查合同版本、配置指纹、参数、资产分类、证据路径与哈希、适用场景及运行报告完整性；不能判定审美。人工分别确认空间接触、材质统一、照明融合、信息阅读、运动稳定和参考表现方向，记录审核人、日期、结论与依据。无证据不记通过；历史截图不证明当前版本。配置、源资产或相关实现指纹改变后，受影响的旧通过失效，须使用新证据。
+ 
+--- E:\数据库\OCC_Codex\Worldbuilding\数据表\OCC_美术与界面规格表_v1.0.csv:before
++++ E:\数据库\OCC_Codex\Worldbuilding\数据表\OCC_美术与界面规格表_v1.0.csv:after
+@@ -106,8 +106,10 @@
+ ART-COMBAT-PORTRAIT-FRAME-34,界面,战斗身份头像框,独立32×32完整主体加安全边交付34×34；最多12色；硬Alpha；1px安全边；1920与960分别4倍与2倍,象牙暖灰炭墨黄铜,内孔透明；当前行动选中焦点与敌我条独立叠加；不把反馈颜色烘焙进头像
+ 
+ ART-HD2D-COURTYARD,非交互环境,学院庭院HD2D环境,正面0°俯角45°永久墙0.65单位；单位物件树木同相机朝向夹角45°；水平地面与楼体贴合立面；直立投影面分离；独立环境模块32PPU自适应32倍数画布,暖石材青灰屋面绿植水庭,硬Alpha至少1px安全边最多24色；主体网格置信度至少1.2；透视接触遮挡照明清晰度验收
+-ART-HD2D-RUNTIME,全局表现,正式入口HD2D接入,开局和共用战斗外书桌及学院路线图和现有战场默认使用；不同战斗含同尺寸切换重开读档刷新；范围水纹尘点贴水平地面而文字控件保持二维,原有像素主体与统一场景光影,真实模型和同相机投影；放大视图按视觉足点最小跟随；隐藏场景释放；渲染目标匹配窗口；静态遮蔽合批；静止模型按变化和环境动画更新而动作逐帧更新；接入状态不等于品质批准，APPROVED_BASELINE须通过A.2.4当前证据与人工审美
++ART-HD2D-RUNTIME,全局表现,正式入口HD2D接入,开局和共用战斗外书桌及学院路线图和现有战场默认使用；不同战斗含同尺寸切换重开读档刷新；范围水纹尘点贴水平地面而文字控件保持二维,原有像素主体与统一场景光影,场景及大型物件用简洁多边形模型与配套像素贴图；其他内容优先纸板厚纸板；同相机投影；放大视图按视觉足点最小跟随；隐藏场景释放；渲染目标匹配窗口；静态遮蔽合批；静止场景物件按变化和环境动画更新而动作逐帧更新；接入状态不等于品质批准，APPROVED_BASELINE须通过A.2.4当前证据与人工审美
+ ART-HD2D-UNIT-INFO,战场表现,HD2D单位信息精简,仅保留脚下生命个人魔力条和左侧护盾图标数字；无额外底板及姓名意图黑框或头顶状态徽记,地块悬停与选中敌人详情保留真实状态公开意图和操作信息,用户确认2026-10-09；覆盖HD2D常驻意图及头顶状态旧要求；范围路线落点不变
+-ART-HD2D-CONTENT-LAYERS,战斗外表现,场景空间内容容器与按钮,除设置等系统页外使用独立2D像素资产在实际场景坐标分层；前景边沿承载面内容标签后景共用相机；文字随承载物布置；悬停详情可用屏幕浮层,暖纸皮革木构黄铜与学院材质,少建模多生产2D资产；不以旧屏幕贴图受光网格冒充迁移；仅保留承载遮挡光影代理；像素源网格和正式资产审核不变；必须验证接触遮挡可读性和鼠标命中
++ART-HD2D-CONTENT-LAYERS,战斗外表现,场景空间内容容器与按钮,除设置等系统页外使用独立2D像素资产在实际场景坐标分层；前景边沿承载面内容标签后景共用相机；文字随承载物布置；悬停详情可用屏幕浮层,暖纸皮革木构黄铜与学院材质,尽量少用建模；优先独立像素纸板厚纸板；模型主要用于场景与大型物件且必须配套像素贴图强化2D感觉；不以纯色模型或几何堆叠代替像素美术；不以旧屏幕贴图受光网格冒充迁移；源分类审核不变；验证接触遮挡阅读与输入
+ ART-HD2D-DESK-LAMP,战斗外表现,整备桌以太晶灯与亮度调节,独立像素晶体黄铜支架瓷座；原生画布按剪影与安全边适配；场景中32PPU；底座旁亮度滑条,柔和暖琥珀晶体与纸面黄铜相协调；光晕由渲染产生不烘进素材,2026-10-09用户授权；默认40%；0关闭；100上限；拖动即时生效松开或离页记住本机；装备与术式整备共用；不改战斗和本轮存档；新增素材须独立机器与人工审美审核
+ ART-HD2D-QUALITY-20261010,共用表现,HD2D正式技术品质门槛,总案A.2.4；书桌与战斗两套批准样板；1920×1080和960×540,共用配置／版本／文件指纹／静态及运动证据／目标设备预算／人工审美,共享渲染变更验收两套样板；局部改动验证受影响配置；旧证据指纹改变即失效；阻断项不得平均抵消；现有样板QA_PENDING
++ART-HD2D-MODELING-20261010,共用表现,建模与2D质感,独立像素纸板厚纸板优先；简洁多边形模型主要用于场景本身及大型场景物件,可见模型必须配套统一像素贴图；材质色簇主要细节由贴图承担,样板须提交模型清单使用理由对应贴图及应用证据；纯色模型几何细节主导或画风不一致阻断批准；书桌可建模但不自动通过；杯碟灯具纸页优先纸板厚纸板
++ART-HD2D-DESK-PERF-20261010,性能验收,首个书桌样板预算,当前电脑；1920×1080与960×540；60 FPS；P95≤16.7ms,记录实际设备及质量档,用户确认2026-10-10；Editor与正式试玩包分别测量；未测量不记通过
+--- E:\数据库\OCC_Codex\Tools\OCCArt\occ_art_contract_v1.json:before
++++ E:\数据库\OCC_Codex\Tools\OCCArt\occ_art_contract_v1.json:after
+@@ -2500,9 +2500,9 @@
+     ],
+     "source_asset_rules_unchanged": "battlefield source rules retained; noncombat_hd2d library uses authorized 2026-10-09 exception",
+     "content_production": {
+-      "authorized": "2026-10-09 user: game content, containers and buttons live in scene space; reduce modeling and prioritize independent 2D assets",
++      "authorized": "2026-10-10 final user correction: minimize modeling; polygonal models mainly for environments and large props; matching pixel textures reinforce 2D appearance",
+       "policy": "layered native pixel sprites at authored world poses; foreground, support, content and label layers share scene camera and depth",
+-      "geometry": "minimal support, occlusion and lighting proxies; do not model each UI cell or decorate a screen-locked panel",
++      "geometry": "pixel cards and thick cards preferred; simple polygonal environment/large-prop models require matching pixel textures; no untextured visible primitives or modeled detail substituting for pixel art",
+       "settings": "retain system screen UI",
+       "acceptance": "A.2.4 scene quality gate plus role-specific source QA; noncombat library exception retained"
+     },
+@@ -2519,7 +2519,7 @@
+       "pitch": 45,
+       "yaw": 0,
+       "permanent_wall_height": 0.65,
+-      "background": "independently_generated_native_modules_and_true_courtyard_geometry",
++      "background": "independent pixel modules; simple polygonal environment structures paired with matching pixel textures",
+       "unit_ground_angle": 45,
+       "unit_pivot": "native_foot_anchor",
+       "sprite_orientation": {
+@@ -2548,11 +2548,11 @@
+         "depth": "upright_foot_anchored_proxy_in_forward_and_depth_passes"
+       }
+     },
+-    "quality_status": "QA_PENDING: implementation_status is historical connection status, not approved visual quality"
++    "quality_status": "QA_PENDING: connection status is not quality approval; current desk needs textured-model/card construction review"
+   },
+   "hd2d_quality_policy": {
+     "schema": "occ-hd2d-quality-policy-v1",
+-    "version": "2026-10-10.1",
++    "version": "2026-10-10.2",
+     "canonical_section": "A.2.4 HD-2D 技术表现与品质门槛",
+     "baseline_registry": "Tools/OCCArt/hd2d_baselines_v1.json",
+     "validator": "Tools/OCCArt/validate_hd2d_quality.py",
+@@ -2574,7 +2574,8 @@
+       "lighting_integration",
+       "reading_input",
+       "motion_stability",
+-      "reference_direction"
++      "reference_direction",
++      "model_texture_2d_consistency"
+     ],
+     "shared_changes_require": [
+       "desk",
+@@ -2660,7 +2661,23 @@
+       "fill_light",
+       "local_lights",
+       "material_profile",
+-      "source_sampling"
+-    ]
++      "source_sampling",
++      "construction_manifest"
++    ],
++    "construction_policy": {
++      "priority": "pixel_cards_and_thick_cards",
++      "model_scope": [
++        "environment_structure",
++        "large_scene_prop"
++      ],
++      "model_style": "simple_polygonal",
++      "visible_model_texture_required": true,
++      "evidence": "bound visible-model inventory with rationale, geometry/material/texture inputs, application captures and genuine human review",
++      "blockers": [
++        "untextured_visible_model",
++        "geometry_detail_dominates_pixel_art",
++        "model_card_style_mismatch"
++      ]
++    }
+   }
+ }
+--- E:\数据库\OCC_Codex\Tools\OCCArt\hd2d_baselines_v1.json:before
++++ E:\数据库\OCC_Codex\Tools\OCCArt\hd2d_baselines_v1.json:after
+@@ -5,7 +5,24 @@
+       "scene_kind": "desk",
+       "status": "QA_PENDING",
+       "configuration": {},
+-      "reason": "Existing runtime connection does not establish visual approval; current captures, motion, performance and human review are required."
++      "reason": "QA_PENDING: current stage source contains untextured visible primitive furniture and modeled cup; rebuild/review card and textured polygon construction before sample promotion.",
++      "performance_budget": {
++        "device": "current_computer_2026-10-10",
++        "quality_tier": "pending_actual_configuration",
++        "approved_by": "user",
++        "approved_at": "2026-10-10",
++        "resolutions": {
++          "1920x1080": {
++            "target_fps": 60,
++            "p95_budget_ms": 16.7
++          },
++          "960x540": {
++            "target_fps": 60,
++            "p95_budget_ms": 16.7
++          }
++        },
++        "measurement_policy": "record actual hardware and tier; Editor and standalone Player separately; current labels require measured device identity before promotion"
++      }
+     },
+     "battlefield-v1": {
+       "scene_kind": "battlefield",
+--- E:\数据库\OCC_Codex\.codex\skills\occ-hd2d-quality\SKILL.md:before
++++ E:\数据库\OCC_Codex\.codex\skills\occ-hd2d-quality\SKILL.md:after
+@@ -29,3 +29,6 @@
+ ## Delivery
+ 
+ Report what users can complete, what was tested, which baseline/inputs were used and the worst remaining defect. Record technical/runtime and human outcomes independently. Until approved samples exist, say quality control is installed and samples are pending; do not claim Octopath-equivalent quality or promise that automatic validation guarantees beauty.
++
++
++OCC modeling policy (final user correction, 2026-10-10): minimize modeling; prefer pixel cards/thick cards. Simple polygonal models mainly serve environments and large scene props, and every visible model needs matching pixel textures reinforcing the 2D style. Before promoting a sample, bind a construction manifest listing model rationale, geometry/material/texture inputs and application evidence; review model/card consistency. A table is not rejected merely for being modeled; untextured visible primitives or geometry-driven detail are quality failures.
+--- E:\数据库\OCC_Codex\AGENTS.md:before
++++ E:\数据库\OCC_Codex\AGENTS.md:after
+@@ -88,3 +88,5 @@
+ - 交付前运行 `python Tools/OCCArt/validate_hd2d_quality.py <当前证据报告.json>`；缺证据、指纹改变、关键失败、未获真实人工审美均阻断APPROVED_BASELINE。报告绑定本次改变的Prefab、Shader、代码、配置及资产。机器通过不能替代实机与人工。
+ - 固定320×180／六倍整帧和全局关闭HDR只用于未迁移像素场景；已迁移HD-2D按A.2.4；战斗外素材库按2026-10-09例外。后补适用范围优先于旧通用步骤，不能降低战场源资产门槛。
+ - 品质回退保留上一批准配置，关键失败先修原因，不批量扩展候选。现有接入记录不证明新规范验收通过；首套样板需真实正常流程、运动、性能预算与人工审核。
++
++- **HD-2D建模口径（用户最终修正，2026-10-10）**：尽量少用建模，优先不同角度的像素纸板和厚纸板；模型以简洁多边形为主，主要用于场景本身与大型场景物件，且必须配套像素贴图强化2D感觉。书桌可在此范围建模，小物件优先纸板；可见模型清单、用途、贴图及应用效果纳入A.2.4验收，不把建模本身判错，也不以纯色模型或几何堆叠代替像素美术。
+--- C:\Users\FNHF\.codex\skills\occ-art-direction\SKILL.md:before
++++ C:\Users\FNHF\.codex\skills\occ-art-direction\SKILL.md:after
+@@ -30,3 +30,6 @@
+ ## Deliverable
+ 
+ Return: asset role; player reading; visual direction; locked invariants; final prompt; exclusions; target-size review checklist. For explorations, also explain the differentiating art-direction decision for each option.
++
++
++OCC modeling policy (final user correction, 2026-10-10): minimize modeling; prefer pixel cards/thick cards. Simple polygonal models mainly serve environments and large scene props, and every visible model needs matching pixel textures reinforcing the 2D style. Before promoting a sample, bind a construction manifest listing model rationale, geometry/material/texture inputs and application evidence; review model/card consistency. A table is not rejected merely for being modeled; untextured visible primitives or geometry-driven detail are quality failures.

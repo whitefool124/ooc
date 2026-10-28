@@ -1,0 +1,205 @@
+--- Hd2DLoadoutScene.before.cs
++++ Hd2DLoadoutScene.cs
+@@ -46,7 +46,7 @@
+             // existing desk meshes; do not add a model for each UI element.
+             foreach(var item in stage.GetComponentsInChildren<Transform>(true))
+                 if(item.name=="桌面实体"||item.name.StartsWith("桌面木板"))
+-                    item.localScale=new Vector3(item.name=="桌面实体"?7.8f:7.75f,item.localScale.y,item.localScale.z);
++                    item.localScale=new Vector3(item.name=="桌面实体"?9.6f:9.55f,item.localScale.y,item.localScale.z);
+             stage.GetComponent<Hd2DDeskArtCandidate>()?.RefreshModelUvs();
+             Hd2DContainerStyle.PrepareControls(gameObject);
+             sceneRoot=new GameObject("场景空间整备陈列");sceneRoot.transform.SetParent(stage.transform,false);
+@@ -57,16 +57,21 @@
+             {
+             // The grid is a layout and input plane, not another opaque tray.
+             foreach(var image in view.BackpackGrid.GetComponents<Image>())image.color=Color.clear;
+-            backdrop.SetDocumentFraming(.15f,.28f);
+-            Place(view.transform.Find("装备工作区/战术栏工作区") as RectTransform,new Vector3(-.60f,1.74f,.10f),new Vector3(58,0,0),1.40f);
++            backdrop.SetDocumentFraming(.15f,.10f);
++            Place(view.transform.Find("装备工作区/战术栏工作区") as RectTransform,new Vector3(-.10f,1.74f,-.90f),new Vector3(58,0,0),1.40f);
+             var slotCentre=Vector2.zero;
+             foreach(var slot in view.EquipmentSlots)slotCentre+=slot.Root.anchoredPosition;
+             slotCentre/=view.EquipmentSlots.Length;
+             foreach(var slot in view.EquipmentSlots)
+-                slot.Root.anchoredPosition=slotCentre+(slot.Root.anchoredPosition-slotCentre)*.90f;
+-            Place(view.CharacterContentRoot.parent as RectTransform,new Vector3(-2.70f,2.55f,-.10f),new Vector3(16,0,0),1.4375f);
+-            Place(view.transform.Find("装备工作区") as RectTransform,new Vector3(-.40f,2.32f,.65f),new Vector3(12,0,0),1.50f);
+-            Place(view.BackpackPanel,new Vector3(2.25f,2.75f,-.70f),new Vector3(58,0,0),1.20f);
++            {
++                slot.Root.anchoredPosition=slotCentre+(slot.Root.anchoredPosition-slotCentre)*1.44f;
++                slot.Root.sizeDelta=new Vector2(240,240);
++            }
++            foreach(var slot in view.TacticalSlots)slot.Root.sizeDelta=new Vector2(190,170);
++            Place(view.CharacterContentRoot.parent as RectTransform,new Vector3(-3.25f,2.55f,-.10f),new Vector3(16,0,0),1.4375f);
++            Place(view.transform.Find("装备工作区") as RectTransform,new Vector3(-.15f,2.45f,.65f),new Vector3(12,0,0),1.50f);
++            Place(view.BackpackPanel,new Vector3(3.00f,2.75f,-.70f),new Vector3(58,0,0),1.20f);
++            PrepareNativeCharacter(view);
+             foreach(var label in view.CharacterContentRoot.parent.GetComponentsInChildren<Text>(true))
+                 if(label.text=="角色状态")label.rectTransform.anchoredPosition+=new Vector2(0,-20);
+             var backpackSurface=view.BackpackPanel.GetComponent<Image>();
+@@ -104,8 +109,10 @@
+                 ApplyPlaque(button,true);
+                 Place(button.transform as RectTransform,new Vector3(1.90f,1.32f,-1.65f),new Vector3(58,0,0));
+             }
+-            BuildDossier(stage);
++            if(view!=null)BuildDossier(stage);
++            else PrepareSpellReading();
+             AddNativeFrames(stage,view);
++            SizeNativeArtwork();
+             if(view!=null)view.BackpackPanel.GetComponent<Image>().color=new Color(.85f,.77f,.64f,1);
+             foreach(var label in GetComponentsInChildren<Text>(true))
+             {
+@@ -119,7 +126,7 @@
+                 for(var parent=label.transform.parent;parent!=null&&parent!=sceneRoot.transform;parent=parent.parent)
+                     if(parent.TryGetComponent<Image>(out var surface)&&surface.color.a>.85f)
+                     {onPaper=surface.sprite==null||(surface.GetComponent<Hd2DContainerStyle>()!=null&&surface.sprite.texture.name!="action_plaque");break;}
+-                label.color=onPaper||label.name=="档案册页签"?ArchiveUiStyle.Ink:new Color(.98f,.90f,.71f);
++                label.color=onPaper||label.name=="档案册页签"||label.name=="角色栏标题"?ArchiveUiStyle.Ink:new Color(.98f,.90f,.71f);
+             }
+             foreach(var overlayImage in GetComponentsInChildren<Image>(true))overlayImage.raycastTarget=false;
+             stage.lampLight.enabled=false;
+@@ -128,8 +135,18 @@
+             {var item=stage.transform.Find(name);if(item!=null)item.gameObject.SetActive(false);}
+             var lightObject=new GameObject("整备陈列柔光",typeof(Light));lightObject.transform.SetParent(sceneRoot.transform,false);
+             lightObject.transform.position=stage.transform.TransformPoint(new Vector3(1,4,-2));
+-            var light=lightObject.GetComponent<Light>();light.type=LightType.Point;light.range=10;light.intensity=12;
++            var light=lightObject.GetComponent<Light>();light.type=LightType.Point;light.range=10;light.intensity=2.5f;
+             light.color=new Color(.96f,.98f,1);light.cullingMask=1<<stage.gameObject.layer;light.shadows=LightShadows.None;
++            foreach(var roomLight in stage.GetComponentsInChildren<Light>(true))
++            {
++                if(roomLight.name=="窗外统一日光")
++                {
++                    roomLight.intensity=1.10f;roomLight.color=new Color(1,.97f,.91f);
++                    roomLight.transform.localRotation=Quaternion.Euler(50,-25,0);
++                }
++                else if(roomLight.name=="窗边柔和补光")roomLight.intensity=2.4f;
++                else if(roomLight.name=="室内暖补光")roomLight.intensity=1.2f;
++            }
+             AddTaskLamp(stage);
+             Canvas.ForceUpdateCanvases();
+             int layer=0;
+@@ -149,15 +166,103 @@
+                 face.transform.localPosition=new Vector3(0,0,.7f);
+                 face.GetComponent<MeshFilter>().sharedMesh=mesh;
+                 var material=new Material(stage.bookLitMaterial){mainTexture=image.mainTexture,color=image.color};
+-                material.SetFloat("_Smoothness",.08f);materials.Add(material);
++                material.SetFloat("_Smoothness",.025f);material.SetFloat("_Metallic",0);materials.Add(material);
+                 var renderer=face.GetComponent<MeshRenderer>();renderer.sharedMaterial=material;
+                 renderer.shadowCastingMode=ShadowCastingMode.On;renderer.receiveShadows=true;
++                // Flat cell guides sit on the case paper; they are not elevated objects.
++                if(image.name.StartsWith("背包格_"))renderer.shadowCastingMode=ShadowCastingMode.Off;
+                 sources.Add(image);faces.Add(renderer);image.canvasRenderer.SetAlpha(0);
+                 groups.Add(image.GetComponentInParent<CanvasGroup>());
+                 if(image.GetComponent<Button>()!=null||(view!=null&&image==view.BackpackPanel.GetComponent<Image>()))
+                     AddContactShadow(image,mesh,stage);
+                 // Sprites carry the visible form. Geometry is reserved for the
+                 // actual case support, not a separate box model for every cell.
++            }
++        }
++        private void PrepareNativeCharacter(RogueLoadoutEquipmentView view)
++        {
++            var root=view.CharacterContentRoot;
++            Text passiveName=null,passiveSummary=null,passiveHeading=null;
++            foreach(var label in root.GetComponentsInChildren<Text>(true))
++            {
++                if(label.name=="被动名称")passiveName=label;
++                if(label.name=="被动说明")passiveSummary=label;
++                if(label.name=="被动标题")passiveHeading=label;
++            }
++            if(passiveName!=null&&passiveName.text=="尚未获得被动术式")
++            {
++                if(passiveHeading!=null)passiveHeading.text="被动：暂无";
++                passiveName.gameObject.SetActive(false);
++                if(passiveSummary!=null)passiveSummary.gameObject.SetActive(false);
++            }
++            foreach(var image in root.GetComponentsInChildren<Image>(true))
++                if(image.name=="角色像素像")
++                {
++                    image.sprite=Resources.Load<Sprite>(FormalArtRegistry.UnitPath("hero"));
++                    if(image.transform.parent is RectTransform portrait)
++                        portrait.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,400);
++                }
++            foreach(var rect in root.GetComponentsInChildren<RectTransform>(true))
++            {
++                float y=rect.name=="资源_生命"||rect.name=="资源_魔力"?-480:
++                    rect.name=="资源_金币"||rect.name=="资源_贡献"?-552:
++                    rect.name=="被动标题"?-624:rect.name=="被动名称"?-656:
++                    rect.name=="被动说明"?-706:float.NaN;
++                if(!float.IsNaN(y))rect.anchoredPosition=new Vector2(rect.anchoredPosition.x,y);
++            }
++        }
++        private void PrepareSpellReading()
++        {
++            // Compact rows carry the slot number and costs. The selected spell
++            // keeps its native-sized illustration in the full detail panel.
++            var work=sceneRoot.transform.Find("术式工作区 场景承载/术式工作区");
++            if(work!=null)
++                foreach(var image in work.GetComponentsInChildren<Image>(true))
++                    if(image.name=="操作图标")image.color=Color.clear;
++            if(work!=null)
++                foreach(var button in work.GetComponentsInChildren<Button>(true))
++                    foreach(var label in button.GetComponentsInChildren<Text>(true))
++                    {
++                        label.rectTransform.anchoredPosition=new Vector2(22,label.rectTransform.anchoredPosition.y);
++                        label.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,438);
++                    }
++            var details=sceneRoot.transform.Find("术式详情 场景承载/术式详情");
++            if(details!=null)
++                foreach(var image in details.GetComponentsInChildren<Image>(true))
++                    if(image.name=="图标"&&image.transform.parent.name!="术式图标")
++                    {
++                        image.color=Color.clear;
++                        var label=image.transform.parent.Find("读数")?.GetComponent<Text>();
++                        if(label!=null){label.rectTransform.anchoredPosition=new Vector2(0,-12);label.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,164);}
++                    }
++        }
++        private void SizeNativeArtwork()
++        {
++            foreach(var image in sceneRoot.GetComponentsInChildren<Image>(true))
++            {
++                var sprite=image.sprite;
++                if(sprite==null||image.color.a<.01f||image.GetComponent<Hd2DContainerStyle>()!=null||
++                    image.type!=Image.Type.Simple)continue;
++                if(image.name=="语义图标")
++                {
++                    // Compact resource lines already name the resource explicitly.
++                    image.color=Color.clear;
++                    var label=image.transform.parent.Find("读数")?.GetComponent<Text>();
++                    if(label!=null)
++                    {
++                        label.rectTransform.anchoredPosition=new Vector2(14,-12);
++                        label.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,174);
++                    }
++                    continue;
++                }
++                var rect=image.rectTransform;
++                var scale=rect.lossyScale;
++                if(Mathf.Abs(scale.x)<.00001f||Mathf.Abs(scale.y)<.00001f)continue;
++                var centre=rect.TransformPoint(rect.rect.center);
++                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal,sprite.rect.width/(32*Mathf.Abs(scale.x)));
++                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical,sprite.rect.height/(32*Mathf.Abs(scale.y)));
++                rect.position+=centre-rect.TransformPoint(rect.rect.center);
++                image.preserveAspect=true;
+             }
+         }
+         private void AddContactShadow(Image image,Mesh mesh,MainMenuHd2DStage stage)
+@@ -230,7 +335,7 @@
+             text.raycastTarget=false;var labelRect=text.rectTransform;
+             labelRect.anchorMin=new Vector2(.05f,.2f);labelRect.anchorMax=new Vector2(.47f,.8f);
+             labelRect.offsetMin=labelRect.offsetMax=Vector2.zero;
+-            Place(rect,new Vector3(-.70f,1.75f,-1.50f),new Vector3(58,0,0),.8f,false);
++            Place(rect,new Vector3(-2.70f,1.75f,-1.00f),new Vector3(78,0,0),.8f,false);
+         }
+         private void PrepareReviewTray(RogueLoadoutEquipmentView view)
+         {
+--- Hd2DLoadoutScene.Art.before.cs
++++ Hd2DLoadoutScene.Art.cs
+@@ -77,7 +77,7 @@
+             ownedArtwork.Add(sprite);
+             var lamp=new GameObject("独立2D以太晶灯",typeof(SpriteRenderer));lamp.layer=stage.gameObject.layer;
+             lamp.transform.SetParent(sceneRoot.transform,false);
+-            lamp.transform.position=stage.transform.TransformPoint(new Vector3(-4.15f,1.37f,-.05f));
++            lamp.transform.position=stage.transform.TransformPoint(new Vector3(-4.50f,1.425f,-.05f));
+             lamp.transform.localScale=Vector3.one;
+             lamp.transform.rotation=stage.transform.rotation*Hd2DViewProfile.DioramaRotation;
+             var renderer=lamp.GetComponent<SpriteRenderer>();renderer.sprite=sprite;

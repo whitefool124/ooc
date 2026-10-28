@@ -1,0 +1,17 @@
+{
+  "schema": "occ-hd2d-baselines-v1",
+  "baselines": {
+    "desk-v1": {
+      "scene_kind": "desk",
+      "status": "QA_PENDING",
+      "configuration": {},
+      "reason": "Existing runtime connection does not establish visual approval; current captures, motion, performance and human review are required."
+    },
+    "battlefield-v1": {
+      "scene_kind": "battlefield",
+      "status": "QA_PENDING",
+      "configuration": {},
+      "reason": "Current normal-entry validation and human review are not available for this new quality policy."
+    }
+  }
+}

@@ -1,0 +1,1 @@
+Reconstructed pre-hook content by removing only this task's audit hook; not a timestamped original copy.

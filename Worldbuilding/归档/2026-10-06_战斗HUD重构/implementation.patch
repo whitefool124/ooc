@@ -1,0 +1,1190 @@
+--- before/AGENTS.md
++++ AGENTS.md
+@@ -63,7 +63,7 @@
+ 
+ - 涉及美术或界面改动时，按需读 `Worldbuilding/策划案/OCC_项目总策划案_v1.0.md` 第5节“界面与表现系统”和文末“附录 A 美术规范与视觉反馈”，以及 `Worldbuilding/数据表/OCC_美术与界面规格表_v1.0.csv`。
+ - `OCC_项目总策划案_v1.0.md` 是唯一活动美术规范源；归档中的专项规范、历史简报、资产清单和旧 manifest 只能追溯，不得覆盖。发现冲突时先修正总策划案、规格数据表与机器镜像 `Tools/OCCArt/occ_art_contract_v1.json`，不得自行选择有利口径。
+-- 当前战斗 UI 基准为 1920×1080、左侧地图 75%、右侧 HUD 25%。
++- 当前战斗 UI 基准为1920×1080；底部指令区以上战场使用完整宽度，人物状态在左上，预计行动顺序在顶部偏右，右侧行动值浮层默认收起、悬停展开，不挤压地图或改变镜头（用户确认，2026-10-06）。
+ - 批准的直接图像生成只能产生可追溯的独立原料；原料不得直接进入 Unity。每项新美术必须先建立 `occ-art-manifest-v1`，通过 `Tools/OCCArt/validate_occ_art_asset.py`、1×／4×／灰阶／棋盘格、实际应用接触和人工审美后才可成为 `FORMAL_CANDIDATE`；完成稳定GUID与Importer／运行时复核后才是 `FORMAL`。
+ - 图片生成只使用 Codex 内置 `image_gen`；停用 EasyCLI、localhost 图像服务、私有 relay 与自动回退。用户要求修改美术时重新生成独立原料，不以程序绘图、重着色或旧原料变形代替；学院永久墙拼接图块按总案 A.2.2 已授权例外，以独立生图作材质方向、在原生网格逐像素制作，不冒充生图解码结果。战场地面以原生32×32为逻辑格基线，多格地表使用`(W×32)×(H×32)`；外沿地块使用32×40，其中下方8px为不参与交互的外立面。单位和透明物件保持32 PPU，逻辑占格与视觉画布分离；画布按主体无损容纳并向32倍数取整，常规人形默认32×64，单格宝箱等物件可使用64×64视觉画布并以底部中心锚定所属格。透明物件与单位须保留安全边、硬Alpha、有限调色板及最终网格一像素外轮廓；不得为了塞入32×32而缩小或删除主体细节。
+ - OCC 后续所有像素资产统一执行 `Tools/OCCArt/native32_generation_profiles.json` 与总案 A.2.2：除已授权的学院永久墙拼接图块外，每项及每次重试使用独立内置生图原料；完整主体必须采用单一方形宏像素格；从主体本身推断网格且置信度至少1.2。失败不得放宽阈值，最多三轮并只修正已识别维度。解码时禁止几何缩放、插值、抖色和新增颜色；固定尺寸角色保持合同尺寸，单位与透明战场物件采用32 PPU自适应32倍数画布。普通单格物件若需超过64×64视觉画布必须重新审核其剪影与用途。机器通过、人工审美、Unity导入与运行时验证仍是独立门槛。
+--- before/UnityProject/Assets/Game/Runtime/Presentation/CombatEntrySequencePresentation.cs
++++ UnityProject/Assets/Game/Runtime/Presentation/CombatEntrySequencePresentation.cs
+@@ -37,8 +37,8 @@
+         private const float RevealZoomScale = 1.15f;
+         private const float OverlaySortingOffset = -10f;
+         private const float StartNoticeHoldSeconds = 1.3f;
+-        // The goal box sits just under the combat header and inside the board's left edge.
+-        private const float ObjectiveTopInset = -92f;
++        // Keep the goal box and its collapsed tab below the left-top hero detail card.
++        private const float ObjectiveTopInset = -384f;
+         private const float ObjectiveChipWidth = 520f;
+         private const float ObjectiveChipHeight = 132f;
+         private const float ObjectiveChipLeft = 48f;
+@@ -51,7 +51,7 @@
+         // Battlefield viewport geometry in the 1920x1080 reference canvas (top-left origin).
+         private const float BoardViewportX = 16f;
+         private const float BoardViewportY = 80f;
+-        private const float BoardViewportWidth = 1408f;
++        private const float BoardViewportWidth = 1888f;
+         private const float BoardViewportHeight = 768f;
+ 
+         private ICombatEntrySequenceHost host;
+--- before/UnityProject/Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs
++++ UnityProject/Assets/Game/Runtime/Presentation/FormalBattlefieldView.cs
+@@ -258,7 +258,7 @@
+ 
+             Button home = shell.HomeButton;
+             home.GetComponent<RectTransform>().anchoredPosition =
+-                new Vector2(BattlefieldPresentationAdapter.BattlefieldWidth - 100f, -8f);
++                new Vector2(BattlefieldPresentationAdapter.BattlefieldWidth - 132f, -112f);
+             home.onClick.AddListener(() => host.BattlefieldViewport.ResetOverview());
+             FormalUiKit.ConfigureButtonFeedback(home,
+                 FormalUiTheme.ButtonPalette(FormalUiButtonTone.Neutral),
+--- before/Tools/OCCArt/occ_art_contract_v1.json
++++ Tools/OCCArt/occ_art_contract_v1.json
+@@ -113,7 +113,7 @@
+         12.0,
+         9.0
+       ],
+-      "viewport_7x4_cells_m": [
++      "viewport_9x4_cells_m": [
+         7.0,
+         4.0
+       ],
+@@ -129,7 +129,7 @@
+     "measurement": "record real width, depth and height before generation and convert visible subject bounds at 1 native px = 3.125 cm; transparent canvas padding is excluded",
+     "fictional_device_reference": "use the nearest real furniture, furnace, laboratory or maintenance equipment analogue",
+     "readability_exception": "an intentional over-scale below the readability floor must record its multiplier and reason in the manifest",
+-    "concept_display": "exempt from battlefield 7x4 viewport, occupancy and walkability layout; still bound by world scale, shared prop camera, fixed light, native 32 PPU and integer display"
++    "concept_display": "exempt from battlefield 9x4 viewport, occupancy and walkability layout; still bound by world scale, shared prop camera, fixed light, native 32 PPU and integer display"
+   },
+   "scene_assembly_contract": {
+     "locked": "2026-09-21",
+@@ -197,7 +197,7 @@
+     "fractional_scale_forbidden": true,
+     "non_integer_resolution_policy": "integer scale plus letterbox; never fractional upscale and never half-pixel placement",
+     "battlefield_viewport": [
+-      1408,
++      1888,
+       768
+     ],
+     "visible_gameplay_cells_at_6x": [
+@@ -1758,7 +1758,7 @@
+     "viewport_reference": [
+       16,
+       80,
+-      1408,
++      1888,
+       768
+     ],
+     "default_cell_reference": 64,
+@@ -1801,25 +1801,22 @@
+     "terrain_labels": "hover_including_occupied_cells",
+     "inactive_ranges": "hidden",
+     "vfx_frame_display": "native_integer_scale_from_current_cell",
+-    "right_console_reference": [
+-      1456,
+-      80,
+-      448,
+-      768
+-    ],
++    "right_console_reference": [1432, 240, 416, 436],
+     "console_modules_reference": {
+-      "hero": [
+-        16,
+-        16,
+-        416,
+-        244
+-      ],
+-      "timeline": [
+-        16,
+-        272,
+-        416,
+-        480
+-      ]
++      "hero": [16, 80, 416, 248],
++      "timeline": [1432, 240, 416, 436]
++    },
++    "floating_hud_policy": {
++      "approved_date": "2026-10-06",
++      "battlefield_viewport": [16, 80, 1888, 768],
++      "action_order": [1032, 80, 824, 96],
++      "timeline_tab": [1860, 320, 44, 136],
++      "open_delay_ms": 200,
++      "close_delay_ms": 350,
++      "default_collapsed": true,
++      "click_pin": true,
++      "overlay_does_not_resize_or_pan_battlefield": true,
++      "current_actor_then_unique_estimated_first_appearances": true
+     },
+     "battlefield_decision_toast_reference": [
+       56,
+--- before/UnityProject/AGENTS.md
++++ UnityProject/AGENTS.md
+@@ -58,7 +58,7 @@
+ - 操作前核对主工程 `Application.dataPath`。技能例子中的对象名、Prefab 路径和数值仅是示例，不能当作 OCC 中已存在的事实。
+ - “修改并保存场景”“进入 Play Mode 验证”等通用步骤仍以仓库规则为准：进入 Play Mode 已获项目级默认授权，保存场景仍需明确授权。只保存获准且本次涉及的场景或资产，避免用全局 SaveAssets 夹带无关修改。
+ - 普通源码/资源修改优先通过 CLI 执行必要导入编译与 Console 检查；CLI 未覆盖时由 Funplay 补充。必须等待实际编译完成并确认 Editor 就绪，不能把进程启动、HTTP成功或命令派发当作完成。纯 Markdown/技能变更不重新编译；Funplay 身份、版本和当前状态只读核验可用 skip_refresh=true。明确通过后不重复刷新或扩大测试。
+-- UI 保持 OCC 当前 PC 像素合同：1920×1080、左地图75%/右HUD25%，资产尺寸按总案与机器合同分层。移动端720×1559/1559×720、刘海安全区、全套手机/平板设备验证只在实际任务涉及对应平台时适用。
++- UI 保持 OCC 当前 PC 像素合同：1920×1080、全宽战场、左上人物状态、顶部偏右行动顺序与右侧悬停行动值浮层（2026-10-06用户确认），资产尺寸按总案与机器合同分层。移动端720×1559/1559×720、刘海安全区、全套手机/平板设备验证只在实际任务涉及对应平台时适用。
+ - 稳定的界面结构优先落在 Prefab 或场景层级中，运行时只负责真实数据绑定、重复列表、瞬时反馈和必须按战局生成的内容；现有动态 UI 按可验收的完整样板逐步迁移，不要求一次性重构全部屏幕。文本组件和绑定方式沿用当前工程兼容口径。
+ - 采用新版 TMP 规则：设计确需文本效果时控制局部材质作用范围，不影响无关标签。生图原料及正式资产仍遵守根目录的来源、manifest、人工审美和入库要求。
+ - Funplay 托管块和生成技能由插件同步。持久项目修订写在本节或个人 funplay-unity-dev 技能；不要直接修改 Library/PackageCache 或手改托管文件来伪装升级。
+--- before/UnityProject/Assets/Game/Resources/Config/OccPixelUiV02.json
++++ UnityProject/Assets/Game/Resources/Config/OccPixelUiV02.json
+@@ -4,8 +4,8 @@
+   "referenceWidth": 1920,
+   "referenceHeight": 1080,
+   "compactHeightThreshold": 600,
+-  "battlefieldWidth": 1440,
+-  "hudWidth": 480,
++  "battlefieldWidth": 1920,
++  "hudWidth": 0,
+   "logicalPixelScale": 4,
+   "skins": [
+     { "id": "panel", "resourcePath": "Art/FormalUISkin16/panel" },
+@@ -71,9 +71,9 @@
+     { "id": "settlement.card", "anchor": "center", "x": 0, "y": 0, "width": 1700, "height": 950 },
+     { "id": "settlement.rewardCard", "anchor": "center", "x": -470, "y": -20, "width": 410, "height": 360 },
+     { "id": "combat.header", "anchor": "top-center", "x": 0, "y": -12, "width": 1872, "height": 56 },
+-    { "id": "combat.rightConsole", "anchor": "top-right", "x": -16, "y": -80, "width": 448, "height": 768 },
+-    { "id": "combat.hero", "anchor": "top-left", "x": 16, "y": -464, "width": 416, "height": 280 },
+-    { "id": "combat.timeline", "anchor": "top-left", "x": 16, "y": -16, "width": 416, "height": 436 },
++    { "id": "combat.rightConsole", "anchor": "top-right", "x": -72, "y": -240, "width": 416, "height": 436 },
++    { "id": "combat.hero", "anchor": "top-left", "x": 0, "y": 0, "width": 416, "height": 248 },
++    { "id": "combat.timeline", "anchor": "top-left", "x": 0, "y": 0, "width": 416, "height": 436 },
+     { "id": "combat.actionPointBadge", "anchor": "top-left", "x": 32, "y": -756, "width": 96, "height": 96 },
+     { "id": "combat.commands", "anchor": "bottom-left", "x": 16, "y": 16, "width": 1888, "height": 200 },
+     { "id": "combat.outcome", "anchor": "center", "x": 0, "y": 0, "width": 720, "height": 390 }
+--- before/UnityProject/Assets/Game/Resources/UI/Prefabs/FormalBattlefieldShell.prefab
++++ UnityProject/Assets/Game/Resources/UI/Prefabs/FormalBattlefieldShell.prefab
+@@ -221,7 +221,7 @@
+   m_AnchorMin: {x: 0, y: 1}
+   m_AnchorMax: {x: 0, y: 1}
+   m_AnchoredPosition: {x: 0, y: 0}
+-  m_SizeDelta: {x: 1440, y: 848}
++  m_SizeDelta: {x: 1920, y: 848}
+   m_Pivot: {x: 0, y: 1}
+ --- !u!222 &3203120366996544509
+ CanvasRenderer:
+--- before/UnityProject/Assets/Game/Resources/UI/Prefabs/FormalCombatHudShell.prefab
++++ UnityProject/Assets/Game/Resources/UI/Prefabs/FormalCombatHudShell.prefab
+@@ -225,6 +225,41 @@
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
++--- !u!1 &3414715329265757542
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 4789271241847399023}
++  m_Layer: 0
++  m_Name: "\u5DE6\u4E0A\u4EBA\u7269\u72B6\u6001"
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &4789271241847399023
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 3414715329265757542}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 7478271534324065361}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 16, y: -80}
++  m_SizeDelta: {x: 416, y: 248}
++  m_Pivot: {x: 0, y: 1}
+ --- !u!1 &3448719704041556996
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -259,6 +294,9 @@
+   - {fileID: 1579760930989601742}
+   - {fileID: 3677727154233472322}
+   - {fileID: 8795175958888875550}
++  - {fileID: 4789271241847399023}
++  - {fileID: 2590011003618214594}
++  - {fileID: 5650503886763481999}
+   m_Father: {fileID: 0}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 0}
+@@ -294,6 +332,9 @@
+   rightConsole: {fileID: 1579760930989601742}
+   actionPointBadge: {fileID: 3677727154233472322}
+   commands: {fileID: 8795175958888875550}
++  heroStatus: {fileID: 4789271241847399023}
++  actionOrder: {fileID: 2590011003618214594}
++  timelineTab: {fileID: 5650503886763481999}
+ --- !u!1 &4879363030845849471
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -370,6 +411,41 @@
+   m_FillOrigin: 0
+   m_UseSpriteMesh: 0
+   m_PixelsPerUnitMultiplier: 1
++--- !u!1 &4911098097656171376
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 5650503886763481999}
++  m_Layer: 0
++  m_Name: "\u53F3\u4FA7\u884C\u52A8\u503C\u9875\u7B7E"
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &5650503886763481999
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 4911098097656171376}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 7478271534324065361}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 1860, y: -320}
++  m_SizeDelta: {x: 44, y: 136}
++  m_Pivot: {x: 0, y: 1}
+ --- !u!1 &5267427410563120552
+ GameObject:
+   m_ObjectHideFlags: 0
+@@ -481,8 +557,8 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 1, y: 1}
+   m_AnchorMax: {x: 1, y: 1}
+-  m_AnchoredPosition: {x: -16, y: -80}
+-  m_SizeDelta: {x: 448, y: 768}
++  m_AnchoredPosition: {x: -72, y: -240}
++  m_SizeDelta: {x: 416, y: 436}
+   m_Pivot: {x: 1, y: 1}
+ --- !u!222 &8510732083486044696
+ CanvasRenderer:
+@@ -506,6 +582,81 @@
+   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+   m_Material: {fileID: 0}
+   m_Color: {r: 0, g: 0, b: 0, a: 0}
++  m_RaycastTarget: 1
++  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
++  m_Maskable: 1
++  m_OnCullStateChanged:
++    m_PersistentCalls:
++      m_Calls: []
++  m_Sprite: {fileID: 0}
++  m_Type: 0
++  m_PreserveAspect: 0
++  m_FillCenter: 1
++  m_FillMethod: 4
++  m_FillAmount: 1
++  m_FillClockwise: 1
++  m_FillOrigin: 0
++  m_UseSpriteMesh: 0
++  m_PixelsPerUnitMultiplier: 1
++--- !u!1 &7823341374886173486
++GameObject:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  serializedVersion: 6
++  m_Component:
++  - component: {fileID: 2590011003618214594}
++  - component: {fileID: 8635161948524878453}
++  - component: {fileID: 2927102385713347999}
++  m_Layer: 0
++  m_Name: "\u9876\u90E8\u884C\u52A8\u987A\u5E8F"
++  m_TagString: Untagged
++  m_Icon: {fileID: 0}
++  m_NavMeshLayer: 0
++  m_StaticEditorFlags: 0
++  m_IsActive: 1
++--- !u!224 &2590011003618214594
++RectTransform:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7823341374886173486}
++  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
++  m_LocalPosition: {x: 0, y: 0, z: 0}
++  m_LocalScale: {x: 1, y: 1, z: 1}
++  m_ConstrainProportionsScale: 0
++  m_Children: []
++  m_Father: {fileID: 7478271534324065361}
++  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
++  m_AnchorMin: {x: 0, y: 1}
++  m_AnchorMax: {x: 0, y: 1}
++  m_AnchoredPosition: {x: 1032, y: -80}
++  m_SizeDelta: {x: 824, y: 96}
++  m_Pivot: {x: 0, y: 1}
++--- !u!222 &8635161948524878453
++CanvasRenderer:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7823341374886173486}
++  m_CullTransparentMesh: 1
++--- !u!114 &2927102385713347999
++MonoBehaviour:
++  m_ObjectHideFlags: 0
++  m_CorrespondingSourceObject: {fileID: 0}
++  m_PrefabInstance: {fileID: 0}
++  m_PrefabAsset: {fileID: 0}
++  m_GameObject: {fileID: 7823341374886173486}
++  m_Enabled: 1
++  m_EditorHideFlags: 0
++  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
++  m_Name: 
++  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
++  m_Material: {fileID: 0}
++  m_Color: {r: 0.89411765, g: 0.85882354, b: 0.78431374, a: 1}
+   m_RaycastTarget: 1
+   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+   m_Maskable: 1
+--- before/UnityProject/Assets/Game/Runtime/Campaign/BattlefieldPresentationAdapter.cs
++++ UnityProject/Assets/Game/Runtime/Campaign/BattlefieldPresentationAdapter.cs
+@@ -65,7 +65,7 @@
+         private readonly CombatMovementRangeCache movementRange = new CombatMovementRangeCache();
+         // 定案（2026-09-16 风格定案 v1 / occ-art-contract-v1.battlefield_display_policy）：
+         // 战场默认按 6 倍档开场——原生 32 像素 × 6 = 192 画布单位，1 个原生像素 = 6 屏幕像素，
+-        // 与主要参考《赛菲莉亚》同级。盘面大于一屏（1408×768 下可见 7×4 格）时靠移动视口查看。
++        // 与主要参考《赛菲莉亚》同级。盘面大于一屏（1888×768 下可见 9×4 格）时靠移动视口查看。
+         // 所有档位都落在原生 32 像素网格上（Step = 32），因此任何档位都不重采样。
+         public const float CellSize = 192f;
+         public const float OverviewCellSize = 96f;
+@@ -73,7 +73,7 @@
+         public const float MaximumCellSize = 384f;
+         // Multiples of the native 32 px grid only, so no zoom tier ever resamples the tiles.
+         public const float CellSizeStep = 32f;
+-        public const float BattlefieldWidth = 1440f;
++        public const float BattlefieldWidth = 1920f;
+         public const float BattlefieldHeight = 848f;
+         public const float BoardTop = 80f;
+         public const int DefaultWidth = 12;
+--- before/UnityProject/Assets/Game/Runtime/Presentation/FormalCombatHud.cs
++++ UnityProject/Assets/Game/Runtime/Presentation/FormalCombatHud.cs
+@@ -10,7 +10,7 @@
+ 
+ namespace OCC.Combat.Presentation
+ {
+-    // Runtime-built production HUD. The battlefield keeps its 75% width above a full-width command deck.
++    // Floating HUD above a full-width battlefield; the action-value drawer does not reserve space.
+     public sealed class FormalCombatHud : MonoBehaviour
+     {
+         /// <summary>
+@@ -64,8 +64,8 @@
+         private const float HeroEntryHeight = 30f;
+         // Roughly the 132px label slot at 24px type.
+         private const int HeroEntryNameMaxChars = 8;
+-        private const float HeroBarTop = 52f;
+-        private const float HeroBarPitch = 72f;
++        private const float HeroBarTop = 40f;
++        private const float HeroBarPitch = 56f;
+ 
+         // Timeline row band inside the 436-tall action-value module. Row size stays the tuned
+         // compact cell; only the layout inside each row is packed.
+@@ -103,6 +103,18 @@
+         private bool heroShowingBack;
+         private bool heroFlipAnimating;
+         private GameObject timelineModule;
++        private CombatTimelineDrawer timelineDrawer;
++        private RawImage heroPortrait;
++        private Text heroName;
++        private readonly Image[] compactStatusIcons = new Image[5];
++        private Text compactStatusOverflow;
++        private readonly Image[] actionOrderSlots = new Image[7];
++        private readonly RawImage[] actionOrderPortraits = new RawImage[7];
++        private readonly Text[] actionOrderLabels = new Text[7];
++        private readonly TimelineRowInteraction[] actionOrderInteractions = new TimelineRowInteraction[7];
++        private readonly Text[] actionOrderDirections = new Text[6];
++        private Text actionOrderCaption, actionOrderOverflow;
++        private Text timelineGlobalProgress;
+         private GameObject timelineFront;
+         private GameObject timelineBack;
+         private Text historyText;
+@@ -188,8 +200,8 @@
+             if (shell == null) return null;
+             if (id == "B1-03") return shell.ActionPointBadge;
+             if (id == "B1-05") return shell.Commands;
+-            if (id == "B1-06") return timelineModule == null ? null : timelineModule.GetComponent<RectTransform>();
+-            return shell.RightConsole;
++            if (id == "B1-06") return shell.TimelineTab;
++            return shell.HeroStatus;
+         }
+ 
+         private void Update()
+@@ -203,6 +215,7 @@
+                 {
+                     ResetCardFlips();
+                     ResetTimelineMotionState();
++                    timelineDrawer?.ResetDrawer();
+                 }
+                 wasVisible = false;
+                 hasPresentedModel = false;
+@@ -295,7 +308,7 @@
+             sideSurface.raycastTarget = false;
+             Image sideSkin = FormalUiKit.SkinOverlay(sideSurface);
+             if (sideSkin != null) sideSkin.gameObject.SetActive(false);
+-            heroModule = ConsoleModule("英雄概况", side.transform, "combat.hero");
++            heroModule = ConsoleModule("英雄概况", shell.HeroStatus, "combat.hero");
+             heroFront = CardFace("英雄概况正面", heroModule.transform);
+             heroBack = CardFace("英雄概况背面", heroModule.transform);
+             // The front face is vitals only: three bars and the status button.
+@@ -303,6 +316,7 @@
+             shieldFill = ResourceBar(heroFront.transform, "护盾", new Vector2(16, -(HeroBarTop + HeroBarPitch)), FormalUiTheme.ResourceShieldFill, out shieldValue);
+             manaFill = ResourceBar(heroFront.transform, "个人魔力", new Vector2(16, -(HeroBarTop + HeroBarPitch * 2f)), FormalUiTheme.ResourceMagicFill, out manaValue);
+             BuildHeroBack();
++            BuildCompactHeroFront();
+             heroFlipButton = Button(heroModule.transform, "英雄概况翻面", new Vector2(296, -3), new Vector2(104, 36), "状态", FormalUiTheme.Panel, FormalUiTheme.BodyFontSize, FormalUiButtonTone.Neutral);
+             ConfigureCompactFrame(heroFlipButton);
+             heroFlipButton.onClick.AddListener(ToggleHeroCard);
+@@ -313,6 +327,11 @@
+             timelineBack = CardFace("行动历史背面", timelineModule.transform);
+             Label("行动值", timelineFront.transform, new Vector2(16, -4), new Vector2(264, 40), FormalUiTheme.BodyFontSize, text, TextAnchor.MiddleLeft);
+             for (int i = 0; i < timelineNames.Length; i++) CreateTimelineSlot(i);
++            Line(timelineFront.transform, new Vector2(30, -360), new Vector2(356, 2), muted);
++            Label("行动轴起点", timelineFront.transform, new Vector2(30, -366), new Vector2(48, 24), 18, muted, TextAnchor.MiddleLeft).text = "0";
++            Label("行动轴阈值", timelineFront.transform, new Vector2(184, -366), new Vector2(48, 24), 18, FormalUiTheme.Cyan, TextAnchor.MiddleCenter).text = "100";
++            Label("行动轴上限", timelineFront.transform, new Vector2(338, -366), new Vector2(48, 24), 18, muted, TextAnchor.MiddleRight).text = "199";
++            timelineGlobalProgress = Label("全局进度", timelineFront.transform, new Vector2(16, -400), new Vector2(384, 28), 18, muted, TextAnchor.MiddleLeft);
+             BuildTimelineBack();
+             timelineFlipButton = Button(timelineModule.transform, "行动值翻面", new Vector2(296, -3), new Vector2(104, 36), "记录", FormalUiTheme.Panel, FormalUiTheme.BodyFontSize, FormalUiButtonTone.Neutral);
+             ConfigureCompactFrame(timelineFlipButton);
+@@ -320,6 +339,17 @@
+             Label("行动值翻面提示", timelineBack.transform, new Vector2(184, -4), new Vector2(104, 32), 18, muted, TextAnchor.MiddleRight).text = "最新在前";
+             heroBack.SetActive(false);
+             timelineBack.SetActive(false);
++            BuildActionOrder(shell.ActionOrder);
++            Button drawerTab = Button(shell.TimelineTab, "行动值页签", Vector2.zero, new Vector2(44, 136),
++                "行\n动\n值\n‹", panel, 24, FormalUiButtonTone.Neutral);
++            ConfigureCompactFrame(drawerTab);
++            Button drawerPin = Button(timelineModule.transform, "固定行动值", new Vector2(192, -3), new Vector2(96, 36),
++                "固定", panel, 18, FormalUiButtonTone.Neutral);
++            ConfigureCompactFrame(drawerPin);
++            timelineDrawer = root.AddComponent<CombatTimelineDrawer>();
++            timelineDrawer.Configure(shell.RightConsole, drawerTab, drawerPin,
++                () => bootstrap.IsInteractionModalOpen || bootstrap.IsCombatOutcomeVisible || !bootstrap.IsDeveloperCombatActive,
++                () => bootstrap.SetTimelineHoveredUnit(null));
+ 
+             GameObject apBadge = shell.ActionPointBadge.gameObject;
+             GameObject outerDiamond = Panel("行动点外菱形", apBadge.transform, new Vector2(0, 1), new Vector2(0, 1),
+@@ -524,6 +554,89 @@
+             rect.offsetMin = Vector2.zero;
+             rect.offsetMax = Vector2.zero;
+             return face;
++        }
++
++        private void BuildCompactHeroFront()
++        {
++            GameObject portrait = FormalUiKit.Create("人物头像", heroFront.transform);
++            heroPortrait = portrait.AddComponent<RawImage>();
++            heroPortrait.raycastTarget = false;
++            RectTransform rect = heroPortrait.rectTransform;
++            rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0, 1);
++            rect.anchoredPosition = new Vector2(16, -4);
++            rect.sizeDelta = new Vector2(32, 32);
++            heroName = Label("人物姓名", heroFront.transform, new Vector2(60, -4), new Vector2(220, 32), 24, text, TextAnchor.MiddleLeft);
++            for (int i = 0; i < compactStatusIcons.Length; i++)
++            {
++                int captured = i;
++                GameObject chip = FormalUiKit.FlatPanel("人物状态图标" + i, heroFront.transform, new Vector2(0, 1), new Vector2(0, 1),
++                    new Vector2(16 + i * 64, -212), new Vector2(60, 28), Color.clear);
++                chip.GetComponent<Image>().raycastTarget = true;
++                compactStatusIcons[i] = FormalUiKit.TopLeftIconSlot("状态图标", chip.transform, null, Vector2.zero);
++                compactStatusIcons[i].rectTransform.sizeDelta = new Vector2(24, 24);
++                Label("状态简称", chip.transform, new Vector2(26, 0), new Vector2(34, 28), 18, text, TextAnchor.MiddleLeft);
++                BindTooltip(chip, () => BuildHeroStatusEntryTooltip(captured));
++            }
++            compactStatusOverflow = Label("状态空态", heroFront.transform, new Vector2(16, -212), new Vector2(384, 28), 18, muted, TextAnchor.MiddleLeft);
++            compactStatusOverflow.raycastTarget = false;
++        }
++
++        private void BuildActionOrder(Transform parent)
++        {
++            actionOrderCaption = Label("行动顺序标题", parent, new Vector2(8, -8), new Vector2(96, 64), 24, text, TextAnchor.MiddleLeft);
++            BindTooltip(parent.gameObject, () => new FormalTooltipContent("预计行动顺序", "当前行动者在前，其后按当前行动值和速度估算各单位首次出手。技能预览会更新顺序；后续速度变化与敌方动作可能改变结果。", FormalUiTheme.Cyan));
++            for (int i = 0; i < actionOrderSlots.Length; i++)
++            {
++                GameObject slot = FormalUiKit.FlatPanel("顺序位" + (i + 1), parent, new Vector2(0, 1), new Vector2(0, 1),
++                    new Vector2(112 + i * 88, -8), new Vector2(72, 80), panel);
++                actionOrderSlots[i] = slot.GetComponent<Image>();
++                actionOrderSlots[i].raycastTarget = true;
++                ConfigureOutlinedPanel(slot, panel, line);
++                actionOrderInteractions[i] = slot.AddComponent<TimelineRowInteraction>();
++                GameObject portrait = FormalUiKit.Create("顺序头像", slot.transform);
++                actionOrderPortraits[i] = portrait.AddComponent<RawImage>();
++                actionOrderPortraits[i].raycastTarget = false;
++                RectTransform rect = actionOrderPortraits[i].rectTransform;
++                rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(0, 1);
++                rect.anchoredPosition = new Vector2(12, -4);
++                rect.sizeDelta = new Vector2(48, 48);
++                actionOrderLabels[i] = Label("顺序标记", slot.transform, new Vector2(0, -52), new Vector2(72, 24), 18, muted, TextAnchor.MiddleCenter);
++                actionOrderLabels[i].raycastTarget = false;
++                if (i < actionOrderSlots.Length - 1)
++                {
++                    actionOrderDirections[i] = Label("顺序方向", parent, new Vector2(184 + i * 88, -24), new Vector2(16, 32), 24, muted, TextAnchor.MiddleCenter);
++                    actionOrderDirections[i].text = "›";
++                    actionOrderDirections[i].raycastTarget = false;
++                }
++            }
++            actionOrderOverflow = Label("顺序剩余", parent, new Vector2(734, -28), new Vector2(82, 32), 24, muted, TextAnchor.MiddleCenter);
++            actionOrderOverflow.raycastTarget = false;
++        }
++
++        private void RefreshActionOrder(CombatState state, CombatActionPreview preview)
++        {
++            IReadOnlyList<UnitState> order = CombatActionOrderPresentation.Build(state, preview);
++            bool projected = preview != null && preview.CanSubmit && preview.HasActionValuePreview;
++            actionOrderCaption.text = projected ? "预计顺序" : "行动顺序";
++            IReadOnlyList<UnitState> baseline = CombatActionOrderPresentation.Build(state);
++            for (int i = 0; i < actionOrderSlots.Length; i++)
++            {
++                actionOrderSlots[i].gameObject.SetActive(i < order.Count);
++                if (i >= order.Count) continue;
++                UnitState unit = order[i];
++                bool active = unit.Id == state.ActiveUnitId;
++                int previous = baseline.ToList().FindIndex(value => value.Id == unit.Id);
++                actionOrderSlots[i].color = active ? Color.Lerp(panel, FormalUiTheme.Cyan, .24f) : panel;
++                actionOrderPortraits[i].texture = TimelinePortrait(unit);
++                actionOrderLabels[i].text = active ? "当前" : projected && previous != i ? (previous > i ? "↑ " : "↓ ") + (i + 1) : (i + 1).ToString();
++                actionOrderLabels[i].color = active ? FormalUiTheme.Cyan : projected && previous != i ?
++                    (previous > i ? FormalUiTheme.Safe : FormalUiTheme.Danger) : muted;
++                actionOrderInteractions[i].Configure(unit.Id, actionOrderSlots[i],
++                    id => { if (!bootstrap.IsInteractionModalOpen) bootstrap.SetTimelineHoveredUnit(id); },
++                    id => { if (!bootstrap.IsInteractionModalOpen) bootstrap.FocusBattlefieldOnUnit(id); });
++            }
++            actionOrderOverflow.text = order.Count > actionOrderSlots.Length ? "+" + (order.Count - actionOrderSlots.Length) : "";
++            for (int i = 0; i < actionOrderDirections.Length; i++) actionOrderDirections[i].gameObject.SetActive(i + 1 < order.Count);
+         }
+ 
+         private void BuildHeroBack()
+@@ -684,6 +797,7 @@
+             for (int i = 0; i < HeaderResourceIds.Length; i++)
+             {
+                 string name = HeaderResourceNames[i];
++                if (i == 0) continue; // Health now belongs to the compact hero card.
+                 string hint = HeaderResourceHints[i];
+                 Color accent = HeaderResourceAccent(i);
+                 Sprite icon = Resources.Load<Sprite>(FormalArtRegistry.ResourceMetricPath(HeaderResourceIds[i]));
+@@ -757,7 +871,6 @@
+             UnitState hero = state.GetUnit("hero");
+             hero = (bootstrap as ICombatActionPresentationHost)?.PresentCombatUnit(hero) ?? hero;
+             RogueliteMapRun run = bootstrap.CurrentMapRun;
+-            headerResourceValues[0].text = hero.Health + "／" + hero.MaxHealth;
+             headerResourceValues[1].text = (run?.Gold ?? 0).ToString();
+             headerResourceValues[2].text = (run?.StageContribution ?? 0).ToString();
+             headerResourceValues[3].text = Math.Max(0, AcademyMapTuning.TransitionProgress - (run?.StageTime ?? 0)).ToString();
+@@ -786,9 +899,13 @@
+             SetBar(shieldFill, rogue ? (hero.Shield > 0 ? 1f : 0f) : hero.Shield / (float)Math.Max(1, hero.MaxShield), ref displayedShield);
+             SetBar(manaFill, hero.Mana / (float)Math.Max(1, hero.MaxMana), ref displayedMana);
+             RefreshHeroBack(state, hero, rogue);
++            heroName.text = hero.DisplayName;
++            heroPortrait.texture = TimelinePortrait(hero);
+             RefreshHistory(state);
+             IReadOnlyList<CombatTurnTrackEntry> track = CombatTurnTrackPresentation.Build(state, timelineNames.Length);
+             CombatActionPreview timelinePreview = bootstrap.CurrentActionPreview;
++            RefreshActionOrder(state, timelinePreview);
++            timelineGlobalProgress.text = "全局进度  " + state.CurrentTime;
+             IReadOnlyDictionary<string, int> orderChanges = timelinePreview != null && timelinePreview.CanSubmit && timelinePreview.HasActionValuePreview
+                 ? CombatTurnTrackPresentation.PreviewOrderChanges(state, timelinePreview.ActionValueTargetId, timelinePreview.ActionValueDelay)
+                 : new Dictionary<string, int>();
+@@ -1302,6 +1419,7 @@
+         private void ToggleBothCards()
+         {
+             if (heroFlipAnimating || timelineFlipAnimating) return;
++            timelineDrawer?.OpenPinned();
+             ToggleHeroCard();
+             ToggleTimelineCard();
+         }
+@@ -1310,6 +1428,7 @@
+         {
+             if (heroFlipAnimating) return;
+             bool showBack = !heroShowingBack;
++            heroModule.GetComponent<RectTransform>().sizeDelta = new Vector2(416, showBack ? 280 : 248);
+             StartCardFlip(heroFront, heroBack, heroFlipButton, showBack, "概况", "状态",
+                 value => heroShowingBack = value, value => heroFlipAnimating = value);
+         }
+@@ -1318,6 +1437,7 @@
+         {
+             if (timelineFlipAnimating) return;
+             bool showBack = !timelineShowingBack;
++            timelineDrawer?.OpenPinned();
+             StartCardFlip(timelineFront, timelineBack, timelineFlipButton, showBack, "行动值", "记录",
+                 value => timelineShowingBack = value, value => timelineFlipAnimating = value);
+         }
+@@ -1404,6 +1524,17 @@
+         {
+             if (heroStatusEntries[0] == null || state == null || hero == null) return;
+             BuildHeroStatusRows(state, hero);
++            for (int i = 0; i < compactStatusIcons.Length; i++)
++            {
++                bool used = i < heroStatusRows.Count;
++                compactStatusIcons[i].transform.parent.gameObject.SetActive(used);
++                if (!used) continue;
++                HeroStatusRow status = heroStatusRows[i];
++                compactStatusIcons[i].sprite = status.Icon;
++                compactStatusIcons[i].color = status.Icon == null ? Color.clear : Color.white;
++                compactStatusIcons[i].transform.parent.Find("状态简称").GetComponent<Text>().text = CompactHud(status.Label, 2);
++            }
++            compactStatusOverflow.text = heroStatusRows.Count == 0 ? "无持续状态" : "";
+             for (int i = 0; i < HeroStatusEntryCount; i++)
+             {
+                 HeroEntryView view = heroStatusEntries[i];
+--- before/UnityProject/Assets/Game/Runtime/Presentation/FormalCombatHudShellView.cs
++++ UnityProject/Assets/Game/Runtime/Presentation/FormalCombatHudShellView.cs
+@@ -12,11 +12,17 @@
+         [SerializeField] private RectTransform rightConsole;
+         [SerializeField] private RectTransform actionPointBadge;
+         [SerializeField] private RectTransform commands;
++        [SerializeField] private RectTransform heroStatus;
++        [SerializeField] private RectTransform actionOrder;
++        [SerializeField] private RectTransform timelineTab;
+ 
+         public RectTransform Header => header;
+         public RectTransform RightConsole => rightConsole;
+         public RectTransform ActionPointBadge => actionPointBadge;
+         public RectTransform Commands => commands;
++        public RectTransform HeroStatus => heroStatus;
++        public RectTransform ActionOrder => actionOrder;
++        public RectTransform TimelineTab => timelineTab;
+ 
+         public static FormalCombatHudShellView Create(Transform parent)
+         {
+@@ -40,7 +46,8 @@
+ 
+         public void ValidateReferences()
+         {
+-            if (header == null || rightConsole == null || actionPointBadge == null || commands == null)
++            if (header == null || rightConsole == null || actionPointBadge == null || commands == null ||
++                heroStatus == null || actionOrder == null || timelineTab == null)
+                 throw new InvalidOperationException("Formal combat HUD shell prefab has incomplete serialized references.");
+         }
+     }
+--- before/UnityProject/Assets/Game/Tests/EditMode/FormalCombatHudShellPrefabTests.cs
++++ UnityProject/Assets/Game/Tests/EditMode/FormalCombatHudShellPrefabTests.cs
+@@ -21,6 +21,10 @@
+                 Assert.That(instance.RightConsole.name, Is.EqualTo("战斗信息"));
+                 Assert.That(instance.ActionPointBadge.name, Is.EqualTo("行动点徽章"));
+                 Assert.That(instance.Commands.name, Is.EqualTo("战术指令"));
++                Assert.That(instance.HeroStatus.sizeDelta, Is.EqualTo(new Vector2(416, 248)));
++                Assert.That(instance.ActionOrder.sizeDelta, Is.EqualTo(new Vector2(824, 96)));
++                Assert.That(instance.TimelineTab.sizeDelta, Is.EqualTo(new Vector2(44, 136)));
++                Assert.That(instance.RightConsole.sizeDelta, Is.EqualTo(new Vector2(416, 436)));
+             }
+             finally
+             {
+--- before/Worldbuilding/数据表/OCC_美术与界面规格表_v1.0.csv
++++ Worldbuilding/数据表/OCC_美术与界面规格表_v1.0.csv
+@@ -12,7 +12,7 @@
+ ART-BATTLE-MULTI-64,战场资产,多格占格场景物（历史ID保留）,(W×32)×(H×32)逻辑基线；透明主体可按32倍数扩展视觉画布,按当前阶段与区域选取材质并保持明确占格轮廓,逻辑占格必须在manifest独立声明；不得沿用旧(W×64)公式；外沿透明安全区按物件语义保留
+ ART-BATTLE-CURRENT-SCOPE,战场资产,当前玩法物件占格口径,默认逻辑占格[1×1]；地面对应32×32；透明物件视觉画布独立自适应；多格仅在另行确认逻辑占格后制作,按玩法物件语义选材,此前2×2仅为拼接材质适应性测试，不代表单件资产占两格
+ ART-BATTLE-NATIVE-32,战场资产,跨分辨率原生资产,统一32 PPU；**世界尺度：1原生像素=3.125厘米、一格=1.00米**；地面一格一张32×32；透明物件与单位画布按主体向32倍数自适应,统一32PPU与角色语义色,同一份原生资产只按整数倍显示，定案基准档为**6倍**（原生320×180→1920×1080，1原生像素=6屏幕像素）；非整数分辨率用整数缩放加信箱边；逻辑占格与视觉画布分离；不再生产独立分辨率伴随稿
+-ART-INDOOR-REAL-SCALE,场景资产,室内常见物件现实尺度,生成前记录现实宽深高并按1px=3.125cm换算可见主体边界；透明画布留白不计物理尺寸,按当前阶段与功能选材,家具炉具实验与维护设备采用现实常见尺寸；虚构设备按最近现实功能类比；低于可读下限的有意放大须在manifest记录；概念陈列图不受战场7×4视口与占格约束但仍遵守世界尺度统一视角固定光源32PPU与整数倍展示
++ART-INDOOR-REAL-SCALE,场景资产,室内常见物件现实尺度,生成前记录现实宽深高并按1px=3.125cm换算可见主体边界；透明画布留白不计物理尺寸,按当前阶段与功能选材,家具炉具实验与维护设备采用现实常见尺寸；虚构设备按最近现实功能类比；低于可读下限的有意放大须在manifest记录；概念陈列图不受战场9×4视口与占格约束但仍遵守世界尺度统一视角固定光源32PPU与整数倍展示
+ ART-ASSET-SEMANTICS,生产,运行时资产职责拆分,地面墙体外沿立面落地物壁挂物台面物单位分别建档,按角色与阶段选材,同一运行时资产不得同时代表可行走地板与阻挡墙体；整块房间壳体仅供概念陈列或组合参考且最高REVIEW_READY；正式室内必须拆为32×32地面和墙体以及独立外沿家具设备
+ ART-PLACEMENT-CONTRACT,生产,场景摆放与锚点合同,manifest记录用途安装类型所属逻辑格原生锚点可见接触线深度排序基线允许遮挡方向屏幕轴向和支撑对象,不改变资产既有材质语义,安装类型区分ground／floor_standing／wall_mounted／tabletop／structural／unit；壁挂资产不得由落地资产抬高冒充；排序按可见接触线而非透明画布底边
+ ART-SCENE-ASSEMBLY,审核,场景组合验收,原生坐标表＋绘制顺序＋1×与标准6×应用接触图,按场景共享色族,先检查可行走与碰撞点击遮挡语义，再检查真实尺度支撑关系浮空穿插错误挂墙前后层和承载面；单件机器PASS不等于组合PASS
+@@ -33,7 +33,7 @@
+ ART-UI-ENCYCLOPEDIA-SPELL,界面,百科术式条目卡,沿用既有三列卡牌与效果数值区；右上角不显示构筑标签；名称下不显示目标／选取／作用说明行,主词条与附带词条仍显示；构筑分类保留筛选和检索,装备法宝条目及共用悬停详情窗不随此项改动
+ ART-UI-CHARACTER-SELECT,界面,多角色选择与基础配置,1920×1080；右侧384×576大立绘；左侧学生档案与经历；底部最多6个角色槽,学院阶段清朗魔法学院界面与角色元素色,当前只为维克多显示完整身份与能力；未确认角色只显示未开放占位；确认后该存档角色固定
+ ART-UI-BACKPACK,界面,装备与背包三列工作区,1920×1080；从左到右为人物属性与状态详情含当前角色立绘／3×3装备九槽与四格战术栏／按真实容量生成的网格（无背包6列×4行；装备后读取背包属性；列数≤10）,学院阶段清朗魔法学院档案界面与角色元素色,战术栏不得放入背包列或独立详情列；术式栏保持11B独立分页；尺寸显式写为X列×Y行；物品详情使用共用内容悬浮窗；容量变化时网格与占格同步重排显示
+-ART-UI-SPLIT,界面,战场与右HUD,1440×1080上部区域与480×1080上部区域,中性与状态色,底栏以上75比25
++ART-UI-SPLIT,界面,全宽战场与悬浮HUD,视口（16／80／1888／768）；左上人物（16／80／416／248）；顶部偏右行动顺序（1032／80／824／96）,中性与状态色,取消固定右栏；行动顺序每单位一次且跟随真实值速度与合法预览；展开不重排视口
+ ART-UI-BOTTOM,界面,底部指令栏,1888×200外边距16,深色承重托盘,横跨全宽
+ ART-UI-GROUPS,界面,底栏三组尺寸,1292×196/360×196/204×196,功能分组,术式/战术栏/结束回合；移动攻击搜刮互动由右键情境菜单提供
+ ART-MAP-REGION-BLOCK,地图界面,区域底图与边界,区域使用低对比固定色块并保留地图主体面积,区域色,不要求独立地貌建筑或区域背景资产；区域表现不得压过节点与连线
+@@ -48,7 +48,7 @@
+ ART-CONTEXT-ACTION,界面,战场右键双行指令,536×104行距112,1px细框,名称与资源摘要各40px且上下内边至少12px
+ ART-REWARD-CARD,界面,商店商品与奖励候选内容卡,商店内容卡宽432且高度自适应；F40三项候选使用独立窗口内三张大卡,同ART-SPELL-TOOLTIP的1px方角细框与内容结构,商店固定显示共用内容卡的完整内容；F40三卡窗口优先显示正式大图标名称关键效果和选中态，完整指标词条效果由共用悬浮窗查看；商店价格和购买按钮在卡下方；F40先选再确认收入并保留放弃奖励确认；固定所得与候选区须明确区分
+ ART-LOOT-TRAY,界面,F40战利品清点与收集共用子界面,1920×1080阻塞式页面；顶部仅显示战利品搜刮；左侧较窄的书页色战利品台逐项显露固定所得及醒目的待开奖励；点击奖励进入独立三卡窗口，选定后返回战利品台；右侧加宽且占满整栏的横向书页色真实背包格、已占容量与半透明预计占格，不设置独立物品展示区；资源与去向优先用图标数量表达；底部清点进度与右下角离开按钮，左侧条目点击即领取，首次漏领离开提醒一次；资源收据可切换紧凑态,学院阶段清朗档案界面与氧化黄铜#A86F22,奖励候选复用ART-SPELL-TOOLTIP图标内容与悬浮详情；F41作为空间不足去向处理态；鼠标键盘和手柄共用焦点顺序；禁止自动丢弃自动替换和重复入袋反馈
+-ART-COMBAT-STATUS,界面,右侧英雄状态首行,226×40,状态语义色,只展开一个状态其余显示+N且不得侵入行动点与资源条
++ART-COMBAT-STATUS,界面,左上人物状态与右侧行动值抽屉,人物正面416×248背面416×280；行动值浮层（1432／240／416／436）；页签（1860／320／44／136）,状态语义色,默认收起；悬停200ms打开移出350ms收起；页签和浮层内保持展开；点击固定；模态或退出清悬停；沿用行动条与记录翻面
+ ART-SPELL-ICON,界面,术式图标,64×64,元素轮廓,快捷键24×24叠左上
+ ART-SPELL-COST,界面,术式资源块,60×64,透明底＋资源语义色,两枚16px正式语义图严格2倍显示为32px；不得给图标附加黑底；数量文本只保留结算所需短数字
+ ART-FONT-BODY,字体,正文按钮菜单关键数值,24px,FusionPixel12ProportionalZhHans,Normal字形无BestFit阴影或描边
+@@ -64,11 +64,11 @@
+ ART-PIXEL-STABILITY,审核,统一流程稳定性基线,学院维护混合批次6项／11次独立生图；首轮网格2／6；一次定向重试后6／6无缩放解码与manifest验证,证明必须保留自动拒绝和定向重试,不以单次生图成功率宣称无人值守量产
+ ART-REVIEW-FIRST-B1,审核,雨后灯庭水面与灯藤v3当前复审,2026-09-05两项QA_PENDING，当前批准0/2,以飞书rev320与本轮用户裁决为基准,旧FORMAL仅追溯；本轮技术2/2与Importer通过；新布局实机接触和人工审美待验；批准0/2，不新增正式替换或扩散复用
+ ART-PLAN-20260905,规划,首战美术与视觉迭代方案交付,方案与评审页及顺序清单已归档，新增正式资产0项,沿用当前暖纸档案方向,布局、真实移动、攻击/火术与法宝反馈代码门禁通过；底栏双分辨率静态接触已修复遮挡；整体实机与审美待完成；完整目标进行中
+-ART-VIEWPORT-OVERVIEW,战场表现,首轮全场视口与像素倍率,视口16/80/1408/768；全场总览按32屏幕单位整数档适配完整逻辑棋盘并居中；原生格32×32；1920基准档每格192屏幕单位即6倍，放大档为12倍；960基准档为3倍，放大档为6倍,中性与状态语义色,两档复用同一原生32PPU资产且只做整数倍率显示；禁止独立32／64伴随图；单位画布与脚底锚点规则不变；隐藏非当前范围；特殊地形说明含占位单位
++ART-VIEWPORT-OVERVIEW,战场表现,首轮全场视口与像素倍率,视口16/80/1888/768；全场总览按32屏幕单位整数档适配完整逻辑棋盘并居中；原生格32×32；1920基准档每格192屏幕单位即6倍，放大档为12倍；960基准档为3倍，放大档为6倍,中性与状态语义色,两档复用同一原生32PPU资产且只做整数倍率显示；禁止独立32／64伴随图；单位画布与脚底锚点规则不变；隐藏非当前范围；特殊地形说明含占位单位
+ ART-HUD-SAFE-AREA,界面,战斗抬头、右侧双卡与底栏安全区,抬头左侧生命/金币/学院贡献/剩余时间并使用正式资源图标；金币与学院贡献显示当前持有量，剩余时间显示距学期节点的当前剩余量；右侧背包/重开/离开各120宽且间隔8；右栏1456/80/448/768；行动值16/16/416/480；英雄16/508/416/244；AP徽章32/756/96/96；底栏顶864,右侧两卡各自不透明底色与1px细框且卡间12px；正文24；资源条文字只显示当前／上限或当前值,行动值在上英雄在下；两卡独立翻面；英雄背面状态／被动双栏；行动值背面最新战斗记录；Tab双翻；取消常驻决策提示条；完整原因悬停查看；目标收回后只显示正式靶标图标
+ ART-RESOURCE-ICONS-12,界面,全局资源语义图标,生命/魔力/金币/学院贡献/学期时间/行动点/次数/负重/风险/探索/零件/护盾等共用原生12×12透明底图标；最多4色；彩色主体外有1px纯黑描边；界面按2／3倍整数放大,保留既有资源语义色,禁止放大旧8px或缩小32px细节图；禁止黑底、渐变、抗锯齿与非整数倍率；1×和实际应用均须一眼可辨
+-ART-RESOURCE-BAR-32,界面,右侧HUD英雄生命护盾个人魔力资源条,独立FormalHudResourceBar预制体；原生32×32九宫格轨道与填充资产；炭墨1px外轮廓；暖象牙／浅石框体；氧化黄铜结构点；深色内凹轨道；固定尺寸填充图只做水平裁切且禁止按数值比例横向缩放,生命封存红／护盾钢铁银／魔力高明度冷青,三项共用同一右侧HUD预制体与同一填充结构并只切换语义色；无场景光照渐变抗锯齿微纹理或青黑终端皮肤；1920与960只做整数倍率；边角轮廓端帽厚度不随长度变化
+-ART-UNIT-BAR-16,界面,单位脚下生命护盾与个人魔力读数,独立FormalUnitHealthBar预制体；生命条固定128×16参考像素并以单位中心线居中；下方个人魔力条固定128×8参考像素；两条均不随战场滚轮缩放；填充贴图固定尺寸并仅水平裁切；炭墨1px外轮廓；无内部比例刻度；生命常驻显示当前／上限；有护盾时在生命条左侧额外显示32×16区域的12px盾牌图标与当前数字且不得侵占缩短或推动生命条；不再显示第二条盾条,生命封存红／护盾图标与数字钢铁银／个人魔力高明度冷青,与右侧HUD资源条分开维护；无装饰渐变抗锯齿微纹理或黑底块；整数倍率显示；无护盾时整组盾牌读数隐藏；不得遮挡单位脚部或扩大格位输入热区
++ART-RESOURCE-BAR-32,界面,左上人物HUD生命护盾个人魔力资源条,独立FormalHudResourceBar预制体；原生32×32九宫格轨道与填充资产；炭墨1px外轮廓；暖象牙／浅石框体；氧化黄铜结构点；深色内凹轨道；固定尺寸填充图只做水平裁切且禁止按数值比例横向缩放,生命封存红／护盾钢铁银／魔力高明度冷青,三项共用同一左上人物HUD预制体与同一填充结构并只切换语义色；无场景光照渐变抗锯齿微纹理或青黑终端皮肤；1920与960只做整数倍率；边角轮廓端帽厚度不随长度变化
++ART-UNIT-BAR-16,界面,单位脚下生命护盾与个人魔力读数,独立FormalUnitHealthBar预制体；生命条固定128×16参考像素并以单位中心线居中；下方个人魔力条固定128×8参考像素；两条均不随战场滚轮缩放；填充贴图固定尺寸并仅水平裁切；炭墨1px外轮廓；无内部比例刻度；生命常驻显示当前／上限；有护盾时在生命条左侧额外显示32×16区域的12px盾牌图标与当前数字且不得侵占缩短或推动生命条；不再显示第二条盾条,生命封存红／护盾图标与数字钢铁银／个人魔力高明度冷青,与左上人物HUD资源条分开维护；无装饰渐变抗锯齿微纹理或黑底块；整数倍率显示；无护盾时整组盾牌读数隐藏；不得遮挡单位脚部或扩大格位输入热区
+ ART-TURN-FEEDBACK,表现,当前轮次与行动值变化,回合标志按格尺寸的1.125倍四角框，黑6白2＋顶部464×52短时回合横幅；16×16顺位箭头；行动条悬停时对应单位头顶使用原生16×16银白金属下指箭头按3倍整数显示并上下循环,黑白轮次标志；顺位上升绿／下降红；悬停定位银白金属,行动条悬停定位不得再显示单位脚底方框；箭头优先贴近可见头顶，和意图徽记冲突时移到意图图标正上方，视口顶缘不足时才侧向避让；换人先加速后减速；行动值数字与条形平滑过渡；规则值立即生效
+ ART-CELL-HOVER,界面,战场地块悬浮信息组,首次停留0.35秒；已显示后连续扫过相邻地块0.10秒；主角不显示单位窗；敌人精简窗居左；右侧按状态逐窗、地表瓦片、地形效果、物块排序；选中敌人详细窗位于场地右上角并可关闭；仅显示当前规则生效的图标化属性、意图与状态词条，敌人武器不显示；肉鸽隐藏无效护甲与格挡并标明速度；生命与护盾并排读数，护盾紧邻生命，使用正式12×12资源语义图；盾术生回合整盾为状态词条且受破势时显示受阻；被动及增减益按状态词条显示名称和层数或次数、悬停仅看第一句,各分类沿用对应语义色,每条状态独立成窗且无状态不显示；三类地块信息各自独立且每窗一句话；分类为空不显示；移出地块、打开操作菜单或移动视口立即关闭；BattlefieldHoverCard Prefab承载稳定层级；运行时只绑定真实地块单位状态数据
+ ART-ROGUE-INLINE-RESULT,界面,肉鸽节点结果信息归属,事件选项／加工卡／医疗服务卡／商品卡内直接显示条件成本和确定结果,沿用对应功能状态色,不另设结果预览块；事件加工医疗最终确认后结算；商品卡点击直接购买且无确认交易按钮；出发页仅在出发按钮上方显示本次战斗消耗的学院时序（含0点），左侧不设耗时卡；敌情与场地合并成一段简介；不另设生命结算出身提示或构筑摘要
+@@ -87,7 +87,7 @@
+ ART-MOVE-RANGE,战场,步数真实性,高亮／有效格数／失败原因共用真实路径与当前步数预算,移动可达用青色内缩方框及低透明填色,束缚／AP／回合／结局门控；水藤代价与敏捷出身修正及障碍占位；只读缓存与变化失效
+ ART-ATTACK-RANGE,战场,攻击射程与可提交目标,真实射程／视线／行动点／魔力与可投递条件,可选深绿框与作用绿填色；敌方范围琥珀框与作用红填色,视线截断／近身死区／超射程不得呈现为可提交目标；自身格仅合法自身动作；有效格数只计可提交格
+ ART-ENEMY-INTENT-DEST,战场表现,敌人路径与落点,原生32格整数几何路径节点与落点框及中心方向标记,橙色；公开意图改变850ms暖色闪烁与变字并反馈新路径和作用格,初次显示和重复计划不提示；关闭动画稳定短提示；重开退出清理；不改变AI与结算
+-ART-BATTLEFIELD-EDGE-OVERHANG,战场表现,逻辑格上边与右边物件完整显示,所有格子地面先绘制；玩法物件进入棋盘共用独立层并按接触线排序；相邻格地面不得覆盖物件越格内容；地图视口上边与右边保留至少1格可平移余量；最大64×64单格物件轮廓完整,不改变逻辑占格或贴图原件；越格内容仍服从战场总视口裁剪且不得覆盖顶部抬头或右侧HUD；点击归属仍为原格
++ART-BATTLEFIELD-EDGE-OVERHANG,战场表现,逻辑格上边与右边物件完整显示,所有格子地面先绘制；玩法物件进入棋盘共用独立层并按接触线排序；相邻格地面不得覆盖物件越格内容；地图视口上边与右边保留至少1格可平移余量；最大64×64单格物件轮廓完整,不改变逻辑占格或贴图原件；越格内容仍服从战场总视口裁剪且不得覆盖顶部抬头或悬浮HUD；点击归属仍为原格
+ ART-CONTEXT-PREVIEW,交互表现,选点与右键菜单预览,首次左击选点并保持；非移动动作再次同格确认；移动双击可达格；菜单行悬停预览点击确认,白色焦点角标；确认浅绿与拒绝红角标400ms,菜单打开仅锚点；悬停行预览该行动；移出仅锚点；关闭恢复动作范围；换动作／回合／交互取消待确认；不延迟提交其他动作
+ ART-TERRAIN-DEPTH,表现,灯藤前沿与地面附属物层级,原图32px按后22行前10行分层；64/128格整数采样,前沿固定地块并按深度遮同格脚部；地面附属物在环境物件之下,空藤合成像素一致；移动不拖地形；命中快照烧毁清理；点击透传；原图GUIDImporter不变；v3仍QA_PENDING0/2；实机审美待验
+ ART-UNIT-PIXEL-INPUT,交互表现,单位逻辑格输入归属,所有英雄与敌人使用所在完整逻辑格；格内空白可选；越格身体透传至指针所在格,格位热区随棋盘平移缩放并服从视口裁剪；沿用真实格位指令与门控,身体生命护盾魔力状态意图不接收战场输入；保留原图轮廓与深度；不以Alpha判断点击；右键菜单和自施术按格位处理
+--- before/Worldbuilding/策划案/OCC_项目总策划案_v1.0.md
++++ Worldbuilding/策划案/OCC_项目总策划案_v1.0.md
+@@ -1200,7 +1200,7 @@
+ 
+ ![当前实机战斗界面（2026-09-06）](https://feishu.cn/file/AL1Kbv3S5oWXclxy21KccZ0MnNb)
+ 
+-战场、HUD 与指令区见图；操作流程见 3.2.1，快捷键见 5.2。右侧英雄概况卡与行动值卡各自提供翻面按钮，分别查看角色状态／被动效果与最新战斗记录；Tab 同时翻转两张卡。
++战斗界面取消固定右侧栏，战场使用底部指令区以上的完整宽度。人物生命、护盾、个人魔力与状态集中在左上角；顶部偏右常驻紧凑的预计行动顺序。右侧行动值页签默认收起，悬停展开原行动条，点击可固定展开；展开面板覆盖战场，不改变视口尺寸或镜头。操作流程见3.2.1，快捷键见5.2。人物概况与行动值仍各自支持翻面，Tab打开并固定行动值面板后同时翻转两区。
+ 
+ **入场演出：**战斗状态激活后，战场先淡入并从轻微收拢恢复至稳定比例，随后 HUD 淡入，最后衔接当前行动者提示。演出采用不受时间缩放影响的时间；动画关闭时立即显示最终状态，不阻塞或改变任何战斗状态。
+ 
+@@ -1933,7 +1933,7 @@
+ - [ ] 【美术表现线】像素显示管线第二阶段：连续地表与战术网格分层重构
+ - [ ] 【美术表现线】像素显示管线第三阶段：角色、物件、UI、字体与 VFX 的统一像素密度母版
+ - [ ] 【美术表现线】像素显示管线第四阶段：移除非整数缩放动画并改为像素稳定过渡
+-- [ ] 【美术表现线】按 A.2 收口战场显示倍率（6 倍整数放大、玩法格 192、一屏 7×4 格）：代码已在并行开发线落地（`CellSize=192`、档位 96–384、步长 32），待实际运行入口验收
++- [ ] 【美术表现线】按 A.2 收口战场显示倍率（6 倍整数放大、玩法格 192、一屏 9×4 格）：代码已在并行开发线落地（`CellSize=192`、档位 96–384、步长 32），待实际运行入口验收
+ 
+ # 附录 A 美术规范与视觉反馈
+ 
+@@ -1947,9 +1947,9 @@
+ 
+ ## A.2 像素与布局
+ 
+-1920×1080参考画布，上部地图75%、右HUD25%；底栏1888×200、外边距16，五组宽度200/1100/152/176/204。战场显示统一为**6倍整数放大**：原生缓冲区320×180，1原生像素=6屏幕像素；1920×1080下1920/320与1080/180均整除为6，与主要参考《赛菲莉娅》的像素颗粒同级。**世界尺度（一切尺寸的唯一锚点）：1 原生像素 = 3.125 厘米，一个玩法格 = 32×32 原生像素 = 1.00 米见方。**由此推导、不再另行商定：人形主体 46–58px = **1.44–1.81 米**（正常人类身高，火法师 51px = 1.59 米）；一格移动 = 1 米；12×9 盘面 = 12×9 米；1408×768 视口的 7×4 格 = 7×4 米；地面方格前立面 8px = 25 厘米高差。人物是侧视，像素高度即真实身高；地面与墙是俯视，其画布高度只作高度提示，真实高度由玩法定义（不可破坏地形占满整格，即视为阻挡通行与视线，不以其像素高度反推）。战场视口1408×768一屏显示**7×4个玩法格**；显示倍率不得为小数，分辨率非整数倍时用整数缩放加信箱边，禁止半像素绘制。**玩法格=32×32原生像素=192屏幕单位**；地面**每格一张32×32方格素材**——一格一图、自成一体，不做跨格底图，当前版本不做材质过渡件，格子靠边框区分。每块地面**自带明显格边框**：1原生像素宽、使用本材质自身的暗色（不得纯黑）、四边一致，相邻瓦片拼接后边框重合为一条；边框内侧留1像素受光唇线以读作高度。**立体感由独立的前立面素材提供**：32×8前立面贴于所属格南侧外沿、向下越出8像素并覆盖下一行格的顶面，按行由远及近绘制，使每格读成一块抬起的方砖；前立面不占逻辑格与点击区，可按格选用（需要高差时才放）。人物**允许冒出所属格**：主体高度高于一格而低于两格（32×64画布、主体32–58原生像素，即一格高度的1–1.8倍），脚底锚定格底、上半身自然越出；这是刻意选择，不因此改变逻辑占格。有方向的地图外沿地块使用**32×40**画布，上方32×32严格对齐一格可走地表，下方8px作为棋盘外立面越出显示，不占逻辑格或点击区，按方向独立制作且不得运行时旋转。学院永久重物块使用**32×64 透明视觉画布**的相邻格拼接图块：每格仍是不可通行、阻挡攻击线且不可破坏的单格物块，逻辑仍占一格；可见墙体边界在画布x0–31、y22–63，整体32px宽、42px高；顶面与端角允许内收成阶梯剪影，实体内部无透明孔洞，以底边中心锚定所属格，向北越出10px；其余区域透明硬Alpha，按行从北到南绘制并复核对北侧地格、单位和墙段的遮挡。只读取同类永久墙在北、东、南、西的相邻格，先按四邻接掩码确定结构图块，再在该掩码的A／B两张同结构石纹变体中按格坐标(x+y)的奇偶确定一张；两种纹理共享外轮廓、顶缘、墙脚及接边像素，坐标选图固定、与随机数及战斗状态无关，读档后保持一致。北侧外露时画连续的浅暖石顶缘，北侧连接的墙身不逐格重复顶面；南侧外露时画统一朝屏幕下方的暖灰石墙脚；东西端面与转角只在对应外露边出现。相接边的明暗、石层和低对比结构缝必须对齐，孤立格读作完整承重石墩，横排读作连续短墙，纵排与转角读作一体石砌墙身，不形成逐格重复的横条。学院阶段以象牙浅暖石和中性暖灰石为主，不用深青面板；无裂纹、破损和碎块。选图仅改变外观，不改变原格的移动、攻击线、点击或地图配置；不依赖运行时旋转或镜像。单位沿用现有32×64画布与素材，渲染时一律按1原生像素=6屏幕单位绘制（32×64画布即192×384屏幕单位），逻辑占格与视觉画布分离；单格宝箱等可使用64×64视觉画布，以底部中心锚定所属格并允许有限越格显示，不因此增加逻辑占格。透明物件和单位保留至少1px画布安全边，连接型覆盖与铺满地面的底图可按功能触边。多格地表及明确多格实体使用(W×32)×(H×32)逻辑基线。人物和意图按足底与空间分层；越格遮挡、相邻层级及藤内表现必须实机复核。
+-
+-室内常见物件默认采用现实世界的常见尺寸，不再为画面方便逐件自由放大或缩小：生成前记录物件的现实宽、深、高，并按1原生像素=3.125厘米换算其**可见主体边界**；透明画布留白不计入物理尺寸。虚构的魔法设备以现实中功能最接近的家具、炉具、实验设备或维护设备为尺寸参照；低于可读下限而有意放大的物件必须在 manifest 记录倍率和原因。概念陈列图可以不受战场7×4视口、逻辑占格和可行走布局约束，但仍必须遵守同一世界尺度、统一物件视角、固定光源、原生像素密度与整数倍展示，不得借“概念”掩盖人物、家具和设备之间的比例失真。
++1920×1080参考画布，上部地图使用全宽，左上人物状态、顶部偏右行动顺序与右侧悬停抽屉按A.4执行；底栏1888×200、外边距16，五组宽度200/1100/152/176/204。战场显示统一为**6倍整数放大**：原生缓冲区320×180，1原生像素=6屏幕像素；1920×1080下1920/320与1080/180均整除为6，与主要参考《赛菲莉娅》的像素颗粒同级。**世界尺度（一切尺寸的唯一锚点）：1 原生像素 = 3.125 厘米，一个玩法格 = 32×32 原生像素 = 1.00 米见方。**由此推导、不再另行商定：人形主体 46–58px = **1.44–1.81 米**（正常人类身高，火法师 51px = 1.59 米）；一格移动 = 1 米；12×9 盘面 = 12×9 米；1888×768 视口的 9×4 格 = 9×4 米；地面方格前立面 8px = 25 厘米高差。人物是侧视，像素高度即真实身高；地面与墙是俯视，其画布高度只作高度提示，真实高度由玩法定义（不可破坏地形占满整格，即视为阻挡通行与视线，不以其像素高度反推）。战场视口1888×768一屏显示**9×4个玩法格**；显示倍率不得为小数，分辨率非整数倍时用整数缩放加信箱边，禁止半像素绘制。**玩法格=32×32原生像素=192屏幕单位**；地面**每格一张32×32方格素材**——一格一图、自成一体，不做跨格底图，当前版本不做材质过渡件，格子靠边框区分。每块地面**自带明显格边框**：1原生像素宽、使用本材质自身的暗色（不得纯黑）、四边一致，相邻瓦片拼接后边框重合为一条；边框内侧留1像素受光唇线以读作高度。**立体感由独立的前立面素材提供**：32×8前立面贴于所属格南侧外沿、向下越出8像素并覆盖下一行格的顶面，按行由远及近绘制，使每格读成一块抬起的方砖；前立面不占逻辑格与点击区，可按格选用（需要高差时才放）。人物**允许冒出所属格**：主体高度高于一格而低于两格（32×64画布、主体32–58原生像素，即一格高度的1–1.8倍），脚底锚定格底、上半身自然越出；这是刻意选择，不因此改变逻辑占格。有方向的地图外沿地块使用**32×40**画布，上方32×32严格对齐一格可走地表，下方8px作为棋盘外立面越出显示，不占逻辑格或点击区，按方向独立制作且不得运行时旋转。学院永久重物块使用**32×64 透明视觉画布**的相邻格拼接图块：每格仍是不可通行、阻挡攻击线且不可破坏的单格物块，逻辑仍占一格；可见墙体边界在画布x0–31、y22–63，整体32px宽、42px高；顶面与端角允许内收成阶梯剪影，实体内部无透明孔洞，以底边中心锚定所属格，向北越出10px；其余区域透明硬Alpha，按行从北到南绘制并复核对北侧地格、单位和墙段的遮挡。只读取同类永久墙在北、东、南、西的相邻格，先按四邻接掩码确定结构图块，再在该掩码的A／B两张同结构石纹变体中按格坐标(x+y)的奇偶确定一张；两种纹理共享外轮廓、顶缘、墙脚及接边像素，坐标选图固定、与随机数及战斗状态无关，读档后保持一致。北侧外露时画连续的浅暖石顶缘，北侧连接的墙身不逐格重复顶面；南侧外露时画统一朝屏幕下方的暖灰石墙脚；东西端面与转角只在对应外露边出现。相接边的明暗、石层和低对比结构缝必须对齐，孤立格读作完整承重石墩，横排读作连续短墙，纵排与转角读作一体石砌墙身，不形成逐格重复的横条。学院阶段以象牙浅暖石和中性暖灰石为主，不用深青面板；无裂纹、破损和碎块。选图仅改变外观，不改变原格的移动、攻击线、点击或地图配置；不依赖运行时旋转或镜像。单位沿用现有32×64画布与素材，渲染时一律按1原生像素=6屏幕单位绘制（32×64画布即192×384屏幕单位），逻辑占格与视觉画布分离；单格宝箱等可使用64×64视觉画布，以底部中心锚定所属格并允许有限越格显示，不因此增加逻辑占格。透明物件和单位保留至少1px画布安全边，连接型覆盖与铺满地面的底图可按功能触边。多格地表及明确多格实体使用(W×32)×(H×32)逻辑基线。人物和意图按足底与空间分层；越格遮挡、相邻层级及藤内表现必须实机复核。
++
++室内常见物件默认采用现实世界的常见尺寸，不再为画面方便逐件自由放大或缩小：生成前记录物件的现实宽、深、高，并按1原生像素=3.125厘米换算其**可见主体边界**；透明画布留白不计入物理尺寸。虚构的魔法设备以现实中功能最接近的家具、炉具、实验设备或维护设备为尺寸参照；低于可读下限而有意放大的物件必须在 manifest 记录倍率和原因。概念陈列图可以不受战场9×4视口、逻辑占格和可行走布局约束，但仍必须遵守同一世界尺度、统一物件视角、固定光源、原生像素密度与整数倍展示，不得借“概念”掩盖人物、家具和设备之间的比例失真。
+ 
+ **汉字占位符口径（已确认）**：某一元素的正式像素资产尚未入库时，该元素在战场与悬停说明中直接使用其名称的汉字作为占位符，不阻断规则接入与验收；占位符用字必须与 `OCC_地图元素配置表_v1.0.csv` 的名称逐字一致。当前占位符已覆盖：浅水、燃烧地格、散页、痕迹（含加深）、约束纹、页幕、烟尘、碎晶、塔内机关、过载装置、护罩发生器、重掩体、轻掩体、灯藤、蓄能晶簇、永久重物块、任务目标、诱导物。风与光带是全场环境状态、不逐格标名；风只在已启用的风系关卡通过敌方意图与战斗记录公开风向、风级和剩余换风次数，其他关卡不显示风况；光带由战场与敌方意图公开，不保留顶部常驻读数。正式资产入库后逐项替换占位符，替换前不得视为可发布美术。
+ 
+@@ -1997,11 +1997,11 @@
+ 
+ 表现只消费真实结算；关闭或跳过动画不得改变生命、魔力、行动点、位置、状态、AI或存档。新美术须依次通过独立原料、manifest、1×／4×／灰阶／棋盘格、实际应用、人工审美、稳定 GUID 与 Importer、运行时复核后才能成为正式资产。机器检查或代码完成不能替代人工审美与实机验收。
+ 
+-## A.4 右侧信息栏安全区
+-
+-右侧信息栏参考坐标为（1456，80），尺寸448×768，底边与底部指令栏之间保留16px。行动值、英雄概况是两张彼此分离的卡片，分别为（16，16，416，480）、（16，508，416，244），各自使用不透明底色和1px细框，卡间保留12px空隙，不新增第三块常驻战斗记录区。两区各有独立翻面按钮，当前战斗内分别保持自己的正反面状态；Tab 同时翻转两区，无论两区此前是否同步。英雄概况正面保留生命、护盾、个人魔力与状态；资源条文字只显示当前／上限，肉鸽无上限护盾只显示当前值，不重复“上限”“100%”等说明。背面为“玩家状态／被动效果”两栏，左栏显示行动、资源、护盾与当前状态，右栏显示当前生效的被动及来源，无内容时显示明确空态。行动值正面显示0／100／199轴、全局进度和最多五名单位的速度、当前值及预览变化；背面按最新在前读取真实战斗事件记录，内容超出时可滚动查看。每次行动值变化时，数字与条形长度都从当前显示值平滑过渡；预览改变预计出手顺位时，只在对应行右侧循环显示绿色上箭头或红色下箭头。鼠标悬停行动条某一单位行时，战场对应单位脚底不再显示定位方框，改为紧贴可见头顶的银白金属下指箭头上下循环；与意图图标冲突时箭头移到意图图标正上方，只有视口顶缘空间不足时才横向避让；移出该行立即隐藏。战斗抬头左侧固定以原生12×12正式资源图标按整数倍放大显示当前生命、当前持有金币、当前持有学院贡献和距学期节点的当前剩余时间，右侧为彼此留有间距的背包、重开、离开按钮。关卡目标收回后只显示正式靶标图标，不显示“关卡目标”文字。行动点使用战场左下96×96菱形徽章，以同套12×12正式行动点图标按整数倍放大并配当前／基础上限数字显示，不以固定三格或“AP”文字表示。
+-
+-英雄生命、护盾与个人魔力资源条使用原生32×32九宫格美术：炭墨单像素外轮廓、暖象牙／浅石框体、少量氧化黄铜结构点和深色内凹轨道，固定左上体积明暗但不烘焙场景光照。生命填充使用封存红，护盾填充使用钢铁银，个人魔力填充使用高明度冷青；三者共享同一个右侧HUD资源条预制体及相同结构，只切换语义材质色，不使用渐变、抗锯齿、细密纹理或青黑终端皮肤。资源数值变化通过固定尺寸填充图的水平裁切表示，禁止按当前比例横向压缩或拉伸填充贴图。单位脚下使用独立的单位资源条预制体：生命条固定128×16参考像素并始终以单位中心线居中，下方个人魔力条固定128×8参考像素；两条均不跟随战场滚轮缩放，使用一参考像素炭墨外框、无内部比例刻度，生命条常驻显示当前生命／上限，个人魔力使用高明度冷青。单位具有护盾时，在生命条左侧额外显示固定32×16参考像素的盾牌图标与当前护盾数字，徽标不得侵占、缩短或推动居中的128px生命条，不再另列第二条盾条。单位条与右侧HUD条是两套独立预制体，分别调节尺寸和美术，但各自内部必须统一。两套资源显示在1920×1080与960×540下只按整数倍率显示，数值变化只裁切填充，不拉伸轮廓、端帽或像素纹理。
++## A.4 战斗悬浮HUD与行动值抽屉
++
++战场参考视口为（16，80，1888，768），不再为右栏预留宽度。人物概况位于左上（16，80），正面416×248，背面按状态内容展开至416×280，使用不透明底色和1px细框。正面显示生命、护盾、个人魔力和状态图标，肉鸽无上限护盾只显示当前值；背面保留玩家状态和被动效果两栏及逐项悬停说明。顶部偏右（1032，80，824，96）常驻行动顺序：突出当前行动单位，其后按当前行动值、有效速度与固定顺序计算预计首次出手顺序，每个单位只出现一次，死亡或退出立即移除；超过七名时显示剩余数量。合法术式预览导致行动值变化时同步重排，取消预览恢复，悬停头像定位单位、点击聚焦。右侧页签位于（1860，320，44，136），明确显示行动值。悬停200ms展开（1432，240，416，436）行动值浮层；鼠标位于页签或面板内保持展开，移出350ms收起；点击页签或固定按钮切换固定展开，键盘及手柄选中页签同样可打开。浮层不挤压战场或移动镜头，收起后不拦截战场输入；打开阻塞弹窗或离开战斗时清除悬停并收起。行动值正面保留0／100／199轴、全局进度、最多五名单位的速度、当前值及预览变化，背面保留最新在前的可滚动真实战斗记录。数值与条形长度平滑过渡，顺位变化沿用绿色上箭头和红色下箭头。悬停行动行或顶部头像时，战场单位头顶显示银白定位箭头；与意图冲突时避让，移出立即隐藏。战斗抬头保留金币、学院贡献、学期剩余时间、当前回合与指令可用性，以及百科、背包、重开、暂离和离开入口；生命归入左上人物卡。关卡目标收回后只显示正式靶标图标。战场左下保留96×96行动点菱形徽章，以正式资源图标和当前／基础上限显示，不使用固定三格或AP文字。底部术式八槽、战术栏四槽和结束回合继续使用现有功能布局。
++
++英雄生命、护盾与个人魔力资源条使用原生32×32九宫格美术：炭墨单像素外轮廓、暖象牙／浅石框体、少量氧化黄铜结构点和深色内凹轨道，固定左上体积明暗但不烘焙场景光照。生命填充使用封存红，护盾填充使用钢铁银，个人魔力填充使用高明度冷青；三者共享同一个左上人物HUD资源条预制体及相同结构，只切换语义材质色，不使用渐变、抗锯齿、细密纹理或青黑终端皮肤。资源数值变化通过固定尺寸填充图的水平裁切表示，禁止按当前比例横向压缩或拉伸填充贴图。单位脚下使用独立的单位资源条预制体：生命条固定128×16参考像素并始终以单位中心线居中，下方个人魔力条固定128×8参考像素；两条均不跟随战场滚轮缩放，使用一参考像素炭墨外框、无内部比例刻度，生命条常驻显示当前生命／上限，个人魔力使用高明度冷青。单位具有护盾时，在生命条左侧额外显示固定32×16参考像素的盾牌图标与当前护盾数字，徽标不得侵占、缩短或推动居中的128px生命条，不再另列第二条盾条。单位条与左上人物HUD条是两套独立预制体，分别调节尺寸和美术，但各自内部必须统一。两套资源显示在1920×1080与960×540下只按整数倍率显示，数值变化只裁切填充，不拉伸轮廓、端帽或像素纹理。
+ 
+ ## A.5 结算来源与延迟触发表现
+ 
+@@ -2047,7 +2047,7 @@
+ 
+ ## A.15 战棋遮挡与点选可读性
+ 
+-单位被后绘制单位或灯藤前沿遮挡时，只沿已显示单位的原图边界补一世界像素语义轮廓：友方冷青、敌方红。轮廓位于角色之上、信息栏之下，服从视口裁剪，不扩大点击热区，也不显示未呈现单位或内部搜索目标。单位生命、护盾、魔力条与头顶状态及意图只显示信息，不提供独立单位点击入口；全部透传至指针所在逻辑格。单位所在格的空白区域仍可选择该格单位，越格贴图、透明像素和装饰轮廓均不得拦截相邻格操作。战场物件允许视觉画布越过所属逻辑格；所有格子的地面绘制完成后，再在棋盘共用物件层按接触线顺序绘制玩法物件，禁止相邻格地面覆盖物件越格到上方或右方的内容。地图视口在上边与右边保留至少1个逻辑格的可平移显示余量，使最大64×64单格物件的完整轮廓可见，不裁切贴图、不改变逻辑占格或所属格输入。越格内容仍服从战场总视口裁剪，不得覆盖右侧HUD或顶部抬头。
++单位被后绘制单位或灯藤前沿遮挡时，只沿已显示单位的原图边界补一世界像素语义轮廓：友方冷青、敌方红。轮廓位于角色之上、信息栏之下，服从视口裁剪，不扩大点击热区，也不显示未呈现单位或内部搜索目标。单位生命、护盾、魔力条与头顶状态及意图只显示信息，不提供独立单位点击入口；全部透传至指针所在逻辑格。单位所在格的空白区域仍可选择该格单位，越格贴图、透明像素和装饰轮廓均不得拦截相邻格操作。战场物件允许视觉画布越过所属逻辑格；所有格子的地面绘制完成后，再在棋盘共用物件层按接触线顺序绘制玩法物件，禁止相邻格地面覆盖物件越格到上方或右方的内容。地图视口在上边与右边保留至少1个逻辑格的可平移显示余量，使最大64×64单格物件的完整轮廓可见，不裁切贴图、不改变逻辑占格或所属格输入。越格内容仍服从战场总视口裁剪，不得覆盖左上人物HUD或顶部抬头。
+ 
+ ## A.16 同时反馈的可读性
+ 
+--- /dev/null
++++ UnityProject/Assets/Game/Runtime/Presentation/CombatTimelineDrawer.cs
+@@ -0,0 +1,101 @@
++using System;
++using UnityEngine;
++using UnityEngine.EventSystems;
++using UnityEngine.InputSystem;
++using UnityEngine.UI;
++
++namespace OCC.Combat.Presentation
++{
++    // An overlay only. Its visibility never changes battlefield geometry or combat state.
++    public sealed class CombatTimelineDrawer : MonoBehaviour
++    {
++        public const float OpenDelay = .20f;
++        public const float CloseDelay = .35f;
++        private RectTransform panel;
++        private Button tab, pin;
++        private Func<bool> blocked;
++        private Action closed;
++        private float hoveringSince = -1f, outsideSince = -1f;
++        public bool IsPinned { get; private set; }
++        public bool IsOpen => panel != null && panel.gameObject.activeSelf;
++
++        public void Configure(RectTransform overlay, Button handle, Button pinButton, Func<bool> isBlocked, Action onClose)
++        {
++            panel = overlay; tab = handle; pin = pinButton; blocked = isBlocked; closed = onClose;
++            tab.onClick.AddListener(TogglePin);
++            pin.onClick.AddListener(TogglePin);
++            ResetDrawer();
++        }
++
++        public void OpenPinned()
++        {
++            IsPinned = true;
++            SetOpen(true);
++        }
++
++        public void TogglePin()
++        {
++            IsPinned = !IsPinned;
++            // Mouse clicks must not leave keyboard focus holding an unpinned drawer open.
++            if (Mouse.current != null && (Contains((RectTransform)tab.transform, Mouse.current.position.ReadValue()) ||
++                Contains((RectTransform)pin.transform, Mouse.current.position.ReadValue())))
++                EventSystem.current?.SetSelectedGameObject(null);
++            if (IsPinned) SetOpen(true);
++            UpdateLabels();
++        }
++
++        public void ResetDrawer()
++        {
++            IsPinned = false; hoveringSince = outsideSince = -1f;
++            SetOpen(false);
++            UpdateLabels();
++        }
++
++        private void Update()
++        {
++            if (panel == null || tab == null) return;
++            if (blocked?.Invoke() == true) { ResetDrawer(); return; }
++            bool over = Mouse.current != null && (Contains((RectTransform)tab.transform, Mouse.current.position.ReadValue()) ||
++                IsOpen && Contains(panel, Mouse.current.position.ReadValue()));
++            GameObject selected = EventSystem.current?.currentSelectedGameObject;
++            bool focused = selected != null && (selected == tab.gameObject || IsOpen && selected.transform.IsChildOf(panel));
++            float now = Time.unscaledTime;
++            if (IsPinned || focused) { SetOpen(true); outsideSince = -1f; }
++            else if (over)
++            {
++                outsideSince = -1f;
++                if (hoveringSince < 0f) hoveringSince = now;
++                if (now - hoveringSince >= OpenDelay) SetOpen(true);
++            }
++            else
++            {
++                hoveringSince = -1f;
++                if (outsideSince < 0f) outsideSince = now;
++                if (now - outsideSince >= CloseDelay) SetOpen(false);
++            }
++        }
++
++        private bool Contains(RectTransform rect, Vector2 pointer)
++        {
++            Canvas canvas = GetComponentInParent<Canvas>();
++            return rect != null && rect.gameObject.activeInHierarchy && RectTransformUtility.RectangleContainsScreenPoint(rect,
++                pointer, canvas == null || canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera);
++        }
++
++        private void SetOpen(bool value)
++        {
++            if (panel == null || panel.gameObject.activeSelf == value) return;
++            panel.gameObject.SetActive(value);
++            if (!value) closed?.Invoke();
++            UpdateLabels();
++        }
++
++        private void UpdateLabels()
++        {
++            if (tab != null) tab.GetComponentInChildren<Text>().text = "行\n动\n值\n" + (IsOpen ? "›" : "‹");
++            if (pin != null) pin.GetComponentInChildren<Text>().text = IsPinned ? "取消固定" : "固定";
++        }
++
++        private void OnDisable() => ResetDrawer();
++    }
++}
+--- /dev/null
++++ UnityProject/Assets/Game/Runtime/Campaign/CombatActionOrderPresentation.cs
+@@ -0,0 +1,27 @@
++using System;
++using System.Collections.Generic;
++using System.Linq;
++
++namespace OCC.Combat
++{
++    public static class CombatActionOrderPresentation
++    {
++        // First future appearance of each living unit at current speed, with the active unit first.
++        // Future status expiry and unsubmitted enemy decisions are deliberately not simulated.
++        public static IReadOnlyList<UnitState> Build(CombatState state, CombatActionPreview preview = null)
++        {
++            if (state == null) return Array.Empty<UnitState>();
++            bool projected = preview != null && preview.CanSubmit && preview.HasActionValuePreview;
++            Func<UnitState, int> value = unit => projected && unit.Id == preview.ActionValueTargetId
++                ? CombatActionTimeline.PreviewDelayedValue(unit, preview.ActionValueDelay) : unit.ActionValue;
++            Func<UnitState, int> ticks = unit => value(unit) >= CombatActionTimeline.ReadyThreshold ? 0 :
++                CombatActionTimeline.TicksUntilReady(value(unit), unit.EffectiveSpeed);
++            return state.Units.Values.Where(unit => unit.IsAlive)
++                .OrderByDescending(unit => unit.Id == state.ActiveUnitId)
++                .ThenBy(ticks)
++                .ThenByDescending(unit => CombatActionTimeline.Clamp(value(unit) + ticks(unit) * unit.EffectiveSpeed))
++                .ThenByDescending(unit => unit.EffectiveSpeed)
++                .ThenBy(unit => state.FixedTurnOrder(unit.Id)).ToArray();
++        }
++    }
++}
+--- /dev/null
++++ UnityProject/Assets/Game/Tests/EditMode/CombatActionOrderPresentationTests.cs
+@@ -0,0 +1,67 @@
++using System.Linq;
++using System.Reflection;
++using NUnit.Framework;
++
++namespace OCC.Combat.Tests
++{
++    public sealed class CombatActionOrderPresentationTests
++    {
++        private static void SetValue(UnitState unit, int value) => typeof(UnitState).GetMethod("SetActionValue", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(unit, new object[] { value });
++        private static CombatState State(out UnitState hero, out UnitState slow, out UnitState fast)
++        {
++            hero = new UnitState("hero", true, new GridPosition(0, 0)) { Speed = 6 };
++            slow = new UnitState("slow", false, new GridPosition(1, 0)) { Speed = 1 };
++            fast = new UnitState("fast", false, new GridPosition(2, 0)) { Speed = 10 };
++            var state = new CombatState(new GridMap(4, 2), new[] { hero, slow, fast });
++            CombatResolver.BeginTurn(state, hero.Id);
++            SetValue(slow, 90);
++            SetValue(fast, 60);
++            return state;
++        }
++
++        [Test]
++        public void FasterReadyArrivalBeatsHigherUnreadyValue_WithoutChangingState()
++        {
++            var state = State(out var hero, out var slow, out var fast);
++            int time = state.CurrentTime;
++            Assert.That(CombatActionOrderPresentation.Build(state).Select(unit => unit.Id), Is.EqualTo(new[] { "hero", "fast", "slow" }));
++            Assert.That(slow.ActionValue, Is.EqualTo(90));
++            Assert.That(fast.ActionValue, Is.EqualTo(60));
++            Assert.That(state.CurrentTime, Is.EqualTo(time));
++            Assert.That(state.ActiveUnitId, Is.EqualTo(hero.Id));
++        }
++
++        [Test]
++        public void LegalDelayReordersForecast_AndCancellationRestoresIt()
++        {
++            var state = State(out var hero, out var slow, out var fast);
++            SetValue(fast, 95);
++            slow.Speed = 4;
++            var preview = new CombatActionPreview("delay", "unit", "", "", 1, "", actionValueTargetId: fast.Id, actionValueDelay: 90);
++            Assert.That(CombatActionOrderPresentation.Build(state, preview).Select(unit => unit.Id), Is.EqualTo(new[] { "hero", "slow", "fast" }));
++            Assert.That(CombatActionOrderPresentation.Build(state).Select(unit => unit.Id), Is.EqualTo(new[] { "hero", "fast", "slow" }));
++            Assert.That(fast.ActionValue, Is.EqualTo(95));
++        }
++
++        [Test]
++        public void ReadyTiesUseValueSpeedAndFixedOrder_AndKeepActorUnique()
++        {
++            var state = State(out var hero, out var slow, out var fast);
++            slow.Speed = fast.Speed = 4;
++            SetValue(slow, 120); SetValue(fast, 120);
++            var order = CombatActionOrderPresentation.Build(state);
++            Assert.That(order.Select(unit => unit.Id), Is.EqualTo(new[] { "hero", "slow", "fast" }));
++            Assert.That(order.Select(unit => unit.Id).Distinct().Count(), Is.EqualTo(order.Count));
++        }
++
++        [Test]
++        public void InvalidPreviewIsIgnored_DeadUnitsDisappear()
++        {
++            var state = State(out var hero, out var slow, out var fast);
++            var preview = new CombatActionPreview("delay", "unit", "", "", 0, "invalid", actionValueTargetId: fast.Id, actionValueDelay: 90);
++            Assert.That(CombatActionOrderPresentation.Build(state, preview).Select(unit => unit.Id), Is.EqualTo(new[] { "hero", "fast", "slow" }));
++            typeof(UnitState).GetMethod("TakeDamage", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(slow, new object[] { int.MaxValue });
++            Assert.That(CombatActionOrderPresentation.Build(state).Select(unit => unit.Id), Is.EqualTo(new[] { "hero", "fast" }));
++        }
++    }
++}
+--- /dev/null
++++ UnityProject/Assets/Game/Editor/CombatHudRedesignVerification.cs
+@@ -0,0 +1,169 @@
++using System;
++using System.Collections;
++using System.Collections.Generic;
++using System.IO;
++using System.Linq;
++using OCC.Combat.Presentation;
++using UnityEditor;
++using UnityEngine;
++using UnityEngine.EventSystems;
++using UnityEngine.InputSystem;
++using UnityEngine.InputSystem.LowLevel;
++using UnityEngine.UI;
++using Object = UnityEngine.Object;
++
++namespace OCC.Combat.EditorTools
++{
++    public static class CombatHudRedesignVerification
++    {
++        private static IDisposable saveScope;
++        private static Dictionary<string, string> originals;
++        private static CombatPrototypeBootstrap host;
++        private static bool inputActive;
++        public static string Status { get; private set; } = "idle";
++        private static string Folder => Path.GetFullPath(Path.Combine(Application.dataPath, "../../Worldbuilding/归档/2026-10-06_战斗HUD重构/verification"));
++
++        [MenuItem("OCC/Combat HUD Redesign/Verify Normal Entry")]
++        public static void Start()
++        {
++            if (!Application.isPlaying || Application.dataPath.Replace('\\', '/') != "E:/数据库/OCC_Codex/UnityProject/Assets")
++                throw new InvalidOperationException("Main project Play Mode required");
++            host = Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
++            if (host == null || saveScope != null) throw new InvalidOperationException("Missing host or verification already running");
++            originals = new Dictionary<string, string>();
++            for (int i = 0; i < 3; i++)
++                foreach (string key in new[] { "OCC.FirstExperiencePrototype.v2.slot." + i, "occ.first_experience.map_run.slot." + i })
++                    originals[key] = PlayerPrefs.GetString(key, "<missing>");
++            saveScope = FirstExperienceSaveRouting.BeginVerificationScope("hud20261006_" + DateTime.UtcNow.Ticks);
++            DetailsInputFixture.Begin(Application.runInBackground); inputActive = true;
++            EditorApplication.playModeStateChanged += Restore;
++            Directory.CreateDirectory(Folder); Status = "running";
++            EditorWindow.GetWindow(Type.GetType("UnityEditor.GameView,UnityEditor")).Focus();
++            host.StartCoroutine(Guard(Routine()));
++        }
++
++        [MenuItem("OCC/Combat HUD Redesign/Verify Current Combat")]
++        public static void VerifyCurrent()
++        {
++            host = Object.FindAnyObjectByType<CombatPrototypeBootstrap>();
++            if (!Application.isPlaying || host == null || !host.IsDeveloperCombatActive) throw new InvalidOperationException("Active combat required");
++            DetailsInputFixture.Begin(Application.runInBackground); inputActive = true;
++            EditorApplication.playModeStateChanged -= Restore; EditorApplication.playModeStateChanged += Restore;
++            Directory.CreateDirectory(Folder); Status = "running-current";
++            host.StartCoroutine(Guard(CheckHud()));
++        }
++
++        private static void Restore(PlayModeStateChange state)
++        {
++            if (state != PlayModeStateChange.ExitingPlayMode) return;
++            CheckPlayerSaves(); saveScope?.Dispose(); saveScope = null;
++            if (inputActive) DetailsInputFixture.End(); inputActive = false;
++            EditorApplication.playModeStateChanged -= Restore;
++        }
++        private static void CheckPlayerSaves()
++        {
++            foreach (var pair in originals ?? new Dictionary<string, string>())
++                if (PlayerPrefs.GetString(pair.Key, "<missing>") != pair.Value) throw new InvalidOperationException("Player save changed: " + pair.Key);
++        }
++        private static IEnumerator Guard(IEnumerator routine)
++        {
++            var stack = new Stack<IEnumerator>(); stack.Push(routine);
++            while (stack.Count > 0)
++            {
++                object current = null; bool moved = false; Exception error = null;
++                try { moved = stack.Peek().MoveNext(); if (moved) current = stack.Peek().Current; } catch (Exception e) { error = e; }
++                if (error != null)
++                {
++                    Status = "FAIL " + error; File.WriteAllText(Path.Combine(Folder, "result.txt"), Status);
++                    if (inputActive) DetailsInputFixture.End(); inputActive = false;
++                    Debug.LogException(error); yield break;
++                }
++                if (!moved) { stack.Pop(); continue; }
++                if (current is IEnumerator child) { stack.Push(child); continue; }
++                yield return current;
++            }
++            CheckPlayerSaves(); Status = "PASS"; File.WriteAllText(Path.Combine(Folder, "result.txt"), Status + "\n" + string.Join("\n", trace));
++            if (inputActive) DetailsInputFixture.End(); inputActive = false;
++        }
++        private static readonly List<string> trace = new List<string>();
++        private static Button Find(string name) => Object.FindObjectsByType<Button>().FirstOrDefault(b => b.isActiveAndEnabled && b.IsInteractable() && (b.name == name || b.name == "按钮_" + name));
++        private static Vector2 Center(RectTransform r) => RectTransformUtility.WorldToScreenPoint(null, r.TransformPoint(r.rect.center));
++        private static void Pointer(Vector2 p, bool down = false) => InputSystem.QueueStateEvent(Mouse.current, down ? new MouseState { position = p }.WithButton(MouseButton.Left) : new MouseState { position = p });
++        private static IEnumerator Click(string name)
++        {
++            float until = Time.realtimeSinceStartup + 4; Button b;
++            while ((b = Find(name)) == null && Time.realtimeSinceStartup < until) yield return null;
++            if (b == null) throw new InvalidOperationException("Missing button " + name);
++            Vector2 p = Center((RectTransform)b.transform);
++            var hits = new List<RaycastResult>();
++            do
++            {
++                hits.Clear(); EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = p }, hits);
++                if (hits.Count > 0 && hits[0].gameObject.GetComponentInParent<Button>() == b) break;
++                yield return null;
++            } while (Time.realtimeSinceStartup < until);
++            if (hits.Count == 0 || hits[0].gameObject.GetComponentInParent<Button>() != b) throw new InvalidOperationException("Blocked button " + name);
++            Pointer(p); yield return null; Pointer(p, true); yield return null; Pointer(p); yield return new WaitForSecondsRealtime(.30f);
++        }
++        private static IEnumerator Capture(string name)
++        {
++            yield return new WaitForEndOfFrame();
++            var image = ScreenCapture.CaptureScreenshotAsTexture();
++            File.WriteAllBytes(Path.Combine(Folder, name + ".png"), image.EncodeToPNG()); Object.Destroy(image);
++        }
++        private static IEnumerator Routine()
++        {
++            trace.Clear(); yield return new WaitForSecondsRealtime(1.5f);
++            if (Find("跳过动画") != null) yield return Click("跳过动画");
++            yield return Click("开始新游戏"); yield return Click("选择档案2");
++            yield return Click("确认"); yield return Click("以此角色开始"); yield return Click("进入首次地图");
++            if (Find("不需要教程") != null) yield return Click("不需要教程");
++            yield return Click("map.node.B1"); yield return Click("进入战斗");
++            float until = Time.realtimeSinceStartup + 15;
++            while (host.IsInteractionModalOpen && Time.realtimeSinceStartup < until) yield return null;
++            if (!host.IsDeveloperCombatActive || host.IsInteractionModalOpen) throw new InvalidOperationException("Normal B1 entry blocked");
++            trace.Add("Normal UI entry to B1; production disk save namespace; saved=" + host.IsMapRunSaved);
++            yield return CheckHud();
++        }
++        private static IEnumerator CheckHud()
++        {
++            float settle = Time.realtimeSinceStartup + 15f;
++            while (host.IsInteractionModalOpen && Time.realtimeSinceStartup < settle) yield return null;
++            if (host.IsInteractionModalOpen) throw new InvalidOperationException("Combat entry did not settle");
++            var drawer = Object.FindAnyObjectByType<CombatTimelineDrawer>();
++            var shell = Object.FindAnyObjectByType<FormalCombatHudShellView>();
++            if (drawer == null || shell == null) throw new InvalidOperationException("HUD missing");
++            Pointer(new Vector2(Screen.width * .5f, Screen.height - 10f)); yield return new WaitForSecondsRealtime(.5f);
++            if (drawer.IsOpen || drawer.IsPinned) throw new InvalidOperationException("Drawer not collapsed by default");
++            var viewport = host.BattlefieldViewport; var before = viewport.BoardRect; var view = viewport.ViewportRect;
++            if (view.Width != 1888) throw new InvalidOperationException("Old reserved sidebar still active");
++            yield return Capture("collapsed-" + Screen.width + "x" + Screen.height);
++            Button tab = Find("行动值页签"); if (tab == null) throw new InvalidOperationException("Tab missing");
++            Pointer(Center((RectTransform)tab.transform)); yield return new WaitForSecondsRealtime(.12f);
++            if (drawer.IsOpen) throw new InvalidOperationException("Opened before hover delay");
++            yield return new WaitForSecondsRealtime(.16f);
++            if (!drawer.IsOpen) throw new InvalidOperationException("Hover did not expand drawer");
++            if (viewport.BoardRect.X != before.X || viewport.BoardRect.Y != before.Y || viewport.ViewportRect.Width != view.Width)
++                throw new InvalidOperationException("Drawer changed camera or viewport");
++            Pointer(Center(shell.RightConsole)); yield return new WaitForSecondsRealtime(.4f);
++            if (!drawer.IsOpen) throw new InvalidOperationException("Closed between tab and panel");
++            yield return Capture("expanded-" + Screen.width + "x" + Screen.height);
++            yield return Click("固定行动值"); Pointer(new Vector2(Screen.width * .5f, Screen.height * .5f)); yield return new WaitForSecondsRealtime(.45f);
++            if (!drawer.IsPinned || !drawer.IsOpen) throw new InvalidOperationException("Pin did not retain drawer");
++            yield return Click("固定行动值"); Pointer(new Vector2(Screen.width * .5f, Screen.height * .5f)); yield return new WaitForSecondsRealtime(.12f);
++            if (!drawer.IsOpen) throw new InvalidOperationException("Closed before exit grace");
++            yield return new WaitForSecondsRealtime(.3f);
++            if (drawer.IsOpen) throw new InvalidOperationException("Unpin and exit did not close");
++            var hits = new List<RaycastResult>(); Vector2 formerPanel = Center(shell.RightConsole);
++            EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = formerPanel }, hits);
++            if (hits.Any(h => h.gameObject.transform.IsChildOf(shell.RightConsole))) throw new InvalidOperationException("Hidden drawer blocks battlefield");
++            var order = CombatActionOrderPresentation.Build(host.CurrentState);
++            if (order.Select(u => u.Id).Distinct().Count() != order.Count) throw new InvalidOperationException("Duplicate order actors");
++            yield return Click("英雄概况翻面"); yield return Capture("hero-details-" + Screen.width + "x" + Screen.height); yield return Click("英雄概况翻面");
++            EventSystem.current.SetSelectedGameObject(tab.gameObject); yield return null;
++            if (!drawer.IsOpen) throw new InvalidOperationException("Keyboard focus did not open drawer");
++            EventSystem.current.SetSelectedGameObject(null); Pointer(new Vector2(Screen.width * .5f, Screen.height * .5f)); yield return new WaitForSecondsRealtime(.45f);
++            trace.Add("PASS hover delay, panel transit, pin/unpin, grace close, keyboard focus, no invisible raycast; no camera shift; status flip; size=" + Screen.width + "x" + Screen.height);
++        }
++    }
++}
